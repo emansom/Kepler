@@ -1,5 +1,5 @@
-#include <lib/dyad/dyad.h>
 #include "lib/dyad/dyad.h"
+#include "game/player/player.h"
 #include "game/player/player_manager.h"
 #include "communication/messages/incoming_message.h"
 #include "communication/message_handler.h"
@@ -53,6 +53,9 @@ static void handle_data(dyad_Event *e) {
  * @param e the socket event
  */
 static void client_disconnect(dyad_Event *e) {
+    player *player = player_manager_find(e->stream);
+    player_cleanup(player);
+
     player_manager_remove(e->stream);
     printf ("Client [%s] has disconnected\n", dyad_getAddress(e->stream));
 }

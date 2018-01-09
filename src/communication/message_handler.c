@@ -1,7 +1,5 @@
-#include <communication/messages/incoming_message.h>
-#include <game/player/player_manager.h>
 #include "message_handler.h"
-#include "game/player/player_manager.h"
+#include "game/player/player.h"
 #include "communication/incoming/VERSIONCHECK.h"
 
 void mh_add_messages() {

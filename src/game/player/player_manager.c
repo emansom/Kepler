@@ -3,6 +3,7 @@
 
 #include "lib/collections/list.h"
 #include "lib/dyad/dyad.h"
+#include "player.c"
 
 void player_manager_init() {
     list_new(&global.player_manager.players);
@@ -12,7 +13,9 @@ player *player_manager_add(dyad_Stream *stream) {
     player *p = malloc(sizeof(player));
     p->stream = stream;
 
+    player_init(p);
     list_add(global.player_manager.players, p);
+
     return p;
 }
 
