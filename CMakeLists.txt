@@ -8,11 +8,17 @@ INCLUDE_DIRECTORIES(src)
 
 file(GLOB src ${PROJECT_DIR}/*.c)
 file(GLOB dyad ${PROJECT_DIR}/dyad/*.c)
+file(GLOB util ${PROJECT_DIR}/util/*.c)
+file(GLOB communication ${PROJECT_DIR}/communication/*.c)
+file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
 
 add_executable(Kepler
         ${src}
         ${dyad}
+        ${util}
+        ${messages}
+        ${communication}
         ${server})
 
 if(WIN32)
