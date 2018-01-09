@@ -3,6 +3,7 @@
 
 #include <shared.h>
 
+typedef struct player_s player;
 typedef struct dyad_Stream dyad_Stream;
 
 typedef struct {
@@ -13,6 +14,7 @@ typedef struct {
 typedef struct {
     incoming_message *im;
     dyad_Stream *stream;
+    player *player;
 } request;
 
 incoming_message *im_create(char*);

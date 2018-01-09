@@ -1,4 +1,6 @@
+#include <lib/dyad/dyad.h>
 #include "lib/dyad/dyad.h"
+#include "game/player/player_manager.h"
 #include "communication/messages/incoming_message.h"
 #include "communication/message_handler.h"
 
@@ -10,6 +12,8 @@ static void handle_data(dyad_Event *e) {
     if (strlen(e->data) < 4) {
         return;
     }
+
+    player *player = player_manager_find(e->stream);
 
     int amount_read = 0;
 
@@ -37,7 +41,7 @@ static void handle_data(dyad_Event *e) {
         printf("Client [%s] incoming data (len: %i): %s\n", dyad_getAddress(e->stream), message_length - 1, message);
 
         incoming_message *im = im_create(message);
-        mh_invoke_message(im, e->stream);
+        mh_invoke_message(im, player);
 
         im_cleanup(im);
         free(message);
@@ -50,7 +54,6 @@ static void handle_data(dyad_Event *e) {
  */
 static void client_disconnect(dyad_Event *e) {
     player_manager_remove(e->stream);
-    player_manager_print();
     printf ("Client [%s] has disconnected\n", dyad_getAddress(e->stream));
 }
 
@@ -59,8 +62,7 @@ static void client_disconnect(dyad_Event *e) {
  * @param e the socket event
  */
 static void client_connect(dyad_Event *e) {
-    player_manager_add(e->stream);
-    player_manager_print();
+    player_manager_add(e->remote);
 
     printf("Client [%s] has connected\n", dyad_getAddress(e->remote));
     dyad_addListener(e->remote, DYAD_EVENT_DATA, handle_data, NULL);

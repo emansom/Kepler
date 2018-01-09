@@ -1,14 +1,18 @@
+#include <communication/messages/incoming_message.h>
+#include <game/player/player_manager.h>
 #include "message_handler.h"
+#include "game/player/player_manager.h"
 #include "communication/incoming/VERSIONCHECK.h"
 
 void mh_add_messages() {
     message_requests[messages_registered++] = mh_create_handle(message_versioncheck, "VERSIONCHECK");
 }
 
-void mh_invoke_message(incoming_message *im, dyad_Stream *pStream) {
+void mh_invoke_message(incoming_message *im, player *player) {
     request req;
     req.im = im;
-    req.stream = pStream;
+    req.player = player;
+    req.stream = player->stream;
 
     for (int i = 0; i < messages_registered; i++) {
         message_handle handle = message_requests[i];

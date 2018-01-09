@@ -8,9 +8,13 @@ struct player_manager {
     List *players;
 };
 
+typedef struct player_s {
+    dyad_Stream *stream;
+} player;
+
 void player_manager_init();
-void player_manager_add(dyad_Stream*);
+player *player_manager_add(dyad_Stream*);
 void player_manager_remove(dyad_Stream*);
-void player_manager_print();
+player *player_manager_find(dyad_Stream*);
 
 #endif

@@ -15,10 +15,9 @@ typedef struct {
     char *header;
 } message_handle;
 
-
 message_handle message_requests[MESSAGES];
 
-void mh_invoke_message(incoming_message *, dyad_Stream *pStream);
+void mh_invoke_message(incoming_message*, player*);
 void mh_add_messages();
 
 message_handle mh_create_handle(mh_request, char*);
