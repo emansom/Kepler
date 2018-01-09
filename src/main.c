@@ -9,8 +9,6 @@ int main(void) {
     printf("Written by Quackster\n");
 
     player_manager_init();
-    player_manager_print();
-    
     mh_add_messages();
 
     dyad_Stream *server = create_server();

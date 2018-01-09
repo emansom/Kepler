@@ -2,20 +2,11 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/message_handler.h"
 
-dyad_Stream *streams[50];
-
-
 /**
  * Handle incoming data from the socket
  * @param e the socket event
  */
 static void handle_data(dyad_Event *e) {
-    /*if (streams[0] != NULL) {
-        if (streams[0] == e->stream) {
-            printf("EQUALS!\n");
-        }
-    }*/
-
     if (strlen(e->data) < 4) {
         return;
     }
@@ -58,11 +49,8 @@ static void handle_data(dyad_Event *e) {
  * @param e the socket event
  */
 static void client_disconnect(dyad_Event *e) {
-    /*if (streams[0] != NULL) {
-        if (streams[0] == e->stream) {
-            printf("BYEEE!\n");
-        }
-    }*/
+    player_manager_remove(e->stream);
+    player_manager_print();
     printf ("Client [%s] has disconnected\n", dyad_getAddress(e->stream));
 }
 
@@ -71,9 +59,9 @@ static void client_disconnect(dyad_Event *e) {
  * @param e the socket event
  */
 static void client_connect(dyad_Event *e) {
-    /*if (streams[0] == NULL) {
-        streams[0] = e->remote;
-    }*/
+    player_manager_add(e->stream);
+    player_manager_print();
+
     printf("Client [%s] has connected\n", dyad_getAddress(e->remote));
     dyad_addListener(e->remote, DYAD_EVENT_DATA, handle_data, NULL);
     dyad_addListener(e->remote, DYAD_EVENT_CLOSE, client_disconnect, NULL);
