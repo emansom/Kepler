@@ -1,5 +1,5 @@
 #include "shared.h"
-#include "dyad/dyad.h"
+#include "lib/dyad/dyad.h"
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
 

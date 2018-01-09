@@ -1,4 +1,4 @@
-#include "dyad/dyad.h"
+#include "lib/dyad/dyad.h"
 
 dyad_Stream *create_server();
 void listen_server(dyad_Stream*);

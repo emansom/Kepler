@@ -2,7 +2,7 @@
 #define INCOMING_MESSAGE_H
 
 #include <shared.h>
-#include "dyad/dyad.h"
+#include "lib/dyad/dyad.h"
 
 typedef struct {
     char *header;

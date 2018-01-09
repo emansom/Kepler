@@ -1,5 +1,4 @@
-#include <dyad/dyad.h>
-#include "dyad/dyad.h"
+#include "lib/dyad/dyad.h"
 #include "communication/messages/incoming_message.h"
 #include "communication/message_handler.h"
 

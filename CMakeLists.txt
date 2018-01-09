@@ -6,14 +6,18 @@ set(PROJECT_DIR src)
 
 INCLUDE_DIRECTORIES(src)
 
+# Collections-C
+file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
+file(GLOB dyad ${PROJECT_DIR}/lib/dyad/*.c)
+
 file(GLOB src ${PROJECT_DIR}/*.c)
-file(GLOB dyad ${PROJECT_DIR}/dyad/*.c)
 file(GLOB util ${PROJECT_DIR}/util/*.c)
 file(GLOB communication ${PROJECT_DIR}/communication/*.c)
 file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
 
 add_executable(Kepler
+        ${collections}
         ${src}
         ${dyad}
         ${util}

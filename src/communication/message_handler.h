@@ -3,7 +3,7 @@
 
 #include <shared.h>
 
-#include "dyad/dyad.h"
+#include "lib/dyad/dyad.h"
 #include "communication/messages/incoming_message.h"
 
 #define MESSAGES 50
