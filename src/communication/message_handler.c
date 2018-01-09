@@ -1,4 +1,3 @@
-#include <communication/messages/incoming_message.h>
 #include "message_handler.h"
 #include "communication/incoming/VERSIONCHECK.h"
 

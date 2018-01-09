@@ -2,11 +2,10 @@
 #define MESSAGE_HANDLER_H
 
 #include <shared.h>
-
-#include "lib/dyad/dyad.h"
 #include "communication/messages/incoming_message.h"
 
 #define MESSAGES 50
+typedef struct dyad_Stream dyad_Stream;
 
 static int messages_registered = 0;
 typedef void (*mh_request)(request);

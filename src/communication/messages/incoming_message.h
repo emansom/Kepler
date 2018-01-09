@@ -2,7 +2,8 @@
 #define INCOMING_MESSAGE_H
 
 #include <shared.h>
-#include "lib/dyad/dyad.h"
+
+typedef struct dyad_Stream dyad_Stream;
 
 typedef struct {
     char *header;

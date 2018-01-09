@@ -1,5 +1,4 @@
 #include "incoming_message.h"
-
 /**
  * Creates an incoming message give by a char array
  * @param message the char array
