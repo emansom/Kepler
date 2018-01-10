@@ -2,7 +2,7 @@
 #define STRINGBUILDER_H
 #include <shared.h>
 
-typedef struct {
+typedef struct stringbuilder_s {
     char *data;
     int index;
     size_t capacity;
