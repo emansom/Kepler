@@ -32,6 +32,28 @@ char *im_read_b64(incoming_message *im) {
 }
 
 /**
+ * Read base64 character, use free() on this returned value after using this.
+ *
+ * @param im the incoming message
+ * @return the base64 value
+ */
+char *im_read_str(incoming_message *im) {
+    char *recv_length = im_read_b64(im);
+    int length = base64_decode(recv_length);
+
+    char *str = malloc(length + 1 * sizeof(char));
+
+    for (int i = 0; i < length; i++) {
+        str[i] = im->data[im->counter++];
+    }
+
+    str[length] = '\0';
+
+    free(recv_length);
+    return str;
+}
+
+/**
  * Call method to cleanup the incoming message
  * @param im the incoming message
  */

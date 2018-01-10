@@ -20,6 +20,7 @@ typedef struct {
 
 incoming_message *im_create(char*);
 char *im_read_b64(incoming_message*);
+char *im_read_str(incoming_message *);
 void im_cleanup(incoming_message*);
 
 #endif
