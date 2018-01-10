@@ -10,8 +10,12 @@ void message_login(player *player, incoming_message *message) {
 
     printf("Username: %s and password: %s\n", username, password);
 
-    outgoing_message *om = om_create(139);
-    om_write_str(om, "Hello!");
+    outgoing_message *om;
+
+    om = om_create(2);
+    player_send(player, om);
+
+    om = om_create(3);
     player_send(player, om);
 
     free(username);

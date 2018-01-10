@@ -1,13 +1,6 @@
-#include <lib/dyad/dyad.h>
-#include <communication/messages/incoming_message.h>
 #include "lib/dyad/dyad.h"
-
 #include "game/player/player.h"
-#include "game/player/player_manager.h"
-
-#include "communication/messages/incoming_message.h"
 #include "communication/message_handler.h"
-
 #include "util/encoding/base64encoding.h"
 
 /**
