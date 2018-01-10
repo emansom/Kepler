@@ -9,6 +9,7 @@ typedef struct dyad_Stream dyad_Stream;
 
 typedef struct outgoing_message_s {
     int header_id;
+    char *header;
     int finalised;
     stringbuilder *sb;
 } outgoing_message;

@@ -8,10 +8,11 @@
 outgoing_message *om_create(int header) {
     outgoing_message *om = malloc(sizeof(outgoing_message));
     om->header_id = header;
+    om->header = base64_encode(om->header_id, 2);
     om->finalised = 0;
     om->sb = sb_create();
 
-    sb_add_string(om->sb, base64_encode(om->header_id, 2));
+    sb_add_string(om->sb, om->header);
     return om;
 }
 
@@ -36,5 +37,6 @@ void om_finalise(outgoing_message *om) {
 
 void om_cleanup(outgoing_message *om) {
     sb_cleanup(om->sb);
+    free(om->header);
     free(om);
 }
