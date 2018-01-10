@@ -36,6 +36,5 @@ void player_send(player *p, outgoing_message *om) {
     dyad_write(p->stream, data, strlen(data));
 
     printf ("Client [%s] outgoing data: %i / %s\n", dyad_getAddress(p->stream), om->header_id, data);
-
     om_cleanup(om);
 }

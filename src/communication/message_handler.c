@@ -1,11 +1,12 @@
 #include "message_handler.h"
 #include "game/player/player.h"
 
-#include "communication/incoming/InitCryptoMessageEvent.h"
-#include "communication/incoming/SecretKeyMessageEvent.h"
-#include "communication/incoming/LoginMessageEvent.h"
-#include "communication/incoming/UserInfoMessageEvent.h"
-#include "communication/incoming/NavigatorMessageEvent.h";
+#include "communication/incoming/login/InitCryptoMessageEvent.h"
+#include "communication/incoming/login/SecretKeyMessageEvent.h"
+#include "communication/incoming/login/LoginMessageEvent.h"
+#include "communication/incoming/login/UserInfoMessageEvent.h"
+
+#include "communication/incoming/navigator/NavigatorMessageEvent.h";
 
 /**
  * Assigns all header handlers to this array
