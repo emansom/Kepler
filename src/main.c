@@ -1,3 +1,4 @@
+#include <util/encoding/base64encoding.h>
 #include "shared.h"
 #include "lib/dyad/dyad.h"
 
@@ -9,6 +10,8 @@
 int main(void) {
     printf("Kepler Habbo server...\n");
     printf("Written by Quackster\n");
+
+    printf("header: %i\n", base64_decode("BK"));
 
     player_manager_init();
     mh_add_messages();

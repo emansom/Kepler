@@ -19,6 +19,10 @@ void om_write_str(outgoing_message *om, char *str) {
     sb_add_string(om->sb, "\2");
 }
 
+void om_finalise(outgoing_message *om) {
+    sb_add_string(om->sb, "\1");
+}
+
 void om_cleanup(outgoing_message *om) {
     sb_cleanup(om->sb);
     free(om);

@@ -3,7 +3,6 @@
 
 #include <shared.h>
 
-typedef struct player_s player;
 typedef struct dyad_Stream dyad_Stream;
 
 typedef struct {
@@ -12,11 +11,6 @@ typedef struct {
     int counter;
     int header_id;
 } incoming_message;
-
-typedef struct {
-    incoming_message *im;
-    player *player;
-} request;
 
 incoming_message *im_create(char*);
 char *im_read_b64(incoming_message*);

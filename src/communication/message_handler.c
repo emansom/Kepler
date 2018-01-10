@@ -12,14 +12,10 @@ void mh_add_messages() {
 }
 
 void mh_invoke_message(incoming_message *im, player *player) {
-    request req;
-    req.im = im;
-    req.player = player;
-
     if (message_requests[im->header_id] == NULL) {
         return;
     }
 
     mh_request handle = message_requests[im->header_id];
-    handle(req);
+    handle(player, im);
 }
