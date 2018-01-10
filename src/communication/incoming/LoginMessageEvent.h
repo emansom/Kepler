@@ -12,14 +12,12 @@ void message_login(player *player, incoming_message *message) {
 
     outgoing_message *om;
 
-    om = om_create(2);
+    om = om_create(2); // @B
     player_send(player, om);
 
-    om = om_create(3);
+    om = om_create(3); // @C
     player_send(player, om);
 
     free(username);
     free(password);
-
-
 }

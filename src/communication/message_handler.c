@@ -5,6 +5,7 @@
 #include "communication/incoming/SecretKeyMessageEvent.h"
 #include "communication/incoming/LoginMessageEvent.h"
 #include "communication/incoming/UserInfoMessageEvent.h"
+#include "communication/incoming/NavigatorMessageEvent.h";
 
 /**
  * Assigns all header handlers to this array
@@ -14,6 +15,7 @@ void mh_add_messages() {
     message_requests[202] = message_secretkey;
     message_requests[4] = message_login;
     message_requests[7] = message_userinfo;
+    message_requests[150] = message_navigator;
 }
 
 /**

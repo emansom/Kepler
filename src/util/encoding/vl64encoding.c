@@ -1,15 +1,16 @@
 #include "shared.h"
 #include "vl64encoding.h"
 
-int vl64_decode(char *value) {
+int vl64_decode(const char *value, int *total_bytes) {
     int result;
+
     int is_negative = (value[0] & 4) == 4;
-    int total_bytes = (value[0] >> 3) & 7;
+    *total_bytes = (value[0] >> 3) & 7;
 
     result = value[0] & 3;
 
     int shift_amount = 2;
-    for (int i = 1; i < total_bytes; i++) {
+    for (int i = 1; i < *total_bytes; i++) {
         result |= (value[i] & 0x3f) << shift_amount;
         shift_amount += 6;
     }

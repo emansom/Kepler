@@ -11,7 +11,14 @@ int main(void) {
     printf("Kepler Habbo server...\n");
     printf("Written by Quackster\n");
 
-    printf("header: %i\n", base64_decode("BK"));
+    /*printf("x: %s\n", vl64_encode(1337));
+
+    int len;
+    char *h = "YNE";
+    printf("header: %i\n", vl64_decode(h, &len));
+    printf("len: %i\n", len);*/
+
+    //printf("header: %i\n", base64_decode("DU"));
 
     player_manager_init();
     mh_add_messages();

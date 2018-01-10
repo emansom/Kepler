@@ -1,6 +1,6 @@
 #include "incoming_message.h"
 #include "util/encoding/base64encoding.h"
-
+#include "util/encoding/vl64encoding.h"
 /**
  * Creates an incoming message give by a char array
  * @param message the char array
@@ -29,6 +29,24 @@ char *im_read_b64(incoming_message *im) {
     };
 
     return strdup(data);
+}
+
+/**
+ * Read vl64 character as an integer
+ *
+ * @param im the incoming message
+ * @return the integer value
+ */
+int im_read_vl64(incoming_message *im) {
+    int length;
+
+    char data[6];
+    strncpy(data, im->data + im->counter, strlen(im->data));
+
+    int val = vl64_decode(data, &length);
+    im->counter += length;
+
+    return val;
 }
 
 /**
