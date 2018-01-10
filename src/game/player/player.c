@@ -8,6 +8,16 @@
 #include "communication/messages/outgoing_message.h"
 
 /**
+ * Creates a new player
+ * @return player struct
+ */
+player *player_create(dyad_Stream *stream) {
+    player *player = malloc(sizeof(player));
+    player->stream = stream;
+    return player;
+}
+
+/**
  * Called when a connection is successfully opened
  * @param p the player struct
  */

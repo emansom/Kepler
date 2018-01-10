@@ -26,8 +26,7 @@ player *player_manager_add(dyad_Stream *stream) {
         return existing;
     }
 
-    player *p = malloc(sizeof(player));
-    p->stream = stream;
+    player *p = player_create(stream);
 
     player_init(p);
     list_add(global.player_manager.players, p);

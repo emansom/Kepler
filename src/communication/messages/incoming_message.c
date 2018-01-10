@@ -72,7 +72,7 @@ char *im_read_str(incoming_message *im) {
 }
 
 /**
- * Call method to cleanup the incoming message
+ * Cleanup any variables loaded on the heap that had to do with this struct
  * @param im the incoming message
  */
 void im_cleanup(incoming_message *im) {
