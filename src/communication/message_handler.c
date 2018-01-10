@@ -1,9 +1,12 @@
 #include "message_handler.h"
 #include "game/player/player.h"
-#include "communication/incoming/VERSIONCHECK.h"
+
+#include "communication/incoming/InitCryptoMessageEvent.h"
+#include "communication/incoming/SecretKeyMessageEvent.h"
 
 void mh_add_messages() {
-    message_requests[messages_registered++] = mh_create_handle(message_versioncheck, "VERSIONCHECK");
+    message_requests[206] = message_initcrypto;
+    message_requests[202] = message_secretkey;
 }
 
 void mh_invoke_message(incoming_message *im, player *player) {
@@ -11,19 +14,10 @@ void mh_invoke_message(incoming_message *im, player *player) {
     req.im = im;
     req.player = player;
 
-    for (int i = 0; i < messages_registered; i++) {
-        message_handle handle = message_requests[i];
-
-        if (strcmp(handle.header, im->header) == 0) {
-            handle.request_handler(req);
-            break;
-        }
+    if (message_requests[im->header_id] == NULL) {
+        return;
     }
-}
 
-message_handle mh_create_handle(mh_request request, char *header) {
-    message_handle handler;
-    handler.request_handler = request;
-    handler.header = header;
-    return handler;
+    mh_request handle = message_requests[im->header_id];
+    handle(req);
 }

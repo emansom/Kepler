@@ -1,4 +1,6 @@
 #include "incoming_message.h"
+#include "util/encoding/base64encoding.h"
+
 /**
  * Creates an incoming message give by a char array
  * @param message the char array
@@ -9,6 +11,8 @@ incoming_message *im_create(char *message) {
     im->data = message;
     im->counter = 0;
     im->header = im_read_b64(im);
+    im->header_id = base64_decode(im->header);
+
 }
 
 /**

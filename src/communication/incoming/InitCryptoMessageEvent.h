@@ -1,9 +1,8 @@
-#include <communication/messages/incoming_message.h>
 #include "lib/dyad/dyad.h"
 #include "communication/messages/incoming_message.h"
 
-void message_versioncheck(request message) {
-    char *response = "###SECRET_KEY\r1337##";
+void message_initcrypto(request message) {
+    char *response = "DUH\1";
     dyad_write(message.player->stream, response, strlen(response));
 
 }

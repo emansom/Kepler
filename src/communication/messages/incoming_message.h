@@ -10,6 +10,7 @@ typedef struct {
     char *header;
     char *data;
     int counter;
+    int header_id;
 } incoming_message;
 
 typedef struct {

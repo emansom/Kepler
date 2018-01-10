@@ -45,7 +45,7 @@ static void handle_data(dyad_Event *e) {
 
         incoming_message *im = im_create(message);
 
-        printf("Client [%s] incoming data: %s / %s\n", dyad_getAddress(e->stream), im->header, message);
+        printf("Client [%s] incoming data: %i / %s\n", dyad_getAddress(e->stream), im->header_id, message);
         mh_invoke_message(im, player_manager_find(e->stream));
 
         im_cleanup(im);
