@@ -61,14 +61,18 @@ char *im_read_str(incoming_message *im) {
 
     char *str = malloc(length + 1 * sizeof(char));
 
-    for (int i = 0; i < length; i++) {
-        str[i] = im->data[im->counter++];
+    if (str) {
+        for (int i = 0; i < length; i++) {
+            str[i] = im->data[im->counter++];
+        }
+
+        str[length] = '\0';
+        free(recv_length);
+
+        return str;
+    } else {
+        return NULL;
     }
-
-    str[length] = '\0';
-
-    free(recv_length);
-    return str;
 }
 
 /**

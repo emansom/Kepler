@@ -37,7 +37,9 @@ void om_write_str(outgoing_message *om, char *str) {
  * @param str the int to write
  */
 void om_write_int(outgoing_message *om, int num) {
-    sb_add_string(om->sb, vl64_encode(num));
+    char *encoded = vl64_encode(num);
+    sb_add_string(om->sb, encoded);
+    free(encoded);
 }
 
 /**

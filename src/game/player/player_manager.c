@@ -1,7 +1,7 @@
 #include "shared.h"
 
-#include "lib/collections/list.h"
-#include "lib/dyad/dyad.h"
+#include "list.h"
+#include "dyad.h"
 
 #include "player.h"
 

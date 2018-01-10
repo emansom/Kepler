@@ -2,7 +2,7 @@
 #include <stdio.h>
 
 #include "player.h"
-#include "lib/dyad/dyad.h"
+#include "dyad.h"
 
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"

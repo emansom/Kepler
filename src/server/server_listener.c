@@ -1,4 +1,4 @@
-#include "lib/dyad/dyad.h"
+#include "dyad.h"
 #include "game/player/player.h"
 #include "communication/message_handler.h"
 #include "util/encoding/base64encoding.h"
@@ -23,11 +23,6 @@ static void handle_data(dyad_Event *e) {
         };
 
         int message_length = base64_decode(recv_length) + 1;
-
-        if (!message_length) {
-            continue;
-        }
-
         char *message = malloc(message_length * sizeof(char));
 
         for (int i = 0; i < message_length - 1; i++) {

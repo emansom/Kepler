@@ -1,5 +1,9 @@
 #include "util/stringbuilder.h"
 
+/**
+ * Creates a stringbuilder instance
+ * @return the stringbuilder
+ */
 stringbuilder *sb_create() {
     stringbuilder *sb = malloc(sizeof(stringbuilder));
     sb->capacity = 1024;
@@ -8,6 +12,11 @@ stringbuilder *sb_create() {
     return sb;
 }
 
+/**
+ * Checks the capacity of the buffer, if there is not a sufficient amount, the buffer will be expanded.
+ * @param sb the stringbuilder
+ * @param length the new length required
+ */
 void sb_ensure_capacity(stringbuilder *sb, int length) {
     if ((sb->capacity - sb->index) >= length) {
         // stringbuilder has capacity
@@ -18,6 +27,11 @@ void sb_ensure_capacity(stringbuilder *sb, int length) {
     sb->data = realloc(sb->data, sb->capacity * sizeof(char));
 }
 
+/**
+ * Adds a string to the stringbuilder
+ * @param sb the stringbuilder
+ * @param data the string
+ */
 void sb_add_string(stringbuilder *sb, const char *data) {
     sb_ensure_capacity(sb, strlen(data) + 1); //+1 for terminated string
 
@@ -33,6 +47,11 @@ void sb_add_string(stringbuilder *sb, const char *data) {
     sb->data[sb->index] = '\0';
 }
 
+/**
+ * Adds an integer to the stringbuilder
+ * @param sb the stringbuilder
+ * @param integer the int
+ */
 void sb_add_int(stringbuilder *sb, int integer) {
     char data[11];
     sprintf(data, "%i", integer);
@@ -40,6 +59,10 @@ void sb_add_int(stringbuilder *sb, int integer) {
     sb_add_string(sb, data);
 }
 
+/**
+ * Cleanup any variables loaded on the heap that had to do with this struct
+ * @param sb the stringbuilder
+ */
 void sb_cleanup(stringbuilder *sb) {
     free(sb->data);
     free(sb);

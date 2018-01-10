@@ -1,31 +1,34 @@
-#include <util/encoding/base64encoding.h>
+#include <sqlite3.h>
 #include "shared.h"
-#include "lib/dyad/dyad.h"
+#include "dyad.h"
 
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
-
-#include "util/encoding/vl64encoding.h"
 
 int main(void) {
     printf("Kepler Habbo server...\n");
     printf("Written by Quackster\n");
 
-    /*printf("x: %s\n", vl64_encode(1337));
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
 
-    int len;
-    char *h = "YNE";
-    printf("header: %i\n", vl64_decode(h, &len));
-    printf("len: %i\n", len);*/
+    rc = sqlite3_open("test.db", &db);
 
-    //printf("header: %i\n", base64_decode("DU"));
+    if( rc ) {
+        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
+        return(0);
+    } else {
+        fprintf(stderr, "Opened database successfully\n");
+    }
+    sqlite3_close(db);
 
     player_manager_init();
     mh_add_messages();
 
-    dyad_Stream *server = create_server();
-    listen_server(server);
+    dyad_Stream *dyad = create_server();
+    listen_server(dyad);
 
-    free(server);
+    free(dyad);
     return 0;
 }

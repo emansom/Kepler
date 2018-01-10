@@ -6,7 +6,7 @@
 #include "communication/incoming/login/LoginMessageEvent.h"
 #include "communication/incoming/login/UserInfoMessageEvent.h"
 
-#include "communication/incoming/navigator/NavigatorMessageEvent.h";
+#include "communication/incoming/navigator/NavigatorMessageEvent.h"
 
 /**
  * Assigns all header handlers to this array
