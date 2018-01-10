@@ -1,15 +1,21 @@
+#include <lib/dyad/dyad.h>
+#include <communication/messages/incoming_message.h>
 #include "lib/dyad/dyad.h"
+
 #include "game/player/player.h"
 #include "game/player/player_manager.h"
+
 #include "communication/messages/incoming_message.h"
 #include "communication/message_handler.h"
+
+#include "util/encoding/base64encoding.h"
 
 /**
  * Handle incoming data from the socket
  * @param e the socket event
  */
 static void handle_data(dyad_Event *e) {
-    if (strlen(e->data) < 4) {
+    if (strlen(e->data) < 5) {
         return;
     }
 
@@ -20,10 +26,10 @@ static void handle_data(dyad_Event *e) {
                 e->data[amount_read++],
                 e->data[amount_read++],
                 e->data[amount_read++],
-                e->data[amount_read++]
+                '\0'
         };
 
-        int message_length = strtol(recv_length, NULL, 10) + 1;
+        int message_length = base64_decode(recv_length) + 1;
 
         if (!message_length) {
             continue;
@@ -36,9 +42,10 @@ static void handle_data(dyad_Event *e) {
         }
 
         message[message_length - 1] = '\0';
-        printf("Client [%s] incoming data (len: %i): %s\n", dyad_getAddress(e->stream), message_length - 1, message);
 
         incoming_message *im = im_create(message);
+
+        printf("Client [%s] incoming data: %s / %s\n", dyad_getAddress(e->stream), im->header, message);
         mh_invoke_message(im, player_manager_find(e->stream));
 
         im_cleanup(im);
@@ -69,7 +76,7 @@ static void client_connect(dyad_Event *e) {
     dyad_addListener(e->remote, DYAD_EVENT_DATA, handle_data, NULL);
     dyad_addListener(e->remote, DYAD_EVENT_CLOSE, client_disconnect, NULL);
 
-    char *handshake = "###HELLO\r##";
+    char *handshake = "@@\1";
     dyad_write(e->remote, handshake, strlen(handshake));
 }
 
@@ -89,7 +96,7 @@ dyad_Stream *create_server() {
  * Listen on the server
  */
 void listen_server(dyad_Stream *server) {
-    dyad_listenEx(server, "0.0.0.0", 37120, 512);
+    dyad_listenEx(server, "0.0.0.0", 12321, 512);
 
     while (dyad_getStreamCount() > 0) {
         dyad_update();

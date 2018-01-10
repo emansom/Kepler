@@ -1,7 +1,7 @@
 #include "shared.h"
 #include "base64encoding.h"
 
-int decode_base64(char *value) {
+int base64_decode(char *value) {
     int result = 0;
 
     for (int i = 0; i < strlen(value); i++) {
@@ -12,16 +12,17 @@ int decode_base64(char *value) {
 }
 
 
-char *encode_base64(int value, int length) {
-    int subValue;
+char *base64_encode(int value, int length) {
+    char *encoded = malloc(length + 1 *sizeof(char));
 
-    char *encoded = malloc(2 *sizeof(char));
     int slot = 0;
+    int subValue;
 
     for (int i = 0; i < length; i++) {
         subValue = (value >> 6 * (length - 1 - i)) & 0x3f;
         encoded[slot++] = (char) (subValue + 0x40);
     }
 
+    encoded[2] = '\0';
     return encoded;
 }

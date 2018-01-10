@@ -9,6 +9,7 @@ typedef struct dyad_Stream dyad_Stream;
 typedef struct {
     char *header;
     char *data;
+    int counter;
 } incoming_message;
 
 typedef struct {
@@ -17,7 +18,7 @@ typedef struct {
 } request;
 
 incoming_message *im_create(char*);
-char *im_get_argument(incoming_message*, const char*, int);
+char *im_read_b64(incoming_message*);
 void im_cleanup(incoming_message*);
 
 #endif

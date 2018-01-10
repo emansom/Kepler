@@ -1,6 +1,6 @@
 #ifndef BASE64ENCODING_H
 #define BASE64ENCODING_H
 
-int decode_base64(char*);
-char *encode_base64(int, int);
+int base64_decode(char*);
+char *base64_encode(int, int);
 #endif
