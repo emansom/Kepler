@@ -13,8 +13,6 @@ static void handle_data(dyad_Event *e) {
         return;
     }
 
-    player *player = player_manager_find(e->stream);
-
     int amount_read = 0;
 
     while (amount_read < strlen(e->data)) {
@@ -41,7 +39,7 @@ static void handle_data(dyad_Event *e) {
         printf("Client [%s] incoming data (len: %i): %s\n", dyad_getAddress(e->stream), message_length - 1, message);
 
         incoming_message *im = im_create(message);
-        mh_invoke_message(im, player);
+        mh_invoke_message(im, player_manager_find(e->stream));
 
         im_cleanup(im);
         free(message);

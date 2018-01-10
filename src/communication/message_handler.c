@@ -10,7 +10,6 @@ void mh_invoke_message(incoming_message *im, player *player) {
     request req;
     req.im = im;
     req.player = player;
-    req.stream = player->stream;
 
     for (int i = 0; i < messages_registered; i++) {
         message_handle handle = message_requests[i];

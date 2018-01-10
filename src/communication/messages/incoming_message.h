@@ -13,7 +13,6 @@ typedef struct {
 
 typedef struct {
     incoming_message *im;
-    dyad_Stream *stream;
     player *player;
 } request;
 
