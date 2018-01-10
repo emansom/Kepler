@@ -16,11 +16,11 @@ char *base64_encode(int value, int length) {
     char *encoded = malloc(length + 1 *sizeof(char));
 
     int slot = 0;
-    int subValue;
+    int sub_value;
 
     for (int i = 0; i < length; i++) {
-        subValue = (value >> 6 * (length - 1 - i)) & 0x3f;
-        encoded[slot++] = (char) (subValue + 0x40);
+        sub_value = (value >> 6 * (length - 1 - i)) & 0x3f;
+        encoded[slot++] = (char) (sub_value + 0x40);
     }
 
     encoded[2] = '\0';

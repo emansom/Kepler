@@ -4,6 +4,8 @@
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
 
+#include "util/encoding/vl64encoding.h"
+
 int main(void) {
     printf("Kepler Habbo server...\n");
     printf("Written by Quackster\n");
