@@ -27,7 +27,6 @@ void om_write_int(outgoing_message *om, int num) {
 
 void om_finalise(outgoing_message *om) {
     if (om->finalised) {
-        printf("already finalised!\n");
         return;
     }
 
