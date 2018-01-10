@@ -1,9 +1,9 @@
-#include "player_manager.h"
 #include "shared.h"
 
 #include "lib/collections/list.h"
 #include "lib/dyad/dyad.h"
-#include "player.c"
+
+#include "player.h"
 
 void player_manager_init() {
     list_new(&global.player_manager.players);

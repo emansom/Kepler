@@ -1,5 +1,9 @@
 #include "player.h"
-#include "shared.h"
+#include "lib/dyad/dyad.h"
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 void player_init(player *p) {
     printf("Player initialise %s\n", dyad_getAddress(p->stream));

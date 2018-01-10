@@ -16,6 +16,7 @@ file(GLOB util ${PROJECT_DIR}/util/*.c)
 file(GLOB communication ${PROJECT_DIR}/communication/*.c)
 file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
+file(GLOB encoding ${PROJECT_DIR}/util/encoding/*.c)
 
 # Kepler managers
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
@@ -28,7 +29,8 @@ add_executable(Kepler
         ${messages}
         ${communication}
         ${server}
-        ${players})
+        ${players}
+        ${encoding})
 
 if(WIN32)
     target_link_libraries(Kepler wsock32 ws2_32)
