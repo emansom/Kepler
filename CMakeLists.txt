@@ -10,7 +10,10 @@ INCLUDE_DIRECTORIES(src)
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/dyad/)
 include_directories(${PROJECT_DIR}/lib/sqlite/)
-link_directories("C:/Users/Alex/Documents/GitHub/Kepler/src/lib/sqlite/")
+
+if(WIN32)
+    link_directories(${PROJECT_DIR}/lib/sqlite/)
+endif()
 
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
 file(GLOB dyad ${PROJECT_DIR}/lib/dyad/*.c)
