@@ -9,4 +9,5 @@ void message_initcrypto(player *player, incoming_message *message) {
     om_write_int(om, 1);
     om_write_int(om, 0);
     player_send(player, om);
+    om_cleanup(om);
 }

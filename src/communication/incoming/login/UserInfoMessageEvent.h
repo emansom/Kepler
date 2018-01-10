@@ -9,5 +9,6 @@ void message_userinfo(player *player, incoming_message *message) {
 
     om = om_create(5);
     player_send(player, om);
+    om_cleanup(om);
 
 }

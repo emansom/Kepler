@@ -14,9 +14,11 @@ void message_login(player *player, incoming_message *message) {
 
     om = om_create(2); // @B
     player_send(player, om);
+    om_cleanup(om);
 
     om = om_create(3); // @C
     player_send(player, om);
+    om_cleanup(om);
 
     free(username);
     free(password);
