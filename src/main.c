@@ -11,19 +11,14 @@ int main(void) {
     print_info("Kepler Habbo server...\n");
     print_info("Written by Quackster\n");
 
-    strcpy(db_connection_settings.hostname, "localhost");
-    strcpy(db_connection_settings.username, "root");
-    strcpy(db_connection_settings.password, "");
-    strcpy(db_connection_settings.database, "icarusdb");
-
     print_info("\n");
     print_info("Testing MySQL connection...\n");
 
-    MYSQL *con = mysql_create_connection();
+    MYSQL *con = mysql_create_connection(mysql_connection_settings());
 
     if (con == NULL) {
         print_info("The connection to MySQL was unsuccessful, program aborted!\n");
-        return 0;
+        return EXIT_FAILURE;
     } else {
         print_info("The connection to MySQL was successful!\n");
         mysql_close(con);
@@ -36,5 +31,5 @@ int main(void) {
     listen_server(dyad);
 
     free(dyad);
-    return 0;
+    return EXIT_SUCCESS;
 }

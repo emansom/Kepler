@@ -7,10 +7,10 @@ typedef struct mysql_details_s {
     char username[50];
     char password[50];
     char database[50];
-} connection_settings;
+} connection_details;
 
-connection_settings db_connection_settings;
-MYSQL *mysql_create_connection();
+connection_details mysql_connection_settings();
+MYSQL *mysql_create_connection(connection_details conn_settings);
 void mysql_print_error(const char *, ...);
 
 #endif
