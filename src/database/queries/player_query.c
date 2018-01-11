@@ -17,7 +17,7 @@ player_data *query_player_login(char *username, char *password) {
     memset(input_bind, 0, sizeof(input_bind));
     memset(result_bind, 0, sizeof(result_bind));
 
-    char *query = "SELECT id,figure FROM users WHERE username = ? AND password = ?";
+    char *query = "SELECT `id`,`figure` FROM `users` WHERE `username` = ? AND `password` = ?";
 
     if(mysql_stmt_prepare(statement, query, strlen(query))){
         fprintf(stderr, "mysql_stmt_prepare(), INSERT failed, %s\n", mysql_error(mysql));
@@ -40,7 +40,7 @@ player_data *query_player_login(char *username, char *password) {
     }
 
     int id;
-    char figure[50];
+    char figure[200];
 
     mysql_bind(result_bind, 0, &id, MYSQL_TYPE_LONG);
     mysql_bind(result_bind, 1, &figure, MYSQL_TYPE_STRING);
@@ -53,7 +53,7 @@ player_data *query_player_login(char *username, char *password) {
 
     while (!mysql_stmt_fetch(statement)) {
         // TODO: Handle retrieved data
-        printf("User with id %i and figure %s\n", id, figure);
+        printf("User with id %i\n", id);
     }
 
     //printf("No user found with username %s and password %s\n", username, password);

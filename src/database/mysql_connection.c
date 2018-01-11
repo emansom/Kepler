@@ -49,7 +49,7 @@ MYSQL *mysql_create_connection() {
 void mysql_bind(MYSQL_BIND *result_bind, int position, void *buffer, enum_field_types type) {
     result_bind[position].buffer_type = type;
     result_bind[position].buffer = (char *)buffer;
-    result_bind[position].buffer_length = sizeof((char *)buffer);
+    result_bind[position].buffer_length = strlen((char *)buffer);
     result_bind[position].length = 0;
     result_bind[position].is_null = 0;
 }
