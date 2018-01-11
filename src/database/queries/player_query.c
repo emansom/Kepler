@@ -8,7 +8,7 @@
 player_data *query_player_login(char *username, char *password) {
     player_data *data = NULL;
 
-    MYSQL *mysql = mysql_create_connection(mysql_connection_settings());
+    MYSQL *mysql = mysql_create_connection();
     MYSQL_STMT *statement = mysql_stmt_init(mysql);
 
     MYSQL_BIND input_bind[1];
