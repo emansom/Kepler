@@ -22,12 +22,16 @@ player *player_create(dyad_Stream *stream) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *figure, int coins) {
+player_data *player_create_data(int id, char *username, char *figure, int credits, char *motto, char *sex, int tickets, int film) {
     player_data *player_data = malloc(sizeof(player_data));
     player_data->id = id;
     player_data->username = strdup(username);
     player_data->figure = strdup(figure);
-    player_data->coins = coins;
+    player_data->credits = credits;
+    player_data->motto = motto;
+    player_data->sex = sex;
+    player_data->tickets = tickets;
+    player_data->film = film;
     return player_data;
 }
 

@@ -8,7 +8,11 @@ typedef struct player_data_s {
     int id;
     char *username;
     char *figure;
-    int coins;
+    int credits;
+    char *motto;
+    char *sex;
+    int tickets;
+    int film;
 } player_data;
 
 typedef struct player_s {
@@ -18,7 +22,7 @@ typedef struct player_s {
 
 
 player *player_create(dyad_Stream*);
-player_data *player_create_data(int, char*, char*, int);
+player_data *player_create_data(int, char*, char*, int, char*, char*, int, int);
 void player_init(player*);
 
 void player_cleanup(player*);
