@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.5)
 project(Kepler C)
 
+set(EXECUTABLE_NAME Kepler)
 set(CMAKE_C_STANDARD 11)
 set(PROJECT_DIR src)
 
@@ -33,7 +34,7 @@ file(GLOB database ${PROJECT_DIR}/database/*.c)
 # Kepler managers
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 
-add_executable(Kepler
+add_executable(${EXECUTABLE_NAME}
         ${collections}
         ${dyad}
         ${sqlite}
@@ -46,8 +47,8 @@ add_executable(Kepler
         ${encoding}
         ${database})
 
-target_link_libraries(Kepler mysql)
+target_link_libraries(${EXECUTABLE_NAME} mysql)
 
 if(WIN32)
-    target_link_libraries(Kepler wsock32 ws2_32)
+    target_link_libraries(${EXECUTABLE_NAME} wsock32 ws2_32)
 endif()
