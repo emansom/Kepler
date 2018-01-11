@@ -14,7 +14,7 @@ typedef struct mysql_details_s {
 } connection_details;
 
 connection_details mysql_connection_settings();
-MYSQL *mysql_create_connection(connection_details conn_settings);
+MYSQL *mysql_create_connection();
 
 void mysql_bind(MYSQL_BIND*, int, void*, enum_field_types);
 //void mysql_bind_str(MYSQL_BIND*, int, void*);

@@ -14,7 +14,7 @@ int main(void) {
     print_info("\n");
     print_info("Testing MySQL connection...\n");
 
-    MYSQL *con = mysql_create_connection(mysql_connection_settings());
+    MYSQL *con = mysql_create_connection();
 
     if (con == NULL) {
         print_info("The connection to MySQL was unsuccessful, program aborted!\n");

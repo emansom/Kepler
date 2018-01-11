@@ -22,8 +22,9 @@ connection_details mysql_connection_settings() {
  *
  * @return the MYSQL connection
  */
-MYSQL *mysql_create_connection(connection_details conn_settings) {
+MYSQL *mysql_create_connection() {
     MYSQL *con = mysql_init(NULL);
+    connection_details conn_settings = mysql_connection_settings();
 
     if (con == NULL) {
         mysql_print_error("%s\n", mysql_error(con));
@@ -46,11 +47,12 @@ MYSQL *mysql_create_connection(connection_details conn_settings) {
 }
 
 void mysql_bind(MYSQL_BIND *result_bind, int position, void *buffer, enum_field_types type) {
-    result_bind[position].buffer_type = type; // should be actual types, but this works...?
-    result_bind[position].buffer = buffer;
-    result_bind[position].buffer_length = sizeof(buffer);
-    result_bind[position].length = &result_bind[position].buffer_length;
-    result_bind[position].is_null = (my_bool*)0;
+    //printf("bind called for position %i and data %s\n", position, (char*)buffer);
+    result_bind[position].buffer_type = type;
+    result_bind[position].buffer = (char *)buffer;
+    result_bind[position].buffer_length = sizeof((char *)buffer);
+    result_bind[position].length = 0;
+    result_bind[position].is_null = 0;
 }
 
 /**
