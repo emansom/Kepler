@@ -20,7 +20,6 @@ endif()
 # Load source files for libraries
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
 file(GLOB dyad ${PROJECT_DIR}/lib/dyad/*.c)
-file(GLOB sqlite ${PROJECT_DIR}/lib/sqlite/include/*.c)
 
 # Kepler classes
 file(GLOB src ${PROJECT_DIR}/*.c)
@@ -37,7 +36,6 @@ file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 add_executable(${EXECUTABLE_NAME}
         ${collections}
         ${dyad}
-        ${sqlite}
         ${src}
         ${util}
         ${messages}
