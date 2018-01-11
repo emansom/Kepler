@@ -28,7 +28,7 @@ player_data *player_create_data(int id, char *username, char *figure, int credit
     player_data->username = strdup(username);
     player_data->figure = strdup(figure);
     player_data->credits = credits;
-    player_data->motto = motto;
+    player_data->motto = strdup(motto);
     player_data->sex = sex;
     player_data->tickets = tickets;
     player_data->film = film;

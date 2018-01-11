@@ -11,14 +11,19 @@ void message_login(player *player, incoming_message *message) {
     char *password = im_read_str(message);
 
     //printf("Username: %s and password: %s.\n", username, password);
-    player_data *player_data = query_player_login(username, password);
+    int player_id = query_player_login(username, password);
 
-    if (player_data == NULL) {
+    if (player_id == -1) {
         send_localised_error(player, "login incorrect"/*": Wrong username"*/);
         return;
     }
 
+    printf("playerdata: %i\n", player_id);
 
+    player_data *player_data = query_player_data(player_id);
+    player->player_data = player_data;
+
+    printf("username: %i\n", player_data->credits);
 
     outgoing_message *om;
 
