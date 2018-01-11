@@ -32,6 +32,18 @@ void om_write_str(outgoing_message *om, char *str) {
 }
 
 /**
+ * Writes a integer as a string to the outgoing message
+ * @param om the outgoing message
+ * @param str the string to write
+ */
+void om_write_str_int(outgoing_message *om, int num) {
+    char var[11];
+    sprintf(var, "%i", num);
+    var[10] = '\0';
+    om_write_str(om, var);
+}
+
+/**
  * Writes a int to the outgoing message
  * @param om the outgoing message
  * @param str the int to write

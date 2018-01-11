@@ -1,5 +1,4 @@
-#include <sqlite3.h>
-
+#include "sqlite3.h"
 #include "db_connection.h"
 #include "shared.h"
 
@@ -22,7 +21,6 @@ connection_details db_connection_settings() {
  */
 sqlite3 *db_create_connection() {
     sqlite3 *db;
-
     int rc = sqlite3_open(db_connection_settings().database_name, &db);
 
     if (rc != SQLITE_OK) {

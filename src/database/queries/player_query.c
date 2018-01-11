@@ -2,6 +2,8 @@
 #include <string.h>
 
 #include "sqlite3.h"
+
+#include "game/player/player.h"
 #include "player_query.h"
 
 #include "database/db_connection.h"
@@ -28,4 +30,36 @@ int query_player_login(char *username, char *password) {
 
     sqlite3_close(conn);
     return SUCCESS;
+}
+
+player_data *query_player_data(int id) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    player_data *player_data = NULL;
+    int status = sqlite3_prepare(conn, "SELECT id,username,figure,credits,sex,motto,tickets,film FROM users WHERE id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    int step = sqlite3_step(stmt);
+
+    if (step == SQLITE_ROW) {
+        player_data = player_create_data(
+            sqlite3_column_int(stmt, 0),
+            (char*) sqlite3_column_text(stmt, 1),
+            (char*) sqlite3_column_text(stmt, 2),
+            sqlite3_column_int(stmt, 5),
+            (char*) sqlite3_column_text(stmt, 3),
+            (char*) sqlite3_column_text(stmt, 4),
+            sqlite3_column_int(stmt, 6),
+            sqlite3_column_int(stmt, 7)
+        );
+    }
+
+    sqlite3_close(conn);
+    return player_data;
 }
