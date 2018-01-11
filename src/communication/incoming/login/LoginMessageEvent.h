@@ -10,7 +10,7 @@ void message_login(player *player, incoming_message *message) {
     char *username = im_read_str(message);
     char *password = im_read_str(message);
 
-    printf("Username: %s and password: %s.\n", username, password);
+    //printf("Username: %s and password: %s.\n", username, password);
     player_data *player_data = query_player_login(username, password);
 
     if (player_data == NULL) {
