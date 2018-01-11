@@ -45,6 +45,25 @@ MYSQL *mysql_create_connection(connection_details conn_settings) {
     return con;
 }
 
+void mysql_bind(MYSQL_BIND *result_bind, int position, void *buffer, enum_field_types type) {
+    result_bind[position].buffer_type = type; // should be actual types, but this works...?
+    result_bind[position].buffer = buffer;
+    result_bind[position].buffer_length = sizeof(buffer);
+    result_bind[position].length = &result_bind[position].buffer_length;
+    result_bind[position].is_null = (my_bool*)0;
+}
+
+/**
+ * Handler to close both connection and statement.
+ *
+ * @param mysql_conn the mysql connection
+ * @param mysql_stmt the mysql statement
+ */
+void mysql_force_close(MYSQL *mysql_conn, MYSQL_STMT *mysql_stmt) {
+    mysql_close(mysql_conn);
+    mysql_stmt_close(mysql_stmt);
+}
+
 /**
  * Method handle to print errors relating to MySQL, operates the same as printf function.
  *
