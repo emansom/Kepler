@@ -10,7 +10,7 @@ typedef struct mysql_details_s {
 } connection_settings;
 
 connection_settings db_connection_settings;
-
 MYSQL *mysql_create_connection();
+void mysql_print_error(const char *, ...);
 
 #endif

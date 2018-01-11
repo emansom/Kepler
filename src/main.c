@@ -3,18 +3,32 @@
 
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
+
+#include "mysql.h"
 #include "database/mysql_connection.h"
 
 int main(void) {
-    printf("Kepler Habbo server...\n");
-    printf("Written by Quackster\n");
+    print_info("Kepler Habbo server...\n");
+    print_info("Written by Quackster\n");
 
     strcpy(db_connection_settings.hostname, "localhost");
     strcpy(db_connection_settings.username, "root");
     strcpy(db_connection_settings.password, "");
-    strcpy(db_connection_settings.database, "hello");
+    strcpy(db_connection_settings.database, "icarusdb");
 
-    mysql_create_connection();
+    print_info("\n");
+    print_info("Testing MySQL connection...\n");
+
+    MYSQL *con = mysql_create_connection();
+
+    if (con == NULL) {
+        print_info("The connection to MySQL was unsuccessful, program aborted!\n");
+        return 0;
+    } else {
+        print_info("The connection to MySQL was successful!\n");
+        mysql_close(con);
+    }
+
     player_manager_init();
     mh_add_messages();
 
