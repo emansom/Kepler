@@ -9,10 +9,10 @@ INCLUDE_DIRECTORIES(src)
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/dyad/)
-include_directories("C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/include/")
 
 # Link library .dlls on Windows
 if(WIN32)
+    include_directories("C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/include/")
     link_directories("C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/lib/")
 endif()
 

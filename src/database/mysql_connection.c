@@ -12,7 +12,7 @@ connection_details mysql_connection_settings() {
     strcpy(settings.hostname, "localhost");
     strcpy(settings.username, "root");
     strcpy(settings.password, "");
-    strcpy(settings.database, "icarusdb");
+    strcpy(settings.database, "kepler");
     return settings;
 }
 
