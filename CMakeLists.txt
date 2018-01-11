@@ -9,11 +9,11 @@ INCLUDE_DIRECTORIES(src)
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/dyad/)
-include_directories(${PROJECT_DIR}/lib/sqlite/)
+include_directories("C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/include/")
 
 # Link library .dlls on Windows
 if(WIN32)
-    link_directories(${PROJECT_DIR}/lib/sqlite/)
+    link_directories("C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/lib/")
 endif()
 
 # Load source files for libraries
@@ -28,6 +28,7 @@ file(GLOB communication ${PROJECT_DIR}/communication/*.c)
 file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
 file(GLOB encoding ${PROJECT_DIR}/util/encoding/*.c)
+file(GLOB database ${PROJECT_DIR}/database/*.c)
 
 # Kepler managers
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
@@ -42,9 +43,10 @@ add_executable(Kepler
         ${communication}
         ${server}
         ${players}
-        ${encoding})
+        ${encoding}
+        ${database})
 
-target_link_libraries(Kepler sqlite3)
+target_link_libraries(Kepler mysql)
 
 if(WIN32)
     target_link_libraries(Kepler wsock32 ws2_32)

@@ -1,28 +1,20 @@
-#include <sqlite3.h>
 #include "shared.h"
 #include "dyad.h"
 
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
+#include "database/mysql_connection.h"
 
 int main(void) {
     printf("Kepler Habbo server...\n");
     printf("Written by Quackster\n");
 
-    sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc;
+    strcpy(db_connection_settings.hostname, "localhost");
+    strcpy(db_connection_settings.username, "root");
+    strcpy(db_connection_settings.password, "");
+    strcpy(db_connection_settings.database, "hello");
 
-    rc = sqlite3_open("test.db", &db);
-
-    if( rc ) {
-        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-        return(0);
-    } else {
-        fprintf(stderr, "Opened database successfully\n");
-    }
-    sqlite3_close(db);
-
+    mysql_create_connection();
     player_manager_init();
     mh_add_messages();
 
