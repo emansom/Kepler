@@ -29,6 +29,7 @@ file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
 file(GLOB encoding ${PROJECT_DIR}/util/encoding/*.c)
 file(GLOB database ${PROJECT_DIR}/database/*.c)
+file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
 
 # Kepler managers
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
@@ -43,7 +44,8 @@ add_executable(${EXECUTABLE_NAME}
         ${server}
         ${players}
         ${encoding}
-        ${database})
+        ${database}
+        ${queries})
 
 target_link_libraries(${EXECUTABLE_NAME} mysql)
 

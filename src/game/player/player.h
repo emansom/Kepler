@@ -4,13 +4,25 @@
 typedef struct dyad_Stream dyad_Stream;
 typedef struct outgoing_message_s outgoing_message;
 
+typedef struct player_data_s {
+    int id;
+    char *username;
+    char *figure;
+    int coins;
+} player_data;
+
 typedef struct player_s {
     dyad_Stream *stream;
+    player_data *player_data;
 } player;
 
+
 player *player_create(dyad_Stream*);
+player_data *player_create_data(int, char*, char*, int);
 void player_init(player*);
+
 void player_cleanup(player*);
 void player_send(player*, outgoing_message*);
+void send_localised_error(player*, char*);
 
 #endif
