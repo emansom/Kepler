@@ -17,8 +17,6 @@ connection_details mysql_connection_settings();
 MYSQL *mysql_create_connection();
 
 void mysql_bind(MYSQL_BIND*, int, void*, enum_field_types);
-//void mysql_bind_str(MYSQL_BIND*, int, void*);
-
 void mysql_force_close(MYSQL*, MYSQL_STMT*);
 void mysql_print_error(const char *, ...);
 

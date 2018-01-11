@@ -11,13 +11,13 @@ player_data *query_player_login(char *username, char *password) {
     MYSQL *mysql = mysql_create_connection();
     MYSQL_STMT *statement = mysql_stmt_init(mysql);
 
-    MYSQL_BIND input_bind[1];
+    MYSQL_BIND input_bind[2];
     MYSQL_BIND result_bind[2];
 
     memset(input_bind, 0, sizeof(input_bind));
     memset(result_bind, 0, sizeof(result_bind));
 
-    char *query = "SELECT id,figure FROM users WHERE username = ?";
+    char *query = "SELECT id,figure FROM users WHERE username = ? AND password = ?";
 
     if(mysql_stmt_prepare(statement, query, strlen(query))){
         fprintf(stderr, "mysql_stmt_prepare(), INSERT failed, %s\n", mysql_error(mysql));
@@ -25,6 +25,7 @@ player_data *query_player_login(char *username, char *password) {
     }
 
     mysql_bind(input_bind, 0, username, MYSQL_TYPE_STRING);
+    mysql_bind(input_bind, 1, password, MYSQL_TYPE_STRING);
 
     if (mysql_stmt_bind_param(statement, input_bind) != 0) {
         fprintf(stderr, "mysql_stmt_bind_param() failed. Error: %s\n", mysql_stmt_error(statement));

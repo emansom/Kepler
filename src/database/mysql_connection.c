@@ -47,7 +47,6 @@ MYSQL *mysql_create_connection() {
 }
 
 void mysql_bind(MYSQL_BIND *result_bind, int position, void *buffer, enum_field_types type) {
-    //printf("bind called for position %i and data %s\n", position, (char*)buffer);
     result_bind[position].buffer_type = type;
     result_bind[position].buffer = (char *)buffer;
     result_bind[position].buffer_length = sizeof((char *)buffer);
