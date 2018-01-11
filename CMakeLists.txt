@@ -10,11 +10,11 @@ INCLUDE_DIRECTORIES(src)
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/dyad/)
+include_directories(${PROJECT_DIR}/lib/sqlite/)
 
 # Link library .dlls on Windows
 if(WIN32)
-    include_directories("C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/include/")
-    link_directories("C:/Program Files (x86)/MySQL/MySQL Connector C 6.1/lib/")
+    link_directories(${PROJECT_DIR}/lib/sqlite/)
 endif()
 
 # Load source files for libraries
@@ -47,7 +47,7 @@ add_executable(${EXECUTABLE_NAME}
         ${database}
         ${queries})
 
-target_link_libraries(${EXECUTABLE_NAME} mysql)
+target_link_libraries(${EXECUTABLE_NAME} sqlite3)
 
 if(WIN32)
     target_link_libraries(${EXECUTABLE_NAME} wsock32 ws2_32)

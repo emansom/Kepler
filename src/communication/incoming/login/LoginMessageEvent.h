@@ -20,11 +20,6 @@ void message_login(player *player, incoming_message *message) {
 
     printf("playerdata: %i\n", player_id);
 
-    player_data *player_data = query_player_data(player_id);
-    player->player_data = player_data;
-
-    printf("username: %i\n", player_data->credits);
-
     outgoing_message *om;
 
     om = om_create(2); // @B
