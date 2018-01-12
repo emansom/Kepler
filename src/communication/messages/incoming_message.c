@@ -50,6 +50,18 @@ int im_read_vl64(incoming_message *im) {
 }
 
 /**
+ * Get rest of the packet, without header
+ *
+ * @param im the incoming message
+ * @return the integer value
+ */
+char *im_get_content(incoming_message *im) {
+    char *new_str = malloc(((strlen(im->data) - 2) * sizeof(char)) + 1);
+    memcpy(new_str, &im->data[2], strlen(im->data) - 2);
+    return new_str;
+}
+
+/**
  * Read base64 character, use free() on this returned value after using this.
  *
  * @param im the incoming message

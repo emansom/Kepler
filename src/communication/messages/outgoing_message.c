@@ -22,7 +22,8 @@ outgoing_message *om_create(int header) {
 }
 
 /**
- * Writes a string to the outgoing message
+ * Writes a string to the outgoing message with the default special character delimeter.
+ *
  * @param om the outgoing message
  * @param str the string to write
  */
@@ -32,11 +33,30 @@ void om_write_str(outgoing_message *om, char *str) {
         return;
     }
 
-    printf("writing...\n");
-    printf("writing: %s\n", str);
     om_write_str_delimeter(om, str, 2);
 }
 
+/**
+ * Writes a string to the outgoing message.
+ *
+ * @param om the outgoing message
+ * @param str the string to write
+ */
+void om_write_raw_str(outgoing_message *om, char *str) {
+    if (str == NULL) {
+        om_write_str_delimeter(om, "[null]", 2);
+        return;
+    }
+
+    sb_add_string(om->sb, str);
+}
+
+/**
+ * Writes a string to the outgoing message with a custom character delimeter.
+ *
+ * @param om the outgoing message
+ * @param str the string to write
+ */
 void om_write_str_delimeter(outgoing_message *om, char *str, int delim) {
     char *temp = strdup(str);
     sb_add_string(om->sb, temp);
@@ -44,6 +64,12 @@ void om_write_str_delimeter(outgoing_message *om, char *str, int delim) {
     free(temp);
 }
 
+/**
+ * Writes a int to the outgoing message with a custom character delimeter.
+ *
+ * @param om the outgoing message
+ * @param str the string to write
+ */
 void om_write_int_delimeter(outgoing_message *om, int num, int delim) {
     char var[11];
     sprintf(var, "%i", num);

@@ -15,8 +15,7 @@ struct server {
 
 static struct server global;
 
-
-
+int is_numeric(const char*);
 void print_info(const char *, ...);
 void print_error(const char *, ...);
 int starts_with(const char*, const char*);

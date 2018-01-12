@@ -32,11 +32,6 @@ sqlite3 *db_create_connection() {
     return db;
 }
 
-char *copy_str(const unsigned char *str) {
-    char *convert = (char*)str;
-    return convert;
-}
-
 void db_print_error(const char *format, ...) {
     print_info("MySQL Error: ");
     va_list args;
