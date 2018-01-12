@@ -39,7 +39,7 @@ player_data *player_create_data(int id, char *username, char *figure, int credit
  * @param p the player struct
  */
 void player_init(player *p) {
-    printf("Player initialise %s\n", dyad_getAddress(p->stream));
+    printf("Client [%s] has connected\n", dyad_getAddress(p->stream));
 }
 
 /**
@@ -61,7 +61,7 @@ void player_cleanup(player *player) {
         free(player_data);
     }
 
-    printf("Player cleanup %s\n", dyad_getAddress(player->stream));
+    printf("Client [%s] has disconnected\n", dyad_getAddress(player->stream));
     free(player);
 }
 

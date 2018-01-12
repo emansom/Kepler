@@ -24,6 +24,11 @@ static void handle_data(dyad_Event *e) {
         };
 
         int message_length = base64_decode(recv_length) + 1;
+
+        if (message_length < 0 || message_length > 5120) {
+            return;
+        }
+
         char *message = malloc(message_length * sizeof(char));
 
         for (int i = 0; i < message_length - 1; i++) {
@@ -33,7 +38,6 @@ static void handle_data(dyad_Event *e) {
         message[message_length - 1] = '\0';
 
         incoming_message *im = im_create(message);
-        printf("Client [%s] incoming data: %i / %s\n", dyad_getAddress(e->stream), im->header_id, message);
         mh_invoke_message(im, e->stream->player);
 
         im_cleanup(im);
@@ -51,8 +55,6 @@ static void client_disconnect(dyad_Event *e) {
     if (player != NULL) {
         player_cleanup(player);
         player_manager_remove(e->stream);
-
-        printf ("Client [%s] has disconnected\n", dyad_getAddress(e->stream));
     }
 }
 
@@ -63,7 +65,6 @@ static void client_disconnect(dyad_Event *e) {
 static void client_connect(dyad_Event *e) {
     player_manager_add(e->remote);
 
-    printf("Client [%s] has connected\n", dyad_getAddress(e->remote));
     dyad_addListener(e->remote, DYAD_EVENT_DATA, handle_data, NULL);
     dyad_addListener(e->remote, DYAD_EVENT_CLOSE, client_disconnect, NULL);
 

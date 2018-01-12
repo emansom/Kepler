@@ -1,3 +1,4 @@
+#include <communication/messages/incoming_message.h>
 #include "message_handler.h"
 #include "game/player/player.h"
 
@@ -81,6 +82,8 @@ Client [127.0.0.1] incoming data: 213 / CU*/
  * @param player the player struct
  */
 void mh_invoke_message(incoming_message *im, player *player) {
+    printf("Client [%s] incoming data: %i / %s\n", dyad_getAddress(player->stream), im->header_id, im->data);
+
     if (message_requests[im->header_id] == NULL) {
         return;
     }

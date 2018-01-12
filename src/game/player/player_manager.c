@@ -41,8 +41,6 @@ player *player_manager_add(dyad_Stream *stream) {
 void player_manager_remove(dyad_Stream *stream) {
     if (hashtable_contains_key(global.player_manager.players, stream)) {
         hashtable_remove(global.player_manager.players, stream, NULL);
-    } else {
-        printf("Could not find.");
     }
 }
 

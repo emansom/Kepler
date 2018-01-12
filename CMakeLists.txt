@@ -12,6 +12,12 @@ include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/dyad/)
 include_directories(${PROJECT_DIR}/lib/sqlite/)
 
+# Link library .dlls on Windows
+if(WIN32)
+    link_directories(${PROJECT_DIR}/lib/sqlite/)
+endif()
+
+
 # Load source files for libraries
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
 file(GLOB dyad ${PROJECT_DIR}/lib/dyad/*.c)
