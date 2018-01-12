@@ -7,7 +7,7 @@
 void GOTOFLAT(player *player, incoming_message *message) {
     outgoing_message *om;
 
-    om = om_create(166); // "Bf"
+    /*om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
     player_send(player, om);
     om_cleanup(om);
@@ -22,5 +22,5 @@ void GOTOFLAT(player *player, incoming_message *message) {
     om = om_create(345); // "EY"
     om_write_int(om, 0); // votes
     player_send(player, om);
-    om_cleanup(om);
+    om_cleanup(om);*/
 }
