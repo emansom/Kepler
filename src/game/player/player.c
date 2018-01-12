@@ -47,6 +47,10 @@ void player_init(player *p) {
  * @param p the player struct
  */
 void player_cleanup(player *p) {
+    if (p == NULL) {
+        return;
+    }
+
     printf("Player cleanup %s\n", dyad_getAddress(p->stream));
 
     if (p->player_data != NULL) {
@@ -58,6 +62,7 @@ void player_cleanup(player *p) {
     }
 
     free(p);
+    p = NULL;
 }
 
 /**

@@ -28,6 +28,7 @@ int query_player_login(char *username, char *password) {
         SUCCESS = sqlite3_column_int(stmt, 0);
     }
 
+    sqlite3_finalize(stmt);
     sqlite3_close(conn);
     return SUCCESS;
 }
@@ -60,6 +61,7 @@ player_data *query_player_data(int id) {
         );
     }
 
+    sqlite3_finalize(stmt);
     sqlite3_close(conn);
     return player_data;
 }

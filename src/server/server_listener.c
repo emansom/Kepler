@@ -1,3 +1,4 @@
+#include <lib/dyad/dyad.h>
 #include "dyad.h"
 #include "game/player/player.h"
 #include "communication/message_handler.h"
@@ -49,10 +50,10 @@ static void client_disconnect(dyad_Event *e) {
 
     if (player != NULL) {
         player_cleanup(player);
-    }
+        player_manager_remove(e->stream);
 
-    player_manager_remove(e->stream);
-    printf ("Client [%s] has disconnected\n", dyad_getAddress(e->stream));
+        printf ("Client [%s] has disconnected\n", dyad_getAddress(e->stream));
+    }
 }
 
 /**

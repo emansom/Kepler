@@ -1,15 +1,16 @@
 #include "shared.h"
 
 #include "list.h"
-#include "dyad.h"
+#include "hashtable.h"
 
+#include "dyad.h"
 #include "player.h"
 
 /**
  * Create a new list to store players
  */
 void player_manager_init() {
-    list_new(&global.player_manager.players);
+    hashtable_new(&global.player_manager.players);
 }
 
 /**
@@ -20,7 +21,7 @@ void player_manager_init() {
  * @return the player
  */
 player *player_manager_add(dyad_Stream *stream) {
-    player *existing = player_manager_find(stream);
+    player *existing = stream->player_s;
 
     if (existing != NULL) {
         return existing;
@@ -29,7 +30,7 @@ player *player_manager_add(dyad_Stream *stream) {
     player *p = player_create(stream);
 
     player_init(p);
-    list_add(global.player_manager.players, p);
+    hashtable_add(global.player_manager.players, stream, p);
 
     return p;
 }
@@ -39,15 +40,10 @@ player *player_manager_add(dyad_Stream *stream) {
  * @param stream the dyad stream
  */
 void player_manager_remove(dyad_Stream *stream) {
-    ListIter iter;
-    list_iter_init(&iter, global.player_manager.players);
-
-    player *p;
-    while (list_iter_next(&iter, (void*) &p) != CC_ITER_END) {
-        if (p->stream == stream) {
-            list_diter_remove(&iter, NULL);
-            break;
-        }
+    if (hashtable_contains_key(global.player_manager.players, stream)) {
+        hashtable_remove(global.player_manager.players, stream, NULL);
+    } else {
+        printf("Could not find.");
     }
 }
 
@@ -57,15 +53,16 @@ void player_manager_remove(dyad_Stream *stream) {
  * @return the player
  */
 player *player_manager_find(dyad_Stream *stream) {
-    ListIter iter;
-    list_iter_init(&iter, global.player_manager.players);
+    void *out = NULL;
 
-    player *p;
-    while (list_iter_next(&iter, (void*) &p) != CC_ITER_END) {
-        if (p->stream == stream) {
-            return p;
-        }
+    if (hashtable_contains_key(global.player_manager.players, stream)) {
+        hashtable_get(global.player_manager.players, stream, &out);
     }
 
-    return NULL;
+    if (out != NULL) {
+        player *player = out;
+        return player;
+    }
+
+    return out;
 }

@@ -1,12 +1,12 @@
 #ifndef PLAYER_MANAGER_H
 #define PLAYER_MANAGER_H
 
-typedef struct list_s List;
+typedef struct hashtable_s HashTable;
 typedef struct dyad_Stream dyad_Stream;
 typedef struct player_s player;
 
 struct player_manager {
-    List *players;
+    HashTable *players;
 };
 
 void player_manager_init();
