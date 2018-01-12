@@ -36,19 +36,11 @@ void om_write_str(outgoing_message *om, char *str) {
     om_write_str_delimeter(om, str, 2);
 }
 
-/**
- * Writes a string to the outgoing message.
- *
- * @param om the outgoing message
- * @param str the string to write
- */
-void om_write_raw_str(outgoing_message *om, char *str) {
-    if (str == NULL) {
-        om_write_str_delimeter(om, "[null]", 2);
-        return;
-    }
-
-    sb_add_string(om->sb, str);
+void om_write_str_kv(outgoing_message *om, char *key, char *value) {
+    sb_add_string(om->sb, key);
+    sb_add_string(om->sb, ":");
+    sb_add_string(om->sb, value);
+    sb_add_char(om->sb, 13);
 }
 
 /**
@@ -58,10 +50,8 @@ void om_write_raw_str(outgoing_message *om, char *str) {
  * @param str the string to write
  */
 void om_write_str_delimeter(outgoing_message *om, char *str, int delim) {
-    char *temp = strdup(str);
-    sb_add_string(om->sb, temp);
+    sb_add_string(om->sb, str);
     sb_add_char(om->sb, delim);
-    free(temp);
 }
 
 /**
