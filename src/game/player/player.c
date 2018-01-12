@@ -1,8 +1,9 @@
-
 #include <stdio.h>
 
 #include "player.h"
 #include "dyad.h"
+
+#include "sqlite3.h"
 
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
@@ -25,13 +26,18 @@ player *player_create(dyad_Stream *stream) {
 player_data *player_create_data(int id, char *username, char *figure, int credits, char *motto, char *sex, int tickets, int film) {
     player_data *player_data = malloc(sizeof(player_data));
     player_data->id = id;
-    player_data->username = strdup(username);
-    player_data->figure = strdup(figure);
+    strcpy(player_data->username, username);
+    strcpy(player_data->figure, figure);
     player_data->credits = credits;
-    player_data->motto = strdup(motto);
-    player_data->sex = strdup(sex);
+    strcpy(player_data->motto, motto);
+    strcpy(player_data->sex, sex);
     player_data->tickets = tickets;
     player_data->film = film;
+
+    player_data->username[strlen(username)] = '\0';
+    player_data->figure[strlen(figure)] = '\0';
+    player_data->motto[strlen(motto)] = '\0';
+    player_data->sex[strlen(sex)] = '\0';
     return player_data;
 }
 
@@ -48,17 +54,18 @@ void player_init(player *p) {
  * @param p the player struct
  */
 void player_cleanup(player *p) {
+    player *player = p;
     printf("Player cleanup %s\n", dyad_getAddress(p->stream));
 
-    if (p->player_data != NULL) {
-        free (p->player_data->username);
-        free (p->player_data->figure);
-        free (p->player_data->motto);
-        free (p->player_data->sex);
+    /*if (p->player_data != NULL) {
+        sqlite3_free (p->player_data->username);
+        sqlite3_free (p->player_data->figure);
+        sqlite3_free (p->player_data->motto);
+        sqlite3_free (p->player_data->sex);
         free (p->player_data);
-    }
+    }*/
 
-    free(p);
+    //free(player);
 }
 
 /**

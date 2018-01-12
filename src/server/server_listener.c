@@ -46,7 +46,10 @@ static void handle_data(dyad_Event *e) {
  */
 static void client_disconnect(dyad_Event *e) {
     player *player = player_manager_find(e->stream);
-    player_cleanup(player);
+
+    if (player != NULL) {
+        player_cleanup(player);
+    }
 
     player_manager_remove(e->stream);
     printf ("Client [%s] has disconnected\n", dyad_getAddress(e->stream));

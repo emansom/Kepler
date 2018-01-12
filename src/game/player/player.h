@@ -6,11 +6,11 @@ typedef struct outgoing_message_s outgoing_message;
 
 typedef struct player_data_s {
     int id;
-    char *username;
-    char *figure;
+    char username[200];
+    char figure[200];
     int credits;
-    char *motto;
-    char *sex;
+    char motto[200];
+    char sex[200];
     int tickets;
     int film;
 } player_data;

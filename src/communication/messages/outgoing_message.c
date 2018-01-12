@@ -32,6 +32,8 @@ void om_write_str(outgoing_message *om, char *str) {
         return;
     }
 
+    printf("writing...\n");
+    printf("writing: %s\n", str);
     om_write_str_delimeter(om, str, 2);
 }
 
