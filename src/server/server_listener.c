@@ -34,7 +34,7 @@ static void handle_data(dyad_Event *e) {
 
         incoming_message *im = im_create(message);
         printf("Client [%s] incoming data: %i / %s\n", dyad_getAddress(e->stream), im->header_id, message);
-        mh_invoke_message(im, player_manager_find(e->stream));
+        mh_invoke_message(im, e->stream->player);
 
         im_cleanup(im);
         free(message);
@@ -46,7 +46,7 @@ static void handle_data(dyad_Event *e) {
  * @param e the socket event
  */
 static void client_disconnect(dyad_Event *e) {
-    player *player = player_manager_find(e->stream);
+    player *player = e->stream->player;
 
     if (player != NULL) {
         player_cleanup(player);

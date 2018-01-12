@@ -44,25 +44,24 @@ void player_init(player *p) {
 
 /**
  * Called when a connection is closed
- * @param p the player struct
+ * @param player the player struct
  */
-void player_cleanup(player *p) {
-    if (p == NULL) {
+void player_cleanup(player *player) {
+    if (player == NULL) {
         return;
     }
 
-    printf("Player cleanup %s\n", dyad_getAddress(p->stream));
-
-    if (p->player_data != NULL) {
-        free(p->player_data->username);
-        free(p->player_data->figure);
-        free(p->player_data->motto);
-        free(p->player_data->sex);
-        free(p->player_data);
+    player_data *player_data = player->player_data;
+    if (player->player_data != NULL) {
+        free(player_data->username);
+        free(player_data->figure);
+        free(player_data->motto);
+        free(player_data->sex);
+        free(player_data);
     }
 
-    free(p);
-    p = NULL;
+    printf("Player cleanup %s\n", dyad_getAddress(player->stream));
+    free(player);
 }
 
 /**
