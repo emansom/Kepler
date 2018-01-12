@@ -52,7 +52,8 @@ void player_cleanup(player *player) {
     }
 
     player_data *player_data = player->player_data;
-    if (player->player_data != NULL) {
+
+    if (player_data != NULL) {
         free(player_data->username);
         free(player_data->figure);
         free(player_data->motto);
