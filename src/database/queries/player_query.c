@@ -50,11 +50,11 @@ player_data *query_player_data(int id) {
     if (step == SQLITE_ROW) {
         player_data = player_create_data(
             sqlite3_column_int(stmt, 0),
-            copy_str(sqlite3_column_text(stmt, 1)),
-            copy_str(sqlite3_column_text(stmt, 2)),
+            (char *) sqlite3_column_text(stmt, 1),
+            (char *) sqlite3_column_text(stmt, 2),
             sqlite3_column_int(stmt, 3),
-            copy_str(sqlite3_column_text(stmt, 4)),
-            copy_str(sqlite3_column_text(stmt, 5)),
+            (char *) sqlite3_column_text(stmt, 4),
+            (char *) sqlite3_column_text(stmt, 5),
             sqlite3_column_int(stmt, 6),
             sqlite3_column_int(stmt, 7)
         );

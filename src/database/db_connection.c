@@ -34,7 +34,7 @@ sqlite3 *db_create_connection() {
 
 char *copy_str(const unsigned char *str) {
     char *convert = (char*)str;
-    return sqlite3_mprintf("%s", convert);
+    return convert;
 }
 
 void db_print_error(const char *format, ...) {
