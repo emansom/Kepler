@@ -9,6 +9,7 @@ typedef struct db_details_s {
 
 connection_details db_connection_settings();
 sqlite3 *db_create_connection();
+char *copy_str(const unsigned char*);
 
 /*void mysql_bind(MYSQL_BIND*, int, void*, enum_field_types);
 void mysql_force_close(MYSQL*, MYSQL_STMT*);

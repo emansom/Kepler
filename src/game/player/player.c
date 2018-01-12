@@ -25,10 +25,10 @@ player *player_create(dyad_Stream *stream) {
 player_data *player_create_data(int id, char *username, char *figure, int credits, char *motto, char *sex, int tickets, int film) {
     player_data *player_data = malloc(sizeof(player_data));
     player_data->id = id;
-    player_data->username = strdup(username);
-    player_data->figure = strdup(figure);
+    player_data->username = username;
+    player_data->figure = figure;
     player_data->credits = credits;
-    player_data->motto = strdup(motto);
+    player_data->motto = motto;
     player_data->sex = sex;
     player_data->tickets = tickets;
     player_data->film = film;
@@ -53,6 +53,8 @@ void player_cleanup(player *p) {
     if (p->player_data != NULL) {
         free (p->player_data->username);
         free (p->player_data->figure);
+        free (p->player_data->motto);
+        free (p->player_data->sex);
         free (p->player_data);
     }
 
@@ -84,4 +86,16 @@ void send_localised_error(player *p, char *error) {
 
     player_send(p, om);
     om_cleanup(om);
+}
+
+/**
+ * Send an alert to the player
+ * @param p the player
+ * @param greeting the alert message
+ */
+void send_alert(player *p, char *greeting) {
+    outgoing_message *welcome_message = om_create(139); // BK
+    om_write_str(welcome_message, greeting);
+    player_send(p, welcome_message);
+    om_cleanup(welcome_message);
 }

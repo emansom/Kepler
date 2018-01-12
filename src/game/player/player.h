@@ -27,6 +27,8 @@ void player_init(player*);
 
 void player_cleanup(player*);
 void player_send(player*, outgoing_message*);
+
 void send_localised_error(player*, char*);
+void send_alert(player*, char*);
 
 #endif

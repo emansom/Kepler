@@ -15,29 +15,22 @@ void message_login(player *player, incoming_message *message) {
     if (player_id == -1) {
         send_localised_error(player, "login incorrect");
         return;
-    }
-
-    player_data *player_data = query_player_data(player_id);
-
-    if (player_data != NULL) {
-        player->player_data = query_player_data(player_id);
+    } else {
+        player_data *data = query_player_data(player_id);
+        player->player_data = data;
     }
 
     outgoing_message *fuserights_message = om_create(2); // @B
     player_send(player, fuserights_message);
     om_cleanup(fuserights_message);
 
-    outgoing_message *authenticate_message = om_create(2); // @C
+    outgoing_message *authenticate_message = om_create(3); // @C
     player_send(player, authenticate_message);
     om_cleanup(authenticate_message);
 
     char greeting[50];
     sprintf(greeting, "Welcome to the Kepler server, %s!", player->player_data->username);
-
-    outgoing_message *welcome_message = om_create(139); // BK
-    om_write_str(welcome_message, greeting);
-    player_send(player, welcome_message);
-    om_cleanup(welcome_message);
+    send_alert(player, greeting);
 
     free(username);
     free(password);
