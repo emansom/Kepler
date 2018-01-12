@@ -60,6 +60,18 @@ void sb_add_int(stringbuilder *sb, int integer) {
 }
 
 /**
+ * Adds an integer to the stringbuilder
+ * @param sb the stringbuilder
+ * @param integer the int
+ */
+void sb_add_char(stringbuilder *sb, int num) {
+    char data[2];
+    data[0] = (char)num;
+    data[1] = '\0';
+    sb_add_string(sb, data);
+}
+
+/**
  * Cleanup any variables loaded on the heap that had to do with this struct
  * @param sb the stringbuilder
  */

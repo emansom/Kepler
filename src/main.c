@@ -9,7 +9,7 @@
 
 int main(void) {
     print_info("Kepler Habbo server...\n");
-    print_info("Written by Quackster\n");
+    print_info("Written by Quackster \n");
 
     print_info("\n");
     print_info("Testing MySQL connection...\n");

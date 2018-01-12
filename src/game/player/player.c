@@ -25,11 +25,11 @@ player *player_create(dyad_Stream *stream) {
 player_data *player_create_data(int id, char *username, char *figure, int credits, char *motto, char *sex, int tickets, int film) {
     player_data *player_data = malloc(sizeof(player_data));
     player_data->id = id;
-    player_data->username = username;
-    player_data->figure = figure;
+    player_data->username = strdup(username);
+    player_data->figure = strdup(figure);
     player_data->credits = credits;
-    player_data->motto = motto;
-    player_data->sex = sex;
+    player_data->motto = strdup(motto);
+    player_data->sex = strdup(sex);
     player_data->tickets = tickets;
     player_data->film = film;
     return player_data;

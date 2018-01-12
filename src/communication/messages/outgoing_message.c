@@ -27,10 +27,32 @@ outgoing_message *om_create(int header) {
  * @param str the string to write
  */
 void om_write_str(outgoing_message *om, char *str) {
+    if (str == NULL) {
+        om_write_str_delimeter(om, "[null]", 2);
+        return;
+    }
+
+    om_write_str_delimeter(om, str, 2);
+}
+
+void om_write_str_delimeter(outgoing_message *om, char *str, int delim) {
     char *temp = strdup(str);
     sb_add_string(om->sb, temp);
-    sb_add_string(om->sb, "\2");
+    sb_add_char(om->sb, delim);
     free(temp);
+}
+
+void om_write_int_delimeter(outgoing_message *om, int num, int delim) {
+    char var[11];
+    sprintf(var, "%i", num);
+    var[10] = '\0';
+
+    sb_add_string(om->sb, var);
+    sb_add_char(om->sb, delim);
+}
+
+void om_write_char(outgoing_message *om, int character) {
+    sb_add_char(om->sb, character);
 }
 
 /**

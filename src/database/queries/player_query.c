@@ -13,7 +13,7 @@ int query_player_login(char *username, char *password) {
     sqlite3_stmt *stmt;
 
     int SUCCESS = -1;
-    int status = sqlite3_prepare(conn, "SELECT id FROM users WHERE username = ? AND password = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id FROM users WHERE username = ? AND password = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
@@ -37,7 +37,7 @@ player_data *query_player_data(int id) {
     sqlite3_stmt *stmt;
 
     player_data *player_data = NULL;
-    int status = sqlite3_prepare(conn, "SELECT id,username,figure,credits,motto,sex,tickets,film FROM users WHERE id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id,username,figure,credits,motto,sex,tickets,film FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, id);

@@ -12,6 +12,7 @@
 
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
+#include "communication/incoming/navigator/SUSERF.h"
 
 /**
  * Assigns all header handlers to this array
@@ -28,6 +29,7 @@ void mh_add_messages() {
 
     // Navigator
     message_requests[150] = NAVIGATE;
+    message_requests[16] = SUSERF;
 }
 
 /**

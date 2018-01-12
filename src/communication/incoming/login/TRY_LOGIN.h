@@ -7,8 +7,8 @@
 #include "database/queries/player_query.h"
 
 void TRY_LOGIN(player *player, incoming_message *message) {
-    char *username = im_read_str(message);
-    char *password = im_read_str(message);
+    char *username = "alex";//im_read_str(message);
+    char *password = "123";//im_read_str(message);
 
     int player_id = query_player_login(username, password);
 
