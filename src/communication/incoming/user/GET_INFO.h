@@ -4,7 +4,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void message_userinfo(player *player, incoming_message *message) {
+void GET_INFO(player *player, incoming_message *message) {
     outgoing_message *user_info = om_create(5);
     om_write_str_int(user_info, player->player_data->id);
     om_write_str(user_info, player->player_data->username);

@@ -27,8 +27,10 @@ outgoing_message *om_create(int header) {
  * @param str the string to write
  */
 void om_write_str(outgoing_message *om, char *str) {
-    sb_add_string(om->sb, str);
+    char *temp = strdup(str);
+    sb_add_string(om->sb, temp);
     sb_add_string(om->sb, "\2");
+    free(temp);
 }
 
 /**

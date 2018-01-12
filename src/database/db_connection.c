@@ -34,10 +34,7 @@ sqlite3 *db_create_connection() {
 
 char *copy_str(const unsigned char *str) {
     char *convert = (char*)str;
-    char *new_str = malloc(strlen(convert) + 1);
-    strcpy(new_str, convert);
-    new_str[strlen(convert)] = '\0';
-    return new_str;
+    return strdup(convert);
 }
 
 void db_print_error(const char *format, ...) {

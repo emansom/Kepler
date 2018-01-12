@@ -6,7 +6,7 @@
 
 #include "database/queries/player_query.h"
 
-void message_login(player *player, incoming_message *message) {
+void TRY_LOGIN(player *player, incoming_message *message) {
     char *username = im_read_str(message);
     char *password = im_read_str(message);
 
