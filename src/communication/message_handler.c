@@ -1,4 +1,4 @@
-#include <communication/messages/incoming_message.h>
+#include "communication/messages/incoming_message.h"
 #include "message_handler.h"
 #include "game/player/player.h"
 
@@ -6,6 +6,11 @@
 #include "communication/incoming/login/INIT_CRYPTO.h"
 #include "communication/incoming/login/GENERATEKEY.h"
 #include "communication/incoming/login/TRY_LOGIN.h"
+
+// Register
+#include "communication/incoming/register/APPROVENAME.h"
+#include "communication/incoming/register/APPROVE_PASSWORD.h"
+#include "communication/incoming/register/APPROVEEMAIL.h"
 
 // User
 #include "communication/incoming/user/GET_INFO.h"
@@ -37,6 +42,11 @@ void mh_add_messages() {
     message_requests[206] = INIT_CRYPTO;
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
+
+    // Register
+    message_requests[42] = APPROVENAME;
+    message_requests[203] = APPROVE_PASSWORD;
+    message_requests[197] = APPROVEEMAIL;
 
     // User
     message_requests[7] = GET_INFO;

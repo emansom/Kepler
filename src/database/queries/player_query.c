@@ -4,8 +4,8 @@
 #include "sqlite3.h"
 
 #include "game/player/player.h"
-#include "player_query.h"
 
+#include "database/queries/player_query.h"
 #include "database/db_connection.h"
 
 int query_player_login(char *username, char *password) {
@@ -31,6 +31,27 @@ int query_player_login(char *username, char *password) {
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
     return SUCCESS;
+}
+
+int query_player_exists_username(char *username) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int SUCCESS = -1;
+    int status = sqlite3_prepare(conn, "SELECT id FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    int step = sqlite3_step(stmt);
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return step == SQLITE_ROW; // row exists
 }
 
 player_data *query_player_data(int id) {
