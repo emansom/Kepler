@@ -26,6 +26,7 @@ int main(void) {
     }
 
     player_manager_init();
+    room_manager_init();
     mh_add_messages();
 
     dyad_Stream *dyad = create_server();
