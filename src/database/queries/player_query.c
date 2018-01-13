@@ -86,3 +86,27 @@ player_data *query_player_data(int id) {
     sqlite3_close(conn);
     return player_data;
 }
+
+int query_player_create(char *username, char *figure, char *gender, char *password) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "INSERT INTO users (username, password, sex, figure) VALUES (?,?,?,?)", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, username, strlen(username), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, password, strlen(password), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, gender, strlen(gender), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 4, figure, strlen(figure), SQLITE_STATIC);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+        return 1;
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+}

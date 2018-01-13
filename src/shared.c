@@ -1,7 +1,43 @@
 #include "shared.h"
 
+#include "database/queries/player_query.h"
+
 #include <stdarg.h>
 #include <ctype.h>
+
+int valid_password(const char *username, const char *password) {
+    char *temp_username = strdup(username);
+    char *temp_password = strdup(username);
+
+    int error_code = 0;
+
+    if (strcmp(strlwr(temp_username), strlwr(temp_password)) > 0) {
+        error_code = 5;
+    } else if (strlen(password) < 6) {
+        error_code = 1;
+    } else if (strlen(password) > 10) {
+        error_code = 2;
+    } else if (!has_numbers(password)) {
+        error_code = 4;
+    }
+
+    free(temp_password);
+    free(temp_username);
+
+    return error_code;
+}
+
+int get_name_check_code(char *username) {
+    if (strlen(username) > 15 || !valid_string(username, "1234567890qwertyuiopasdfghjklzxcvbnm-+=?!@:.,$")) {
+        return 2;
+    } else {
+        if (query_player_exists_username(username)) {
+            return 4;
+        } else {
+            return 0;
+        }
+    }
+}
 
 bool is_numeric(const char *s) {
     if (s == NULL || *s == '\0' || isspace(*s))

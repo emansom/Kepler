@@ -1,25 +1,11 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
+#include "database/queries/player_query.h"
+
+#include "shared.h"
+
 void REGISTER(player *player, incoming_message *message) {
-    /*
-     @k
-     @B
-     @Galex123
-
-     @D@Y1000118001270012900121001
-
-     @E
-     @A
-     M
-
-     @F
-     @@
-     @G
-     @K
-
-     dedfe@c.com@H@J06.01.1998@JA@A@@IA@C@Iqwerty123
-    */
     im_read_b64_int(message);
     char *name = im_read_str(message);
 
@@ -31,20 +17,32 @@ void REGISTER(player *player, incoming_message *message) {
 
     im_read_b64_int(message);
     im_read_b64_int(message);
+
+    // don't give a shit about emails
     im_read_b64_int(message);
+    free(im_read_str(message));
 
-    char *mail = im_read_str(message);
-    char *birth;
-    char *password;
+    // couldn't give a shit about your birthday either
+    im_read_b64_int(message);
+    free(im_read_str(message));
 
+    im_read(message, 11);
+    char *password = im_read_str(message);
 
+    bool kick_user = false;
 
-    printf("username: %s, figure: %s, mail: %s, birth: %s", name, figure, mail, birth);
+    if (valid_password(name, password) == 0 && get_name_check_code(name) == 0) {
+        query_player_create(name, figure, gender, password);
+    } else {
+        kick_user = true;
+    }
 
     free(name);
     free(figure);
     free(gender);
-    free(mail);
-    /*free(birth);
-    free(password);*/
+    free(password);
+
+    if (kick_user) {
+        dyad_close(player->stream);
+    }
 }

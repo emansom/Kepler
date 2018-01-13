@@ -5,18 +5,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
-
-int get_name_check_code(char *username) {
-    if (strlen(username) > 15 || !valid_string(username, "1234567890qwertyuiopasdfghjklzxcvbnm-+=?!@:.,$")) {
-        return 2;
-    } else {
-        if (query_player_exists_username(username)) {
-            return 4;
-        } else {
-            return 0;
-        }
-    }
-}
+#include "shared.h"
 
 void APPROVENAME(player *player, incoming_message *message) {
     char *username = im_read_str(message);

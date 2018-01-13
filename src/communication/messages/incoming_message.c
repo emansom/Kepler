@@ -31,6 +31,12 @@ char *im_read_b64(incoming_message *im) {
     return strdup(data);
 }
 
+/**
+ * Read a B64 as an integer.
+ *
+ * @param im the incoming message
+ * @return the integer
+ */
 int im_read_b64_int(incoming_message *im) {
     char data[] = {
         im->data[im->counter++],
@@ -66,8 +72,13 @@ int im_read_vl64(incoming_message *im) {
  * @return the integer value
  */
 char *im_get_content(incoming_message *im) {
-    char *new_str = malloc(((strlen(im->data) - 2) * sizeof(char)) + 1);
-    memcpy(new_str, &im->data[2], strlen(im->data) - 2);
+    int substring = im->counter;
+    int new_len = strlen(im->data) - substring;
+
+    char *new_str = malloc((new_len + 1) * sizeof(char));
+    memcpy(new_str, &im->data[substring], strlen(im->data) - substring);
+    new_str[new_len] = '\0';
+
     return new_str;
 }
 
@@ -95,6 +106,10 @@ char *im_read_str(incoming_message *im) {
     } else {
         return NULL;
     }
+}
+
+void *im_read(incoming_message *im, int amount_read) {
+    im->counter += amount_read;
 }
 
 /**

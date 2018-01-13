@@ -3,7 +3,7 @@
 
 void PARENT_EMAIL_REQUIRED(player *player, incoming_message *message) {
     outgoing_message *om = om_create(217); // "CY"
-    om_write_int(om, 1);
+    om_write_str_int(om, 1);
     player_send(player, om);
     om_cleanup(om);
 }

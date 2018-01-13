@@ -16,6 +16,8 @@ struct server {
 
 static struct server global;
 
+int valid_password(const char *username, const char *password);
+int get_name_check_code(char *username);
 bool is_numeric(const char*);
 bool has_numbers(const char*);
 bool valid_string(char*, char*);
