@@ -1,3 +1,4 @@
+#include <game/room/room.h>
 #include "shared.h"
 #include "dyad.h"
 
@@ -8,6 +9,9 @@
 #include "sqlite3.h"
 
 #include "game/player/player.h"
+
+#include "list.h"
+#include "database/queries/room_query.h"
 
 int main(void) {
     print_info("Kepler Habbo server...\n");
@@ -23,6 +27,16 @@ int main(void) {
     } else {
         print_info("The connection to the database was successful!\n");
         sqlite3_close(con);
+    }
+
+    List *rooms = room_query_get_by_id(1);
+    ListIter iter;
+
+    list_iter_init(&iter, rooms);
+
+    room *el;
+    while (list_iter_next(&iter, (void*) &el) != CC_ITER_END) {
+        printf("rooms: %s\n", el->room_data->name);
     }
 
     player_manager_init();
