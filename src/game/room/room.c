@@ -31,7 +31,11 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
     data->description = strdup(description);
     data->model = strdup(model);
     data->model_data = model_manager_get(model);
-    data->ccts = strdup(ccts);
+    if (ccts == NULL) {
+        data->ccts = strdup("");
+    } else {
+        data->ccts = strdup(ccts);
+    }
     data->wall = wallpaper;
     data->floor = floor;
     data->show_name = showname;

@@ -3,8 +3,6 @@
 
 #include <shared.h>
 
-typedef struct dyad_Stream dyad_Stream;
-
 typedef struct {
     char *header;
     char *data;

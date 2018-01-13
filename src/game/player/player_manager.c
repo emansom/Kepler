@@ -3,7 +3,6 @@
 #include "list.h"
 #include "hashtable.h"
 
-#include "dyad.h"
 #include "player.h"
 
 /**
@@ -20,7 +19,7 @@ void player_manager_init() {
  * @param stream the dyad stream
  * @return the player
  */
-player *player_manager_add(dyad_Stream *stream) {
+player *player_manager_add(void *stream) {
     player *p = player_create(stream);
     hashtable_add(global.player_manager.players, stream, p);
     return p;
@@ -30,7 +29,7 @@ player *player_manager_add(dyad_Stream *stream) {
  * Removes a player by the given stream
  * @param stream the dyad stream
  */
-void player_manager_remove(dyad_Stream *stream) {
+void player_manager_remove(void *stream) {
     if (hashtable_contains_key(global.player_manager.players, stream)) {
         hashtable_remove(global.player_manager.players, stream, NULL);
     }
@@ -41,7 +40,7 @@ void player_manager_remove(dyad_Stream *stream) {
  * @param stream the dyad stream
  * @return the player
  */
-player *player_manager_find(dyad_Stream *stream) {
+player *player_manager_find(void *stream) {
     player *p = NULL;
 
     if (hashtable_contains_key(global.player_manager.players, stream)) {

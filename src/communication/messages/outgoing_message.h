@@ -5,7 +5,6 @@
 
 typedef struct player_s player;
 typedef struct stringbuilder_s stringbuilder;
-typedef struct dyad_Stream dyad_Stream;
 
 typedef struct outgoing_message_s {
     int header_id;

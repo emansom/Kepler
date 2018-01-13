@@ -1,6 +1,4 @@
 #include "shared.h"
-#include "dyad.h"
-
 #include "sqlite3.h"
 
 #include "server/server_listener.h"
@@ -30,10 +28,7 @@ int main(void) {
     room_manager_init();
     mh_add_messages();
 
-    dyad_Stream *dyad = create_server();
-    listen_server(dyad);
-
-    free(dyad);
+    start_server("127.0.0.1", 12321);
     return EXIT_SUCCESS;
 }
 

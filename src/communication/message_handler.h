@@ -6,7 +6,6 @@
 
 #define MESSAGES 9999
 
-typedef struct dyad_Stream dyad_Stream;
 typedef struct player_s player;
 
 typedef void (*mh_request)(player*, incoming_message*);

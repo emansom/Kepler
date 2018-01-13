@@ -3,21 +3,23 @@
 #include "game/player/player.h"
 #include "game/room/room_user.h"
 
-#include "dyad.h"
-
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
+
+#include "server/server_listener.h"
+
+#include "uv.h"
 
 /**
  * Creates a new player
  * @return player struct
  */
-player *player_create(dyad_Stream *stream) {
-    player *player = malloc(sizeof(player));
-    player->room_user = room_user_create();
-    player->stream = stream;
-    player->player_data = NULL;
-    return player;
+player *player_create(void *socket) {
+    player *p = malloc(sizeof(player));
+    p->room_user = room_user_create();
+    p->stream = socket;
+    p->player_data = NULL;
+    return p;
 }
 
 /**
@@ -68,7 +70,6 @@ void player_cleanup(player *player) {
         room_user_cleanup(player->room_user);
     }
 
-    printf("Client [%s] has disconnected\n", dyad_getAddress(player->stream));
     free(player);
 }
 
@@ -80,10 +81,14 @@ void player_cleanup(player *player) {
 void player_send(player *p, outgoing_message *om) {
     om_finalise(om);
 
+    uv_handle_t *handle = p->stream;
     char *data = om->sb->data;
-    dyad_write(p->stream, data, strlen(data));
 
-    //printf ("Client [%s] outgoing data: %i / %s\n", dyad_getAddress(p->stream), om->header_id, data);
+    uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
+    uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
+    uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+
+    printf ("Client [%s] outgoing data: %i / %s\n", "", om->header_id, data);
 }
 
 /**

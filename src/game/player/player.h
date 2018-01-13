@@ -1,7 +1,6 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-typedef struct dyad_Stream dyad_Stream;
 typedef struct outgoing_message_s outgoing_message;
 typedef struct room_user_s room_user;
 
@@ -17,13 +16,13 @@ typedef struct player_data_s {
 } player_data;
 
 typedef struct player_s {
-    dyad_Stream *stream;
+    void *stream;
     player_data *player_data;
     room_user *room_user;
 } player;
 
 
-player *player_create(dyad_Stream*);
+player *player_create(void *);
 player_data *player_create_data(int, char*, char*, int, char*, char*, int, int);
 void player_login(player*);
 

@@ -4,19 +4,14 @@ project(Kepler C)
 set(EXECUTABLE_NAME Kepler)
 set(CMAKE_C_STANDARD 11)
 set(PROJECT_DIR src)
+set(CMAKE_BUILD_TYPE Debug)
 
 INCLUDE_DIRECTORIES(src)
 
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/dyad/)
-include_directories(${PROJECT_DIR}/lib/sqlite/)
-
-# Link library .dlls on Windows
-if(WIN32)
-    link_directories(${PROJECT_DIR}/lib/sqlite/)
-endif()
-
+link_directories(/usr/local/lib/)
 
 # Load source files for libraries
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
@@ -33,9 +28,9 @@ file(GLOB database ${PROJECT_DIR}/database/*.c)
 file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
 
 # Kepler managers
+
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
-
 add_executable(${EXECUTABLE_NAME}
         ${collections}
         ${dyad}
@@ -51,6 +46,7 @@ add_executable(${EXECUTABLE_NAME}
         ${room})
 
 target_link_libraries(${EXECUTABLE_NAME} sqlite3)
+target_link_libraries(${EXECUTABLE_NAME} uv)
 
 if(WIN32)
     target_link_libraries(${EXECUTABLE_NAME} wsock32 ws2_32)

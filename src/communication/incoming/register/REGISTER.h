@@ -41,8 +41,4 @@ void REGISTER(player *player, incoming_message *message) {
     free(figure);
     free(gender);
     free(password);
-
-    if (kick_user) {
-        dyad_close(player->stream);
-    }
 }
