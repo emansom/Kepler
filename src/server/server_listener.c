@@ -18,7 +18,7 @@ void server_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
 }
 
 void server_on_connection_close(uv_handle_t *handle) {
-    printf("[libhh] disposed a connection\n");
+    player_cleanup(handle->data);
 }
 
 void server_on_write(uv_write_t* req, int status) {
