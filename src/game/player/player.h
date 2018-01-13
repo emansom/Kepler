@@ -23,7 +23,7 @@ typedef struct player_s {
 
 player *player_create(dyad_Stream*);
 player_data *player_create_data(int, char*, char*, int, char*, char*, int, int);
-void player_init(player*);
+void player_login(player*);
 
 void player_cleanup(player*);
 void player_send(player*, outgoing_message*);

@@ -6,6 +6,8 @@
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
 
+#include "shared.h"
+
 /**
  * Creates a new player
  * @return player struct
@@ -38,8 +40,9 @@ player_data *player_create_data(int id, char *username, char *figure, int credit
  * Called when a connection is successfully opened
  * @param p the player struct
  */
-void player_init(player *p) {
-    printf("Client [%s] has connected\n", dyad_getAddress(p->stream));
+void player_login(player *player) {
+    // Add rooms
+    room_manager_add_by_user_id(player->player_data->id);
 }
 
 /**

@@ -17,6 +17,8 @@ void TRY_LOGIN(player *player, incoming_message *message) {
         player->player_data = data;
     }
 
+    player_login(player);
+
     outgoing_message *fuserights_message = om_create(2); // @B
     player_send(player, fuserights_message);
     om_cleanup(fuserights_message);

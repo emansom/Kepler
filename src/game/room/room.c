@@ -3,6 +3,8 @@
 
 #include "room.h"
 
+#include "database/queries/player_query.h"
+
 room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
     instance->room_id = room_id;
@@ -14,6 +16,7 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
     room_data *data = malloc(sizeof(room_data));
     data->id = id;
     data->owner_id = owner_id;
+    data->owner_name = query_player_username(owner_id);
     data->category = category;
     data->name = strdup(name);
     data->description = strdup(description);
@@ -33,6 +36,7 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
 void room_cleanup(room *room) {
     if (room->room_data != NULL) {
         free(room->room_data->name);
+        free(room->room_data->owner_name);
         free(room->room_data->description);
         free(room->room_data->model);
         free(room->room_data->ccts);

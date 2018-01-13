@@ -4,6 +4,7 @@
 typedef struct room_data_s {
     int id;
     int owner_id;
+    char *owner_name;
     int category;
     char *name;
     char *description;

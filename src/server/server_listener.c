@@ -64,6 +64,7 @@ static void client_disconnect(dyad_Event *e) {
  */
 static void client_connect(dyad_Event *e) {
     player_manager_add(e->remote);
+    printf("Client [%s] has connected\n", dyad_getAddress(e->remote));
 
     dyad_addListener(e->remote, DYAD_EVENT_DATA, handle_data, NULL);
     dyad_addListener(e->remote, DYAD_EVENT_CLOSE, client_disconnect, NULL);

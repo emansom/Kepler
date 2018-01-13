@@ -27,7 +27,6 @@ player *player_manager_add(dyad_Stream *stream) {
         player *p = player_create(stream);
         stream->player = p;
 
-        player_init(p);
         hashtable_add(global.player_manager.players, stream, p);
     }
 

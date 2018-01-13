@@ -8,6 +8,30 @@
 #include "database/queries/player_query.h"
 #include "database/db_connection.h"
 
+char * query_player_username(int user_id) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    char *username;
+    int status = sqlite3_prepare(conn, "SELECT username FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, user_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    int step = sqlite3_step(stmt);
+
+    if (step == SQLITE_ROW) {
+        username = strdup((char*)sqlite3_column_text(stmt, 0));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+    return username;
+}
+
 /**
  * Retrives the user ID if there was a successful login.
  *
