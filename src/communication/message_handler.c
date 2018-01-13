@@ -6,11 +6,15 @@
 #include "communication/incoming/login/INIT_CRYPTO.h"
 #include "communication/incoming/login/GENERATEKEY.h"
 #include "communication/incoming/login/TRY_LOGIN.h"
+#include "communication/incoming/login/GDATE.h"
 
 // Register
 #include "communication/incoming/register/APPROVENAME.h"
 #include "communication/incoming/register/APPROVE_PASSWORD.h"
 #include "communication/incoming/register/APPROVEEMAIL.h"
+#include "communication/incoming/register/PARENT_EMAIL_REQUIRED.h"
+#include "communication/incoming/register/CHECK_AGE.h"
+#include "communication/incoming/register/REGISTER.h"
 
 // User
 #include "communication/incoming/user/GET_INFO.h"
@@ -42,11 +46,15 @@ void mh_add_messages() {
     message_requests[206] = INIT_CRYPTO;
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
+    message_requests[49] = GDATE;
 
     // Register
     message_requests[42] = APPROVENAME;
     message_requests[203] = APPROVE_PASSWORD;
     message_requests[197] = APPROVEEMAIL;
+    message_requests[146] = PARENT_EMAIL_REQUIRED;
+    message_requests[46] = CHECK_AGE;
+    message_requests[43] = REGISTER;
 
     // User
     message_requests[7] = GET_INFO;

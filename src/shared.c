@@ -3,21 +3,41 @@
 #include <stdarg.h>
 #include <ctype.h>
 
-int is_numeric(const char *s) {
+bool is_numeric(const char *s) {
     if (s == NULL || *s == '\0' || isspace(*s))
-        return 0;
+        return false;
+
     char * p;
     strtod (s, &p);
     return *p == '\0';
 }
 
-int starts_with(const char *string, const char *prefix) {
-    while(*prefix) {
-        if(*prefix++ != *string++)
-            return 0;
+bool has_numbers(const char *str) {
+    for (int i = 0; i < strlen(str); i++) {
+        if (isdigit(str[i])) {
+            printf("hello!\n");
+            return true;
+        }
     }
 
-    return 1;
+    return false;
+}
+
+bool valid_string(char *str, char *allowed_chars) {
+    bool valid = false;
+
+    for (int j = 0; j < strlen(str); j++) {
+        valid = false;
+
+        for (int i = 0; i < strlen(allowed_chars); i++) {
+            if (str[j] == allowed_chars[i]) {
+                valid = true;
+                continue;
+            }
+        }
+    }
+
+    return valid;
 }
 
 void print_info(const char *format, ...) {

@@ -31,6 +31,16 @@ char *im_read_b64(incoming_message *im) {
     return strdup(data);
 }
 
+int im_read_b64_int(incoming_message *im) {
+    char data[] = {
+        im->data[im->counter++],
+        im->data[im->counter++],
+        '\0'
+    };
+
+    return base64_decode(data);
+}
+
 /**
  * Read vl64 character as an integer
  *

@@ -14,6 +14,7 @@ typedef struct {
 
 incoming_message *im_create(char*);
 char *im_read_b64(incoming_message*);
+int im_read_b64_int(incoming_message*);
 int im_read_vl64(incoming_message*);
 char *im_get_content(incoming_message*);
 char *im_read_str(incoming_message *);

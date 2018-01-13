@@ -7,8 +7,6 @@
 #include "database/db_connection.h"
 #include "sqlite3.h"
 
-#include "hashtable.h"
-
 #include "game/player/player.h"
 
 int main(void) {
@@ -17,10 +15,6 @@ int main(void) {
 
     print_info("\n");
     print_info("Testing MySQL connection...\n");
-
-    HashTable *table;
-    hashtable_new(&table);
-
     sqlite3 *con = db_create_connection();
 
     if (con == NULL) {
