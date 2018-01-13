@@ -1,6 +1,8 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+typedef struct room_model_s room_model;
+
 typedef struct room_data_s {
     int id;
     int owner_id;
@@ -9,6 +11,7 @@ typedef struct room_data_s {
     char *name;
     char *description;
     char *model;
+    room_model *model_data;
     char *ccts;
     int wall;
     int floor;

@@ -1,12 +1,12 @@
 #include "shared.h"
 #include "dyad.h"
 
+#include "sqlite3.h"
+#include "hashtable.h"
+
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
-
 #include "database/db_connection.h"
-#include "sqlite3.h"
-
 #include "game/player/player.h"
 
 int main(void) {
@@ -26,6 +26,7 @@ int main(void) {
     }
 
     player_manager_init();
+    model_manager_init();
     room_manager_init();
     mh_add_messages();
 

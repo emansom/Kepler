@@ -5,6 +5,8 @@
 
 #include "database/queries/player_query.h"
 
+#include "game/room/room_model_manager.h"
+
 room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
     instance->room_id = room_id;
@@ -21,6 +23,7 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
     data->name = strdup(name);
     data->description = strdup(description);
     data->model = strdup(model);
+    data->model_data = model_manager_get(model);
     data->ccts = strdup(ccts);
     data->wall = wallpaper;
     data->floor = floor;
