@@ -1,12 +1,12 @@
 #include <stdio.h>
 
-#include "player.h"
+#include "game/player/player.h"
+#include "game/room/room_user.h"
+
 #include "dyad.h"
 
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
-
-#include "shared.h"
 
 /**
  * Creates a new player
@@ -14,6 +14,7 @@
  */
 player *player_create(dyad_Stream *stream) {
     player *player = malloc(sizeof(player));
+    player->room_user = room_user_create();
     player->stream = stream;
     player->player_data = NULL;
     return player;
@@ -54,14 +55,17 @@ void player_cleanup(player *player) {
         return;
     }
 
-    player_data *player_data = player->player_data;
+    if (player->player_data != NULL) {
+        free(player->player_data->username);
+        free(player->player_data->figure);
+        free(player->player_data->motto);
+        free(player->player_data->sex);
+        free(player->player_data);
+        player->player_data = NULL;
+    }
 
-    if (player_data != NULL) {
-        free(player_data->username);
-        free(player_data->figure);
-        free(player_data->motto);
-        free(player_data->sex);
-        free(player_data);
+    if (player->room_user != NULL) {
+        room_user_cleanup(player->room_user);
     }
 
     printf("Client [%s] has disconnected\n", dyad_getAddress(player->stream));

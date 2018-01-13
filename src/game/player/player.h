@@ -3,6 +3,7 @@
 
 typedef struct dyad_Stream dyad_Stream;
 typedef struct outgoing_message_s outgoing_message;
+typedef struct room_user_s room_user;
 
 typedef struct player_data_s {
     int id;
@@ -18,6 +19,7 @@ typedef struct player_data_s {
 typedef struct player_s {
     dyad_Stream *stream;
     player_data *player_data;
+    room_user *room_user;
 } player;
 
 

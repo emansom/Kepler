@@ -2,7 +2,6 @@
 #include "communication/messages/outgoing_message.h"
 
 void G_STAT(player *player, incoming_message *message) {
-
     char var[11];
     sprintf(var, "%i", player->player_data->id);
     var[10] = '\0';

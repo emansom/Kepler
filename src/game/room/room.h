@@ -1,5 +1,5 @@
 #ifndef ROOM_H
-#define ROOM_
+#define ROOM_H
 
 typedef struct room_data_s {
     int id;
