@@ -6,6 +6,8 @@ void GOTOFLAT(player *player, incoming_message *message) {
         return;
     }
 
+    player->room_user->room->room_data->visitors_now++;
+
     outgoing_message *om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
     player_send(player, om);

@@ -1,11 +1,13 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "room.h"
 
 #include "database/queries/player_query.h"
 
 #include "game/room/room_model_manager.h"
+#include "room_model.h"
 
 room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
@@ -24,6 +26,7 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
     data->description = strdup(description);
     data->model = strdup(model);
     data->model_data = model_manager_get(model);
+    printf("x: %i and y: %i\n", data->model_data->door_x, data->model_data->door_y);
     data->ccts = strdup(ccts);
     data->wall = wallpaper;
     data->floor = floor;

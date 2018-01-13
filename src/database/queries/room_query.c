@@ -33,14 +33,14 @@ void room_query_get_models() {
         }
 
         room_model *model = room_model_create(
-            sqlite3_column_int(stmt, 0),
-            sqlite3_column_int(stmt, 1),
-            sqlite3_column_double(stmt, 2),
-            (char*)sqlite3_column_text(stmt, 3)
+                (char*)sqlite3_column_text(stmt, 4),
+                sqlite3_column_int(stmt, 0),
+                sqlite3_column_int(stmt, 1),
+                sqlite3_column_double(stmt, 2),
+                (char*)sqlite3_column_text(stmt, 3)
         );
 
-        char *modeltype = strdup((char*)sqlite3_column_text(stmt, 4));
-        model_manager_add(modeltype, model);
+        model_manager_add(model);
     }
 }
 

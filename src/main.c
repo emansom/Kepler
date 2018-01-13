@@ -8,7 +8,6 @@
 #include "database/db_connection.h"
 
 #include "game/player/player.h"
-#include "game/room/room_model.h"
 
 int main(void) {
     print_info("Kepler Habbo server...\n");
@@ -30,12 +29,6 @@ int main(void) {
     model_manager_init();
     room_manager_init();
     mh_add_messages();
-
-    room_model *model = model_manager_get("model_a");
-
-    if (model != NULL) {
-        printf("x: %i\n", model->door_x);
-    }
 
     dyad_Stream *dyad = create_server();
     listen_server(dyad);
