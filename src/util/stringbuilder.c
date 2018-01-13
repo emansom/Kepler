@@ -59,6 +59,13 @@ void sb_add_int(stringbuilder *sb, int integer) {
     sb_add_string(sb, data);
 }
 
+void sb_add_float(stringbuilder *sb, double d) {
+    char data[11];
+    sprintf(data, "%f", d);
+    data[10] = '\0';
+    sb_add_string(sb, data);
+}
+
 /**
  * Adds an integer to the stringbuilder
  * @param sb the stringbuilder

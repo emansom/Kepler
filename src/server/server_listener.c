@@ -1,9 +1,11 @@
+#include <lib/dyad/dyad.h>
 #include "dyad.h"
+
 #include "game/player/player.h"
+#include "game/player/player_manager.h"
+
 #include "communication/message_handler.h"
 #include "util/encoding/base64encoding.h"
-
-#include "hashtable.h"
 
 /**
  * Handle incoming data from the socket
@@ -39,7 +41,7 @@ static void handle_data(dyad_Event *e) {
         message[message_length - 1] = '\0';
 
         incoming_message *im = im_create(message);
-        mh_invoke_message(im, e->stream->player);
+        mh_invoke_message(im, player_manager_find(e->stream));
 
         im_cleanup(im);
         free(message);
@@ -51,7 +53,7 @@ static void handle_data(dyad_Event *e) {
  * @param e the socket event
  */
 static void client_disconnect(dyad_Event *e) {
-    player *player = e->stream->player;
+    player *player = player_manager_find(e->stream);
 
     if (player != NULL) {
         player_cleanup(player);

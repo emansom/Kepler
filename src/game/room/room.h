@@ -1,7 +1,10 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+typedef struct list_s List;
+typedef struct player_s player;
 typedef struct room_model_s room_model;
+typedef struct outgoing_message_s outgoing_message;
 
 typedef struct room_data_s {
     int id;
@@ -26,10 +29,14 @@ typedef struct room_data_s {
 typedef struct room_s {
     int room_id;
     room_data *room_data;
+    List *users;
 } room;
 
 room *room_create(int);
 room_data *room_create_data(int, int, int, char*, char*, char*, char*, int, int, int, int, int, char*, int, int);
+void append_user_list(outgoing_message*, player*);
+void room_enter(room*, player*);
+void room_send(room*, outgoing_message*);
 void room_cleanup(room*);
 
 #endif

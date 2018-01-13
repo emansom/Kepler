@@ -25,73 +25,7 @@ typedef SOCKET dyad_Socket;
 typedef int dyad_Socket;
 #endif
 
-static void *dyad_realloc(void *ptr, int n) {
-    ptr = realloc(ptr, n);
-    if (!ptr && n != 0) {
-        //panic("out of memory");
-    }
-    return ptr;
-}
-
-
-
-/*===========================================================================*/
-/* Vec (dynamic array)                                                       */
-/*===========================================================================*/
-
-static void vec_expand(char **data, int *length, int *capacity, int memsz) {
-    if (*length + 1 > *capacity) {
-        if (*capacity == 0) {
-            *capacity = 1;
-        } else {
-            *capacity <<= 1;
-        }
-        *data = dyad_realloc(*data, *capacity * memsz);
-    }
-}
-
-static void vec_splice(
-        char **data, int *length, int *capacity, int memsz, int start, int count
-) {
-    (void) capacity;
-    memmove(*data + start * memsz,
-            *data + (start + count) * memsz,
-            (*length - start - count) * memsz);
-}
-
-
-#define Vec(T)\
-  struct { T *data; int length, capacity; }
-
-
-#define vec_unpack(v)\
-  (char**)&(v)->data, &(v)->length, &(v)->capacity, sizeof(*(v)->data)
-
-
-#define vec_init(v)\
-  memset((v), 0, sizeof(*(v)))
-
-
-#define vec_deinit(v)\
-  dyad_free((v)->data)
-
-
-#define vec_clear(v)\
-  ((v)->length = 0)
-
-
-#define vec_push(v, val)\
-  ( vec_expand(vec_unpack(v)),\
-    (v)->data[(v)->length++] = (val) )
-
-
-#define vec_splice(v, start, count)\
-  ( vec_splice(vec_unpack(v), start, count),\
-    (v)->length -= (count) )
-
 struct dyad_Stream;
-
-typedef struct player_s player;
 typedef struct dyad_Stream dyad_Stream;
 
 typedef struct {
@@ -106,30 +40,6 @@ typedef struct {
 
 typedef void (*dyad_Callback)(dyad_Event*);
 typedef void (*dyad_PanicCallback)(const char*);
-
-typedef struct {
-    int event;
-    dyad_Callback callback;
-    void *udata;
-} Listener;
-
-
-struct dyad_Stream {
-    int state, flags;
-    dyad_Socket sockfd;
-    char *address;
-    int port;
-    int bytesSent, bytesReceived;
-    double lastActivity, timeout;
-    Vec(Listener) listeners;
-    Vec(char) lineBuffer;
-    Vec(char) writeBuffer;
-    dyad_Stream *next;
-    player *player;
-};
-
-
-
 
 enum {
   DYAD_EVENT_NULL,

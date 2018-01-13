@@ -21,16 +21,14 @@ void player_manager_init() {
  * @return the player
  */
 player *player_manager_add(dyad_Stream *stream) {
-    player *existing = player_manager_find(stream);
+    player *p = player_manager_find(stream);
 
-    if (existing == NULL) {
-        player *p = player_create(stream);
-        stream->player = p;
-
+    if (p == NULL) {
+        p = player_create(stream);
         hashtable_add(global.player_manager.players, stream, p);
     }
 
-    return stream->player;
+    return p;
 }
 
 /**
