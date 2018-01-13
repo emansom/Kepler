@@ -7,7 +7,7 @@
 #include "database/queries/room_query.h"
 
 /**
- * Create a new hashtable to store players
+ * Create a new hashtable to store rooms
  */
 void room_manager_init() {
     hashtable_new(&global.room_manager.rooms);
@@ -20,7 +20,8 @@ void room_manager_add_by_user_id(int user_id) {
     list_iter_init(&iter, rooms);
 
     room *room;
-    while (list_iter_next(&iter, (void*) &room) != CC_ITER_END) {
+    while (list_iter_next(&iter, (void *)&room) != CC_ITER_END)
+    {
         if (!hashtable_contains_key(global.room_manager.rooms, &room->room_id)) {
             hashtable_add(global.room_manager.rooms, &room->room_id, room);
         }
@@ -38,8 +39,11 @@ List *room_manager_get_by_user_id(int user_id) {
 
     TableEntry *entry;
     while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-        list_add(rooms, entry->value);
+        room *room = entry->value;
 
+        if (room->room_data->owner_id == user_id) {
+            list_add(rooms, room);
+        }
     }
 
     return rooms;
@@ -49,7 +53,7 @@ room *room_manager_get_by_id(int room_id) {
     void *room = NULL;
 
     if (hashtable_contains_key(global.room_manager.rooms, &room_id)) {
-        hashtable_get(global.room_manager.rooms, &room_id, (void*) &room);
+        hashtable_get(global.room_manager.rooms, &room_id, (void *)&room);
     }
 
     return room;
