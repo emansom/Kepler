@@ -7,11 +7,12 @@
 
 #include "game/room/room.h"
 #include "game/room/room_model.h"
+#include "game/room/room_model_manager.h"
 
 #include "database/queries/room_query.h"
 #include "database/db_connection.h"
 
-HashTable *room_query_get_models() {
+void room_query_get_models() {
     HashTable *models;
     hashtable_new(&models);
 
@@ -39,10 +40,8 @@ HashTable *room_query_get_models() {
         );
 
         char *modeltype = strdup((char*)sqlite3_column_text(stmt, 4));
-        hashtable_add(models, modeltype, model);
+        model_manager_add(modeltype, model);
     }
-
-    return models;
 }
 
 List *room_query_get_by_id(int owner_id) {

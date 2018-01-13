@@ -9,6 +9,7 @@ struct room_model_manager {
 };
 
 void model_manager_init();
+void model_manager_add(char*, room_model*);
 room_model *model_manager_get(char*);
 
 #endif

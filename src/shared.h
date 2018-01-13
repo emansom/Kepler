@@ -18,7 +18,7 @@ struct server {
     struct room_model_manager room_model_manager;
 };
 
-static struct server global;
+struct server global;
 
 char *replace(const char*, char, const char*);
 int valid_password(const char*, const char*);
