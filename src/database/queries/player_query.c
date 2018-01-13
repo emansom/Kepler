@@ -8,6 +8,13 @@
 #include "database/queries/player_query.h"
 #include "database/db_connection.h"
 
+/**
+ * Retrives the user ID if there was a successful login.
+ *
+ * @param username the username
+ * @param password the password
+ * @return the user id, -1 if not successful
+ */
 int query_player_login(char *username, char *password) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
@@ -33,11 +40,16 @@ int query_player_login(char *username, char *password) {
     return SUCCESS;
 }
 
+/**
+ * Returns true or false if the username exists, required for registration.
+ *
+ * @param username the username
+ * @return true, if successful
+ */
 int query_player_exists_username(char *username) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int SUCCESS = -1;
     int status = sqlite3_prepare(conn, "SELECT id FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
@@ -54,6 +66,12 @@ int query_player_exists_username(char *username) {
     return step == SQLITE_ROW; // row exists
 }
 
+/**
+ * Get player data by user id, must be freed manually.
+ *
+ * @param id the user id
+ * @return the player data struct
+ */
 player_data *query_player_data(int id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
@@ -72,11 +90,11 @@ player_data *query_player_data(int id) {
     if (step == SQLITE_ROW) {
         player_data = player_create_data(
             sqlite3_column_int(stmt, 0),
-            (char *) sqlite3_column_text(stmt, 1),
-            (char *) sqlite3_column_text(stmt, 2),
+            (char*)sqlite3_column_text(stmt, 1),
+            (char*)sqlite3_column_text(stmt, 2),
             sqlite3_column_int(stmt, 3),
-            (char *) sqlite3_column_text(stmt, 4),
-            (char *) sqlite3_column_text(stmt, 5),
+            (char*)sqlite3_column_text(stmt, 4),
+            (char*)sqlite3_column_text(stmt, 5),
             sqlite3_column_int(stmt, 6),
             sqlite3_column_int(stmt, 7)
         );
@@ -87,6 +105,16 @@ player_data *query_player_data(int id) {
     return player_data;
 }
 
+/**
+ * Creates a new player instance.
+ *
+ * @param username the username
+ * @param figure the figure
+ * @param gender the gender
+ * @param password the password
+ *
+ * @return the inserted player id
+ */
 int query_player_create(char *username, char *figure, char *gender, char *password) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
@@ -109,4 +137,6 @@ int query_player_create(char *username, char *figure, char *gender, char *passwo
 
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
+
+    return (int)sqlite3_last_insert_rowid(conn);
 }
