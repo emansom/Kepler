@@ -1,5 +1,11 @@
 cmake-build-debug/
 .idea/
 bin/
+CMakeFiles/
 src/lib/sqlite
 src/lib/collections
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+.vscode/
+Kepler

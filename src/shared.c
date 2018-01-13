@@ -1,9 +1,22 @@
 #include "shared.h"
+#include "string.h"
 
 #include "database/queries/player_query.h"
 
 #include <stdarg.h>
 #include <ctype.h>
+
+char *strlwr(char *str)
+{
+  unsigned char *p = (unsigned char *)str;
+
+  while (*p) {
+     *p = tolower((unsigned char)*p);
+      p++;
+  }
+
+  return str;
+}
 
 char *replace(const char *s, char ch, const char *repl) {
     int count = 0;
