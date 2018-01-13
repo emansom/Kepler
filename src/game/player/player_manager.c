@@ -21,13 +21,8 @@ void player_manager_init() {
  * @return the player
  */
 player *player_manager_add(dyad_Stream *stream) {
-    player *p = player_manager_find(stream);
-
-    if (p == NULL) {
-        p = player_create(stream);
-        hashtable_add(global.player_manager.players, stream, p);
-    }
-
+    player *p = player_create(stream);
+    hashtable_add(global.player_manager.players, stream, p);
     return p;
 }
 
@@ -47,16 +42,11 @@ void player_manager_remove(dyad_Stream *stream) {
  * @return the player
  */
 player *player_manager_find(dyad_Stream *stream) {
-    void *out = NULL;
+    player *p = NULL;
 
     if (hashtable_contains_key(global.player_manager.players, stream)) {
-        hashtable_get(global.player_manager.players, stream, &out);
+        hashtable_get(global.player_manager.players, stream, (void*)&p);
     }
 
-    if (out != NULL) {
-        player *player = out;
-        return player;
-    }
-
-    return out;
+    return p;
 }

@@ -1,5 +1,6 @@
-#include <lib/dyad/dyad.h>
 #include "dyad.h"
+
+#include "hashtable.h"
 
 #include "game/player/player.h"
 #include "game/player/player_manager.h"
@@ -40,10 +41,14 @@ static void handle_data(dyad_Event *e) {
 
         message[message_length - 1] = '\0';
 
-        incoming_message *im = im_create(message);
-        mh_invoke_message(im, player_manager_find(e->stream));
+        player *player = player_manager_find(e->stream);
 
-        im_cleanup(im);
+        if (player != NULL) {
+            incoming_message *im = im_create(message);
+            mh_invoke_message(im, player);
+            im_cleanup(im);
+        }
+
         free(message);
     }
 }
@@ -56,8 +61,8 @@ static void client_disconnect(dyad_Event *e) {
     player *player = player_manager_find(e->stream);
 
     if (player != NULL) {
-        player_cleanup(player);
         player_manager_remove(e->stream);
+        player_cleanup(player);
     }
 }
 
@@ -71,6 +76,8 @@ static void client_connect(dyad_Event *e) {
 
     dyad_addListener(e->remote, DYAD_EVENT_DATA, handle_data, NULL);
     dyad_addListener(e->remote, DYAD_EVENT_CLOSE, client_disconnect, NULL);
+
+    printf("size players: %i\n", hashtable_size(global.player_manager.players));
 
     char *handshake = "@@\1";
     dyad_write(e->remote, handshake, strlen(handshake));
