@@ -48,6 +48,9 @@ add_executable(${EXECUTABLE_NAME}
         ${players}
         ${room})
 
+find_package (Threads)
+
+target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(${EXECUTABLE_NAME} sqlite3)
 target_link_libraries(${EXECUTABLE_NAME} uv)
 
