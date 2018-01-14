@@ -18,12 +18,14 @@ void server_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
 }
 
 void server_on_connection_close(uv_handle_t *handle) {
-    player_cleanup(handle->data);
+    player *player = handle->data;
+    printf("Client [%s] has disconnected\n", player->ip_address);
+    player_cleanup(player);
 }
 
 void server_on_write(uv_write_t* req, int status) {
-    if (status) {
-        fprintf(stderr, "uv_write error: %s\n", uv_strerror(status));
+    if (status == UV_ECANCELED) {
+         printf("uv_write error\n");
         return;
     }
  }
@@ -34,7 +36,7 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         return;
     }
 
-    if(nread > 0) {\
+    if(nread > 0) {
         player *p = handle->data;
         int amount_read = 0;
 
@@ -49,6 +51,7 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             int message_length = base64_decode(recv_length) + 1;
 
             if (message_length < 0 || message_length > 5120) {
+                uv_close((uv_handle_t *) handle, server_on_connection_close);
                 continue;
             }
 
@@ -69,6 +72,7 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             free(message);
         }
     } else {
+        printf("dc?\n");
         uv_close((uv_handle_t *) handle, server_on_connection_close);
     }
 
@@ -86,7 +90,9 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     uv_tcp_getpeername((const uv_tcp_t*) handle, (struct sockaddr*)&client_addr, &client_addr_length);
     char *ip = inet_ntoa(client_addr.sin_addr);
 
-    player *p = player_manager_add(handle);
+    player *p = player_manager_add(handle, ip);
+    printf("Client [%s] has connected\n", p->ip_address);
+
     client->data = p;
 
     int result = uv_accept(server, handle);

@@ -9,7 +9,7 @@ struct player_manager {
 };
 
 void player_manager_init();
-player *player_manager_add(void*);
+player *player_manager_add(void*, char *ip);
 void player_manager_remove(void*);
 player *player_manager_find(void*);
 

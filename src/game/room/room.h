@@ -35,6 +35,7 @@ typedef struct room_s {
 room *room_create(int);
 room_data *room_create_data(int, int, int, char*, char*, char*, char*, int, int, int, int, int, char*, int, int);
 void append_user_list(outgoing_message*, player*);
+void append_user_status(outgoing_message *players, player *player);
 void room_enter(room*, player*);
 void room_send(room*, outgoing_message*);
 void room_cleanup(room*);

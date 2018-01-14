@@ -100,7 +100,7 @@ Client [127.0.0.1] incoming data: 213 / CU*/
  * @param player the player struct
  */
 void mh_invoke_message(incoming_message *im, player *player) {
-    printf("Client [] incoming data: %i / %s\n", im->header_id, im->data);
+    printf("Client [%s] incoming data: %i / %s\n", player->ip_address, im->header_id, im->data);
 
     if (message_requests[im->header_id] == NULL) {
         return;

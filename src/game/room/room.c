@@ -63,7 +63,7 @@ void append_user_list(outgoing_message *players, player *player) {
     sprintf(instance_id, "%i", player->player_data->id);
     instance_id[10] = '\0';
 
-    om_write_str_kv(players, "i", "0");
+    om_write_str_kv(players, "i", instance_id);
     om_write_str_kv(players, "a", instance_id);
     om_write_str_kv(players, "n", player->player_data->username);
     om_write_str_kv(players, "f", player->player_data->figure);
@@ -76,6 +76,22 @@ void append_user_list(outgoing_message *players, player *player) {
     sb_add_float(players->sb, player->room_user->room->room_data->model_data->door_z);
     sb_add_char(players->sb, 13);
     om_write_str_kv(players, "c", player->player_data->motto);
+}
+
+void append_user_status(outgoing_message *om, player *player) {
+    sb_add_int(om->sb, player->player_data->id);
+    sb_add_string(om->sb, " ");
+    sb_add_int(om->sb, player->room_user->room->room_data->model_data->door_x);
+    sb_add_string(om->sb, ",");
+    sb_add_int(om->sb, player->room_user->room->room_data->model_data->door_y);
+    sb_add_string(om->sb, ",");
+    sb_add_string(om->sb, "0.0");
+    sb_add_string(om->sb, ",");
+    sb_add_string(om->sb, "2");
+    sb_add_string(om->sb, ",");
+    sb_add_string(om->sb, "2");
+    sb_add_string(om->sb, "/");
+    sb_add_char(om->sb, 13);
 }
 
 void room_send(room *room, outgoing_message *message) {

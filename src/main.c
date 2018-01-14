@@ -12,7 +12,7 @@ int main(void) {
     print_info("Written by Quackster \n");
 
     print_info("\n");
-    print_info("Testing MySQL connection...\n");
+    print_info("Testing SQLite connection...\n");
     sqlite3 *con = db_create_connection();
 
     if (con == NULL) {
@@ -23,10 +23,15 @@ int main(void) {
         sqlite3_close(con);
     }
 
+    print_info("\n");
+    print_info("Starting managers...\n");
+
     player_manager_init();
     model_manager_init();
     room_manager_init();
     mh_add_messages();
+
+    print_info("Starting server...\n");
 
     start_server("127.0.0.1", 12321);
     return EXIT_SUCCESS;

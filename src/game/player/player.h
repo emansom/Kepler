@@ -17,12 +17,13 @@ typedef struct player_data_s {
 
 typedef struct player_s {
     void *stream;
+    char *ip_address;
     player_data *player_data;
     room_user *room_user;
 } player;
 
 
-player *player_create(void *);
+player *player_create(void*, char*);
 player_data *player_create_data(int, char*, char*, int, char*, char*, int, int);
 void player_login(player*);
 

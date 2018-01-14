@@ -19,8 +19,8 @@ void player_manager_init() {
  * @param stream the dyad stream
  * @return the player
  */
-player *player_manager_add(void *stream) {
-    player *p = player_create(stream);
+player *player_manager_add(void *stream, char *ip) {
+    player *p = player_create(stream, ip);
     hashtable_add(global.player_manager.players, stream, p);
     return p;
 }

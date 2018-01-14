@@ -10,8 +10,7 @@ void GDATE(player *player, incoming_message *message) {
 
     char date[11];
     sprintf(date, "%02d-%02d-%d", tm.tm_mday, tm.tm_mon + 1, tm.tm_year + 1900);
-    printf("date: %s\n", date);
-
+    
     outgoing_message *om = om_create(163); // "Bc"
     om_write_str(om, date);
     player_send(player, om);

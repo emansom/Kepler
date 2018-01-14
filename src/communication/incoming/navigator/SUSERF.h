@@ -8,7 +8,7 @@
 #include "list.h"
 
 void SUSERF(player *player, incoming_message *message) {
-    List *rooms = room_manager_get_by_user_id(player->player_data->id);
+    List *rooms = room_manager_get_by_user_id(1);
     room *room;
 
     ListIter iter;

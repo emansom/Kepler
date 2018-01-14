@@ -14,10 +14,11 @@
  * Creates a new player
  * @return player struct
  */
-player *player_create(void *socket) {
+player *player_create(void *socket, char *ip_address) {
     player *p = malloc(sizeof(player));
     p->room_user = room_user_create();
     p->stream = socket;
+    p->ip_address = strdup(ip_address);
     p->player_data = NULL;
     return p;
 }
@@ -70,6 +71,7 @@ void player_cleanup(player *player) {
         room_user_cleanup(player->room_user);
     }
 
+    free(player->ip_address);
     free(player);
 }
 
@@ -87,8 +89,7 @@ void player_send(player *p, outgoing_message *om) {
     uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
     uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
     uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
-
-    printf ("Client [%s] outgoing data: %i / %s\n", "", om->header_id, data);
+    //printf ("Client [%s] outgoing data: %i / %s\n", "", om->header_id, data);
 }
 
 /**

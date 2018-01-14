@@ -20,8 +20,7 @@ void room_manager_add_by_user_id(int user_id) {
     list_iter_init(&iter, rooms);
 
     room *room;
-    while (list_iter_next(&iter, (void *)&room) != CC_ITER_END)
-    {
+    while (list_iter_next(&iter, (void *)&room) != CC_ITER_END) {
         if (!hashtable_contains_key(global.room_manager.rooms, &room->room_id)) {
             hashtable_add(global.room_manager.rooms, &room->room_id, room);
         }
@@ -34,15 +33,17 @@ List *room_manager_get_by_user_id(int user_id) {
     List *rooms;
     list_new(&rooms);
 
-    HashTableIter iter;
-    hashtable_iter_init(&iter, global.room_manager.rooms);
+    if (hashtable_size(global.room_manager.rooms) > 0) {
+        HashTableIter iter;
+        hashtable_iter_init(&iter, global.room_manager.rooms);
 
-    TableEntry *entry;
-    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-        room *room = entry->value;
+        TableEntry *entry;
+        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+            room *room = entry->value;
 
-        if (room->room_data->owner_id == user_id) {
-            list_add(rooms, room);
+            if (room->room_data->owner_id == user_id) {
+                list_add(rooms, room);
+            }
         }
     }
 
