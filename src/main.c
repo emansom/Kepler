@@ -6,6 +6,7 @@
 #include "database/db_connection.h"
 
 #include "game/player/player.h"
+#include "util/threading.h"
 
 int main(void) {
     print_info("Kepler Habbo server...\n");
@@ -22,6 +23,8 @@ int main(void) {
         print_info("The connection to the database was successful!\n");
         sqlite3_close(con);
     }
+
+    create_thread_pool();
 
     print_info("\n");
     print_info("Starting managers...\n");

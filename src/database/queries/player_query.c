@@ -8,7 +8,12 @@
 #include "database/queries/player_query.h"
 #include "database/db_connection.h"
 
-char * query_player_username(int user_id) {
+/**
+ *
+ * @param user_id
+ * @return
+ */
+char *query_player_username(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 

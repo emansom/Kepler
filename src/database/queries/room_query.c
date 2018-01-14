@@ -12,6 +12,9 @@
 #include "database/queries/room_query.h"
 #include "database/db_connection.h"
 
+/**
+ *
+ */
 void room_query_get_models() {
     HashTable *models;
     hashtable_new(&models);
@@ -44,6 +47,11 @@ void room_query_get_models() {
     }
 }
 
+/**
+ *
+ * @param owner_id
+ * @return
+ */
 List *room_query_get_by_id(int owner_id) {
     List *rooms;
     list_new(&rooms);

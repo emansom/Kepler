@@ -2,6 +2,9 @@
 
 #include "room_user.h"
 
+/*
+ *
+ */
 room_user *room_user_create() {
     room_user *user = malloc(sizeof(room_user));
     user->room_id = 0;
@@ -9,10 +12,19 @@ room_user *room_user_create() {
     return user;
 }
 
+/**
+ *
+ * @param player
+ * @param room
+ */
 void room_user_join(player *player, room *room) {
 
 }
 
+/**
+ *
+ * @param room_user
+ */
 void room_user_cleanup(room_user *room_user) {
     free(room_user);
 }

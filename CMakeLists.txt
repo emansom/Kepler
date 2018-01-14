@@ -10,8 +10,12 @@ INCLUDE_DIRECTORIES(src)
 
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/collections/)
-include_directories(${PROJECT_DIR}/lib/dyad/)
-link_directories(/usr/local/lib/)
+
+if(WIN32)
+    include_directories(${PROJECT_DIR}/lib/sqlite/)
+else()
+    link_directories(/usr/local/lib/)
+endif()
 
 # Load source files for libraries
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
@@ -28,12 +32,11 @@ file(GLOB database ${PROJECT_DIR}/database/*.c)
 file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
 
 # Kepler managers
-
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
+
 add_executable(${EXECUTABLE_NAME}
         ${collections}
-        ${dyad}
         ${src}
         ${util}
         ${messages}

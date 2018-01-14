@@ -64,21 +64,6 @@ void mh_add_messages() {
     message_requests[150] = NAVIGATE;
     message_requests[16] = SUSERF;
 
-    /*Client [127.0.0.1] incoming data: 21 / @U1
-Client [127.0.0.1] incoming data: 182 / Bvgeneral
-Client [127.0.0.1] incoming data: 182 / Bvgeneral
-Client [127.0.0.1] incoming data: 88 / AXCarryItem
-Client [127.0.0.1] incoming data: 2 / @B@IH
-Client [127.0.0.1] incoming data: 57 / @y1
-Client [127.0.0.1] incoming data: 59 / @{1
-Client [127.0.0.1] incoming data: 88 / AXCarryItem
-Client [127.0.0.1] incoming data: 126 / A~
-Client [127.0.0.1] incoming data: 60 / @|
-Client [127.0.0.1] incoming data: 61 / @}
-Client [127.0.0.1] incoming data: 62 / @~
-Client [127.0.0.1] incoming data: 63 / @
-Client [127.0.0.1] incoming data: 213 / CU*/
-
     // Room
     message_requests[21] = GETFLATINFO;
     message_requests[182] = GETINTERST;

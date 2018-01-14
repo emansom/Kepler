@@ -13,6 +13,11 @@
 #include "database/queries/player_query.h"
 #include "communication/messages/outgoing_message.h"
 
+/**
+ *
+ * @param room_id
+ * @return
+ */
 room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
     instance->room_id = room_id;
@@ -21,6 +26,25 @@ room *room_create(int room_id) {
     return instance;
 }
 
+/**
+ *
+ * @param id
+ * @param owner_id
+ * @param category
+ * @param name
+ * @param description
+ * @param model
+ * @param ccts
+ * @param wallpaper
+ * @param floor
+ * @param showname
+ * @param superusers
+ * @param accesstype
+ * @param password
+ * @param visitors_now
+ * @param visitors_max
+ * @return
+ */
 room_data *room_create_data(int id, int owner_id, int category, char *name, char *description, char *model, char *ccts, int wallpaper, int floor, int showname, int superusers, int accesstype, char *password, int visitors_now, int visitors_max) {
     room_data *data = malloc(sizeof(room_data));
     data->id = id;
@@ -47,6 +71,12 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
     return data;
 }
 
+/**
+ * Room entry handler
+ *
+ * @param om the outgoing message
+ * @param player the player
+ */
 void room_enter(room *room, player *player) {
     if (list_contains(room->users, player)) {
         return;
@@ -58,6 +88,12 @@ void room_enter(room *room, player *player) {
     list_add(room->users, player);
 }
 
+/**
+ * Append user list to the packet
+ *
+ * @param om the outgoing message
+ * @param player the player
+ */
 void append_user_list(outgoing_message *players, player *player) {
     char instance_id[11];
     sprintf(instance_id, "%i", player->player_data->id);
@@ -78,6 +114,12 @@ void append_user_list(outgoing_message *players, player *player) {
     om_write_str_kv(players, "c", player->player_data->motto);
 }
 
+/**
+ * Append user statuses to the packet
+ *
+ * @param om the outgoing message
+ * @param player the player
+ */
 void append_user_status(outgoing_message *om, player *player) {
     sb_add_int(om->sb, player->player_data->id);
     sb_add_string(om->sb, " ");
@@ -94,6 +136,11 @@ void append_user_status(outgoing_message *om, player *player) {
     sb_add_char(om->sb, 13);
 }
 
+/**
+ *
+ * @param room
+ * @param message
+ */
 void room_send(room *room, outgoing_message *message) {
     ListIter iter;
     list_iter_init(&iter, room->users);
@@ -104,6 +151,10 @@ void room_send(room *room, outgoing_message *message) {
     }
 }
 
+/**
+ *
+ * @param room
+ */
 void room_cleanup(room *room) {
     if (room->room_data != NULL) {
         free(room->room_data->name);

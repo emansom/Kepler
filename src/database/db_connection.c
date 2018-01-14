@@ -33,7 +33,7 @@ sqlite3 *db_create_connection() {
 }
 
 void db_print_error(const char *format, ...) {
-    print_info("MySQL Error: ");
+    print_info("SQLite Error: ");
     va_list args;
     va_start(args, format);
     vprintf(format, args);

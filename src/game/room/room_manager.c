@@ -13,6 +13,9 @@ void room_manager_init() {
     hashtable_new(&global.room_manager.rooms);
 }
 
+/*
+ *
+ */
 void room_manager_add_by_user_id(int user_id) {
     List *rooms = room_query_get_by_id(user_id);
 
@@ -29,6 +32,11 @@ void room_manager_add_by_user_id(int user_id) {
     list_destroy(rooms);
 }
 
+/**
+ *
+ * @param user_id
+ * @return
+ */
 List *room_manager_get_by_user_id(int user_id) {
     List *rooms;
     list_new(&rooms);
@@ -50,6 +58,11 @@ List *room_manager_get_by_user_id(int user_id) {
     return rooms;
 }
 
+/**
+ *
+ * @param room_id
+ * @return
+ */
 room *room_manager_get_by_id(int room_id) {
     void *room = NULL;
 
