@@ -88,7 +88,11 @@ void player_send(player *p, outgoing_message *om) {
 
     uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
     uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
-    uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+
+    int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+    if (r) {
+        printf("error sending message\n");
+    }
     //printf ("Client [%s] outgoing data: %i / %s\n", "", om->header_id, data);
 }
 

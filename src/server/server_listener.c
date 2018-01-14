@@ -23,20 +23,17 @@ void server_on_connection_close(uv_handle_t *handle) {
     player_cleanup(player);
 }
 
-void server_on_write(uv_write_t* req, int status) {
-    if (status == UV_ECANCELED) {
-         printf("uv_write error\n");
-        return;
-    }
- }
+void server_on_write(uv_write_t* req, int status) { 
+    //free(req->data);
+}
 
 void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
-    if(nread == UV_EOF) {
+    if (nread == UV_EOF || nread < 0) {
         uv_close((uv_handle_t *) handle, server_on_connection_close);
         return;
     }
 
-    if(nread > 0) {
+    if (nread > 0) {
         player *p = handle->data;
         int amount_read = 0;
 
@@ -51,7 +48,6 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             int message_length = base64_decode(recv_length) + 1;
 
             if (message_length < 0 || message_length > 5120) {
-                uv_close((uv_handle_t *) handle, server_on_connection_close);
                 continue;
             }
 
@@ -72,7 +68,6 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             free(message);
         }
     } else {
-        printf("dc?\n");
         uv_close((uv_handle_t *) handle, server_on_connection_close);
     }
 
@@ -80,6 +75,10 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 }
 
 void server_on_new_connection(uv_stream_t *server, int status) {
+    if (status == -1) {
+        return;
+    }
+
     uv_tcp_t *client = malloc(sizeof(uv_tcp_t));
     uv_tcp_init(uv_default_loop(), client);
 
@@ -99,11 +98,10 @@ void server_on_new_connection(uv_stream_t *server, int status) {
 
     if(result == 0) {
         char *handshake = "@@\1";
-        
         uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
         uv_buf_t wrbuf = uv_buf_init(handshake, strlen(handshake));
-        uv_write(req, handle, &wrbuf, 1, server_on_write);
 
+        uv_write(req, handle, &wrbuf, 1, server_on_write);
         uv_read_start(handle, server_alloc_buffer, server_on_read);
     } else {
         uv_close((uv_handle_t *) handle, server_on_connection_close);
@@ -111,7 +109,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
 }
 
 void start_server(const char *ip, int port) {
-    uv_loop_t *loop = uv_default_loop();
+    loop = uv_default_loop();
 
     uv_tcp_t server;
     struct sockaddr_in bind_addr;
