@@ -15,13 +15,13 @@ void G_STAT(player *p, incoming_message *message) {
 
     outgoing_message *players = om_create(34); // "@b"
     while (list_iter_next(&iter, (void*) &user) != CC_ITER_END) {
-        append_user_list(players, user);
+        append_user_status(players, user);
     }
     player_send(p, players);
     om_cleanup(players);
 
     players = om_create(34); // "@b"
-    append_user_list(players, p);
+    append_user_status(players, p);
     room_send(room, players);
     om_cleanup(players);
 }

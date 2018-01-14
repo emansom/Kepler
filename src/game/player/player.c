@@ -72,6 +72,7 @@ void player_cleanup(player *player) {
     }
 
     free(player->ip_address);
+    free(player->stream);
     free(player);
 }
 
@@ -93,7 +94,24 @@ void player_send(player *p, outgoing_message *om) {
     if (r) {
         printf("error sending message\n");
     }
-    //printf ("Client [%s] outgoing data: %i / %s\n", "", om->header_id, data);
+
+    char *friendly_message = data;
+
+    for (int i = 0; i < 14; i++) {
+        char ch[13];
+        sprintf(ch, "{%i}", i);
+        ch[12] = '\0';
+
+        char *temp = friendly_message;
+        friendly_message = replace(temp, (char)i, ch);
+
+        if (i > 0) {
+            free(temp);
+        }
+    }
+    
+    printf ("Client [%s] SENT: %i / %s\n", p->ip_address, om->header_id, friendly_message);
+    free(friendly_message);
 }
 
 /**
