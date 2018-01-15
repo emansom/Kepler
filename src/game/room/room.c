@@ -87,57 +87,32 @@ void room_enter(room *room, player *player) {
     player->room_user->room = room;
     player->room_user->room_id = room->room_id;
 
+    player->room_user->x = room->room_data->model_data->door_x;
+    player->room_user->y = room->room_data->model_data->door_y;
+    player->room_user->z = room->room_data->model_data->door_z;
+    player->room_user->head_rotation = 2;
+    player->room_user->body_rotation = 2;
+
     list_add(room->users, player);
 }
 
-/**
- * Append user list to the packet
- *
- * @param om the outgoing message
- * @param player the player
- */
-void append_user_list(outgoing_message *players, player *player) {
-    char instance_id[11];
-    sprintf(instance_id, "%i", player->player_data->id);
-    instance_id[10] = '\0';
+void room_load(room *room, player *player) {
+    outgoing_message *om = om_create(166); // "Bf"
+    om_write_str(om, "/client/");
+    player_send(player, om);
+    om_cleanup(om);
 
-    om_write_str_kv(players, "i", instance_id);
-    om_write_str_kv(players, "a", instance_id);
-    om_write_str_kv(players, "n", player->player_data->username);
-    om_write_str_kv(players, "f", player->player_data->figure);
-    
-    sb_add_string(players->sb, "l");
-    sb_add_string(players->sb, ":");
-    sb_add_int(players->sb, player->room_user->room->room_data->model_data->door_x);
-    sb_add_string(players->sb, " ");
-    sb_add_int(players->sb, player->room_user->room->room_data->model_data->door_y);
-    sb_add_string(players->sb, " ");
-    sb_add_float(players->sb, player->room_user->room->room_data->model_data->door_z);
-    sb_add_char(players->sb, 13);
+    om = om_create(69); // "AE"
+    om_write_str(om, player->room_user->room->room_data->model);
+    om_write_str(om, " ");
+    om_write_str_int(om, player->room_user->room_id);
+    player_send(player, om);
+    om_cleanup(om);
 
-    om_write_str_kv(players, "c", player->player_data->motto);
-}
-
-/**
- * Append user statuses to the packet
- *
- * @param om the outgoing message
- * @param player the player
- */
-void append_user_status(outgoing_message *om, player *player) {
-    sb_add_int(om->sb, player->player_data->id);
-    sb_add_string(om->sb, " ");
-    sb_add_int(om->sb, player->room_user->room->room_data->model_data->door_x);
-    sb_add_string(om->sb, ",");
-    sb_add_int(om->sb, player->room_user->room->room_data->model_data->door_y);
-    sb_add_string(om->sb, ",");
-    sb_add_string(om->sb, "0.0");
-    sb_add_string(om->sb, ",");
-    sb_add_string(om->sb, "2");
-    sb_add_string(om->sb, ",");
-    sb_add_string(om->sb, "2");
-    sb_add_string(om->sb, "/");
-    sb_add_char(om->sb, 13);
+    om = om_create(345); // "EY"
+    om_write_int(om, 0); // votes
+    player_send(player, om);
+    om_cleanup(om);
 }
 
 /**

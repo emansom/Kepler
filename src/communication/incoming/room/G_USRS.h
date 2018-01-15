@@ -3,10 +3,13 @@
 
 #include "game/player/player.h"
 
-void sb_add_float(stringbuilder *p, double z);
-
 void G_USRS(player *p, incoming_message *message) {
     if (p->room_user->room == NULL) {
+        return;
+    }
+
+    if (p->room_user->room->room_data->model_data == NULL) {
+        printf("Room %i has invalid model data.\n", p->room_user->room->room_data->id);
         return;
     }
 

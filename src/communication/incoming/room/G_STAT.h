@@ -7,6 +7,11 @@ void G_STAT(player *p, incoming_message *message) {
         return;
     }
 
+    if (p->room_user->room->room_data->model_data == NULL) {
+        printf("Room %i has invalid model data.\n", p->room_user->room->room_data->id);
+        return;
+    }
+
     room *room = p->room_user->room;
 
     ListIter iter;
