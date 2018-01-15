@@ -8,6 +8,7 @@
 #include "game/room/room.h"
 #include "game/room/room_model.h"
 #include "game/room/room_model_manager.h"
+#include "game/room/room_category_manager.h"
 
 #include "database/queries/room_query.h"
 #include "database/db_connection.h"
@@ -16,9 +17,6 @@
  *
  */
 void room_query_get_models() {
-    HashTable *models;
-    hashtable_new(&models);
-
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -101,4 +99,39 @@ List *room_query_get_by_id(int owner_id) {
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
     return rooms;
+}
+
+/**
+ * Get room categories
+ */
+void room_query_get_categories() {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "SELECT id, parent_id, name, public_spaces, allow_trading FROM rooms_categories", -1, &stmt, 0);
+
+    if (status != SQLITE_OK) {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    while (true) {
+        status = sqlite3_step(stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        room_category *category = category_manager_create(
+                sqlite3_column_int(stmt, 0),
+                sqlite3_column_int(stmt, 1),
+                (char*)sqlite3_column_text(stmt, 2),
+                sqlite3_column_int(stmt, 3),
+                sqlite3_column_int(stmt, 4)
+        );
+
+        category_manager_add(category);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
 }

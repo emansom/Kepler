@@ -55,11 +55,13 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
     data->description = strdup(description);
     data->model = strdup(model);
     data->model_data = model_manager_get(model);
+    
     if (ccts == NULL) {
         data->ccts = strdup("");
     } else {
         data->ccts = strdup(ccts);
     }
+
     data->wall = wallpaper;
     data->floor = floor;
     data->show_name = showname;
@@ -103,6 +105,7 @@ void append_user_list(outgoing_message *players, player *player) {
     om_write_str_kv(players, "a", instance_id);
     om_write_str_kv(players, "n", player->player_data->username);
     om_write_str_kv(players, "f", player->player_data->figure);
+    
     sb_add_string(players->sb, "l");
     sb_add_string(players->sb, ":");
     sb_add_int(players->sb, player->room_user->room->room_data->model_data->door_x);
@@ -111,6 +114,7 @@ void append_user_list(outgoing_message *players, player *player) {
     sb_add_string(players->sb, " ");
     sb_add_float(players->sb, player->room_user->room->room_data->model_data->door_z);
     sb_add_char(players->sb, 13);
+
     om_write_str_kv(players, "c", player->player_data->motto);
 }
 

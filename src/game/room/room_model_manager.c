@@ -41,5 +41,6 @@ room_model *model_manager_get(char *modeltype) {
         }
     }
 
+
     return NULL;
 }

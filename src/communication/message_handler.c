@@ -23,6 +23,7 @@
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
 #include "communication/incoming/navigator/SUSERF.h"
+#include "communication/incoming/navigator/GETUSERFLATCATS.h"
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
@@ -63,6 +64,7 @@ void mh_add_messages() {
     // Navigator
     message_requests[150] = NAVIGATE;
     message_requests[16] = SUSERF;
+    message_requests[151] = GETUSERFLATCATS;
 
     // Room
     message_requests[21] = GETFLATINFO;

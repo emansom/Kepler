@@ -8,6 +8,7 @@
 
 #include "game/player/player_manager.h"
 #include "game/room/room_model_manager.h"
+#include "game/room/room_category_manager.h"
 #include "game/room/room_manager.h"
 
 #define PREFIX "Kepler"
@@ -16,6 +17,7 @@ struct server {
     struct player_manager player_manager;
     struct room_manager room_manager;
     struct room_model_manager room_model_manager;
+    struct room_category_manager room_category_manager;
 };
 
 struct server global;

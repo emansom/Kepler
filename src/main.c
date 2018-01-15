@@ -31,6 +31,7 @@ int main(void) {
 
     player_manager_init();
     model_manager_init();
+    category_manager_init();
     room_manager_init();
     mh_add_messages();
 
