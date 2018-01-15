@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/room/room_category_manager.h"
+#include "game/navigator/navigator_category_manager.h"
 
 #include "list.h"
 
@@ -25,8 +25,18 @@ void NAVIGATE(player *player, incoming_message *message) {
             om_write_int(navigator, 0);  // room count
         }
 
-        List *child_categories = category_manager_get_by_parent_id(parent_category->id);
+        List *rooms = category_manager_get_rooms(parent_category->id);
         ListIter iter;
+
+        list_iter_init(&iter, rooms);
+        room *instance;
+
+        while (list_iter_next(&iter, (void*) &instance) != CC_ITER_END) {
+            category_manager_serialise(navigator, instance, parent_category->category_type);
+        }
+
+
+        List *child_categories = category_manager_get_by_parent_id(parent_category->id);
 
         list_iter_init(&iter, child_categories);
         room_category *category;
@@ -40,6 +50,7 @@ void NAVIGATE(player *player, incoming_message *message) {
             om_write_int(navigator, parent_category->id); 
         }
 
+        list_destroy(rooms);
         list_destroy(child_categories);
     }
         

@@ -6,11 +6,33 @@
 #include "room.h"
 #include "database/queries/room_query.h"
 
+void room_manager_add_public_rooms();
+
 /**
  * Create a new hashtable to store rooms
  */
 void room_manager_init() {
     hashtable_new(&global.room_manager.rooms);
+    room_manager_add_public_rooms();
+}
+
+/**
+ * Add public rooms to the manager
+ */
+void room_manager_add_public_rooms() {
+    List *rooms = room_query_get_by_id(0);
+
+    ListIter iter;
+    list_iter_init(&iter, rooms);
+
+    room *room;
+    while (list_iter_next(&iter, (void *)&room) != CC_ITER_END) {
+        if (!hashtable_contains_key(global.room_manager.rooms, &room->room_id)) {
+            hashtable_add(global.room_manager.rooms, &room->room_id, room);
+        }
+    }
+
+    list_destroy(rooms);
 }
 
 /*

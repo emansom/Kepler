@@ -8,19 +8,20 @@
 
 #include "game/player/player_manager.h"
 #include "game/room/room_model_manager.h"
-#include "game/room/room_category_manager.h"
 #include "game/room/room_manager.h"
+
+#include "game/navigator/navigator_category_manager.h"
 
 #define PREFIX "Kepler"
 
-struct server {
+typedef struct server_s {
     struct player_manager player_manager;
     struct room_manager room_manager;
     struct room_model_manager room_model_manager;
     struct room_category_manager room_category_manager;
-};
+} server;
 
-struct server global;
+server global;
 
 char *replace(const char*, char, const char*);
 int valid_password(const char*, const char*);

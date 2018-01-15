@@ -1,9 +1,13 @@
 #include "shared.h"
 
 #include "list.h"
+#include "hashtable.h"
+
+#include "game/room/room.h"
+#include "communication/messages/outgoing_message.h"
 
 #include "database/queries/room_query.h"
-#include "room_category_manager.h"
+#include "navigator_category_manager.h"
 
 void category_manager_init() {
     list_new(&global.room_category_manager.categories);
@@ -19,9 +23,9 @@ room_category *category_manager_create(int id, int parent_id, char *name, int pu
     category->allow_trading = allow_trading;
 
     if (public_spaces == 0) {
-        category->category_type = 2;
+        category->category_type = PRIVATE;
     } else {
-        category->category_type = 0;
+        category->category_type = PUBLIC;
     }
 
     return category;
@@ -63,4 +67,37 @@ List *category_manager_get_by_parent_id(int category_id) {
     }
 
     return sub_categories;
+}
+
+List *category_manager_get_rooms(int category_id) {
+    List *rooms;
+    list_new(&rooms);
+
+    HashTableIter iter;
+    hashtable_iter_init(&iter, global.room_manager.rooms);
+
+    TableEntry *entry;
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        room *instance = entry->value;
+        list_add(rooms, instance);
+    }
+
+    return rooms;
+}
+
+void category_manager_serialise(outgoing_message *navigator, room *instance, room_category_type category_type) {
+    if (category_type == PUBLIC) {
+        om_write_int(navigator, instance->room_data->id); // room id
+        om_write_int(navigator, 1);
+        om_write_str(navigator, instance->room_data->name);
+        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+        om_write_int(navigator, instance->room_data->category); // category id
+        om_write_str(navigator, instance->room_data->description); // description
+        om_write_int(navigator, instance->room_data->id); // room id
+        om_write_int(navigator, 0);
+        om_write_str(navigator, instance->room_data->ccts);
+        om_write_int(navigator, 0);
+        om_write_int(navigator, 1);
+    }
 }

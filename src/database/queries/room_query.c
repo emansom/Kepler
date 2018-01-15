@@ -8,7 +8,8 @@
 #include "game/room/room.h"
 #include "game/room/room_model.h"
 #include "game/room/room_model_manager.h"
-#include "game/room/room_category_manager.h"
+
+#include "game/navigator/navigator_category_manager.h"
 
 #include "database/queries/room_query.h"
 #include "database/db_connection.h"
@@ -34,11 +35,11 @@ void room_query_get_models() {
         }
 
         room_model *model = room_model_create(
-                (char*)sqlite3_column_text(stmt, 4),
-                sqlite3_column_int(stmt, 0),
-                sqlite3_column_int(stmt, 1),
-                sqlite3_column_double(stmt, 2),
-                (char*)sqlite3_column_text(stmt, 3)
+            (char*)sqlite3_column_text(stmt, 4),
+            sqlite3_column_int(stmt, 0),
+            sqlite3_column_int(stmt, 1),
+            sqlite3_column_double(stmt, 2),
+            (char*)sqlite3_column_text(stmt, 3)
         );
 
         model_manager_add(model);
@@ -57,7 +58,7 @@ List *room_query_get_by_id(int owner_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT * FROM rooms WHERE owner_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT * FROM rooms WHERE owner_id = ? ORDER BY id DESC", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, owner_id);
@@ -108,7 +109,7 @@ void room_query_get_categories() {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT id, parent_id, name, public_spaces, allow_trading FROM rooms_categories", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id, parent_id, name, public_spaces, allow_trading FROM rooms_categories ORDER BY id ASC", -1, &stmt, 0);
 
     if (status != SQLITE_OK) {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
@@ -122,11 +123,11 @@ void room_query_get_categories() {
         }
 
         room_category *category = category_manager_create(
-                sqlite3_column_int(stmt, 0),
-                sqlite3_column_int(stmt, 1),
-                (char*)sqlite3_column_text(stmt, 2),
-                sqlite3_column_int(stmt, 3),
-                sqlite3_column_int(stmt, 4)
+            sqlite3_column_int(stmt, 0),
+            sqlite3_column_int(stmt, 1),
+            (char*)sqlite3_column_text(stmt, 2),
+            sqlite3_column_int(stmt, 3),
+            sqlite3_column_int(stmt, 4)
         );
 
         category_manager_add(category);
