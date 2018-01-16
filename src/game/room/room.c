@@ -87,6 +87,11 @@ void room_enter(room *room, player *player) {
     player->room_user->room = room;
     player->room_user->room_id = room->room_id;
 
+    if (player->room_user->room->room_data->model_data == NULL) {
+        printf("Room %i has invalid model data.\n", player->room_user->room->room_data->id);
+        return;
+    }
+
     player->room_user->x = room->room_data->model_data->door_x;
     player->room_user->y = room->room_data->model_data->door_y;
     player->room_user->z = room->room_data->model_data->door_z;
