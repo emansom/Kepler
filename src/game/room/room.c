@@ -10,6 +10,10 @@
 #include "room_user.h"
 
 #include "game/player/player.h"
+#include "game/items/item.h"
+
+#include "game/navigator/navigator_category_manager.h"
+
 #include "database/queries/player_query.h"
 #include "communication/messages/outgoing_message.h"
 
@@ -24,6 +28,7 @@ room *room_create(int room_id) {
     instance->room_id = room_id;
     instance->room_data = NULL;
     list_new(&instance->users);
+    list_new(&instance->public_items);
     return instance;
 }
 
@@ -47,7 +52,7 @@ room *room_create(int room_id) {
  * @param visitors_max
  * @return
  */
-room_data *room_create_data(int id, int owner_id, int category, char *name, char *description, char *model, char *ccts, int wallpaper, int floor, int showname, int superusers, int accesstype, char *password, int visitors_now, int visitors_max) {
+room_data *room_create_data(room *room, int id, int owner_id, int category, char *name, char *description, char *model, char *ccts, int wallpaper, int floor, int showname, int superusers, int accesstype, char *password, int visitors_now, int visitors_max) {
     room_data *data = malloc(sizeof(room_data));
     data->id = id;
     data->owner_id = owner_id;
@@ -72,6 +77,20 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
     data->password = strdup(password);
     data->visitors_now = visitors_now;
     data->visitors_max = visitors_max;
+
+    List *public_items = data->model_data->public_items;
+
+    if (list_size(public_items) > 0) {
+        ListIter iter;
+        list_iter_init(&iter, public_items);
+
+        item *room_item;
+
+        while (list_iter_next(&iter, (void*) &room_item) != CC_ITER_END) {
+            list_add(room->public_items, room_item);
+        }
+    }
+
     return data;
 }
 

@@ -23,7 +23,6 @@ void model_manager_add(room_model *model) {
         return;
     }
 
-    item_parser_get_items(model->type);
     list_add(global.room_model_manager.models, model);
 }
 

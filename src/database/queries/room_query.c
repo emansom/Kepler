@@ -75,6 +75,7 @@ List *room_query_get_by_id(int owner_id) {
 
         room *room = room_create(sqlite3_column_int(stmt, 0));
         room_data *room_data = room_create_data(
+            room,
             room->room_id,
             sqlite3_column_int(stmt, 1),
             sqlite3_column_int(stmt, 2),

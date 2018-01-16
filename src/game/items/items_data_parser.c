@@ -5,7 +5,7 @@
 
 #include "shared.h"
 
-#include "items.h"
+#include "item.h"
 #include "items_data_parser.h"
 
 List *item_parser_get_items(char *model) {
@@ -18,7 +18,7 @@ List *item_parser_get_items(char *model) {
 		return NULL;
 	}
 
-	List *items;
+	List *items = NULL;
 	list_new(&items);
 
     char * line = NULL;
@@ -41,8 +41,11 @@ List *item_parser_get_items(char *model) {
 			strtol(str_x, NULL, 10),
 			strtol(str_y, NULL, 10),
 			strtol(str_z, NULL, 10),
-			strtol(str_rotation, NULL, 10)
+			strtol(str_rotation, NULL, 10),
+			get_argument(line, " ", 0)
 		);
+
+		list_add(items, room_item);
 
 		free(str_x);
 		free(str_y);

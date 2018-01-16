@@ -30,10 +30,11 @@ typedef struct room_s {
     int room_id;
     room_data *room_data;
     List *users;
+    List *public_items;
 } room;
 
 room *room_create(int);
-room_data *room_create_data(int, int, int, char*, char*, char*, char*, int, int, int, int, int, char*, int, int);
+room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, int, int, char*, int, int);
 void room_enter(room*, player*);
 void room_load(room*, player*);
 void room_send(room*, outgoing_message*);

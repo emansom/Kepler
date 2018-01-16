@@ -56,7 +56,8 @@ void room_manager_add_by_user_id(int user_id) {
 }
 
 /**
- * Get rooms by user id
+ * Get rooms by user id.
+ * 
  * @param user_id the user id
  * @return the list of rooms
  */
@@ -82,7 +83,8 @@ List *room_manager_get_by_user_id(int user_id) {
 }
 
 /**
- * Get room manager by the room id
+ * Get room manager by the room id.
+ * 
  * @param room_id the room id
  * @return the room
  */
