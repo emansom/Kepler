@@ -23,6 +23,7 @@ typedef struct server_s {
 
 server global;
 
+char *get_argument(char*, char*, int);
 char *replace(const char*, char, const char*);
 int valid_password(const char*, const char*);
 int get_name_check_code(char*);

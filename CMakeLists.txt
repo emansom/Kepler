@@ -35,6 +35,7 @@ file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
+file(GLOB items ${PROJECT_DIR}/game/items/*.c)
 
 add_executable(${EXECUTABLE_NAME}
         ${collections}
@@ -48,7 +49,8 @@ add_executable(${EXECUTABLE_NAME}
         ${queries}
         ${players}
         ${room}
-        ${navigator})
+        ${navigator}
+        ${items})
 
 find_package (Threads)
 

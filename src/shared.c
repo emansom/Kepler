@@ -6,6 +6,24 @@
 #include <stdarg.h>
 #include <ctype.h>
 
+char *get_argument(char *str, char *delim, int index) {
+    char *copy = strdup(str);
+    char *token = NULL;
+
+    int i = 0;
+
+    for (token = strtok(copy, delim); token; token = strtok(NULL, delim)) {
+        if (i == index) {
+            return strdup(token);
+        }
+
+        i++;
+    }
+
+    free(copy);
+    return token;
+}
+
 char *strlwr(char *str)
 {
   unsigned char *p = (unsigned char *)str;

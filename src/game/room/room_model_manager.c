@@ -2,7 +2,9 @@
 #include "list.h"
 
 #include "database/queries/room_query.h"
-#include "room_model.h"
+
+#include "game/items/items_data_parser.h"
+#include "game/room/room_model.h"
 
 /**
  *
@@ -21,6 +23,7 @@ void model_manager_add(room_model *model) {
         return;
     }
 
+    item_parser_get_items(model->type);
     list_add(global.room_model_manager.models, model);
 }
 
