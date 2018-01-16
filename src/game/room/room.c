@@ -14,9 +14,10 @@
 #include "communication/messages/outgoing_message.h"
 
 /**
- *
- * @param room_id
- * @return
+ * Create a room instance.
+ * 
+ * @param room_id the room id
+ * @return the room instance
  */
 room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
@@ -27,7 +28,8 @@ room *room_create(int room_id) {
 }
 
 /**
- *
+ * Create a room data instance.
+ * 
  * @param id
  * @param owner_id
  * @param category
@@ -74,7 +76,7 @@ room_data *room_create_data(int id, int owner_id, int category, char *name, char
 }
 
 /**
- * Room entry handler
+ * Room entry handler.
  *
  * @param om the outgoing message
  * @param player the player
@@ -99,8 +101,15 @@ void room_enter(room *room, player *player) {
     player->room_user->body_rotation = 2;
 
     list_add(room->users, player);
+    room->room_data->visitors_now++;
 }
 
+/**
+ * Send packets to start the room entance.
+ *
+ * @param om the outgoing message
+ * @param player the player
+ */
 void room_load(room *room, player *player) {
     outgoing_message *om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
@@ -121,9 +130,10 @@ void room_load(room *room, player *player) {
 }
 
 /**
- *
- * @param room
- * @param message
+ * Send an outgoing message to all the room users.
+ * 
+ * @param room the room
+ * @param message the outgoing message to send
  */
 void room_send(room *room, outgoing_message *message) {
     ListIter iter;
@@ -136,8 +146,9 @@ void room_send(room *room, outgoing_message *message) {
 }
 
 /**
- *
- * @param room
+ * Cleanup a room instance.
+ * 
+ * @param room the room instance.
  */
 void room_cleanup(room *room) {
     if (room->room_data != NULL) {

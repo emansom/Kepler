@@ -12,21 +12,42 @@
 
 uv_loop_t *loop;
 
+/**
+ *
+ * @param handle
+ * @param size
+ * @param buf
+ */
 void server_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
     buf->base = malloc(size);
     buf->len = size;
 }
 
+/**
+ *
+ * @param handle
+ */
 void server_on_connection_close(uv_handle_t *handle) {
     player *player = handle->data;
     printf("Client [%s] has disconnected\n", player->ip_address);
     player_cleanup(player);
 }
 
+/**
+ *
+ * @param req
+ * @param status
+ */
 void server_on_write(uv_write_t* req, int status) { 
     //free(req->data);
 }
 
+/**
+ *
+ * @param handle
+ * @param nread
+ * @param buf
+ */
 void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     if (nread == UV_EOF) {
         uv_close((uv_handle_t *) handle, server_on_connection_close);
@@ -79,6 +100,11 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     free(buf->base);
 }
 
+/**
+ *
+ * @param server
+ * @param status
+ */
 void server_on_new_connection(uv_stream_t *server, int status) {
     if (status == -1) {
         return;
@@ -113,6 +139,11 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     }
 }
 
+/**
+ *
+ * @param ip
+ * @param port
+ */
 void start_server(const char *ip, int port) {
     loop = uv_default_loop();
 

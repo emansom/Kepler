@@ -36,7 +36,8 @@ void room_manager_add_public_rooms() {
 }
 
 /*
- *
+ * Add rooms by user id, will check if the room exists
+ * before adding a new room.
  */
 void room_manager_add_by_user_id(int user_id) {
     List *rooms = room_query_get_by_id(user_id);
@@ -55,9 +56,9 @@ void room_manager_add_by_user_id(int user_id) {
 }
 
 /**
- *
- * @param user_id
- * @return
+ * Get rooms by user id
+ * @param user_id the user id
+ * @return the list of rooms
  */
 List *room_manager_get_by_user_id(int user_id) {
     List *rooms;
@@ -81,9 +82,9 @@ List *room_manager_get_by_user_id(int user_id) {
 }
 
 /**
- *
- * @param room_id
- * @return
+ * Get room manager by the room id
+ * @param room_id the room id
+ * @return the room
  */
 room *room_manager_get_by_id(int room_id) {
     void *room = NULL;
