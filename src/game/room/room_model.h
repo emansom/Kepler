@@ -9,10 +9,11 @@ typedef struct room_model_s {
     int door_x;
     int door_y;
     double door_z;
+    int door_dir;
     char *heightmap;
     List *public_items;
 } room_model;
 
-room_model *room_model_create(char*, char *, int, int, double, char *);
+room_model *room_model_create(char*, char *, int, int, double, int, char *);
 
 #endif

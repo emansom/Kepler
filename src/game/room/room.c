@@ -106,7 +106,6 @@ void room_enter(room *room, player *player) {
     }
 
     if (player->room_user->room != NULL) {
-        printf ("LEAVING ROOM!\n");
         room_leave(player->room_user->room, player);
     }
 
@@ -121,8 +120,8 @@ void room_enter(room *room, player *player) {
     player->room_user->x = room->room_data->model_data->door_x;
     player->room_user->y = room->room_data->model_data->door_y;
     player->room_user->z = room->room_data->model_data->door_z;
-    player->room_user->head_rotation = 2;
-    player->room_user->body_rotation = 2;
+    player->room_user->head_rotation = room->room_data->model_data->door_dir;
+    player->room_user->body_rotation = room->room_data->model_data->door_dir;
 
     list_add(room->users, player);
     room->room_data->visitors_now++;
@@ -147,8 +146,6 @@ void room_leave(room *room, player *player) {
     sb_add_int(om->sb, player->player_data->id);
     room_send(room, om);
     om_cleanup(om);
-
-    printf ("LEAVE ROOM!\n");
 }
 
 /**
@@ -167,11 +164,6 @@ void room_load(room *room, player *player) {
     om_write_str(om, player->room_user->room->room_data->model);
     om_write_str(om, " ");
     om_write_str_int(om, player->room_user->room_id);
-    player_send(player, om);
-    om_cleanup(om);
-
-    om = om_create(345); // "EY"
-    om_write_int(om, 0); // votes
     player_send(player, om);
     om_cleanup(om);
 }

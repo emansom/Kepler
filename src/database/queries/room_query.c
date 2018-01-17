@@ -21,7 +21,7 @@ void room_query_get_models() {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT door_x, door_y, door_z, heightmap, model_id, model_name FROM rooms_models", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT door_x, door_y, door_z, door_dir, heightmap, model_id, model_name FROM rooms_models", -1, &stmt, 0);
 
     if (status != SQLITE_OK) {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
@@ -35,12 +35,13 @@ void room_query_get_models() {
         }
 
         room_model *model = room_model_create(
-            (char*)sqlite3_column_text(stmt, 4),
             (char*)sqlite3_column_text(stmt, 5),
+            (char*)sqlite3_column_text(stmt, 6),
             sqlite3_column_int(stmt, 0),
             sqlite3_column_int(stmt, 1),
             sqlite3_column_double(stmt, 2),
-            (char*)sqlite3_column_text(stmt, 3)
+            sqlite3_column_int(stmt, 3),
+            (char*)sqlite3_column_text(stmt, 4)
         );
 
         model_manager_add(model);
