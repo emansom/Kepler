@@ -109,13 +109,13 @@ void room_enter(room *room, player *player) {
         room_leave(room, player);
     }
 
-    player->room_user->room = room;
-    player->room_user->room_id = room->room_id;
-
-    if (player->room_user->room->room_data->model_data == NULL) {
-        printf("Room %i has invalid model data.\n", player->room_user->room->room_data->id);
+    if (room->room_data->model_data == NULL) {
+        printf("Room %i has invalid model data.\n", room->room_data->id);
         return;
     }
+
+    player->room_user->room = room;
+    player->room_user->room_id = room->room_id;
 
     player->room_user->x = room->room_data->model_data->door_x;
     player->room_user->y = room->room_data->model_data->door_y;
@@ -127,6 +127,10 @@ void room_enter(room *room, player *player) {
     room->room_data->visitors_now++;
 }
 
+/**
+ * Leave room handler, will make room and id for the room user reset back to NULL and 0.
+ * And remove the character from the room.
+ */
 void room_leave(room *room, player *player) {
     if (!list_contains(room->users, player)) {
         return;
