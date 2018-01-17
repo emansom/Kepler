@@ -120,6 +120,18 @@ void player_send(player *p, outgoing_message *om) {
     free(friendly_message);
 }
 
+void player_send_raw(player *p, char *msg) {
+    uv_handle_t *handle = p->stream;
+
+    uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
+    uv_buf_t wrbuf = uv_buf_init(msg, strlen(msg));
+
+    int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+    if (r) {
+        printf("error sending message\n");
+    }
+}
+
 /**
  * Sends the key of an error, whose description value is inside the external_texts of the client.
  * @param p the player

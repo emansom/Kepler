@@ -6,7 +6,7 @@
  */
 stringbuilder *sb_create() {
     stringbuilder *sb = malloc(sizeof(stringbuilder));
-    sb->capacity = 1024;
+    sb->capacity = 512;
     sb->data = malloc(sb->capacity * sizeof(char));
     sb->index = 0;
     return sb;
@@ -36,10 +36,6 @@ void sb_add_string(stringbuilder *sb, const char *data) {
     sb_ensure_capacity(sb, strlen(data) + 1); //+1 for terminated string
 
     for (int i = 0; i < strlen(data); i++) {
-        if (data[i] == '\0') {
-            break;
-        }
-
         sb->data[sb->index++] = data[i];
     }
 

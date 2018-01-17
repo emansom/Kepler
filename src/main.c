@@ -23,7 +23,7 @@ int main(void) {
         print_info("The connection to the database was successful!\n");
         sqlite3_close(con);
     }
-
+    
     create_thread_pool();
 
     print_info("\n");
