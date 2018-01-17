@@ -106,7 +106,8 @@ void room_enter(room *room, player *player) {
     }
 
     if (player->room_user->room != NULL) {
-        room_leave(room, player);
+        printf ("LEAVING ROOM!\n");
+        room_leave(player->room_user->room, player);
     }
 
     if (room->room_data->model_data == NULL) {
@@ -139,13 +140,15 @@ void room_leave(room *room, player *player) {
     player->room_user->room = NULL;
     player->room_user->room_id = 0;
 
+    list_remove(room->users, player, NULL);
+    room->room_data->visitors_now--;
+
     outgoing_message *om = om_create(29); // "@]"
     sb_add_int(om->sb, player->player_data->id);
     room_send(room, om);
     om_cleanup(om);
 
-    list_remove(room->users, player, NULL);
-    room->room_data->visitors_now--;
+    printf ("LEAVE ROOM!\n");
 }
 
 /**
