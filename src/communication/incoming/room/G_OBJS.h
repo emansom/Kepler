@@ -32,6 +32,7 @@ void G_OBJS(player *player, incoming_message *message) {
             sb_add_int(om->sb, (int)room_item->z);
             sb_add_string(om->sb, " ");
             sb_add_int(om->sb, room_item->rotation);
+            sb_add_string(om->sb, " ");
             sb_add_char(om->sb, 13);
 
         }
