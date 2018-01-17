@@ -19,7 +19,7 @@ void model_manager_init() {
  * @param model
  */
 void model_manager_add(room_model *model) {
-    if (model_manager_get(model->type) != NULL) {
+    if (model_manager_get(model->model_id) != NULL) {
         return;
     }
 
@@ -38,7 +38,7 @@ room_model *model_manager_get(char *modeltype) {
     room_model *model;
 
     while (list_iter_next(&iter, (void*) &model) != CC_ITER_END) {
-        if (strcmp(model->type, modeltype) == 0) {
+        if (strcmp(model->model_id, modeltype) == 0) {
             return model;
         }
     }

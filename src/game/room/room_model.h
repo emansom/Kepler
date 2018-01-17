@@ -4,7 +4,8 @@
 typedef struct list_s List;
 
 typedef struct room_model_s {
-    char *type;
+    char *model_id;
+    char *model_name;
     int door_x;
     int door_y;
     double door_z;
@@ -12,6 +13,6 @@ typedef struct room_model_s {
     List *public_items;
 } room_model;
 
-room_model *room_model_create(char*, int, int, double, char *);
+room_model *room_model_create(char*, char *, int, int, double, char *);
 
 #endif

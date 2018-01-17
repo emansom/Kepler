@@ -60,9 +60,9 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
     data->category = category;
     data->name = strdup(name);
     data->description = strdup(description);
-    data->model = strdup(model);
     data->model_data = model_manager_get(model);
-    
+    data->model = data->model_data->model_name;
+
     if (ccts == NULL) {
         data->ccts = strdup("");
     } else {
@@ -174,11 +174,13 @@ void room_cleanup(room *room) {
         free(room->room_data->name);
         free(room->room_data->owner_name);
         free(room->room_data->description);
-        free(room->room_data->model);
         free(room->room_data->ccts);
         free(room->room_data->password);
         free(room->room_data);
     }
+
+    list_destroy(room->users);
+    list_destroy(room->public_items);
 
     free(room);
 }
