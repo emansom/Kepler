@@ -37,6 +37,7 @@ room *room_create(int);
 room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, int, int, char*, int, int);
 void room_enter(room*, player*);
 void room_load(room*, player*);
+void room_leave(room*, player*);
 void room_send(room*, outgoing_message*);
 void room_cleanup(room*);
 

@@ -58,6 +58,10 @@ void player_cleanup(player *player) {
         return;
     }
 
+    if (player->room_user->room != NULL) {
+        room_leave(player->room_user->room, player);
+    }
+
     if (player->player_data != NULL) {
         free(player->player_data->username);
         free(player->player_data->figure);

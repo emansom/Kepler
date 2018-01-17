@@ -39,6 +39,9 @@
 #include "communication/incoming/room/G_USRS.h"
 #include "communication/incoming/room/GET_FURNI_REVISIONS.h"
 
+// Room user
+#include "communication/incoming/room/user/QUIT.h"
+
 /**
  * Assigns all header handlers to this array
  */
@@ -79,6 +82,9 @@ void mh_add_messages() {
     message_requests[63] = G_ITEMS;
     message_requests[61] = G_USRS;
     message_requests[213] = GET_FURNI_REVISIONS;
+
+    // Room user
+    message_requests[53] = QUIT;
 }
 
 /**
