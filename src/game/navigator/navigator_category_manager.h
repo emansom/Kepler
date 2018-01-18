@@ -29,6 +29,8 @@ void category_manager_add(room_category*);
 room_category *category_manager_get_by_id(int);
 List *category_manager_get_by_parent_id(int);
 List *category_manager_get_rooms(int);
+int category_manager_get_current_vistors(int);
+int category_manager_get_max_vistors(int);
 void category_manager_serialise(outgoing_message*, room*, room_category_type);
 
 #endif

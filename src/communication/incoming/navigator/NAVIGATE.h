@@ -17,8 +17,8 @@ void NAVIGATE(player *player, incoming_message *message) {
         om_write_int(navigator, category_id);
         om_write_int(navigator, parent_category->category_type); // current visitors
         om_write_str(navigator, parent_category->name);
-        om_write_int(navigator, 0); // current visitors
-        om_write_int(navigator, 25); // max visitorss
+        om_write_int(navigator, category_manager_get_current_vistors(category_id)); // current visitors
+        om_write_int(navigator, category_manager_get_max_vistors(category_id)); // max visitorss
         om_write_int(navigator, parent_category->parent_id); 
 
         if (parent_category->public_spaces == 0) {
@@ -45,8 +45,8 @@ void NAVIGATE(player *player, incoming_message *message) {
             om_write_int(navigator, category->id);
             om_write_int(navigator, 0);//category->category_type); // current visitors
             om_write_str(navigator, category->name);
-            om_write_int(navigator, 0); // current visitors
-            om_write_int(navigator, 25); // max visitorss
+            om_write_int(navigator, category_manager_get_current_vistors(category->id)); // current visitors
+            om_write_int(navigator, category_manager_get_max_vistors(category->id)); // max visitorss
             om_write_int(navigator, parent_category->id); 
         }
 

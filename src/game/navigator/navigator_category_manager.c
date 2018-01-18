@@ -114,10 +114,49 @@ List *category_manager_get_rooms(int category_id) {
     TableEntry *entry;
     while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
         room *instance = entry->value;
-        list_add(rooms, instance);
+
+        if (instance->room_data->category == category_id) {
+            list_add(rooms, instance);
+        }
     }
 
     return rooms;
+}
+
+int category_manager_get_current_vistors(int category_id) {
+    int current_visitors = 0;
+
+    HashTableIter iter;
+    hashtable_iter_init(&iter, global.room_manager.rooms);
+
+    TableEntry *entry;
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        room *instance = entry->value;
+
+        if (instance->room_data->category == category_id) {
+            current_visitors += instance->room_data->visitors_now;
+        }
+    }
+
+    return current_visitors;
+}
+
+int category_manager_get_max_vistors(int category_id) {
+    int max_visitors = 0;
+
+    HashTableIter iter;
+    hashtable_iter_init(&iter, global.room_manager.rooms);
+
+    TableEntry *entry;
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        room *instance = entry->value;
+
+        if (instance->room_data->category == category_id) {
+            max_visitors += instance->room_data->visitors_max;
+        }
+    }
+
+    return max_visitors;
 }
 
 /**
