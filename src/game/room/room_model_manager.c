@@ -7,7 +7,7 @@
 #include "game/room/room_model.h"
 
 /**
- *
+ * Initialise the model manager.
  */
 void model_manager_init() {
     list_new(&global.room_model_manager.models);
@@ -15,8 +15,9 @@ void model_manager_init() {
 }
 
 /**
- *
- * @param model
+ * Add a model, if it already exists, it won't be added
+ * 
+ * @param model the model id
  */
 void model_manager_add(room_model *model) {
     if (model_manager_get(model->model_id) != NULL) {
@@ -26,19 +27,20 @@ void model_manager_add(room_model *model) {
     list_add(global.room_model_manager.models, model);
 }
 
-/**
- *
- * @param modeltype
- * @return
+/** 
+ * Get model by model id.
+ * 
+ * @param model_id the model id to find
+ * @return the room model struct
  */
-room_model *model_manager_get(char *modeltype) {
+room_model *model_manager_get(char *model_id) {
     ListIter iter;
     list_iter_init(&iter, global.room_model_manager.models);
 
     room_model *model;
 
     while (list_iter_next(&iter, (void*) &model) != CC_ITER_END) {
-        if (strcmp(model->model_id, modeltype) == 0) {
+        if (strcmp(model->model_id, model_id) == 0) {
             return model;
         }
     }

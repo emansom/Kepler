@@ -118,6 +118,18 @@
 		<Unit filename="C:/Users/Alex/Documents/GitHub/Kepler/src/database/queries/room_query.h">
 			<Option target="Kepler"/>
 		</Unit>
+		<Unit filename="C:/Users/Alex/Documents/GitHub/Kepler/src/game/items/item.c">
+			<Option target="Kepler"/>
+		</Unit>
+		<Unit filename="C:/Users/Alex/Documents/GitHub/Kepler/src/game/items/item.h">
+			<Option target="Kepler"/>
+		</Unit>
+		<Unit filename="C:/Users/Alex/Documents/GitHub/Kepler/src/game/items/items_data_parser.c">
+			<Option target="Kepler"/>
+		</Unit>
+		<Unit filename="C:/Users/Alex/Documents/GitHub/Kepler/src/game/items/items_data_parser.h">
+			<Option target="Kepler"/>
+		</Unit>
 		<Unit filename="C:/Users/Alex/Documents/GitHub/Kepler/src/game/navigator/navigator_category_manager.c">
 			<Option target="Kepler"/>
 		</Unit>
