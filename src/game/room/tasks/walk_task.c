@@ -17,7 +17,6 @@
 void process_user(player *player);
 
 void walk_task(room *room) {
-
     List *users;
 	list_copy_shallow(room->users, &users);
 

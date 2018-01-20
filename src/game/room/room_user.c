@@ -114,6 +114,7 @@ void room_user_reset(room_user *room_user) {
     room_user->room = NULL;
 
     if (room_user->walk_list != NULL) {
+        deque_remove_all(room_user->walk_list);
         deque_destroy(room_user->walk_list);
         room_user->walk_list = NULL;
     }
