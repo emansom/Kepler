@@ -127,15 +127,15 @@ void room_enter(room *room, player *player) {
     player->room_user->head_rotation = room->room_data->model_data->door_dir;
     player->room_user->body_rotation = room->room_data->model_data->door_dir;
 
-    if (list_size(room->users) == 0) {
-        runnable *r = malloc(sizeof(runnable));
-        r->request = walk_task;
-        r->argument = room;
-        deque_add_last(global.thread_manager.tasks, r);
-    }
-
     list_add(room->users, player);
     room->room_data->visitors_now++;
+
+    if (list_size(room->users) == 1) {
+        runnable *r = create_runnable();
+        r->request = walk_task;
+        r->room = (void*)room;
+        deque_add_last(global.thread_manager.tasks, r);
+    }
 }
 
 /**
@@ -193,13 +193,19 @@ void room_load(room *room, player *player) {
  * @param message the outgoing message to send
  */
 void room_send(room *room, outgoing_message *message) {
+    List *users;
+	list_copy_shallow(room->users, &users);
+
     ListIter iter;
-    list_iter_init(&iter, room->users);
+    list_iter_init(&iter, users);
 
     player *player;
     while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
         player_send(player, message);
     }
+
+	om_cleanup(message);
+    list_destroy(users);
 }
 
 /**

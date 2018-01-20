@@ -29,7 +29,6 @@ void G_USRS(player *p, incoming_message *message) {
     players = om_create(28); // "@\"
     append_user_list(players, p);
     room_send(room, players);
-    om_cleanup(players);
 
 
     /*char instance_id[11];

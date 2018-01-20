@@ -4,6 +4,7 @@
 #include "deque.h"
 
 #include "game/player/player.h"
+#include "game/pathfinder/coord.h"
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
@@ -14,66 +15,68 @@
 
 void process_user(player *player);
 
-void walk_task(void *argument, runnable *self) {
-    room *room = argument;
-
-    if (room == NULL || room->users == NULL) {
-        free(self);
-        self = NULL;
-    }
+void walk_task(runnable *runnable) {
+	room *room = runnable->room;
 
     List *users;
 	list_copy_shallow(room->users, &users);
 
-    int players = list_size(users);
+	int user_updates = 0;
+	outgoing_message *status_update = om_create(34);
 
-    // Stop any segfaults from happening
-    if (!(players > 0)) {
-        free(self);
-        list_destroy(users);
-        self = NULL;
-    } else {
-		int user_updates = 0;
-		outgoing_message *status_update = om_create(34);
+	ListIter iter;
+	list_iter_init(&iter, users);
 
-        // Continue with task
-        ListIter iter;
-        list_iter_init(&iter, users);
-
-        player *player;
-
-        while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
-            if (player == NULL) {
-                continue;
-            }
-
-			if (player->room_user == NULL) {
-                continue;
-            }
-
-			process_user(player);
-
-			if (player->room_user->needs_update) {
-				player->room_user->needs_update = 0;
-				append_user_status(status_update, player);
-				user_updates++;
-			}
-        }
-        
-		if (user_updates > 0) {
-			room_send(room, status_update);
+	player *player;
+	while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
+		if (player == NULL) {
+			continue;
 		}
-		
-		om_cleanup(status_update);
-        list_destroy(users);
-	    deque_add_last(global.thread_manager.tasks, self);
-    }
+
+		if (player->player_data == NULL) {
+			continue;
+		}
+
+		if (player->room_user == NULL) {
+			continue;
+		}
+
+		process_user(player);
+
+		if (player->room_user->needs_update) {
+			player->room_user->needs_update = 0;
+			append_user_status(status_update, player);
+			user_updates++;
+		}
+	}
+
+	if (user_updates > 0) {
+		room_send(room, status_update);
+	}
+	
+	list_destroy(users);
+	deque_add_last(global.thread_manager.tasks, runnable);
 }
 
 void process_user(player *player) {
 	room_user *room_user = player->room_user;
 
 	if (room_user->is_walking) {
-		printf("walk request:\n");
+		if (room_user->next != NULL) {
+			room_user->current->x = room_user->next->x;
+			room_user->current->y = room_user->next->y;
+		}
+
+		if (deque_size(room_user->walk_list) > 0) {
+			coord *next;
+			deque_remove_first(room_user->walk_list, (void*)&next);
+			room_user->next = next;
+
+		} else {
+			room_user->next = NULL;
+			room_user->is_walking = 0;
+		}
+
+		player->room_user->needs_update = 1;
 	}
 }

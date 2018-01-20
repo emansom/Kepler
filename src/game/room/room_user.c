@@ -19,8 +19,8 @@ room_user *room_user_create() {
     user->room = NULL;
     user->is_walking = 0;
     user->needs_update = 0;
-    user->current = malloc(sizeof(coord));
-    user->goal = malloc(sizeof(coord));
+    user->current = create_coord(0, 0);
+    user->goal = create_coord(0, 0);
     user->next = NULL;
     deque_new(&user->walk_list);
     return user;
@@ -119,6 +119,6 @@ void room_user_cleanup(room_user *room_user) {
         deque_destroy(room_user->walk_list);
         room_user->walk_list = NULL;
     }
-    
+
     free(room_user);
 }

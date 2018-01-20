@@ -30,8 +30,8 @@ Deque *create_path(room_user *room_user) {
 	Deque *path;
 	deque_new(&path);
 
-	int map_size_x = 120;
-	int map_size_y = 120;
+	int map_size_x = 40;
+	int map_size_y = 40;
 	pathfinder *pathfinder = make_path_reversed(room_user, map_size_x, map_size_y);
 
 	if (pathfinder->nodes != NULL) {
@@ -40,7 +40,7 @@ Deque *create_path(room_user *room_user) {
 			int x = pathfinder->nodes->x;
 			int y = pathfinder->nodes->y;
 
-			deque_add_first(path, create_coord(x, y));
+			deque_add_last(path, create_coord(x, y));
 			pathfinder->nodes = pathfinder->nodes->node;
 		}
 
@@ -69,6 +69,14 @@ int is_valid_tile(room_user *room_user, coord from, coord to) {
 	// Don't use negative coordinates
 	if (from.x < 0 || from.y < 0 || to.x < 0 || to.y < 0) {
 		return 0; // 0 for false
+	}
+
+	if (from.x >= 40 || from.y >= 40) {
+		return 0;
+	}
+
+	if (to.x >= 40 || to.y >= 40) {
+		return 0;
 	}
 
 	// TODO: Add your checking here

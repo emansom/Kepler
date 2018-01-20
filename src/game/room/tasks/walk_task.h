@@ -1,2 +1,2 @@
 typedef struct runnable_s runnable;
-void walk_task(void *argument, runnable *self);
+void walk_task(runnable *runnable);
