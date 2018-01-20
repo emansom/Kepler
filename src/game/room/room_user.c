@@ -40,7 +40,12 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    Deque *deque = create_path(room_user);
+    Deque *path = create_path(room_user);
+
+    if (deque_size(path) > 0) {
+        room_user->walk_list = path;
+        room_user->is_walking = 1;
+    }
 }
 
 /**
@@ -110,6 +115,10 @@ void room_user_cleanup(room_user *room_user) {
 
     room_user->room = NULL;
 
-    deque_destroy(room_user->walk_list);
+    if (room_user->walk_list != NULL) {
+        deque_destroy(room_user->walk_list);
+        room_user->walk_list = NULL;
+    }
+    
     free(room_user);
 }

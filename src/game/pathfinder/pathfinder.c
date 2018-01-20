@@ -40,9 +40,7 @@ Deque *create_path(room_user *room_user) {
 			int x = pathfinder->nodes->x;
 			int y = pathfinder->nodes->y;
 
-			printf("x: %d\n", x);
-			printf("y: %d\n", y);
-
+			deque_add_first(path, create_coord(x, y));
 			pathfinder->nodes = pathfinder->nodes->node;
 		}
 

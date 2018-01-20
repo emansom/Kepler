@@ -7,6 +7,7 @@ typedef struct coord_s {
 	double z;
 } coord;
 
+coord *create_coord(int, int);
 int distance_squared(int first_x, int first_y, int point_x, int point_y);
 
 #endif

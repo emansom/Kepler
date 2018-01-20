@@ -12,6 +12,8 @@
 
 #include "shared.h"
 
+void process_user(player *player);
+
 void walk_task(void *argument, runnable *self) {
     room *room = argument;
 
@@ -39,7 +41,7 @@ void walk_task(void *argument, runnable *self) {
         list_iter_init(&iter, users);
 
         player *player;
-		
+
         while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
             if (player == NULL) {
                 continue;
@@ -57,8 +59,15 @@ void walk_task(void *argument, runnable *self) {
 		}
 		
 		om_cleanup(status_update);
-
         list_destroy(users);
 	    deque_add_last(global.thread_manager.tasks, self);
     }
+}
+
+void process_user(player *player) {
+	room_user *room_user = player->room_user;
+
+	if (room_user->is_walking) {
+		printf("walk request:\n");
+	}
 }
