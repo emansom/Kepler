@@ -1,4 +1,5 @@
 #include "stdlib.h"
+#include <ctype.h>
 
 #include "room_model.h"
 #include "shared.h"
@@ -26,6 +27,8 @@ room_model *room_model_create(char *model_id, char *model_name, int door_x, int 
     model->door_y = door_y;
     model->door_z = door_z;
     model->door_dir = door_dir;
+    model->map_size_x = 0;
+    model->map_size_y = 0;
     model->heightmap = replace(heightmap, '|', "\r");
     
     List *items = item_parser_get_items(model->model_id);
@@ -36,5 +39,57 @@ room_model *room_model_create(char *model_id, char *model_name, int door_x, int 
         list_new(&model->public_items);
     }
     
+    room_model_parse(model);
     return model;
+}
+
+void room_model_parse(room_model *room_model) {
+    char *heightmap = strdup(room_model->heightmap);
+
+    int count = 0;
+    char *line = get_argument(heightmap, "\r", count);
+
+    int map_size_y = strlen(line);
+    int map_size_x = 0;
+
+    room_title_states temp[100][100];
+    memset(temp, -1, sizeof(temp));
+
+    while (line != NULL) {
+        for (int i = 0; i < strlen(line); i++) {
+            char letter = (char)tolower(line[i]);
+
+            if (letter == 'x') {
+                temp[count][i] = CLOSED;
+            } else {
+                temp[count][i] = OPEN;
+            }   
+        }
+    
+        if (line != NULL) {
+            free(line);
+        }  
+
+        count++;
+        map_size_x = count;
+
+        line = get_argument(heightmap, "\r", count);
+    }
+
+    printf("Model: %s\n", room_model->model_name);
+    printf("x: %d y: %d\n", map_size_x, map_size_y);
+
+    room_model->map_size_x = map_size_x;
+    room_model->map_size_y = map_size_y;
+    room_model->states = malloc(sizeof(*room_model->states) * map_size_x);
+
+    for (int x = 0; x < room_model->map_size_x ; x++) { 
+         room_model->states[x] = malloc(sizeof(*room_model->states) * map_size_y);
+
+         for (int y = 0; y < room_model->map_size_y ; y++) { 
+             room_model->states[x][y] = temp[x][y];
+         }
+    }
+
+    free(heightmap);
 }

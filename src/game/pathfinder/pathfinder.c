@@ -7,7 +7,10 @@
 #include "coord.h"
 
 #include "deque.h"
+
+#include "game/room/room.h"
 #include "game/room/room_user.h"
+#include "game/room/room_model.h"
 
 #include <limits.h>
 
@@ -22,17 +25,20 @@ coord DIAGONAL_MOVE_POINTS[] = {
 	{ -1, -1, 0 }
 };
 
-int get_address(int x, int y, int map_size_y) {
-	return x * map_size_y + y;
-}
-
 Deque *create_path(room_user *room_user) {
+	if (room_user->room == NULL) {
+		return NULL;
+	}
+
 	Deque *path;
 	deque_new(&path);
 
-	int map_size_x = 40;
-	int map_size_y = 40;
-	pathfinder *pathfinder = make_path_reversed(room_user, map_size_x, map_size_y);
+	room *room = room_user->room;
+	int map_size_x = room->room_data->model_data->map_size_x;
+	int map_size_y = room->room_data->model_data->map_size_y;
+
+	pathfinder *pathfinder = NULL;
+	pathfinder = make_path_reversed(room_user, map_size_x, map_size_y);
 
 	if (pathfinder->nodes != NULL) {
 		while (pathfinder->nodes->node != NULL) {
@@ -40,104 +46,125 @@ Deque *create_path(room_user *room_user) {
 			int x = pathfinder->nodes->x;
 			int y = pathfinder->nodes->y;
 
-			deque_add_last(path, create_coord(x, y));
+			deque_add_first(path, create_coord(x, y));
 			pathfinder->nodes = pathfinder->nodes->node;
 		}
 
-
-		for (int y = 0; y < map_size_y; y++) {
-			for (int x = 0; x < map_size_x; x++) {
-				node *node = pathfinder->map[get_address(x, y, map_size_y)];
+		for (int x = 0; x < map_size_x; x++) {
+			for (int y = 0; y < map_size_y; y++) {
+				node *node = pathfinder->map[x][y];
 
 				if (node != NULL) {
 					free(node);
-					pathfinder->map[get_address(x, y, map_size_y)] = NULL;
+					pathfinder->map[x][y] = NULL;
 				}
 			}
+
+			free(pathfinder->map[x]);
 		}
 
 		free(pathfinder->map);
-		free(pathfinder->open_list);
 		free(pathfinder);
 
+	} else {
+		printf("mistake 22222!\n");
 	}
 
 	return path;
 }
 
 int is_valid_tile(room_user *room_user, coord from, coord to) {
+	room *room = room_user->room;
+
 	// Don't use negative coordinates
 	if (from.x < 0 || from.y < 0 || to.x < 0 || to.y < 0) {
 		return 0; // 0 for false
 	}
 
-	if (from.x >= 40 || from.y >= 40) {
+	if (from.x >= room->room_data->model_data->map_size_x || from.y >= room->room_data->model_data->map_size_y) {
 		return 0;
 	}
 
-	if (to.x >= 40 || to.y >= 40) {
+	if (to.x >= room->room_data->model_data->map_size_x || to.y >= room->room_data->model_data->map_size_y) {
 		return 0;
 	}
 
-	// TODO: Add your checking here
-	// The "to" variable is the tile around the "from" variable.
+	if (room->room_data->model_data->states[to.x][to.y] == CLOSED) {
+		return 0;
+	}
+
+	if (room->room_data->model_data->states[from.x][from.y] == CLOSED) {
+		return 0;
+	}
 
 	return 1; // 1 for true
 }
 
 pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_size_y) {
-	int map_size = map_size_x * map_size_y;
-
 	pathfinder *p = malloc(sizeof(pathfinder));
-	p->map = malloc(sizeof(node) * map_size);
-	p->open_list = malloc(sizeof(node) * map_size);
+	p->nodes = NULL;
+	p->open_list = NULL;
+	p->current = NULL;
+	//p->map = NULL;
 
-	node **adjust_list = p->open_list;
-	memset(p->map, 0, sizeof(node) * map_size);
-	memset(p->open_list, 0, sizeof(node) * map_size);
+	deque_new(&p->open_list);
+
+	p->map = malloc(sizeof(node**) * map_size_x);
+
+    for (int x = 0; x < map_size_x ; x++) { 
+         p->map[x] =  malloc(sizeof(node*) * map_size_y);
+
+		 for (int y = 0; y < map_size_y ; y++) { 
+			p->map[x][y] = NULL;
+		 }
+    }
+
+	coord c;
+	coord tmp;
+
+	c.x = room_user->current->x;
+	c.y = room_user->current->x;
+
+	tmp.x = c.x;
+	tmp.y = c.y;
+
+	if (!is_valid_tile(room_user, c, tmp)) {
+		return p;
+	}
 
 	p->current = create_node();
 	p->current->x = room_user->current->x;
 	p->current->y = room_user->current->y;
 
-	coord tmp;
-
 	int cost = 0;
 	int diff = 0;
 
-	p->map[get_address(p->current->x, p->current->y, map_size_y)] = p->current;
-	p->open_list[0] = p->current;
+	p->map[p->current->x][p->current->y] = p->current;
+	deque_add_last(p->open_list, p->current);
 
-	int list_size = 1;
-
-	while (adjust_list[0] != 0) {
-		p->current = adjust_list[0];
+	while (deque_size(p->open_list) > 0) {
+		deque_remove_first(p->open_list, (void*)&p->current);
 		p->current->closed = 1;
-
-		adjust_list++;
-		list_size--;
 
 		for (int i = 0; i < 8; i++) {
 			tmp.x = p->current->x + DIAGONAL_MOVE_POINTS[i].x;
 			tmp.y = p->current->y + DIAGONAL_MOVE_POINTS[i].y;
 
 			int isFinalMove = (tmp.x == room_user->goal->x && tmp.y == room_user->goal->y);
-
-			coord c;
 			c.x = p->current->x;
 			c.y = p->current->y;
 
 			if (is_valid_tile(room_user, c, tmp)) {
-				int array_index = get_address(tmp.x, tmp.y, map_size_y);
 
-				if (p->map[array_index] == 0) {
+				if (p->map[tmp.x][tmp.y] == 0) {
 					p->nodes = create_node();
 					p->nodes->x = tmp.x;
 					p->nodes->y = tmp.y;
-					p->map[array_index] = p->nodes;
+					p->map[tmp.x][tmp.y] = p->nodes;
+
 				}
 				else {
-					p->nodes = p->map[array_index];
+					p->nodes = p->map[tmp.x][tmp.y];
 				}
 
 				if (!p->nodes->closed) {
@@ -165,7 +192,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 						}
 
 						p->nodes->open = 1;
-						adjust_list[list_size++] = p->nodes;
+						deque_add_last(p->open_list, p->nodes);
 					}
 				}
 			}

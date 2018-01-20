@@ -7,8 +7,8 @@ typedef struct deque_s Deque;
 typedef struct coord_s coord;
 
 typedef struct pathfinder_s {
-	node **map;
-	node **open_list;
+	node ***map;
+	Deque *open_list;
 	node *current;
 	node *nodes;
 } pathfinder;

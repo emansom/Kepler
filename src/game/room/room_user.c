@@ -28,6 +28,7 @@ room_user *room_user_create() {
 
 void walk_to(room_user *room_user, int x, int y) {
     if (room_user->room == NULL) {
+        printf("Debug 1\n");
         return;
     }
 
@@ -35,6 +36,7 @@ void walk_to(room_user *room_user, int x, int y) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
         room_user->needs_update = 1;
+        printf("Debug 2\n");
     }
 
     room_user->goal->x = x;
@@ -42,9 +44,12 @@ void walk_to(room_user *room_user, int x, int y) {
 
     Deque *path = create_path(room_user);
 
-    if (deque_size(path) > 0) {
-        room_user->walk_list = path;
-        room_user->is_walking = 1;
+    if (path != NULL) {
+        printf("Debug 3\n");
+        if (deque_size(path) > 0) {
+            room_user->walk_list = path;
+            room_user->is_walking = 1;
+        }
     }
 }
 
