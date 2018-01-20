@@ -1,2 +1,4 @@
 typedef struct runnable_s runnable;
-void walk_task(runnable *runnable);
+typedef struct room_s room;
+
+void walk_task(room *room);

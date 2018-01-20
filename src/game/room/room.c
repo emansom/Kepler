@@ -133,7 +133,7 @@ void room_enter(room *room, player *player) {
     if (list_size(room->users) == 1) {
         runnable *r = create_runnable();
         r->request = walk_task;
-        r->room = (void*)room;
+        r->room_id = room->room_id;
         deque_add_last(global.thread_manager.tasks, r);
     }
 }
@@ -163,7 +163,6 @@ void room_leave(room *room, player *player) {
     outgoing_message *om = om_create(29); // "@]"
     sb_add_int(om->sb, player->player_data->id);
     room_send(room, om);
-    om_cleanup(om);
 }
 
 /**

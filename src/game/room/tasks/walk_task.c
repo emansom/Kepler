@@ -15,8 +15,7 @@
 
 void process_user(player *player);
 
-void walk_task(runnable *runnable) {
-	room *room = runnable->room;
+void walk_task(room *room) {
 
     List *users;
 	list_copy_shallow(room->users, &users);
@@ -55,7 +54,6 @@ void walk_task(runnable *runnable) {
 	}
 	
 	list_destroy(users);
-	deque_add_last(global.thread_manager.tasks, runnable);
 }
 
 void process_user(player *player) {

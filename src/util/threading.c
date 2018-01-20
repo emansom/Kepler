@@ -7,6 +7,7 @@
 #include "deque.h"
 #include "list.h"
 
+#include "game/room/room_manager.h"
 #include "game/room/room.h"
 
 #include "shared.h"
@@ -24,11 +25,11 @@ void *thr_func(void *arg) {
 				continue;
 			}
 
-			if (run->room == NULL) {
+			if (run->room_id == 0) {
 				continue;
 			}
 
-			room *room = run->room;
+			room *room = room_manager_get_by_id(run->room_id);
 
 			if (room == NULL) {
 				free(run);
@@ -49,7 +50,7 @@ void *thr_func(void *arg) {
 			}
 
 			if (list_size(room->users) > 0) {
-				run->request(run);
+				run->request(room);
 				deque_add_last(global.thread_manager.tasks, run);
 			}
 
@@ -80,7 +81,7 @@ void create_thread_pool() {
 
 runnable *create_runnable() {
 	runnable *r = malloc(sizeof(runnable));
-	r->room = NULL;
+	r->room_id = 0;
 	r->request = NULL;
 	r->self = r;
 	return r;
