@@ -1,9 +1,10 @@
 #include "stdlib.h"
 
 #include "game/player/player.h"
-#include "util/stringbuilder.h"
+#include "game/room/room_user.h"
 
-#include "room_user.h"
+#include "util/stringbuilder.h"
+#include "deque.h"
 #include "communication/messages/outgoing_message.h"
 
 /*
@@ -13,6 +14,8 @@ room_user *room_user_create() {
     room_user *user = malloc(sizeof(room_user));
     user->room_id = 0;
     user->room = NULL;
+    user->is_walking = 0;
+    deque_new(&user->walk_list);
     return user;
 }
 
@@ -71,5 +74,6 @@ void append_user_status(outgoing_message *om, player *player) {
  * @param room_user
  */
 void room_user_cleanup(room_user *room_user) {
+    deque_destroy(room_user->walk_list);
     free(room_user);
 }

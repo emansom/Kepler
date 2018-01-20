@@ -3,6 +3,7 @@
 
 typedef struct player_s player;
 typedef struct room_s room;
+typedef struct deque_s Deque;
 
 typedef struct room_user_s {
     int room_id;
@@ -12,6 +13,8 @@ typedef struct room_user_s {
     double z;
     int head_rotation;
     int body_rotation;
+    Deque *walk_list;
+    int is_walking;
 } room_user;
 
 room_user *room_user_create();

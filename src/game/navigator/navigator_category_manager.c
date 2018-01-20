@@ -135,6 +135,18 @@ int category_manager_get_current_vistors(int category_id) {
 
         if (instance->room_data->category == category_id) {
             current_visitors += instance->room_data->visitors_now;
+
+            /**
+             * Recursive lisiting for child categories underneath this category
+             */
+            List *categories = category_manager_get_by_parent_id(category_id);
+            ListIter list_iter;
+            list_iter_init(&list_iter, categories);
+            room_category *category;
+            while (list_iter_next(&list_iter, (void*) &category) != CC_ITER_END) {
+                current_visitors += category_manager_get_current_vistors(category->id);
+            }
+            list_destroy(categories);
         }
     }
 
@@ -153,6 +165,18 @@ int category_manager_get_max_vistors(int category_id) {
 
         if (instance->room_data->category == category_id) {
             max_visitors += instance->room_data->visitors_max;
+
+            /**
+             * Recursive lisiting for child categories underneath this category
+             */
+            List *categories = category_manager_get_by_parent_id(category_id);
+            ListIter list_iter;
+            list_iter_init(&list_iter, categories);
+            room_category *category;
+            while (list_iter_next(&list_iter, (void*) &category) != CC_ITER_END) {
+                max_visitors += category_manager_get_max_vistors(category->id);
+            }
+            list_destroy(categories);
         }
     }
 

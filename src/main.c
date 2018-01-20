@@ -1,11 +1,15 @@
 #include "shared.h"
 #include "sqlite3.h"
 
+#include "list.h"
+
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
 #include "database/db_connection.h"
 
 #include "game/player/player.h"
+#include "game/pathfinder/pathfinder.h"
+
 #include "util/threading.h"
 
 int main(void) {
@@ -23,8 +27,6 @@ int main(void) {
         print_info("The connection to the database was successful!\n");
         sqlite3_close(con);
     }
-    
-    create_thread_pool();
 
     print_info("\n");
     print_info("Starting managers...\n");
@@ -34,9 +36,9 @@ int main(void) {
     category_manager_init();
     room_manager_init();
     mh_add_messages();
-
+    create_thread_pool();
+    
     print_info("Starting server...\n");
-
     start_server("0.0.0.0", 12321);
     return EXIT_SUCCESS;
 }

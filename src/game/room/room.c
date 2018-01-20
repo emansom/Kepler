@@ -4,6 +4,7 @@
 
 #include "list.h"
 #include "util/stringbuilder.h"
+#include "deque.h"
 
 #include "room.h"
 #include "room_model.h"
@@ -16,6 +17,7 @@
 
 #include "database/queries/player_query.h"
 #include "communication/messages/outgoing_message.h"
+
 
 /**
  * Create a room instance.
@@ -94,6 +96,48 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
     return data;
 }
 
+void walk_task(void *argument, runnable *self) {
+    room *room = argument;
+
+	/*ListIter iter;
+    list_iter_init(&iter, room->users);
+
+    player *player;
+    while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
+        if (player == NULL) {
+            continue;
+        }
+    
+        printf("Hello: %s\n", player->player_data->username);
+    }*/
+
+    List *users;
+    list_copy_shallow(room->users, &users);
+    int players = list_size(users);
+    
+    if (players > 0) {
+
+        for(int i = 0; i < players; i++) {
+            player *player;
+            list_get_at(users, i, (void*)&player);
+
+            if (player == NULL) {
+                continue;
+            }
+
+            printf("hello: %s\n", player->player_data->username);
+        }
+
+    
+	    deque_add_last(global.thread_manager.tasks, self);
+    } else {
+        free(self);
+        self = NULL;
+    }
+        
+    list_destroy(users);
+}
+
 /**
  * Room entry handler.
  *
@@ -122,6 +166,13 @@ void room_enter(room *room, player *player) {
     player->room_user->z = room->room_data->model_data->door_z;
     player->room_user->head_rotation = room->room_data->model_data->door_dir;
     player->room_user->body_rotation = room->room_data->model_data->door_dir;
+
+    if (list_size(room->users) == 0) {
+        runnable *r = malloc(sizeof(runnable));
+        r->request = walk_task;
+        r->argument = room;
+        deque_add_last(global.thread_manager.tasks, r);
+    }
 
     list_add(room->users, player);
     room->room_data->visitors_now++;

@@ -80,6 +80,8 @@ void player_cleanup(player *player) {
     free(player->ip_address);
     free(player->stream);
     free(player);
+
+    player = NULL;
 }
 
 /**

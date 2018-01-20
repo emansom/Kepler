@@ -11,10 +11,12 @@
 #include "game/room/room_manager.h"
 
 #include "game/navigator/navigator_category_manager.h"
+#include "util/threading.h"
 
 #define PREFIX "Kepler"
 
 typedef struct server_s {
+    struct thread_manager thread_manager;
     struct player_manager player_manager;
     struct room_manager room_manager;
     struct room_model_manager room_model_manager;
@@ -23,6 +25,7 @@ typedef struct server_s {
 
 server global;
 
+void **testing_iterate(List*);
 char *get_argument(char*, char*, int);
 char *replace(const char*, char, const char*);
 int valid_password(const char*, const char*);
