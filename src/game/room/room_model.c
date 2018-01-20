@@ -45,51 +45,47 @@ room_model *room_model_create(char *model_id, char *model_name, int door_x, int 
 
 void room_model_parse(room_model *room_model) {
     char *heightmap = strdup(room_model->heightmap);
+    char *array[100];
 
-    int count = 0;
-    char *line = get_argument(heightmap, "\r", count);
+    int lines = 0;
 
-    int map_size_y = strlen(line);
-    int map_size_x = 0;
+    array[lines] = strtok(heightmap,"\r");
 
-    room_title_states temp[100][100];
-    memset(temp, -1, sizeof(temp));
-
-    while (line != NULL) {
-        for (int i = 0; i < strlen(line); i++) {
-            char letter = (char)tolower(line[i]);
-
-            if (letter == 'x') {
-                temp[count][i] = CLOSED;
-            } else {
-                temp[count][i] = OPEN;
-            }   
-        }
-    
-        if (line != NULL) {
-            free(line);
-        }  
-
-        count++;
-        map_size_x = count;
-
-        line = get_argument(heightmap, "\r", count);
+    while(array[lines]!=NULL) {
+        array[++lines] = strtok(NULL,"\r");
     }
 
-    printf("Model: %s\n", room_model->model_name);
-    printf("x: %d y: %d\n", map_size_x, map_size_y);
+    int map_size_x = strlen(array[0]);
+    int map_size_y = lines;
 
     room_model->map_size_x = map_size_x;
     room_model->map_size_y = map_size_y;
+
     room_model->states = malloc(sizeof(*room_model->states) * map_size_x);
+    room_model->heights = malloc(sizeof(*room_model->heights) * map_size_x);
 
-    for (int x = 0; x < room_model->map_size_x ; x++) { 
+    for (int x = 0; x < map_size_x ; x++) { 
          room_model->states[x] = malloc(sizeof(*room_model->states) * map_size_y);
-
-         for (int y = 0; y < room_model->map_size_y ; y++) { 
-             room_model->states[x][y] = temp[x][y];
-         }
+         room_model->heights[x] = malloc(sizeof(*room_model->heights) * map_size_y);
     }
+
+
+     for (int y = 0; y < map_size_y; y++) {
+        char *line = array[y];
+
+        for (int x = 0; x < strlen(line); x++) {
+            char ch = (char)tolower(line[x]);
+
+            if (ch == 'x') {
+                room_model->states[x][y] = CLOSED;
+                room_model->heights[x][y] = 0;
+            } else {
+                int height = ch - 0;
+                room_model->states[x][y] = OPEN;
+                room_model->heights[x][y] = height;
+            }
+        }
+     }
 
     free(heightmap);
 }
