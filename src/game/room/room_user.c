@@ -107,6 +107,22 @@ void append_user_status(outgoing_message *om, player *player) {
  *
  * @param room_user
  */
+void room_user_reset(room_user *room_user) {
+    room_user->is_walking = 0;
+    room_user->needs_update = 0;
+    room_user->room_id = 0;
+    room_user->room = NULL;
+
+    if (room_user->walk_list != NULL) {
+        deque_destroy(room_user->walk_list);
+        room_user->walk_list = NULL;
+    }
+}
+
+/**
+ *
+ * @param room_user
+ */
 void room_user_cleanup(room_user *room_user) {
     if (room_user->current != NULL) {
         free(room_user->current);
@@ -117,13 +133,9 @@ void room_user_cleanup(room_user *room_user) {
         free(room_user->goal);
         room_user->goal = NULL;
     }
-
+    
+    room_user_reset(room_user);
+    
     room_user->room = NULL;
-
-    if (room_user->walk_list != NULL) {
-        deque_destroy(room_user->walk_list);
-        room_user->walk_list = NULL;
-    }
-
     free(room_user);
 }

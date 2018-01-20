@@ -66,8 +66,6 @@ Deque *create_path(room_user *room_user) {
 		free(pathfinder->map);
 		free(pathfinder);
 
-	} else {
-		printf("mistake 22222!\n");
 	}
 
 	return path;
@@ -109,7 +107,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 
 	deque_new(&p->open_list);
 
-	p->map = malloc(sizeof(node**) * map_size_x);
+	p->map = malloc(sizeof(node*) * map_size_x);
 
     for (int x = 0; x < map_size_x ; x++) { 
          p->map[x] =  malloc(sizeof(node*) * map_size_y);
@@ -121,16 +119,6 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 
 	coord c;
 	coord tmp;
-
-	c.x = room_user->current->x;
-	c.y = room_user->current->x;
-
-	tmp.x = c.x;
-	tmp.y = c.y;
-
-	if (!is_valid_tile(room_user, c, tmp)) {
-		return p;
-	}
 
 	p->current = create_node();
 	p->current->x = room_user->current->x;
@@ -155,8 +143,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 			c.y = p->current->y;
 
 			if (is_valid_tile(room_user, c, tmp)) {
-
-				if (p->map[tmp.x][tmp.y] == 0) {
+				if (p->map[tmp.x][tmp.y] == NULL) {
 					p->nodes = create_node();
 					p->nodes->x = tmp.x;
 					p->nodes->y = tmp.y;

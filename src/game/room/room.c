@@ -147,15 +147,7 @@ void room_leave(room *room, player *player) {
         return;
     }
 
-    player->room_user->room = NULL;
-    player->room_user->room_id = 0;
-    player->room_user->needs_update = 0;
-    player->room_user->is_walking = 0;
-
-    if (player->room_user->walk_list != NULL) {
-        deque_destroy(player->room_user->walk_list);
-        player->room_user->walk_list = NULL;
-    }
+    room_user_reset(player->room_user);
 
     list_remove(room->users, player, NULL);
     room->room_data->visitors_now--;

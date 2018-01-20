@@ -80,9 +80,13 @@ void room_model_parse(room_model *room_model) {
                 room_model->states[x][y] = CLOSED;
                 room_model->heights[x][y] = 0;
             } else {
-                int height = ch - 0;
+                int height = ch - '0';
                 room_model->states[x][y] = OPEN;
                 room_model->heights[x][y] = height;
+            }
+            
+            if (x == room_model->door_x && y == room_model->door_y) {
+                room_model->states[x][y] = OPEN;
             }
         }
      }
