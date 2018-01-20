@@ -99,27 +99,29 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
 void walk_task(void *argument, runnable *self) {
     room *room = argument;
 
-	/*ListIter iter;
-    list_iter_init(&iter, room->users);
-
-    player *player;
-    while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
-        if (player == NULL) {
-            continue;
-        }
-    
-        printf("Hello: %s\n", player->player_data->username);
-    }*/
+    if (room == NULL || room->users == NULL) {
+        free(self);
+        self = NULL;
+    }
 
     List *users;
     list_copy_shallow(room->users, &users);
-    int players = list_size(users);
-    
-    if (players > 0) {
 
-        for(int i = 0; i < players; i++) {
-            player *player;
-            list_get_at(users, i, (void*)&player);
+    int players = list_size(users);
+
+    // Stop any segfaults from happening
+    if (!(players > 0)) {
+        free(self);
+        list_destroy(users);
+        self = NULL;
+    } else {
+
+        // Continue with task
+        ListIter iter;
+        list_iter_init(&iter, users);
+
+        player *player;
+        while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
 
             if (player == NULL) {
                 continue;
@@ -127,15 +129,10 @@ void walk_task(void *argument, runnable *self) {
 
             printf("hello: %s\n", player->player_data->username);
         }
-
-    
-	    deque_add_last(global.thread_manager.tasks, self);
-    } else {
-        free(self);
-        self = NULL;
-    }
         
-    list_destroy(users);
+        list_destroy(users);
+	    deque_add_last(global.thread_manager.tasks, self);
+    }
 }
 
 /**
@@ -252,6 +249,9 @@ void room_cleanup(room *room) {
 
     list_destroy(room->users);
     list_destroy(room->public_items);
+
+    room->users = NULL;
+    room->public_items = NULL;
 
     free(room);
 }
