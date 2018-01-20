@@ -33,18 +33,19 @@ void *thr_func(void *arg) {
 
 			if (room == NULL) {
 				free(run);
-				run = NULL;
+				//run = NULL;
 				continue;
 			}
 
 			if (room->users == NULL) {
 				free(run);
-				run = NULL;
+				//run = NULL;
 				continue;
 			}
 
 			if (list_size(room->users) == 0) {
 				free(run);
+				printf("free'd\n");
 				run = NULL;
 				continue;
 			}
