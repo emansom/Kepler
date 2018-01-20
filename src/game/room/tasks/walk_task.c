@@ -47,6 +47,12 @@ void walk_task(void *argument, runnable *self) {
                 continue;
             }
 
+			if (player->room_user == NULL) {
+                continue;
+            }
+
+			process_user(player);
+
 			if (player->room_user->needs_update) {
 				player->room_user->needs_update = 0;
 				append_user_status(status_update, player);
