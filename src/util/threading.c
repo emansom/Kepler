@@ -32,14 +32,10 @@ void *thr_func(void *arg) {
 			room *room = room_manager_get_by_id(run->room_id);
 
 			if (room == NULL) {
-				free(run);
-				//run = NULL;
 				continue;
 			}
 
 			if (room->users == NULL) {
-				free(run);
-				//run = NULL;
 				continue;
 			}
 
