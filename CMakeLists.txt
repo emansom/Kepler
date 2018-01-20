@@ -38,6 +38,9 @@ file(GLOB room ${PROJECT_DIR}/game/room/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
 file(GLOB items ${PROJECT_DIR}/game/items/*.c)
 
+# Tasks
+file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
+
 add_executable(${EXECUTABLE_NAME}
         ${collections}
         ${src}
@@ -52,7 +55,8 @@ add_executable(${EXECUTABLE_NAME}
         ${players}
         ${room}
         ${navigator}
-        ${items})
+        ${items}
+        ${tasks})
 
 find_package (Threads)
 
