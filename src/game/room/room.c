@@ -105,8 +105,13 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  * @param player the player
  */
 void room_enter(room *room, player *player) {
-    if (list_contains(room->users, player)) {
-        return;
+    if (!list_contains(room->users, player)) {
+        if (list_size(room->users) == 0) {
+            runnable *r = create_runnable();
+            r->request = walk_task;
+            r->room_id = room->room_id;
+            deque_add_last(global.thread_manager.tasks, r);
+        }
     }
 
     if (player->room_user->room != NULL) {
@@ -129,13 +134,6 @@ void room_enter(room *room, player *player) {
 
     list_add(room->users, player);
     room->room_data->visitors_now++;
-
-    if (list_size(room->users) == 1) {
-        runnable *r = create_runnable();
-        r->request = walk_task;
-        r->room_id = room->room_id;
-        deque_add_last(global.thread_manager.tasks, r);
-    }
 }
 
 /**
