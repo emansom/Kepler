@@ -6,6 +6,9 @@
 #include "node.h"
 #include "coord.h"
 
+#include "deque.h"
+#include "game/room/room_user.h"
+
 #include <limits.h>
 
 coord DIAGONAL_MOVE_POINTS[] = {
@@ -23,19 +26,13 @@ int get_address(int x, int y, int map_size_y) {
 	return x * map_size_y + y;
 }
 
-void start_pathfinder_test() {
-	coord from;
-	from.x = 1;
-	from.y = 1;
+Deque *create_path(room_user *room_user) {
+	Deque *path;
+	deque_new(&path);
 
-	coord to;
-	to.x = 5;
-	to.y = 9;
-
-	int map_size_x = 20;
-	int map_size_y = 20;
-
-	pathfinder *pathfinder = make_path_reversed(from, to, map_size_x, map_size_y);
+	int map_size_x = 120;
+	int map_size_y = 120;
+	pathfinder *pathfinder = make_path_reversed(room_user, map_size_x, map_size_y);
 
 	if (pathfinder->nodes != NULL) {
 		while (pathfinder->nodes->node != NULL) {
@@ -66,9 +63,11 @@ void start_pathfinder_test() {
 		free(pathfinder);
 
 	}
+
+	return path;
 }
 
-int is_valid_tile(coord from, coord to) {
+int is_valid_tile(room_user *room_user, coord from, coord to) {
 	// Don't use negative coordinates
 	if (from.x < 0 || from.y < 0 || to.x < 0 || to.y < 0) {
 		return 0; // 0 for false
@@ -80,7 +79,7 @@ int is_valid_tile(coord from, coord to) {
 	return 1; // 1 for true
 }
 
-pathfinder *make_path_reversed(coord from, coord to, int map_size_x, int map_size_y) {
+pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_size_y) {
 	int map_size = map_size_x * map_size_y;
 
 	pathfinder *p = malloc(sizeof(pathfinder));
@@ -92,8 +91,8 @@ pathfinder *make_path_reversed(coord from, coord to, int map_size_x, int map_siz
 	memset(p->open_list, 0, sizeof(node) * map_size);
 
 	p->current = create_node();
-	p->current->x = from.x;
-	p->current->y = from.y;
+	p->current->x = room_user->current->x;
+	p->current->y = room_user->current->y;
 
 	coord tmp;
 
@@ -116,13 +115,13 @@ pathfinder *make_path_reversed(coord from, coord to, int map_size_x, int map_siz
 			tmp.x = p->current->x + DIAGONAL_MOVE_POINTS[i].x;
 			tmp.y = p->current->y + DIAGONAL_MOVE_POINTS[i].y;
 
-			int isFinalMove = (tmp.x == to.x && tmp.y == to.y);
+			int isFinalMove = (tmp.x == room_user->goal->x && tmp.y == room_user->goal->y);
 
 			coord c;
 			c.x = p->current->x;
 			c.y = p->current->y;
 
-			if (is_valid_tile(c, tmp)) {
+			if (is_valid_tile(room_user, c, tmp)) {
 				int array_index = get_address(tmp.x, tmp.y, map_size_y);
 
 				if (p->map[array_index] == 0) {
@@ -146,7 +145,7 @@ pathfinder *make_path_reversed(coord from, coord to, int map_size_x, int map_siz
 						diff += 1;
 					}
 
-					cost = p->current->cost + diff + distance_squared(p->nodes->x, p->nodes->y, to.x, to.y);
+					cost = p->current->cost + diff + distance_squared(p->nodes->x, p->nodes->y, room_user->goal->x, room_user->goal->y);
 
 					if (cost < p->nodes->cost) {
 						p->nodes->cost = cost;
@@ -154,7 +153,7 @@ pathfinder *make_path_reversed(coord from, coord to, int map_size_x, int map_siz
 					}
 
 					if (!p->nodes->open) {
-						if (p->nodes->x == to.x && p->nodes->y == to.y) {
+						if (p->nodes->x == room_user->goal->x && p->nodes->y == room_user->goal->y) {
 							p->nodes->node = p->current;
 							return p;
 						}

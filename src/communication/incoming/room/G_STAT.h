@@ -12,21 +12,5 @@ void G_STAT(player *p, incoming_message *message) {
         return;
     }
 
-    room *room = p->room_user->room;
-
-    ListIter iter;
-    list_iter_init(&iter, room->users);
-    player *user;
-
-    outgoing_message *players = om_create(34); // "@b"
-    while (list_iter_next(&iter, (void*) &user) != CC_ITER_END) {
-        append_user_status(players, user);
-    }
-    player_send(p, players);
-    om_cleanup(players);
-
-    players = om_create(34); // "@b"
-    append_user_status(players, p);
-    room_send(room, players);
-    om_cleanup(players);
+    p->room_user->needs_update = 1;
 }

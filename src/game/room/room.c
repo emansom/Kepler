@@ -15,6 +15,7 @@
 #include "game/player/player.h"
 #include "game/items/item.h"
 #include "game/navigator/navigator_category_manager.h"
+#include "game/pathfinder/coord.h"
 
 #include "database/queries/player_query.h"
 #include "communication/messages/outgoing_message.h"
@@ -120,9 +121,9 @@ void room_enter(room *room, player *player) {
     player->room_user->room = room;
     player->room_user->room_id = room->room_id;
 
-    player->room_user->x = room->room_data->model_data->door_x;
-    player->room_user->y = room->room_data->model_data->door_y;
-    player->room_user->z = room->room_data->model_data->door_z;
+    player->room_user->current->x = room->room_data->model_data->door_x;
+    player->room_user->current->y = room->room_data->model_data->door_y;
+    player->room_user->current->z = room->room_data->model_data->door_z;
     player->room_user->head_rotation = room->room_data->model_data->door_dir;
     player->room_user->body_rotation = room->room_data->model_data->door_dir;
 

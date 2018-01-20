@@ -3,6 +3,9 @@
 #include "game/player/player.h"
 #include "game/room/room_user.h"
 
+#include "game/pathfinder/pathfinder.h"
+#include "game/pathfinder/coord.h"
+
 #include "util/stringbuilder.h"
 #include "deque.h"
 #include "communication/messages/outgoing_message.h"
@@ -15,8 +18,29 @@ room_user *room_user_create() {
     user->room_id = 0;
     user->room = NULL;
     user->is_walking = 0;
+    user->needs_update = 0;
+    user->current = malloc(sizeof(coord));
+    user->goal = malloc(sizeof(coord));
+    user->next = NULL;
     deque_new(&user->walk_list);
     return user;
+}
+
+void walk_to(room_user *room_user, int x, int y) {
+    if (room_user->room == NULL) {
+        return;
+    }
+
+    if (room_user->next != NULL) {
+        room_user->current->x = room_user->next->x;
+        room_user->current->y = room_user->next->y;
+        room_user->needs_update = 1;
+    }
+
+    room_user->goal->x = x;
+    room_user->goal->y = y;
+
+    Deque *deque = create_path(room_user);
 }
 
 /**
@@ -37,11 +61,11 @@ void append_user_list(outgoing_message *players, player *player) {
     
     sb_add_string(players->sb, "l");
     sb_add_string(players->sb, ":");
-    sb_add_int(players->sb, player->room_user->x);
+    sb_add_int(players->sb, player->room_user->current->x);
     sb_add_string(players->sb, " ");
-    sb_add_int(players->sb, player->room_user->y);
+    sb_add_int(players->sb, player->room_user->current->y);
     sb_add_string(players->sb, " ");
-    sb_add_float(players->sb, player->room_user->z);
+    sb_add_float(players->sb, player->room_user->current->z);
     sb_add_char(players->sb, 13);
 
     om_write_str_kv(players, "c", player->player_data->motto);
@@ -56,11 +80,11 @@ void append_user_list(outgoing_message *players, player *player) {
 void append_user_status(outgoing_message *om, player *player) {
     sb_add_int(om->sb, player->player_data->id);
     sb_add_string(om->sb, " ");
-    sb_add_int(om->sb, player->room_user->x);
+    sb_add_int(om->sb, player->room_user->current->x);
     sb_add_string(om->sb, ",");
-    sb_add_int(om->sb, player->room_user->y);
+    sb_add_int(om->sb, player->room_user->current->y);
     sb_add_string(om->sb, ",");
-    sb_add_float(om->sb, player->room_user->z);
+    sb_add_float(om->sb, player->room_user->current->z);
     sb_add_string(om->sb, ",");
     sb_add_int(om->sb, player->room_user->head_rotation);
     sb_add_string(om->sb, ",");
@@ -74,6 +98,18 @@ void append_user_status(outgoing_message *om, player *player) {
  * @param room_user
  */
 void room_user_cleanup(room_user *room_user) {
+    if (room_user->current != NULL) {
+        free(room_user->current);
+        room_user->current = NULL;
+    }
+
+    if (room_user->goal != NULL) {
+        free(room_user->goal);
+        room_user->goal = NULL;
+    }
+
+    room_user->room = NULL;
+
     deque_destroy(room_user->walk_list);
     free(room_user);
 }

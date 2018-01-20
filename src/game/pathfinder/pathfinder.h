@@ -1,6 +1,10 @@
-typedef struct coord_s coord;
+#ifndef PATHFINDER_H
+#define PATHFINDER_H
+
+typedef struct room_user_s room_user;
 typedef struct node_s node;
-typedef struct deque_struct deque_type;
+typedef struct deque_s Deque;
+typedef struct coord_s coord;
 
 typedef struct pathfinder_s {
 	node **map;
@@ -9,6 +13,8 @@ typedef struct pathfinder_s {
 	node *nodes;
 } pathfinder;
 
-pathfinder *make_path_reversed(coord, coord, int, int);
-int is_valid_tile(coord from, coord to);
-void start_pathfinder_test();
+Deque *create_path(room_user*);
+pathfinder *make_path_reversed(room_user*, int, int);
+int is_valid_tile(room_user*, coord from, coord to);
+
+#endif
