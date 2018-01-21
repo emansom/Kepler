@@ -12,5 +12,7 @@ void G_STAT(player *player, incoming_message *message) {
         return;
     }
 
-    player->room_user->needs_update = 1;
+    outgoing_message *status_update = om_create(34);
+	append_user_status(status_update, player);
+	room_send(player->room_user->room, status_update);
 }

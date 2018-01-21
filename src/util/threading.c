@@ -40,8 +40,10 @@ void *thr_func(void *arg) {
 			}
 
 			if (list_size(room->users) == 0) {
-				free(run);
-				run = NULL;
+				if (run != NULL) {
+					free(run);
+					run = NULL;
+				}
 			} else {
 				run->request(room);
 				deque_add_last(global.thread_manager.tasks, run);
