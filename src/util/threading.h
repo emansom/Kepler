@@ -17,6 +17,7 @@ typedef struct runnable_s {
 } runnable;
 
 void create_thread_pool();
+int threading_has_room(int);
 runnable *create_runnable();
 
 #endif

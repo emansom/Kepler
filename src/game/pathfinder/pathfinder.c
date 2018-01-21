@@ -110,7 +110,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 	p->map = malloc(sizeof(node*) * map_size_x);
 
     for (int x = 0; x < map_size_x ; x++) { 
-         p->map[x] =  malloc(sizeof(node*) * map_size_y);
+         p->map[x] =  malloc(sizeof(node) * map_size_y);
 
 		 for (int y = 0; y < map_size_y ; y++) { 
 			p->map[x][y] = NULL;

@@ -17,46 +17,41 @@
 void process_user(player *player);
 
 void walk_task(room *room) {
-    List *users;
-	list_copy_shallow(room->users, &users);
+    List *users = room->users;
+	int user_count = list_size(users);
 
 	int user_updates = 0;
 	outgoing_message *status_update = om_create(34);
 
-	ListIter iter;
-	list_iter_init(&iter, users);
+	for (int i = 0; i < user_count; i++) {
+		player *room_player;
+		list_get_at(users, i, (void*)&room_player);
 
-	player *player;
-	while (list_iter_next(&iter, (void*) &player) != CC_ITER_END) {
-		if (player == NULL) {
+		if (room_player == NULL) {
 			continue;
 		}
 
-		if (player->player_data == NULL) {
+		if (room_player->room_user == NULL) {
 			continue;
 		}
 
-		if (player->room_user == NULL) {
-			continue;
-		}
+		process_user(room_player);
 
-		process_user(player);
-
-		if (player->room_user->needs_update) {
-			player->room_user->needs_update = 0;
-			append_user_status(status_update, player);
+		if (room_player->room_user->needs_update) {
+			room_player->room_user->needs_update = 0;
 			user_updates++;
+			append_user_status(status_update, room_player);
 		}
+
 	}
 
 	if (user_updates > 0) {
 		room_send(room, status_update);
 	}
-	
-	list_destroy(users);
 }
 
 void process_user(player *player) {
+	printf("Debug 5\n");
 	room_user *room_user = player->room_user;
 
 	if (room_user->is_walking) {

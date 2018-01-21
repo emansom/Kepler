@@ -1,4 +1,6 @@
 #include "coord.h"
+
+#include "stdio.h"
 #include "stdlib.h"
 
 int distance_squared(int first_x, int first_y, int point_x, int point_y) {

@@ -41,7 +41,6 @@ void *thr_func(void *arg) {
 
 			if (list_size(room->users) == 0) {
 				free(run);
-				printf("free'd\n");
 				run = NULL;
 				continue;
 			}
@@ -55,25 +54,32 @@ void *thr_func(void *arg) {
 			usleep(500 * 1000);
 		}
 	}
-}
 
-/*void walk_task(void *argument, runnable *self) {
-	printf("hello xd\n");
-	deque_push_back(global.thread_manager.tasks, self);
-}*/
 
 void create_thread_pool() {
 	deque_new(&global.thread_manager.tasks);
-
-	/*runnable *r = malloc(sizeof(runnable));
-	r->request = walk_task;
-	r->argument = "xd";
-	deque_push_back(global.thread_manager.tasks, r);*/
 
 	for (int i = 0; i <4; i++) {
 		pthread_t thread;
 		pthread_create(&thread, NULL, thr_func, &thread);
 	}
+}
+
+int threading_has_room(int room_id) {
+	int deque_count = deque_size(global.thread_manager.tasks);
+
+	for (int i = 0; i < deque_count; i++) {
+		runnable *task;
+		deque_get_at(global.thread_manager.tasks, i, (void*)&task);
+
+		if (task != NULL) {
+			if (task->room_id == room_id) {
+				return 1;
+			}
+		}
+	}
+
+	return 0;
 }
 
 runnable *create_runnable() {

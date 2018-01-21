@@ -61,12 +61,12 @@ void room_model_parse(room_model *room_model) {
     room_model->map_size_x = map_size_x;
     room_model->map_size_y = map_size_y;
 
-    room_model->states = malloc(sizeof(*room_model->states) * map_size_x);
-    room_model->heights = malloc(sizeof(*room_model->heights) * map_size_x);
+    room_model->states = malloc(sizeof(room_title_states*) * map_size_x);
+    room_model->heights = malloc(sizeof(double*) * map_size_x);
 
     for (int x = 0; x < map_size_x ; x++) { 
-         room_model->states[x] = malloc(sizeof(*room_model->states) * map_size_y);
-         room_model->heights[x] = malloc(sizeof(*room_model->heights) * map_size_y);
+         room_model->states[x] = malloc(sizeof(room_title_states*) * map_size_y);
+         room_model->heights[x] = malloc(sizeof(double*) * map_size_y);
     }
 
 
