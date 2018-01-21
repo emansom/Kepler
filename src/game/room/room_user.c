@@ -25,13 +25,17 @@ room_user *room_user_create() {
     user->current = create_coord(0, 0);
     user->goal = create_coord(0, 0);
     user->next = NULL;
-    deque_new(&user->walk_list);
+    user->walk_list = NULL;
     hashtable_new(&user->statuses);
     return user;
 }
 
 void walk_to(room_user *room_user, int x, int y) {
     if (room_user->room == NULL) {
+        return;
+    }
+
+    if (room_user->current->x == x && room_user->current->y == y) {
         return;
     }
 
@@ -48,16 +52,18 @@ void walk_to(room_user *room_user, int x, int y) {
 
     if (path != NULL) {
         if (deque_size(path) > 0) {
-
             /* start freeing old list */ 
-            for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
-                coord *coord;
-                deque_get_at(room_user->walk_list, i, (void*)&coord);
-                free(coord);
+            if (room_user->walk_list != NULL) {
+                for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
+                    coord *coord;
+                    deque_get_at(room_user->walk_list, i, (void*)&coord);
+                    free(coord);
+                }
+
+                deque_destroy(room_user->walk_list);
+                room_user->walk_list = NULL;
             }
             /* end freeing old list */ 
-
-            deque_destroy(room_user->walk_list);
             room_user->walk_list = path;
             room_user->is_walking = 1;
         }
@@ -153,13 +159,32 @@ void room_user_reset(room_user *room_user) {
     room_user->room_id = 0;
     room_user->room = NULL;
 
-    hashtable_remove_all(room_user->statuses);
+    Array *keys;
 
+    /* clear statuses */
+    if (hashtable_size(room_user->statuses) > 0) {
+        hashtable_get_keys(room_user->statuses, &keys);
+
+        for (int i = 0; i < array_size(keys); i++) {
+            char *key, *value;
+            array_get_at(keys, i, (void*)&key);
+            room_user_remove_status(room_user, key);
+        }
+    }
+    /* end clear statuses */
+
+    /* start freeing old list */ 
     if (room_user->walk_list != NULL) {
-        deque_remove_all(room_user->walk_list);
+        for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
+            coord *coord;
+            deque_get_at(room_user->walk_list, i, (void*)&coord);
+            free(coord);
+        }
+
         deque_destroy(room_user->walk_list);
         room_user->walk_list = NULL;
     }
+    /* end freeing old list */ 
 
     if (room_user->next != NULL) {
         free(room_user->next);
@@ -172,6 +197,8 @@ void room_user_reset(room_user *room_user) {
  * @param room_user
  */
 void room_user_cleanup(room_user *room_user) {
+    room_user_reset(room_user);
+    
     if (room_user->current != NULL) {
         free(room_user->current);
         room_user->current = NULL;
@@ -181,8 +208,11 @@ void room_user_cleanup(room_user *room_user) {
         free(room_user->goal);
         room_user->goal = NULL;
     }
-    
-    room_user_reset(room_user);
+
+    if (room_user->statuses != NULL) {
+        hashtable_destroy(room_user->statuses);
+        room_user->statuses = NULL;
+    }
     
     room_user->room = NULL;
     free(room_user);

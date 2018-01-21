@@ -184,7 +184,6 @@ void room_load(room *room, player *player) {
 void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
-    char *data = strdup(message->sb->data);
 	int user_count = list_size(room->users);
 
 	for (int i = 0; i < user_count; i++) {
@@ -199,11 +198,8 @@ void room_send(room *room, outgoing_message *message) {
 			continue;
 		}
 
-        player_send_raw(room_player, data);
+        player_send(room_player, message);
 	}
-
-    free(data);
-    data = NULL;
 
 	om_cleanup(message);
 }

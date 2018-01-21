@@ -108,8 +108,8 @@ void player_send(player *p, outgoing_message *om) {
         printf("error sending message\n");
     }
 
-    free(data);
-    /*char *friendly_message = data;
+    
+    char *friendly_message = data;
 
     for (int i = 0; i < 14; i++) {
         char ch[13];
@@ -125,7 +125,8 @@ void player_send(player *p, outgoing_message *om) {
     }
     
     printf ("Client [%s] SENT: %i / %s\n", p->ip_address, om->header_id, friendly_message);
-    free(friendly_message);*/
+    free(friendly_message);
+    free(data);
 }
 
 void player_send_raw(player *p, char *msg) {
