@@ -48,6 +48,16 @@ void walk_to(room_user *room_user, int x, int y) {
 
     if (path != NULL) {
         if (deque_size(path) > 0) {
+
+            /* start freeing old list */ 
+            for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
+                coord *coord;
+                deque_get_at(room_user->walk_list, i, (void*)&coord);
+                free(coord);
+            }
+            /* end freeing old list */ 
+
+            deque_destroy(room_user->walk_list);
             room_user->walk_list = path;
             room_user->is_walking = 1;
         }

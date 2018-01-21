@@ -58,6 +58,7 @@ void process_user(player *player) {
 			room_user->current->x = room_user->next->x;
 			room_user->current->y = room_user->next->y;
 			room_user->current->z = room_user->room->room_data->model_data->heights[room_user->current->x][room_user->current->y];
+			free(room_user->next);
 		}
 
 		if (deque_size(room_user->walk_list) > 0) {

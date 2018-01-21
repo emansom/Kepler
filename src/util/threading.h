@@ -5,6 +5,7 @@ typedef struct hashtable_s HashTable;
 typedef struct runnable_s runnable;
 typedef struct room_s room;
 typedef struct thpool_* threadpool;
+
 typedef void (*thread_request)(room*);
 
 struct thread_manager {
