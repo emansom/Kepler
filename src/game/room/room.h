@@ -5,6 +5,7 @@ typedef struct list_s List;
 typedef struct player_s player;
 typedef struct room_model_s room_model;
 typedef struct outgoing_message_s outgoing_message;
+typedef struct runnable_s runnable;
 
 typedef struct room_data_s {
     int id;
@@ -29,6 +30,7 @@ typedef struct room_data_s {
 typedef struct room_s {
     int room_id;
     room_data *room_data;
+    runnable *walking_job;
     List *users;
     List *public_items;
 } room;

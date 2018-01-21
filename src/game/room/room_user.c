@@ -35,33 +35,21 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
-    printf("test 1\n");
-
     if (room_user->next != NULL) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
         room_user->needs_update = 1;
     }
 
-    printf("test 2\n");
-
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    printf("test 3\n");
-
     Deque *path = create_path(room_user);
 
-    printf("test 4\n");
-
     if (path != NULL) {
-
-        printf("test 5\n");
-
         if (deque_size(path) > 0) {
             room_user->walk_list = path;
             room_user->is_walking = 1;
-            printf("test 6\n");
         }
     }
 }

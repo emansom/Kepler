@@ -32,6 +32,7 @@ room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
     instance->room_id = room_id;
     instance->room_data = NULL;
+    instance->walking_job = NULL;
     list_new(&instance->users);
     list_new(&instance->public_items);
     return instance;
@@ -106,11 +107,11 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  * @param player the player
  */
 void room_enter(room *room, player *player) {
-    if (list_size(room->users) == 0) {
-        runnable *r = create_runnable();
-        r->request = walk_task;
-        r->room_id = room->room_id;
-        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, r);
+    if (list_size(room->users) == 0 && room->walking_job == NULL) {
+        room->walking_job = create_runnable();
+        room->walking_job->request = walk_task;
+        room->walking_job->room_id = room->room_id;
+        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
     }
 
     if (player->room_user->room != NULL) {
