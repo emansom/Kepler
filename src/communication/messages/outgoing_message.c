@@ -101,6 +101,10 @@ void om_write_int(outgoing_message *om, int num) {
  * @param om the outgoing message
  */
 void om_finalise(outgoing_message *om) {
+    if (om == NULL) {
+        return;
+    }
+
     if (om->finalised) {
         return;
     }
@@ -117,4 +121,6 @@ void om_cleanup(outgoing_message *om) {
     sb_cleanup(om->sb);
     free(om->header);
     free(om);
+    
+    om = NULL;
 }

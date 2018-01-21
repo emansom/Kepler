@@ -90,6 +90,10 @@ void player_cleanup(player *player) {
  * @param om the outgoing message
  */
 void player_send(player *p, outgoing_message *om) {
+    if (om == NULL) {
+        return;
+    }
+
     om_finalise(om);
 
     uv_handle_t *handle = p->stream;
@@ -125,6 +129,10 @@ void player_send(player *p, outgoing_message *om) {
 }
 
 void player_send_raw(player *p, char *msg) {
+    if (msg == NULL) {
+        return;
+    }
+    
     uv_handle_t *handle = p->stream;
 
     uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));

@@ -53,21 +53,18 @@ Deque *create_path(room_user *room_user) {
 		for (int x = 0; x < map_size_x; x++) {
 			for (int y = 0; y < map_size_y; y++) {
 				node *node = pathfinder->map[x][y];
-
 				if (node != NULL) {
 					free(node);
 					pathfinder->map[x][y] = NULL;
+					node = NULL;
 				}
 			}
-
-			free(pathfinder->map[x]);
 		}
-
-		free(pathfinder->map);
-		free(pathfinder);
-
 	}
 
+	deque_destroy(pathfinder->open_list);
+	free(pathfinder);
+	
 	return path;
 }
 
@@ -101,21 +98,8 @@ int is_valid_tile(room_user *room_user, coord from, coord to) {
 pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_size_y) {
 	pathfinder *p = malloc(sizeof(pathfinder));
 	p->nodes = NULL;
-	p->open_list = NULL;
 	p->current = NULL;
-	//p->map = NULL;
-
 	deque_new(&p->open_list);
-
-	p->map = malloc(sizeof(node*) * map_size_x);
-
-    for (int x = 0; x < map_size_x ; x++) { 
-         p->map[x] =  malloc(sizeof(node) * map_size_y);
-
-		 for (int y = 0; y < map_size_y ; y++) { 
-			p->map[x][y] = NULL;
-		 }
-    }
 
 	coord c;
 	coord tmp;
@@ -123,6 +107,12 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 	p->current = create_node();
 	p->current->x = room_user->current->x;
 	p->current->y = room_user->current->y;
+
+    for (int x = 0; x < map_size_x ; x++) { 
+		 for (int y = 0; y < map_size_y ; y++) { 
+			p->map[x][y] = NULL;
+		 }
+    }
 
 	int cost = 0;
 	int diff = 0;

@@ -6,6 +6,9 @@
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
 
+#include "hashtable.h"
+#include "array.h"
+
 #include "util/stringbuilder.h"
 #include "deque.h"
 #include "communication/messages/outgoing_message.h"
@@ -23,6 +26,7 @@ room_user *room_user_create() {
     user->goal = create_coord(0, 0);
     user->next = NULL;
     deque_new(&user->walk_list);
+    hashtable_new(&user->statuses);
     return user;
 }
 
@@ -97,7 +101,36 @@ void append_user_status(outgoing_message *om, player *player) {
     sb_add_string(om->sb, ",");
     sb_add_int(om->sb, player->room_user->body_rotation);
     sb_add_string(om->sb, "/");
+
+    Array *keys;
+
+    if (hashtable_size(player->room_user->statuses) > 0) {
+        hashtable_get_keys(player->room_user->statuses, &keys);
+
+        for (int i = 0; i < array_size(keys); i++) {
+            char *key, *value;
+            array_get_at(keys, i, (void*)&key);
+            hashtable_get(player->room_user->statuses, key, (void*)&value);
+
+            sb_add_string(om->sb, key);
+            sb_add_string(om->sb, value);
+            sb_add_string(om->sb, "/");
+        }    
+    }
     sb_add_char(om->sb, 13);
+}
+
+void room_user_add_status(room_user *room_user, char *key, char *value) {
+    room_user_remove_status(room_user, key);
+    hashtable_add(room_user->statuses, key, strdup(value));
+}
+
+void room_user_remove_status(room_user *room_user, char *key) {
+    if (hashtable_contains_key(room_user->statuses, key)) {
+        char *cleanup;
+        hashtable_remove(room_user->statuses, key, (void*)&cleanup);
+        free(cleanup);
+    }
 }
 
 /**
@@ -109,6 +142,8 @@ void room_user_reset(room_user *room_user) {
     room_user->needs_update = 0;
     room_user->room_id = 0;
     room_user->room = NULL;
+
+    hashtable_remove_all(room_user->statuses);
 
     if (room_user->walk_list != NULL) {
         deque_remove_all(room_user->walk_list);

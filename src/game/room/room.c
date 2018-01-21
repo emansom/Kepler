@@ -105,7 +105,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  * @param player the player
  */
 void room_enter(room *room, player *player) {
-    if (!threading_has_room(room->room_id)) {
+    if (!threading_has_room(room->room_id) && list_size(room->users) == 0) {
         runnable *r = create_runnable();
         r->request = walk_task;
         r->room_id = room->room_id;
@@ -180,6 +180,9 @@ void room_load(room *room, player *player) {
  * @param message the outgoing message to send
  */
 void room_send(room *room, outgoing_message *message) {
+    om_finalise(message);
+
+    char *data = strdup(message->sb->data);
 	int user_count = list_size(room->users);
 
 	for (int i = 0; i < user_count; i++) {
@@ -194,8 +197,11 @@ void room_send(room *room, outgoing_message *message) {
 			continue;
 		}
 
-        player_send(room_player, message);
+        player_send_raw(room_player, data);
 	}
+
+    free(data);
+    data = NULL;
 
 	om_cleanup(message);
 }

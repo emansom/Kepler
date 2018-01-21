@@ -121,18 +121,13 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     char *ip = inet_ntoa(client_addr.sin_addr);
 
     player *p = player_manager_add(handle, ip);
-    printf("Client [%s] has connected\n", p->ip_address);
-
     client->data = p;
-
+    
+    printf("Client [%s] has connected\n", p->ip_address);
     int result = uv_accept(server, handle);
 
     if(result == 0) {
-        char *handshake = "@@\1";
-        uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
-        uv_buf_t wrbuf = uv_buf_init(handshake, strlen(handshake));
-
-        uv_write(req, handle, &wrbuf, 1, server_on_write);
+        player_send_raw(p, "@@\1");
         uv_read_start(handle, server_alloc_buffer, server_on_read);
     } else {
         uv_close((uv_handle_t *) handle, server_on_connection_close);

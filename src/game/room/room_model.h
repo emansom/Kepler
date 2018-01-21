@@ -19,8 +19,8 @@ typedef struct room_model_s {
     List *public_items;
     int map_size_x;
     int map_size_y;
-    room_title_states **states;
-    double **heights;
+    room_title_states states[200][200];
+    double heights[200][200];
 } room_model;
 
 

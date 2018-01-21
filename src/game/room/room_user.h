@@ -6,6 +6,7 @@ typedef struct room_s room;
 typedef struct deque_s Deque;
 typedef struct coord_s coord;
 typedef struct outgoing_message_s outgoing_message;
+typedef struct hashtable_s HashTable;
 
 typedef struct room_user_s {
     int room_id;
@@ -18,6 +19,7 @@ typedef struct room_user_s {
     Deque *walk_list;
     int is_walking;
     int needs_update;
+    HashTable *statuses;
 } room_user;
 
 room_user *room_user_create();
@@ -26,5 +28,8 @@ void append_user_list(outgoing_message*, player*);
 void append_user_status(outgoing_message *players, player *player);
 void room_user_reset(room_user*);
 void room_user_cleanup(room_user*);
+
+void room_user_add_status(room_user*,char*,char*);
+void room_user_remove_status(room_user*,char*);
 
 #endif

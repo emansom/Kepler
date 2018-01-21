@@ -65,9 +65,16 @@ void process_user(player *player) {
 			deque_remove_first(room_user->walk_list, (void*)&next);
 			room_user->next = next;
 
+			char *key = "mv";
+			char value[30];
+			sprintf(value, " %i,%i,%f", next->x, next->y, next->z);
+			room_user_add_status(room_user, key, value);
+
+
 		} else {
 			room_user->next = NULL;
 			room_user->is_walking = 0;
+			room_user_remove_status(room_user, "mv");
 		}
 
 		player->room_user->needs_update = 1;
