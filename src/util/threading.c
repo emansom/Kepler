@@ -42,10 +42,7 @@ void *thr_func(void *arg) {
 			if (list_size(room->users) == 0) {
 				free(run);
 				run = NULL;
-				continue;
-			}
-
-			if (list_size(room->users) > 0) {
+			} else {
 				run->request(room);
 				deque_add_last(global.thread_manager.tasks, run);
 			}
@@ -55,14 +52,6 @@ void *thr_func(void *arg) {
 		}
 	}
 
-
-void create_thread_pool() {
-	deque_new(&global.thread_manager.tasks);
-
-	for (int i = 0; i <4; i++) {
-		pthread_t thread;
-		pthread_create(&thread, NULL, thr_func, &thread);
-	}
 }
 
 int threading_has_room(int room_id) {
@@ -80,6 +69,15 @@ int threading_has_room(int room_id) {
 	}
 
 	return 0;
+}
+
+void create_thread_pool() {
+	deque_new(&global.thread_manager.tasks);
+
+	for (int i = 0; i <4; i++) {
+		pthread_t thread;
+		pthread_create(&thread, NULL, thr_func, &thread);
+	}
 }
 
 runnable *create_runnable() {

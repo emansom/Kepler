@@ -51,7 +51,6 @@ void walk_task(room *room) {
 }
 
 void process_user(player *player) {
-	printf("Debug 5\n");
 	room_user *room_user = player->room_user;
 
 	if (room_user->is_walking) {
