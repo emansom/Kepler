@@ -10,6 +10,7 @@ INCLUDE_DIRECTORIES(src)
 
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/collections/)
+include_directories(${PROJECT_DIR}/lib/cthreadpool/)
 
 if(WIN32)
     include_directories(${PROJECT_DIR}/lib/sqlite/)
@@ -19,7 +20,7 @@ endif()
 
 # Load source files for libraries
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
-file(GLOB dyad ${PROJECT_DIR}/lib/dyad/*.c)
+file(GLOB cthreadpool ${PROJECT_DIR}/lib/cthreadpool/*.c)
 
 # Kepler classes
 file(GLOB src ${PROJECT_DIR}/*.c)
@@ -43,6 +44,7 @@ file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 
 add_executable(${EXECUTABLE_NAME}
         ${collections}
+        ${cthreadpool}
         ${src}
         ${util}
         ${messages}

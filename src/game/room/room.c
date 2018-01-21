@@ -5,6 +5,7 @@
 #include "list.h"
 #include "util/stringbuilder.h"
 #include "deque.h"
+#include "thpool.h"
 
 #include "room.h"
 #include "room_model.h"
@@ -105,11 +106,11 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  * @param player the player
  */
 void room_enter(room *room, player *player) {
-    if (!threading_has_room(room->room_id) && list_size(room->users) == 0) {
+    if (list_size(room->users) == 0) {
         runnable *r = create_runnable();
         r->request = walk_task;
         r->room_id = room->room_id;
-        deque_add_last(global.thread_manager.tasks, r);
+        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, r);
     }
 
     if (player->room_user->room != NULL) {

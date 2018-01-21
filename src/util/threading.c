@@ -4,6 +4,8 @@
 
 #include "pthread.h"
 
+#include "thpool.h"
+
 #include "deque.h"
 #include "list.h"
 
@@ -12,49 +14,37 @@
 
 #include "shared.h"
 
-void *thr_func(void *arg) {
-	while (true) {
-
-		if (deque_size(global.thread_manager.tasks) > 0) {
-			runnable *run;
-			deque_remove_first(global.thread_manager.tasks, (void*) &run);
-
-			usleep(500 * 1000);
-
-			if (run == NULL) {
-				continue;
-			}
-
-			if (run->room_id == 0) {
-				continue;
-			}
-
-			room *room = room_manager_get_by_id(run->room_id);
-
-			if (room == NULL) {
-				continue;
-			}
-
-			if (room->users == NULL) {
-				continue;
-			}
-
-			if (list_size(room->users) == 0) {
-				if (run != NULL) {
-					free(run);
-					run = NULL;
-				}
-			} else {
-				run->request(room);
-				deque_add_last(global.thread_manager.tasks, run);
-			}
-
-		} else {
-			usleep(500 * 1000);
-		}
+void do_room_task(runnable *run){
+	if (run == NULL) {
+		return;
 	}
 
+	if (run->room_id == 0) {
+		return;
+	}
+
+	room *room = room_manager_get_by_id(run->room_id);
+
+	if (room == NULL) {
+		return;
+	}
+
+	if (room->users == NULL) {
+		return;
+	}
+
+	if (list_size(room->users) == 0) {
+		if (run != NULL) {
+			free(run);
+			run = NULL;
+		}
+	} else {
+		run->request(room);
+		usleep(500*1000);
+		thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
+	}
 }
+
 
 int threading_has_room(int room_id) {
 	int deque_count = deque_size(global.thread_manager.tasks);
@@ -75,11 +65,11 @@ int threading_has_room(int room_id) {
 
 void create_thread_pool() {
 	deque_new(&global.thread_manager.tasks);
+	global.thread_manager.pool = thpool_init(8);
 
-	for (int i = 0; i <4; i++) {
-		pthread_t thread;
-		pthread_create(&thread, NULL, thr_func, &thread);
-	}
+	/*for (int i = 0; i < 4; i++) {
+		thpool_add_work(global.thread_manager.pool, (void*)sleep_2_secs, NULL);
+	}*/
 }
 
 runnable *create_runnable() {
