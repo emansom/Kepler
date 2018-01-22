@@ -3,6 +3,7 @@
 
 typedef struct player_s player;
 typedef struct room_s room;
+typedef struct item_s item;
 typedef struct deque_s Deque;
 typedef struct coord_s coord;
 typedef struct outgoing_message_s outgoing_message;
@@ -23,13 +24,14 @@ typedef struct room_user_s {
 } room_user;
 
 room_user *room_user_create();
-void walk_to(room_user *room_user, int, int);
+void walk_to(room_user*, int, int);
+void stop_walking(room_user*, item*);
 void append_user_list(outgoing_message*, player*);
-void append_user_status(outgoing_message *players, player *player);
+void append_user_status(outgoing_message*, player*);
 void room_user_reset(room_user*);
 void room_user_cleanup(room_user*);
 
 void room_user_add_status(room_user*,char*,char*);
 void room_user_remove_status(room_user*,char*);
-
+int room_user_has_status(room_user*, char*);
 #endif

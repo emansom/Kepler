@@ -76,9 +76,8 @@ Deque *create_path(room_user *room_user) {
 int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move) {
 	room *room_instance = room_user->room;
 
-	// Don't use negative coordinates
 	if (from.x < 0 || from.y < 0 || to.x < 0 || to.y < 0) {
-		return 0; // 0 for false
+		return 0;
 	}
 
 	if (from.x >= room_instance->room_data->model_data->map_size_x || from.y >= room_instance->room_data->model_data->map_size_y) {

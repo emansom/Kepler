@@ -10,7 +10,12 @@
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
+
+#include "game/items/item.h"
+
 #include "game/room/mapping/room_model.h"
+#include "game/room/mapping/room_map.h"
+#include "game/room/mapping/room_tile.h"
 
 #include "communication/messages/outgoing_message.h"
 
@@ -85,6 +90,10 @@ void process_user(player *player) {
 		} else {
 			room_user->next = NULL;
 			room_user->is_walking = 0;
+
+			room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
+			stop_walking(room_user, tile->highest_item);
+			
 			room_user_remove_status(room_user, "mv");
 		}
 

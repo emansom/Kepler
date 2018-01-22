@@ -2,6 +2,7 @@
 
 #include "game/player/player.h"
 #include "game/room/room_user.h"
+#include "game/items/item.h"
 
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
@@ -72,6 +73,27 @@ void walk_to(room_user *room_user, int x, int y) {
     } else {
         printf("User requested path %i, %i from path %i, %i in room %i but it was NULL.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
     }
+}
+
+void stop_walking(room_user *room_user, item *item) {
+    int needs_update = 0;
+
+    if (item == NULL || !item->can_sit) {
+        if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
+            room_user_remove_status(room_user, "sit");
+            room_user_remove_status(room_user, "lay");
+            needs_update = 1;
+        }
+    } else {
+        if (item->can_sit) {
+            room_user_add_status(room_user, "sit", " 1.0");
+            room_user->head_rotation = item->rotation;
+            room_user->body_rotation = item->rotation;
+            needs_update = 1;
+        }
+    }
+
+    room_user->needs_update = needs_update;
 }
 
 /**
@@ -151,6 +173,10 @@ void room_user_remove_status(room_user *room_user, char *key) {
         hashtable_remove(room_user->statuses, key, (void*)&cleanup);
         free(cleanup);
     }
+}
+
+int room_user_has_status(room_user *room_user, char *key) {
+    return hashtable_contains_key(room_user->statuses, key);
 }
 
 /**
