@@ -42,6 +42,8 @@
 // Room user
 #include "communication/incoming/room/user/QUIT.h"
 #include "communication/incoming/room/user/WALK.h"
+#include "communication/incoming/room/user/CHAT.h"
+#include "communication/incoming/room/user/SHOUT.h"
 
 /**
  * Assigns all header handlers to this array
@@ -87,6 +89,8 @@ void mh_add_messages() {
     // Room user
     message_requests[53] = QUIT;
     message_requests[75] = WALK;
+    message_requests[52] = CHAT;
+    message_requests[55] = SHOUT;
 }
 
 /**
