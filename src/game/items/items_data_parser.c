@@ -47,13 +47,13 @@ List *item_parser_get_items(char *model) {
 			get_argument(line, " ", 0)
 		);
 
-		/*if (str_table != NULL) {
-			if (str_table[0] == '2' && strcmp(model, "cafe_gold0") != 0 && strcmp(model, "ballroom") != 0 && strcmp(model, "library") != 0) {
+		if (str_table != NULL) {
+			if (str_table[0] == '2') {
 				room_item->is_table = 1; 
 			}
 
 			free(str_table);
-		}*/
+		}
 
 		if (strstr(room_item->class_name, "chair") != NULL || strstr(room_item->class_name, "bench") != NULL || strstr(room_item->class_name, "seat") != NULL || strstr(room_item->class_name, "stool") != NULL || strstr(room_item->class_name, "sofa") != NULL) {
 			room_item->can_sit = 1;
