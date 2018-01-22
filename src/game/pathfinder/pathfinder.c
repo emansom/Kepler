@@ -51,7 +51,10 @@ Deque *create_path(room_user *room_user) {
 			int x = pathfinder->nodes->x;
 			int y = pathfinder->nodes->y;
 
-			deque_add_first(path, create_coord(x, y));
+			if (!pathfinder->failed) {
+				deque_add_first(path, create_coord(x, y));
+			}
+			
 			pathfinder->nodes = pathfinder->nodes->node;
 		}
 
@@ -130,6 +133,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 	pathfinder *p = malloc(sizeof(pathfinder));
 	p->nodes = NULL;
 	p->current = NULL;
+	p->failed = 0;
 	deque_new(&p->open_list);
 
 	coord c;
@@ -148,8 +152,9 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 	int cost = 0;
 	int diff = 0;
 
+
 	p->map[p->current->x][p->current->y] = p->current;
-	deque_add_last(p->open_list, p->current);
+	deque_add(p->open_list, p->current);
 
 	while (deque_size(p->open_list) > 0) {
 		deque_remove_first(p->open_list, (void*)&p->current);
@@ -201,12 +206,13 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 						}
 
 						p->nodes->open = 1;
-						deque_add_last(p->open_list, p->nodes);
+						deque_add(p->open_list, p->nodes);
 					}
 				}
 			}
 		}
 	}
 
+	p->failed = 1;
 	return p;
 }

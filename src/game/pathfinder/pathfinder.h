@@ -11,6 +11,7 @@ typedef struct pathfinder_s {
 	Deque *open_list;
 	node *current;
 	node *nodes;
+	int failed;
 } pathfinder;
 
 Deque *create_path(room_user*);
