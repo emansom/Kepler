@@ -34,6 +34,8 @@ List *item_parser_get_items(char *model) {
 		char *str_y = get_argument(line, " ", 3);
 		char *str_z = get_argument(line, " ", 4);
 		char *str_rotation = get_argument(line, " ", 5);
+		char *str_table = get_argument(line, " ", 6);
+
 
 		item *room_item = item_create(
 			get_argument(line, " ", 1),
@@ -44,6 +46,14 @@ List *item_parser_get_items(char *model) {
 			strtol(str_rotation, NULL, 10),
 			get_argument(line, " ", 0)
 		);
+
+		if (str_table != NULL) {
+			if (str_table[0] == '2' && strcmp(model, "cafe_gold0") != 0) {
+				room_item->is_table = 1; 
+			}
+
+			free(str_table);
+		}
 
 		if (strstr(room_item->class_name, "chair") != NULL || strstr(room_item->class_name, "bench") != NULL || strstr(room_item->class_name, "seat") != NULL || strstr(room_item->class_name, "stool") != NULL || strstr(room_item->class_name, "sofa") != NULL) {
 			room_item->can_sit = 1;

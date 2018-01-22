@@ -3,6 +3,7 @@
 
 typedef struct item_s {
 	char *class_name;
+	int is_table;
 	int sprite_id;
 	int x;
 	int y;
