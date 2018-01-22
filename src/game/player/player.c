@@ -108,7 +108,6 @@ void player_send(player *p, outgoing_message *om) {
         printf("error sending message\n");
     }
 
-    
     char *friendly_message = data;
 
     for (int i = 0; i < 14; i++) {
@@ -129,15 +128,15 @@ void player_send(player *p, outgoing_message *om) {
     free(data);
 }
 
-void player_send_raw(player *p, char *msg) {
-    if (msg == NULL) {
+void player_send_raw(player *p, char *data) {
+    if (data == NULL) {
         return;
     }
-    
+
     uv_handle_t *handle = p->stream;
 
     uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
-    uv_buf_t wrbuf = uv_buf_init(msg, strlen(msg));
+    uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
 
     int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
     if (r) {

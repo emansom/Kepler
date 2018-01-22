@@ -6,8 +6,11 @@
  */
 stringbuilder *sb_create() {
     stringbuilder *sb = malloc(sizeof(stringbuilder));
-    sb->capacity = 512;
+    sb->capacity = 1024;
+    
     sb->data = malloc(sb->capacity * sizeof(char));
+    memset(sb->data, 0, sizeof(sb->data));
+
     sb->index = 0;
     return sb;
 }
@@ -62,7 +65,7 @@ void sb_add_int(stringbuilder *sb, int integer) {
  */
 void sb_add_float(stringbuilder *sb, double d) {
     char data[11];
-    sprintf(data, "%f", d);
+    sprintf(data, "%.2f", d);
     data[10] = '\0';
     sb_add_string(sb, data);
 }

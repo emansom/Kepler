@@ -168,9 +168,9 @@ void room_load(room *room, player *player) {
     om_cleanup(om);
 
     om = om_create(69); // "AE"
-    om_write_str(om, player->room_user->room->room_data->model);
-    om_write_str(om, " ");
-    om_write_str_int(om, player->room_user->room_id);
+    sb_add_string(om->sb, player->room_user->room->room_data->model);
+    sb_add_string(om->sb, " ");
+    sb_add_int(om->sb, player->room_user->room_id);
     player_send(player, om);
     om_cleanup(om);
 }

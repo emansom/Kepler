@@ -72,7 +72,7 @@ void process_user(player *player) {
 
 			char *key = "mv";
 			char value[30];
-			sprintf(value, " %i,%i,%f", next->x, next->y, next->z);
+			sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
 
 			int rotation = calculate(room_user->current->x, room_user->current->y, next->x, next->y);
 			room_user->body_rotation = rotation;
