@@ -2,11 +2,13 @@
 #define NAVIGATOR_CATEGORY_MANAGER_H
 
 typedef struct list_s List;
+typedef struct hashtable_s HashTable;
+
 typedef struct outgoing_message_s outgoing_message;
 typedef struct room_s room;
 
 struct room_category_manager {
-    List *categories;
+    HashTable *categories;
 };
 
 typedef enum {

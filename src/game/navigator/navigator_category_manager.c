@@ -13,7 +13,7 @@
  * Navigator category manager
  */
 void category_manager_init() {
-    list_new(&global.room_category_manager.categories);
+    hashtable_new(&global.room_category_manager.categories);
     room_query_get_categories();
 }
 
@@ -50,7 +50,7 @@ room_category *category_manager_create(int id, int parent_id, char *name, int pu
  * @param category the category struct
  */
 void category_manager_add(room_category *category) {
-    list_add(global.room_category_manager.categories, category);
+    hashtable_add(global.room_category_manager.categories, &category->id, category);
 }
 
 /**
@@ -60,18 +60,13 @@ void category_manager_add(room_category *category) {
  * @return the room category
  */
 room_category *category_manager_get_by_id(int category_id) {
-    ListIter iter;
-    list_iter_init(&iter, global.room_category_manager.categories);
+    void *category = NULL;
 
-    room_category *category;
-
-    while (list_iter_next(&iter, (void*) &category) != CC_ITER_END) {
-        if (category->id == category_id) {
-            return category;
-        }
+    if (hashtable_contains_key(global.room_category_manager.categories, &category_id)) {
+        hashtable_get(global.room_category_manager.categories, &category_id, (void *)&category);
     }
 
-    return NULL;
+    return category;
 }
 
 /**
@@ -84,12 +79,24 @@ List *category_manager_get_by_parent_id(int category_id) {
     List *sub_categories;
     list_new(&sub_categories);
 
-    ListIter iter;
+    /*ListIter iter;
 
     list_iter_init(&iter, global.room_category_manager.categories);
     room_category *category;
 
     while (list_iter_next(&iter, (void*) &category) != CC_ITER_END) {
+        if (category->parent_id == category_id) {
+            list_add(sub_categories, category);
+        }
+    }*/
+
+    HashTableIter iter;
+    hashtable_iter_init(&iter, global.room_category_manager.categories);
+
+    TableEntry *entry;
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        room_category *category = entry->value;
+
         if (category->parent_id == category_id) {
             list_add(sub_categories, category);
         }

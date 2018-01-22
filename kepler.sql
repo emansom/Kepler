@@ -195,4 +195,5 @@ INSERT INTO `rooms` VALUES (1045,0,6,'Ice Cafe','ice_cafe','ice_cafe','hh_room_i
 INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_netcafe',0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1111,1,0,'xd','xdddddddddd','model_b',NULL,0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,1,0,0,'',0,25);
+INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,'true','false',0,'',0,100);
 COMMIT;
