@@ -73,7 +73,7 @@ Deque *create_path(room_user *room_user) {
 	return path;
 }
 
-int is_valid_tile(room_user *room_user, coord from, coord to) {
+int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move) {
 	room *room_instance = room_user->room;
 
 	// Don't use negative coordinates
@@ -116,6 +116,12 @@ int is_valid_tile(room_user *room_user, coord from, coord to) {
 		if (item->is_solid == 1) {
 			return 0;
 		}
+
+		if (!is_final_move) {
+			if (item->can_sit) {
+				return 1;
+			}
+		}
 	}
 
 	return 1; // 1 for true
@@ -154,11 +160,12 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 			tmp.x = p->current->x + DIAGONAL_MOVE_POINTS[i].x;
 			tmp.y = p->current->y + DIAGONAL_MOVE_POINTS[i].y;
 
-			int isFinalMove = (tmp.x == room_user->goal->x && tmp.y == room_user->goal->y);
+			int is_final_move = (tmp.x == room_user->goal->x && tmp.y == room_user->goal->y);
+
 			c.x = p->current->x;
 			c.y = p->current->y;
 
-			if (is_valid_tile(room_user, c, tmp)) {
+			if (is_valid_tile(room_user, c, tmp, is_final_move)) {
 				if (p->map[tmp.x][tmp.y] == NULL) {
 					p->nodes = create_node();
 					p->nodes->x = tmp.x;
