@@ -95,37 +95,7 @@ void player_send(player *p, outgoing_message *om) {
     }
 
     om_finalise(om);
-
-    uv_handle_t *handle = p->stream;
-    char *data = strdup(om->sb->data);
-
-    uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
-    uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
-
-    int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
-
-    if (r) {
-        printf("error sending message\n");
-    }
-
-    char *friendly_message = data;
-
-    for (int i = 0; i < 14; i++) {
-        char ch[13];
-        sprintf(ch, "{%i}", i);
-        ch[12] = '\0';
-
-        char *temp = friendly_message;
-        friendly_message = replace(temp, (char)i, ch);
-
-        if (i > 0) {
-            free(temp);
-        }
-    }
-    
-    printf ("Client [%s] SENT: %i / %s\n", p->ip_address, om->header_id, friendly_message);
-    free(friendly_message);
-    free(data);
+    player_send_raw(p, om->sb->data);
 }
 
 void player_send_raw(player *p, char *data) {
@@ -134,11 +104,11 @@ void player_send_raw(player *p, char *data) {
     }
 
     uv_handle_t *handle = p->stream;
-
     uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
     uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
 
     int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+
     if (r) {
         printf("error sending message\n");
     }

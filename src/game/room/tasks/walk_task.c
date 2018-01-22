@@ -10,7 +10,7 @@
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
-#include "game/room/room_model.h"
+#include "game/room/mapping/room_model.h"
 
 #include "communication/messages/outgoing_message.h"
 

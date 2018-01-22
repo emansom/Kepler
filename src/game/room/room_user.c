@@ -64,9 +64,13 @@ void walk_to(room_user *room_user, int x, int y) {
                 room_user->walk_list = NULL;
             }
             /* end freeing old list */ 
+            printf("User requested path %i, %i from path %i, %i in room %i with walk size %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id, (int)deque_size(path));
+
             room_user->walk_list = path;
             room_user->is_walking = 1;
         }
+    } else {
+        printf("User requested path %i, %i from path %i, %i in room %i but it was NULL.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
     }
 }
 

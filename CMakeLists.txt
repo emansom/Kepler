@@ -34,6 +34,7 @@ file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
 file(GLOB pathfinder ${PROJECT_DIR}/game/pathfinder/*.c)
 
 # Kepler managers
+file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
@@ -58,7 +59,8 @@ add_executable(${EXECUTABLE_NAME}
         ${room}
         ${navigator}
         ${items}
-        ${tasks})
+        ${tasks}
+        ${room_mapping})
 
 find_package (Threads)
 

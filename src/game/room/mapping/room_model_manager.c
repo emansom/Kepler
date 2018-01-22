@@ -2,9 +2,9 @@
 #include "list.h"
 
 #include "database/queries/room_query.h"
-
 #include "game/items/items_data_parser.h"
-#include "game/room/room_model.h"
+
+#include "room_model.h"
 
 /**
  * Initialise the model manager.

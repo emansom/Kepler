@@ -6,8 +6,9 @@
 #include "hashtable.h"
 
 #include "game/room/room.h"
-#include "game/room/room_model.h"
-#include "game/room/room_model_manager.h"
+
+#include "game/room/mapping/room_model.h"
+#include "game/room/mapping/room_model_manager.h"
 
 #include "game/navigator/navigator_category_manager.h"
 

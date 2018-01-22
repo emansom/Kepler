@@ -7,7 +7,7 @@
 #include <stdbool.h>
 
 #include "game/player/player_manager.h"
-#include "game/room/room_model_manager.h"
+#include "game/room/mapping/room_model_manager.h"
 #include "game/room/room_manager.h"
 
 #include "game/navigator/navigator_category_manager.h"

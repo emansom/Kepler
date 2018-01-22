@@ -8,7 +8,7 @@
 #include "thpool.h"
 
 #include "room.h"
-#include "room_model.h"
+#include "mapping/room_model.h"
 #include "room_user.h"
 
 #include "tasks/walk_task.h"

@@ -4,7 +4,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "game/room/room.h"
-#include "game/room/room_model.h"
+#include "game/room/mapping/room_model.h"
 
 #include "list.h"
 
