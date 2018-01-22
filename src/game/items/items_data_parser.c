@@ -47,13 +47,13 @@ List *item_parser_get_items(char *model) {
 			get_argument(line, " ", 0)
 		);
 
-		if (str_table != NULL) {
-			if (str_table[0] == '2' && strcmp(model, "cafe_gold0") != 0) {
+		/*if (str_table != NULL) {
+			if (str_table[0] == '2' && strcmp(model, "cafe_gold0") != 0 && strcmp(model, "ballroom") != 0 && strcmp(model, "library") != 0) {
 				room_item->is_table = 1; 
 			}
 
 			free(str_table);
-		}
+		}*/
 
 		if (strstr(room_item->class_name, "chair") != NULL || strstr(room_item->class_name, "bench") != NULL || strstr(room_item->class_name, "seat") != NULL || strstr(room_item->class_name, "stool") != NULL || strstr(room_item->class_name, "sofa") != NULL) {
 			room_item->can_sit = 1;
@@ -68,8 +68,31 @@ List *item_parser_get_items(char *model) {
 		free(str_y);
 		free(str_z);
 		free(str_rotation);
-	}	
+	}
 
 	fclose(file);
+
+	/*file = fopen(file_path, "w+");
+
+	for (int i = 0; i < list_size(items); i++) {
+		item *room_item;
+		list_get_at(items, i, (void*)&room_item);
+
+		char custom_content[10];
+
+		if (room_item->is_table) {
+			strcpy(custom_content, " 2");
+		} else {
+			strcpy(custom_content, "");
+		}
+
+		char buf[100];
+		sprintf(buf, "%s %s %i %i %i %i%s\n", room_item->custom_data, room_item->class_name, room_item->x, room_item->y, (int)room_item->z, room_item->rotation, custom_content);
+		fputs(buf, file);
+	}
+	
+	fclose(file);*/
+
 	return items;
 }
+
