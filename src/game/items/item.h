@@ -9,6 +9,8 @@ typedef struct item_s {
 	double z;
 	int rotation;
 	char *custom_data;
+	int can_sit;
+	int is_solid;
 } item;
 
 item *item_create(char*, int, int, int, double, int, char*);

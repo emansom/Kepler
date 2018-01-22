@@ -45,6 +45,13 @@ List *item_parser_get_items(char *model) {
 			get_argument(line, " ", 0)
 		);
 
+		if (strstr(room_item->class_name, "chair") != NULL || strstr(room_item->class_name, "bench") != NULL || strstr(room_item->class_name, "seat") != NULL || strstr(room_item->class_name, "stool") != NULL || strstr(room_item->class_name, "sofa") != NULL) {
+			room_item->can_sit = 1;
+		} else {
+			room_item->can_sit = 0;
+			room_item->is_solid = 1;
+		}
+
 		list_add(items, room_item);
 
 		free(str_x);

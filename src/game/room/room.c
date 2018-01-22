@@ -8,8 +8,10 @@
 #include "thpool.h"
 
 #include "room.h"
-#include "mapping/room_model.h"
 #include "room_user.h"
+
+#include "mapping/room_model.h"
+#include "mapping/room_map.h"
 
 #include "tasks/walk_task.h"
 
@@ -33,6 +35,7 @@ room *room_create(int room_id) {
     instance->room_id = room_id;
     instance->room_data = NULL;
     instance->walking_job = NULL;
+    instance->room_map = NULL;
     list_new(&instance->users);
     list_new(&instance->public_items);
     return instance;
@@ -107,11 +110,8 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  * @param player the player
  */
 void room_enter(room *room, player *player) {
-    if (list_size(room->users) == 0 && room->walking_job == NULL) {
-        room->walking_job = create_runnable();
-        room->walking_job->request = walk_task;
-        room->walking_job->room_id = room->room_id;
-        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
+    if (list_size(room->users) == 0) {
+        init_room_map(room);
     }
 
     if (player->room_user->room != NULL) {
@@ -134,6 +134,13 @@ void room_enter(room *room, player *player) {
 
     list_add(room->users, player);
     room->room_data->visitors_now++;
+
+    if (room->walking_job == NULL) {
+        room->walking_job = create_runnable();
+        room->walking_job->request = walk_task;
+        room->walking_job->room_id = room->room_id;
+        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
+    }
 }
 
 /**

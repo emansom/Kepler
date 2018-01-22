@@ -11,5 +11,7 @@ item *item_create(char *class_name, int sprite_id, int x, int y, double z, int r
 	room_item->z = z;
 	room_item->rotation = rotation;
 	room_item->custom_data = custom_data;
+	room_item->can_sit = 0;
+	room_item->is_solid = 0;
 	return room_item;
 }

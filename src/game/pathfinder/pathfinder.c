@@ -8,9 +8,14 @@
 
 #include "deque.h"
 
+#include "game/items/item.h"
+
 #include "game/room/room.h"
 #include "game/room/room_user.h"
+
 #include "game/room/mapping/room_model.h"
+#include "game/room/mapping/room_map.h"
+#include "game/room/mapping/room_tile.h"
 
 #include <limits.h>
 
@@ -69,31 +74,31 @@ Deque *create_path(room_user *room_user) {
 }
 
 int is_valid_tile(room_user *room_user, coord from, coord to) {
-	room *room = room_user->room;
+	room *room_instance = room_user->room;
 
 	// Don't use negative coordinates
 	if (from.x < 0 || from.y < 0 || to.x < 0 || to.y < 0) {
 		return 0; // 0 for false
 	}
 
-	if (from.x >= room->room_data->model_data->map_size_x || from.y >= room->room_data->model_data->map_size_y) {
+	if (from.x >= room_instance->room_data->model_data->map_size_x || from.y >= room_instance->room_data->model_data->map_size_y) {
 		return 0;
 	}
 
-	if (to.x >= room->room_data->model_data->map_size_x || to.y >= room->room_data->model_data->map_size_y) {
+	if (to.x >= room_instance->room_data->model_data->map_size_x || to.y >= room_instance->room_data->model_data->map_size_y) {
 		return 0;
 	}
 
-	if (room->room_data->model_data->states[to.x][to.y] == CLOSED) {
+	if (room_instance->room_data->model_data->states[to.x][to.y] == CLOSED) {
 		return 0;
 	}
 
-	if (room->room_data->model_data->states[from.x][from.y] == CLOSED) {
+	if (room_instance->room_data->model_data->states[from.x][from.y] == CLOSED) {
 		return 0;
 	}
 
-	double old_height = room->room_data->model_data->heights[from.x][from.y];
-	double new_height = room->room_data->model_data->heights[to.x][to.y];
+	double old_height = room_instance->room_data->model_data->heights[from.x][from.y];
+	double new_height = room_instance->room_data->model_data->heights[to.x][to.y];
 
 	// Can't go down more than 4 in height or can't go up more than 1.5 in height
 	if (old_height - 4 >= new_height) {
@@ -102,6 +107,15 @@ int is_valid_tile(room_user *room_user, coord from, coord to) {
 
 	if (old_height + 1.5 <= new_height) {
 		return 0;
+	}
+
+	room_tile *tile = room_instance->room_map->map[to.x][to.y];
+	item *item = tile->highest_item;
+		
+	if (item != NULL) {
+		if (item->is_solid == 1) {
+			return 0;
+		}
 	}
 
 	return 1; // 1 for true
