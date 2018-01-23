@@ -152,7 +152,6 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 	int cost = 0;
 	int diff = 0;
 
-
 	p->map[p->current->x][p->current->y] = p->current;
 	deque_add(p->open_list, p->current);
 
@@ -192,7 +191,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 						diff += 1;
 					}
 
-					cost = p->current->cost + diff + distance_squared(p->nodes->x, p->nodes->y, room_user->goal->x, room_user->goal->y);
+					cost = p->current->cost + diff + distance_squared(tmp, *room_user->goal);
 
 					if (cost < p->nodes->cost) {
 						p->nodes->cost = cost;

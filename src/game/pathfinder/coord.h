@@ -8,6 +8,6 @@ typedef struct coord_s {
 } coord;
 
 coord *create_coord(int, int);
-int distance_squared(int first_x, int first_y, int point_x, int point_y);
+int distance_squared(coord, coord);
 
 #endif
