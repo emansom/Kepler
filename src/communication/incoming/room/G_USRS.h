@@ -17,12 +17,14 @@ void G_USRS(player *p, incoming_message *message) {
 
     ListIter iter;
     list_iter_init(&iter, room->users);
-    player *user;
-
+   
     outgoing_message *players = om_create(28); // "@\"
+    
+    player *user;
     while (list_iter_next(&iter, (void*) &user) != CC_ITER_END) {
         append_user_list(players, user);
     }
+
     player_send(p, players);
     om_cleanup(players);
 

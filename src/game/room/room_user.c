@@ -1,7 +1,13 @@
 #include "stdlib.h"
 
 #include "game/player/player.h"
+
+#include "game/room/room.h"
 #include "game/room/room_user.h"
+
+#include "game/room/mapping/room_tile.h"
+#include "game/room/mapping/room_map.h"
+
 #include "game/items/item.h"
 
 #include "game/pathfinder/pathfinder.h"
@@ -51,27 +57,32 @@ void walk_to(room_user *room_user, int x, int y) {
 
     Deque *path = create_path(room_user);
 
-    if (path != NULL) {
-        if (deque_size(path) > 0) {
-            /* start freeing old list */ 
-            if (room_user->walk_list != NULL) {
-                for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
-                    coord *coord;
-                    deque_get_at(room_user->walk_list, i, (void*)&coord);
-                    free(coord);
-                }
+    room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
 
-                deque_destroy(room_user->walk_list);
-                room_user->walk_list = NULL;
-            }
-            /* end freeing old list */ 
-            printf("User requested path %i, %i from path %i, %i in room %i with walk size %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id, (int)deque_size(path));
-
-            room_user->walk_list = path;
-            room_user->is_walking = 1;
+    if (tile != NULL) {
+        if (tile->highest_item != NULL) {
+            printf("item name: %s\n", tile->highest_item->class_name);
         }
-    } else {
-        printf("User requested path %i, %i from path %i, %i in room %i but it was NULL.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    }
+
+
+    if (path != NULL && deque_size(path) > 0) {
+        /* start freeing old list */ 
+        if (room_user->walk_list != NULL) {
+            for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
+                coord *coord;
+                deque_get_at(room_user->walk_list, i, (void*)&coord);
+                free(coord);
+            }
+
+            deque_destroy(room_user->walk_list);
+            room_user->walk_list = NULL;
+        }
+        /* end freeing old list */ 
+        printf("User requested path %i, %i from path %i, %i in room %i with walk size %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id, (int)deque_size(path));
+
+        room_user->walk_list = path;
+        room_user->is_walking = 1;
     }
 }
 

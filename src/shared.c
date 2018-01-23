@@ -8,20 +8,21 @@
 
 char *get_argument(char *str, char *delim, int index) {
     char *copy = strdup(str);
-    char *token = NULL;
+    char *value = NULL;
 
     int i = 0;
 
-    for (token = strtok(copy, delim); token; token = strtok(NULL, delim)) {
+    for (char *token = strtok(copy, delim); token; token = strtok(NULL, delim)) {
         if (i == index) {
-            return strdup(token);
+            value = strdup(token);
+            break;
         }
 
         i++;
     }
 
     free(copy);
-    return token;
+    return value;
 }
 
 char *strlwr(char *str)
