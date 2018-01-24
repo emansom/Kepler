@@ -19,19 +19,17 @@ void G_STAT(player *session, incoming_message *message) {
         printf("Room %i has invalid model data.\n", session->room_user->room->room_data->id);
         return;
     }
-
-    session->room_user->needs_update = 1;
     
-    ListIter iter;
-    list_iter_init(&iter, room->users);  
-
-    player *room_player;
-    outgoing_message *players = om_create(28); // "@\"
-    while (list_iter_next(&iter, (void*) &room_player) != CC_ITER_END) {
-        append_user_list(players, room_player);
+    outgoing_message *players = om_create(34); // "@b"
+    
+    for (int i = 0; i < list_size(room->users); i++) {
+		player *room_player;
+		list_get_at(room->users, i, (void*)&room_player);
+        append_user_status(players, room_player);
     }
 
     player_send(session, players);
     om_cleanup(players);
 
+    session->room_user->needs_update = 1;
 }

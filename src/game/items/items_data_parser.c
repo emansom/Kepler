@@ -72,26 +72,28 @@ List *item_parser_get_items(char *model) {
 
 	fclose(file);
 
-	/*file = fopen(file_path, "w+");
+	/*if (strcmp(model, "picnic") == 0) {
+		file = fopen(file_path, "w+");
 
-	for (int i = 0; i < list_size(items); i++) {
-		item *room_item;
-		list_get_at(items, i, (void*)&room_item);
+		for (int i = 0; i < list_size(items); i++) {
+			item *room_item;
+			list_get_at(items, i, (void*)&room_item);
 
-		char custom_content[10];
+			char custom_content[10];
 
-		if (room_item->is_table) {
-			strcpy(custom_content, " 2");
-		} else {
-			strcpy(custom_content, "");
+			if (room_item->is_table) {
+				strcpy(custom_content, " 2");
+			} else {
+				strcpy(custom_content, "");
+			}
+
+			char buf[100];
+			sprintf(buf, "%s %s %i %i %i %i%s\n", room_item->custom_data, room_item->class_name, room_item->x, room_item->y, (int)room_item->z, room_item->rotation, custom_content);
+			fputs(buf, file);
 		}
-
-		char buf[100];
-		sprintf(buf, "%s %s %i %i %i %i%s\n", room_item->custom_data, room_item->class_name, room_item->x, room_item->y, (int)room_item->z, room_item->rotation, custom_content);
-		fputs(buf, file);
-	}
-	
-	fclose(file);*/
+		
+		fclose(file);
+	}*/
 
 	return items;
 }

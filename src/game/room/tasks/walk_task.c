@@ -28,7 +28,7 @@ void walk_task(room *room) {
 	int user_count = list_size(users);
 
 	int user_updates = 0;
-	outgoing_message *status_update = om_create(34);
+	outgoing_message *status_update = om_create(34); // "@b"
 
 	for (int i = 0; i < user_count; i++) {
 		player *room_player;

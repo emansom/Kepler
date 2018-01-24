@@ -63,7 +63,6 @@ void om_write_str_delimeter(outgoing_message *om, char *str, int delim) {
 void om_write_int_delimeter(outgoing_message *om, int num, int delim) {
     char var[11];
     sprintf(var, "%i", num);
-    var[10] = '\0';
 
     sb_add_string(om->sb, var);
     sb_add_char(om->sb, delim);
@@ -81,7 +80,6 @@ void om_write_char(outgoing_message *om, int character) {
 void om_write_str_int(outgoing_message *om, int num) {
     char var[11];
     sprintf(var, "%i", num);
-    var[10] = '\0';
     om_write_str(om, var);
 }
 

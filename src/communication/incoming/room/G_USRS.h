@@ -15,7 +15,7 @@ void G_USRS(player *p, incoming_message *message) {
 
     room *room = p->room_user->room;
 
-    ListIter iter;
+    /*ListIter iter;
     list_iter_init(&iter, room->users);
    
     outgoing_message *players = om_create(28); // "@\"
@@ -26,7 +26,18 @@ void G_USRS(player *p, incoming_message *message) {
     }
 
     player_send(p, players);
-    om_cleanup(players);
+    om_cleanup(players);*/
+
+    outgoing_message *players;
+    players = om_create(28); // "@\"
+
+    for (int i = 0; i < list_size(room->users); i++) {
+		player *room_player;
+		list_get_at(room->users, i, (void*)&room_player);
+        append_user_list(players, room_player);
+    }
+    
+    player_send(p, players);
 
     players = om_create(28); // "@\"
     append_user_list(players, p);

@@ -11,12 +11,7 @@ INCLUDE_DIRECTORIES(src)
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/cthreadpool/)
-
-if(WIN32)
-    include_directories(${PROJECT_DIR}/lib/sqlite/)
-else()
-    link_directories(/usr/local/lib/)
-endif()
+link_directories(/usr/local/lib/)
 
 # Load source files for libraries
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
@@ -67,7 +62,3 @@ find_package (Threads)
 target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
 target_link_libraries(${EXECUTABLE_NAME} sqlite3)
 target_link_libraries(${EXECUTABLE_NAME} uv)
-
-if(WIN32)
-    target_link_libraries(${EXECUTABLE_NAME} wsock32 ws2_32)
-endif()

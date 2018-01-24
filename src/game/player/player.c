@@ -44,11 +44,69 @@ player_data *player_create_data(int id, char *username, char *figure, int credit
 
 /**
  * Called when a connection is successfully opened
+ * 
  * @param p the player struct
  */
 void player_login(player *player) {
     // Add rooms
     room_manager_add_by_user_id(player->player_data->id);
+}
+
+/**
+ * Send an outgoing message to the socket
+ * 
+ * @param p the player struct
+ * @param om the outgoing message
+ */
+void player_send(player *p, outgoing_message *om) {
+    if (om == NULL) {
+        return;
+    }
+
+    om_finalise(om);
+    player_send_raw(p, om->sb->data);
+}
+
+void player_send_raw(player *p, char *data) {
+    if (data == NULL) {
+        return;
+    }
+
+    uv_handle_t *handle = p->stream;
+    uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
+    uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
+
+    int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+
+    if (r) {
+        printf("error sending message\n");
+    }
+}
+
+/**
+ * Sends the key of an error, whose description value is inside the external_texts of the client.
+ * 
+ * @param p the player
+ * @param error the error message
+ */
+void send_localised_error(player *p, char *error) {
+    outgoing_message *om = om_create(33); // @a
+    om_write_str(om, error);
+    player_send(p, om);
+    om_cleanup(om);
+}
+
+/**
+ * Send an alert to the player
+ * 
+ * @param p the player
+ * @param greeting the alert message
+ */
+void send_alert(player *p, char *greeting) {
+    outgoing_message *welcome_message = om_create(139); // BK
+    om_write_str(welcome_message, greeting);
+    player_send(p, welcome_message);
+    om_cleanup(welcome_message);
 }
 
 /**
@@ -82,58 +140,4 @@ void player_cleanup(player *player) {
     free(player);
 
     player = NULL;
-}
-
-/**
- * Send an outgoing message to the socket
- * @param p the player struct
- * @param om the outgoing message
- */
-void player_send(player *p, outgoing_message *om) {
-    if (om == NULL) {
-        return;
-    }
-
-    om_finalise(om);
-    player_send_raw(p, om->sb->data);
-}
-
-void player_send_raw(player *p, char *data) {
-    if (data == NULL) {
-        return;
-    }
-
-    uv_handle_t *handle = p->stream;
-    uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
-    uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
-
-    int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
-
-    if (r) {
-        printf("error sending message\n");
-    }
-}
-
-/**
- * Sends the key of an error, whose description value is inside the external_texts of the client.
- * @param p the player
- * @param error the error message
- */
-void send_localised_error(player *p, char *error) {
-    outgoing_message *om = om_create(33); // @a
-    om_write_str(om, error);
-    player_send(p, om);
-    om_cleanup(om);
-}
-
-/**
- * Send an alert to the player
- * @param p the player
- * @param greeting the alert message
- */
-void send_alert(player *p, char *greeting) {
-    outgoing_message *welcome_message = om_create(139); // BK
-    om_write_str(welcome_message, greeting);
-    player_send(p, welcome_message);
-    om_cleanup(welcome_message);
 }

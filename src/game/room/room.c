@@ -191,9 +191,7 @@ void room_load(room *room, player *player) {
 void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
-	int user_count = list_size(room->users);
-
-	for (int i = 0; i < user_count; i++) {
+	for (int i = 0; i < list_size(room->users); i++) {
 		player *room_player;
 		list_get_at(room->users, i, (void*)&room_player);
 
