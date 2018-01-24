@@ -70,6 +70,30 @@ room_category *category_manager_get_by_id(int category_id) {
 }
 
 /**
+ * Get all the flat categories belonging to rooms owned by users.
+ * 
+ * @return the list of flat categories
+ */
+List *category_manager_flat_categories() {
+    List *categories;
+    list_new(&categories);
+
+    HashTableIter iter;
+    hashtable_iter_init(&iter, global.room_category_manager.categories);
+
+    TableEntry *entry;
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        room_category *category = entry->value;
+
+        if (category->category_type == PRIVATE) {
+            list_add(categories, category);
+        }
+    }
+
+    return categories;
+}
+
+/**
  * Get child navigator categories by the parent category id.
  * 
  * @param category_id the category id
@@ -198,8 +222,9 @@ int category_manager_get_max_vistors(int category_id) {
  * @param category_type the category type
  */
 void category_manager_serialise(outgoing_message *navigator, room *instance, room_category_type category_type) {
+    om_write_int(navigator, instance->room_data->id); // room id
+
     if (category_type == PUBLIC) {
-        om_write_int(navigator, instance->room_data->id); // room id
         om_write_int(navigator, 1);
         om_write_str(navigator, instance->room_data->name);
         om_write_int(navigator, instance->room_data->visitors_now); // current visitors
@@ -211,5 +236,26 @@ void category_manager_serialise(outgoing_message *navigator, room *instance, roo
         om_write_str(navigator, instance->room_data->ccts);
         om_write_int(navigator, 0);
         om_write_int(navigator, 1);
+    }
+
+    if (category_type == PRIVATE) {
+        om_write_str(navigator, instance->room_data->name);
+        om_write_str(navigator, instance->room_data->owner_name);
+
+        if (instance->room_data->accesstype == 2) {
+            om_write_str(navigator, "password");
+        }
+
+        if (instance->room_data->accesstype == 1) {
+            om_write_str(navigator, "closed");
+        }
+
+        if (instance->room_data->accesstype == 0) {
+            om_write_str(navigator, "open");
+        }
+
+        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+        om_write_str(navigator, instance->room_data->description); // description
     }
 }

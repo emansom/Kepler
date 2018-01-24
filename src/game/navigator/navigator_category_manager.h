@@ -29,6 +29,7 @@ void category_manager_init();
 room_category *category_manager_create(int, int, char*, int, int);
 void category_manager_add(room_category*);
 room_category *category_manager_get_by_id(int);
+List *category_manager_flat_categories();
 List *category_manager_get_by_parent_id(int);
 List *category_manager_get_rooms(int);
 int category_manager_get_current_vistors(int);

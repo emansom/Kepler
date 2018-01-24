@@ -2,6 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "game/navigator/navigator_category_manager.h"
+#include "game/room/room.h"
 
 #include "list.h"
 
@@ -15,33 +16,36 @@ void NAVIGATE(player *player, incoming_message *message) {
     if (parent_category != NULL) {
         om_write_int(navigator, hide_full);
         om_write_int(navigator, category_id);
-        om_write_int(navigator, parent_category->category_type); // current visitors
+
+        if (parent_category->category_type == PUBLIC) {
+            om_write_int(navigator, 0);
+        } else {
+            om_write_int(navigator, 2);
+        }
         om_write_str(navigator, parent_category->name);
         om_write_int(navigator, category_manager_get_current_vistors(category_id)); // current visitors
         om_write_int(navigator, category_manager_get_max_vistors(category_id)); // max visitorss
         om_write_int(navigator, parent_category->parent_id); 
 
-        if (parent_category->public_spaces == 0) {
-            om_write_int(navigator, 0);  // room count
+        List *rooms = category_manager_get_rooms(parent_category->id);
+
+        if (parent_category->category_type == PRIVATE) {
+            om_write_int(navigator, list_size(rooms));  // room count
         }
 
-        List *rooms = category_manager_get_rooms(parent_category->id);
-        ListIter iter;
+        for (int i = 0; i < list_size(rooms); i++) {
+            room *instance;
+            list_get_at(rooms, i, (void*)&instance);
 
-        list_iter_init(&iter, rooms);
-        room *instance;
-
-        while (list_iter_next(&iter, (void*) &instance) != CC_ITER_END) {
             category_manager_serialise(navigator, instance, parent_category->category_type);
         }
 
-
         List *child_categories = category_manager_get_by_parent_id(parent_category->id);
 
-        list_iter_init(&iter, child_categories);
-        room_category *category;
+        for (int i = 0; i < list_size(child_categories); i++) {
+            room_category *category;
+            list_get_at(child_categories, i, (void*)&category);
 
-        while (list_iter_next(&iter, (void*) &category) != CC_ITER_END) {
             om_write_int(navigator, category->id);
             om_write_int(navigator, 0);//category->category_type); // current visitors
             om_write_str(navigator, category->name);
