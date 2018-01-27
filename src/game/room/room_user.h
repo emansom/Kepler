@@ -26,6 +26,7 @@ typedef struct room_user_s {
 room_user *room_user_create();
 void walk_to(room_user*, int, int);
 void stop_walking(room_user*, item*);
+void room_user_clear_walk_list(room_user*);
 void append_user_list(outgoing_message*, player*);
 void append_user_status(outgoing_message*, player*);
 void room_user_reset(room_user*);

@@ -38,6 +38,8 @@ room_user *room_user_create() {
 }
 
 void walk_to(room_user *room_user, int x, int y) {
+    printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+
     if (room_user->room == NULL) {
         return;
     }
@@ -67,26 +69,33 @@ void walk_to(room_user *room_user, int x, int y) {
 
 
     if (path != NULL && deque_size(path) > 0) {
-        /* start freeing old list */ 
-        if (room_user->walk_list != NULL) {
-            for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
-                coord *coord;
-                deque_get_at(room_user->walk_list, i, (void*)&coord);
-                free(coord);
-            }
-
-            deque_destroy(room_user->walk_list);
-            room_user->walk_list = NULL;
-        }
-        /* end freeing old list */ 
-        printf("User requested path %i, %i from path %i, %i in room %i with walk size %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id, (int)deque_size(path));
-
+        room_user_clear_walk_list(room_user);
         room_user->walk_list = path;
         room_user->is_walking = 1;
     }
 }
 
+/**
+ * Clear the walk list, called by the server automatically.
+ */
+void room_user_clear_walk_list(room_user *room_user) {
+    if (room_user->walk_list != NULL) {
+        for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
+            coord *coord;
+            deque_get_at(room_user->walk_list, i, (void*)&coord);
+            free(coord);
+        }
+
+        deque_destroy(room_user->walk_list);
+        room_user->walk_list = NULL;
+
+    }
+}
+
 void stop_walking(room_user *room_user, item *item) {
+    room_user_remove_status(room_user, "mv");
+    room_user_clear_walk_list(room_user);
+
     int needs_update = 0;
 
     if (item == NULL || !item->can_sit) {
@@ -104,7 +113,84 @@ void stop_walking(room_user *room_user, item *item) {
         }
     }
 
+    room_user->next = NULL;
     room_user->needs_update = needs_update;
+    room_user->is_walking = 0;
+}
+
+
+void room_user_add_status(room_user *room_user, char *key, char *value) {
+    room_user_remove_status(room_user, key);
+    hashtable_add(room_user->statuses, key, strdup(value));
+}
+
+void room_user_remove_status(room_user *room_user, char *key) {
+    if (hashtable_contains_key(room_user->statuses, key)) {
+        char *cleanup;
+        hashtable_remove(room_user->statuses, key, (void*)&cleanup);
+        free(cleanup);
+    }
+}
+
+int room_user_has_status(room_user *room_user, char *key) {
+    return hashtable_contains_key(room_user->statuses, key);
+}
+
+/**
+ *
+ * @param room_user
+ */
+void room_user_reset(room_user *room_user) {
+    room_user->is_walking = 0;
+    room_user->needs_update = 0;
+    room_user->room_id = 0;
+    room_user->room = NULL;
+
+    Array *keys;
+
+    /* clear statuses */
+    if (hashtable_size(room_user->statuses) > 0) {
+        hashtable_get_keys(room_user->statuses, &keys);
+
+        for (int i = 0; i < array_size(keys); i++) {
+            char *key, *value;
+            array_get_at(keys, i, (void*)&key);
+            room_user_remove_status(room_user, key);
+        }
+    }
+    /* end clear statuses */
+    room_user_clear_walk_list(room_user);
+
+    if (room_user->next != NULL) {
+        free(room_user->next);
+        room_user->next = NULL;
+    }
+}
+
+/**
+ *
+ * @param room_user
+ */
+void room_user_cleanup(room_user *room_user) {
+    room_user_reset(room_user);
+    
+    if (room_user->current != NULL) {
+        free(room_user->current);
+        room_user->current = NULL;
+    }
+
+    if (room_user->goal != NULL) {
+        free(room_user->goal);
+        room_user->goal = NULL;
+    }
+
+    if (room_user->statuses != NULL) {
+        hashtable_destroy(room_user->statuses);
+        room_user->statuses = NULL;
+    }
+    
+    room_user->room = NULL;
+    free(room_user);
 }
 
 /**
@@ -169,90 +255,4 @@ void append_user_status(outgoing_message *om, player *player) {
         }    
     }
     sb_add_char(om->sb, 13);
-}
-
-void room_user_add_status(room_user *room_user, char *key, char *value) {
-    room_user_remove_status(room_user, key);
-    hashtable_add(room_user->statuses, key, strdup(value));
-}
-
-void room_user_remove_status(room_user *room_user, char *key) {
-    if (hashtable_contains_key(room_user->statuses, key)) {
-        char *cleanup;
-        hashtable_remove(room_user->statuses, key, (void*)&cleanup);
-        free(cleanup);
-    }
-}
-
-int room_user_has_status(room_user *room_user, char *key) {
-    return hashtable_contains_key(room_user->statuses, key);
-}
-
-/**
- *
- * @param room_user
- */
-void room_user_reset(room_user *room_user) {
-    room_user->is_walking = 0;
-    room_user->needs_update = 0;
-    room_user->room_id = 0;
-    room_user->room = NULL;
-
-    Array *keys;
-
-    /* clear statuses */
-    if (hashtable_size(room_user->statuses) > 0) {
-        hashtable_get_keys(room_user->statuses, &keys);
-
-        for (int i = 0; i < array_size(keys); i++) {
-            char *key, *value;
-            array_get_at(keys, i, (void*)&key);
-            room_user_remove_status(room_user, key);
-        }
-    }
-    /* end clear statuses */
-
-    /* start freeing old list */ 
-    if (room_user->walk_list != NULL) {
-        for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
-            coord *coord;
-            deque_get_at(room_user->walk_list, i, (void*)&coord);
-            free(coord);
-        }
-
-        deque_destroy(room_user->walk_list);
-        room_user->walk_list = NULL;
-    }
-    /* end freeing old list */ 
-
-    if (room_user->next != NULL) {
-        free(room_user->next);
-        room_user->next = NULL;
-    }
-}
-
-/**
- *
- * @param room_user
- */
-void room_user_cleanup(room_user *room_user) {
-    room_user_reset(room_user);
-    
-    if (room_user->current != NULL) {
-        free(room_user->current);
-        room_user->current = NULL;
-    }
-
-    if (room_user->goal != NULL) {
-        free(room_user->goal);
-        room_user->goal = NULL;
-    }
-
-    if (room_user->statuses != NULL) {
-        hashtable_destroy(room_user->statuses);
-        room_user->statuses = NULL;
-    }
-    
-    room_user->room = NULL;
-    free(room_user);
 }

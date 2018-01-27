@@ -75,7 +75,15 @@ void process_user(player *player) {
 			deque_remove_first(room_user->walk_list, (void*)&next);
 			next->z = room_user->room->room_data->model_data->heights[next->x][next->y];
 
-			char *key = "mv";
+			/*room_tile *tile = room_user->room->room_map->map[next->x][next->y];
+
+			if (tile != NULL && tile->highest_item != NULL) {
+				if (tile->highest_item->can_sit) {
+					stop_walking(room_user, tile->highest_item);
+					return;
+				}
+			}*/
+
 			char value[30];
 			sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
 
@@ -83,7 +91,7 @@ void process_user(player *player) {
 			room_user->body_rotation = rotation;
 			room_user->head_rotation = rotation;
 
-			room_user_add_status(room_user, key, value);
+			room_user_add_status(room_user, "mv", value);
 			room_user->next = next;
 
 
@@ -93,8 +101,6 @@ void process_user(player *player) {
 
 			room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
 			stop_walking(room_user, tile->highest_item);
-			
-			room_user_remove_status(room_user, "mv");
 		}
 
 		player->room_user->needs_update = 1;

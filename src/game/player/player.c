@@ -79,7 +79,9 @@ void player_send_raw(player *p, char *data) {
     int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
 
     if (r) {
-        printf("error sending message\n");
+        printf("Error sending message\n");
+    } else {
+        printf("Client [%s]: %s\n", p->ip_address, data);
     }
 }
 

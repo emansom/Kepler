@@ -8,5 +8,6 @@ void GOTOFLAT(player *player, incoming_message *message) {
         return;
     }
 
+    room_enter(player->room_user->room, player);
     room_load(player->room_user->room, player);
 }

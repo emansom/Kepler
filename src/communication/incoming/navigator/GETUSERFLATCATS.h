@@ -22,5 +22,6 @@ void GETUSERFLATCATS(player *player, incoming_message *message) {
 
     player_send(player, navigator);
     om_cleanup(navigator);
+    
     list_destroy(categories);
 }
