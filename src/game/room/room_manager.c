@@ -42,14 +42,22 @@ void room_manager_add_public_rooms() {
 void room_manager_add_by_user_id(int user_id) {
     List *rooms = room_query_get_by_id(user_id);
 
-    ListIter iter;
+    /*ListIter iter;
     list_iter_init(&iter, rooms);
 
     room *room;
     while (list_iter_next(&iter, (void *)&room) != CC_ITER_END) {
         if (!hashtable_contains_key(global.room_manager.rooms, &room->room_id)) {
+                    printf("Name: %s\n", room->room_data->name);
             hashtable_add(global.room_manager.rooms, &room->room_id, room);
         }
+    }*/
+
+    for (int i = 0; i < list_size(rooms); i++) {
+        room *room;
+        list_get_at(rooms, i, (void*)&room);
+
+         hashtable_add(global.room_manager.rooms, &room->room_id, room);
     }
 
     list_destroy(rooms);

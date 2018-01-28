@@ -90,10 +90,10 @@ List *room_query_get_by_id(int owner_id) {
             sqlite3_column_int(stmt, 8),
             sqlite3_column_int(stmt, 9),
             sqlite3_column_int(stmt, 10),
-            sqlite3_column_int(stmt, 12),
-            (char*)sqlite3_column_text(stmt, 13),
             sqlite3_column_int(stmt, 11),
-            sqlite3_column_int(stmt, 12)
+            (char*)sqlite3_column_text(stmt, 12),
+            sqlite3_column_int(stmt, 13),
+            sqlite3_column_int(stmt, 14)
         );
 
         room->room_data = room_data;
