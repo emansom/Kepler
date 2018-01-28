@@ -115,7 +115,6 @@ void room_enter(room *room, player *player) {
     }
 
     if (player->room_user->room != NULL) {
-        printf("leaving room!\n");
         room_leave(player->room_user->room, player);
     }
 
@@ -137,7 +136,6 @@ void room_enter(room *room, player *player) {
     room->room_data->visitors_now++;
 
     if (room->walking_job == NULL) {
-        printf("helloxddd \n");
         room->walking_job = create_runnable();
         room->walking_job->request = walk_task;
         room->walking_job->room = room;
@@ -150,7 +148,7 @@ void room_enter(room *room, player *player) {
  * And remove the character from the room.
  */
 void room_leave(room *room, player *room_player) {
-    if (list_contains(room->users, room_player)) {
+    if (!list_contains(room->users, room_player)) {
         return;
     }
 

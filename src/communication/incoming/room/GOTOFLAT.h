@@ -4,10 +4,20 @@
 #include "game/room/room.h"
 
 void GOTOFLAT(player *player, incoming_message *message) {
-    if (player->room_user->room == NULL) {
+    char *content = im_get_content(message);
+
+    if (!is_numeric(content)) {
+        free(content);
         return;
     }
 
-    room_enter(player->room_user->room, player);
-    room_load(player->room_user->room, player);
+    room *room = room_manager_get_by_id(strtol(content, NULL, 10));
+
+    if (room != NULL) { 
+        printf("GOTOFLAT.c flat entry\n");
+        room_enter(room, player);
+        room_load(room, player);
+    }
+
+    free(content);
 }
