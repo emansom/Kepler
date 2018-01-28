@@ -79,9 +79,9 @@ void player_send_raw(player *p, char *data) {
     int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
 
     if (r) {
-        printf("Error sending message\n");
+        //printf("Error sending message\n");
     } else {
-        printf("Client [%s]: %s\n", p->ip_address, data);
+        //printf("Client [%s]: %s\n", p->ip_address, data);
     }
 }
 
@@ -124,6 +124,10 @@ void player_cleanup(player *player) {
         room_leave(player->room_user->room, player);
     }
 
+    if (player->room_user != NULL) {
+        room_user_cleanup(player->room_user);
+    }
+
     if (player->player_data != NULL) {
         free(player->player_data->username);
         free(player->player_data->figure);
@@ -131,10 +135,6 @@ void player_cleanup(player *player) {
         free(player->player_data->sex);
         free(player->player_data);
         player->player_data = NULL;
-    }
-
-    if (player->room_user != NULL) {
-        room_user_cleanup(player->room_user);
     }
 
     free(player->ip_address);

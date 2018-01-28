@@ -141,6 +141,8 @@ int room_user_has_status(room_user *room_user, char *key) {
  * @param room_user
  */
 void room_user_reset(room_user *room_user) {
+    stop_walking(room_user, NULL);
+    
     room_user->is_walking = 0;
     room_user->needs_update = 0;
     room_user->room_id = 0;
@@ -159,7 +161,6 @@ void room_user_reset(room_user *room_user) {
         }
     }
     /* end clear statuses */
-    room_user_clear_walk_list(room_user);
 
     if (room_user->next != NULL) {
         free(room_user->next);

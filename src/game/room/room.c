@@ -115,6 +115,7 @@ void room_enter(room *room, player *player) {
     }
 
     if (player->room_user->room != NULL) {
+        printf("leaving room!\n");
         room_leave(player->room_user->room, player);
     }
 
@@ -136,9 +137,10 @@ void room_enter(room *room, player *player) {
     room->room_data->visitors_now++;
 
     if (room->walking_job == NULL) {
+        printf("helloxddd \n");
         room->walking_job = create_runnable();
         room->walking_job->request = walk_task;
-        room->walking_job->room_id = room->room_id;
+        room->walking_job->room = room;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
     }
 }
@@ -147,19 +149,21 @@ void room_enter(room *room, player *player) {
  * Leave room handler, will make room and id for the room user reset back to NULL and 0.
  * And remove the character from the room.
  */
-void room_leave(room *room, player *player) {
-    if (!list_contains(room->users, player)) {
+void room_leave(room *room, player *room_player) {
+    if (list_contains(room->users, room_player)) {
         return;
     }
 
-    room_user_reset(player->room_user);
-
-    list_remove(room->users, player, NULL);
+    list_remove(room->users, room_player, NULL);
     room->room_data->visitors_now--;
 
+    room_user_reset(room_player->room_user); 
+
     outgoing_message *om = om_create(29); // "@]"
-    sb_add_int(om->sb, player->player_data->id);
+    sb_add_int(om->sb, room_player->player_data->id);
     room_send(room, om);
+
+    room_player->room_user->room = NULL;
 }
 
 /**
@@ -229,6 +233,7 @@ void room_cleanup(room *room) {
 
     room->users = NULL;
     room->public_items = NULL;
+    room->walking_job = NULL;
 
     free(room);
 }

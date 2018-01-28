@@ -6,8 +6,6 @@ void G_ITEMS(player *player, incoming_message *message) {
         return;
     }
 
-    room_enter(player->room_user->room, player);
-
     outgoing_message *om = om_create(45); // "@m"
     player_send(player, om);
     om_cleanup(om);

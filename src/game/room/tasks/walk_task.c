@@ -24,13 +24,13 @@
 void process_user(player *player);
 
 void walk_task(room *room) {
-    List *users = room->users;
-	int user_count = list_size(users);
+    List *users;// = room->users;
+    list_copy_shallow(room->users, &users);
 
 	int user_updates = 0;
 	outgoing_message *status_update = om_create(34); // "@b"
 
-	for (int i = 0; i < user_count; i++) {
+	for (int i = 0; i < list_size(users); i++) {
 		player *room_player;
 		list_get_at(users, i, (void*)&room_player);
 
@@ -57,6 +57,8 @@ void walk_task(room *room) {
 	} else {
 		om_cleanup(status_update);
 	}
+
+	list_destroy(users);
 }
 
 void process_user(player *player) {

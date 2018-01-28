@@ -50,12 +50,12 @@ void server_on_write(uv_write_t* req, int status) {
  */
 void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     if (nread == UV_EOF) {
-        uv_close((uv_handle_t *) handle, server_on_connection_close);
+        uv_close((uv_handle_t*) handle, server_on_connection_close);
         return;
     }
 
     if (nread == 0) {
-        uv_close((uv_handle_t *) handle, server_on_connection_close);
+        uv_close((uv_handle_t*) handle, server_on_connection_close);
         return;
     }
 

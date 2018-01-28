@@ -14,25 +14,30 @@
 
 void do_room_task(runnable *run){
 	if (run == NULL) {
+		printf("CALLED 1! \n");
 		return;
 	}
 
-	if (run->room_id == 0) {
+	if (run->room == NULL) {
+		printf("CALLED 2! \n");
 		return;
 	}
 
-	room *room = room_manager_get_by_id(run->room_id);
+	room *room = run->room;
 
 	if (room == NULL) {
+		printf("CALLED 3! \n");
 		return;
 	}
 
 	if (room->users == NULL) {
+		printf("CALLED 4! \n");
 		return;
 	}
 
 	if (list_size(room->users) == 0) {
 		if (run != NULL) {
+			printf("Room task has ended.\n");
 			room->walking_job = NULL;
 			free(run);
 			run = NULL;
@@ -51,7 +56,7 @@ void create_thread_pool() {
 
 runnable *create_runnable() {
 	runnable *r = malloc(sizeof(runnable));
-	r->room_id = 0;
+	r->room = NULL;
 	r->request = NULL;
 	r->self = r;
 	return r;

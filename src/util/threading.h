@@ -16,7 +16,7 @@ struct thread_manager {
 typedef struct runnable_s {
     thread_request request;
     runnable *self;
-    int room_id;
+    room *room;
 } runnable;
 
 void do_room_task(runnable*);
