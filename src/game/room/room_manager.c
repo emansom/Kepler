@@ -56,7 +56,10 @@ void room_manager_add_by_user_id(int user_id) {
     for (int i = 0; i < list_size(rooms); i++) {
         room *room;
         list_get_at(rooms, i, (void*)&room);
-        hashtable_add(global.room_manager.rooms, &room->room_id, room);
+        
+        if (!hashtable_contains_key(global.room_manager.rooms, &room->room_id)) {
+            hashtable_add(global.room_manager.rooms, &room->room_id, room);
+        }
     }
 
     list_destroy(rooms);
