@@ -55,7 +55,12 @@ List *item_parser_get_items(char *model) {
 			free(str_table);
 		}
 
-		if (strstr(room_item->class_name, "chair") != NULL || strstr(room_item->class_name, "bench") != NULL || strstr(room_item->class_name, "seat") != NULL || strstr(room_item->class_name, "stool") != NULL || strstr(room_item->class_name, "sofa") != NULL) {
+		if (strstr(room_item->class_name, "chair") != NULL 
+		|| strstr(room_item->class_name, "bench") != NULL 
+		|| strstr(room_item->class_name, "seat") != NULL 
+		|| strstr(room_item->class_name, "stool") != NULL 
+		|| strstr(room_item->class_name, "sofa") != NULL 
+		|| strstr(room_item->class_name, "couch") != NULL) {
 			room_item->can_sit = 1;
 		} else {
 			room_item->can_sit = 0;
@@ -72,7 +77,7 @@ List *item_parser_get_items(char *model) {
 
 	fclose(file);
 
-	/*if (strcmp(model, "picnic") == 0) {
+	/*if (strcmp(model, "club_mammoth") == 0) {
 		file = fopen(file_path, "w+");
 
 		for (int i = 0; i < list_size(items); i++) {
