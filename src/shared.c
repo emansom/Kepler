@@ -25,16 +25,15 @@ char *get_argument(char *str, char *delim, int index) {
     return value;
 }
 
-char *strlwr(char *str)
-{
-  unsigned char *p = (unsigned char *)str;
+char *strlwr(char *str) {
+    unsigned char *p = (unsigned char *)str;
 
-  while (*p) {
-     *p = tolower((unsigned char)*p);
-      p++;
-  }
+    while (*p) {
+        *p = tolower((unsigned char)*p);
+        p++;
+    }
 
-  return str;
+    return str;
 }
 
 char *replace(const char *s, char ch, const char *repl) {

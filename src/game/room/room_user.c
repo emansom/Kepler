@@ -57,16 +57,16 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    Deque *path = create_path(room_user);
-
-    room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
+    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
     if (tile != NULL) {
         if (tile->highest_item != NULL) {
             printf("Item name: %s\n", tile->highest_item->class_name);
         }
-    }
-
+    }*/
+    
+    Deque *path = create_path(room_user);
+    
     if (path != NULL && deque_size(path) > 0) {
         room_user_clear_walk_list(room_user);
         room_user->walk_list = path;
@@ -257,6 +257,6 @@ void append_user_status(outgoing_message *om, player *player) {
             sb_add_string(om->sb, "/");
         }    
     }
-    
+
     sb_add_char(om->sb, 13);
 }

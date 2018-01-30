@@ -24,7 +24,6 @@ stringbuilder *sb_create() {
  */
 void sb_ensure_capacity(stringbuilder *sb, int length) {
     if ((sb->capacity - sb->index) >= length) {
-        // stringbuilder has capacity
         return;
     }
 
