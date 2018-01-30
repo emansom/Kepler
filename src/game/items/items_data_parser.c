@@ -60,7 +60,10 @@ List *item_parser_get_items(char *model) {
 		|| strstr(room_item->class_name, "seat") != NULL 
 		|| strstr(room_item->class_name, "stool") != NULL 
 		|| strstr(room_item->class_name, "sofa") != NULL 
-		|| strstr(room_item->class_name, "couch") != NULL) {
+		|| strcmp(room_item->class_name, "l") == 0
+		|| strcmp(room_item->class_name, "m") == 0
+		|| strcmp(room_item->class_name, "k") == 0
+		|| strcmp(room_item->class_name, "shift1") == 0) {
 			room_item->can_sit = 1;
 		} else {
 			room_item->can_sit = 0;

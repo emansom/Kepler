@@ -59,14 +59,13 @@ void walk_to(room_user *room_user, int x, int y) {
 
     Deque *path = create_path(room_user);
 
-    room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
+    room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
     if (tile != NULL) {
         if (tile->highest_item != NULL) {
             printf("item name: %s\n", tile->highest_item->class_name);
         }
     }
-
 
     if (path != NULL && deque_size(path) > 0) {
         room_user_clear_walk_list(room_user);
@@ -124,6 +123,7 @@ void room_user_add_status(room_user *room_user, char *key, char *value) {
     hashtable_add(room_user->statuses, key, strdup(value));
 }
 
+
 void room_user_remove_status(room_user *room_user, char *key) {
     if (hashtable_contains_key(room_user->statuses, key)) {
         char *cleanup;
@@ -137,7 +137,8 @@ int room_user_has_status(room_user *room_user, char *key) {
 }
 
 /**
- *
+ *  Called when a player either leaves a room, or disconnects.
+ * 
  * @param room_user
  */
 void room_user_reset(room_user *room_user) {
@@ -169,7 +170,8 @@ void room_user_reset(room_user *room_user) {
 }
 
 /**
- *
+ * Called when a player disconnects.
+ * 
  * @param room_user
  */
 void room_user_cleanup(room_user *room_user) {
