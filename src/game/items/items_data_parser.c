@@ -80,7 +80,7 @@ List *item_parser_get_items(char *model) {
 
 	fclose(file);
 
-	/*if (strcmp(model, "club_mammoth") == 0) {
+	/*if (strcmp(model, "cafe_ole") == 0) {
 		file = fopen(file_path, "w+");
 
 		for (int i = 0; i < list_size(items); i++) {
