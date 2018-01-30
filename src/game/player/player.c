@@ -22,6 +22,7 @@ player *player_create(void *socket, char *ip_address) {
     p->stream = socket;
     p->ip_address = strdup(ip_address);
     p->player_data = NULL;
+    p->disconnected = 0;
     return p;
 }
 
@@ -59,7 +60,7 @@ void player_login(player *player) {
  * @param om the outgoing message
  */
 void player_send(player *p, outgoing_message *om) {
-    if (om == NULL) {
+    if (om == NULL || p == NULL) {
         return;
     }
 
@@ -68,7 +69,7 @@ void player_send(player *p, outgoing_message *om) {
 }
 
 void player_send_raw(player *p, char *data) {
-    if (data == NULL) {
+    if (data == NULL || p == NULL) {
         return;
     }
 

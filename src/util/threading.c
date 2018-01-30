@@ -13,35 +13,11 @@
 #include "shared.h"
 
 void do_room_task(runnable *run){
-	if (run == NULL) {
-		printf("CALLED 1! \n");
-		return;
-	}
-
-	if (run->room == NULL) {
-		printf("CALLED 2! \n");
-		return;
-	}
-
 	room *room = run->room;
 
-	if (room == NULL) {
-		printf("CALLED 3! \n");
-		return;
-	}
-
-	if (room->users == NULL) {
-		printf("CALLED 4! \n");
-		return;
-	}
-
 	if (list_size(room->users) == 0) {
-		if (run != NULL) {
-			printf("Room task has ended.\n");
-			room->walking_job = NULL;
-			free(run);
-			run = NULL;
-		}
+		room->walking_job = NULL;
+		free(run);
 	} else {
 		run->request(room);
 		usleep(500*1000);

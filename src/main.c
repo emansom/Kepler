@@ -39,7 +39,7 @@ int main(void) {
     create_thread_pool();
     
     print_info("Starting server...\n");
-    start_server("0.0.0.0", 12321);
+    start_server("127.0.0.1", 12321);
     return EXIT_SUCCESS;
 }
 

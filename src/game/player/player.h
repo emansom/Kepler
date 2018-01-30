@@ -20,6 +20,7 @@ typedef struct player_s {
     char *ip_address;
     player_data *player_data;
     room_user *room_user;
+    int disconnected;
 } player;
 
 

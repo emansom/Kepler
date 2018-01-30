@@ -118,9 +118,11 @@ void server_on_new_connection(uv_stream_t *server, int status) {
 
     uv_stream_t *handle = (uv_stream_t*)client;
     uv_tcp_getpeername((const uv_tcp_t*) handle, (struct sockaddr*)&client_addr, &client_addr_length);
-    char *ip = inet_ntoa(client_addr.sin_addr);
+    
+    char ip[16];
+    uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
 
-    player *p = player_manager_add(handle, ip);
+    player *p = player_manager_add(handle, strdup(ip));
     client->data = p;
     
     printf("Client [%s] has connected\n", p->ip_address);
@@ -147,7 +149,7 @@ void start_server(const char *ip, int port) {
 
     uv_tcp_init(loop, &server);
     uv_ip4_addr(ip, port, &bind_addr);
-    uv_tcp_bind(&server, (const struct sockaddr *) &bind_addr, 0);
+    uv_tcp_bind(&server, (const struct sockaddr*) &bind_addr, 0);
     uv_listen((uv_stream_t *) &server, 128, server_on_new_connection);
 
     // At the moment, the entire server is single threaded but there are plans
