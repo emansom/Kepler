@@ -63,7 +63,7 @@ void walk_to(room_user *room_user, int x, int y) {
 
     if (tile != NULL) {
         if (tile->highest_item != NULL) {
-            printf("item name: %s\n", tile->highest_item->class_name);
+            printf("Item name: %s\n", tile->highest_item->class_name);
         }
     }
 
@@ -257,5 +257,6 @@ void append_user_status(outgoing_message *om, player *player) {
             sb_add_string(om->sb, "/");
         }    
     }
+    
     sb_add_char(om->sb, 13);
 }

@@ -1,6 +1,5 @@
 #ifndef STRINGBUILDER_H
 #define STRINGBUILDER_H
-#include <shared.h>
 
 typedef struct stringbuilder_s {
     char *data;

@@ -1,3 +1,5 @@
+#include <shared.h>
+
 #include "util/stringbuilder.h"
 
 /**
