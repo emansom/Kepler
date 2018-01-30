@@ -133,7 +133,7 @@ void room_enter(room *room, player *player) {
     player->room_user->body_rotation = room->room_data->model_data->door_dir;
 
     list_add(room->users, player);
-    room->room_data->visitors_now++;
+    room->room_data->visitors_now = list_size(room->users);
 
     if (room->walking_job == NULL) {
         room->walking_job = create_runnable();
@@ -153,7 +153,7 @@ void room_leave(room *room, player *room_player) {
     }
 
     list_remove(room->users, room_player, NULL);
-    room->room_data->visitors_now--;
+    room->room_data->visitors_now = list_size(room->users);
 
     room_user_reset(room_player->room_user); 
 

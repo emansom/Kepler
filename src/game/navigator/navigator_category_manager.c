@@ -249,13 +249,6 @@ void category_manager_serialise(outgoing_message *navigator, room *instance, roo
             om_write_str(navigator, "-"); // room owner
         }
 
-        /*if (instance->room_data->show_name == 1) {
-            om_write_str(navigator, instance->room_data->owner_name); // room owner
-        } else {
-            om_write_str(navigator, "-"); // room owner
-        }*/
-         om_write_str(navigator, instance->room_data->owner_name); // room owner
-
         if (instance->room_data->accesstype == 2) {
             om_write_str(navigator, "password");
         }
