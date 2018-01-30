@@ -9,6 +9,8 @@
 #include "database/queries/room_query.h"
 #include "navigator_category_manager.h"
 
+#include "game/player/player.h"
+
 /**
  * Navigator category manager
  */
@@ -221,7 +223,7 @@ int category_manager_get_max_vistors(int category_id) {
  * @param instance the room instance
  * @param category_type the category type
  */
-void category_manager_serialise(outgoing_message *navigator, room *instance, room_category_type category_type) {
+void category_manager_serialise(outgoing_message *navigator, room *instance, room_category_type category_type, player *player) {
     om_write_int(navigator, instance->room_data->id); // room id
 
     if (category_type == PUBLIC) {
@@ -240,7 +242,19 @@ void category_manager_serialise(outgoing_message *navigator, room *instance, roo
 
     if (category_type == PRIVATE) {
         om_write_str(navigator, instance->room_data->name);
-        om_write_str(navigator, instance->room_data->owner_name);
+        
+        if (player->player_data->id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
+            om_write_str(navigator, instance->room_data->owner_name); // room owner
+        } else {
+            om_write_str(navigator, "-"); // room owner
+        }
+
+        /*if (instance->room_data->show_name == 1) {
+            om_write_str(navigator, instance->room_data->owner_name); // room owner
+        } else {
+            om_write_str(navigator, "-"); // room owner
+        }*/
+         om_write_str(navigator, instance->room_data->owner_name); // room owner
 
         if (instance->room_data->accesstype == 2) {
             om_write_str(navigator, "password");

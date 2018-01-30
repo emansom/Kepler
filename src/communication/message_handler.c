@@ -27,7 +27,6 @@
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
-#include "communication/incoming/room/GETFLATINFO.h"
 #include "communication/incoming/room/room_directory.h"
 #include "communication/incoming/room/TRYFLAT.h"
 #include "communication/incoming/room/GOTOFLAT.h"
@@ -49,6 +48,7 @@
 #include "communication/incoming/room/settings/CREATEFLAT.h"
 #include "communication/incoming/room/settings/SETFLATINFO.h"
 #include "communication/incoming/room/settings/GETFLATCAT.h"
+#include "communication/incoming/room/settings/GETFLATINFO.h"
 
 /**
  * Assigns all header handlers to this array
@@ -78,7 +78,6 @@ void mh_add_messages() {
     message_requests[151] = GETUSERFLATCATS;
 
     // Room
-    message_requests[21] = GETFLATINFO;
     message_requests[182] = GETINTERST;
     message_requests[2] = room_directory;
     message_requests[57] = TRYFLAT; // @y1052/123
@@ -98,6 +97,7 @@ void mh_add_messages() {
     message_requests[55] = SHOUT;
 
     // Room settings
+    message_requests[21] = GETFLATINFO;
     message_requests[29] = CREATEFLAT;
     message_requests[25] = SETFLATINFO;
     message_requests[152] = GETFLATCAT;

@@ -37,7 +37,7 @@ void NAVIGATE(player *player, incoming_message *message) {
             room *instance;
             list_get_at(rooms, i, (void*)&instance);
 
-            category_manager_serialise(navigator, instance, parent_category->category_type);
+            category_manager_serialise(navigator, instance, parent_category->category_type, player);
         }
 
         List *child_categories = category_manager_get_by_parent_id(parent_category->id);
