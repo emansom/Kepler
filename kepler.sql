@@ -133,7 +133,7 @@ INSERT INTO `rooms_categories` VALUES (117,0,4,0,'Gaming & Race Rooms',0,0,1,1);
 INSERT INTO `rooms_categories` VALUES (118,0,4,0,'Help Centre Rooms',0,0,1,1);
 INSERT INTO `rooms_categories` VALUES (120,0,4,0,'Miscellaneous',0,0,1,1);
 CREATE TABLE IF NOT EXISTS `rooms` (
-	`id`	int ( 11 ) NOT NULL,
+	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`owner_id`	int ( 11 ) NOT NULL,
 	`category`	int ( 3 ) NOT NULL DEFAULT '0',
 	`name`	TEXT NOT NULL,
@@ -153,13 +153,12 @@ INSERT INTO `rooms` VALUES (1001,0,3,'Welcome Lounge','welcome_lounge','newbie_l
 INSERT INTO `rooms` VALUES (1003,0,5,'Theatredome','theatredrome','theater','hh_room_theater',0,0,'true','false',0,'',0,100);
 INSERT INTO `rooms` VALUES (1004,0,5,'Library','library','library','hh_room_library',0,0,'true','false',0,'',0,30);
 INSERT INTO `rooms` VALUES (1005,0,5,'TV Studio','tv_studio','tv_studio','hh_room_tv_studio_general',0,0,'true','false',0,'',0,20);
-INSERT INTO `rooms` VALUES (1010,0,6,'The Dirty Duck Pub','the_dirty_duck_pub','pub_a','hh_room_pub',0,0,'true','false',0,'',0,40);
-INSERT INTO `rooms` VALUES (1011,0,6,'Cafe Ole','cafe_ole','cafe_ole','hh_room_cafe',0,0,'true','false',0,'',0,35);
-INSERT INTO `rooms` VALUES (1007,0,5,'Power Gym','sport','sport','hh_room_sport',0,0,'true','false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1006,0,5,'Cinema','habbo_cinema','cinema_a','hh_room_cinema',0,0,'true','false',0,'',0,50);
-INSERT INTO `rooms` VALUES (1019,0,7,'Oriental Tearoom','tearoom','tearoom','hh_room_tearoom',0,0,'true','false',0,'',0,40);
+INSERT INTO `rooms` VALUES (1007,0,5,'Power Gym','sport','sport','hh_room_sport',0,0,'true','false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1008,0,5,'Olympic Stadium','ballroom','ballroom','hh_room_ballroom',0,0,'true','false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1009,0,5,'Habbo Kitchen','hotel_kitchen','cr_kitchen','hh_room_kitchen',0,0,'true','false',0,'',0,20);
+INSERT INTO `rooms` VALUES (1010,0,6,'The Dirty Duck Pub','the_dirty_duck_pub','pub_a','hh_room_pub',0,0,'true','false',0,'',0,40);
+INSERT INTO `rooms` VALUES (1011,0,6,'Cafe Ole','cafe_ole','cafe_ole','hh_room_cafe',0,0,'true','false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1012,0,6,'Gallery Cafe','eric''s_eaterie','cr_cafe','hh_room_erics',0,0,'true','false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1013,0,6,'Space Cafe','space_cafe','space_cafe','hh_room_space_cafe',0,0,'true','false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1014,0,16,'Rooftop Terrace','rooftop','rooftop','hh_room_rooftop',0,0,'true','false',0,'',0,30);
@@ -167,24 +166,25 @@ INSERT INTO `rooms` VALUES (1015,0,16,'Rooftop Cafe','rooftop','rooftop_2','hh_r
 INSERT INTO `rooms` VALUES (1016,0,6,'Palazzo Pizza','pizza','pizza','hh_room_pizza',0,0,'true','false',0,'',0,40);
 INSERT INTO `rooms` VALUES (1017,0,6,'Habburgers','habburger''s','habburger','hh_room_habburger',0,0,'true','false',0,'',0,40);
 INSERT INTO `rooms` VALUES (1018,0,8,'Grandfathers Lounge','dusty_lounge','dusty_lounge','hh_room_dustylounge',0,0,'true','false',0,'',0,45);
+INSERT INTO `rooms` VALUES (1019,0,7,'Oriental Tearoom','tearoom','tearoom','hh_room_tearoom',0,0,'true','false',0,'',0,40);
 INSERT INTO `rooms` VALUES (1020,0,17,'Oldskool Lounge','old_skool','old_skool0','hh_room_old_skool',0,0,'true','false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1022,0,17,'Oldskool Dancefloor','old_skool','old_skool1','hh_room_old_skool',0,0,'true','false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1023,0,18,'The Chromide Club I','the_chromide_club','malja_bar_a','hh_room_disco',0,0,'true','false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1024,0,18,'The Chromide Club II','the_chromide_club','malja_bar_b','hh_room_disco',0,0,'true','false',0,'',0,50);
-INSERT INTO `rooms` VALUES (1027,0,6,'Sunset Cafe','sunset_cafe','sunset_cafe','hh_room_sunsetcafe',0,0,'true','false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1025,0,19,'Club Massiva I','club_massiva','bar_a','hh_room_bar',0,0,'true','false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1026,0,19,'Club Massiva II','club_massiva2','bar_b','hh_room_bar',0,0,'true','false',0,'',0,70);
+INSERT INTO `rooms` VALUES (1027,0,6,'Sunset Cafe','sunset_cafe','sunset_cafe','hh_room_sunsetcafe',0,0,'true','false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1028,0,7,'Oasis Spa','cafe_gold','cafe_gold0','hh_room_gold',0,0,'true','false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1029,0,9,'Treehugger Garden','chill','chill','hh_room_chill',0,0,'true','false',0,'',0,30);
-INSERT INTO `rooms` VALUES (1037,0,21,'The Infobus','park','park_b','hh_room_park_general,hh_room_park',0,0,'true','false',0,'',0,20);
 INSERT INTO `rooms` VALUES (1030,0,8,'Club Mammoth','club_mammoth','club_mammoth','hh_room_clubmammoth',0,0,'true','false',0,'',0,45);
-INSERT INTO `rooms` VALUES (1033,0,9,'Sun Terrace','sun_terrace','sun_terrace','hh_room_sun_terrace',0,0,'true','false',0,'',0,50);
-INSERT INTO `rooms` VALUES (1036,0,21,'The Park','park','park_a','hh_room_park_general,hh_room_park',0,0,'true','false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1031,0,9,'Floating Garden','floatinggarden','floatinggarden','hh_room_floatinggarden',0,0,'true','false',0,'',0,80);
 INSERT INTO `rooms` VALUES (1032,0,9,'Picnic Fields','picnic','picnic','hh_room_picnic',0,0,'true','false',0,'',0,55);
-INSERT INTO `rooms` VALUES (1038,0,22,'Lido A','habbo_lido','pool_a','hh_room_pool,hh_people_pool',0,0,'true','false',0,'',0,60);
+INSERT INTO `rooms` VALUES (1033,0,9,'Sun Terrace','sun_terrace','sun_terrace','hh_room_sun_terrace',0,0,'true','false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1034,0,20,'The Laughing Lions - Gate','gate_park','gate_park','hh_room_gate_park',0,0,'true','false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1035,0,20,'The Laughing Lions - Picnic','gate_park','gate_park_2','hh_room_gate_park',0,0,'true','false',0,'',0,50);
+INSERT INTO `rooms` VALUES (1036,0,21,'The Park','park','park_a','hh_room_park_general,hh_room_park',0,0,'true','false',0,'',0,45);
+INSERT INTO `rooms` VALUES (1037,0,21,'The Infobus','park','park_b','hh_room_park_general,hh_room_park',0,0,'true','false',0,'',0,20);
+INSERT INTO `rooms` VALUES (1038,0,22,'Lido A','habbo_lido','pool_a','hh_room_pool,hh_people_pool',0,0,'true','false',0,'',0,60);
 INSERT INTO `rooms` VALUES (1039,0,22,'Lido B','habbo_lido_ii','pool_b','hh_room_pool,hh_people_pool',0,0,'true','false',0,'',0,60);
 INSERT INTO `rooms` VALUES (1040,0,10,'Rooftop Rumble','rooftop_rumble','md_a','hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu',0,0,'true','false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1041,0,11,'Main Lobby','main_lobby','lobby_a','hh_room_lobby',0,0,'true','false',0,'',0,100);
@@ -193,8 +193,6 @@ INSERT INTO `rooms` VALUES (1043,0,11,'Median Lobby','median_lobby','floorlobby_
 INSERT INTO `rooms` VALUES (1044,0,11,'Skylight Lobby','skylight_lobby','floorlobby_c','hh_room_floorlobbies',0,0,'true','false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1045,0,6,'Ice Cafe','ice_cafe','ice_cafe','hh_room_icecafe',0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_netcafe',0,0,1,0,0,'',0,25);
-INSERT INTO `rooms` VALUES (1111,1,114,'xd','xdddddddddd','model_b',NULL,0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,'true','false',0,'',0,100);
-INSERT INTO `rooms` VALUES (1112,1,114,'another room','xdddddddddd','model_h',NULL,0,0,1,0,0,'',0,25);
 COMMIT;
