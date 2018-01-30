@@ -48,6 +48,7 @@
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
 #include "communication/incoming/room/settings/SETFLATINFO.h"
+#include "communication/incoming/room/settings/GETFLATCAT.h"
 
 /**
  * Assigns all header handlers to this array
@@ -99,6 +100,7 @@ void mh_add_messages() {
     // Room settings
     message_requests[29] = CREATEFLAT;
     message_requests[25] = SETFLATINFO;
+    message_requests[152] = GETFLATCAT;
 }
 
 /**
