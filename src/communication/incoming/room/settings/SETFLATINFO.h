@@ -4,15 +4,23 @@
 #include "game/player/player.h"
 #include "game/room/room.h"
 
-#include "database/queries/room_user_query.h"
+#include "database/queries/room_query.h"
 
 void SETFLATINFO(player *player, incoming_message *message) {
-	int room_id = 0;
-
 	char *content = im_get_content(message);
-	room_id = strtol(get_argument(content, "/", 0), NULL, 10);
+	char *argument = get_argument(content, "/", 0);
 
-	printf("received room id: %i\n", room_id);
+	if (!is_numeric(argument)) {
+		goto cleanup;
+		return;
+	}
+
+	room *room = room_manager_get_by_id(strtol(argument, NULL, 10));
+
+	if (room == NULL) {
+		goto cleanup;
+		return;
+	}
 
 	int split_count = 0;
 
@@ -31,13 +39,41 @@ void SETFLATINFO(player *player, incoming_message *message) {
 		value += strlen(key) + 1;
 		value = strdup(value); // create its own independent pointer
 
-		printf("k: %s and v: %s\n", key, value);
+		if (strcmp(key, "description") == 0) {
+			free(room->room_data->description);
+			room->room_data->description = strdup(value);
+
+		} else if (strcmp(key, "allsuperuser") == 0) {
+			if (is_numeric(value)) {
+				int allsuperuser = strtol(value, NULL, 10);
+				room->room_data->superusers = allsuperuser;
+			}
+
+		} else if (strcmp(key, "maxvisitors") == 0) {
+			if (is_numeric(value)) {
+				int max_visitors = strtol(value, NULL, 10);
+			
+				if (max_visitors < 10 || max_visitors > 50) {
+					max_visitors = 25;
+				}
+
+				room->room_data->visitors_max = max_visitors;
+			}
+		} else if (strcmp(key, "password") == 0) {
+			free(room->room_data->password);
+			room->room_data->password = strdup(value);
+
+		}
 
 		free(setting_data);
 		free(key);
 		free(value);
 	}
 
-	free(copy);
-	free(content);
+	room_query_save(room);
+
+	cleanup:
+		free(argument);
+		free(copy);
+		free(content);
 }

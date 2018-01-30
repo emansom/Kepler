@@ -192,6 +192,29 @@ void room_query_get_categories() {
     sqlite3_close(conn);
 }
 
-void room_query_save(int room_id, char *description, int allsuperuser, int max_visitors, char *password) {
+void room_query_save(room *room) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
 
+    int status = sqlite3_prepare(conn, "UPDATE rooms SET category = ?, name = ?, description = ?, wallpaper = ?, floor = ?, showname = ?, superusers = ?, accesstype = ?, password = ?, visitors_max = ? WHERE id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, room->room_data->category);
+        sqlite3_bind_text(stmt, 2, room->room_data->name, strlen(room->room_data->name), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, room->room_data->description, strlen(room->room_data->description), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 4, room->room_data->wall);
+        sqlite3_bind_int(stmt, 5, room->room_data->floor);
+        sqlite3_bind_int(stmt, 6, room->room_data->show_name);
+        sqlite3_bind_int(stmt, 7, room->room_data->superusers);
+        sqlite3_bind_int(stmt, 8, room->room_data->accesstype);
+        sqlite3_bind_text(stmt, 9, room->room_data->password, strlen(room->room_data->password), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 10, room->room_data->visitors_max);
+        sqlite3_bind_int(stmt, 11, room->room_data->id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_step(stmt);
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
 }

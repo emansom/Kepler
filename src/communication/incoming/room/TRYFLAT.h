@@ -5,14 +5,30 @@
 #include "game/room/room_manager.h"
 
 void TRYFLAT(player *player, incoming_message *message) {
+    int room_id = 0;
+    
     char *content = im_get_content(message);
+    char *password = NULL;
 
-    if (!is_numeric(content)) {
-        free(content);
-        return;
+    if (strstr(content, "/") != NULL) {
+        char *temp = get_argument(content, "/", 0);
+
+        if (!is_numeric(temp)) {
+            free(temp);
+            goto cleanup;
+            return;
+        }
+
+        room_id = strtol(content, NULL, 10);
+        password = get_argument(content, "/", 1);
+    } else {
+        if (!is_numeric(content)) {
+            goto cleanup;
+            return;
+        }
     }
 
-    room *room = room_manager_get_by_id(strtol(content, NULL, 10));
+    room *room = room_manager_get_by_id(room_id);
 
     if (room != NULL) { 
         outgoing_message *interest = om_create(41); // "@i"
@@ -20,5 +36,6 @@ void TRYFLAT(player *player, incoming_message *message) {
         om_cleanup(interest);
     }
 
-    free(content);
+    cleanup:
+        free(content);
 }

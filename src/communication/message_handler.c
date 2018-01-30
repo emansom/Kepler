@@ -80,7 +80,7 @@ void mh_add_messages() {
     message_requests[21] = GETFLATINFO;
     message_requests[182] = GETINTERST;
     message_requests[2] = room_directory;
-    message_requests[57] = TRYFLAT;
+    message_requests[57] = TRYFLAT; // @y1052/123
     message_requests[59] = GOTOFLAT;
     message_requests[126] = GETROOMAD;
     message_requests[60] = G_HMAP;
