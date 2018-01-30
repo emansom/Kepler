@@ -4,7 +4,7 @@ project(Kepler C)
 set(EXECUTABLE_NAME Kepler)
 set(CMAKE_C_STANDARD 11)
 set(PROJECT_DIR src)
-set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_BUILD_TYPE Debug)
 
 INCLUDE_DIRECTORIES(src)
 
