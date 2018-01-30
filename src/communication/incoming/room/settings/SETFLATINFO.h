@@ -46,7 +46,7 @@ void SETFLATINFO(player *player, incoming_message *message) {
 		} else if (strcmp(key, "allsuperuser") == 0) {
 			if (is_numeric(value)) {
 				int allsuperuser = strtol(value, NULL, 10);
-				room->room_data->superusers = allsuperuser;
+				room->room_data->superusers = (allsuperuser == 1);
 			}
 
 		} else if (strcmp(key, "maxvisitors") == 0) {
