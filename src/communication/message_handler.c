@@ -44,7 +44,10 @@
 #include "communication/incoming/room/user/WALK.h"
 #include "communication/incoming/room/user/CHAT.h"
 #include "communication/incoming/room/user/SHOUT.h"
-#include "communication/incoming/room/user/CREATEFLAT.h"
+
+// Room settings
+#include "communication/incoming/room/settings/CREATEFLAT.h"
+#include "communication/incoming/room/settings/SETFLATINFO.h"
 
 /**
  * Assigns all header handlers to this array
@@ -88,11 +91,14 @@ void mh_add_messages() {
     message_requests[213] = GET_FURNI_REVISIONS;
 
     // Room user
-    message_requests[29] = CREATEFLAT;
     message_requests[53] = QUIT;
     message_requests[75] = WALK;
     message_requests[52] = CHAT;
     message_requests[55] = SHOUT;
+
+    // Room settings
+    message_requests[29] = CREATEFLAT;
+    message_requests[25] = SETFLATINFO;
 }
 
 /**

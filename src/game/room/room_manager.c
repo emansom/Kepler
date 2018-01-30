@@ -20,7 +20,7 @@ void room_manager_init() {
  * Add public rooms to the manager
  */
 void room_manager_add_public_rooms() {
-    List *rooms = room_query_get_by_id(0);
+    List *rooms = room_query_get_by_owner_id(0);
 
     ListIter iter;
     list_iter_init(&iter, rooms);
@@ -35,12 +35,21 @@ void room_manager_add_public_rooms() {
     list_destroy(rooms);
 }
 
+void room_manager_add(int room_id) {
+    if (hashtable_contains_key(global.room_manager.rooms, &room_id)) {
+        return;
+    }
+
+    room *room = room_query_get_by_room_id(room_id);
+    hashtable_add(global.room_manager.rooms, &room->room_id, room);
+}
+
 /*
  * Add rooms by user id, will check if the room exists
  * before adding a new room.
  */
 void room_manager_add_by_user_id(int user_id) {
-    List *rooms = room_query_get_by_id(user_id);
+    List *rooms = room_query_get_by_owner_id(user_id);
 
     /*ListIter iter;
     list_iter_init(&iter, rooms);

@@ -20,11 +20,6 @@ void CREATEFLAT(player *player, incoming_message *message) {
 		return;
 	}
 
-	if (strcmp(room_name, "pepe the frog") == 0) {
-		goto cleanup;
-		return;
-	}
-
 	room_model *model = model_manager_get(room_select_model);
 
 	if (model == NULL) {
@@ -37,11 +32,14 @@ void CREATEFLAT(player *player, incoming_message *message) {
 		return;
 	}
 
-	// TODO: Check model permissions
-	printf("Room creation success.\n");
+	int room_id = query_room_create(player->player_data->id, room_name, room_select_model, room_setting, room_show_name);
+	room_manager_add(room_id);
 
-	int room_id = query_room_create(room_name, room_select_model, room_setting, room_show_name);
-	printf("room id: %i\n", room_id);
+	outgoing_message *om = om_create(59); // "@{"
+	sb_add_int(om->sb, room_id);
+    sb_add_char(om->sb, 13);
+    sb_add_string(om->sb, room_name);
+	player_send(player, om);
 
 	cleanup:
 		free(floor_setting);

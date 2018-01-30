@@ -10,6 +10,7 @@ struct room_manager {
 };
 
 void room_manager_init();
+void room_manager_add(int);
 void room_manager_add_by_user_id(int);
 List *room_manager_get_by_user_id(int);
 room *room_manager_get_by_id(int);

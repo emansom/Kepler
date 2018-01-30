@@ -77,15 +77,6 @@ void process_user(player *player) {
 			deque_remove_first(room_user->walk_list, (void*)&next);
 			next->z = room_user->room->room_data->model_data->heights[next->x][next->y];
 
-			/*room_tile *tile = room_user->room->room_map->map[next->x][next->y];
-
-			if (tile != NULL && tile->highest_item != NULL) {
-				if (tile->highest_item->can_sit) {
-					stop_walking(room_user, tile->highest_item);
-					return;
-				}
-			}*/
-
 			char value[30];
 			sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
 
