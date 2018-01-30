@@ -192,7 +192,7 @@ void room_query_get_categories() {
     sqlite3_close(conn);
 }
 
-void room_query_save(room *room) {
+void query_room_save(room *room) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 

@@ -10,6 +10,6 @@ room *room_query_get_by_room_id(int);
 
 void room_query_get_models();
 void room_query_get_categories();
-void room_query_save(room*);
+void query_room_save(room*);
 
 #endif

@@ -70,7 +70,7 @@ void SETFLATINFO(player *player, incoming_message *message) {
 		free(value);
 	}
 
-	room_query_save(room);
+	query_room_save(room);
 
 	cleanup:
 		free(argument);
