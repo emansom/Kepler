@@ -13,12 +13,10 @@ char *get_argument(char *str, char *delim, int index) {
     int i = 0;
 
     for (char *token = strtok(copy, delim); token; token = strtok(NULL, delim)) {
-        if (i == index) {
+        if (i++ == index) {
             value = strdup(token);
             break;
         }
-
-        i++;
     }
 
     free(copy);
