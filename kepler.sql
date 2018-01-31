@@ -10,8 +10,6 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`tickets`	int ( 11 ) NOT NULL DEFAULT '0',
 	`film`	int ( 11 ) NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1100120501270012900125504','M','the kepler way',1337,0,0);
-INSERT INTO `users` VALUES (2,'al0x','123','1000118001270012900121001','M','de kepler whey',200,0,0);
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -195,6 +193,4 @@ INSERT INTO `rooms` VALUES (1045,0,6,'Ice Cafe','ice_cafe','ice_cafe','hh_room_i
 INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_netcafe',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,0,'false',0,'',0,100);
-INSERT INTO `rooms` VALUES (1054,1,118,'alex''s room','LOL!! XD1!!','model_j',NULL,0,0,0,0,0,'',0,50);
-INSERT INTO `rooms` VALUES (1055,1,116,'test room','hahaha lol ok m8xdd','model_b',NULL,0,0,1,0,0,'',0,25);
 COMMIT;
