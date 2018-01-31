@@ -8,7 +8,12 @@ void UPDATE(player *player, incoming_message *message) {
 	content = im_read_str(message);
 
 	if (content != NULL) {
-		printf("figure: %s\n", content);
+		if (is_numeric(content)) {
+			free(player->player_data->figure);
+			player->player_data->figure = strdup(content);
+			printf("figure: %s\n", player->player_data->figure);
+		}
+
 		free(content);
 	}
 
@@ -16,7 +21,15 @@ void UPDATE(player *player, incoming_message *message) {
 	content = im_read_str(message);
 
 	if (content != NULL) {
-		printf("figure: %s\n", content);
+		if ((content[0] == 'M' || content[0] == 'F') && strlen(content) == 1) {
+			char *sex = strdup(content);
+
+			free(player->player_data->sex);
+			player->player_data->sex = sex;
+
+			printf("sex updated\n");
+		}
+
 		free(content);
 	}
 
@@ -24,7 +37,8 @@ void UPDATE(player *player, incoming_message *message) {
 	content = im_read_str(message);
 
 	if (content != NULL) {
-		printf("figure: %s\n", content);
+		char *motto = strdup(content);
+
 		free(content);
 	}
 }

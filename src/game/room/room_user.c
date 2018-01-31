@@ -211,6 +211,7 @@ void append_user_list(outgoing_message *players, player *player) {
     om_write_str_kv(players, "a", instance_id);
     om_write_str_kv(players, "n", player->player_data->username);
     om_write_str_kv(players, "f", player->player_data->figure);
+    om_write_str_kv(players, "s", player->player_data->sex);
     sb_add_string(players->sb, "l");
     sb_add_string(players->sb, ":");
     sb_add_int(players->sb, player->room_user->current->x);

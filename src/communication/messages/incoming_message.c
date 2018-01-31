@@ -12,7 +12,6 @@ incoming_message *im_create(char *message) {
     im->counter = 0;
     im->header = im_read_b64(im);
     im->header_id = base64_decode(im->header);
-    printf("message: %i\n", strlen(message));
     im->total_length = strlen(message) - 2;
 
 }
