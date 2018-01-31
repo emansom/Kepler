@@ -12,7 +12,7 @@ incoming_message *im_create(char *message) {
     im->counter = 0;
     im->header = im_read_b64(im);
     im->header_id = base64_decode(im->header);
-    im->total_length = strlen(message) - 2;
+    im->total_length = strlen(message);
 
 }
 
@@ -23,7 +23,7 @@ incoming_message *im_create(char *message) {
  * @return the base64 value
  */
 char *im_read_b64(incoming_message *im) {
-    if (im->counter > im->total_length) {
+    if ((im->counter - 2) > im->total_length) {
         return NULL;
     }
 
@@ -43,7 +43,7 @@ char *im_read_b64(incoming_message *im) {
  * @return the integer
  */
 int im_read_b64_int(incoming_message *im) {
-    if (im->counter > im->total_length) {
+    if ((im->counter - 2) > im->total_length) {
         return -1;
     }
 
@@ -63,8 +63,8 @@ int im_read_b64_int(incoming_message *im) {
  * @return the integer value
  */
 int im_read_vl64(incoming_message *im) {
-    if (im->counter > im->total_length) {
-        return 0;
+    if ((im->counter - 2) > im->total_length) {
+        return -1;
     }
 
     int length;
@@ -73,6 +73,7 @@ int im_read_vl64(incoming_message *im) {
     strncpy(data, im->data + im->counter, strlen(im->data));
 
     int val = vl64_decode(data, &length);
+    printf("l: %i, d: %i, tl: %i \n", im->counter, length, im->total_length);
     im->counter += length;
 
     return val;
@@ -85,7 +86,7 @@ int im_read_vl64(incoming_message *im) {
  * @return the integer value
  */
 char *im_get_content(incoming_message *im) {
-    if (im->counter > im->total_length) {
+    if ((im->counter - 2) > im->total_length) {
         return NULL;
     }
 

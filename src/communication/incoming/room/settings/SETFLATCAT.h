@@ -7,6 +7,10 @@ void SETFLATCAT(player *player, incoming_message *message) {
 
 	room_category *category = category_manager_get_by_id(category_id);
 
+	if (category == NULL) {
+		return;
+	}
+
 	if (category->public_spaces) {
 		return;
 	}
@@ -22,6 +26,7 @@ void SETFLATCAT(player *player, incoming_message *message) {
 	}
 
 	// TODO: Check category min ranks
+
 	if (player->player_data->rank >= category->minrole_setflatcat) {
 		room->room_data->category = category_id;
 		query_room_save(room);
