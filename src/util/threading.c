@@ -22,7 +22,7 @@ void do_room_task(runnable *run){
 		run->request(room);
 		usleep(500*1000);
 
-		if (room_manager_get_by_id(run->room_id)) {
+		if (room_manager_get_by_id(run->room_id) != NULL) {
 			thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
 		} else {
 			room->walking_job = NULL;
