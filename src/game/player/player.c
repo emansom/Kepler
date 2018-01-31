@@ -128,18 +128,20 @@ void player_cleanup(player *player) {
         room_leave(player->room_user->room, player);
     }
 
-    List *rooms = room_manager_get_by_user_id(player->player_data->id);
+    if (player->player_data != NULL) {
+        List *rooms = room_manager_get_by_user_id(player->player_data->id);
 
-    for (int i = 0; i < list_size(rooms); i++) {
-        room *room;
-        list_get_at(rooms, i, (void*)&room);
+        for (int i = 0; i < list_size(rooms); i++) {
+            room *room;
+            list_get_at(rooms, i, (void*)&room);
 
-        if (room != NULL) {
-            room_dispose(room);
+            if (room != NULL) {
+                room_dispose(room);
+            }
         }
-    }
 
-    list_destroy(rooms);
+        list_destroy(rooms);
+    }
 
     if (player->room_user != NULL) {
         room_user_cleanup(player->room_user);
