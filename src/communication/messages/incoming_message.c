@@ -44,7 +44,7 @@ char *im_read_b64(incoming_message *im) {
  */
 int im_read_b64_int(incoming_message *im) {
     if (im->counter > im->total_length) {
-        return 0;
+        return -1;
     }
 
     char data[] = {

@@ -169,3 +169,29 @@ int query_player_create(char *username, char *figure, char *gender, char *passwo
 
     return (int)sqlite3_last_insert_rowid(conn);
 }
+
+void query_player_save(player *player) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "UPDATE users SET figure = ?, sex = ?, motto = ?, credits = ?, tickets = ?, film = ? WHERE id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, player->player_data->figure, strlen(player->player_data->figure), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, player->player_data->sex, strlen(player->player_data->sex), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, player->player_data->motto, strlen(player->player_data->motto), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 4, player->player_data->credits);
+        sqlite3_bind_int(stmt, 5, player->player_data->tickets);
+        sqlite3_bind_int(stmt, 6, player->player_data->film);
+        sqlite3_bind_int(stmt, 7, player->player_data->id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+}
