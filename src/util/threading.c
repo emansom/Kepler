@@ -15,13 +15,19 @@
 void do_room_task(runnable *run){
 	room *room = run->room;
 
-	if (list_size(room->users) == 0 || run->cancel) {
+	if (run->cancel || list_size(room->users) == 0) {
 		room->walking_job = NULL;
 		free(run);
 	} else {
 		run->request(room);
 		usleep(500*1000);
-		thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
+
+		if (room_manager_get_by_id(run->room_id)) {
+			thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
+		} else {
+			room->walking_job = NULL;
+			free(run);
+		}
 	}
 }
 
@@ -33,6 +39,7 @@ void create_thread_pool() {
 runnable *create_runnable() {
 	runnable *r = malloc(sizeof(runnable));
 	r->room = NULL;
+	r->room_id = 0;
 	r->request = NULL;
 	r->self = r;
 	r->cancel = 0;

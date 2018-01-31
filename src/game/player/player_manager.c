@@ -29,7 +29,6 @@ player *player_manager_add(void *stream, char *ip) {
  */
 void player_manager_remove(player *p) {
     if (list_contains(global.player_manager.players, p)) {
-        printf("lol\n");
         list_remove(global.player_manager.players, p, NULL);
     }
 }

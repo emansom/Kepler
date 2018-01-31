@@ -139,6 +139,7 @@ void room_enter(room *room, player *player) {
         room->walking_job = create_runnable();
         room->walking_job->request = walk_task;
         room->walking_job->room = room;
+        room->walking_job->room_id = room->room_id;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
     }
 }

@@ -145,8 +145,6 @@ void player_cleanup(player *player) {
         room_user_cleanup(player->room_user);
     }
 
-    printf("player disposed\n");
-
     if (player->player_data != NULL) {
         free(player->player_data->username);
         free(player->player_data->figure);
