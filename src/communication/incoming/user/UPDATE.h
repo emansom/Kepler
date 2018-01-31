@@ -9,7 +9,7 @@ void UPDATE(player *player, incoming_message *message) {
 			char *content = im_read_str(message);
 			
 			if (content != NULL) {
-				if (is_numeric(content)) {
+				if (is_numeric(content) && strlen(content) == 25) {
 					free(player->player_data->figure);
 					player->player_data->figure = content;
 				} else {

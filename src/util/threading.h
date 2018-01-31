@@ -17,6 +17,7 @@ typedef struct runnable_s {
     thread_request request;
     runnable *self;
     room *room;
+    int cancel;
 } runnable;
 
 void do_room_task(runnable*);

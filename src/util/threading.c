@@ -15,7 +15,7 @@
 void do_room_task(runnable *run){
 	room *room = run->room;
 
-	if (list_size(room->users) == 0) {
+	if (list_size(room->users) == 0 || run->cancel) {
 		room->walking_job = NULL;
 		free(run);
 	} else {
@@ -35,5 +35,6 @@ runnable *create_runnable() {
 	r->room = NULL;
 	r->request = NULL;
 	r->self = r;
+	r->cancel = 0;
 	return r;
 }

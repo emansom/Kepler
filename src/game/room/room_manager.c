@@ -116,3 +116,9 @@ room *room_manager_get_by_id(int room_id) {
 
     return room;
 }
+
+void room_manager_remove(int room_id) {
+    if (hashtable_contains_key(global.room_manager.rooms, &room_id)) {
+        hashtable_remove(global.room_manager.rooms, &room_id, NULL);
+    }
+}

@@ -162,6 +162,7 @@ void room_leave(room *room, player *room_player) {
     room_send(room, om);
 
     room_player->room_user->room = NULL;
+    room_dispose(room);
 }
 
 /**
@@ -216,7 +217,21 @@ void room_send(room *room, outgoing_message *message) {
  * 
  * @param room the room instance.
  */
-void room_cleanup(room *room) {
+void room_dispose(room *room) {
+    if (list_size(room->users) > 0) {
+        return;
+    }
+
+    if (list_size(room->public_items) > 0) {
+        return; // Prevent public rooms
+    }
+
+    if (player_manager_find_by_id(room->room_data->owner_id) != NULL) {
+        return;
+    }
+
+    room_manager_remove(room->room_id);
+
     if (room->room_data != NULL) {
         free(room->room_data->name);
         free(room->room_data->owner_name);
@@ -232,6 +247,7 @@ void room_cleanup(room *room) {
     room->users = NULL;
     room->public_items = NULL;
     room->walking_job = NULL;
-
+    
     free(room);
+    room = NULL;
 }

@@ -4,6 +4,7 @@
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
+#include "game/room/room_manager.h"
 
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
@@ -11,6 +12,7 @@
 #include "server/server_listener.h"
 
 #include "uv.h"
+#include "list.h"
 
 /**
  * Creates a new player
@@ -120,13 +122,30 @@ void player_cleanup(player *player) {
         return;
     }
 
+    player_manager_remove(player);
+
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player);
     }
 
+    List *rooms = room_manager_get_by_user_id(player->player_data->id);
+
+    for (int i = 0; i < list_size(rooms); i++) {
+        room *room;
+        list_get_at(rooms, i, (void*)&room);
+
+        if (room != NULL) {
+            room_dispose(room);
+        }
+    }
+
+    list_destroy(rooms);
+
     if (player->room_user != NULL) {
         room_user_cleanup(player->room_user);
     }
+
+    printf("player disposed\n");
 
     if (player->player_data != NULL) {
         free(player->player_data->username);
