@@ -10,6 +10,7 @@
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_model_manager.h"
 
+#include "game/navigator/navigator_category.h"
 #include "game/navigator/navigator_category_manager.h"
 
 #include "database/queries/room_query.h"
@@ -177,12 +178,14 @@ void room_query_get_categories() {
             break;
         }
 
-        room_category *category = category_manager_create(
+        room_category *category = category_create(
             sqlite3_column_int(stmt, 0),
             sqlite3_column_int(stmt, 1),
             (char*)sqlite3_column_text(stmt, 2),
             sqlite3_column_int(stmt, 3),
-            sqlite3_column_int(stmt, 4)
+            sqlite3_column_int(stmt, 4),
+            sqlite3_column_int(stmt, 5),
+            sqlite3_column_int(stmt, 6)
         );
 
         category_manager_add(category);

@@ -7,6 +7,8 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/room_query.h"
+
+#include "navigator_category.h"
 #include "navigator_category_manager.h"
 
 #include "game/player/player.h"
@@ -17,33 +19,6 @@
 void category_manager_init() {
     hashtable_new(&global.room_category_manager.categories);
     room_query_get_categories();
-}
-
-/**
- * Create a navigator category.
- * 
- * @param id the category id
- * @param parent_id the parent id
- * @param name the name of the category
- * @param public_spaces the public spaces
- * @param allow_trading does this category allow trading
- * @return the created navigator navigator
- */
-room_category *category_manager_create(int id, int parent_id, char *name, int public_spaces, int allow_trading) {
-    room_category *category = malloc(sizeof(room_category));
-    category->id = id;
-    category->parent_id = parent_id;
-    category->name = strdup(name);
-    category->public_spaces = public_spaces;
-    category->allow_trading = allow_trading;
-
-    if (public_spaces == 0) {
-        category->category_type = PRIVATE;
-    } else {
-        category->category_type = PUBLIC;
-    }
-
-    return category;
 }
 
 /**
@@ -104,17 +79,6 @@ List *category_manager_flat_categories() {
 List *category_manager_get_by_parent_id(int category_id) {
     List *sub_categories;
     list_new(&sub_categories);
-
-    /*ListIter iter;
-
-    list_iter_init(&iter, global.room_category_manager.categories);
-    room_category *category;
-
-    while (list_iter_next(&iter, (void*) &category) != CC_ITER_END) {
-        if (category->parent_id == category_id) {
-            list_add(sub_categories, category);
-        }
-    }*/
 
     HashTableIter iter;
     hashtable_iter_init(&iter, global.room_category_manager.categories);

@@ -13,6 +13,7 @@ typedef struct player_data_s {
     char *sex;
     int tickets;
     int film;
+    int rank;
 } player_data;
 
 typedef struct player_s {
@@ -25,7 +26,7 @@ typedef struct player_s {
 
 
 player *player_create(void*, char*);
-player_data *player_create_data(int, char*, char*, int, char*, char*, int, int);
+player_data *player_create_data(int, char*, char*, int, char*, char*, int, int, int);
 void player_login(player*);
 
 void player_cleanup(player*);

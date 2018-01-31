@@ -106,7 +106,7 @@ player_data *query_player_data(int id) {
     sqlite3_stmt *stmt;
 
     player_data *player_data = NULL;
-    int status = sqlite3_prepare(conn, "SELECT id,username,figure,credits,motto,sex,tickets,film FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id,username,figure,credits,motto,sex,tickets,film,rank FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, id);
@@ -125,7 +125,8 @@ player_data *query_player_data(int id) {
             (char*)sqlite3_column_text(stmt, 4),
             (char*)sqlite3_column_text(stmt, 5),
             sqlite3_column_int(stmt, 6),
-            sqlite3_column_int(stmt, 7)
+            sqlite3_column_int(stmt, 7),
+            sqlite3_column_int(stmt, 8)
         );
     }
 

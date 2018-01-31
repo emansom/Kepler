@@ -32,7 +32,7 @@ player *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *figure, int credits, char *motto, char *sex, int tickets, int film) {
+player_data *player_create_data(int id, char *username, char *figure, int credits, char *motto, char *sex, int tickets, int film, int rank) {
     player_data *data = malloc(sizeof(player_data));
     data->id = id;
     data->username = strdup(username);
@@ -42,6 +42,7 @@ player_data *player_create_data(int id, char *username, char *figure, int credit
     data->sex = strdup(sex);
     data->tickets = tickets;
     data->film = film;
+    data->rank = rank;
     return data;
 }
 
