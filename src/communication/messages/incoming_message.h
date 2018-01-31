@@ -8,6 +8,7 @@ typedef struct {
     char *data;
     int counter;
     int header_id;
+    int total_length;
 } incoming_message;
 
 incoming_message *im_create(char*);

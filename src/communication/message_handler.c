@@ -19,6 +19,7 @@
 // User
 #include "communication/incoming/user/GET_INFO.h"
 #include "communication/incoming/user/GET_CREDITS.h"
+#include "communication/incoming/user/UPDATE.h"
 
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
@@ -72,6 +73,7 @@ void mh_add_messages() {
     // User
     message_requests[7] = GET_INFO;
     message_requests[8] = GET_CREDITS;
+    message_requests[44] = UPDATE;
 
     // Navigator
     message_requests[150] = NAVIGATE;
