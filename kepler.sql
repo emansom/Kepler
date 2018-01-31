@@ -6,9 +6,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`figure`	TEXT NOT NULL,
 	`sex`	TEXT NOT NULL DEFAULT 'M',
 	`motto`	TEXT NOT NULL DEFAULT 'de kepler whey',
-	`credits`	int ( 11 ) NOT NULL DEFAULT '200',
-	`tickets`	int ( 11 ) NOT NULL DEFAULT '0',
-	`film`	int ( 11 ) NOT NULL DEFAULT '0'
+	`credits`	INTEGER NOT NULL DEFAULT 200,
+	`tickets`	INTEGER NOT NULL DEFAULT 0,
+	`film`	INTEGER NOT NULL DEFAULT 0,
+	`rank`	INTEGER NOT NULL DEFAULT 1
 );
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
@@ -91,14 +92,14 @@ INSERT INTO `rooms_models` VALUES ('ice_cafe','taivas_cafe',17,23,0.0,0,'xx11111
 INSERT INTO `rooms_models` VALUES ('netcafe','netcafe',22,12,0.0,6,'xxxxx1111xxxxxxxxxxx1xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxxxxx0000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|xxxx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx111000000000000000000|x1xx111000000000000000000|xxxx111000000000000000000|xxxx11100000000000000xxxx|xxxx1110000000xx11111xxxx|xxxxx111110000x111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxx1111100001111111xxxx|',1);
 CREATE TABLE IF NOT EXISTS `rooms_categories` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`order_id`	int ( 11 ) NOT NULL,
-	`parent_id`	int ( 4 ) NOT NULL,
-	`isnode`	INT NOT NULL DEFAULT '0',
+	`order_id`	INTEGER NOT NULL,
+	`parent_id`	INTEGER NOT NULL,
+	`isnode`	INTEGER NOT NULL DEFAULT 0,
 	`name`	TEXT NOT NULL,
-	`public_spaces`	INT ( 1 ) NOT NULL DEFAULT '0',
-	`allow_trading`	INT ( 1 ) NOT NULL DEFAULT '0',
-	`minrole_access`	int ( 1 ) NOT NULL DEFAULT '1',
-	`minrole_setflatcat`	int ( 1 ) NOT NULL DEFAULT '1'
+	`public_spaces`	INTEGER NOT NULL DEFAULT 0,
+	`allow_trading`	INTEGER NOT NULL DEFAULT 0,
+	`minrole_access`	INTEGER NOT NULL DEFAULT 1,
+	`minrole_setflatcat`	INTEGER NOT NULL DEFAULT 1
 );
 INSERT INTO `rooms_categories` VALUES (2,0,0,0,'No category',0,0,1,1);
 INSERT INTO `rooms_categories` VALUES (3,0,0,1,'Public Rooms',1,0,1,6);

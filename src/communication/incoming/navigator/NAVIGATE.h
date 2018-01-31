@@ -15,7 +15,7 @@ void NAVIGATE(player *player, incoming_message *message) {
     room_category *parent_category = category_manager_get_by_id(category_id);
     outgoing_message *navigator = om_create(220); // "C\"
 
-    if (parent_category != NULL) {
+    if (parent_category != NULL && category_has_access(parent_category, player->player_data->rank)) {
         om_write_int(navigator, hide_full);
         om_write_int(navigator, category_id);
 
@@ -39,7 +39,7 @@ void NAVIGATE(player *player, incoming_message *message) {
             room *instance;
             list_get_at(rooms, i, (void*)&instance);
 
-            category_manager_serialise(navigator, instance, parent_category->category_type, player);
+            category_serialise(navigator, instance, parent_category->category_type, player);
         }
 
         List *child_categories = category_manager_get_by_parent_id(parent_category->id);
@@ -48,12 +48,17 @@ void NAVIGATE(player *player, incoming_message *message) {
             room_category *category;
             list_get_at(child_categories, i, (void*)&category);
 
-            om_write_int(navigator, category->id);
-            om_write_int(navigator, 0);//category->category_type); // current visitors
-            om_write_str(navigator, category->name);
-            om_write_int(navigator, category_manager_get_current_vistors(category->id)); // current visitors
-            om_write_int(navigator, category_manager_get_max_vistors(category->id)); // max visitorss
-            om_write_int(navigator, parent_category->id); 
+            int current_visitors = category_manager_get_current_vistors(category->id);
+            int max_visitors = category_manager_get_max_vistors(category->id);
+
+            if (category_has_access(category, player->player_data->rank) && (!hide_full || current_visitors < max_visitors)) {
+                om_write_int(navigator, category->id);
+                om_write_int(navigator, 0);
+                om_write_str(navigator, category->name);
+                om_write_int(navigator, current_visitors);
+                om_write_int(navigator, max_visitors); 
+                om_write_int(navigator, parent_category->id); 
+            }
         }
 
         list_destroy(rooms);

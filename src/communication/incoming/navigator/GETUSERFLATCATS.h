@@ -9,15 +9,30 @@
 void GETUSERFLATCATS(player *player, incoming_message *message) {
     outgoing_message *navigator = om_create(221); // "C]"
 
+    // Count categories that this user can actually access
     List *categories = category_manager_flat_categories();
-    om_write_int(navigator, list_size(categories)); // category count
+    int accessible_categories = 0;
 
     for (int i = 0; i < list_size(categories); i++) {
         room_category *category;
         list_get_at(categories, i, (void*)&category);
 
-        om_write_int(navigator, category->id); // category id
-        om_write_str(navigator, category->name); // category name
+        if (player->player_data->rank >= category->minrole_setflatcat) {
+            accessible_categories++;
+        }
+    }
+
+    // Start appending accessible categories
+    om_write_int(navigator, accessible_categories); // category count
+
+    for (int i = 0; i < list_size(categories); i++) {
+        room_category *category;
+        list_get_at(categories, i, (void*)&category);
+
+        if (player->player_data->rank >= category->minrole_setflatcat) {
+            om_write_int(navigator, category->id); // category id
+            om_write_str(navigator, category->name); // category name
+        }
     }
 
     player_send(player, navigator);
