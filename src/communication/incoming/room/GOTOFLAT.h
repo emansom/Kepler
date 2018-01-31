@@ -14,7 +14,6 @@ void GOTOFLAT(player *player, incoming_message *message) {
     room *room = room_manager_get_by_id(strtol(content, NULL, 10));
 
     if (room != NULL) { 
-        printf("GOTOFLAT.c flat entry\n");
         room_enter(room, player);
         room_load(room, player);
     }

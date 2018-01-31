@@ -73,7 +73,6 @@ int im_read_vl64(incoming_message *im) {
     strncpy(data, im->data + im->counter, strlen(im->data));
 
     int val = vl64_decode(data, &length);
-    printf("l: %i, d: %i, tl: %i \n", im->counter, length, im->total_length);
     im->counter += length;
 
     return val;
