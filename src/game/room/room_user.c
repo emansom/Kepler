@@ -104,7 +104,7 @@ void stop_walking(room_user *room_user, item *item) {
         }
     } else {
         if (item->can_sit) {
-            room_user_add_status(room_user, "sit", " 1.0");
+            room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
             room_user->head_rotation = item->rotation;
             room_user->body_rotation = item->rotation;
             needs_update = 1;
@@ -117,16 +117,27 @@ void stop_walking(room_user *room_user, item *item) {
 }
 
 
-void room_user_add_status(room_user *room_user, char *key, char *value) {
+void room_user_add_status(room_user *room_user, char *key, char *value, int sec_lifetime, char *action, int sec_action_switch, int sec_action_length) {
     room_user_remove_status(room_user, key);
-    hashtable_add(room_user->statuses, key, strdup(value));
+
+    room_user_status *status = malloc(sizeof(room_user_status));
+    status->value = strdup(value);
+    status->sec_lifetime = sec_lifetime;
+    status->lifetime_expire = sec_lifetime;
+    status->action = strdup(action);
+    status->sec_action_switch = sec_action_switch;
+    status->sec_action_length = sec_action_length;
+    status->action_expire = sec_action_length;
+    hashtable_add(room_user->statuses, key, status);
 }
 
 
 void room_user_remove_status(room_user *room_user, char *key) {
     if (hashtable_contains_key(room_user->statuses, key)) {
-        char *cleanup;
+        room_user_status *cleanup;
         hashtable_remove(room_user->statuses, key, (void*)&cleanup);
+        free(cleanup->value);
+        free(cleanup->action);
         free(cleanup);
     }
 }
@@ -248,12 +259,13 @@ void append_user_status(outgoing_message *om, player *player) {
         hashtable_get_keys(player->room_user->statuses, &keys);
 
         for (int i = 0; i < array_size(keys); i++) {
-            char *key, *value;
+            char *key;
+            room_user_status *rus;
             array_get_at(keys, i, (void*)&key);
-            hashtable_get(player->room_user->statuses, key, (void*)&value);
+            hashtable_get(player->room_user->statuses, key, (void*)&rus);
 
             sb_add_string(om->sb, key);
-            sb_add_string(om->sb, value);
+            sb_add_string(om->sb, rus->value);
             sb_add_string(om->sb, "/");
         }    
     }

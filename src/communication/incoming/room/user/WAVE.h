@@ -12,6 +12,11 @@ void WAVE(player *player, incoming_message *im) {
         return;
     }
 
+    if (!room_user_has_status(player->room_user, "wave")) {
+        room_user_add_status(player->room_user, "wave", "", 2, "", 0, 0);
+        player->room_user->needs_update = 1;
+    }
+
     /*if (!room_user_has_status(player->room_user, "wave")) {
         thpool_add_work(global.thread_manager.pool, (void*)wave_task, player->room_user);
     }*/

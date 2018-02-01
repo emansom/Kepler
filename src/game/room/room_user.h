@@ -23,14 +23,15 @@ typedef struct room_user_s {
     HashTable *statuses;
 } room_user;
 
-typedef struct room_status_s {
-    char *key;
+typedef struct room_user_status_s {
     char *value;
     int sec_lifetime;
     char *action;
     int sec_action_switch;
     int sec_action_length;
-} room_status;
+    int action_expire;
+    int lifetime_expire;
+} room_user_status;
 
 room_user *room_user_create();
 void walk_to(room_user*, int, int);
@@ -41,7 +42,7 @@ void append_user_status(outgoing_message*, player*);
 void room_user_reset(room_user*);
 void room_user_cleanup(room_user*);
 
-void room_user_add_status(room_user*,char*,char*);
+void room_user_add_status(room_user*,char*,char*,int,char*,int,int);
 void room_user_remove_status(room_user*,char*);
 int room_user_has_status(room_user*, char*);
 #endif

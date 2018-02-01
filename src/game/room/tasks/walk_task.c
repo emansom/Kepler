@@ -84,7 +84,7 @@ void process_user(player *player) {
 			room_user->body_rotation = rotation;
 			room_user->head_rotation = rotation;
 
-			room_user_add_status(room_user, "mv", value);
+			room_user_add_status(room_user, "mv", value, -1, "", 0, 0);
 			room_user->next = next;
 
 
