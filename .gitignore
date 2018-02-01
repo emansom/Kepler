@@ -9,5 +9,5 @@ cmake_install.cmake
 Makefile
 .vscode/
 Kepler
-Kepler.cbd
+Kepler.cbp
 Kepler.db

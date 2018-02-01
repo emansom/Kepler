@@ -89,7 +89,22 @@ void room_user_clear_walk_list(room_user *room_user) {
     }
 }
 
-void stop_walking(room_user *room_user, item *item) {
+/**
+ * Forcibly stops the user from walking, will clear/update statuses and auto manage memory.
+ *
+ * @param room_user the room user
+ */
+void stop_walking(room_user *room_user) {
+    item *item = NULL;
+
+    room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
+
+    if (tile != NULL) {
+        if (tile->highest_item != NULL) {
+            item = tile->highest_item;
+        }
+    }
+
     room_user_remove_status(room_user, "mv");
     room_user_clear_walk_list(room_user);
 
@@ -115,7 +130,18 @@ void stop_walking(room_user *room_user, item *item) {
     room_user->is_walking = 0;
 }
 
-
+/**
+ * Adds a status to the room user, will handle switching actions automatically in the status task.
+ * Will automatically remove and free the previous status.
+ *
+ * @param room_user the room user
+ * @param key the first part to the status
+ * @param value the second part to the status
+ * @param sec_lifetime seconds until the status expires, -1 for permanent
+ * @param action the action to switch to
+ * @param sec_action_switch the amount of seconds needed until the action gets switched
+ * @param sec_action_length the amount of seconds needed for the action to stay until the action switches back
+ */
 void room_user_add_status(room_user *room_user, char *key, char *value, int sec_lifetime, char *action, int sec_action_switch, int sec_action_length) {
     room_user_remove_status(room_user, key);
 
@@ -130,7 +156,13 @@ void room_user_add_status(room_user *room_user, char *key, char *value, int sec_
     hashtable_add(room_user->statuses, key, status);
 }
 
-
+/**
+ * Removes a status of the room user by status key. Will
+ * automatically remove and free the previous status.
+ *
+ * @param room_user the room user
+ * @param key the key to remove
+ */
 void room_user_remove_status(room_user *room_user, char *key) {
     if (hashtable_contains_key(room_user->statuses, key)) {
         room_user_status *cleanup;
@@ -141,6 +173,13 @@ void room_user_remove_status(room_user *room_user, char *key) {
     }
 }
 
+/**
+ * Returns if the user currently has a status by its key.
+ *
+ * @param room_user the room user
+ * @param key the key to remove
+ * @return true, if successful
+ */
 int room_user_has_status(room_user *room_user, char *key) {
     return hashtable_contains_key(room_user->statuses, key);
 }
@@ -151,7 +190,7 @@ int room_user_has_status(room_user *room_user, char *key) {
  * @param room_user
  */
 void room_user_reset(room_user *room_user) {
-    stop_walking(room_user, NULL);
+    stop_walking(room_user);
     
     room_user->is_walking = 0;
     room_user->needs_update = 0;

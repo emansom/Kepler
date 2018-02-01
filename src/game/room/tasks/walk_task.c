@@ -93,7 +93,7 @@ void process_user(player *player) {
 			room_user->is_walking = 0;
 
 			room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
-			stop_walking(room_user, tile->highest_item);
+			stop_walking(room_user);
 		}
 
 		player->room_user->needs_update = 1;

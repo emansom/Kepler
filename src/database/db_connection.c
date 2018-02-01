@@ -14,7 +14,6 @@ connection_details db_connection_settings() {
 }
 
 char* load_file(char const* path) {
-    
     char* buffer = 0;
     long length;
     FILE * f = fopen (path, "rb"); //was "rb"

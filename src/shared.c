@@ -6,6 +6,7 @@
 #include <stdarg.h>
 #include <ctype.h>
 
+
 char *get_argument(char *str, char *delim, int index) {
     char *copy = strdup(str);
     char *value = NULL;
@@ -27,7 +28,7 @@ char *strlwr(char *str) {
     unsigned char *p = (unsigned char *)str;
 
     while (*p) {
-        *p = tolower((unsigned char)*p);
+        *p = (unsigned char)tolower((unsigned char)*p);
         p++;
     }
 
