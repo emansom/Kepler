@@ -86,7 +86,6 @@ void room_user_clear_walk_list(room_user *room_user) {
 
         deque_destroy(room_user->walk_list);
         room_user->walk_list = NULL;
-
     }
 }
 

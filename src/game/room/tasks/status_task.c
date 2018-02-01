@@ -36,11 +36,9 @@ void process_user_status(room_user *room_user) {
 
 			if (rus->lifetime_expire > 0) {
 				rus->lifetime_expire--;
-				printf("called..\n");
 			} else if (rus->lifetime_expire == 0) {
 				room_user_remove_status(room_user, "wave");
 				room_user->needs_update = 1;
-				printf("called... done XDD.\n");
 			}
 		}
 	}
