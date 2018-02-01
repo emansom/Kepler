@@ -14,6 +14,7 @@
 #include "mapping/room_map.h"
 
 #include "tasks/walk_task.h"
+#include "tasks/status_task.h"
 
 #include "game/player/player.h"
 #include "game/items/item.h"
@@ -34,8 +35,9 @@ room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
     instance->room_id = room_id;
     instance->room_data = NULL;
-    instance->walking_job = NULL;
     instance->room_map = NULL;
+    instance->walking_job = NULL;
+    instance->status_job = NULL;
     list_new(&instance->users);
     list_new(&instance->public_items);
     return instance;
@@ -140,7 +142,17 @@ void room_enter(room *room, player *player) {
         room->walking_job->request = walk_task;
         room->walking_job->room = room;
         room->walking_job->room_id = room->room_id;
+        room->walking_job->millis = 500;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
+    }
+
+    if (room->status_job == NULL) {
+        room->status_job = create_runnable();
+        room->status_job->request = status_task;
+        room->status_job->room = room;
+        room->status_job->room_id = room->room_id;
+        room->status_job->millis = 1000;
+        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->status_job);
     }
 }
 
@@ -248,6 +260,7 @@ void room_dispose(room *room) {
     room->users = NULL;
     room->public_items = NULL;
     room->walking_job = NULL;
+    room->status_job = NULL;
     
     free(room);
     room = NULL;

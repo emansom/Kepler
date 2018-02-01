@@ -23,6 +23,15 @@ typedef struct room_user_s {
     HashTable *statuses;
 } room_user;
 
+typedef struct room_status_s {
+    char *key;
+    char *value;
+    int sec_lifetime;
+    char *action;
+    int sec_action_switch;
+    int sec_action_length;
+} room_status;
+
 room_user *room_user_create();
 void walk_to(room_user*, int, int);
 void stop_walking(room_user*, item*);

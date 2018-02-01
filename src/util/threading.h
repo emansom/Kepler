@@ -18,7 +18,7 @@ typedef struct runnable_s {
     runnable *self;
     room *room;
     int room_id;
-    int cancel;
+    int millis;
 } runnable;
 
 void do_room_task(runnable*);

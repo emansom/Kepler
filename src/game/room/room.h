@@ -33,6 +33,7 @@ typedef struct room_s {
     room_data *room_data;
     room_map *room_map;
     runnable *walking_job;
+    runnable *status_job;
     List *users;
     List *public_items;
 } room;
