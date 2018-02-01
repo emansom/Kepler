@@ -38,8 +38,7 @@ room_user *room_user_create() {
 }
 
 void walk_to(room_user *room_user, int x, int y) {
-    printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
-
+    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
     if (room_user->room == NULL) {
         return;
     }

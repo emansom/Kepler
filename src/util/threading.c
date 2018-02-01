@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "pthread.h"
 #include "thpool.h"
 #include "hashtable.h"
 #include "list.h"

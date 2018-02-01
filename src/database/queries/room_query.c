@@ -188,8 +188,6 @@ void room_query_get_categories() {
             sqlite3_column_int(stmt, 6)
         );
 
-        printf("category request: %i\n", category->id);
-
         category_manager_add(category);
     }
 

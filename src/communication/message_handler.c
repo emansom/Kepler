@@ -44,6 +44,7 @@
 #include "communication/incoming/room/user/WALK.h"
 #include "communication/incoming/room/user/CHAT.h"
 #include "communication/incoming/room/user/SHOUT.h"
+#include "communication/incoming/room/user/WAVE.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -98,6 +99,7 @@ void mh_add_messages() {
     message_requests[75] = WALK;
     message_requests[52] = CHAT;
     message_requests[55] = SHOUT;
+    message_requests[94] = WAVE;
 
     // Room settings
     message_requests[21] = GETFLATINFO;

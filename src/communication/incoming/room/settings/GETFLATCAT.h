@@ -3,7 +3,7 @@
 
 void GETFLATCAT(player *player, incoming_message *message) {
     int room_id = im_read_vl64(message);
-	room *room = room_query_get_by_room_id(room_id);
+	room *room = room_manager_get_by_id(room_id);
 
 	if (room == NULL) {
 		return;
