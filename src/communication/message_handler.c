@@ -1,5 +1,8 @@
 #include "communication/messages/incoming_message.h"
+
 #include "message_handler.h"
+#include <shared.h>
+
 #include "game/player/player.h"
 
 // Login

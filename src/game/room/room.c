@@ -2,8 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "shared.h"
+
 #include "list.h"
 #include "util/stringbuilder.h"
+#include "util/threading.h"
+
 #include "deque.h"
 #include "thpool.h"
 
@@ -11,12 +15,16 @@
 #include "room_user.h"
 
 #include "mapping/room_model.h"
+#include "mapping/room_model_manager.h"
+
 #include "mapping/room_map.h"
 
 #include "tasks/walk_task.h"
 #include "tasks/status_task.h"
 
 #include "game/player/player.h"
+#include "game/player/player_manager.h"
+
 #include "game/items/item.h"
 #include "game/navigator/navigator_category_manager.h"
 #include "game/pathfinder/coord.h"

@@ -5,6 +5,8 @@
 #include "util/encoding/base64encoding.h"
 #include "util/encoding/vl64encoding.h"
 
+#include <shared.h>
+
 /**
  * Creates an outgoing message struct with the specified header
  * @param header the b64 header

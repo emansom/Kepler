@@ -4,7 +4,7 @@
 typedef struct stringbuilder_s {
     char *data;
     int index;
-    size_t capacity;
+    int capacity;
 } stringbuilder;
 
 stringbuilder *sb_create();

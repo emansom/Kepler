@@ -1,8 +1,6 @@
 #ifndef OUTGOING_MESSAGE_H
 #define OUTGOING_MESSAGE_H
 
-#include <shared.h>
-
 typedef struct player_s player;
 typedef struct stringbuilder_s stringbuilder;
 

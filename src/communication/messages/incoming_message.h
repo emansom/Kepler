@@ -1,9 +1,7 @@
 #ifndef INCOMING_MESSAGE_H
 #define INCOMING_MESSAGE_H
 
-#include <shared.h>
-
-typedef struct {
+typedef struct incoming_message_s {
     char *header;
     char *data;
     int counter;
