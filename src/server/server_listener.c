@@ -6,6 +6,8 @@
 #include "game/player/player_manager.h"
 
 #include "communication/message_handler.h"
+#include "communication/messages/incoming_message.h"
+
 #include "util/encoding/base64encoding.h"
 
 #include "server/server_listener.h"

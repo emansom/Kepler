@@ -1,11 +1,9 @@
 #ifndef MESSAGE_HANDLER_H
 #define MESSAGE_HANDLER_H
 
-#include <shared.h>
-#include "communication/messages/incoming_message.h"
-
 #define MESSAGES 9999
 
+typedef struct incoming_message_s incoming_message;
 typedef struct player_s player;
 
 typedef void (*mh_request)(player*, incoming_message*);
