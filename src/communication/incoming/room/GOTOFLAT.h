@@ -7,7 +7,7 @@ void GOTOFLAT(player *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     if (!is_numeric(content)) {
-        free(content);
+        goto cleanup;
         return;
     }
 
@@ -18,5 +18,6 @@ void GOTOFLAT(player *player, incoming_message *message) {
         room_load(room, player);
     }
 
-    free(content);
+    cleanup:
+        free(content);
 }

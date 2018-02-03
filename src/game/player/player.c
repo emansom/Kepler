@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "game/player/player.h"
+#include "game/player/player_manager.h"
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
