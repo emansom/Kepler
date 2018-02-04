@@ -14,6 +14,7 @@ typedef struct player_data_s {
     int tickets;
     int film;
     int rank;
+    char *console_motto;
 } player_data;
 
 typedef struct player_s {
@@ -26,7 +27,7 @@ typedef struct player_s {
 
 
 player *player_create(void*, char*);
-player_data *player_create_data(int, char*, char*, int, char*, char*, int, int, int);
+player_data *player_create_data(int, char*, char*, int, char*, char*, int, int, int, char*);
 void player_login(player*);
 
 void player_cleanup(player*);

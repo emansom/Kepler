@@ -9,8 +9,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`credits`	INTEGER NOT NULL DEFAULT 200,
 	`tickets`	INTEGER NOT NULL DEFAULT 0,
 	`film`	INTEGER NOT NULL DEFAULT 0,
-	`rank`	INTEGER NOT NULL DEFAULT 1
+	`rank`	INTEGER NOT NULL DEFAULT 1,
+	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!'
 );
+INSERT INTO `users` VALUES (1,'alex','qwerty123','1500320501270123000325504','M','de kepler whey',200,0,0,1,'I''m a new user!');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -194,4 +196,5 @@ INSERT INTO `rooms` VALUES (1045,0,6,'Ice Cafe','ice_cafe','ice_cafe','hh_room_i
 INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_netcafe',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,0,'false',0,'',0,100);
+INSERT INTO `rooms` VALUES (1049,1,114,'mein room','ddwdwd','model_c',NULL,0,0,0,0,0,'',0,25);
 COMMIT;

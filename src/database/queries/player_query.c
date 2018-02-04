@@ -126,7 +126,8 @@ player_data *query_player_data(int id) {
             (char*)sqlite3_column_text(stmt, 5),
             sqlite3_column_int(stmt, 6),
             sqlite3_column_int(stmt, 7),
-            sqlite3_column_int(stmt, 8)
+            sqlite3_column_int(stmt, 8),
+             (char*)sqlite3_column_text(stmt, 9)
         );
     }
 

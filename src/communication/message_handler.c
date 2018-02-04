@@ -24,6 +24,9 @@
 #include "communication/incoming/user/GET_CREDITS.h"
 #include "communication/incoming/user/UPDATE.h"
 
+// Messenger
+#include "communication/incoming/messenger/MESSENGERINIT.h"
+
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
 #include "communication/incoming/navigator/SUSERF.h"
@@ -78,6 +81,9 @@ void mh_add_messages() {
     message_requests[7] = GET_INFO;
     message_requests[8] = GET_CREDITS;
     message_requests[44] = UPDATE;
+
+    // Messenger
+    message_requests[12] = MESSENGERINIT; 
 
     // Navigator
     message_requests[150] = NAVIGATE;
