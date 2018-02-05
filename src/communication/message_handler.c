@@ -23,6 +23,7 @@
 #include "communication/incoming/user/GET_INFO.h"
 #include "communication/incoming/user/GET_CREDITS.h"
 #include "communication/incoming/user/UPDATE.h"
+#include "communication/incoming/user/UPDATE_ACCOUNT.h"
 
 // Messenger
 #include "communication/incoming/messenger/MESSENGERINIT.h"
@@ -81,6 +82,7 @@ void mh_add_messages() {
     message_requests[7] = GET_INFO;
     message_requests[8] = GET_CREDITS;
     message_requests[44] = UPDATE;
+    message_requests[149] = UPDATE_ACCOUNT;
 
     // Messenger
     message_requests[12] = MESSENGERINIT; 
@@ -116,6 +118,10 @@ void mh_add_messages() {
     message_requests[25] = SETFLATINFO;
     message_requests[152] = GETFLATCAT;
     message_requests[153] = SETFLATCAT;
+
+    /*Client [0.0.0.0] incoming data: 203 / CK@Dalex@F123456
+hello!
+Client [0.0.0.0] incoming data: 149 / BU@M@C123@H@J07.04.1992@C@F123456*/
 }
 
 /**
