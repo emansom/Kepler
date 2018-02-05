@@ -16,11 +16,20 @@ void UPDATE_ACCOUNT(player *player, incoming_message *message) {
 		return;
 	}
 
-	int error_id = 0;
-	
 	outgoing_message *om = om_create(169); // "Bi"
 	
-	
+	int error_id = 0;
+
+	if (strcmp(password, new_password) != 0) {
+		error_id = 1;
+	} else {
+
+	}
+
+	om_write_int(om, error_id);
+	player_send(player, om);
+	om_cleanup(om);
+
 
 	cleanup:
 		if (password != NULL) {
@@ -31,7 +40,7 @@ void UPDATE_ACCOUNT(player *player, incoming_message *message) {
 			free(date_of_birth);
 		}
 			
-		if (password != NULL) {
-			free(password);
+		if (new_password != NULL) {
+			free(new_password);
 		}
 }

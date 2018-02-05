@@ -34,9 +34,11 @@ player *player_create(void *socket, char *ip_address) {
  * @return player data struct
  */
 player_data *player_create_data(int id, char *username, char *figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto) {
+player_data *player_create_data(int id, char *username, char *password, char *figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto) {
     player_data *data = malloc(sizeof(player_data));
     data->id = id;
     data->username = strdup(username);
+    data->password = strdup(password);
     data->figure = strdup(figure);
     data->credits = credits;
     data->motto = strdup(motto);
