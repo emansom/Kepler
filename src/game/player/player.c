@@ -155,6 +155,7 @@ void player_cleanup(player *player) {
         free(player->player_data->username);
         free(player->player_data->figure);
         free(player->player_data->motto);
+        free(player->player_data->console_motto);
         free(player->player_data->sex);
         free(player->player_data);
         player->player_data = NULL;
