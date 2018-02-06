@@ -13,9 +13,9 @@ incoming_message *im_create(char *message) {
     incoming_message *im = malloc(sizeof(incoming_message));
     im->data = message;
     im->counter = 0;
+    im->total_length = strlen(message);
     im->header = im_read_b64(im);
     im->header_id = base64_decode(im->header);
-    im->total_length = strlen(message);
 
 }
 

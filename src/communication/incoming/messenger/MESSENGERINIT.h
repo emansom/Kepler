@@ -4,6 +4,10 @@
 #include "game/player/player.h"
 
 void MESSENGERINIT(player *player, incoming_message *message) {
+    if (player->player_data == NULL) {
+        return;
+    }
+    
     outgoing_message *response = om_create(12); // "@L"
     om_write_str(response, player->player_data->console_motto);
     om_write_int(response, 600);

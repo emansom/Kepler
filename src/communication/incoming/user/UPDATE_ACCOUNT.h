@@ -23,7 +23,7 @@ void UPDATE_ACCOUNT(player *player, incoming_message *message) {
 	if (strcmp(password, new_password) != 0) {
 		error_id = 1;
 	} else {
-
+		
 	}
 
 	om_write_int(om, error_id);
