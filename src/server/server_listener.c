@@ -124,7 +124,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     char ip[16];
     uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
 
-    player *p = player_manager_add(handle, strdup(ip));
+    player *p = player_manager_add(handle, ip);
     client->data = p;
     
     printf("Client [%s] has connected\n", p->ip_address);
