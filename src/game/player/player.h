@@ -3,6 +3,7 @@
 
 typedef struct outgoing_message_s outgoing_message;
 typedef struct room_user_s room_user;
+typedef struct messenger_s messenger;
 
 typedef struct player_data_s {
     int id;
@@ -22,6 +23,7 @@ typedef struct player_s {
     void *stream;
     char *ip_address;
     player_data *player_data;
+    messenger *messenger;
     room_user *room_user;
     int disconnected;
 } player;

@@ -1,5 +1,7 @@
 #include <stdio.h>
 
+#include "game/messenger/messenger.h"
+
 #include "game/player/player.h"
 #include "game/player/player_manager.h"
 
@@ -22,6 +24,7 @@
 player *player_create(void *socket, char *ip_address) {
     player *p = malloc(sizeof(player));
     p->room_user = room_user_create();
+    p->messenger = messenger_create();
     p->stream = socket;
     p->ip_address = strdup(ip_address);
     p->player_data = NULL;
@@ -56,6 +59,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
  */
 void player_login(player *player) {
     room_manager_add_by_user_id(player->player_data->id);
+    messenger_init(player);
 }
 
 /**

@@ -38,7 +38,7 @@ void NAVIGATE(player *player, incoming_message *message) {
         for (int i = 0; i < list_size(rooms); i++) {
             room *instance;
             list_get_at(rooms, i, (void*)&instance);
-
+            
             category_serialise(navigator, instance, parent_category->category_type, player);
         }
 

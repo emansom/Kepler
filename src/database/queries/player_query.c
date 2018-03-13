@@ -134,6 +134,7 @@ player_data *query_player_data(int id) {
 
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
+
     return player_data;
 }
 
@@ -216,7 +217,6 @@ void query_player_save_motto(player *player) {
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
 }
-
 
 void query_player_currency(player *player) {
     sqlite3 *conn = db_create_connection();
