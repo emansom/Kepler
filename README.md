@@ -57,4 +57,4 @@ sudo apt-get install sqlite3 libsqlite3-dev
 
 ## Requirements
 
-This server is only supported on Linux/POSIX systems. For Windows users, to compile Kepler you must use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run the app in a Linux environment.
+This server is only supported on Linux/POSIX systems. For Windows users, to use Kepler you must use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run and compile the app in a Linux environment.
