@@ -1,10 +1,6 @@
-<p align="center">
-  <h2>Kepler</h2>
-</p>
-
 ## About
 
-Kepler is a small TCP server written in C11 powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 13 client from 2006 era. The aim is to fully replicate this version by writing the backend server in the C11 language.
+Kepler is a small TCP server written in C powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 13 client from 2006 era. The aim is to fully replicate this version by writing the back-end server in the C11 language.
 
 ## Compile Kepler
 
@@ -61,4 +57,4 @@ sudo apt-get install sqlite3 libsqlite3-dev
 
 ## Requirements
 
-This server only compiles and is supported on Linux/POSIX systems. It is possible to use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run the app in a Linux envrionment for Windows.
+This server is only supported on Linux/POSIX systems. For Windows users, to compile Kepler you must use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run the app in a Linux environment.
