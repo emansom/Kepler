@@ -10,5 +10,6 @@ typedef struct messenger_s {
 
 messenger *messenger_create();
 void messenger_init(player*);
+void messenger_cleanup(messenger*);
 
 #endif
