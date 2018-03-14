@@ -42,9 +42,12 @@ void messenger_serialise(int user_id, outgoing_message *response) {
                 } else {
                     om_write_str(response, "Floor1a");
                 }
+            } else {
+                om_write_str(response, "On hotel view");
             }
+
         } else {
-            om_write_str(response, "Hotel View");
+            om_write_str(response, "");
         }
 
         om_write_str(response, "00-00-0000");
