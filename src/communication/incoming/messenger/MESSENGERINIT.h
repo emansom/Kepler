@@ -26,7 +26,7 @@ void MESSENGERINIT(player *p, incoming_message *message) {
     for (int i = 0; i < list_size(p->messenger->friends); i++) {
         messenger_friend *friend;
         list_get_at(p->messenger->friends, i, (void*)&friend);
-        
+
         messenger_serialise(friend->friend_id, response);
     }
 

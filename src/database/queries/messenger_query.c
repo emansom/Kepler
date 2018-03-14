@@ -46,7 +46,7 @@ List *messenger_query_get_friends(int user_id) {
         }
         
         messenger_friend *friend = messenger_friend_create(friend_id);
-        list_add(friends, (void*)&friend);
+        list_add(friends, (void*)friend);
     }
 
     sqlite3_finalize(stmt);

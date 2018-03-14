@@ -22,12 +22,6 @@ messenger *messenger_create() {
 void messenger_init(player *player) {
     List *friends = messenger_query_get_friends(player->player_data->id);
     player->messenger->friends = friends;
-
-    if (list_size(player->messenger->friends) > 0) {
-        messenger_friend *friend;
-        list_get_at(player->messenger->friends, 0, (void*)&friend);
-        printf("friend found %i\n", friend->friend_id);
-    }
 }
 
 void messenger_cleanup(messenger *messenger_manager) {

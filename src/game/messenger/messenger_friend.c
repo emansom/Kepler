@@ -25,6 +25,7 @@ void messenger_serialise(int user_id, outgoing_message *response) {
     player *search_player = player_manager_find_by_id(user_id);
 
     if (data != NULL) {
+        printf("Friend figure %s\n", data->figure);
         om_write_int(response, data->id);
         om_write_str(response, data->username);
         om_write_int(response, strcmp(data->sex, "M") == 0);
@@ -34,7 +35,7 @@ void messenger_serialise(int user_id, outgoing_message *response) {
         om_write_int(response, is_online);
 
         if (is_online) {
-            if (search_player->room_user->room_id > 0) {
+            if (search_player->room_user->room != NULL) {
                 room *room = room_manager_get_by_id(search_player->room_user->room_id);
 
                 if (list_size(room->public_items) > 0) {
@@ -47,7 +48,6 @@ void messenger_serialise(int user_id, outgoing_message *response) {
             om_write_str(response, "Hotel View");
         }
 
-        om_write_char(response, 2);
         om_write_str(response, "00-00-0000");
         om_write_str(response, data->figure);
     }
