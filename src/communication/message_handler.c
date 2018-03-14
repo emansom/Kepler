@@ -27,6 +27,8 @@
 
 // Messenger
 #include "communication/incoming/messenger/MESSENGERINIT.h"
+#include "communication/incoming/messenger/FINDUSER.h"
+#include "communication/incoming/messenger/MESSENGER_ASSIGNPERSMSG.h"
 
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
@@ -86,7 +88,9 @@ void mh_add_messages() {
 
     // Messenger
     message_requests[12] = MESSENGERINIT; 
-
+    message_requests[41] = FINDUSER;
+    message_requests[36] = MESSENGER_ASSIGNPERSMSG;
+    
     // Navigator
     message_requests[150] = NAVIGATE;
     message_requests[16] = SUSERF;
