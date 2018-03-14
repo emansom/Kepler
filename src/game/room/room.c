@@ -215,22 +215,22 @@ void room_load(room *room, player *player) {
 void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
-	for (int i = 0; i < list_size(room->users); i++) {
-		player *room_player;
-		list_get_at(room->users, i, (void*)&room_player);
+    for (int i = 0; i < list_size(room->users); i++) {
+        player *room_player;
+        list_get_at(room->users, i, (void*)&room_player);
 
-		if (room_player == NULL) {
-			continue;
-		}
+        if (room_player == NULL) {
+            continue;
+        }
 
-		if (room_player->room_user == NULL) {
-			continue;
-		}
+        if (room_player->room_user == NULL) {
+            continue;
+        }
 
         player_send(room_player, message);
-	}
+    }
 
-	om_cleanup(message);
+    om_cleanup(message);
 }
 
 /**

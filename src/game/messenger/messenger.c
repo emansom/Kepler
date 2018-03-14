@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "hashtable.h"
+#include "list.h"
 
 #include "communication/messages/outgoing_message.h"
 
@@ -21,11 +21,12 @@ void messenger_init(player *player) {
     printf("MESSENGER INIT: %i\n", player->player_data->id);
     
     List *friends = messenger_query_get_friends(player->player_data->id);
+    player->messenger->friends = friends;
 }
 
 void messenger_cleanup(messenger *messenger_manager) {
     if (messenger_manager->friends != NULL) {
-        hashtable_destroy(messenger_manager->friends);
+        list_destroy(messenger_manager->friends);
     }
 
     free(messenger_manager);

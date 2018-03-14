@@ -3,19 +3,19 @@
 
 void GETFLATCAT(player *player, incoming_message *message) {
     int room_id = im_read_vl64(message);
-	room *room = room_manager_get_by_id(room_id);
+    room *room = room_manager_get_by_id(room_id);
 
-	if (room == NULL) {
-		return;
-	}
+    if (room == NULL) {
+        return;
+    }
 
-	outgoing_message *om = om_create(222); // "C^"
-	
-	if (room != NULL) {
-		om_write_int(om, room->room_id);	
-		om_write_int(om, room->room_data->category);		
-	}
+    outgoing_message *om = om_create(222); // "C^"
+    
+    if (room != NULL) {
+        om_write_int(om, room->room_id);    
+        om_write_int(om, room->room_data->category);        
+    }
 
-	player_send(player, om);
-	om_cleanup(om);
+    player_send(player, om);
+    om_cleanup(om);
 }

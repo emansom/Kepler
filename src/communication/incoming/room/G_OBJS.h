@@ -15,8 +15,8 @@ void G_OBJS(player *player, incoming_message *message) {
     outgoing_message *om = om_create(30); // "@^"
 
     for (int i = 0; i < list_size(room->public_items); i++) {
-		item *room_item;
-		list_get_at(room->public_items, i, (void*)&room_item);
+        item *room_item;
+        list_get_at(room->public_items, i, (void*)&room_item);
 
         sb_add_string(om->sb, room_item->custom_data);
         sb_add_string(om->sb, " ");

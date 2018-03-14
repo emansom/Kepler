@@ -51,9 +51,9 @@ player *player_manager_find(void *stream) {
  * @return the player, if sound, otherwise returns NULL
  */
 player *player_manager_find_by_id(int player_id) {
-	for (int i = 0; i < list_size(global.player_manager.players); i++) {
-		player *p;
-		list_get_at(global.player_manager.players, i, (void*)&p);
+    for (int i = 0; i < list_size(global.player_manager.players); i++) {
+        player *p;
+        list_get_at(global.player_manager.players, i, (void*)&p);
 
         if (p->player_data->id == player_id) {
             return p;
@@ -70,9 +70,9 @@ player *player_manager_find_by_id(int player_id) {
  * @return the player, if sound, otherwise returns NULL
  */
 player_data *player_manager_get_data_by_id(int player_id) {
-	for (int i = 0; i < list_size(global.player_manager.players); i++) {
-		player *p;
-		list_get_at(global.player_manager.players, i, (void*)&p);
+    for (int i = 0; i < list_size(global.player_manager.players); i++) {
+        player *p;
+        list_get_at(global.player_manager.players, i, (void*)&p);
 
         if (p->player_data->id == player_id) {
             return p->player_data;

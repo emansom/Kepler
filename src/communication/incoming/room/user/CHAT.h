@@ -20,11 +20,11 @@ void CHAT(player *session, incoming_message *im) {
     int source_x = session->room_user->current->x;
     int source_y = session->room_user->current->y;
     
-	outgoing_message *status_update = om_create(34);
+    outgoing_message *status_update = om_create(34);
 
-	for (int i = 0; i < list_size(room->users); i++) {
-		player *room_player;
-		list_get_at(room->users, i, (void*)&room_player);
+    for (int i = 0; i < list_size(room->users); i++) {
+        player *room_player;
+        list_get_at(room->users, i, (void*)&room_player);
 
         int dist_x = abs(source_x - room_player->room_user->current->x) - 1;
         int dist_y = abs(source_y - room_player->room_user->current->y) - 1;

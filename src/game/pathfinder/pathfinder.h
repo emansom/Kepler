@@ -7,11 +7,11 @@ typedef struct deque_s Deque;
 typedef struct coord_s coord;
 
 typedef struct pathfinder_s {
-	node *map[200][200];
-	Deque *open_list;
-	node *current;
-	node *nodes;
-	int failed;
+    node *map[200][200];
+    Deque *open_list;
+    node *current;
+    node *nodes;
+    int failed;
 } pathfinder;
 
 Deque *create_path(room_user*);

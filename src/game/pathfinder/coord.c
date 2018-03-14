@@ -12,11 +12,11 @@
  * @return coord ptr
  */
 coord *create_coord(int x, int y) {
-	coord *pos = malloc(sizeof(coord));
-	pos->x = x;
-	pos->y = y;
-	pos->z = 0;
-	return pos;
+    coord *pos = malloc(sizeof(coord));
+    pos->x = x;
+    pos->y = y;
+    pos->z = 0;
+    return pos;
 }
 
 /**
@@ -28,7 +28,7 @@ coord *create_coord(int x, int y) {
  * @return distance
  */
 int distance_squared(coord first, coord second) {
-	int dx = first.x - second.x;
-	int dy = first.y - second.y;
-	return (dx * dx) + (dy * dy);
+    int dx = first.x - second.x;
+    int dy = first.y - second.y;
+    return (dx * dx) + (dy * dy);
 }

@@ -1076,7 +1076,7 @@ enum cc_stat slist_filter(SList *list, bool (*pred) (const void*), SList **out)
     SNode *curr = list->head;
     while (curr) {
         if (pred(curr->data)) {
-	  slist_add(filtered, curr->data);
+      slist_add(filtered, curr->data);
         }
 
         curr = curr->next;
@@ -1113,7 +1113,7 @@ enum cc_stat slist_filter_mut(SList *list, bool (*pred) (const void*))
             unlink(list, curr, prev);
         } else {
             prev = curr;
-	}
+    }
         curr = next;
     }
 

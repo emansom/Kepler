@@ -32,8 +32,8 @@ void G_USRS(player *p, incoming_message *message) {
     players = om_create(28); // "@\"
 
     for (int i = 0; i < list_size(room->users); i++) {
-		player *room_player;
-		list_get_at(room->users, i, (void*)&room_player);
+        player *room_player;
+        list_get_at(room->users, i, (void*)&room_player);
         append_user_list(players, room_player);
     }
     
