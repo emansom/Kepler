@@ -25,7 +25,6 @@ void messenger_serialise(int user_id, outgoing_message *response) {
     player *search_player = player_manager_find_by_id(user_id);
 
     if (data != NULL) {
-        printf("Friend figure %s\n", data->figure);
         om_write_int(response, data->id);
         om_write_str(response, data->username);
         om_write_int(response, strcmp(data->sex, "M") == 0);
@@ -46,6 +45,7 @@ void messenger_serialise(int user_id, outgoing_message *response) {
             }
         } else {
             om_write_str(response, "Hotel View");
+            player_data_cleanup(data);
         }
 
         om_write_str(response, "00-00-0000");

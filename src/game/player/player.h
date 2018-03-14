@@ -34,6 +34,8 @@ player_data *player_create_data(int, char*, char*, char*, int, char*, char*, int
 void player_login(player*);
 
 void player_cleanup(player*);
+void player_data_cleanup(player_data*);
+
 void player_send(player*, outgoing_message*);
 void player_send_raw(player*, char*);
 
