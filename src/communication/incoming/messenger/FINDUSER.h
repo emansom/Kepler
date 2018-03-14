@@ -23,15 +23,7 @@ void FINDUSER(player *user, incoming_message *message) {
 
     int search_id = query_player_id(input_search);
     player *search_player = player_manager_find_by_id(search_id);
-    player_data *data = NULL;
-
-    printf("user id: %i\n", search_id);
-
-    if (search_player != NULL) {
-        data = search_player->player_data;
-    } else {
-        data = query_player_data(search_id);
-    }
+    player_data *data = player_manager_get_data_by_id(search_id);
 
     outgoing_message *msg = om_create(128); // "B@"
     om_write_str(msg, "MESSENGER");
