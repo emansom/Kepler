@@ -38,6 +38,36 @@ char *query_player_username(int user_id) {
 }
 
 /**
+ *
+ * @param user_id
+ * @return
+ */
+int query_player_id(char *username) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int USER_ID = -1;
+    int status = sqlite3_prepare(conn, "SELECT id FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    int step = sqlite3_step(stmt);
+
+    if (step == SQLITE_ROW) {
+        USER_ID = sqlite3_column_int(stmt, 0);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return USER_ID;
+}
+
+/**
  * Retrives the user ID if there was a successful login.
  *
  * @param username the username
@@ -218,7 +248,7 @@ void query_player_save_motto(player *player) {
     sqlite3_close(conn);
 }
 
-void query_player_currency(player *player) {
+void query_player_save_currency(player *player) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 

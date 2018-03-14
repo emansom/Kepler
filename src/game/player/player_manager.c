@@ -2,6 +2,7 @@
 
 #include "list.h"
 #include "player.h"
+#include "database/queries/player_query.h"
 
 /**
  * Create a new list to store players
@@ -34,14 +35,21 @@ void player_manager_remove(player *p) {
 }
 
 /**
- * Finds a player by a given dyad stream
- * @param stream the dyad stream
+ * Finds a player by a given stream
+ * 
+ * @param stream the stream
  * @return the player
  */
 player *player_manager_find(void *stream) {
     return NULL;
 }
 
+/**
+ * Find a player by user id
+ * 
+ * @param player_id the player id
+ * @return the player, if sound, otherwise returns NULL
+ */
 player *player_manager_find_by_id(int player_id) {
 	for (int i = 0; i < list_size(global.player_manager.players); i++) {
 		player *p;
@@ -53,4 +61,23 @@ player *player_manager_find_by_id(int player_id) {
     }  
 
     return NULL;
+}
+
+/**
+ * Find a player by user id
+ * 
+ * @param player_id the player id
+ * @return the player, if sound, otherwise returns NULL
+ */
+player_data *player_manager_get_data_by_id(int player_id) {
+	for (int i = 0; i < list_size(global.player_manager.players); i++) {
+		player *p;
+		list_get_at(global.player_manager.players, i, (void*)&p);
+
+        if (p->player_data->id == player_id) {
+            return p->player_data;
+        }
+    }  
+
+    return query_player_data(player_id);
 }
