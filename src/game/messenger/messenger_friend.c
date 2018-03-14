@@ -45,11 +45,14 @@ void messenger_serialise(int user_id, outgoing_message *response) {
             }
         } else {
             om_write_str(response, "Hotel View");
-            player_data_cleanup(data);
         }
 
         om_write_str(response, "00-00-0000");
         om_write_str(response, data->figure);
+
+        if (!is_online) {
+            player_data_cleanup(data);
+        }
     }
 }
 
