@@ -7,7 +7,9 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "game/player/player.h"
+
 #include "game/messenger/messenger.h"
+#include "game/messenger/messenger_friend.h"
 
 #include "database/queries/messenger_query.h"
 
@@ -18,10 +20,14 @@ messenger *messenger_create() {
 }
 
 void messenger_init(player *player) {
-    printf("MESSENGER INIT: %i\n", player->player_data->id);
-    
     List *friends = messenger_query_get_friends(player->player_data->id);
     player->messenger->friends = friends;
+
+    if (list_size(player->messenger->friends) > 0) {
+        messenger_friend *friend;
+        list_get_at(player->messenger->friends, 0, (void*)&friend);
+        printf("friend found %i\n", friend->friend_id);
+    }
 }
 
 void messenger_cleanup(messenger *messenger_manager) {

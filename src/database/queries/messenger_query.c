@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "database/db_connection.h"
+#include "game/messenger/messenger_friend.h"
 
 #include "sqlite3.h"
 #include "list.h"
@@ -43,8 +44,9 @@ List *messenger_query_get_friends(int user_id) {
         } else {
             friend_id = from_id;
         }
-
-        list_add(friends, (void*)&friend_id);
+        
+        messenger_friend *friend = messenger_friend_create(friend_id);
+        list_add(friends, (void*)&friend);
     }
 
     sqlite3_finalize(stmt);
