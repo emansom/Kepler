@@ -63,9 +63,9 @@ List *messenger_query_get_friends(int user_id) {
  * @param to_id the id that the request is sent from
  * @param from_id the id that the request is sent to
  */
-void messenger_query_new_request(int from_id, int to_id) {
+int messenger_query_new_request(int from_id, int to_id) {
     if (messenger_query_request_exists(from_id, to_id)) {
-        return;
+        return 0;
     }
 
     sqlite3 *conn = db_create_connection();
@@ -86,6 +86,8 @@ void messenger_query_new_request(int from_id, int to_id) {
 
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
+
+    return 1;
 }
 
 /**
