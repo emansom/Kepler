@@ -11,12 +11,12 @@ void MESSENGER_DECLINEBUDDY(player *session, incoming_message *message) {
 
     int friend_id = im_read_vl64(message);
 
-    if (!messenger_has_request(session->messenger, friend_id)) {
-        return;
-    }
-
     messenger_query_delete_request(session->player_data->id, friend_id);
     messenger_query_delete_request(friend_id, session->player_data->id);
 
-    messenger_remove_request(session->messenger, friend_id);
+    player *friend = player_manager_find_by_id(friend_id);
+
+    if (friend != NULL) {
+        messenger_remove_request(friend->messenger, friend_id);
+    }
 }

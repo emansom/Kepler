@@ -33,5 +33,8 @@ void MESSENGER_ACCEPTBUDDY(player *session, incoming_message *message) {
     }
 
     list_add(session->messenger->friends, messenger_entry_create(friend_id));
-    messenger_remove_request(session->messenger, friend_id);
+
+    if (friend != NULL) {
+        messenger_remove_request(friend->messenger, session->player_data->id);
+    }
 }

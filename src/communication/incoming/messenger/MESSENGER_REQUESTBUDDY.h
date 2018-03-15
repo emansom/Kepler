@@ -16,11 +16,13 @@ void MESSENGER_REQUESTBUDDY(player *session, incoming_message *message) {
     }
 
     if (messenger_is_friends(session->messenger, search_id)) {
+        print_info("debug 0");
         goto cleanup;
         return;
     }
 
     if (!messenger_query_new_request(session->player_data->id, search_id)) {
+        print_info("debug 1");
         goto cleanup;
         return;
     }
@@ -36,8 +38,6 @@ void MESSENGER_REQUESTBUDDY(player *session, incoming_message *message) {
 
         list_add(requested_player->messenger->requests, messenger_entry_create(session->player_data->id));
     }
-
-    list_add(session->messenger->requests, messenger_entry_create(search_id));
 
     cleanup:
         free(input_search);

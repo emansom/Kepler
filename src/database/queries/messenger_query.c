@@ -104,6 +104,7 @@ List *messenger_query_get_requests(int user_id) {
  */
 int messenger_query_new_request(int from_id, int to_id) {
     if (messenger_query_request_exists(from_id, to_id)) {
+        printf("debug 3\n");
         return 0;
     }
 
