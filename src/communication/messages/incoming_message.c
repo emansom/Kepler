@@ -72,7 +72,7 @@ int im_read_vl64(incoming_message *im) {
 
     int length;
 
-    char data[6];
+    char data[10];
     strncpy(data, im->data + im->counter, strlen(im->data));
 
     int val = vl64_decode(data, &length);
