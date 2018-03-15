@@ -2,8 +2,6 @@
 
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
-
-#include "database/queries/player_query.h"
 #include "shared.h"
 
 void APPROVENAME(player *player, incoming_message *message) {

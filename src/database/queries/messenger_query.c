@@ -70,7 +70,7 @@ List *messenger_query_get_requests(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT from_id FROM messenger_friends WHERE to_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT from_id FROM messenger_requests WHERE to_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
