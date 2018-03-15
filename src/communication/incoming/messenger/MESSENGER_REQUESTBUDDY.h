@@ -33,7 +33,11 @@ void MESSENGER_REQUESTBUDDY(player *session, incoming_message *message) {
         om_write_str(response, session->player_data->username);
         player_send(requested_player, response);
         om_cleanup(response);
+
+        list_add(requested_player->messenger->requests, messenger_entry_create(session->player_data->id));
     }
+
+    list_add(session->messenger->requests, messenger_entry_create(search_id));
 
     cleanup:
         free(input_search);

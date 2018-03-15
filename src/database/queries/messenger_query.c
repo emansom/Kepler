@@ -130,6 +130,97 @@ int messenger_query_new_request(int from_id, int to_id) {
 }
 
 /**
+ * Insert a new friend into the database
+ * 
+ * @param to_id the id that the request is sent from
+ * @param from_id the id that the request is sent to
+ */
+int messenger_query_new_friend(int from_id, int to_id) {
+    if (!messenger_query_request_exists(from_id, to_id)) {
+        return 0;
+    }
+
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "INSERT INTO messenger_friends (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, from_id);
+        sqlite3_bind_int(stmt, 2, to_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return 1;
+}
+
+/**
+ * Deletes a request from the database
+ * 
+ * @param to_id the id that the request is sent from
+ * @param from_id the id that the request is sent to
+ */
+int messenger_query_delete_request(int from_id, int to_id) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "DELETE FROM messenger_requests WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, from_id);
+        sqlite3_bind_int(stmt, 2, to_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return 1;
+}
+
+/**
+ * Deletes a friend from the database
+ * 
+ * @param to_id the id that the request is sent from
+ * @param from_id the id that the request is sent to
+ */
+int messenger_query_delete_friend(int from_id, int to_id) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "DELETE FROM messenger_friends WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, from_id);
+        sqlite3_bind_int(stmt, 2, to_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return 1;
+}
+
+/**
  * Insert a new request into the database
  * 
  * @param to_id the id that the request is sent from

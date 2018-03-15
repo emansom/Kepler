@@ -30,6 +30,9 @@
 #include "communication/incoming/messenger/FINDUSER.h"
 #include "communication/incoming/messenger/MESSENGER_ASSIGNPERSMSG.h"
 #include "communication/incoming/messenger/MESSENGER_REQUESTBUDDY.h"
+#include "communication/incoming/messenger/MESSENGER_DECLINEBUDDY.h"
+#include "communication/incoming/messenger/MESSENGER_ACCEPTBUDDY.h"
+#include "communication/incoming/messenger/MESSENGER_REMOVEBUDDY.h"
 
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
@@ -90,8 +93,11 @@ void mh_add_messages() {
     // Messenger
     message_requests[12] = MESSENGERINIT; 
     message_requests[41] = FINDUSER;
+    message_requests[40] = MESSENGER_REMOVEBUDDY;
     message_requests[36] = MESSENGER_ASSIGNPERSMSG;
     message_requests[39] = MESSENGER_REQUESTBUDDY;
+    message_requests[38] = MESSENGER_DECLINEBUDDY;
+    message_requests[37] = MESSENGER_ACCEPTBUDDY;
     
     // Navigator
     message_requests[150] = NAVIGATE;
