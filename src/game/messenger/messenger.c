@@ -22,6 +22,23 @@ messenger *messenger_create() {
 void messenger_init(player *player) {
     List *friends = messenger_query_get_friends(player->player_data->id);
     player->messenger->friends = friends;
+
+    /*if (messenger_is_friends(player->messenger, 1)) {
+        printf("PLAYER IS FRIEND!\n");
+    }*/
+}
+
+int messenger_is_friends(messenger *messenger, int user_id) {
+    for (int i = 0; i < list_size(messenger->friends); i++) {
+        messenger_friend *friend;
+        list_get_at(messenger->friends, i, (void*)&friend);
+
+        if (friend->friend_id == user_id) {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 void messenger_cleanup(messenger *messenger_manager) {

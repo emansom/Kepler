@@ -1,6 +1,8 @@
 #include <stdio.h>
 
 #include "database/db_connection.h"
+#include "database/queries/messenger_query.h"
+
 #include "game/messenger/messenger_friend.h"
 
 #include "sqlite3.h"
@@ -53,4 +55,67 @@ List *messenger_query_get_friends(int user_id) {
     sqlite3_close(conn);
 
     return friends;
+}
+
+/**
+ * Insert a new request into the database
+ * 
+ * @param to_id the id that the request is sent from
+ * @param from_id the id that the request is sent to
+ */
+void messenger_query_new_request(int from_id, int to_id) {
+    if (messenger_query_request_exists(from_id, to_id)) {
+        return;
+    }
+
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "INSERT INTO messenger_requests (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, from_id);
+        sqlite3_bind_int(stmt, 2, to_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+}
+
+/**
+ * Insert a new request into the database
+ * 
+ * @param to_id the id that the request is sent from
+ * @param from_id the id that the request is sent to
+ */
+int messenger_query_request_exists(int from_id, int to_id) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int result = 0;
+    int status = sqlite3_prepare(conn, "SELECT * FROM messenger_requests WHERE to_id = ? AND from_id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, to_id);
+        sqlite3_bind_int(stmt, 2, from_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    int step = sqlite3_step(stmt);
+
+    if (step == SQLITE_ROW) {
+        result = 1;
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return result;
 }
