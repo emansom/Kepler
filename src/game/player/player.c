@@ -74,13 +74,7 @@ void player_send(player *p, outgoing_message *om) {
     }
 
     om_finalise(om);
-    player_send_raw(p, om->sb->data);
-}
-
-void player_send_raw(player *p, char *data) {
-    if (data == NULL || p == NULL) {
-        return;
-    }
+    char *data = om->sb->data;
 
     uv_handle_t *handle = p->stream;
     uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));

@@ -6,10 +6,11 @@
 #include "game/player/player_manager.h"
 
 #include "communication/message_handler.h"
+
 #include "communication/messages/incoming_message.h"
+#include "communication/messages/outgoing_message.h"
 
 #include "util/encoding/base64encoding.h"
-
 #include "server/server_listener.h"
 
 uv_loop_t *loop;
@@ -131,7 +132,10 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     int result = uv_accept(server, handle);
 
     if(result == 0) {
-        player_send_raw(p, "@@\1");
+        outgoing_message *msg = om_create(0); // "@@"
+        player_send(p, msg);
+        om_cleanup(msg);
+
         uv_read_start(handle, server_alloc_buffer, server_on_read);
     } else {
         uv_close((uv_handle_t *) handle, server_on_connection_close);
