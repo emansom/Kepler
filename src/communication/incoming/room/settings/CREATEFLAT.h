@@ -15,6 +15,11 @@ void CREATEFLAT(player *player, incoming_message *message) {
     char *room_setting = get_argument(content, "/", 3);
     char *room_show_name = get_argument(content, "/", 4);
 
+    filter_vulnerable_characters(&room_name, 0);
+    filter_vulnerable_characters(&room_select_model, 0);
+    filter_vulnerable_characters(&room_setting, 0);
+    filter_vulnerable_characters(&room_show_name, 0);
+
     if (strcmp(floor_setting, "first floor") != 0) {
         goto cleanup;
         return;

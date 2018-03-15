@@ -6,6 +6,19 @@
 #include <stdarg.h>
 #include <ctype.h>
 
+void filter_vulnerable_characters(char **str, int remove_newline) {
+    for (int i = 0; i < strlen(*str); i++) {
+        char ch = *str[i];
+
+        if (ch == 2 || ch == 9 || ch == 10 || ch == 12) {
+            *str[i] == ' ';
+        }
+
+        if (remove_newline) {
+            *str[i] == ' ';
+        }
+    }
+}
 
 char *get_argument(char *str, char *delim, int index) {
     char *copy = strdup(str);
@@ -102,7 +115,6 @@ bool is_numeric(const char *s) {
 bool has_numbers(const char *str) {
     for (int i = 0; i < strlen(str); i++) {
         if (isdigit(str[i])) {
-            printf("hello!\n");
             return true;
         }
     }

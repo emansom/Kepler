@@ -252,3 +252,35 @@ int messenger_query_request_exists(int from_id, int to_id) {
 
     return result;
 }
+
+/**
+ * Insert a new message into the database
+ * 
+ * @param to_id the id that the request is sent from
+ * @param from_id the id that the request is sent to
+ */
+int messenger_query_new_message(int receiver_id, int sender_id, char *body) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "INSERT INTO messenger_messages (receiver_id, sender_id, unread, body) VALUES (?, ?, ?, ?)", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, receiver_id);
+        sqlite3_bind_int(stmt, 2, sender_id);
+        sqlite3_bind_int(stmt, 3, 1);
+        sqlite3_bind_text(stmt, 4, body, -1, SQLITE_STATIC);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    int row_id = sqlite3_last_insert_rowid(conn);
+    return row_id;
+}

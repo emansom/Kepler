@@ -25,6 +25,7 @@ typedef struct server_s {
 
 server global;
 
+void filter_vulnerable_characters(char**, int);
 void **testing_iterate(List*);
 char *get_argument(char*, char*, int);
 char *replace(const char*, char, const char*);

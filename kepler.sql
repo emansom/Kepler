@@ -13,7 +13,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!'
 );
 INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey',200,0,0,1,'I''m a new xddd');
-INSERT INTO `users` VALUES (2,'john','123','1500318001270123000325504','M','de kepler whey',200,0,0,1,'I''m a new user!');
+INSERT INTO `users` VALUES (2,'john','123','1100118001270123000325004','M','de kepler whey',200,0,0,1,'I''m a new user!');
+INSERT INTO `users` VALUES (3,'mark','123','1100118001270123000325004','M','de kepler whey',200,0,0,1,'u wot br0han');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -202,8 +203,17 @@ CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
 );
+CREATE TABLE IF NOT EXISTS `messenger_messages` (
+	`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`receiver_id`	INTEGER NOT NULL,
+	`sender_id`	INTEGER NOT NULL,
+	`unread`	TEXT NOT NULL,
+	`body`	TEXT
+);
 CREATE TABLE IF NOT EXISTS `messenger_friends` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
 );
+INSERT INTO `messenger_friends` VALUES (1,2);
+INSERT INTO `messenger_friends` VALUES (1,3);
 COMMIT;
