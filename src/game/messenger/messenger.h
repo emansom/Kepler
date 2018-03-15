@@ -6,6 +6,7 @@ typedef struct player_s player;
 
 typedef struct messenger_s {
     List *friends;
+    List *requests;
 } messenger;
 
 messenger *messenger_create();

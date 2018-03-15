@@ -23,6 +23,9 @@ void messenger_init(player *player) {
     List *friends = messenger_query_get_friends(player->player_data->id);
     player->messenger->friends = friends;
 
+    List *requests = messenger_query_get_requests(player->player_data->id);
+    player->messenger->requests = requests;
+
     /*if (messenger_is_friends(player->messenger, 1)) {
         printf("PLAYER IS FRIEND!\n");
     }*/
@@ -30,8 +33,21 @@ void messenger_init(player *player) {
 
 int messenger_is_friends(messenger *messenger, int user_id) {
     for (int i = 0; i < list_size(messenger->friends); i++) {
-        messenger_friend *friend;
+        messenger_entry *friend;
         list_get_at(messenger->friends, i, (void*)&friend);
+
+        if (friend->friend_id == user_id) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+int messenger_has_request(messenger *messenger, int user_id) {
+    for (int i = 0; i < list_size(messenger->friends); i++) {
+        messenger_entry *friend;
+        list_get_at(messenger->requests, i, (void*)&friend);
 
         if (friend->friend_id == user_id) {
             return 1;

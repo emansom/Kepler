@@ -3,12 +3,12 @@
 
 typedef struct outgoing_message_s outgoing_message;
 
-typedef struct messenger_friend_s {
+typedef struct messenger_entry_s {
     int friend_id;
-} messenger_friend;
+} messenger_entry;
 
-messenger_friend *messenger_friend_create(int friend_id);
-void messenger_friend_cleanup(messenger_friend*);
-void messenger_serialise(int, outgoing_message*);
+messenger_entry *messenger_entry_create(int friend_id);
+void messenger_entry_cleanup(messenger_entry*);
+void messenger_entry_serialise(int, outgoing_message*);
 
 #endif

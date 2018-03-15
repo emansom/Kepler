@@ -47,7 +47,7 @@ List *messenger_query_get_friends(int user_id) {
             friend_id = from_id;
         }
         
-        messenger_friend *friend = messenger_friend_create(friend_id);
+        messenger_entry *friend = messenger_entry_create(friend_id);
         list_add(friends, (void*)friend);
     }
 
@@ -55,6 +55,45 @@ List *messenger_query_get_friends(int user_id) {
     sqlite3_close(conn);
 
     return friends;
+}
+
+/** 
+ * Get requests towards the user id
+ * 
+ * @param user_id the user id
+ * @return
+ */
+List *messenger_query_get_requests(int user_id) {
+    List *requests;
+    list_new(&requests);
+
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "SELECT from_id FROM messenger_friends WHERE to_id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, user_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    while (true) {
+        status = sqlite3_step(stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        int friend_id = sqlite3_column_int(stmt, 0);
+        messenger_entry *friend = messenger_entry_create(friend_id);
+        list_add(requests, (void*)friend);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return requests;
 }
 
 /**

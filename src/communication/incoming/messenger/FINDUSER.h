@@ -20,7 +20,7 @@ void FINDUSER(player *user, incoming_message *message) {
     om_write_str(msg, "MESSENGER");
 
     if (search_id > 0) {
-        messenger_serialise(search_id, msg);
+        messenger_entry_serialise(search_id, msg);
 
     } else {
         om_write_int(msg, 0);
