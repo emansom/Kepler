@@ -1,7 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
 #include "game/navigator/navigator_category_manager.h"
 
 #include "list.h"

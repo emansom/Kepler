@@ -1,14 +1,10 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "database/queries/player_query.h"
-
 #include "game/messenger/messenger.h"
 #include "game/messenger/messenger_friend.h"
 
-#include "game/room/room.h"
-#include "game/room/room_user.h"
+#include "communication/incoming/messenger/MESSENGER_GETREQUESTS.h"
 
 #include "list.h"
 
@@ -33,21 +29,7 @@ void MESSENGERINIT(player *p, incoming_message *message) {
     player_send(p, friends_list);
     om_cleanup(friends_list);
 
-    for (int i = 0; i < list_size(p->messenger->requests); i++) {
-        messenger_entry *request_entry;
-        list_get_at(p->messenger->requests, i, (void*)&request_entry);
-
-        char *friends_name = query_player_username(request_entry->friend_id);
-
-        if (friends_name == NULL) {
-            continue;
-        }
-        
-        outgoing_message *request = om_create(132); // "BD"
-        om_write_int(request, request_entry->friend_id);
-        om_write_str(request, friends_name);
-        player_send(p, request);
-        om_cleanup(request);
-        free(friends_name);
-    }
+    /* V14 messenger sends message 191 and message 233 after receiving @L, V13 does not.
+    Invoke it manually... */
+    MESSENGER_GETREQUESTS(p, message);
 }

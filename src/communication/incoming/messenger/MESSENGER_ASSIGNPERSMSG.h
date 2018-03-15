@@ -1,7 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
 #include "database/queries/player_query.h"
 
 void MESSENGER_ASSIGNPERSMSG(player *player, incoming_message *message) {
