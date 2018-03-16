@@ -3,6 +3,7 @@
 #include "database/db_connection.h"
 #include "database/queries/messenger_query.h"
 
+#include "game/messenger/messenger.h"
 #include "game/messenger/messenger_friend.h"
 
 #include "sqlite3.h"
@@ -283,4 +284,41 @@ int messenger_query_new_message(int receiver_id, int sender_id, char *body) {
 
     int row_id = sqlite3_last_insert_rowid(conn);
     return row_id;
+}
+
+List *messenger_query_unread_messages(int user_id) {
+    List *messages;
+    list_new(&messages);
+
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "SELECT receiver_id,sender_id,body FROM messenger_messages WHERE receiver_id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, user_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    while (true) {
+        status = sqlite3_step(stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        int id = sqlite3_column_int(stmt, 0);
+        int receiver_id = sqlite3_column_int(stmt, 1);
+        int sender_id = sqlite3_column_int(stmt, 2);
+        char *body = strdup((char*)sqlite3_column_text(stmt, 3));
+
+        messenger_message *msg = messenger_message_create(id, receiver_id, sender_id, body);
+        list_add(messages, msg);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+    return messages;
 }

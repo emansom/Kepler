@@ -5,6 +5,7 @@
 #include "game/messenger/messenger_friend.h"
 
 #include "communication/incoming/messenger/MESSENGER_GETREQUESTS.h"
+#include "communication/incoming/messenger/MESSENGER_GETMESSAGES.h"
 
 #include "list.h"
 
@@ -31,5 +32,7 @@ void MESSENGERINIT(player *p, incoming_message *message) {
 
     /* V14 messenger sends message 191 and message 233 after receiving @L, V13 does not.
     Invoke it manually... */
+
     MESSENGER_GETREQUESTS(p, message);
+    MESSENGER_GETMESSAGES(p, message);
 }

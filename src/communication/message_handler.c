@@ -35,6 +35,7 @@
 #include "communication/incoming/messenger/MESSENGER_REMOVEBUDDY.h"
 #include "communication/incoming/messenger/MESSENGER_GETREQUESTS.h"
 #include "communication/incoming/messenger/MESSENGER_SENDMSG.h"
+#include "communication/incoming/messenger/MESSENGER_GETMESSAGES.h"
 
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
@@ -102,6 +103,7 @@ void mh_add_messages() {
     message_requests[37] = MESSENGER_ACCEPTBUDDY;
     message_requests[233] = MESSENGER_GETREQUESTS;
     message_requests[33] = MESSENGER_SENDMSG;
+    message_requests[191] = MESSENGER_GETMESSAGES;
     
     // Navigator
     message_requests[150] = NAVIGATE;
