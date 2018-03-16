@@ -51,9 +51,10 @@ void messenger_entry_serialise(int user_id, outgoing_message *response) {
         } else {
             om_write_str(response, "");
         }
-
-        om_write_str(response, get_time_formatted_custom(data->last_online));
+        char *date = get_time_formatted_custom(data->last_online);
+        om_write_str(response, date);
         om_write_str(response, data->figure);
+        free(date);
 
         if (!is_online) {
             player_data_cleanup(data);

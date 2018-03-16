@@ -103,12 +103,22 @@ void messenger_cleanup(messenger *messenger_manager) {
             list_get_at(messenger_manager->requests, i, (void*)&request);
             messenger_entry_cleanup(request);
         }
-        
+
         list_destroy(messenger_manager->requests);
         messenger_manager->requests = NULL;
     }
 
     if (messenger_manager->messages != NULL) {
+        // Clear requests list
+        for (int i = 0; i < list_size(messenger_manager->messages); i++) {
+            messenger_message *msg;
+            list_get_at(messenger_manager->messages, i, (void*)&msg);
+            
+            free(msg->body);
+            free(msg->date);
+            free(msg);
+        }
+
         list_destroy(messenger_manager->messages);
         messenger_manager->messages = NULL;
     }
