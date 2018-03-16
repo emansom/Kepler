@@ -6,15 +6,16 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`figure`	TEXT NOT NULL,
 	`sex`	TEXT NOT NULL DEFAULT 'M',
 	`motto`	TEXT NOT NULL DEFAULT 'de kepler whey',
-	`credits`	INTEGER NOT NULL DEFAULT 200,
+	`credits`	TEXT NOT NULL DEFAULT 200,
 	`tickets`	INTEGER NOT NULL DEFAULT 0,
 	`film`	INTEGER NOT NULL DEFAULT 0,
 	`rank`	INTEGER NOT NULL DEFAULT 1,
-	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!'
+	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
+	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey',200,0,0,1,'I''m a new xddd');
-INSERT INTO `users` VALUES (2,'john','123','1100118001270123000325004','M','de kepler whey',200,0,0,1,'I''m a new user!');
-INSERT INTO `users` VALUES (3,'mark','123','1100118001270123000325004','M','de kepler whey',200,0,0,1,'u wot br0han');
+INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey','200',0,0,1,'I''m a new xddd','1521194299');
+INSERT INTO `users` VALUES (2,'john','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'I''m a new user!','1521194032');
+INSERT INTO `users` VALUES (3,'mark','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'u wot br0han','1521194299');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -208,7 +209,8 @@ CREATE TABLE IF NOT EXISTS `messenger_messages` (
 	`receiver_id`	INTEGER NOT NULL,
 	`sender_id`	INTEGER NOT NULL,
 	`unread`	TEXT NOT NULL,
-	`body`	TEXT
+	`body`	TEXT NOT NULL,
+	`date`	TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `messenger_friends` (
 	`from_id`	INTEGER,
