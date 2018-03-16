@@ -33,7 +33,7 @@ void MESSENGER_SENDMSG(player *session, incoming_message *message) {
             om_write_int(response, 1);
             om_write_int(response, message_id);
             om_write_int(response, session->player_data->id);
-            om_write_str(response, "dd-MM-yyyy HH:mm:ss");
+            om_write_str(response, date);
             om_write_str(response, chat_message);
             player_send(player_friend, response);
             om_cleanup(response);

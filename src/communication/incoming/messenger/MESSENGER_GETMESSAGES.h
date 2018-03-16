@@ -15,7 +15,7 @@ void MESSENGER_GETMESSAGES(player *p, incoming_message *message) {
         om_write_int(response, 1);
         om_write_int(response, message->id);
         om_write_int(response, message->receiver_id);
-        om_write_str(response, "dd-MM-yyyy HH:mm:ss");
+        om_write_str(response, message->date);
         om_write_str(response, message->body);
         player_send(p, response);
         om_cleanup(response);
