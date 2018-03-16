@@ -19,12 +19,13 @@ messenger *messenger_create() {
     return messenger_manager;
 }
 
-messenger_message *messenger_message_create(int id, int sender_id, int receiver_id, char *body) {
+messenger_message *messenger_message_create(int id, int sender_id, int receiver_id, char *body, char *date) {
     messenger_message *message = malloc(sizeof(messenger_message));
     message->id = id;
     message->sender_id = sender_id;
     message->receiver_id = receiver_id;
     message->body = body;
+    message->date = date;
     return message;
 }
 

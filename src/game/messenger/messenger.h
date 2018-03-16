@@ -15,10 +15,11 @@ typedef struct messenger_message_s {
     int receiver_id;
     int sender_id;
     char *body;
+    char *date;
 } messenger_message;
 
 messenger *messenger_create();
-messenger_message *messenger_message_create(int, int, int, char*);
+messenger_message *messenger_message_create(int, int, int, char*, char*);
 void messenger_init(player*);
 int messenger_is_friends(messenger*, int);
 int messenger_has_request(messenger*, int);

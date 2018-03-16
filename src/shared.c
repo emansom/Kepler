@@ -5,17 +5,27 @@
 
 #include <stdarg.h>
 #include <ctype.h>
+#include <time.h>
+
+char *get_time_formatted() {
+    char buff[20];
+    time_t now = time(NULL);
+    strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&now));
+    return strdup(buff);
+}
 
 void filter_vulnerable_characters(char **str, int remove_newline) {
+    char *body = *str;
+
     for (int i = 0; i < strlen(*str); i++) {
-        char ch = *str[i];
+        char ch = body[i];
 
         if (ch == 2 || ch == 9 || ch == 10 || ch == 12) {
-            *str[i] == ' ';
+            *str[i] == (char)' ';
         }
 
         if (remove_newline) {
-            *str[i] == ' ';
+            *str[i] == (char)' ';
         }
     }
 }

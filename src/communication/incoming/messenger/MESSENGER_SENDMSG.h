@@ -23,7 +23,9 @@ void MESSENGER_SENDMSG(player *session, incoming_message *message) {
         messenger_entry *friend;
         list_get_at(friends, i, (void*)&friend);
 
-        int message_id = messenger_query_new_message(friend->friend_id, session->player_data->id, chat_message);
+        char *date = get_time_formatted();
+
+        int message_id = messenger_query_new_message(friend->friend_id, session->player_data->id, chat_message, date);
         player *player_friend = player_manager_find_by_id(friend->friend_id);
 
         if (player_friend != NULL) {
@@ -38,6 +40,7 @@ void MESSENGER_SENDMSG(player *session, incoming_message *message) {
         }
 
         messenger_entry_cleanup(friend);
+        free(date);
     }
 
     list_destroy(friends);

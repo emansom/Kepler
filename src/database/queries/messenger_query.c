@@ -260,17 +260,18 @@ int messenger_query_request_exists(int from_id, int to_id) {
  * @param to_id the id that the request is sent from
  * @param from_id the id that the request is sent to
  */
-int messenger_query_new_message(int receiver_id, int sender_id, char *body) {
+int messenger_query_new_message(int receiver_id, int sender_id, char *body, char *date) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "INSERT INTO messenger_messages (receiver_id, sender_id, unread, body) VALUES (?, ?, ?, ?)", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "INSERT INTO messenger_messages (receiver_id, sender_id, unread, body, date) VALUES (?, ?, ?, ?, ?)", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, receiver_id);
         sqlite3_bind_int(stmt, 2, sender_id);
         sqlite3_bind_int(stmt, 3, 1);
         sqlite3_bind_text(stmt, 4, body, -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 5, date, -1, SQLITE_STATIC);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
@@ -293,7 +294,7 @@ List *messenger_query_unread_messages(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT id,receiver_id,sender_id,body FROM messenger_messages WHERE receiver_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id,receiver_id,sender_id,body,date FROM messenger_messages WHERE receiver_id = ? AND unread = 0", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
@@ -312,8 +313,9 @@ List *messenger_query_unread_messages(int user_id) {
         int receiver_id = sqlite3_column_int(stmt, 1);
         int sender_id = sqlite3_column_int(stmt, 2);
         char *body = strdup((char*)sqlite3_column_text(stmt, 3));
+        char *date = strdup((char*)sqlite3_column_text(stmt, 4));
 
-        messenger_message *msg = messenger_message_create(id, receiver_id, sender_id, body);
+        messenger_message *msg = messenger_message_create(id, receiver_id, sender_id, body, date);
         list_add(messages, msg);
     }
 
