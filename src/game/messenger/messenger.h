@@ -23,9 +23,10 @@ messenger_message *messenger_message_create(int, int, int, char*, char*);
 void messenger_init(player*);
 int messenger_is_friends(messenger*, int);
 int messenger_has_request(messenger*, int);
-void messenger_cleanup(messenger*);
-
 void messenger_remove_request(messenger*, int);
 void messenger_remove_friend(messenger*, int);
+
+void messenger_cleanup_list(List*);
+void messenger_cleanup(messenger*);
 
 #endif

@@ -83,28 +83,29 @@ void messenger_remove_friend(messenger *messenger, int user_id) {
     }
 }
 
+void messenger_cleanup_list(List *messenger_entries) {
+    for (int i = 0; i < list_size(messenger_entries); i++) {
+        messenger_entry *entry;
+        list_get_at(messenger_entries, i, (void*)&entry);
+        messenger_entry_cleanup(entry);
+    }
+
+    list_destroy(messenger_entries);
+}
+
+/**
+ * Clear requests, friends and messenger messages struct list.
+ * 
+ * @param messenger the messenger struct instance
+ */
 void messenger_cleanup(messenger *messenger_manager) {
     if (messenger_manager->friends != NULL) {
-        // Clear friends list
-        for (int i = 0; i < list_size(messenger_manager->friends); i++) {
-            messenger_entry *friend;
-            list_get_at(messenger_manager->friends, i, (void*)&friend);
-            messenger_entry_cleanup(friend);
-        }
-
-        list_destroy(messenger_manager->friends);
+        messenger_cleanup_list(messenger_manager->friends);
         messenger_manager->friends = NULL;
     }
 
     if (messenger_manager->requests != NULL) {
-        // Clear requests list
-        for (int i = 0; i < list_size(messenger_manager->requests); i++) {
-            messenger_entry *request;
-            list_get_at(messenger_manager->requests, i, (void*)&request);
-            messenger_entry_cleanup(request);
-        }
-
-        list_destroy(messenger_manager->requests);
+        messenger_cleanup_list(messenger_manager->requests);
         messenger_manager->requests = NULL;
     }
 
