@@ -12,5 +12,6 @@ int messenger_query_delete_friend(int, int);
 int messenger_query_request_exists(int, int);
 int messenger_query_new_message(int, int, char*, char*);
 List *messenger_query_unread_messages(int);
+void messenger_query_mark_read(int);
 
 #endif

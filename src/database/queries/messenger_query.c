@@ -280,13 +280,20 @@ int messenger_query_new_message(int receiver_id, int sender_id, char *body, char
         printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
     }
 
+    int row_id = sqlite3_last_insert_rowid(conn);
+
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
 
-    int row_id = sqlite3_last_insert_rowid(conn);
     return row_id;
 }
 
+/**
+ * Load all unread messages for user.
+ * 
+ * @param user_id the id to load the messages for
+ * @return list of unread messages
+ */
 List *messenger_query_unread_messages(int user_id) {
     List *messages;
     list_new(&messages);
@@ -323,4 +330,27 @@ List *messenger_query_unread_messages(int user_id) {
     sqlite3_close(conn);
 
     return messages;
+}
+
+/**
+ * Mark message as read
+ */
+void messenger_query_mark_read(int message_id) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "UPDATE messenger_messages SET unread = 0 WHERE id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, message_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
 }
