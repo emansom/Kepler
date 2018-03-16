@@ -13,6 +13,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "server/server_listener.h"
+#include "database/queries/player_query.h"
 
 #include "uv.h"
 #include "list.h"
@@ -36,7 +37,7 @@ player *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *password, char *figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto) {
+player_data *player_create_data(int id, char *username, char *password, char *figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online) {
     player_data *data = malloc(sizeof(player_data));
     data->id = id;
     data->username = strdup(username);
@@ -49,6 +50,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->tickets = tickets;
     data->film = film;
     data->rank = rank;
+    data->last_online = strtoul(last_online, NULL, 10);
     return data;
 }
 
@@ -58,6 +60,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
  * @param p the player struct
  */
 void player_login(player *player) {
+    query_player_save_last_online(player);
     room_manager_add_by_user_id(player->player_data->id);
     messenger_init(player);
 }
@@ -124,6 +127,7 @@ void player_cleanup(player *player) {
         return;
     }
 
+    query_player_save_last_online(player);
     player_manager_remove(player);
 
     if (player->room_user->room != NULL) {

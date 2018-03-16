@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <time.h>
 
 #include "sqlite3.h"
 
@@ -136,7 +137,7 @@ player_data *query_player_data(int id) {
     sqlite3_stmt *stmt;
 
     player_data *player_data = NULL;
-    int status = sqlite3_prepare(conn, "SELECT id,username,password,figure,credits,motto,sex,tickets,film,rank,console_motto FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id,username,password,figure,credits,motto,sex,tickets,film,rank,console_motto,last_online FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, id);
@@ -158,7 +159,8 @@ player_data *query_player_data(int id) {
             sqlite3_column_int(stmt, 7),
             sqlite3_column_int(stmt, 8),
             sqlite3_column_int(stmt, 9),
-            (char*)sqlite3_column_text(stmt, 10)
+            (char*)sqlite3_column_text(stmt, 10),
+            (char*)sqlite3_column_text(stmt, 11)
         );
     }
 
@@ -182,13 +184,17 @@ int query_player_create(char *username, char *figure, char *gender, char *passwo
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "INSERT INTO users (username, password, sex, figure) VALUES (?,?,?,?)", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "INSERT INTO users (username, password, sex, figure, last_online) VALUES (?,?,?,?,?)", -1, &stmt, 0);
+    
+    char last_online[100];
+    sprintf(last_online, "%lu", (unsigned long)time(NULL));
 
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, strlen(username), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, password, strlen(password), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 3, gender, strlen(gender), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 4, figure, strlen(figure), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 5, last_online, strlen(last_online), SQLITE_STATIC);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
@@ -198,10 +204,12 @@ int query_player_create(char *username, char *figure, char *gender, char *passwo
         return 1;
     }
 
+    int user_id = (int)sqlite3_last_insert_rowid(conn);
+    
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
 
-    return (int)sqlite3_last_insert_rowid(conn);
+    return user_id;
 }
 
 void query_player_save_looks(player *player) {
@@ -214,6 +222,30 @@ void query_player_save_looks(player *player) {
         sqlite3_bind_text(stmt, 1, player->player_data->figure, strlen(player->player_data->figure), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, player->player_data->sex, strlen(player->player_data->sex), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 3, player->player_data->id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+}
+
+void query_player_save_last_online(player *player) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "UPDATE users SET last_online = ? WHERE id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        char last_online[100];
+        sprintf(last_online, "%lu", (unsigned long)time(NULL));
+
+        sqlite3_bind_text(stmt, 1, last_online, strlen(last_online), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 2, player->player_data->id);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }

@@ -14,6 +14,8 @@
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
 
+#include "shared.h"
+
 messenger_entry *messenger_entry_create(int friend_id) {
     messenger_entry *friend = malloc(sizeof(messenger_entry));
     friend->friend_id = friend_id;
@@ -50,7 +52,7 @@ void messenger_entry_serialise(int user_id, outgoing_message *response) {
             om_write_str(response, "");
         }
 
-        om_write_str(response, "00-00-0000");
+        om_write_str(response, get_time_formatted_custom(data->last_online));
         om_write_str(response, data->figure);
 
         if (!is_online) {

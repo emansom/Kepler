@@ -14,6 +14,13 @@ char *get_time_formatted() {
     return strdup(buff);
 }
 
+char *get_time_formatted_custom(unsigned long time_seconds) {
+    char buff[20];
+    time_t now = (time_t)time_seconds;
+    strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&now));
+    return strdup(buff);
+}
+
 char *filter_vulnerable_characters(char *str, int remove_newline) {
     char *body = strdup(str);
     for (int i = 0; i < strlen(body); i++) {
