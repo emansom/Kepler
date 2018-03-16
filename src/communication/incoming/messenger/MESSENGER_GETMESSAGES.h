@@ -11,10 +11,10 @@ void MESSENGER_GETMESSAGES(player *p, incoming_message *message) {
         messenger_message *message;
         list_get_at(p->messenger->messages, i, (void*)&message);
 
-        outgoing_message *response = om_create(132); // "BD"
+        outgoing_message *response = om_create(134); // "BF"
         om_write_int(response, 1);
         om_write_int(response, message->id);
-        om_write_int(response, message->sender_id);
+        om_write_int(response, message->receiver_id);
         om_write_str(response, "dd-MM-yyyy HH:mm:ss");
         om_write_str(response, message->body);
         player_send(p, response);

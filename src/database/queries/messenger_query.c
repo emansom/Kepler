@@ -293,7 +293,7 @@ List *messenger_query_unread_messages(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT receiver_id,sender_id,body FROM messenger_messages WHERE receiver_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id,receiver_id,sender_id,body FROM messenger_messages WHERE receiver_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
