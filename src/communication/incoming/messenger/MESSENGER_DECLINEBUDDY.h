@@ -4,6 +4,8 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "game/player/player.h"
+#include "game/messenger/messenger.h"
+
 #include "database/queries/messenger_query.h"
 
 void remove_friend(player *session, int friend_id) {       
@@ -24,11 +26,11 @@ void MESSENGER_DECLINEBUDDY(player *session, incoming_message *message) {
         int request_id = im_read_vl64(message);
         remove_friend(session, request_id);
     } else {
-        for (int i = 0; i < list_size(session->messenger->requests); i++) {
+        for (size_t i = 0; i < list_size(session->messenger->requests); i++) {
             messenger_entry *request;
             list_get_at(session->messenger->requests, i, (void*)&request);
             
-            int request_id = request->friend_id;
+            int request_id = request->user_id;
             remove_friend(session, request_id);
         }
     }

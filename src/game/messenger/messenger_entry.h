@@ -4,7 +4,7 @@
 typedef struct outgoing_message_s outgoing_message;
 
 typedef struct messenger_entry_s {
-    int friend_id;
+    int user_id;
 } messenger_entry;
 
 messenger_entry *messenger_entry_create(int friend_id);

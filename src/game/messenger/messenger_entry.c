@@ -5,7 +5,7 @@
 #include "list.h"
 
 #include "communication/messages/outgoing_message.h"
-#include "game/messenger/messenger_friend.h"
+#include "game/messenger/messenger_entry.h"
 
 #include "game/player/player.h"
 #include "game/player/player_manager.h"
@@ -18,7 +18,7 @@
 
 messenger_entry *messenger_entry_create(int friend_id) {
     messenger_entry *friend = malloc(sizeof(messenger_entry));
-    friend->friend_id = friend_id;
+    friend->user_id = friend_id;
     return friend;
 }
 

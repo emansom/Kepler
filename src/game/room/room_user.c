@@ -38,6 +38,12 @@ room_user *room_user_create() {
     return user;
 }
 
+/**
+ *
+ * @param room_user
+ * @param x
+ * @param y
+ */
 void walk_to(room_user *room_user, int x, int y) {
     //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
     if (room_user->room == NULL) {
@@ -299,7 +305,7 @@ void append_user_status(outgoing_message *om, player *player) {
     if (hashtable_size(player->room_user->statuses) > 0) {
         hashtable_get_keys(player->room_user->statuses, &keys);
 
-        for (int i = 0; i < array_size(keys); i++) {
+        for (size_t i = 0; i < array_size(keys); i++) {
             char *key;
             room_user_status *rus;
             array_get_at(keys, i, (void*)&key);

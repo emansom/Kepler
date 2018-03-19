@@ -19,14 +19,14 @@ void MESSENGER_SENDMSG(player *session, incoming_message *message) {
     char *chat_message = im_read_str(message);
     char *filtered_chat_message = filter_vulnerable_characters(chat_message, 0);
 
-    for (int i = 0; i < list_size(friends); i++) {
+    for (size_t i = 0; i < list_size(friends); i++) {
         messenger_entry *friend;
         list_get_at(friends, i, (void*)&friend);
 
         char *date = get_time_formatted();
+        int message_id = messenger_query_new_message(friend->user_id, session->player_data->id, filtered_chat_message, date);
 
-        int message_id = messenger_query_new_message(friend->friend_id, session->player_data->id, filtered_chat_message, date);
-        player *player_friend = player_manager_find_by_id(friend->friend_id);
+        player *player_friend = player_manager_find_by_id(friend->user_id);
 
         if (player_friend != NULL) {
             outgoing_message *response = om_create(134); // "BF"

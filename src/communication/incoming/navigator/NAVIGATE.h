@@ -32,19 +32,58 @@ void NAVIGATE(player *player, incoming_message *message) {
         List *rooms = category_manager_get_rooms(parent_category->id);
 
         if (parent_category->category_type == PRIVATE) {
-            om_write_int(navigator, list_size(rooms));  // room count
+            om_write_int(navigator, (int)list_size(rooms));  // room count
         }
 
-        for (int i = 0; i < list_size(rooms); i++) {
+        for (size_t i = 0; i < list_size(rooms); i++) {
             room *instance;
-            list_get_at(rooms, i, (void*)&instance);
-            
-            category_serialise(navigator, instance, parent_category->category_type, player);
+            list_get_at(rooms, i, (void *) &instance);
+            om_write_int(navigator, instance->room_data->id); // room id
+
+            if (parent_category->category_type == PUBLIC) {
+                om_write_int(navigator, 1);
+                om_write_str(navigator, instance->room_data->name);
+                om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+                om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+                om_write_int(navigator, instance->room_data->category); // category id
+                om_write_str(navigator, instance->room_data->description); // description
+                om_write_int(navigator, instance->room_data->id); // room id
+                om_write_int(navigator, 0);
+                om_write_str(navigator, instance->room_data->ccts);
+                om_write_int(navigator, 0);
+                om_write_int(navigator, 1);
+            }
+
+            if (parent_category->category_type == PRIVATE) {
+                om_write_str(navigator, instance->room_data->name);
+
+                if (player->player_data->id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
+                    om_write_str(navigator, instance->room_data->owner_name); // room owner
+                } else {
+                    om_write_str(navigator, "-"); // room owner
+                }
+
+                if (instance->room_data->accesstype == 2) {
+                    om_write_str(navigator, "password");
+                }
+
+                if (instance->room_data->accesstype == 1) {
+                    om_write_str(navigator, "closed");
+                }
+
+                if (instance->room_data->accesstype == 0) {
+                    om_write_str(navigator, "open");
+                }
+
+                om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+                om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+                om_write_str(navigator, instance->room_data->description); // description
+            }
         }
 
         List *child_categories = category_manager_get_by_parent_id(parent_category->id);
 
-        for (int i = 0; i < list_size(child_categories); i++) {
+        for (size_t i = 0; i < list_size(child_categories); i++) {
             room_category *category;
             list_get_at(child_categories, i, (void*)&category);
 

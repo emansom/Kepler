@@ -4,7 +4,7 @@
 #include "database/queries/messenger_query.h"
 
 #include "game/messenger/messenger.h"
-#include "game/messenger/messenger_friend.h"
+#include "game/messenger/messenger_entry.h"
 
 #include "sqlite3.h"
 #include "list.h"

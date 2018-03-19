@@ -2,7 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "game/messenger/messenger.h"
-#include "game/messenger/messenger_friend.h"
+#include "game/messenger/messenger_entry.h"
 
 #include "communication/incoming/messenger/MESSENGER_GETREQUESTS.h"
 #include "communication/incoming/messenger/MESSENGER_GETMESSAGES.h"
@@ -24,7 +24,7 @@ void MESSENGERINIT(player *p, incoming_message *message) {
     for (int i = 0; i < list_size(p->messenger->friends); i++) {
         messenger_entry *friend;
         list_get_at(p->messenger->friends, i, (void*)&friend);
-        messenger_entry_serialise(friend->friend_id, friends_list);
+        messenger_entry_serialise(friend->user_id, friends_list);
     }
 
     player_send(p, friends_list);

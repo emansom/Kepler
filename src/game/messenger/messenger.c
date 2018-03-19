@@ -7,7 +7,7 @@
 
 #include "game/player/player.h"
 #include "game/messenger/messenger.h"
-#include "game/messenger/messenger_friend.h"
+#include "game/messenger/messenger_entry.h"
 
 #include "database/queries/messenger_query.h"
 
@@ -36,11 +36,11 @@ void messenger_init(player *player) {
 }
 
 int messenger_is_friends(messenger *messenger, int user_id) {
-    for (int i = 0; i < list_size(messenger->friends); i++) {
+    for (size_t i = 0; i < list_size(messenger->friends); i++) {
         messenger_entry *friend;
         list_get_at(messenger->friends, i, (void*)&friend);
 
-        if (friend->friend_id == user_id) {
+        if (friend->user_id == user_id) {
             return 1;
         }
     }
@@ -49,11 +49,11 @@ int messenger_is_friends(messenger *messenger, int user_id) {
 }
 
 int messenger_has_request(messenger *messenger, int user_id) {
-    for (int i = 0; i < list_size(messenger->requests); i++) {
+    for (size_t i = 0; i < list_size(messenger->requests); i++) {
         messenger_entry *friend;
         list_get_at(messenger->requests, i, (void*)&friend);
 
-        if (friend->friend_id == user_id) {
+        if (friend->user_id == user_id) {
             return 1;
         }
     }
@@ -62,29 +62,29 @@ int messenger_has_request(messenger *messenger, int user_id) {
 }
 
 void messenger_remove_request(messenger *messenger, int user_id) {
-    for (int i = 0; i < list_size(messenger->requests); i++) {
+    for (size_t i = 0; i < list_size(messenger->requests); i++) {
         messenger_entry *friend;
         list_get_at(messenger->requests, i, (void*)&friend);
 
-        if (friend->friend_id == user_id) {
+        if (friend->user_id == user_id) {
             list_remove_at(messenger->requests, i, NULL);
         }
     }
 }
 
 void messenger_remove_friend(messenger *messenger, int user_id) {
-    for (int i = 0; i < list_size(messenger->friends); i++) {
+    for (size_t i = 0; i < list_size(messenger->friends); i++) {
         messenger_entry *friend;
         list_get_at(messenger->friends, i, (void*)&friend);
 
-        if (friend->friend_id == user_id) {
+        if (friend->user_id == user_id) {
             list_remove_at(messenger->friends, i, NULL);
         }
     }
 }
 
 void messenger_cleanup_list(List *messenger_entries) {
-    for (int i = 0; i < list_size(messenger_entries); i++) {
+    for (size_t i = 0; i < list_size(messenger_entries); i++) {
         messenger_entry *entry;
         list_get_at(messenger_entries, i, (void*)&entry);
         messenger_entry_cleanup(entry);
@@ -111,7 +111,7 @@ void messenger_cleanup(messenger *messenger_manager) {
 
     if (messenger_manager->messages != NULL) {
         // Clear requests list
-        for (int i = 0; i < list_size(messenger_manager->messages); i++) {
+        for (size_t i = 0; i < list_size(messenger_manager->messages); i++) {
             messenger_message *msg;
             list_get_at(messenger_manager->messages, i, (void*)&msg);
             

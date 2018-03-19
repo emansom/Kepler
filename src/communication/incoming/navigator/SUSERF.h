@@ -10,14 +10,14 @@
 void SUSERF(player *player, incoming_message *message) {
     List *rooms = room_manager_get_by_user_id(player->player_data->id);
 
-    room *room;
-    ListIter iter;
-
     if (list_size(rooms) > 0) {
-        list_iter_init(&iter, rooms);
 
         outgoing_message *om = om_create(16); // "@P"
-        while (list_iter_next(&iter, (void*) &room) != CC_ITER_END) {
+
+        for (size_t i = 0; i < list_size(rooms); i++) {
+            room *room;
+            list_get_at(rooms, i, (void *) &room);
+
             om_write_int_delimeter(om, room->room_id, 9);
             om_write_str_delimeter(om, room->room_data->name, 9);
             om_write_str_delimeter(om, room->room_data->owner_name, 9);

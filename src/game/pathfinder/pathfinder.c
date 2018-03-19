@@ -38,9 +38,9 @@ Deque *create_path(room_user *room_user) {
     Deque *path;
     deque_new(&path);
 
-    room *room = room_user->room;
-    int map_size_x = room->room_data->model_data->map_size_x;
-    int map_size_y = room->room_data->model_data->map_size_y;
+    room *user_room = room_user->room;
+    int map_size_x = user_room->room_data->model_data->map_size_x;
+    int map_size_y = user_room->room_data->model_data->map_size_y;
 
     pathfinder *pathfinder = NULL;
     pathfinder = make_path_reversed(room_user, map_size_x, map_size_y);

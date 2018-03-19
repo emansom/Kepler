@@ -11,14 +11,14 @@ void MESSENGER_GETREQUESTS(player *p, incoming_message *message) {
         messenger_entry *request_entry;
         list_get_at(p->messenger->requests, i, (void*)&request_entry);
 
-        char *friends_name = query_player_username(request_entry->friend_id);
+        char *friends_name = query_player_username(request_entry->user_id);
 
         if (friends_name == NULL) {
             continue;
         }
         
         outgoing_message *request = om_create(132); // "BD"
-        om_write_int(request, request_entry->friend_id);
+        om_write_int(request, request_entry->user_id);
         om_write_str(request, friends_name);
         player_send(p, request);
         om_cleanup(request);
