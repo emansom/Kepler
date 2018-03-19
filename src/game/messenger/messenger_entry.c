@@ -16,12 +16,23 @@
 
 #include "shared.h"
 
-messenger_entry *messenger_entry_create(int friend_id) {
-    messenger_entry *friend = malloc(sizeof(messenger_entry));
-    friend->user_id = friend_id;
-    return friend;
+/**
+ * Create messenger entry instance
+ * @param user_id the target user id
+ * @return the messenger entry struct
+ */
+messenger_entry *messenger_entry_create(int user_id) {
+    messenger_entry *entry = malloc(sizeof(messenger_entry));
+    entry->user_id = user_id;
+    return entry;
 }
 
+/**
+ * Serialise messenger entries, used for both messenger search and messenger friends list.
+ *
+ * @param user_id the target user id to show
+ * @param response the packet to append the data to
+ */
 void messenger_entry_serialise(int user_id, outgoing_message *response) {
     player_data *data = player_manager_get_data_by_id(user_id);
     player *search_player = player_manager_find_by_id(user_id);
@@ -51,6 +62,7 @@ void messenger_entry_serialise(int user_id, outgoing_message *response) {
         } else {
             om_write_str(response, "");
         }
+
         char *date = get_time_formatted_custom(data->last_online);
         om_write_str(response, date);
         om_write_str(response, data->figure);
@@ -62,6 +74,11 @@ void messenger_entry_serialise(int user_id, outgoing_message *response) {
     }
 }
 
+/**
+ * Method for cleaning up the messenger entry instance.
+ *
+ * @param entry the messenger entry instance
+ */
 void messenger_entry_cleanup(messenger_entry *entry) {
     free(entry);
 }

@@ -11,6 +11,11 @@
 
 #include "database/queries/messenger_query.h"
 
+/**
+ * Create messenger instance.
+ *
+ * @return the messenger instance
+ */
 messenger *messenger_create() {
     messenger *messenger_manager = malloc(sizeof(messenger));
     messenger_manager->friends = NULL;
@@ -19,6 +24,16 @@ messenger *messenger_create() {
     return messenger_manager;
 }
 
+/**
+ * Create the messenger message instance.
+ *
+ * @param id the id of the message
+ * @param sender_id the sender user id
+ * @param receiver_id the receiver user id
+ * @param body the body of the message
+ * @param date the date the message was sent
+ * @return
+ */
 messenger_message *messenger_message_create(int id, int sender_id, int receiver_id, char *body, char *date) {
     messenger_message *message = malloc(sizeof(messenger_message));
     message->id = id;
@@ -29,12 +44,32 @@ messenger_message *messenger_message_create(int id, int sender_id, int receiver_
     return message;
 }
 
+/**
+ * Initialise the messenger for the player.
+ *
+ * @param player the player instance
+ */
 void messenger_init(player *player) {
-    player->messenger->friends = messenger_query_get_friends(player->player_data->id);
-    player->messenger->requests = messenger_query_get_requests(player->player_data->id);
-    player->messenger->messages = messenger_query_unread_messages(player->player_data->id);
+    if (player->messenger->friends == NULL) {
+        player->messenger->friends = messenger_query_get_friends(player->player_data->id);
+    }
+
+    if (player->messenger->requests == NULL) {
+        player->messenger->requests = messenger_query_get_requests(player->player_data->id);
+    }
+
+    if (player->messenger->messages == NULL) {
+        player->messenger->messages = messenger_query_unread_messages(player->player_data->id);
+    }
 }
 
+/**
+ * Get whether the user has a friend with a certain user id.
+ *
+ * @param messenger the messenger instance
+ * @param user_id the user id to check for
+ * @return true, if successful
+ */
 int messenger_is_friends(messenger *messenger, int user_id) {
     for (size_t i = 0; i < list_size(messenger->friends); i++) {
         messenger_entry *friend;
@@ -48,6 +83,13 @@ int messenger_is_friends(messenger *messenger, int user_id) {
     return 0;
 }
 
+/**
+ * Get whether the user has a request from a certain user id.
+ *
+ * @param messenger the messenger instance
+ * @param user_id the user id to check for
+ * @return true, if successful
+ */
 int messenger_has_request(messenger *messenger, int user_id) {
     for (size_t i = 0; i < list_size(messenger->requests); i++) {
         messenger_entry *friend;
@@ -61,6 +103,12 @@ int messenger_has_request(messenger *messenger, int user_id) {
     return 0;
 }
 
+/**
+ * Remove request from list
+ *
+ * @param messenger the messenger instance
+ * @param user_id the user id
+ */
 void messenger_remove_request(messenger *messenger, int user_id) {
     for (size_t i = 0; i < list_size(messenger->requests); i++) {
         messenger_entry *friend;
@@ -72,6 +120,12 @@ void messenger_remove_request(messenger *messenger, int user_id) {
     }
 }
 
+/**
+ * Remove friend from list.
+ *
+ * @param messenger the messenger instance
+ * @param user_id the user id
+ */
 void messenger_remove_friend(messenger *messenger, int user_id) {
     for (size_t i = 0; i < list_size(messenger->friends); i++) {
         messenger_entry *friend;
@@ -83,6 +137,11 @@ void messenger_remove_friend(messenger *messenger, int user_id) {
     }
 }
 
+/**
+ * Method for cleaning up requests and friends list.
+ *
+ * @param messenger_entries the list of messenger entries
+ */
 void messenger_cleanup_list(List *messenger_entries) {
     for (size_t i = 0; i < list_size(messenger_entries); i++) {
         messenger_entry *entry;

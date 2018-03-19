@@ -13,7 +13,7 @@
 void process_user_status(room_user *room_user);
 
 void status_task(room *room) {
-    for (int i = 0; i < list_size(room->users); i++) {
+    for (size_t i = 0; i < list_size(room->users); i++) {
         player *room_player;
         list_get_at(room->users, i, (void*)&room_player);
 
@@ -27,7 +27,7 @@ void process_user_status(room_user *room_user) {
     if (hashtable_size(room_user->statuses) > 0) {
         hashtable_get_keys(room_user->statuses, &keys);
 
-        for (int i = 0; i < array_size(keys); i++) {
+        for (size_t i = 0; i < array_size(keys); i++) {
             char *key;
             room_user_status *rus;
 

@@ -62,38 +62,38 @@ void walk_task(room *room) {
 }
 
 void process_user(player *player) {
-    room_user *room_user = player->room_user;
+    room_user *user = player->room_user;
 
-    if (room_user->is_walking) {
-        if (room_user->next != NULL) {
-            room_user->current->x = room_user->next->x;
-            room_user->current->y = room_user->next->y;
-            room_user->current->z = room_user->next->z;
-            free(room_user->next);
+    if (user->is_walking) {
+        if (user->next != NULL) {
+            user->current->x = user->next->x;
+            user->current->y = user->next->y;
+            user->current->z = user->next->z;
+            free(user->next);
         }
 
-        if (deque_size(room_user->walk_list) > 0) {
+        if (deque_size(user->walk_list) > 0) {
             coord *next;
-            deque_remove_first(room_user->walk_list, (void*)&next);
-            next->z = room_user->room->room_data->model_data->heights[next->x][next->y];
+            deque_remove_first(user->walk_list, (void*)&next);
+            next->z = user->room->room_data->model_data->heights[next->x][next->y];
 
             char value[30];
             sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
 
-            int rotation = calculate(room_user->current->x, room_user->current->y, next->x, next->y);
-            room_user->body_rotation = rotation;
-            room_user->head_rotation = rotation;
+            int rotation = calculate(user->current->x, user->current->y, next->x, next->y);
+            user->body_rotation = rotation;
+            user->head_rotation = rotation;
 
-            room_user_add_status(room_user, "mv", value, -1, "", 0, 0);
-            room_user->next = next;
+            room_user_add_status(user, "mv", value, -1, "", 0, 0);
+            user->next = next;
 
 
         } else {
-            room_user->next = NULL;
-            room_user->is_walking = 0;
+            user->next = NULL;
+            user->is_walking = 0;
 
-            room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
-            stop_walking(room_user);
+            room_tile *tile = user->room->room_map->map[user->current->x][user->current->y];
+            stop_walking(user);
         }
 
         player->room_user->needs_update = 1;
