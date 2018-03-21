@@ -17,14 +17,14 @@ void MESSENGER_SENDMSG(player *session, incoming_message *message) {
     }
 
     char *chat_message = im_read_str(message);
-    char *filtered_chat_message = filter_vulnerable_characters(chat_message, 0);
+    filter_vulnerable_characters(&chat_message, false);
 
     for (size_t i = 0; i < list_size(friends); i++) {
         messenger_entry *friend;
         list_get_at(friends, i, (void*)&friend);
 
         char *date = get_time_formatted();
-        int message_id = messenger_query_new_message(friend->user_id, session->player_data->id, filtered_chat_message, date);
+        int message_id = messenger_query_new_message(friend->user_id, session->player_data->id, chat_message, date);
 
         player *player_friend = player_manager_find_by_id(friend->user_id);
 
@@ -34,7 +34,7 @@ void MESSENGER_SENDMSG(player *session, incoming_message *message) {
             om_write_int(response, message_id);
             om_write_int(response, session->player_data->id);
             om_write_str(response, date);
-            om_write_str(response, filtered_chat_message);
+            om_write_str(response, chat_message);
             player_send(player_friend, response);
             om_cleanup(response);
         }
@@ -44,7 +44,6 @@ void MESSENGER_SENDMSG(player *session, incoming_message *message) {
     }
 
     free(chat_message);
-    free(filtered_chat_message);
     
     list_destroy(friends);
 }

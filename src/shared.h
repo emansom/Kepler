@@ -27,7 +27,7 @@ server global;
 
 char *get_time_formatted();
 char *get_time_formatted_custom(unsigned long);
-char *filter_vulnerable_characters(char*, int);
+void filter_vulnerable_characters(char**, int);
 void **testing_iterate(List*);
 char *get_argument(char*, char*, int);
 char *replace(const char*, char, const char*);

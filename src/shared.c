@@ -21,23 +21,21 @@ char *get_time_formatted_custom(unsigned long time_seconds) {
     return strdup(buff);
 }
 
-char *filter_vulnerable_characters(char *str, int remove_newline) {
-    char *body = strdup(str);
+void filter_vulnerable_characters(char **str, int remove_newline) {
+    char *body = *str;
     for (int i = 0; i < strlen(body); i++) {
         char ch = body[i];
 
         if (ch == 2 || ch == 9 || ch == 10 || ch == 12) {
-            body[i] == (char)' ';
+            body[i] = (char)' ';
         }
 
         if (remove_newline) {
             if (ch == 13) {
-                body[i] == (char)' ';
+                body[i] = (char)' ';
             }
         }
     }
-
-    return body;
 }
 
 char *get_argument(char *str, char *delim, int index) {

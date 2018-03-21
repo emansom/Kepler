@@ -19,10 +19,8 @@ void CHAT(player *session, incoming_message *im) {
 
     int source_x = session->room_user->current->x;
     int source_y = session->room_user->current->y;
-    
-    outgoing_message *status_update = om_create(34);
 
-    for (int i = 0; i < list_size(room->users); i++) {
+    for (size_t i = 0; i < list_size(room->users); i++) {
         player *room_player;
         list_get_at(room->users, i, (void*)&room_player);
 

@@ -10,15 +10,15 @@ void CREATEFLAT(player *player, incoming_message *message) {
     // Client [0.0.0.0] incoming data: 29 / @]/first floor/xddd/model_a/open/1
     char *content = im_get_content(message);
     char *floor_setting = get_argument(content, "/", 0);
-    char *room_name_check = get_argument(content, "/", 1);
-    char *room_select_model_check = get_argument(content, "/", 2);
-    char *room_setting_check = get_argument(content, "/", 3);
-    char *room_show_name_check = get_argument(content, "/", 4);
+    char *room_name = get_argument(content, "/", 1);
+    char *room_select_model = get_argument(content, "/", 2);
+    char *room_setting = get_argument(content, "/", 3);
+    char *room_show_name = get_argument(content, "/", 4);
 
-    char *room_name = filter_vulnerable_characters(room_name, 1);
-    char *room_select_model = filter_vulnerable_characters(room_select_model, 1);
-    char *room_setting = filter_vulnerable_characters(room_setting, 1);
-    char *room_show_name = filter_vulnerable_characters(room_show_name, 1);
+    filter_vulnerable_characters(&room_name, true);
+    filter_vulnerable_characters(&room_select_model, true);
+    filter_vulnerable_characters(&room_setting, true);
+    filter_vulnerable_characters(&room_show_name, true);
 
     if (strcmp(floor_setting, "first floor") != 0) {
         goto cleanup;
@@ -53,12 +53,6 @@ void CREATEFLAT(player *player, incoming_message *message) {
         free(room_setting);
         free(room_show_name);
         free(content);
-
-        // Unfiltered responses
-        free(room_name_check);
-        free(room_select_model_check);
-        free(room_setting_check);
-        free(room_show_name_check);
 }
 
 

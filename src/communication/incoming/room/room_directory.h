@@ -12,10 +12,10 @@ void room_directory(player *player, incoming_message *message) {
     om_cleanup(om);
 
     if (is_public) {
-        memmove(content, content+1, strlen(content)); // remove first character
+        char* contents_chopped = content + 1;
 
         int len;
-        int room_id = vl64_decode(content, &len);
+        int room_id = vl64_decode(contents_chopped, &len);
 
         room *room = room_manager_get_by_id(room_id);
 

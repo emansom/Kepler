@@ -11,7 +11,7 @@ void GOTOFLAT(player *player, incoming_message *message) {
         return;
     }
 
-    room *room = room_manager_get_by_id(strtol(content, NULL, 10));
+    room *room = room_manager_get_by_id((int)strtol(content, NULL, 10));
 
     if (room != NULL) { 
         room_enter(room, player);
