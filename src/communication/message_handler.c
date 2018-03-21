@@ -73,7 +73,7 @@
 /**
  * Assigns all header handlers to this array
  */
-void mh_add_messages() {
+void message_handler_init() {
     // Login
     message_requests[206] = INIT_CRYPTO;
     message_requests[202] = GENERATEKEY;
@@ -149,7 +149,7 @@ Client [0.0.0.0] incoming data: 149 / BU@M@C123@H@J07.04.1992@C@F123456*/
  * @param im the incoming message struct
  * @param player the player struct
  */
-void mh_invoke_message(incoming_message *im, player *player) {
+void message_handler_invoke(incoming_message *im, player *player) {
     printf("Client [%s] incoming data: %i / %s\n", player->ip_address, im->header_id, im->data);
 
     if (message_requests[im->header_id] == NULL) {

@@ -23,7 +23,7 @@ void MESSENGER_ACCEPTBUDDY(player *session, incoming_message *message) {
     player *friend = player_manager_find_by_id(friend_id);
 
     if (friend != NULL) {    
-        outgoing_message *response = om_create(137); // "BI"
+        response = om_create(137); // "BI"
         messenger_entry_serialise(session->player_data->id, response);
         player_send(friend, response);
         om_cleanup(response);

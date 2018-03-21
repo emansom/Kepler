@@ -90,7 +90,7 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 
             if (p != NULL) {
                 incoming_message *im = im_create(message);
-                mh_invoke_message(im, p);
+                message_handler_invoke(im, p);
                 im_cleanup(im);
             }
 

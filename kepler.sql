@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey','200',0,0,1,'I''m a new xddd','1521194299');
+INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey','200',0,0,1,'I''m a new xddd','1521462415');
 INSERT INTO `users` VALUES (2,'john','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'I''m a new user!','1521194032');
 INSERT INTO `users` VALUES (3,'mark','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'u wot br0han','1521194299');
 CREATE TABLE IF NOT EXISTS `rooms_models` (

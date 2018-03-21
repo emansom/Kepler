@@ -9,8 +9,10 @@ typedef struct room_map_s {
     room_tile *map[200][200];
 } room_map;
 
-void init_room_map(room*);
-void map_regenerate(room*);
+void room_map_init(room *);
+void room_map_reset(room *);
+void room_map_regenerate(room *);
+void room_map_add_public_items(room *);
 void room_map_destroy(room*);
 
 #endif

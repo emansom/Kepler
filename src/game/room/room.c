@@ -121,7 +121,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  */
 void room_enter(room *room, player *player) {
     if (list_size(room->users) == 0) {
-        init_room_map(room);
+        room_map_init(room);
     }
 
     if (player->room_user->room != NULL) {
@@ -215,7 +215,7 @@ void room_load(room *room, player *player) {
 void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
-    for (int i = 0; i < list_size(room->users); i++) {
+    for (size_t i = 0; i < list_size(room->users); i++) {
         player *room_player;
         list_get_at(room->users, i, (void*)&room_player);
 
@@ -260,6 +260,7 @@ void room_dispose(room *room) {
         free(room->room_data->ccts);
         free(room->room_data->password);
         free(room->room_data);
+        room->room_data = NULL;
     }
 
     list_destroy(room->users);

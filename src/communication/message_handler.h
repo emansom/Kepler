@@ -9,7 +9,7 @@ typedef struct player_s player;
 typedef void (*mh_request)(player*, incoming_message*);
 mh_request message_requests[MESSAGES];
 
-void mh_invoke_message(incoming_message*, player*);
-void mh_add_messages();
+void message_handler_invoke(incoming_message *, player *);
+void message_handler_init();
 
 #endif

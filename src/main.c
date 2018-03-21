@@ -35,8 +35,15 @@ int main(void) {
     model_manager_init();
     category_manager_init();
     room_manager_init();
-    mh_add_messages();
+    message_handler_init();
     create_thread_pool();
+
+    /*int *num = malloc(sizeof(int));
+    *num = 10;
+
+    printf("number: %i\n", *num);
+
+    free(num)*/
     
     print_info("Starting server...\n");
     start_server("0.0.0.0", 12321);

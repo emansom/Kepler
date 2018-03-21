@@ -24,8 +24,8 @@
  */
 player *player_create(void *socket, char *ip_address) {
     player *p = malloc(sizeof(player));
-    p->room_user = room_user_create();
-    p->messenger = messenger_create();
+    p->room_user = (void*)room_user_create();
+    p->messenger = (void*)messenger_create();
     p->stream = socket;
     p->ip_address = strdup(ip_address);
     p->player_data = NULL;
@@ -81,15 +81,9 @@ void player_send(player *p, outgoing_message *om) {
 
     uv_handle_t *handle = p->stream;
     uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
-    uv_buf_t wrbuf = uv_buf_init(data, strlen(data));
+    uv_buf_t wrbuf = uv_buf_init(data, (unsigned int)strlen(data));
 
     int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
-
-    if (r) {
-        //printf("Error sending message\n");
-    } else {
-        //printf("Client [%s]: %s\n", p->ip_address, data);
-    }
 }
 
 /**
@@ -127,7 +121,6 @@ void player_cleanup(player *player) {
         return;
     }
 
-    query_player_save_last_online(player);
     player_manager_remove(player);
 
     if (player->room_user->room != NULL) {
@@ -135,9 +128,11 @@ void player_cleanup(player *player) {
     }
 
     if (player->player_data != NULL) {
+        query_player_save_last_online(player);
+
         List *rooms = room_manager_get_by_user_id(player->player_data->id);
 
-        for (int i = 0; i < list_size(rooms); i++) {
+        for (size_t i = 0; i < list_size(rooms); i++) {
             room *room;
             list_get_at(rooms, i, (void*)&room);
 

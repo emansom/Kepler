@@ -30,7 +30,7 @@ void walk_task(room *room) {
     int user_updates = 0;
     outgoing_message *status_update = om_create(34); // "@b"
 
-    for (int i = 0; i < list_size(users); i++) {
+    for (size_t i = 0; i < list_size(users); i++) {
         player *room_player;
         list_get_at(users, i, (void*)&room_player);
 
