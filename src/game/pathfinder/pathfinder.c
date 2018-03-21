@@ -30,6 +30,11 @@ coord DIAGONAL_MOVE_POINTS[] = {
     { -1, -1, 0 }
 };
 
+/**
+ *
+ * @param room_user
+ * @return
+ */
 Deque *create_path(room_user *room_user) {
     if (room_user->room == NULL) {
         return NULL;
@@ -38,7 +43,7 @@ Deque *create_path(room_user *room_user) {
     Deque *path;
     deque_new(&path);
 
-    room *user_room = room_user->room;
+    room *user_room = (void *)room_user->room;
     int map_size_x = user_room->room_data->model_data->map_size_x;
     int map_size_y = user_room->room_data->model_data->map_size_y;
 
@@ -47,7 +52,6 @@ Deque *create_path(room_user *room_user) {
 
     if (pathfinder->nodes != NULL) {
         while (pathfinder->nodes->node != NULL) {
-            node *current_node = pathfinder->nodes;
             int x = pathfinder->nodes->x;
             int y = pathfinder->nodes->y;
 
@@ -55,7 +59,7 @@ Deque *create_path(room_user *room_user) {
                 deque_add_first(path, create_coord(x, y));
             }
             
-            pathfinder->nodes = pathfinder->nodes->node;
+            pathfinder->nodes = (void *)pathfinder->nodes->node;
         }
 
         for (int x = 0; x < map_size_x; x++) {
@@ -64,7 +68,6 @@ Deque *create_path(room_user *room_user) {
                 if (node != NULL) {
                     free(node);
                     pathfinder->map[x][y] = NULL;
-                    node = NULL;
                 }
             }
         }
@@ -76,8 +79,16 @@ Deque *create_path(room_user *room_user) {
     return path;
 }
 
+/**
+ *
+ * @param room_user
+ * @param from
+ * @param to
+ * @param is_final_move
+ * @return
+ */
 int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move) {
-    room *room_instance = room_user->room;
+    room *room_instance = (void *)room_user->room;
 
     if (from.x < 0 || from.y < 0 || to.x < 0 || to.y < 0) {
         return 0;
@@ -129,6 +140,13 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
     return 1; // 1 for true
 }
 
+/**
+ *
+ * @param room_user
+ * @param map_size_x
+ * @param map_size_y
+ * @return
+ */
 pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_size_y) {
     pathfinder *p = malloc(sizeof(pathfinder));
     p->nodes = NULL;
@@ -195,12 +213,12 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
 
                     if (cost < p->nodes->cost) {
                         p->nodes->cost = cost;
-                        p->nodes->node = p->current;
+                        p->nodes->node = (void *)p->current;
                     }
 
                     if (!p->nodes->open) {
                         if (p->nodes->x == room_user->goal->x && p->nodes->y == room_user->goal->y) {
-                            p->nodes->node = p->current;
+                            p->nodes->node = (void *)p->current;
                             return p;
                         }
 
