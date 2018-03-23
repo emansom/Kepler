@@ -12,4 +12,6 @@ void APPROVENAME(player *player, incoming_message *message) {
     om_write_int(om, name_check_code);
     player_send(player, om);
     om_cleanup(om);
+
+    free(username);
 }

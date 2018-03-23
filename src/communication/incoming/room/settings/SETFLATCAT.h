@@ -25,8 +25,6 @@ void SETFLATCAT(player *player, incoming_message *message) {
         return;
     }
 
-    // TODO: Check category min ranks
-
     if (player->player_data->rank >= category->minrole_setflatcat) {
         room->room_data->category = category_id;
         query_room_save(room);

@@ -11,4 +11,7 @@ void APPROVE_PASSWORD(player *player, incoming_message *message) {
     om_write_int(om, valid_password(username, password));
     player_send(player, om);
     om_cleanup(om);
+
+    free(username);
+    free(password);
 }

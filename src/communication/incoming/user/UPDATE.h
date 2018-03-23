@@ -7,6 +7,7 @@ void UPDATE(player *player, incoming_message *message) {
 
         if (update_id == 4) {
             char *content = im_read_str(message);
+            filter_vulnerable_characters(&content, true);
             
             if (content != NULL) {
                 if (is_numeric(content) && strlen(content) == 25) {

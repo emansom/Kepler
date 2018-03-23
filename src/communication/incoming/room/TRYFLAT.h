@@ -16,15 +16,15 @@ void TRYFLAT(player *player, incoming_message *message) {
         if (!is_numeric(temp)) {
             free(temp);
             goto cleanup;
-            return;
         }
 
-        room_id = strtol(content, NULL, 10);
+        room_id = (int)strtol(content, NULL, 10);
         password = get_argument(content, "/", 1);
+
+        free(temp);
     } else {
         if (!is_numeric(content)) {
             goto cleanup;
-            return;
         }
     }
 

@@ -7,7 +7,7 @@ void GETFLATINFO(player *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     if (is_numeric(content)) {
-        int room_id = strtol(content, NULL, 10);
+        int room_id = (int)strtol(content, NULL, 10);
         room *room = room_manager_get_by_id(room_id);
 
         outgoing_message *flat_info = om_create(54); // "@v"

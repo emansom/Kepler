@@ -15,7 +15,7 @@ void SETFLATINFO(player *player, incoming_message *message) {
         return;
     }
 
-    room *room = room_manager_get_by_id(strtol(argument, NULL, 10));
+    room *room = room_manager_get_by_id((int)strtol(argument, NULL, 10));
 
     if (room == NULL) {
         goto cleanup;
@@ -41,17 +41,19 @@ void SETFLATINFO(player *player, incoming_message *message) {
 
         if (strcmp(key, "description") == 0) {
             free(room->room_data->description);
+
+            filter_vulnerable_characters(&value, false);
             room->room_data->description = strdup(value);
 
         } else if (strcmp(key, "allsuperuser") == 0) {
             if (is_numeric(value)) {
-                int allsuperuser = strtol(value, NULL, 10);
+                int allsuperuser = (int)strtol(value, NULL, 10);
                 room->room_data->superusers = (allsuperuser == 1);
             }
 
         } else if (strcmp(key, "maxvisitors") == 0) {
             if (is_numeric(value)) {
-                int max_visitors = strtol(value, NULL, 10);
+                int max_visitors = (int)strtol(value, NULL, 10);
             
                 if (max_visitors < 10 || max_visitors > 50) {
                     max_visitors = 25;

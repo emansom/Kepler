@@ -20,8 +20,8 @@ void G_STAT(player *session, incoming_message *message) {
         return;
     }
     
-    outgoing_message *players = om_create(34); // "@b"
-    
+    outgoing_message *players = om_create(34); // "@b
+
     for (size_t i = 0; i < list_size(room->users); i++) {
         player *room_player;
         list_get_at(room->users, i, (void*)&room_player);

@@ -10,12 +10,8 @@ void GETFLATCAT(player *player, incoming_message *message) {
     }
 
     outgoing_message *om = om_create(222); // "C^"
-    
-    if (room != NULL) {
-        om_write_int(om, room->room_id);    
-        om_write_int(om, room->room_data->category);        
-    }
-
+    om_write_int(om, room->room_id);
+    om_write_int(om, room->room_data->category);
     player_send(player, om);
     om_cleanup(om);
 }

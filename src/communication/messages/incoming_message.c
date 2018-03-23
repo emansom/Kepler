@@ -13,10 +13,9 @@ incoming_message *im_create(char *message) {
     incoming_message *im = malloc(sizeof(incoming_message));
     im->data = message;
     im->counter = 0;
-    im->total_length = strlen(message);
+    im->total_length = (int)strlen(message);
     im->header = im_read_b64(im);
     im->header_id = base64_decode(im->header);
-
 }
 
 /**
@@ -92,7 +91,7 @@ char *im_get_content(incoming_message *im) {
     }
 
     int substring = im->counter;
-    int new_len = strlen(im->data) - substring;
+    int new_len = (int)strlen(im->data) - substring;
 
     char *new_str = malloc((new_len + 1) * sizeof(char));
     memcpy(new_str, &im->data[substring], strlen(im->data) - substring);
@@ -115,7 +114,7 @@ char *im_read_str(incoming_message *im) {
     char *recv_length = im_read_b64(im);
     int length = base64_decode(recv_length);
 
-    char *str = malloc(length + 1 * sizeof(char));
+    char *str = malloc((length + 1) * sizeof(char));
 
     if (str) {
         for (int i = 0; i < length; i++) {
@@ -131,6 +130,13 @@ char *im_read_str(incoming_message *im) {
     }
 }
 
+/**
+ * Used for skipping over garbage data.
+ *
+ * @param im the incoming message instance
+ * @param amount_read the amount of bytes to read
+ * @return none
+ */
 void *im_read(incoming_message *im, int amount_read) {
     im->counter += amount_read;
 }

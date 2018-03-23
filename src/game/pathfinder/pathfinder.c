@@ -113,7 +113,6 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
     double old_height = room_instance->room_data->model_data->heights[from.x][from.y];
     double new_height = room_instance->room_data->model_data->heights[to.x][to.y];
 
-    // Can't go down more than 4 in height or can't go up more than 1.5 in height
     if (old_height - 4 >= new_height) {
         return 0;
     }
