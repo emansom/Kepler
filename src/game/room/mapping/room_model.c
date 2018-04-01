@@ -43,6 +43,11 @@ room_model *room_model_create(char *model_id, char *model_name, int door_x, int 
     return model;
 }
 
+/**
+ * Parse heightmap, will grab height and enterable/non-enterable tiles
+ *
+ * @param room_model the room model struct to parse
+ */
 void room_model_parse(room_model *room_model) {
     char *heightmap = strdup(room_model->heightmap);
     char *array[100];
@@ -55,7 +60,7 @@ void room_model_parse(room_model *room_model) {
         array[++lines] = strtok(NULL,"\r");
     }
 
-    int map_size_x = strlen(array[0]);
+    int map_size_x = (int)strlen(array[0]);
     int map_size_y = lines;
 
     room_model->map_size_x = map_size_x;

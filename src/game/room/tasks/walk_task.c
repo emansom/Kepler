@@ -23,8 +23,13 @@
 
 void process_user(player *player);
 
+/**
+ * Walk task cyle that is called every 500ms
+ *
+ * @param room the room handled
+ */
 void walk_task(room *room) {
-    List *users;// = room->users;
+    List *users;
     list_copy_shallow(room->users, &users);
 
     int user_updates = 0;
@@ -61,8 +66,13 @@ void walk_task(room *room) {
     list_destroy(users);
 }
 
+/**
+ * Process the user in the walk task cycle
+ *
+ * @param player the player struct to process
+ */
 void process_user(player *player) {
-    room_user *user = player->room_user;
+    room_user *user = (void*)player->room_user;
 
     if (user->is_walking) {
         if (user->next != NULL) {
@@ -91,8 +101,7 @@ void process_user(player *player) {
         } else {
             user->next = NULL;
             user->is_walking = 0;
-
-            room_tile *tile = user->room->room_map->map[user->current->x][user->current->y];
+            //room_tile *tile = user->room->room_map->map[user->current->x][user->current->y];
             stop_walking(user);
         }
 

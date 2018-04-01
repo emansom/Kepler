@@ -85,7 +85,7 @@ void walk_to(room_user *room_user, int x, int y) {
  */
 void room_user_clear_walk_list(room_user *room_user) {
     if (room_user->walk_list != NULL) {
-        for (int i = 0; i < (int)deque_size(room_user->walk_list); i++) {
+        for (size_t i = 0; i < (int)deque_size(room_user->walk_list); i++) {
             coord *coord;
             deque_get_at(room_user->walk_list, i, (void*)&coord);
             free(coord);
@@ -212,8 +212,8 @@ void room_user_reset(room_user *room_user) {
     if (hashtable_size(room_user->statuses) > 0) {
         hashtable_get_keys(room_user->statuses, &keys);
 
-        for (int i = 0; i < array_size(keys); i++) {
-            char *key, *value;
+        for (size_t i = 0; i < array_size(keys); i++) {
+            char *key;
             array_get_at(keys, i, (void*)&key);
             room_user_remove_status(room_user, key);
         }

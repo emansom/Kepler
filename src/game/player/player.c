@@ -77,6 +77,7 @@ void player_send(player *p, outgoing_message *om) {
     }
 
     om_finalise(om);
+
     char *data = om->sb->data;
 
     uv_handle_t *handle = p->stream;

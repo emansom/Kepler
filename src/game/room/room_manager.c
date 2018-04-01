@@ -35,6 +35,12 @@ void room_manager_add_public_rooms() {
     list_destroy(rooms);
 }
 
+/**
+ * Add a room by room id if the room doesn't exist, will fetch data
+ * from the database.
+ *
+ * @param room_id the room id
+ */
 void room_manager_add(int room_id) {
     if (hashtable_contains_key(global.room_manager.rooms, &room_id)) {
         return;
@@ -51,7 +57,7 @@ void room_manager_add(int room_id) {
 void room_manager_add_by_user_id(int user_id) {
     List *rooms = room_query_get_by_owner_id(user_id);
 
-    for (int i = 0; i < list_size(rooms); i++) {
+    for (size_t i = 0; i < list_size(rooms); i++) {
         room *room;
         list_get_at(rooms, i, (void*)&room);
         

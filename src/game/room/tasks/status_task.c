@@ -12,15 +12,24 @@
 
 void process_user_status(room_user *room_user);
 
+/**
+ * Status task cycle that is called every 1000ms.
+ *
+ * @param room the room struct to process
+ */
 void status_task(room *room) {
     for (size_t i = 0; i < list_size(room->users); i++) {
         player *room_player;
         list_get_at(room->users, i, (void*)&room_player);
-
-        process_user_status(room_player->room_user);
+        process_user_status((void*)room_player->room_user);
     }
 }
 
+/**
+ * Process the user in the status task cycle
+ *
+ * @param player the player struct to process
+ */
 void process_user_status(room_user *room_user) {
     Array *keys;
 

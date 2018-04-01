@@ -10,6 +10,9 @@
 #include "game/room/room.h"
 #include "game/room/mapping/room_model.h"
 
+void room_map_add_public_items(room *room);
+void room_map_reset(room *room);
+
 /**
  * Initalises the room map for the furniture collision.
  *
@@ -34,12 +37,6 @@ void room_map_reset(room *room) {
     // Set everything to null...
     for (int x = 0; x < room->room_data->model_data->map_size_x; x++) {
         for (int y = 0; y < room->room_data->model_data->map_size_y; y++) {
-            room_tile *tile = room->room_map->map[x][y];
-
-            if (tile != NULL) {
-                room_tile_destroy(tile, room);
-            }
-
             room->room_map->map[x][y] = NULL;
         }
     }
@@ -61,8 +58,6 @@ void room_map_regenerate(room *room) {
 
             tile = room_tile_create(room);
             room->room_map->map[x][y] = tile;
-
-
         }
     }
 
@@ -94,7 +89,9 @@ void room_map_add_public_items(room *room) {
  * @param room the room instance
  */
 void room_map_destroy(room *room) {
-    room_map_reset(room);
+    if (room->room_map != NULL) {
+        room_map_reset(room);
+    }
 
     free(room->room_map);
     room->room_map = NULL;

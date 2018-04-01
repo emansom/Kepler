@@ -148,7 +148,7 @@ void room_enter(room *room, player *player) {
     if (room->walking_job == NULL) {
         room->walking_job = create_runnable();
         room->walking_job->request = walk_task;
-        room->walking_job->room = room;
+        room->walking_job->room = (void*) room;
         room->walking_job->room_id = room->room_id;
         room->walking_job->millis = 500;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
@@ -157,7 +157,7 @@ void room_enter(room *room, player *player) {
     if (room->status_job == NULL) {
         room->status_job = create_runnable();
         room->status_job->request = status_task;
-        room->status_job->room = room;
+        room->status_job->room = (void*) room;
         room->status_job->room_id = room->room_id;
         room->status_job->millis = 1000;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->status_job);
@@ -176,7 +176,7 @@ void room_leave(room *room, player *room_player) {
     list_remove(room->users, room_player, NULL);
     room->room_data->visitors_now = list_size(room->users);
 
-    room_user_reset(room_player->room_user); 
+    room_user_reset((void*)room_player->room_user);
 
     outgoing_message *om = om_create(29); // "@]"
     sb_add_int(om->sb, room_player->player_data->id);
@@ -242,6 +242,9 @@ void room_dispose(room *room) {
     if (list_size(room->users) > 0) {
         return;
     }
+
+    printf("Room map destroy!\n");
+    room_map_destroy(room);
 
     if (list_size(room->public_items) > 0) {
         return; // Prevent public rooms
