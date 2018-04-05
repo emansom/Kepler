@@ -8,20 +8,10 @@
 
 #include "database/db_connection.h"
 
-int query_room_create(int owner_id, char *room_name, char *room_model, char *room_setting, char *room_show_name) {
+int query_room_create(int owner_id, char *room_name, char *room_model, char *room_show_name) {
     char *room_description = "";
     int showname = 1;
-
-    int db_room_setting = 0;
     int room_id = -1;
-
-    if (strcmp(room_setting, "closed") == 0) {
-        db_room_setting = 1;
-    }
-
-    if (strcmp(room_setting, "password") == 0) {
-        db_room_setting = 2;
-    }
 
     if (strcmp(room_show_name, "0") == 0) {
         showname = 0;
@@ -34,9 +24,9 @@ int query_room_create(int owner_id, char *room_name, char *room_model, char *roo
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, owner_id);
-        sqlite3_bind_text(stmt, 2, room_name, strlen(room_name), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 3, room_description, strlen(room_description), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 4, room_model, strlen(room_model), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, room_name, (int)strlen(room_name), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, room_description, (int)strlen(room_description), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 4, room_model, (int)strlen(room_model), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 5, showname);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
@@ -46,7 +36,7 @@ int query_room_create(int owner_id, char *room_name, char *room_model, char *roo
         printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
         return 1;
     } else {
-        room_id = sqlite3_last_insert_rowid(conn);
+        room_id = (int)sqlite3_last_insert_rowid(conn);
     }
 
     sqlite3_finalize(stmt);

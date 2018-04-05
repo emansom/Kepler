@@ -9,6 +9,7 @@
 #include "game/player/player_manager.h"
 #include "game/room/mapping/room_model_manager.h"
 #include "game/room/room_manager.h"
+#include "game/catalogue/catalogue_manager.h"
 
 #include "game/navigator/navigator_category_manager.h"
 #include "util/threading.h"
@@ -21,6 +22,7 @@ typedef struct server_s {
     struct room_manager room_manager;
     struct room_model_manager room_model_manager;
     struct room_category_manager room_category_manager;
+    struct catalogue_manager catalogue_manager;
 } server;
 
 server global;

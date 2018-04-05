@@ -35,6 +35,7 @@ int main(void) {
     model_manager_init();
     category_manager_init();
     room_manager_init();
+    catalogue_manager_init();
     message_handler_init();
     create_thread_pool();
 

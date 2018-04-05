@@ -8,19 +8,24 @@
  * @return the connection details
  */
 connection_details db_connection_settings() {
-    connection_details settings;
+    connection_details settings = {};
     strcpy(settings.database_name, "Kepler.db");
     return settings;
 }
 
+/**
+ *
+ * @param path
+ * @return
+ */
 char* load_file(char const* path) {
-    char* buffer = 0;
-    long length;
+    char* buffer = NULL;
+    size_t length;
     FILE * f = fopen (path, "rb"); //was "rb"
 
     if (f) {
         fseek (f, 0, SEEK_END);
-        length = ftell (f);
+        length = (size_t )ftell (f);
         fseek (f, 0, SEEK_SET);
         buffer = (char*)malloc ((length+1)*sizeof(char));
 
@@ -29,9 +34,12 @@ char* load_file(char const* path) {
         }
 
         fclose (f);
+
+        if (buffer != NULL) {
+            buffer[length] = '\0';
+        }
     }
 
-    buffer[length] = '\0';
     return buffer;
 }
 
@@ -42,7 +50,7 @@ char* load_file(char const* path) {
  * @return the MYSQL connection
  */
 sqlite3 *db_create_connection() {
-    FILE *file;
+    FILE *file = NULL;
     int run_query = 0;
     char *err_msg = 0;
 
@@ -73,6 +81,10 @@ sqlite3 *db_create_connection() {
 
             free(buffer);
         }
+    }
+
+    if (file != NULL) {
+        fclose(file);
     }
 
     return db;
