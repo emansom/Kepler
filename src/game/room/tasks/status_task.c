@@ -46,7 +46,7 @@ void process_user_status(room_user *room_user) {
             if (rus->lifetime_expire > 0) {
                 rus->lifetime_expire--;
             } else if (rus->lifetime_expire == 0) {
-                room_user_remove_status(room_user, "wave");
+                room_user_remove_status(room_user, key);
                 room_user->needs_update = 1;
             }
         }

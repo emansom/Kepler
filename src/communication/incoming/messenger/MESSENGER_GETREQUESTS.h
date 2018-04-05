@@ -7,7 +7,7 @@
 #include "communication/messages/outgoing_message.h"
 
 void MESSENGER_GETREQUESTS(player *p, incoming_message *message) {
-    for (int i = 0; i < list_size(p->messenger->requests); i++) {
+    for (size_t i = 0; i < list_size(p->messenger->requests); i++) {
         messenger_entry *request_entry;
         list_get_at(p->messenger->requests, i, (void*)&request_entry);
 

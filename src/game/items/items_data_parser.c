@@ -23,9 +23,8 @@ List *item_parser_get_items(char *model) {
 
     char * line = NULL;
     size_t len = 0;
-    size_t read;
 
-    while ((read = getline(&line, &len, file)) != -1) {
+    while ((getline(&line, &len, file)) != -1) {
         if (line == NULL) {
             continue;
         }
