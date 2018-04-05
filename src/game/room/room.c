@@ -120,12 +120,13 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  * @param player the player
  */
 void room_enter(room *room, player *player) {
-    if (list_size(room->users) == 0) {
-        room_map_init(room);
-    }
-
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player);
+    }
+
+    if (list_size(room->users) == 0) {
+        printf("Room map create!\n");
+        room_map_init(room);
     }
 
     if (room->room_data->model_data == NULL) {
@@ -218,15 +219,6 @@ void room_send(room *room, outgoing_message *message) {
     for (size_t i = 0; i < list_size(room->users); i++) {
         player *room_player;
         list_get_at(room->users, i, (void*)&room_player);
-
-        if (room_player == NULL) {
-            continue;
-        }
-
-        if (room_player->room_user == NULL) {
-            continue;
-        }
-
         player_send(room_player, message);
     }
 
