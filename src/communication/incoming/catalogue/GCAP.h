@@ -18,9 +18,22 @@ void GCAP(player *player, incoming_message *message) {
         goto cleanup;
     }
 
-    printf("page name: %s\n", page_name);
-
     outgoing_message *catalogue_page = om_create(127); // "A"
+    om_write_str_kv(catalogue_page, "i", page->name_index);
+    om_write_str_kv(catalogue_page, "n", page->name);
+    om_write_str_kv(catalogue_page, "l", page->layout);
+    om_write_str_kv(catalogue_page, "g", page->image_headline);
+    om_write_str_kv(catalogue_page, "e", page->image_teasers);
+    om_write_str_kv(catalogue_page, "h", page->body);
+
+    if (page->label_pick != NULL) {
+        om_write_str_kv(catalogue_page, "w", page->label_pick);
+    }
+
+    if (page->label_extra_s != NULL) {
+        om_write_str_kv(catalogue_page, "s", page->label_extra_s);
+    }
+
     player_send(player, catalogue_page);
     om_cleanup(catalogue_page);
 

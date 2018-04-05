@@ -3,26 +3,11 @@
 
 #include "list.h"
 
-#include "game/catalogue/catalogue_manager.h"
-#include "game/catalogue/catalogue_page.h"
+void GETUSERFLATCATS(player *player, incoming_message *message) {
+    outgoing_message *navigator = om_create(221); // "C]"
 
-#include "game/player/player.h"
-
-void GCIX(player *player, incoming_message *message) {
-    List *pages = catalogue_manager_get_pages();
-
-    outgoing_message *catalogue_pages = om_create(126); // "A~"
-
-    for (size_t i = 0; i < list_size(pages); i++) {
-        catalogue_page *page = NULL;
-        list_get_at(pages, i, (void *) &page);
-
-        if (player->player_data->rank >= page->min_role) {
-            om_write_str_delimeter(catalogue_pages, page->name_index, 9);
-            om_write_str_delimeter(catalogue_pages, page->name, 13);
-        }
-    }
-
-    player_send(player, catalogue_pages);
-    om_cleanup(catalogue_pages);
+    player_send(player, navigator);
+    om_cleanup(navigator);
+    
+    list_destroy(categories);
 }

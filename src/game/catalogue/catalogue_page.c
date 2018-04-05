@@ -6,6 +6,21 @@
 
 #include "catalogue_page.h"
 
+/**
+ *
+ * @param id
+ * @param min_role
+ * @param name_index
+ * @param name
+ * @param layout
+ * @param image_headline
+ * @param image_teasers
+ * @param body
+ * @param label_pick
+ * @param label_extra_s
+ * @param label_extra_t
+ * @return
+ */
 catalogue_page *catalogue_page_create(int id, int min_role, char *name_index, char *name, char *layout, char *image_headline, char *image_teasers, char *body, char *label_pick, char *label_extra_s, char *label_extra_t) {
     catalogue_page *page = malloc(sizeof(catalogue_page));
     page->id = id;
