@@ -8,6 +8,11 @@
 #include "item.h"
 #include "items_data_parser.h"
 
+/**
+ *
+ * @param model
+ * @return
+ */
 List *item_parser_get_items(char *model) {
     char file_path[30];
     sprintf(file_path, "data/public_items/%s.dat", model);
@@ -39,10 +44,10 @@ List *item_parser_get_items(char *model) {
         item *room_item = item_create(
             get_argument(line, " ", 1),
             -1,
-            strtol(str_x, NULL, 10),
-            strtol(str_y, NULL, 10),
-            strtol(str_z, NULL, 10),
-            strtol(str_rotation, NULL, 10),
+            (int) strtol(str_x, NULL, 10),
+            (int) strtol(str_y, NULL, 10),
+            (int) strtol(str_z, NULL, 10),
+            (int) strtol(str_rotation, NULL, 10),
             get_argument(line, " ", 0)
         );
 

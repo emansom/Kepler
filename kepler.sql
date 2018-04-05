@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey','200',0,0,1,'I''m a new xddd','1521462415');
+INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey','200',0,0,1,'I''m a new xddd','1522943656');
 INSERT INTO `users` VALUES (2,'john','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'I''m a new user!','1521194032');
 INSERT INTO `users` VALUES (3,'mark','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'u wot br0han','1521194299');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
@@ -218,4 +218,54 @@ CREATE TABLE IF NOT EXISTS `messenger_friends` (
 );
 INSERT INTO `messenger_friends` VALUES (1,2);
 INSERT INTO `messenger_friends` VALUES (1,3);
+CREATE TABLE IF NOT EXISTS `catalogue_pages` (
+	`id`	INTEGER,
+	`order_id`	INTEGER,
+	`min_role`	INTEGER,
+	`name_index`	TEXT,
+	`name`	TEXT,
+	`layout`	TEXT,
+	`image_headline`	TEXT,
+	`image_teasers`	TEXT,
+	`body`	TEXT,
+	`label_pick`	TEXT,
+	`label_extra_s`	TEXT,
+	`label_extra_t`	TEXT
+);
+INSERT INTO `catalogue_pages` VALUES (1,1,1,'Frontpage','Frontpage','ctlg_frontpage2','catal_fp_header','catal_fp_pic4,catal_fp_pic5,','Need some Furni for your Habbo room?  Well, you’re in the right place!  This Catalogue is packed FULL of funky Furni, just click the tabs on the right to browse.<br><br>We regularly add and remove Furni, so check back regularly for new items.<br><br>',NULL,'Oost west - Suelake best!','1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.');
+INSERT INTO `catalogue_pages` VALUES (22,22,1,'Sports','Sport','ctlg_layout2','catalog_sports_headline1','catalog_sports_teaser1,','For the sporty people, here is the Sports section! Create your own hockey stadium!','Click on the item you want for more information','2:Yay!',NULL);
+INSERT INTO `catalogue_pages` VALUES (23,23,1,'Rugs','Rugs','ctlg_layout2','catalog_rugs_headline1','catalog_rugs_teaser1,','We have rugs for all occasions. All rugs are non-slip and washable.','Click on the item you want for more information','2:We have rugs for ANY room!',NULL);
+INSERT INTO `catalogue_pages` VALUES (3,3,1,'Spaces','Spaces','ctlg_spaces','catalog_spaces_headline1','','Are you walls looking a little gay? What you need is a splash of paint and this is the place to sooo get it! <br><br>A splash of sperm on the walls and a nice jew on the floor can make all the difference. Use the virtual room below to test stuff out before you buy!',NULL,NULL,'1:Wall
+2:Floor
+3:Pattern
+4:Colour
+5:Pattern
+6:Colour
+7:Preview');
+INSERT INTO `catalogue_pages` VALUES (2,2,1,'Rare','Rare','ctlg_productpage1','catalog_rares_headline1','','Okay this thing is fucking epic!\rEnjoy it while it lasts!',NULL,NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (24,24,1,'Gallery','Gallery','ctlg_layout2','catalog_gallery_headline1','catalog_gallery_teaser1,','Adorn your walls with wondrous works of art, posters, plaques and wall hangings. We have items to suit all tastes, from kitsch to cool, traditional to modern.','Click on the item you want for more information','2: Brighten up your walls!',NULL);
+INSERT INTO `catalogue_pages` VALUES (25,25,1,'Flags','Flags','ctlg_layout2','catalog_flags_headline1','catalog_flags_teaser1,','If you''re feeling patriotic, get a flag to prove it. Our finest cloth flags will brighten up the dullest walls.','Click on the item you want for more information','2:Hail Nillus!',NULL);
+INSERT INTO `catalogue_pages` VALUES (26,26,1,'Trophies','Trophies','ctlg_trophies','catalog_trophies_headline1','','Reward your friends, or yourself with one of our fabulous glittering array of bronze, silver and gold trophies.<br><br>First choose the trophy model (click on the arrows to see all the different styles) and then the metal (click on the seal below the trophy). Type your inscription below and we''ll engrave it on the trophy along with your name and today''s date.<br>',NULL,NULL,'1:Type your inscription CAREFULLY, it''s permanent!');
+INSERT INTO `catalogue_pages` VALUES (7,7,1,'Pets','Pets','ctlg_pets','catalog_pet_headline1','catalog_pets_teaser1,','Pets! Those furry friends are even cuter than jews on your floor and mudkips in your bathtub! Get them now because they are officially coded!','Find your own pet!',NULL,'1:Give name:');
+INSERT INTO `catalogue_pages` VALUES (4,4,1,'Bank','Exchange','ctlg_layout2','catalog_bank_headline1','catalog_bank_teaser,','With Bank items you can exchange your valueable Credits for currency-solid items! You can trade these freely with other users or put them in your room and exchange them back for credits by double clicking tem!','Click on the item you want for more information','EPIC YAY!',NULL);
+INSERT INTO `catalogue_pages` VALUES (5,5,1,'Rollers','Rollers','ctlg_layout2','catalog_roller_headline1','','Move your imagination, while you move yourself!  Perfect for mazes, games, for keeping your queue moving or making your pet go round in circles for hours.  Available in multi-packs – the more you buy the cheaper the Roller!','Click on a Roller to see more information!','You can fit 30 Rollers in a user flat!',NULL);
+INSERT INTO `catalogue_pages` VALUES (6,6,1,'Teleporters','Teleporters','ctlg_productpage3','catalog_doors_headline1','catalog_door_a,catalog_door_c,catalog_door_b,','Beam your user from one room to another with one of our cunningly disguised, space age teleports. Now you can link any two rooms together! Teleports are sold in pairs, so if you trade for them, check you''re getting a linked pair.','Click on the item you want for more information','Beam!',NULL);
+INSERT INTO `catalogue_pages` VALUES (8,8,1,'Petstuff','Pet accessories','ctlg_layout2','catalog_pet_headline2','ctlg_pet_teaser1,','You''ll need to take care of your pet to keep it happy and healthy. This section of has EVERYTHING you’ll need to satisfy your pet’s needs.  PLEASE NOTE:  No fish were harmed in the creating of this section! (just jews)','Click on the item you want for more information','You''ll have to share it!',NULL);
+INSERT INTO `catalogue_pages` VALUES (9,9,1,'Area','Area','Area','catalog_area_headline1','catalog_area_teaser1,','Introducing the Area Collection...  Clean, chunky lines set this collection apart as a preserve of the down-to-earth person. It''s beautiful in its simplicity, and welcoming to everyone.','Click on the item you want for more information','2: Beautiful in it''s simplicity!',NULL);
+INSERT INTO `catalogue_pages` VALUES (10,10,1,'Gothic','Gothic','ctlg_layout2','catalog_gothic_headline1','catalog_gothic_teaser1,','The Gothic section is full of medieval looking items. Create your own Gothic castle!','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (11,11,1,'Soundmachines','Trax','ctlg_soundmachine','catalog_djshop_headline1','catalog_djshop_teaser1,','Bring sound to your room! Purchase a sound machine plus some sample packs and create your own songs to play in your flat!<br>Moar soundsets coming soon!','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (12,12,1,'Candy','Candy','ctlg_layout2','catalog_candy_headline1','catalog_candy_teaser1,','Sleek, girly and a total ripoff of the Mode collection. We present to you the one and only Candy range!<br>Decorate your room with these items and express your feministihingsthangthing feelings!','Click on the item you want for more information','2: WTF SCREW YOU LOL',NULL);
+INSERT INTO `catalogue_pages` VALUES (13,13,1,'Asian','Asian','ctlg_layout2','catalog_asian_headline1','catalog_asian_teaser1,','Introducing the Asian collection... These handcrafted items are the result of years of child slavery, some mixture of Ying and Yang and a mass-shipping from China. These authentic items fit in every oriental themed user flat. Made in China: fo'' real nigga.','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (14,14,1,'Iced','Iced','ctlg_layout2','catalog_iced_headline1','catalog_iced_teaser1,','Introducing the Iced Collection...  For the person who needs no introduction. It''s so chic, it says everything and nothing. It''s a blank canvas, let your imagination to run wild!','Click on the item you want for more information','2: These chairs are so filthy',NULL);
+INSERT INTO `catalogue_pages` VALUES (15,15,1,'Lodge','Lodge','ctlg_layout2','catalog_lodge_headline1','catalog_lodge_teaser1,','Introducing the Lodge Collection...  Do you appreciate the beauty of wood?  For that ski lodge effect, or to match that open fire... Lodge is the Furni of choice for people with that no frills approach to decorating.','Click on the item you want for more information','2: I luv wood!',NULL);
+INSERT INTO `catalogue_pages` VALUES (16,16,1,'Plasto','Plasto','ctlg_plasto','catalog_plasto_headline1','','Introducing The Plasto Collection...  Can you feel that 1970s vibe?  Decorate with Plasto and add some colour to your life. Choose a colour that reflect your mood, or just pick your favourite shade.','Select an item and a colour and buy!','New colors!','1:Choose an item
+2:Select the color
+3:Preview');
+INSERT INTO `catalogue_pages` VALUES (17,17,1,'Pura','Pura','ctlg_layout2','catalog_pura_headline1','catalog_pura_teaser1,','Introducing the Pura Collection...  This collection breathes fresh, clean air and cool tranquillity. Use it to create a special haven away from the hullabaloo of life outside the Hotel.','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (18,18,1,'Mode','Mode','ctlg_layout2','catalog_mode_headline1','catalog_mode_teaser1,','Introducing the Mode Collection...  Steely grey functionality combined with sleek designer upholstery. The person that chooses this furniture is a cool urban cat - streetwise, sassy and so slightly untouchable.','Click on the item you want for more information','2: So shiny and new...',NULL);
+INSERT INTO `catalogue_pages` VALUES (19,19,1,'Accessories','Accessories','ctlg_layout2','catalog_extra_headline1','catalog_extra_teaser1,','Is your room missing something?  Well, now you can add the finishing touches that express your true personality. And don''t forget, like everything else, these accessories can be moved about to suit your mood.','Click on the item you want for more information','2: I herd u liek mudkips?',NULL);
+INSERT INTO `catalogue_pages` VALUES (20,20,1,'Bathroom','Bathroom','ctlg_layout2','catalog_bath_headline1','catalog_bath_teaser1,','Introducing the Bathroom Collection...  Have some fun with the cheerful bathroom collection. Give yourself and your guests somewhere to freshen up - vital if you want to avoid nasty niffs. Put your loo in a corner though...','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (21,21,1,'Plants','Plants','ctlg_layout2','catalog_plants_headline1','catalog_plants_teaser1,','Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (40,40,5,'staffHC','Club Shop','ctlg_layout2','catalog_club_headline1','catalog_hc_teaser,','Welcome to the Club Shop! All ''Habbo Club membership gifts'' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (41,41,5,'Dragons','Dragons','ctlg_layout2','catalog_rares_headline1','','The Dragon page contains all of the Dragon Lamps.','Click on the item you want for more information',NULL,NULL);
 COMMIT;

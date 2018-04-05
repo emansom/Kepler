@@ -125,7 +125,6 @@ void room_enter(room *room, player *player) {
     }
 
     if (list_size(room->users) == 0) {
-        printf("Room map create!\n");
         room_map_init(room);
     }
 
@@ -235,7 +234,6 @@ void room_dispose(room *room) {
         return;
     }
 
-    printf("Room map destroy!\n");
     room_map_destroy(room);
 
     if (list_size(room->public_items) > 0) {

@@ -70,6 +70,11 @@
 #include "communication/incoming/room/settings/GETFLATINFO.h"
 #include "communication/incoming/room/settings/SETFLATCAT.h"
 
+// Catalogue
+#include "communication/incoming/catalogue/GCIX.h"
+#include "communication/incoming/catalogue/GCAP.h"
+
+
 /**
  * Assigns all header handlers to this array
  */
@@ -138,6 +143,10 @@ void message_handler_init() {
     message_requests[25] = SETFLATINFO;
     message_requests[152] = GETFLATCAT;
     message_requests[153] = SETFLATCAT;
+
+    // Catalogue
+    message_requests[101] = GCIX;
+    message_requests[102] = GCAP;
 
     /*Client [0.0.0.0] incoming data: 203 / CK@Dalex@F123456
 hello!

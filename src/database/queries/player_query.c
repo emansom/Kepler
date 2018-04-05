@@ -18,7 +18,7 @@ char *query_player_username(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    char *username;
+    char *username = NULL;
     int status = sqlite3_prepare(conn, "SELECT username FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
@@ -35,6 +35,7 @@ char *query_player_username(int user_id) {
 
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
+
     return username;
 }
 

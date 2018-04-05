@@ -1,15 +1,16 @@
 #ifndef CATALOGUE_MANAGER_H
 #define CATALOGUE_MANAGER_H
 
-typedef struct hashtable_s HashTable;
+typedef struct list_s List;
 typedef struct catalogue_page_s catalogue_page;
 
 struct catalogue_manager {
-    HashTable *pages;
+    List *pages;
 };
 
 void catalogue_manager_init();
-void catalogue_add_page(catalogue_page*);
-catalogue_page *catalogue_manager_get_page_by_id(int);
+void catalogue_manager_add_page(catalogue_page*);
+catalogue_page *catalogue_manager_get_page_by_index(char*);
+List *catalogue_manager_get_pages();
 
 #endif
