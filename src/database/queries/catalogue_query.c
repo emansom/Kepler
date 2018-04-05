@@ -38,7 +38,7 @@ void catalogue_query_pages() {
             strdup((char*)sqlite3_column_text(stmt, 5)),
             strdup((char*)sqlite3_column_text(stmt, 6)),
             strdup((char*)sqlite3_column_text(stmt, 7)),
-            strdup((char*)sqlite3_column_text(stmt, 8)),
+            sqlite3_column_text(stmt, 8) != NULL ? strdup((char*)sqlite3_column_text(stmt, 8)) : NULL,
             sqlite3_column_text(stmt, 9) != NULL ? strdup((char*)sqlite3_column_text(stmt, 9)) : NULL,
             sqlite3_column_text(stmt, 10) != NULL ? strdup((char*)sqlite3_column_text(stmt, 10)) : NULL
         );
