@@ -31,24 +31,23 @@ void status_task(room *room) {
  * @param player the player struct to process
  */
 void process_user_status(room_user *room_user) {
-    Array *keys;
+    if (hashtable_size(room_user->statuses) == 0) {
+        return;
+    }
 
-    if (hashtable_size(room_user->statuses) > 0) {
-        hashtable_get_keys(room_user->statuses, &keys);
+    HashTableIter iter;
+    hashtable_iter_init(&iter, room_user->statuses);
 
-        for (size_t i = 0; i < array_size(keys); i++) {
-            char *key;
-            room_user_status *rus;
+    TableEntry *entry;
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        char *key = entry->key;
+        room_user_status *rus = entry->value;
 
-            array_get_at(keys, i, (void*)&key);
-            hashtable_get(room_user->statuses, key, (void*)&rus);
-
-            if (rus->lifetime_expire > 0) {
-                rus->lifetime_expire--;
-            } else if (rus->lifetime_expire == 0) {
-                room_user_remove_status(room_user, key);
-                room_user->needs_update = 1;
-            }
+        if (rus->lifetime_expire > 0) {
+            rus->lifetime_expire--;
+        } else if (rus->lifetime_expire == 0) {
+            room_user_remove_status(room_user, key);
+            room_user->needs_update = 1;
         }
     }
 }
