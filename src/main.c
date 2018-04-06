@@ -15,9 +15,9 @@
 int main(void) {
     print_info("Kepler Habbo server...\n");
     print_info("Written by Quackster \n");
-
     print_info("\n");
     print_info("Testing SQLite connection...\n");
+
     sqlite3 *con = db_create_connection();
 
     if (con == NULL) {
@@ -39,13 +39,6 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
-    /*int *num = malloc(sizeof(int));
-    *num = 10;
-
-    printf("number: %i\n", *num);
-
-    free(num)*/
-    
     print_info("Starting server...\n");
     start_server("0.0.0.0", 12321);
     

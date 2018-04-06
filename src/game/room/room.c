@@ -106,6 +106,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
         item *room_item;
 
         while (list_iter_next(&iter, (void*) &room_item) != CC_ITER_END) {
+            room_item->room_id = id;
             list_add(room->public_items, room_item);
         }
     }
@@ -199,9 +200,9 @@ void room_load(room *room, player *player) {
     om_cleanup(om);
 
     om = om_create(69); // "AE"
-    sb_add_string(om->sb, player->room_user->room->room_data->model);
+    sb_add_string(om->sb, room->room_data->model);
     sb_add_string(om->sb, " ");
-    sb_add_int(om->sb, player->room_user->room_id);
+    sb_add_int(om->sb, room->room_id);
     player_send(player, om);
     om_cleanup(om);
 }

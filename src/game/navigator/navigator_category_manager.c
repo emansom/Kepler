@@ -147,6 +147,7 @@ int category_manager_get_current_vistors(int category_id) {
             while (list_iter_next(&list_iter, (void*) &category) != CC_ITER_END) {
                 current_visitors += category_manager_get_current_vistors(category->id);
             }
+
             list_destroy(categories);
         }
     }

@@ -38,10 +38,10 @@ List *item_parser_get_items(char *model) {
         char *str_y = get_argument(line, " ", 3);
         char *str_z = get_argument(line, " ", 4);
         char *str_rotation = get_argument(line, " ", 5);
-        char *str_table = get_argument(line, " ", 6);
-
+        char *public_custom_data = get_argument(line, " ", 6);
 
         item *room_item = item_create(
+            -1,
             get_argument(line, " ", 1),
             -1,
             (int) strtol(str_x, NULL, 10),
@@ -51,23 +51,25 @@ List *item_parser_get_items(char *model) {
             get_argument(line, " ", 0)
         );
 
-        if (str_table != NULL) {
-            if (str_table[0] == '2') {
-                room_item->is_table = 1; 
+        if (public_custom_data != NULL) {
+            if (public_custom_data[0] == '2') {
+                room_item->is_table = 1;
+                free(public_custom_data);
+            } else {
+                room_item->current_program = public_custom_data;
             }
-
-            free(str_table);
         }
 
         if (strstr(room_item->class_name, "chair") != NULL 
-        || strstr(room_item->class_name, "bench") != NULL 
-        || strstr(room_item->class_name, "seat") != NULL 
-        || strstr(room_item->class_name, "stool") != NULL 
-        || strstr(room_item->class_name, "sofa") != NULL 
-        || strcmp(room_item->class_name, "l") == 0
-        || strcmp(room_item->class_name, "m") == 0
-        || strcmp(room_item->class_name, "k") == 0
-        || strcmp(room_item->class_name, "shift1") == 0) {
+            || strstr(room_item->class_name, "bench") != NULL
+            || strstr(room_item->class_name, "seat") != NULL
+            || strstr(room_item->class_name, "stool") != NULL
+            || strstr(room_item->class_name, "sofa") != NULL
+            || strcmp(room_item->class_name, "l") == 0
+            || strcmp(room_item->class_name, "m") == 0
+            || strcmp(room_item->class_name, "k") == 0
+            || strcmp(room_item->class_name, "poolLift") == 0
+            || strcmp(room_item->class_name, "shift1") == 0) {
             room_item->can_sit = 1;
         } else {
             room_item->can_sit = 0;
@@ -80,6 +82,10 @@ List *item_parser_get_items(char *model) {
         free(str_y);
         free(str_z);
         free(str_rotation);
+
+        /*if (strcmp(room_item->class_name, "poolLift") == 0) {
+            printf("extra data: %s\n", room_item->public_custom_data);
+        }*/
     }
 
     fclose(file);
@@ -100,7 +106,13 @@ List *item_parser_get_items(char *model) {
             }
 
             char buf[100];
-            sprintf(buf, "%s %s %i %i %i %i%s\n", room_item->custom_data, room_item->class_name, room_item->x, room_item->y, (int)room_item->z, room_item->rotation, custom_content);
+            if (strlen(custom_content) > 0) {
+                sprintf(buf, "%s %s %i %i %i %i%s\n", room_item->custom_data, room_item->class_name, room_item->x,
+                        room_item->y, (int) room_item->z, room_item->rotation, custom_content);
+            } else {
+                sprintf(buf, "%s %s %i %i %i %i\n", room_item->custom_data, room_item->class_name, room_item->x,
+                        room_item->y, (int) room_item->z, room_item->rotation);
+            }
             fputs(buf, file);
         }
         

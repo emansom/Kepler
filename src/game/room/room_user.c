@@ -130,6 +130,10 @@ void stop_walking(room_user *room_user) {
             room_user->body_rotation = item->rotation;
             needs_update = 1;
         }
+
+        if (strcmp(item->class_name, "poolLift") == 0) {
+            item_assign_program(item, "close");
+        }
     }
 
     room_user->next = NULL;
