@@ -38,8 +38,9 @@ void player_cleanup(player*);
 void player_data_cleanup(player_data*);
 
 void player_send(player*, outgoing_message*);
-void player_send_raw(player*, char*);
 
+void player_send_credits(player*);
+void player_send_tickets(player*);
 void send_localised_error(player*, char*);
 void send_alert(player*, char*);
 

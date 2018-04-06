@@ -24,7 +24,7 @@
  */
 player *player_create(void *socket, char *ip_address) {
     player *p = malloc(sizeof(player));
-    p->room_user = (void*)room_user_create();
+    p->room_user = (void*)room_user_create(p);
     p->messenger = (void*)messenger_create();
     p->stream = socket;
     p->ip_address = strdup(ip_address);
@@ -111,6 +111,26 @@ void send_alert(player *p, char *greeting) {
     om_write_str(welcome_message, greeting);
     player_send(p, welcome_message);
     om_cleanup(welcome_message);
+}
+
+void player_send_credits(player *player) {
+    char credits_string[10 + 2 + 1]; ///"num + .0 + /0";
+    sprintf(credits_string, "%i", player->player_data->credits);
+
+    outgoing_message *credits = om_create(6); // "@F"
+    om_write_str(credits, credits_string);
+    player_send(player, credits);
+    om_cleanup(credits);
+}
+
+void player_send_tickets(player *player) {
+    char credits_string[10 + 1]; ///"num + /0";
+    sprintf(credits_string, "%i", player->player_data->credits);
+
+    outgoing_message *credits = om_create(124); // "A|"
+    sb_add_string(credits->sb, credits_string);
+    player_send(player, credits);
+    om_cleanup(credits);
 }
 
 /**

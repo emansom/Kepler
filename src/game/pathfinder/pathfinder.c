@@ -8,6 +8,7 @@
 
 #include "deque.h"
 
+#include "game/player/player.h"
 #include "game/items/item.h"
 
 #include "game/room/room.h"
@@ -125,9 +126,11 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
     item *item = tile->highest_item;
         
     if (item != NULL) {
-        if (strcmp(item->class_name, "poolLift") == 0) {
+        if (strcmp(item->class_name, "poolLift") == 0 || strcmp(item->class_name, "poolBooth") == 0) {
             if (item->current_program_state != NULL && strcmp(item->current_program_state, "close") == 0) {
                 return 0;
+            } else {
+                return 1;
             }
         }
 

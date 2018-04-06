@@ -11,6 +11,7 @@
 #include "game/pathfinder/pathfinder.h"
 
 #include "util/threading.h"
+#include "util/encoding/base64encoding.h"
 
 int main(void) {
     print_info("Kepler Habbo server...\n");
@@ -38,6 +39,8 @@ int main(void) {
     catalogue_manager_init();
     message_handler_init();
     create_thread_pool();
+
+    //printf("decoded: %i\n", base64_decode("A`"));
 
     print_info("Starting server...\n");
     start_server("0.0.0.0", 12321);

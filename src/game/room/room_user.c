@@ -24,8 +24,9 @@
 /*
  *
  */
-room_user *room_user_create() {
+room_user *room_user_create(player *player) {
     room_user *user = malloc(sizeof(room_user));
+    user->player = player;
     user->room_id = 0;
     user->room = NULL;
     user->is_walking = 0;
@@ -34,6 +35,7 @@ room_user *room_user_create() {
     user->goal = create_coord(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
+    user->walking_lock = false;
     hashtable_new(&user->statuses);
     return user;
 }
@@ -45,7 +47,10 @@ room_user *room_user_create() {
  * @param y
  */
 void walk_to(room_user *room_user, int x, int y) {
-    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    if (room_user->walking_lock) {
+        return;
+    }
+
     if (room_user->room == NULL) {
         return;
     }
@@ -63,7 +68,9 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
+    /*printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+
+    room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
     if (tile != NULL) {
         if (tile->highest_item != NULL) {
@@ -123,7 +130,9 @@ void stop_walking(room_user *room_user) {
             room_user_remove_status(room_user, "lay");
             needs_update = 1;
         }
-    } else {
+    }
+
+    if (item != NULL) {
         if (item->can_sit) {
             room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
             room_user->head_rotation = item->rotation;
@@ -132,7 +141,26 @@ void stop_walking(room_user *room_user) {
         }
 
         if (strcmp(item->class_name, "poolLift") == 0) {
+            room_user->walking_lock = true;
+            room_user->player->player_data->tickets--;
+
             item_assign_program(item, "close");
+
+            outgoing_message *om = om_create(125); // "A}"
+            player_send(room_user->player, om);
+            om_cleanup(om);
+
+            player_send_tickets(room_user->player);
+        }
+
+        printf("%s\n", item->class_name);
+
+        if (strcmp(item->class_name, "poolBooth") == 0) {
+            item_assign_program(item, "close");
+
+            outgoing_message *om = om_create(96); // "A`"
+            player_send(room_user->player, om);
+            om_cleanup(om);
         }
     }
 
@@ -209,6 +237,7 @@ void room_user_reset(room_user *room_user) {
     room_user->needs_update = 0;
     room_user->room_id = 0;
     room_user->room = NULL;
+    room_user->walking_lock = false;
 
     Array *keys;
 
@@ -282,6 +311,7 @@ void append_user_list(outgoing_message *players, player *player) {
     sb_add_float(players->sb, player->room_user->current->z);
     sb_add_char(players->sb, 13);
     om_write_str_kv(players, "c", player->player_data->motto);
+    //om_write_str_kv(players, "p", "ch=s02/53,51,44");
 }
 
 /**

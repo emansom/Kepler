@@ -41,14 +41,14 @@ List *item_parser_get_items(char *model) {
         char *public_custom_data = get_argument(line, " ", 6);
 
         item *room_item = item_create(
-            -1,
-            get_argument(line, " ", 1),
-            -1,
-            (int) strtol(str_x, NULL, 10),
-            (int) strtol(str_y, NULL, 10),
-            (int) strtol(str_z, NULL, 10),
-            (int) strtol(str_rotation, NULL, 10),
-            get_argument(line, " ", 0)
+                -1,
+                get_argument(line, " ", 1),
+                -1,
+                (int) strtol(str_x, NULL, 10),
+                (int) strtol(str_y, NULL, 10),
+                (int) strtol(str_z, NULL, 10),
+                (int) strtol(str_rotation, NULL, 10),
+                get_argument(line, " ", 0)
         );
 
         if (public_custom_data != NULL) {
@@ -60,7 +60,7 @@ List *item_parser_get_items(char *model) {
             }
         }
 
-        if (strstr(room_item->class_name, "chair") != NULL 
+        if (strstr(room_item->class_name, "chair") != NULL
             || strstr(room_item->class_name, "bench") != NULL
             || strstr(room_item->class_name, "seat") != NULL
             || strstr(room_item->class_name, "stool") != NULL
@@ -68,12 +68,17 @@ List *item_parser_get_items(char *model) {
             || strcmp(room_item->class_name, "l") == 0
             || strcmp(room_item->class_name, "m") == 0
             || strcmp(room_item->class_name, "k") == 0
-            || strcmp(room_item->class_name, "poolLift") == 0
             || strcmp(room_item->class_name, "shift1") == 0) {
             room_item->can_sit = 1;
         } else {
             room_item->can_sit = 0;
             room_item->is_solid = 1;
+        }
+
+        if (strcmp(room_item->class_name, "poolLift") == 0
+            || strcmp(room_item->class_name, "poolBooth") == 0) {
+            room_item->can_sit = 0;
+            room_item->is_solid = 0;
         }
 
         list_add(items, room_item);
