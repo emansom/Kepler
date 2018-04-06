@@ -1,5 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
+
+#include "shared.h"
+#include "hashtable.h"
 
 #include "communication/messages/outgoing_message.h"
 #include "game/player/player.h"
@@ -33,6 +37,44 @@ catalogue_page *catalogue_page_create(int id, int min_role, char *name_index, ch
     page->body = body;
     page->label_pick = label_pick;
     page->label_extra_s = label_extra_s;
-    page->label_extra_t = label_extra_t;
+    hashtable_new(&page->label_extra);
+
+    if (label_extra_t != NULL) {
+        char *new_line = strtok(label_extra_t,"\r\n");
+
+        while(new_line != NULL) {
+            // Get ID
+            int index = (int)strcspn (new_line, ":");
+            char z_id[10];
+            memcpy(z_id, &new_line[0], (size_t)index + 1);
+            z_id[index] = '\0';
+
+            // Get the value, past the ":", jesus christ this messy as fuck,
+            // sorry for anyone trying to understand this terrible code.
+            size_t new_length = strlen(new_line) - (index + 1);
+            char *z_data = malloc(new_length + 1 * sizeof(char));
+            strcpy(z_data, new_line + ((size_t)index + 1));
+
+            char key[25]; // "label_extra_t_" + 10 chars for integer and 1 for /0 ending
+            sprintf(key, "label_extra_t_%s", z_id);
+
+            hashtable_add(page->label_extra, strdup(key), strdup(z_data));
+            new_line = strtok(NULL,"\r\n");
+        }
+
+        /*HashTableIter iter;
+        hashtable_iter_init(&iter, page->label_extra);
+
+        TableEntry *entry;
+        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+            char *key = entry->key;
+            printf("key: %s\n", key);
+            free(key);
+        }*/
+    }
+
+
+
+    free(label_extra_t);
     return page;
 }

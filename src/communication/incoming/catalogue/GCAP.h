@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "list.h"
+#include "hashtable.h"
 
 #include "game/catalogue/catalogue_manager.h"
 #include "game/catalogue/catalogue_page.h"
@@ -32,6 +32,23 @@ void GCAP(player *player, incoming_message *message) {
 
     if (page->label_extra_s != NULL) {
         om_write_str_kv(catalogue_page, "s", page->label_extra_s);
+    }
+
+    for (int attribute_id = 0; attribute_id < 12; attribute_id++) {
+        char key[25]; // "label_extra_t_" + 10 chars for integer and 1 for /0 ending
+        sprintf(key, "label_extra_t_%i", attribute_id);
+
+        char message_key[12]; // "t" + 10 chars for integer and 1 /0 ending
+        sprintf(message_key, "t%i", attribute_id);
+
+        if (hashtable_contains_key(page->label_extra, key)) {
+            char *value;
+            hashtable_get(page->label_extra, key, (void*)&value);
+
+            printf("key: %s\n", message_key);
+
+            om_write_str_kv(catalogue_page, message_key, value);
+        }
     }
 
     player_send(player, catalogue_page);
