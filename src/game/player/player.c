@@ -114,9 +114,13 @@ void send_alert(player *p, char *greeting) {
     om_cleanup(welcome_message);
 }
 
+/**
+ *
+ * @param player
+ */
 void player_send_credits(player *player) {
     char credits_string[10 + 2 + 1]; ///"num + .0 + /0";
-    sprintf(credits_string, "%i", player->player_data->credits);
+    sprintf(credits_string, "%i.0", player->player_data->credits);
 
     outgoing_message *credits = om_create(6); // "@F"
     om_write_str(credits, credits_string);
@@ -124,9 +128,13 @@ void player_send_credits(player *player) {
     om_cleanup(credits);
 }
 
+/**
+ *
+ * @param player
+ */
 void player_send_tickets(player *player) {
     char credits_string[10 + 1]; ///"num + /0";
-    sprintf(credits_string, "%i", player->player_data->credits);
+    sprintf(credits_string, "%i", player->player_data->tickets);
 
     outgoing_message *credits = om_create(124); // "A|"
     sb_add_string(credits->sb, credits_string);

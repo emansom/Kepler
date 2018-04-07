@@ -1,4 +1,4 @@
-#include "stdlib.h"
+#include <stdlib.h>
 #include <ctype.h>
 
 #include "room_model.h"
@@ -6,9 +6,9 @@
 #include "list.h"
 
 #include "game/items/item.h"
-#include "game/navigator/navigator_category_manager.h"
-
 #include "game/items/items_data_parser.h"
+
+#include "game/navigator/navigator_category_manager.h"
 
 /**
  *

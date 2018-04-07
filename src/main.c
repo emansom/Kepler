@@ -40,7 +40,18 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
-    printf("decoded: %i\n", base64_decode("@S"));
+    /*char *str = strdup("QEQBIIH|QESAIIJ|SESAIIJ|RFSAIIH|QFSAIIJ|RESAIIJ|1RFQAIIH|QEPBIIH|RFRAIIH|PFSAIIJ");
+    char *s = "|";
+    char *token;
+
+    token = strtok(str, s);
+
+    while( token != NULL ) {
+        printf( " %s\n", token);
+        token = strtok(NULL, s);
+    }*/
+
+    //printf("decoded: %i\n", base64_decode("@`"));
 
     print_info("Starting server...\n");
     start_server("0.0.0.0", 12321);

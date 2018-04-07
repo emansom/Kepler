@@ -10,6 +10,8 @@
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
 
+#include "game/room/pool/pool_handler.h"
+
 #include "game/items/item.h"
 
 #include "game/pathfinder/pathfinder.h"
@@ -141,28 +143,7 @@ void stop_walking(room_user *room_user) {
             needs_update = 1;
         }
 
-        if (strcmp(item->class_name, "poolLift") == 0) {
-            room_user->walking_lock = true;
-            room_user->player->player_data->tickets--;
-
-            item_assign_program(item, "close");
-
-            outgoing_message *om = om_create(125); // "A}"
-            player_send(room_user->player, om);
-            om_cleanup(om);
-
-            player_send_tickets(room_user->player);
-        }
-
-        printf("%s\n", item->class_name);
-
-        if (strcmp(item->class_name, "poolBooth") == 0) {
-            item_assign_program(item, "close");
-
-            outgoing_message *om = om_create(96); // "A`"
-            player_send(room_user->player, om);
-            om_cleanup(om);
-        }
+        pool_booth_walk_on(room_user->player, item);
     }
 
     room_user->next = NULL;

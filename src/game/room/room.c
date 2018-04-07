@@ -32,7 +32,6 @@
 #include "database/queries/player_query.h"
 #include "communication/messages/outgoing_message.h"
 
-
 /**
  * Create a room instance.
  * 
@@ -105,7 +104,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
 
         item *room_item;
 
-        while (list_iter_next(&iter, (void*) &room_item) != CC_ITER_END) {
+        while (list_iter_next(&iter, (void*)&room_item) != CC_ITER_END) {
             room_item->room_id = id;
             list_add(room->public_items, room_item);
         }
@@ -163,6 +162,10 @@ void room_enter(room *room, player *player) {
         room->status_job->millis = 1000;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->status_job);
     }
+
+    /*outgoing_message *om = om_create(73); // "AI"
+    player_send(player, om);
+    om_cleanup(om);*/
 }
 
 /**
@@ -177,7 +180,7 @@ void room_leave(room *room, player *room_player) {
     list_remove(room->users, room_player, NULL);
     room->room_data->visitors_now = list_size(room->users);
 
-    room_user_reset((void*)room_player->room_user);
+    room_user_reset(room_player->room_user);
 
     outgoing_message *om = om_create(29); // "@]"
     sb_add_int(om->sb, room_player->player_data->id);

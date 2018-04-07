@@ -7,11 +7,12 @@
 #include "room_map.h"
 
 #include "game/items/item.h"
+
 #include "game/room/room.h"
 #include "game/room/mapping/room_model.h"
+#include "game/room/pool/pool_handler.h"
 
 void room_map_add_public_items(room *room);
-void room_map_reset(room *room);
 
 /**
  * Initalises the room map for the furniture collision.
@@ -63,25 +64,8 @@ void room_map_add_public_items(room *room) {
         if (tile != NULL) {
             tile->highest_item = public_item;
             room_tile_add_item(tile, public_item);
-
-            // Setup poolBoth redirections
-            if (strcmp(public_item->class_name, "poolBooth") == 0) {
-                if (public_item->x == 17 && public_item->y == 11) {
-                    room->room_map->map[18][11]->highest_item = public_item;
-                }
-
-                if (public_item->x == 17 && public_item->y == 9) {
-                    room->room_map->map[18][9]->highest_item = public_item;
-                }
-
-                if (public_item->x == 8 && public_item->y == 1) {
-                    room->room_map->map[8][0]->highest_item = public_item;
-                }
-
-                if (public_item->x == 9 && public_item->y == 1) {
-                    room->room_map->map[9][0]->highest_item = public_item;
-                }
-            }
+            
+            pool_setup_redirections(room, public_item);
         }
     }
 }
