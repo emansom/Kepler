@@ -46,3 +46,5 @@ g2043 pool_chairg 20 43 7 0
 g2143 pool_chairg 21 43 7 0
 h4162 poolBooth 17 11 7 0 curtains1
 j2573 poolBooth 17 9 7 0 curtains2
+j4G31 poolEnter 20 28 0 0 Splash0
+G14B1 poolExit 21 28 0 0 Splash0

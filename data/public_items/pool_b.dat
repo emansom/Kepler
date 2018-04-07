@@ -36,3 +36,8 @@ b1613 pool_2sofa2 16 13 8 2
 B1414 pool_2sofa1 14 14 9 2
 B1614 pool_2sofa1 16 14 8 2
 C17B2 poolLift 26 4 0 0 door
+j4G31 poolEnter 17 21 0 0 Splash0
+G14B1 poolExit 17 22 0 0 Splash0
+K17B2 poolExit 20 19 0 0 Splash1
+AS131 poolEnter 31 10 0 0 Splash2
+N15B1 poolExit 31 11 0 0 Splash2

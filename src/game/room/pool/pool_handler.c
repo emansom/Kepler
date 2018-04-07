@@ -20,7 +20,7 @@
 #include "game/room/mapping/room_map.h"
 #include "game/room/mapping/room_tile.h"
 
-void pool_warp_swim(player*, item*, coord warp, coord goal, bool exit);
+void pool_warp_swim(player*, item*, coord warp, bool exit);
 
 /**
  * Handle walking out of booth
@@ -92,34 +92,53 @@ void pool_booth_walk_on(player *p, item *item) {
 
     if (strcmp(item->class_name, "poolEnter") == 0) {
         coord warp = { };
-        coord goal = { };
 
         if (item->x == 20 && item->y == 28) {
             warp.x = 21;
             warp.y = 28;
-            goal.x = 22;
-            goal.y = 28;
         }
 
-        pool_warp_swim(p, item, warp, goal, false);
+        if (item->x == 17 && item->y == 21) {
+            warp.x = 17;
+            warp.y = 22;
+        }
+
+        if (item->x == 31 && item->y == 10) {
+            warp.x = 31;
+            warp.y = 11;
+        }
+
+        pool_warp_swim(p, item, warp, false);
     }
 
     if (strcmp(item->class_name, "poolExit") == 0) {
         coord warp = { };
-        coord goal = { };
 
         if (item->x == 21 && item->y == 28) {
             warp.x = 20;
             warp.y = 28;
-            goal.x = 19;
-            goal.y = 28;
         }
 
-        pool_warp_swim(p, item, warp, goal, true);
+        if (item->x == 17 && item->y == 22) {
+            warp.x = 17;
+            warp.y = 21;
+        }
+
+        if (item->x == 20 && item->y == 19) {
+            warp.x = 19;
+            warp.y = 19;
+        }
+
+        if (item->x == 31 && item->y == 11) {
+            warp.x = 31;
+            warp.y = 10;
+        }
+
+        pool_warp_swim(p, item, warp, true);
     }
 }
 
-void pool_warp_swim(player *p, item *item, coord warp, coord goal, bool exit) {
+void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
     room_user *room_entity = (room_user*)p->room_user;
     stop_walking(room_entity, true);
 
@@ -134,7 +153,7 @@ void pool_warp_swim(player *p, item *item, coord warp, coord goal, bool exit) {
     }
 
     item_assign_program(item, "");
-    walk_to(room_entity, goal.x, goal.y);
+    room_entity->needs_update = true;
 
     //walk_to(room_entity, goal.x, goal.y);
 
