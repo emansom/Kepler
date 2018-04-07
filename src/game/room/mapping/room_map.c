@@ -64,7 +64,7 @@ void room_map_add_public_items(room *room) {
         if (tile != NULL) {
             tile->highest_item = public_item;
             room_tile_add_item(tile, public_item);
-            
+
             pool_setup_redirections(room, public_item);
         }
     }
