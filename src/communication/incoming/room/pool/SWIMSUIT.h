@@ -23,10 +23,9 @@ void SWIMSUIT(player *player, incoming_message *message) {
         goto cleanup;
     }
 
+    // Update pool figure
     free(player->player_data->pool_figure);
     player->player_data->pool_figure = strdup(content);
-
-    query_player_save_looks(player);
 
     // Refresh pool figure
     outgoing_message *refresh = om_create(28); // "@\"
@@ -63,6 +62,9 @@ void SWIMSUIT(player *player, incoming_message *message) {
             walk_to(player->room_user, 9, 2);
         }
     }
+
+    // Save looks to database
+    query_player_save_looks(player);
 
     cleanup:
         free(content);
