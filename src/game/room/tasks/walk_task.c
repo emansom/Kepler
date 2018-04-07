@@ -102,7 +102,7 @@ void process_user(player *player) {
             user->next = NULL;
             user->is_walking = 0;
             //room_tile *tile = user->room->room_map->map[user->current->x][user->current->y];
-            stop_walking(user);
+            stop_walking(user, false);
         }
 
         player->room_user->needs_update = 1;

@@ -58,9 +58,18 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
+    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
     if (room_user->current->x == x && room_user->current->y == y) {
-        return;
-    }
+        if (tile != NULL && tile->highest_item != NULL) {
+            item *item = tile->highest_item;
+
+            if (strcmp(item->class_name, "poolEnter") != 0 && strcmp(item->class_name, "poolExit") !=  0) {
+                return;
+            }
+        } else {
+            return;
+        }
+    }*/
 
     if (room_user->next != NULL) {
         room_user->current->x = room_user->next->x;
@@ -111,39 +120,42 @@ void room_user_clear_walk_list(room_user *room_user) {
  *
  * @param room_user the room user
  */
-void stop_walking(room_user *room_user) {
-    item *item = NULL;
-
-    room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
-
-    if (tile != NULL) {
-        if (tile->highest_item != NULL) {
-            item = tile->highest_item;
-        }
-    }
-
+void stop_walking(room_user *room_user, bool is_silent) {
     room_user_remove_status(room_user, "mv");
     room_user_clear_walk_list(room_user);
 
     int needs_update = 0;
 
-    if (item == NULL || !item->can_sit) {
-        if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
-            room_user_remove_status(room_user, "sit");
-            room_user_remove_status(room_user, "lay");
-            needs_update = 1;
-        }
-    }
+    if (!is_silent) {
+        item *item = NULL;
 
-    if (item != NULL) {
-        if (item->can_sit) {
-            room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
-            room_user->head_rotation = item->rotation;
-            room_user->body_rotation = item->rotation;
-            needs_update = 1;
+        room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
+
+        if (tile != NULL) {
+            if (tile->highest_item != NULL) {
+                item = tile->highest_item;
+            }
         }
 
-        pool_booth_walk_on(room_user->player, item);
+
+        if (item == NULL || !item->can_sit) {
+            if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
+                room_user_remove_status(room_user, "sit");
+                room_user_remove_status(room_user, "lay");
+                needs_update = 1;
+            }
+        }
+
+        if (item != NULL) {
+            if (item->can_sit) {
+                room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
+                room_user->head_rotation = item->rotation;
+                room_user->body_rotation = item->rotation;
+                needs_update = 1;
+            }
+
+            pool_booth_walk_on(room_user->player, item);
+        }
     }
 
     room_user->next = NULL;
@@ -212,7 +224,7 @@ int room_user_has_status(room_user *room_user, char *key) {
  */
 void room_user_reset(room_user *room_user) {
     if (room_user->room != NULL) {
-        stop_walking(room_user);
+        stop_walking(room_user, false);
     }
     
     room_user->is_walking = 0;

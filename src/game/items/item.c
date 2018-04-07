@@ -59,8 +59,11 @@ void item_assign_program(item *room_item, char *program_state) {
 
         outgoing_message *om = om_create(71); // "AG"
         sb_add_string(om->sb, room_item->current_program);
-        sb_add_string(om->sb, " ");
-        om_write_str(om, room_item->current_program_state);
+
+        if (strlen(room_item->current_program_state) > 0) {
+            sb_add_string(om->sb, " ");
+            om_write_str(om, room_item->current_program_state);
+        }
 
         room *room = room_manager_get_by_id(room_item->room_id);
 

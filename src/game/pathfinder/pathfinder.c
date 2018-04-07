@@ -130,8 +130,12 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             if (item->current_program_state != NULL && strcmp(item->current_program_state, "close") == 0) {
                 return 0;
             } else {
-                return 1;
+                return strlen(room_user->player->player_data->pool_figure) > 0;
             }
+        }
+
+        if (strcmp(item->class_name, "poolEnter") == 0 || strcmp(item->class_name, "poolExit") == 0) {
+            return strlen(room_user->player->player_data->pool_figure) > 0;
         }
 
         if (item->is_solid == 1) {
