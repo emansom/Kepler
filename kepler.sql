@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`username`	TEXT DEFAULT NULL,
 	`password`	TEXT DEFAULT NULL,
 	`figure`	TEXT NOT NULL,
+	`pool_figure`	TEXT NOT NULL,
 	`sex`	TEXT NOT NULL DEFAULT 'M',
 	`motto`	TEXT NOT NULL DEFAULT 'de kepler whey',
 	`credits`	TEXT NOT NULL DEFAULT 200,
@@ -13,9 +14,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','M','de kepler whey','200',0,0,1,'I''m a new xddd','1522946395');
-INSERT INTO `users` VALUES (2,'john','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'I''m a new user!','1521194032');
-INSERT INTO `users` VALUES (3,'mark','123','1100118001270123000325004','M','de kepler whey','200',0,0,1,'u wot br0han','1521194299');
+INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/238,238,238','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523088005');
+INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523088005');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -216,8 +216,6 @@ CREATE TABLE IF NOT EXISTS `messenger_friends` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
 );
-INSERT INTO `messenger_friends` VALUES (1,2);
-INSERT INTO `messenger_friends` VALUES (1,3);
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,
 	`order_id`	INTEGER,
@@ -232,7 +230,7 @@ CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`label_extra_s`	TEXT,
 	`label_extra_t`	TEXT
 );
-INSERT INTO `catalogue_pages` VALUES (1,1,1,'Frontpage','Frontpage','ctlg_frontpage2','catal_fp_header','catal_fp_pic4,catal_fp_pic5,','Need some Furni for your Habbo room?  Well, you’re in the right place!  This Catalogue is packed FULL of funky Furni, just click the tabs on the right to browse.<br><br>We regularly add and remove Furni, so check back regularly for new items.<br><br>',NULL,'Home sweet home!','1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.');
+INSERT INTO `catalogue_pages` VALUES (1,1,1,'Frontpage','Frontpage','ctlg_frontpage2','catal_fp_header','catal_fp_pic4,catal_fp_pic5,','Welcome to the Hotel Catalogue. It''s packed full of fab things for your room - there''s something for everyone! Browse the ranges by clicking the tabs on the right.<br><br>Some ranges are seasonal, so check back regularly for new items.<br><br>We regularly add and remove Furni, so check back regularly for new items.<br><br>',NULL,'Home sweet home!','1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.');
 INSERT INTO `catalogue_pages` VALUES (22,22,1,'Sports','Sport','ctlg_layout2','catalog_sports_headline1','catalog_sports_teaser1,','For the sporty people, here is the Sports section! Create your own hockey stadium!','Click on the item you want for more information','2:Yay!',NULL);
 INSERT INTO `catalogue_pages` VALUES (23,23,1,'Rugs','Rugs','ctlg_layout2','catalog_rugs_headline1','catalog_rugs_teaser1,','We have rugs for all occasions. All rugs are non-slip and washable.','Click on the item you want for more information','2:We have rugs for ANY room!',NULL);
 INSERT INTO `catalogue_pages` VALUES (3,3,1,'Spaces','Spaces','ctlg_spaces','catalog_spaces_headline1','','Floors, wallpapers, landscapes - get a groovy combination to your room. Use our virtual room preview below to test out the combinations before you buy. Select the design and color you like and click Buy.',NULL,NULL,'1:Wall

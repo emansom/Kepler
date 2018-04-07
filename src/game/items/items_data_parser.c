@@ -9,9 +9,9 @@
 #include "items_data_parser.h"
 
 /**
- *
- * @param model
- * @return
+ * Parse the public room model items
+ * @param model the model name to parse
+ * @return the list of room items parsed
  */
 List *item_parser_get_items(char *model) {
     char file_path[30];

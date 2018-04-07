@@ -73,6 +73,14 @@ void room_map_add_public_items(room *room) {
                 if (public_item->x == 17 && public_item->y == 9) {
                     room->room_map->map[18][9]->highest_item = public_item;
                 }
+
+                if (public_item->x == 8 && public_item->y == 1) {
+                    room->room_map->map[8][0]->highest_item = public_item;
+                }
+
+                if (public_item->x == 9 && public_item->y == 1) {
+                    room->room_map->map[9][0]->highest_item = public_item;
+                }
             }
         }
     }

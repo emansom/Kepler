@@ -13,14 +13,16 @@
 #include "util/stringbuilder.h"
 
 /**
+ * Create room item struct.
  *
- * @param class_name
- * @param sprite_id
- * @param x
- * @param y
- * @param z
- * @param rotation
- * @param custom_data
+ * @param room_id the room id of the item
+ * @param class_name the item class name
+ * @param sprite_id the item sprite name
+ * @param x the item x coordinate
+ * @param y the item y coordinate
+ * @param z the item z coordinate
+ * @param rotation the item rotation
+ * @param custom_data the item custom data
  * @return
  */
 item *item_create(int room_id, char *class_name, int sprite_id, int x, int y, double z, int rotation, char *custom_data) {
@@ -41,6 +43,12 @@ item *item_create(int room_id, char *class_name, int sprite_id, int x, int y, do
     return room_item;
 }
 
+/**
+ * Assign program, used for many public rooms.
+ *
+ * @param room_item the item to assign
+ * @param program_state the state of the item
+ */
 void item_assign_program(item *room_item, char *program_state) {
     if (room_item->current_program_state != NULL) {
         free(room_item->current_program_state);
@@ -57,7 +65,6 @@ void item_assign_program(item *room_item, char *program_state) {
         room *room = room_manager_get_by_id(room_item->room_id);
 
         if (room != NULL) {
-            printf("send %s | %s\n", room_item->current_program, room_item->current_program_state);
             room_send(room, om);
         }
 

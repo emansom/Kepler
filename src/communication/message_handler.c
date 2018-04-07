@@ -56,6 +56,9 @@
 #include "communication/incoming/room/G_USRS.h"
 #include "communication/incoming/room/GET_FURNI_REVISIONS.h"
 
+// Pool
+#include "communication/incoming/room/pool/SWIMSUIT.h"
+
 // Room user
 #include "communication/incoming/room/user/QUIT.h"
 #include "communication/incoming/room/user/WALK.h"
@@ -129,6 +132,9 @@ void message_handler_init() {
     message_requests[63] = G_ITEMS;
     message_requests[61] = G_USRS;
     message_requests[213] = GET_FURNI_REVISIONS;
+
+    // Pool
+    message_requests[116] = SWIMSUIT;
 
     // Room user
     message_requests[53] = QUIT;

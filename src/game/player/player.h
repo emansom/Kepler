@@ -10,6 +10,7 @@ typedef struct player_data_s {
     char *username;
     char *password;
     char *figure;
+    char *pool_figure;
     int credits;
     char *motto;
     char *sex;
@@ -31,7 +32,7 @@ typedef struct player_s {
 
 
 player *player_create(void*, char*);
-player_data *player_create_data(int, char*, char*, char*, int, char*, char*, int, int, int, char*,char *);
+player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *);
 void player_login(player*);
 
 void player_cleanup(player*);

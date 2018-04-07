@@ -6,6 +6,7 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
+#include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
 
@@ -68,9 +69,9 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    /*printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
-    room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
+    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
     if (tile != NULL) {
         if (tile->highest_item != NULL) {
@@ -311,7 +312,15 @@ void append_user_list(outgoing_message *players, player *player) {
     sb_add_float(players->sb, player->room_user->current->z);
     sb_add_char(players->sb, 13);
     om_write_str_kv(players, "c", player->player_data->motto);
-    //om_write_str_kv(players, "p", "ch=s02/53,51,44");
+
+    if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0
+        || strcmp(player->room_user->room->room_data->model_data->model_name, "pool_b") == 0
+        || strcmp(player->room_user->room->room_data->model_data->model_name, "md_a") == 0) {
+
+        if (strlen(player->player_data->pool_figure) > 0) {
+            om_write_str_kv(players, "p", player->player_data->pool_figure);
+        }
+    }
 }
 
 /**

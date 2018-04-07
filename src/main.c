@@ -40,7 +40,7 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
-    //printf("decoded: %i\n", base64_decode("A`"));
+    printf("decoded: %i\n", base64_decode("@S"));
 
     print_info("Starting server...\n");
     start_server("0.0.0.0", 12321);

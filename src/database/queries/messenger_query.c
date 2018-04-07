@@ -319,8 +319,8 @@ List *messenger_query_unread_messages(int user_id) {
         int id = sqlite3_column_int(stmt, 0);
         int receiver_id = sqlite3_column_int(stmt, 1);
         int sender_id = sqlite3_column_int(stmt, 2);
-        char *body = strdup((char*)sqlite3_column_text(stmt, 3));
-        char *date = strdup((char*)sqlite3_column_text(stmt, 4));
+        char *body = (char*)sqlite3_column_text(stmt, 3);
+        char *date = (char*)sqlite3_column_text(stmt, 4);
 
         messenger_message *msg = messenger_message_create(id, receiver_id, sender_id, body, date);
         list_add(messages, msg);
