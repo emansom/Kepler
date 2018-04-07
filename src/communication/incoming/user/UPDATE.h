@@ -23,6 +23,11 @@ void UPDATE(player *player, incoming_message *message) {
             char *content = im_read_str(message);
 
             if (content != NULL) {
+                if (player->player_data->sex[0] != content[0]) { // Changed sex? Reset pool figure
+                    free(player->player_data->pool_figure);
+                    player->player_data->pool_figure = strdup("");
+                }
+
                 if ((content[0] == 'M' || content[0] == 'F') && strlen(content) == 1) {
                     free(player->player_data->sex);
                     player->player_data->sex = content;
