@@ -140,7 +140,7 @@ void pool_booth_walk_on(player *p, item *item) {
 
 void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
     room_user *room_entity = (room_user*)p->room_user;
-    stop_walking(room_entity, true);
+    stop_walking(room_entity);
 
     room_entity->current->x = warp.x;
     room_entity->current->y = warp.y;
