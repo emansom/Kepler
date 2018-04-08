@@ -48,6 +48,9 @@ void room_query_get_models() {
 
         model_manager_add(model);
     }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
 }
 
 /**

@@ -59,6 +59,11 @@ void walk_to(room_user *room_user, int x, int y) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
         room_user->needs_update = 1;
+
+        if (room_user->next != NULL) {
+            free(room_user->next);
+            room_user->next = NULL;
+        }
     }
 
     room_user->goal->x = x;
@@ -143,9 +148,13 @@ void stop_walking(room_user *room_user, bool is_silent) {
         }
     }
 
-    room_user->next = NULL;
     room_user->needs_update = needs_update;
     room_user->is_walking = 0;
+
+    if (room_user->next != NULL) {
+        free(room_user->next);
+        room_user->next = NULL;
+    }
 }
 
 /**
