@@ -154,31 +154,6 @@ void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
 
     item_assign_program(item, "");
     room_entity->needs_update = true;
-
-    //walk_to(room_entity, goal.x, goal.y);
-
-    /*room_entity->current->x = warp.x;
-    room_entity->current->y = warp.y;
-    room_entity->current->z = room_entity->room->room_data->model_data->heights[warp.x][warp.y];*/
-
-    /*if (!exit) {
-        room_user_add_status(room_entity, "swim", "", -1, "", 0, 0);
-    } else {
-        room_user_remove_status(room_entity, "swim");
-    }
-
-    room_entity->needs_update = true;
-    item_assign_program(item, "");
-
-    walk_to(room_entity, goal.x, goal.y);
-
-    room_entity->goal->x = goal.x;
-    room_entity->goal->y = goal.y;
-
-    printf("Current height: %f\n", room_entity->current->z);
-    printf("Goal height: %f\n", room_entity->room->room_data->model_data->heights[goal.x][goal.y]);*/
-
-
 }
 
 /**

@@ -51,7 +51,7 @@ int main(void) {
         token = strtok(NULL, s);
     }*/
 
-    //printf("decoded: %i\n", base64_decode("@`"));
+    //printf("decoded: %i\n", base64_decode("AJ"));
 
     print_info("Starting server...\n");
     start_server("0.0.0.0", 12321);

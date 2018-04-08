@@ -67,8 +67,8 @@ void room_model_parse(room_model *room_model) {
     room_model->map_size_y = map_size_y;
 
     if (room_model->map_size_x >= 200 || room_model->map_size_y >= 200) {
-        room_model->map_size_x = 100;
-        room_model->map_size_y = 100;
+        room_model->map_size_x = 200 - 1;
+        room_model->map_size_y = 200 - 1;
     }
 
      for (int y = 0; y < map_size_y; y++) {

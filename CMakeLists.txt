@@ -33,6 +33,7 @@ file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
 file(GLOB room_pool ${PROJECT_DIR}/game/room/pool/*.c)
+file(GLOB room_manager ${PROJECT_DIR}/game/room/manager/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
 file(GLOB items ${PROJECT_DIR}/game/items/*.c)
 file(GLOB messenger ${PROJECT_DIR}/game/messenger/*.c)
@@ -60,6 +61,7 @@ add_executable(${EXECUTABLE_NAME}
         ${items}
         ${tasks}
         ${room_mapping}
+        ${room_manager}
         ${messenger}
         ${catalogue})
 

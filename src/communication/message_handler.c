@@ -58,6 +58,8 @@
 
 // Pool
 #include "communication/incoming/room/pool/SWIMSUIT.h"
+#include "communication/incoming/room/pool/SPLASH.h"
+#include "communication/incoming/room/pool/DIVE.h"
 
 // Room user
 #include "communication/incoming/room/user/QUIT.h"
@@ -135,6 +137,8 @@ void message_handler_init() {
 
     // Pool
     message_requests[116] = SWIMSUIT;
+    message_requests[106] = DIVE;
+    message_requests[107] = SPLASH;
 
     // Room user
     message_requests[53] = QUIT;

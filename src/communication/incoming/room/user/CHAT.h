@@ -30,7 +30,7 @@ void CHAT(player *session, incoming_message *im) {
         int dist_y = abs(source_y - room_player->room_user->current->y) - 1;
 
         outgoing_message *om = om_create(24); // "@X"
-        om_write_int(om, session->player_data->id);
+        om_write_int(om, session->room_user->instance_id);
 
         if (dist_x < 9 && dist_y < 9) {// User can hear
             if (dist_x <= 6 && dist_y <= 6) {// User can hear full message

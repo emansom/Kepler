@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <game/room/manager/room_entity_manager.h>
 
 #include "shared.h"
 
@@ -135,6 +136,7 @@ void room_enter(room *room, player *player) {
 
     player->room_user->room = room;
     player->room_user->room_id = room->room_id;
+    player->room_user->instance_id = create_instance_id((room_user*) player->room_user);
 
     player->room_user->current->x = room->room_data->model_data->door_x;
     player->room_user->current->y = room->room_data->model_data->door_y;
@@ -180,10 +182,10 @@ void room_leave(room *room, player *room_player) {
     list_remove(room->users, room_player, NULL);
     room->room_data->visitors_now = list_size(room->users);
 
-    room_user_reset(room_player->room_user);
+    room_user_reset((room_user*) room_player->room_user);
 
     outgoing_message *om = om_create(29); // "@]"
-    sb_add_int(om->sb, room_player->player_data->id);
+    sb_add_int(om->sb, room_player->room_user->instance_id);
     room_send(room, om);
 
     room_player->room_user->room = NULL;

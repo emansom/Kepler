@@ -14,5 +14,5 @@ void WALK(player *player, incoming_message *im) {
     int x = im_read_b64_int(im);
     int y = im_read_b64_int(im);
     
-    walk_to(player->room_user, x, y);
+    walk_to((room_user*) player->room_user, x, y);
 }

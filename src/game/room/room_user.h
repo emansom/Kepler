@@ -13,6 +13,7 @@ typedef struct hashtable_s HashTable;
 
 typedef struct room_user_s {
     player *player;
+    int instance_id;
     int room_id;
     room *room;
     coord *current;

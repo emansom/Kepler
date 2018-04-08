@@ -17,7 +17,7 @@ void SHOUT(player *player, incoming_message *im) {
     filter_vulnerable_characters(&message, true);
 
     outgoing_message *om = om_create(26); // "@Z"
-    om_write_int(om, player->player_data->id);
+    om_write_int(om, player->room_user->instance_id);
     om_write_str(om, message);
     room_send(player->room_user->room, om);
 

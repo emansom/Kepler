@@ -30,6 +30,7 @@
 room_user *room_user_create(player *player) {
     room_user *user = malloc(sizeof(room_user));
     user->player = player;
+    user->instance_id = 0;
     user->room_id = 0;
     user->room = NULL;
     user->is_walking = 0;
@@ -80,16 +81,8 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
-    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
-
-    if (tile != NULL) {
-        if (tile->highest_item != NULL) {
-            printf("Item name: %s\n", tile->highest_item->class_name);
-        }
-    }*/
-    
     Deque *path = create_path(room_user);
     
     if (path != NULL && deque_size(path) > 0) {
@@ -137,7 +130,6 @@ void stop_walking(room_user *room_user, bool is_silent) {
             }
         }
 
-
         if (item == NULL || !item->can_sit) {
             if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
                 room_user_remove_status(room_user, "sit");
@@ -154,7 +146,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
                 needs_update = 1;
             }
 
-            pool_booth_walk_on(room_user->player, item);
+            pool_booth_walk_on((player*) room_user->player, item);
         }
     }
 
@@ -226,7 +218,7 @@ void room_user_reset(room_user *room_user) {
     if (room_user->room != NULL) {
         stop_walking(room_user, false);
     }
-    
+
     room_user->is_walking = 0;
     room_user->needs_update = 0;
     room_user->room_id = 0;
@@ -287,12 +279,16 @@ void room_user_cleanup(room_user *room_user) {
  * @param player the player
  */
 void append_user_list(outgoing_message *players, player *player) {
+    char user_id[11];
+    sprintf(user_id, "%i", player->player_data->id);
+    user_id[10] = '\0';
+
     char instance_id[11];
-    sprintf(instance_id, "%i", player->player_data->id);
+    sprintf(instance_id, "%i", player->room_user->instance_id);
     instance_id[10] = '\0';
 
     om_write_str_kv(players, "i", instance_id);
-    om_write_str_kv(players, "a", instance_id);
+    om_write_str_kv(players, "a", user_id);
     om_write_str_kv(players, "n", player->player_data->username);
     om_write_str_kv(players, "f", player->player_data->figure);
     om_write_str_kv(players, "s", player->player_data->sex);
@@ -323,7 +319,7 @@ void append_user_list(outgoing_message *players, player *player) {
  * @param player the player
  */
 void append_user_status(outgoing_message *om, player *player) {
-    sb_add_int(om->sb, player->player_data->id);
+    sb_add_int(om->sb, player->room_user->instance_id);
     sb_add_string(om->sb, " ");
     sb_add_int(om->sb, player->room_user->current->x);
     sb_add_string(om->sb, ",");
