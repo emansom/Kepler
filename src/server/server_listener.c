@@ -21,7 +21,7 @@ uv_loop_t *loop;
  * @param size
  * @param buf
  */
-void server_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf) {
+void server_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
     buf->base = malloc(size);
     buf->len = size;
 }
@@ -41,8 +41,9 @@ void server_on_connection_close(uv_handle_t *handle) {
  * @param req
  * @param status
  */
-void server_on_write(uv_write_t* req, int status) { 
-    //free(req->data);
+void server_on_write(uv_write_t* req, int status) {
+    printf("Written data: %s\n", (char*)req->data);
+    free(req->data);
 }
 
 /**

@@ -79,13 +79,21 @@ void player_send(player *p, outgoing_message *om) {
 
     om_finalise(om);
 
-    char *data = om->sb->data;
+    uv_write_t *req;
 
-    uv_handle_t *handle = p->stream;
-    uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
-    uv_buf_t wrbuf = uv_buf_init(data, (unsigned int)strlen(data));
+    if(!(req = malloc(sizeof(uv_write_t)))){
+        return;
+    }
 
-    int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+    size_t message_length = strlen(om->sb->data);
+
+    uv_buf_t buffer = uv_buf_init(malloc(message_length), (unsigned int) message_length);
+    memcpy(buffer.base, om->sb->data, message_length);
+
+    req->handle = (void*) p;
+    req->data = buffer.base;
+
+    uv_write(req, (uv_stream_t*)p->stream, &buffer, 1, &server_on_write);
 }
 
 /**
