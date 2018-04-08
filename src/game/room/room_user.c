@@ -1,6 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "array.h"
+#include "hashtable.h"
+
 #include "game/player/player.h"
 
 #include "game/room/room.h"
@@ -17,8 +20,7 @@
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
 
-#include "hashtable.h"
-#include "array.h"
+
 
 #include "util/stringbuilder.h"
 #include "deque.h"
@@ -322,10 +324,24 @@ void append_user_status(outgoing_message *om, player *player) {
     sb_add_int(om->sb, player->room_user->body_rotation);
     sb_add_string(om->sb, "/");
 
-    Array *keys;
-
     if (hashtable_size(player->room_user->statuses) > 0) {
-        hashtable_get_keys(player->room_user->statuses, &keys);
+        HashTableIter iter;
+        hashtable_iter_init(&iter, player->room_user->statuses);
+
+        TableEntry *entry;
+        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+            char *key = entry->key;
+            room_user_status *rus = entry->value;
+
+            sb_add_string(om->sb, key);
+            sb_add_string(om->sb, rus->value);
+            sb_add_string(om->sb, "/");
+        }
+    }
+
+    sb_add_char(om->sb, 13);
+
+     /*   hashtable_get_keys(player->room_user->statuses, &keys);
 
         for (size_t i = 0; i < array_size(keys); i++) {
             char *key;
@@ -336,8 +352,8 @@ void append_user_status(outgoing_message *om, player *player) {
             sb_add_string(om->sb, key);
             sb_add_string(om->sb, rus->value);
             sb_add_string(om->sb, "/");
-        }    
-    }
+        }
 
-    sb_add_char(om->sb, 13);
+        array_destroy(keys);
+    }*/
 }

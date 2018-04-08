@@ -206,6 +206,7 @@ void player_cleanup(player *player) {
 
 void player_data_cleanup(player_data *player_data) {
     free(player_data->username);
+    free(player_data->password);
     free(player_data->figure);
     free(player_data->pool_figure);
     free(player_data->motto);

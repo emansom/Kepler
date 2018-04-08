@@ -38,6 +38,7 @@ void G_USRS(player *p, incoming_message *message) {
     }
     
     player_send(p, players);
+    om_cleanup(players);
 
     players = om_create(28); // "@\"
     append_user_list(players, p);
