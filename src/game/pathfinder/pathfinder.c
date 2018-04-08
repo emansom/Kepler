@@ -142,7 +142,7 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             return 0;
         }
 
-        if (is_final_move && item->can_sit) {
+        if (is_final_move && (item->can_sit || !item->is_solid)) {
             return 1;
         } else {
             return 0;

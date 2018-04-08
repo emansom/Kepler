@@ -12,6 +12,7 @@
 
 #include "util/threading.h"
 #include "util/encoding/base64encoding.h"
+#include "util/encoding/vl64encoding.h"
 
 int main(void) {
     print_info("Kepler Habbo server...\n");
@@ -40,18 +41,37 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
-    /*char *str = strdup("QEQBIIH|QESAIIJ|SESAIIJ|RFSAIIH|QFSAIIJ|RESAIIJ|1RFQAIIH|QEPBIIH|RFRAIIH|PFSAIIJ");
+    /*char *str = strdup("QEQBIIH|QESAIIJ|SESAIIJ|RFSAIIH|QFSAIIJ|RESAIIJ|RFQAIIH|QEPBIIH|RFRAIIH|PFSAIIJ");
     char *s = "|";
     char *token;
 
     token = strtok(str, s);
 
+    int i = 0;
+
     while( token != NULL ) {
-        printf( " %s\n", token);
+        int len;
+
+        int x = vl64_decode(token, &len);
+        token += len;
+
+        int y = vl64_decode(token, &len);
+        token += len;
+
+        int length = vl64_decode(token, &len);
+        token += len;
+
+        int width = vl64_decode(token, &len);
+        token += len;
+
+        int rotation = vl64_decode(token, &len);
+        token += len;
+
+        printf("%i %s %i %i %i %i private\n", i++, "queue_tile2", x, y, 7, rotation);
         token = strtok(NULL, s);
     }*/
 
-    printf("decoded: %i\n", base64_decode("@S"));
+    //printf("decoded: %i\n", base64_decode("@S"));
 
     print_info("Starting server...\n");
     start_server("0.0.0.0", 12321);

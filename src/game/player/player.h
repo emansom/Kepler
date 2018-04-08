@@ -38,6 +38,7 @@ void player_login(player*);
 void player_cleanup(player*);
 void player_data_cleanup(player_data*);
 
+void player_send_raw(player*, char*);
 void player_send(player*, outgoing_message*);
 
 void player_send_credits(player*);

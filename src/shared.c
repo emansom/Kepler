@@ -26,14 +26,8 @@ void filter_vulnerable_characters(char **str, int remove_newline) {
     for (int i = 0; i < strlen(body); i++) {
         char ch = body[i];
 
-        if (ch == 2 || ch == 9 || ch == 10 || ch == 12) {
-            body[i] = (char)' ';
-        }
-
-        if (remove_newline) {
-            if (ch == 13) {
-                body[i] = (char)' ';
-            }
+        if (ch == 2 || ch == 9 || ch == 10 || ch == 12 || (remove_newline && ch == 13)) {
+            memmove(&body[i], &body[i + 1], strlen(body) - i); //remove char completely
         }
     }
 }

@@ -2,6 +2,7 @@
 #define ITEM_H
 
 typedef struct item_s {
+    int id;
     int room_id;
     char *class_name;
     int is_table;
@@ -17,7 +18,7 @@ typedef struct item_s {
     int is_solid;
 } item;
 
-item *item_create(int, char*, int, int, int, double, int, char*);
+item *item_create(int, int, char*, int, int, int, double, int, char*);
 void item_assign_program(item*, char*);
 
 #endif

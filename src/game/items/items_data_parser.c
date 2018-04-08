@@ -28,6 +28,7 @@ List *item_parser_get_items(char *model) {
 
     char * line = NULL;
     size_t len = 0;
+    int id = 0;
 
     while ((getline(&line, &len, file)) != -1) {
         if (line == NULL) {
@@ -41,6 +42,7 @@ List *item_parser_get_items(char *model) {
         char *public_custom_data = get_argument(line, " ", 6);
 
         item *room_item = item_create(
+                id++,
                 -1,
                 get_argument(line, " ", 1),
                 -1,
@@ -51,7 +53,12 @@ List *item_parser_get_items(char *model) {
                 get_argument(line, " ", 0)
         );
 
+        // Filter unwanted characters
+        filter_vulnerable_characters(&room_item->class_name, true);
+
         if (public_custom_data != NULL) {
+            filter_vulnerable_characters(&public_custom_data, true);
+
             if (public_custom_data[0] == '2') {
                 room_item->is_table = 1;
                 free(public_custom_data);
@@ -81,16 +88,20 @@ List *item_parser_get_items(char *model) {
             room_item->is_solid = 0;
         }
 
+        if (strcmp(room_item->class_name, "queue_tile2") == 0) {
+            room_item->can_sit = 0;
+            room_item->is_solid = 0;
+
+            free(room_item->custom_data);
+            room_item->custom_data = strdup("2");
+        }
+
         list_add(items, room_item);
 
         free(str_x);
         free(str_y);
         free(str_z);
         free(str_rotation);
-
-        /*if (strcmp(room_item->class_name, "poolLift") == 0) {
-            printf("extra data: %s\n", room_item->public_custom_data);
-        }*/
     }
 
     fclose(file);

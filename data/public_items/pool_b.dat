@@ -41,3 +41,13 @@ G14B1 poolExit 17 22 0 0 Splash0
 K17B2 poolExit 20 19 0 0 Splash1
 AS131 poolEnter 31 10 0 0 Splash2
 N15B1 poolExit 31 11 0 0 Splash2
+0 queue_tile2 21 9 7 0 private
+1 queue_tile2 21 7 7 2 private
+2 queue_tile2 23 7 7 2 private
+3 queue_tile2 26 7 7 0 private
+4 queue_tile2 25 7 7 2 private
+5 queue_tile2 22 7 7 2 private
+6 queue_tile2 26 5 7 0 private
+7 queue_tile2 21 8 7 0 private
+8 queue_tile2 26 6 7 0 private
+9 queue_tile2 24 7 7 2 private

@@ -35,6 +35,7 @@ typedef struct room_s {
     runnable *walking_job;
     runnable *status_job;
     List *users;
+    List *items;
     List *public_items;
 } room;
 

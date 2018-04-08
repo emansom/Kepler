@@ -88,6 +88,14 @@ void player_send(player *p, outgoing_message *om) {
     int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
 }
 
+void player_send_raw(player *p, char *data) {
+    uv_handle_t *handle = p->stream;
+    uv_write_t *req = (uv_write_t *) malloc(sizeof(uv_write_t));
+    uv_buf_t wrbuf = uv_buf_init(data, (unsigned int)strlen(data));
+
+    int r = uv_write(req, (uv_stream_t *)handle, &wrbuf, 1, server_on_write);
+}
+
 /**
  * Sends the key of an error, whose description value is inside the external_texts of the client.
  * 

@@ -48,6 +48,7 @@ room *room_create(int room_id) {
     instance->status_job = NULL;
     list_new(&instance->users);
     list_new(&instance->public_items);
+    list_new(&instance->items);
     return instance;
 }
 
@@ -107,7 +108,13 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
 
         while (list_iter_next(&iter, (void*)&room_item) != CC_ITER_END) {
             room_item->room_id = id;
-            list_add(room->public_items, room_item);
+
+            if (room_item->current_program != NULL && strcmp(room_item->current_program, "private") == 0) {
+                printf("hello %s\n", room_item->class_name);
+                list_add(room->items, room_item);
+            } else {
+                list_add(room->public_items, room_item);
+            }
         }
     }
 
@@ -263,6 +270,7 @@ void room_dispose(room *room) {
     }
 
     list_destroy(room->users);
+    list_destroy(room->items);
     list_destroy(room->public_items);
 
     room->users = NULL;
