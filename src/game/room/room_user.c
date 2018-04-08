@@ -55,19 +55,6 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
-    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
-    if (room_user->current->x == x && room_user->current->y == y) {
-        if (tile != NULL && tile->highest_item != NULL) {
-            item *item = tile->highest_item;
-
-            if (strcmp(item->class_name, "poolEnter") != 0 && strcmp(item->class_name, "poolExit") !=  0) {
-                return;
-            }
-        } else {
-            return;
-        }
-    }*/
-
     if (room_user->next != NULL) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
@@ -98,6 +85,8 @@ void walk_to(room_user *room_user, int x, int y) {
 
 /**
  * Clear the walk list, called by the server automatically.
+ *
+ * @param room_user the room user to clear
  */
 void room_user_clear_walk_list(room_user *room_user) {
     if (room_user->walk_list != NULL) {
@@ -228,20 +217,8 @@ void room_user_reset(room_user *room_user) {
     room_user->room_id = 0;
     room_user->room = NULL;
     room_user->walking_lock = false;
-
-    Array *keys;
-
-    /* clear statuses */
-    if (hashtable_size(room_user->statuses) > 0) {
-        hashtable_get_keys(room_user->statuses, &keys);
-
-        for (size_t i = 0; i < array_size(keys); i++) {
-            char *key;
-            array_get_at(keys, i, (void*)&key);
-            room_user_remove_status(room_user, key);
-        }
-    }
-    /* end clear statuses */
+    
+    room_user_clear_walk_list(room_user);
 
     if (room_user->next != NULL) {
         free(room_user->next);
