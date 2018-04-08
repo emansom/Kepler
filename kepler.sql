@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/238,238,238','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523088005');
-INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523088005');
+INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/53,51,44','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523187766');
+INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523186936');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -215,6 +215,16 @@ CREATE TABLE IF NOT EXISTS `messenger_messages` (
 CREATE TABLE IF NOT EXISTS `messenger_friends` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
+);
+CREATE TABLE IF NOT EXISTS `items` (
+	`id`	INTEGER,
+	`class_name`	TEXT,
+	`sprite_id`	INTEGER,
+	`x`	TEXT,
+	`y`	TEXT,
+	`z`	NUMERIC,
+	`rotation`	INTEGER,
+	`custom_data`	TEXT
 );
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,

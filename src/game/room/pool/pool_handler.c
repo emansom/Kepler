@@ -138,6 +138,14 @@ void pool_booth_walk_on(player *p, item *item) {
     }
 }
 
+/**
+ * Warp to the pool/ladder and remove/add swim state.
+ *
+ * @param p the player to warp
+ * @param item the warp they're sending the state (such as splash) to clients
+ * @param warp the coordinates to warp to
+ * @param exit true or false whether they're exiting or entering
+ */
 void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
     room_user *room_entity = (room_user*)p->room_user;
     stop_walking(room_entity, true);
@@ -180,10 +188,4 @@ void pool_setup_redirections(room *room, item *public_item) {
             room->room_map->map[9][0]->highest_item = public_item;
         }
     }
-
-    /*if (strcmp(public_item->class_name, "poolEnter") == 0) {
-        if (public_item->x == 20 && public_item->y == 28) {
-            room->room_map->map[18][11]->highest_item = public_item;
-        }
-    }*/
 }

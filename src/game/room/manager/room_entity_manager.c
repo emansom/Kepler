@@ -10,6 +10,12 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
+/**
+ * Get a unused instance id for the room they're in.
+ *
+ * @param room_user the room user struct to assign to
+ * @return the new instance id
+ */
 int create_instance_id(room_user *room_user) {
     int instance_id = 0;
 
@@ -20,6 +26,13 @@ int create_instance_id(room_user *room_user) {
     return instance_id;
 }
 
+/**
+ * Find a room user by instance id.
+ *
+ * @param room the room to search in
+ * @param instance_id the instance id to search for
+ * @return the room user struct
+ */
 room_user *get_room_user_by_instance_id(room *room, int instance_id) {
     for (size_t i = 0; i < list_size(room->users); i++) {
         player *room_player;
