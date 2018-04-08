@@ -11,6 +11,10 @@ void WALK(player *player, incoming_message *im) {
         return;
     }
 
+    if (player->room_user->walking_lock) {
+        return;
+    }
+
     int x = im_read_b64_int(im);
     int y = im_read_b64_int(im);
     

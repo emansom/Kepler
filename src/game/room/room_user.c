@@ -51,10 +51,6 @@ room_user *room_user_create(player *player) {
  * @param y
  */
 void walk_to(room_user *room_user, int x, int y) {
-    if (room_user->walking_lock) {
-        return;
-    }
-
     if (room_user->room == NULL) {
         return;
     }

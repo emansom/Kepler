@@ -17,8 +17,6 @@ int create_instance_id(room_user *room_user) {
         instance_id++;
     }
 
-    printf("Created instance id: %i\n", instance_id);
-
     return instance_id;
 }
 
