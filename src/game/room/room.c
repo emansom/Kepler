@@ -110,7 +110,6 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
             room_item->room_id = id;
 
             if (room_item->current_program != NULL && strcmp(room_item->current_program, "private") == 0) {
-                printf("hello %s\n", room_item->class_name);
                 list_add(room->items, room_item);
             } else {
                 list_add(room->public_items, room_item);

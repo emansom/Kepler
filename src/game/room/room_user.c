@@ -79,13 +79,13 @@ void walk_to(room_user *room_user, int x, int y) {
 
     //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
-    room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
+    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
     if (tile != NULL && tile->highest_item != NULL) {
         item *item = tile->highest_item;
 
         printf("Item: %s\n", item->class_name);
-    }
+    }*/
 
     Deque *path = create_path(room_user);
     
@@ -150,7 +150,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
                 needs_update = 1;
             }
 
-            pool_booth_walk_on((player*) room_user->player, item);
+            pool_item_walk_on((player *) room_user->player, item);
         }
     }
 

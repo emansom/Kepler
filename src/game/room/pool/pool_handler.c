@@ -65,7 +65,7 @@ void pool_booth_exit(player *player) {
  *
  * @param player the player to handle
  */
-void pool_booth_walk_on(player *p, item *item) {
+void pool_item_walk_on(player *p, item *item) {
     room_user *room_entity = (room_user*)p->room_user;
 
     if (strcmp(item->class_name, "poolLift") == 0) {
