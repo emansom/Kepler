@@ -93,6 +93,9 @@ void process_user(player *player) {
             room_entity->body_rotation = rotation;
             room_entity->head_rotation = rotation;
 
+            room_user_remove_status(room_entity, "sit");
+            room_user_remove_status(room_entity, "lay");
+
             room_user_add_status(room_entity, "mv", value, -1, "", 0, 0);
             room_entity->next = next;
         } else {
