@@ -217,7 +217,7 @@ void room_user_reset(room_user *room_user) {
     room_user->room_id = 0;
     room_user->room = NULL;
     room_user->walking_lock = false;
-    
+
     room_user_clear_walk_list(room_user);
 
     if (room_user->next != NULL) {
