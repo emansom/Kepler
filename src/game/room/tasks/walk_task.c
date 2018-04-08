@@ -93,16 +93,12 @@ void process_user(player *player) {
             room_entity->body_rotation = rotation;
             room_entity->head_rotation = rotation;
 
-            room_user_remove_status(room_entity, "sit");
-            room_user_remove_status(room_entity, "lay");
-            room_user_remove_status(room_entity, "swim");
-
             room_user_add_status(room_entity, "mv", value, -1, "", 0, 0);
             room_entity->next = next;
         } else {
             room_entity->next = NULL;
             room_entity->is_walking = 0;
-            stop_walking(room_entity);
+            stop_walking(room_entity, false);
         }
 
         player->room_user->needs_update = 1;

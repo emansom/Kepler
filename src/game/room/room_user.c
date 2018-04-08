@@ -109,12 +109,13 @@ void room_user_clear_walk_list(room_user *room_user) {
  *
  * @param room_user the room user
  */
-void stop_walking(room_user *room_user) {
+void stop_walking(room_user *room_user, bool is_silent) {
     room_user_remove_status(room_user, "mv");
     room_user_clear_walk_list(room_user);
 
     int needs_update = 0;
 
+    if (!is_silent) {
         item *item = NULL;
 
         room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
@@ -143,6 +144,7 @@ void stop_walking(room_user *room_user) {
 
             pool_booth_walk_on((player*) room_user->player, item);
         }
+    }
 
     room_user->next = NULL;
     room_user->needs_update = needs_update;
@@ -210,7 +212,7 @@ int room_user_has_status(room_user *room_user, char *key) {
  */
 void room_user_reset(room_user *room_user) {
     if (room_user->room != NULL) {
-        stop_walking(room_user);
+        stop_walking(room_user, false);
     }
 
     room_user->is_walking = 0;

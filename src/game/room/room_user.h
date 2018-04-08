@@ -40,7 +40,7 @@ typedef struct room_user_status_s {
 
 room_user *room_user_create(player*);
 void walk_to(room_user*, int, int);
-void stop_walking(room_user*);
+void stop_walking(room_user*,bool);
 void room_user_clear_walk_list(room_user*);
 void append_user_list(outgoing_message*, player*);
 void append_user_status(outgoing_message*, player*);
