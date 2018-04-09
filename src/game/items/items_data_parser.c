@@ -80,16 +80,16 @@ List *item_parser_get_items(char *model) {
             room_item->is_solid = 1;
         }
 
-        if (strcmp(room_item->class_name, "poolLift") == 0
-            || strcmp(room_item->class_name, "poolBooth") == 0) {
+        if (strcmp(room_item->class_name, "poolEnter") == 0
+            || strcmp(room_item->class_name, "poolExit") == 0
+            || strcmp(room_item->class_name, "poolLift") == 0
+            || strcmp(room_item->class_name, "poolBooth") == 0
+            || strcmp(room_item->class_name, "queue_tile2") == 0) {
             room_item->can_sit = 0;
             room_item->is_solid = 0;
         }
 
         if (strcmp(room_item->class_name, "queue_tile2") == 0) {
-            room_item->can_sit = 0;
-            room_item->is_solid = 0;
-
             free(room_item->custom_data);
             room_item->custom_data = strdup("2");
         }

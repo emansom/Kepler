@@ -89,6 +89,14 @@ void pool_item_walk_on(player *p, item *item) {
         om_cleanup(om);
     }
 
+    if (strcmp(room_entity->room->room_data->model_data->model_name, "pool_b") == 0) {
+        if (strcmp(item->class_name, "queue_tile2") == 0) {
+            coord next;
+            coord_get_front(item->coords, &next);
+            walk_to(room_entity, next.x, next.y);
+        }
+    }
+
 
     if (strcmp(item->class_name, "poolEnter") == 0) {
         coord warp = { };

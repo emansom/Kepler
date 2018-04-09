@@ -127,7 +127,22 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
 
     item *to_item = to_tile->highest_item;
     item *from_item = from_tile->highest_item;
-        
+
+    if (from_item != NULL) {
+        if (strcmp(from_item->class_name, "poolEnter") == 0 || strcmp(from_item->class_name, "poolExit") == 0) {
+            return strlen(room_user->player->player_data->pool_figure) > 0;
+        }
+
+        if (to_item != NULL) {
+            if (strcmp(room_user->room->room_data->model_data->model_name, "pool_b") == 0
+                && strcmp(from_item->class_name, "queue_tile2") == 0
+                && strcmp(to_item->class_name, "queue_tile2") == 0) {
+
+                return true;
+            }
+        }
+    }
+
     if (to_item != NULL) {
         if (strcmp(to_item->class_name, "poolLift") == 0 || strcmp(to_item->class_name, "poolBooth") == 0) {
             if (to_item->current_program_state != NULL && strcmp(to_item->current_program_state, "close") == 0) {
@@ -137,8 +152,14 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             }
         }
 
-        if (strcmp(to_item->class_name, "poolEnter") == 0 || strcmp(to_item->class_name, "poolExit") == 0) {
-            return strlen(room_user->player->player_data->pool_figure) > 0;
+        if (strcmp(room_user->room->room_data->model_data->model_name, "pool_b") == 0
+            && strcmp(to_item->class_name, "queue_tile2") == 0) {
+
+            if (to_item->coords->x == 21 && to_item->coords->y == 9) {
+                return true;
+            } else {
+                return false;
+            }
         }
 
         if (to_item->is_solid == 1) {

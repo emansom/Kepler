@@ -63,7 +63,7 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
     /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
@@ -108,6 +108,7 @@ void room_user_clear_walk_list(room_user *room_user) {
 void stop_walking(room_user *room_user, bool is_silent) {
     room_user_remove_status(room_user, "mv");
     room_user_clear_walk_list(room_user);
+    room_user->is_walking = 0;
 
     int needs_update = 0;
 
@@ -142,7 +143,6 @@ void stop_walking(room_user *room_user, bool is_silent) {
     }
 
     room_user->needs_update = needs_update;
-    room_user->is_walking = 0;
 }
 
 /**
