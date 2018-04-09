@@ -36,9 +36,10 @@ void process_user_status(room_user *room_user) {
     }
 
     HashTableIter iter;
+    TableEntry *entry;
+
     hashtable_iter_init(&iter, room_user->statuses);
 
-    TableEntry *entry;
     while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
         char *key = entry->key;
         room_user_status *rus = entry->value;

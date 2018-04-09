@@ -31,7 +31,7 @@ int main(void) {
     }
 
     print_info("\n");
-    print_info("Starting managers...\n");
+    print_info("Initialising various server managers...\n");
 
     player_manager_init();
     model_manager_init();
@@ -41,40 +41,18 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
-    /*char *str = strdup("QEQBIIH|QESAIIJ|SESAIIJ|RFSAIIH|QFSAIIJ|RESAIIJ|RFQAIIH|QEPBIIH|RFRAIIH|PFSAIIJ");
-    char *s = "|";
-    char *token;
+    print_info("\n");
 
-    token = strtok(str, s);
+    server_settings *settings = malloc(sizeof(server_settings));
+    strcpy(settings->ip, "127.0.0.1");
+    settings->port = 12321;
 
-    int i = 0;
+    pthread_t server_thread;
+    start_server(settings, &server_thread);
 
-    while( token != NULL ) {
-        int len;
+    while (1) {
 
-        int x = vl64_decode(token, &len);
-        token += len;
-
-        int y = vl64_decode(token, &len);
-        token += len;
-
-        int length = vl64_decode(token, &len);
-        token += len;
-
-        int width = vl64_decode(token, &len);
-        token += len;
-
-        int rotation = vl64_decode(token, &len);
-        token += len;
-
-        printf("%i %s %i %i %i %i private\n", i++, "queue_tile2", x, y, 7, rotation);
-        token = strtok(NULL, s);
-    }*/
-
-    //printf("decoded: %i\n", base64_decode("@S"));
-
-    print_info("Starting server...\n");
-    start_server("0.0.0.0", 12321);
+    }
     
     return EXIT_SUCCESS;
 }

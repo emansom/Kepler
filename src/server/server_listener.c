@@ -1,6 +1,7 @@
 #include <stdio.h>
 
 #include "hashtable.h"
+#include "shared.h"
 
 #include "game/player/player.h"
 #include "game/player/player_manager.h"
@@ -13,7 +14,6 @@
 #include "util/encoding/base64encoding.h"
 #include "server/server_listener.h"
 
-uv_loop_t *loop;
 
 /**
  *
@@ -144,24 +144,40 @@ void server_on_new_connection(uv_stream_t *server, int status) {
 }
 
 /**
+ * Thread callback to start server on a different loop.
  *
- * @param ip
- * @param port
+ * @param arguments the server settings argument
  */
-void start_server(const char *ip, int port) {
-    loop = uv_default_loop();
+void *listen_server(void *arguments)  {
+    server_settings *args = (server_settings *)arguments;
+    uv_loop_t *loop = uv_default_loop();
 
     uv_tcp_t server;
     struct sockaddr_in bind_addr;
 
     uv_tcp_init(loop, &server);
-    uv_ip4_addr(ip, port, &bind_addr);
+    uv_ip4_addr(args->ip, args->port, &bind_addr);
     uv_tcp_bind(&server, (const struct sockaddr*) &bind_addr, 0);
     uv_listen((uv_stream_t *) &server, 128, server_on_new_connection);
 
-    // At the moment, the entire server is single threaded but there are plans
-    // to make the entire server multithreaded.
-
     uv_run(loop, UV_RUN_DEFAULT);
     uv_loop_close(loop);
+
+    return NULL;
+}
+
+/**
+ * Create thread for server listener.
+ *
+ * @param settings the server settings
+ * @param server_thread the thread to initialise
+ */
+void start_server(server_settings *settings, pthread_t *server_thread) {
+    print_info("Starting server on port %i...\n", settings->port);
+
+    if (pthread_create(server_thread, NULL, &listen_server, (void*) settings) != 0) {
+        printf("Uh-oh!\n");
+    } else {
+        print_info("Server successfully started!\n", settings->port);
+    }
 }
