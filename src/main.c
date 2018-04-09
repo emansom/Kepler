@@ -54,15 +54,16 @@ int main(void) {
     start_server(settings, &server_thread);
 
     while (true) {
-        char *command = read_line();
-        filter_vulnerable_characters(&command, true); // Strip unneeded characters
+        char command[50];
+        fgets(command, 10, stdin);
 
-        if (strcmp(command, "q") == 0 || strcmp(command, "quit") == 0) {
+        char *filter_command = (char*)command;
+        filter_vulnerable_characters(&filter_command, true); // Strip unneeded characters
+
+        if (strcmp(filter_command, "q") == 0 || strcmp(filter_command, "quit") == 0) {
             dispose_program();
             break;
         }
-
-        free(command);
     }
     
     return EXIT_SUCCESS;
@@ -72,12 +73,12 @@ int main(void) {
  * Destroys program, clears all memory, except server listen instances.
  */
 void dispose_program() {
+    printf("Shutting down server!\n");
+    thpool_destroy(global.thread_manager.pool);
     player_manager_dispose();
     model_manager_dispose();
     room_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();
-    thpool_destroy(global.thread_manager.pool);
-    printf("Shutting down server!");
+    printf("Done!\n");
 }
-

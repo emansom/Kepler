@@ -39,7 +39,7 @@ void do_room_task(runnable *run){
         free(run);
     } else {
         run->request(room);
-        usleep((__useconds_t )run->millis*1000);
+        usleep((__useconds_t) run->millis*1000);
 
         if (room_manager_get_by_id(run->room_id) != NULL) {
             thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);

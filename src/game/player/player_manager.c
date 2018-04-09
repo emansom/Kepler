@@ -94,4 +94,6 @@ void player_manager_dispose() {
         uv_close((uv_handle_t *) player->stream, server_on_connection_close);
         player_cleanup(player);
     }
+
+    list_destroy(global.player_manager.players);
 }
