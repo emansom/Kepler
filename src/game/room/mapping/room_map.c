@@ -6,6 +6,8 @@
 #include "room_tile.h"
 #include "room_map.h"
 
+#include "game/pathfinder/coord.h"
+
 #include "game/items/item.h"
 
 #include "game/room/room.h"
@@ -61,7 +63,7 @@ void room_map_add_private_items(room *room) {
         item *public_item;
         list_get_at(room->items, i, (void *) &public_item);
 
-        room_tile *tile = room->room_map->map[public_item->x][public_item->y];
+        room_tile *tile = room->room_map->map[public_item->coords->x][public_item->coords->y];
 
         if (tile != NULL) {
             tile->highest_item = public_item;
@@ -80,7 +82,7 @@ void room_map_add_public_items(room *room) {
         item *public_item;
         list_get_at(room->public_items, i, (void *) &public_item);
 
-        room_tile *tile = room->room_map->map[public_item->x][public_item->y];
+        room_tile *tile = room->room_map->map[public_item->coords->x][public_item->coords->y];
 
         if (tile != NULL) {
             tile->highest_item = public_item;

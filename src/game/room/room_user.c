@@ -12,15 +12,12 @@
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
-
 #include "game/room/pool/pool_handler.h"
 
 #include "game/items/item.h"
 
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
-
-
 
 #include "util/stringbuilder.h"
 #include "deque.h"
@@ -61,11 +58,6 @@ void walk_to(room_user *room_user, int x, int y) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
         room_user->needs_update = 1;
-
-        if (room_user->next != NULL) {
-            free(room_user->next);
-            room_user->next = NULL;
-        }
     }
 
     room_user->goal->x = x;
@@ -141,8 +133,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
         if (item != NULL) {
             if (item->can_sit) {
                 room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
-                room_user->head_rotation = item->rotation;
-                room_user->body_rotation = item->rotation;
+                coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
                 needs_update = 1;
             }
 
@@ -152,11 +143,6 @@ void stop_walking(room_user *room_user, bool is_silent) {
 
     room_user->needs_update = needs_update;
     room_user->is_walking = 0;
-
-    if (room_user->next != NULL) {
-        free(room_user->next);
-        room_user->next = NULL;
-    }
 }
 
 /**
@@ -271,13 +257,9 @@ void room_user_cleanup(room_user *room_user) {
  * @param player the player
  */
 void append_user_list(outgoing_message *players, player *player) {
-    char user_id[11];
+    char user_id[11], instance_id[11];
     sprintf(user_id, "%i", player->player_data->id);
-    user_id[10] = '\0';
-
-    char instance_id[11];
     sprintf(instance_id, "%i", player->room_user->instance_id);
-    instance_id[10] = '\0';
 
     om_write_str_kv(players, "i", instance_id);
     om_write_str_kv(players, "a", user_id);
@@ -292,7 +274,10 @@ void append_user_list(outgoing_message *players, player *player) {
     sb_add_string(players->sb, " ");
     sb_add_float(players->sb, player->room_user->current->z);
     sb_add_char(players->sb, 13);
-    om_write_str_kv(players, "c", player->player_data->motto);
+
+    if (strlen(player->player_data->motto) > 0) {
+        om_write_str_kv(players, "c", player->player_data->motto);
+    }
 
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0
         || strcmp(player->room_user->room->room_data->model_data->model_name, "pool_b") == 0
@@ -319,16 +304,17 @@ void append_user_status(outgoing_message *om, player *player) {
     sb_add_string(om->sb, ",");
     sb_add_float(om->sb, player->room_user->current->z);
     sb_add_string(om->sb, ",");
-    sb_add_int(om->sb, player->room_user->head_rotation);
+    sb_add_int(om->sb, player->room_user->current->head_rotation);
     sb_add_string(om->sb, ",");
-    sb_add_int(om->sb, player->room_user->body_rotation);
+    sb_add_int(om->sb, player->room_user->current->body_rotation);
     sb_add_string(om->sb, "/");
 
     if (hashtable_size(player->room_user->statuses) > 0) {
         HashTableIter iter;
+        TableEntry *entry;
+
         hashtable_iter_init(&iter, player->room_user->statuses);
 
-        TableEntry *entry;
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
             char *key = entry->key;
             room_user_status *rus = entry->value;
@@ -340,20 +326,4 @@ void append_user_status(outgoing_message *om, player *player) {
     }
 
     sb_add_char(om->sb, 13);
-
-     /*   hashtable_get_keys(player->room_user->statuses, &keys);
-
-        for (size_t i = 0; i < array_size(keys); i++) {
-            char *key;
-            room_user_status *rus;
-            array_get_at(keys, i, (void*)&key);
-            hashtable_get(player->room_user->statuses, key, (void*)&rus);
-
-            sb_add_string(om->sb, key);
-            sb_add_string(om->sb, rus->value);
-            sb_add_string(om->sb, "/");
-        }
-
-        array_destroy(keys);
-    }*/
 }

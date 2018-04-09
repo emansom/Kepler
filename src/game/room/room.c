@@ -139,16 +139,20 @@ void room_enter(room *room, player *player) {
         printf("Room %i has invalid model data.\n", room->room_data->id);
         return;
     }
+    
+    room_user *room_entity = (room_user *) player->room_user;
 
-    player->room_user->room = room;
-    player->room_user->room_id = room->room_id;
-    player->room_user->instance_id = create_instance_id((room_user*) player->room_user);
+   room_entity->room = room;
+   room_entity->room_id = room->room_id;
+   room_entity->instance_id = create_instance_id((room_user*)room_entity);
 
-    player->room_user->current->x = room->room_data->model_data->door_x;
-    player->room_user->current->y = room->room_data->model_data->door_y;
-    player->room_user->current->z = room->room_data->model_data->door_z;
-    player->room_user->head_rotation = room->room_data->model_data->door_dir;
-    player->room_user->body_rotation = room->room_data->model_data->door_dir;
+   room_entity->current->x = room->room_data->model_data->door_x;
+   room_entity->current->y = room->room_data->model_data->door_y;
+   room_entity->current->z = room->room_data->model_data->door_z;
+
+   coord_set_rotation(room_entity->current,
+                      room->room_data->model_data->door_dir,
+                      room->room_data->model_data->door_dir);
 
     list_add(room->users, player);
     room->room_data->visitors_now = list_size(room->users);

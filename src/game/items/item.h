@@ -1,16 +1,15 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+typedef struct coord_s coord;
+
 typedef struct item_s {
     int id;
     int room_id;
     char *class_name;
     int is_table;
     int sprite_id;
-    int x;
-    int y;
-    double z;
-    int rotation;
+    coord *coords;
     char *custom_data;
     char *current_program;
     char *current_program_state;

@@ -19,8 +19,6 @@ typedef struct room_user_s {
     coord *current;
     coord *goal;
     coord *next;
-    int head_rotation;
-    int body_rotation;
     Deque *walk_list;
     int is_walking;
     int needs_update;

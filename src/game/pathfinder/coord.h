@@ -5,9 +5,14 @@ typedef struct coord_s {
     int x;
     int y;
     double z;
+    int head_rotation;
+    int body_rotation;
+    int rotation;
 } coord;
 
-coord *create_coord(int, int);
-int distance_squared(coord, coord);
+coord *create_coord(int x, int y);
+int distance_squared(coord from, coord to);
+void coord_set_rotation(coord *coord, int head_rotation, int body_rotation);
+void coord_get_front(coord *start_coord, coord *new_coord);
 
 #endif

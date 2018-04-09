@@ -90,8 +90,7 @@ void process_user(player *player) {
             sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
 
             int rotation = calculate(room_entity->current->x, room_entity->current->y, next->x, next->y);
-            room_entity->body_rotation = rotation;
-            room_entity->head_rotation = rotation;
+            coord_set_rotation(room_entity->current, rotation, rotation);
 
             room_user_remove_status(room_entity, "sit");
             room_user_remove_status(room_entity, "lay");

@@ -93,17 +93,17 @@ void pool_item_walk_on(player *p, item *item) {
     if (strcmp(item->class_name, "poolEnter") == 0) {
         coord warp = { };
 
-        if (item->x == 20 && item->y == 28) {
+        if (item->coords->x == 20 && item->coords->y == 28) {
             warp.x = 21;
             warp.y = 28;
         }
 
-        if (item->x == 17 && item->y == 21) {
+        if (item->coords->x == 17 && item->coords->y == 21) {
             warp.x = 17;
             warp.y = 22;
         }
 
-        if (item->x == 31 && item->y == 10) {
+        if (item->coords->x == 31 && item->coords->y == 10) {
             warp.x = 31;
             warp.y = 11;
         }
@@ -114,22 +114,22 @@ void pool_item_walk_on(player *p, item *item) {
     if (strcmp(item->class_name, "poolExit") == 0) {
         coord warp = { };
 
-        if (item->x == 21 && item->y == 28) {
+        if (item->coords->x == 21 && item->coords->y == 28) {
             warp.x = 20;
             warp.y = 28;
         }
 
-        if (item->x == 17 && item->y == 22) {
+        if (item->coords->x == 17 && item->coords->y == 22) {
             warp.x = 17;
             warp.y = 21;
         }
 
-        if (item->x == 20 && item->y == 19) {
+        if (item->coords->x == 20 && item->coords->y == 19) {
             warp.x = 19;
             warp.y = 19;
         }
 
-        if (item->x == 31 && item->y == 11) {
+        if (item->coords->x == 31 && item->coords->y == 11) {
             warp.x = 31;
             warp.y = 10;
         }
@@ -172,19 +172,19 @@ void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
  */
 void pool_setup_redirections(room *room, item *public_item) {
     if (strcmp(public_item->class_name, "poolBooth") == 0) {
-        if (public_item->x == 17 && public_item->y == 11) {
+        if (public_item->coords->x == 17 && public_item->coords->y == 11) {
             room->room_map->map[18][11]->highest_item = public_item;
         }
 
-        if (public_item->x == 17 && public_item->y == 9) {
+        if (public_item->coords->x == 17 && public_item->coords->y == 9) {
             room->room_map->map[18][9]->highest_item = public_item;
         }
 
-        if (public_item->x == 8 && public_item->y == 1) {
+        if (public_item->coords->x == 8 && public_item->coords->y == 1) {
             room->room_map->map[8][0]->highest_item = public_item;
         }
 
-        if (public_item->x == 9 && public_item->y == 1) {
+        if (public_item->coords->x == 9 && public_item->coords->y == 1) {
             room->room_map->map[9][0]->highest_item = public_item;
         }
     }

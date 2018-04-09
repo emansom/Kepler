@@ -42,7 +42,6 @@ void server_on_connection_close(uv_handle_t *handle) {
  * @param status
  */
 void server_on_write(uv_write_t* req, int status) {
-    printf("Written data: %s\n", (char*)req->data);
     free(req->data);
     free(req);
 }
