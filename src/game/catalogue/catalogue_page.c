@@ -58,23 +58,42 @@ catalogue_page *catalogue_page_create(int id, int min_role, char *name_index, ch
             char key[25]; // "label_extra_t_" + 10 chars for integer and 1 for /0 ending
             sprintf(key, "label_extra_t_%s", z_id);
 
-            hashtable_add(page->label_extra, strdup(key), strdup(z_data));
+            hashtable_add(page->label_extra, key, z_data);
             new_line = strtok(NULL,"\r\n");
         }
-
-        /*HashTableIter iter;
-        hashtable_iter_init(&iter, page->label_extra);
-
-        TableEntry *entry;
-        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-            char *key = entry->key;
-            printf("key: %s\n", key);
-            free(key);
-        }*/
     }
-
-
 
     free(label_extra_t);
     return page;
+}
+
+/**
+ * Dispose catalogue page.
+ *
+ * @param page the catalogue page to dispose
+ */
+void catalogue_page_dispose(catalogue_page *page) {
+    free(page->name_index);
+    free(page->name);
+    free(page->layout);
+    free(page->image_headline);
+    free(page->image_teasers);
+    free(page->body);
+    free(page->label_pick);
+    free(page->label_extra_s);
+
+    if (hashtable_size(page->label_extra) > 0) {
+        HashTableIter iter;
+        TableEntry *entry;
+
+        hashtable_iter_init(&iter, page->label_extra);
+
+        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+            char *value = entry->value;
+            free(value);
+        }
+    }
+
+    hashtable_destroy(page->label_extra);
+    free(page);
 }

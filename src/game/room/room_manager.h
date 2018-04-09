@@ -15,5 +15,6 @@ void room_manager_add_by_user_id(int);
 List *room_manager_get_by_user_id(int);
 room *room_manager_get_by_id(int);
 void room_manager_remove(int);
+void room_manager_dispose();
 
 #endif

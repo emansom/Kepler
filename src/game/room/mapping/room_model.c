@@ -95,3 +95,23 @@ void room_model_parse(room_model *room_model) {
 
     free(heightmap);
 }
+
+/**
+ * Dispose room model.
+ *
+ * @param model the model to dispose.
+ */
+void room_model_dispose(room_model *model) {
+    free(model->model_id);
+    free(model->model_name);
+    free(model->heightmap);
+
+    for (size_t j = 0; j < list_size(model->public_items); j++) {
+        item *item;
+        list_get_at(model->public_items, j, (void *) &item);
+        item_dispose(item);
+    }
+
+    list_destroy(model->public_items);
+    free(model);
+}

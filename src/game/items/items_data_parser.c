@@ -26,15 +26,13 @@ List *item_parser_get_items(char *model) {
     List *items = NULL;
     list_new(&items);
 
-    char * line = NULL;
+    char *line = NULL;
     size_t len = 0;
+    ssize_t read;
+
     int id = 0;
 
-    while ((getline(&line, &len, file)) != -1) {
-        if (line == NULL) {
-            continue;
-        }
-
+    while ((read = getline(&line, &len, file)) != -1) {
         char *str_x = get_argument(line, " ", 2);
         char *str_y = get_argument(line, " ", 3);
         char *str_z = get_argument(line, " ", 4);
@@ -104,6 +102,7 @@ List *item_parser_get_items(char *model) {
         free(str_rotation);
     }
 
+    free(line);
     fclose(file);
 
     /*if (strcmp(model, "cafe_ole") == 0) {

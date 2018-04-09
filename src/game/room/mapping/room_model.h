@@ -26,5 +26,6 @@ typedef struct room_model_s {
 
 room_model *room_model_create(char*, char *, int, int, double, int, char *);
 void room_model_parse(room_model*);
+void room_model_dispose(room_model *model);
 
 #endif

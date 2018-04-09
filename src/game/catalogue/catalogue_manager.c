@@ -52,3 +52,17 @@ catalogue_page *catalogue_manager_get_page_by_index(char *page_index) {
 List *catalogue_manager_get_pages() {
     return global.catalogue_manager.pages;
 }
+
+
+/**
+ * Dispose model manager
+ */
+void catalogue_manager_dispose() {
+    for (size_t i = 0; i < list_size(global.catalogue_manager.pages); i++) {
+        catalogue_page *page = NULL;
+        list_get_at(global.catalogue_manager.pages, i, (void *) &page);
+        catalogue_page_dispose(page);
+    }
+
+    list_destroy(global.catalogue_manager.pages);
+}

@@ -1,7 +1,8 @@
 #include "shared.h"
-#include "sqlite3.h"
 
+#include "sqlite3.h"
 #include "list.h"
+#include "lib/cthreadpool/thpool.h"
 
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
@@ -13,6 +14,8 @@
 #include "util/threading.h"
 #include "util/encoding/base64encoding.h"
 #include "util/encoding/vl64encoding.h"
+
+void dispose_program();
 
 int main(void) {
     print_info("Kepler Habbo server...\n");
@@ -55,9 +58,7 @@ int main(void) {
         filter_vulnerable_characters(&command, true); // Strip unneeded characters
 
         if (strcmp(command, "q") == 0 || strcmp(command, "quit") == 0) {
-            player_manager_dispose();
-            model_manager_dispose();
-            printf("Shutting down server!");
+            dispose_program();
             break;
         }
 
@@ -65,5 +66,18 @@ int main(void) {
     }
     
     return EXIT_SUCCESS;
+}
+
+/**
+ * Destroys program, clears all memory, except server listen instances.
+ */
+void dispose_program() {
+    player_manager_dispose();
+    model_manager_dispose();
+    room_manager_dispose();
+    catalogue_manager_dispose();
+    category_manager_dispose();
+    thpool_destroy(global.thread_manager.pool);
+    printf("Shutting down server!");
 }
 

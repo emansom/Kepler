@@ -58,15 +58,8 @@ void model_manager_dispose() {
     for (size_t i = 0; i < list_size(global.room_model_manager.models); i++) {
         room_model *model;
         list_get_at(global.room_model_manager.models, i, (void *) &model);
-
-        free(model->model_id);
-        free(model->model_name);
-        free(model->heightmap);
-
-        for (size_t j = 0; j < list_size(model->public_items); j++) {
-            item *item;
-            list_get_at(model->public_items, j, (void *) &item);
-            item_dispose(item);
-        }
+        room_model_dispose(model);
     }
+
+    list_destroy(global.room_model_manager.models);
 }

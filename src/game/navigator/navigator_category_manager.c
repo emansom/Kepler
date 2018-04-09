@@ -192,3 +192,24 @@ int category_manager_get_max_vistors(int category_id) {
 
     return max_visitors;
 }
+
+
+/**
+ * Dispose room manager.
+ */
+void category_manager_dispose() {
+    if (hashtable_size(global.room_category_manager.categories) > 0) {
+        HashTableIter iter;
+        hashtable_iter_init(&iter, global.room_category_manager.categories);
+
+        TableEntry *entry;
+        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+            room_category *category = entry->value;
+
+            free(category->name);
+            free(category);
+        }
+    }
+
+    hashtable_destroy(global.room_category_manager.categories);
+}

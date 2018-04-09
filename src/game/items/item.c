@@ -78,9 +78,15 @@ void item_assign_program(item *room_item, char *program_state) {
     }
 }
 
+/**
+ * Dispose item.
+ *
+ * @param item the item to dispose
+ */
 void item_dispose(item *item) {
     free(item->class_name);
     free(item->custom_data);
+    free(item->coords);
 
     if (item->current_program != NULL) {
         free(item->current_program);

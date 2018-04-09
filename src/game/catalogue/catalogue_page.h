@@ -18,5 +18,6 @@ typedef struct catalogue_page_s {
 } catalogue_page;
 
 catalogue_page *catalogue_page_create(int, int, char*, char*, char*, char*, char*, char*, char*, char*, char*);
+void catalogue_page_dispose(catalogue_page *page);
 
 #endif

@@ -47,4 +47,5 @@ void room_leave(room*, player*);
 void room_send(room*, outgoing_message*);
 void room_dispose(room*);
 
+
 #endif

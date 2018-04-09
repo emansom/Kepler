@@ -122,3 +122,23 @@ void room_manager_remove(int room_id) {
         hashtable_remove(global.room_manager.rooms, &room_id, NULL);
     }
 }
+
+/**
+ * Dispose room manager.
+ */
+void room_manager_dispose() {
+    if (hashtable_size(global.room_manager.rooms) > 0) {
+        HashTableIter iter;
+        hashtable_iter_init(&iter, global.room_manager.rooms);
+
+        TableEntry *entry;
+        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+            room *room = entry->value;
+            list_remove_all(room->public_items);
+            room_dispose(room);
+        }
+    }
+
+    hashtable_destroy(global.room_manager.rooms);
+
+}
