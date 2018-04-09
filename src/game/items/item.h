@@ -19,5 +19,6 @@ typedef struct item_s {
 
 item *item_create(int, int, char*, int, int, int, double, int, char*);
 void item_assign_program(item*, char*);
+void item_dispose(item *item);
 
 #endif

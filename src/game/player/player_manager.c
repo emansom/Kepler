@@ -2,8 +2,9 @@
 
 #include "list.h"
 #include "player.h"
-#include "database/queries/player_query.h"
 
+#include "database/queries/player_query.h"
+#include "server/server_listener.h"
 /**
  * Create a new list to store players
  */
@@ -80,4 +81,17 @@ player_data *player_manager_get_data_by_id(int player_id) {
     }  
 
     return query_player_data(player_id);
+}
+
+/**
+ * Dispose model manager
+ */
+void player_manager_dispose() {
+    for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
+        player *player;
+        list_get_at(global.player_manager.players, i, (void *) &player);
+
+        uv_close((uv_handle_t *) player->stream, server_on_connection_close);
+        player_cleanup(player);
+    }
 }

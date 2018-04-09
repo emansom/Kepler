@@ -15,5 +15,6 @@ void player_manager_remove(player*);
 player *player_manager_find(void*);
 player *player_manager_find_by_id(int);
 player_data *player_manager_get_data_by_id(int);
+void player_manager_dispose();
 
 #endif

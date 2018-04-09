@@ -21,7 +21,7 @@ char *get_time_formatted_custom(unsigned long time_seconds) {
     return strdup(buff);
 }
 
-void filter_vulnerable_characters(char **str, int remove_newline) {
+void filter_vulnerable_characters(char **str, bool remove_newline) {
     char *body = *str;
     for (int i = 0; i < strlen(body); i++) {
         char ch = body[i];
@@ -149,6 +149,44 @@ bool valid_string(char *str, char *allowed_chars) {
     }
 
     return valid;
+}
+
+char *read_line() {
+    char * line = malloc(100), * linep = line;
+    size_t lenmax = 100, len = lenmax;
+    int c;
+
+    if (line == NULL) {
+        return NULL;
+    }
+
+    for (;;) {
+        c = fgetc(stdin);
+
+        if (c == EOF) {
+            break;
+        }
+
+        if(--len == 0) {
+            len = lenmax;
+            char *linen = realloc(linep, lenmax *= 2);
+
+            if (linen == NULL) {
+                free(linep);
+                return NULL;
+            }
+
+            line = linen + (line - linep);
+            linep = linen;
+        }
+
+        if ((*line++ = (char)c) == '\n') {
+            break;
+        }
+    }
+
+    *line = '\0';
+    return linep;
 }
 
 void print_info(const char *format, ...) {

@@ -50,8 +50,18 @@ int main(void) {
     pthread_t server_thread;
     start_server(settings, &server_thread);
 
-    while (1) {
+    while (true) {
+        char *command = read_line();
+        filter_vulnerable_characters(&command, true); // Strip unneeded characters
 
+        if (strcmp(command, "q") == 0 || strcmp(command, "quit") == 0) {
+            player_manager_dispose();
+            model_manager_dispose();
+            printf("Shutting down server!");
+            break;
+        }
+
+        free(command);
     }
     
     return EXIT_SUCCESS;

@@ -77,3 +77,18 @@ void item_assign_program(item *room_item, char *program_state) {
         room_item->current_program_state = NULL;
     }
 }
+
+void item_dispose(item *item) {
+    free(item->class_name);
+    free(item->custom_data);
+
+    if (item->current_program != NULL) {
+        free(item->current_program);
+    }
+
+    if (item->current_program_state != NULL) {
+        free(item->current_program_state);
+    }
+
+    free(item);
+}
