@@ -78,15 +78,15 @@ void SPLASHPOSITION(player *diver, incoming_message *message) {
         }
     }
 
+    char target[200];
+    sprintf(target, "targetcamera %i", diver->room_user->instance_id);
+
     // Show diving score
     if (total > 0) {
         final = sum / total;
 
         char score_text[200];
         sprintf(score_text, "showtext %s's score:/%.1f", diver->player_data->username, final);
-
-        char target[200];
-        sprintf(target, "targetcamera %i", diver->room_user->instance_id);
 
         outgoing_message *target_diver = om_create(71); // "AG"
         sb_add_string(target_diver->sb, "cam1");
@@ -109,9 +109,6 @@ void SPLASHPOSITION(player *diver, incoming_message *message) {
             }
         }
     } else {
-        char target[200];
-        sprintf(target, "targetcamera %i", diver->room_user->instance_id);
-
         outgoing_message *target_diver = om_create(71); // "AG"
         sb_add_string(target_diver->sb, "cam1");
         sb_add_string(target_diver->sb, " ");
