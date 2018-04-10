@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <util/stringbuilder.h>
 
 #include "deque.h"
 
@@ -70,6 +71,15 @@ void pool_item_walk_on(player *p, item *item) {
 
     if (strcmp(item->class_name, "poolLift") == 0) {
         item_assign_program(item, "close");
+
+        char target[200];
+        sprintf(target, "targetcamera %i", p->room_user->instance_id);
+
+        outgoing_message *target_diver = om_create(71); // "AG"
+        sb_add_string(target_diver->sb, "cam1");
+        sb_add_string(target_diver->sb, " ");
+        sb_add_string(target_diver->sb, target);
+        room_send((room *) room_entity->room, target_diver);
 
         room_entity->walking_lock = true;
         room_entity->player->player_data->tickets--;
