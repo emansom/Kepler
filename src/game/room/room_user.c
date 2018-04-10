@@ -34,6 +34,7 @@ room_user *room_user_create(player *player) {
     user->room = NULL;
     user->is_walking = 0;
     user->needs_update = 0;
+    user->lido_vote = -1;
     user->current = create_coord(0, 0);
     user->goal = create_coord(0, 0);
     user->next = NULL;
@@ -57,13 +58,13 @@ void walk_to(room_user *room_user, int x, int y) {
     if (room_user->next != NULL) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
-        room_user->needs_update = 1;
+        room_user->needs_update = true;
     }
 
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
     /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
@@ -78,7 +79,7 @@ void walk_to(room_user *room_user, int x, int y) {
     if (path != NULL && deque_size(path) > 0) {
         room_user_clear_walk_list(room_user);
         room_user->walk_list = path;
-        room_user->is_walking = 1;
+        room_user->is_walking = true;
     }
 }
 
@@ -108,9 +109,9 @@ void room_user_clear_walk_list(room_user *room_user) {
 void stop_walking(room_user *room_user, bool is_silent) {
     room_user_remove_status(room_user, "mv");
     room_user_clear_walk_list(room_user);
-    room_user->is_walking = 0;
+    room_user->is_walking = false;
 
-    int needs_update = 0;
+    bool needs_update = false;
 
     if (!is_silent) {
         item *item = NULL;
@@ -127,7 +128,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
             if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
                 room_user_remove_status(room_user, "sit");
                 room_user_remove_status(room_user, "lay");
-                needs_update = 1;
+                needs_update = true;
             }
         }
 
@@ -135,7 +136,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
             if (item->can_sit) {
                 room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
                 coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
-                needs_update = 1;
+                needs_update = true;
             }
 
             pool_item_walk_on((player *) room_user->player, item);
@@ -214,6 +215,7 @@ void room_user_reset(room_user *room_user) {
     room_user->room_id = 0;
     room_user->room = NULL;
     room_user->walking_lock = false;
+    room_user->lido_vote = -1;
 
     room_user_clear_walk_list(room_user);
 

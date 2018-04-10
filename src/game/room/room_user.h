@@ -22,6 +22,7 @@ typedef struct room_user_s {
     Deque *walk_list;
     int is_walking;
     int needs_update;
+    int lido_vote;
     HashTable *statuses;
     bool walking_lock;
 } room_user;
