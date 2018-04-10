@@ -58,7 +58,7 @@ catalogue_page *catalogue_page_create(int id, int min_role, char *name_index, ch
             char key[25]; // "label_extra_t_" + 10 chars for integer and 1 for /0 ending
             sprintf(key, "label_extra_t_%s", z_id);
 
-            hashtable_add(page->label_extra, key, z_data);
+            hashtable_add(page->label_extra, strdup(key), strdup(z_data));
             new_line = strtok(NULL,"\r\n");
         }
     }
