@@ -9,5 +9,6 @@ struct item_manager {
 };
 
 void item_manager_init();
+item_definition *item_manager_get_definition_by_id(int definition_id);
 
 #endif
