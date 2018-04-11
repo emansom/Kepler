@@ -9,15 +9,13 @@
 #include "game/player/player.h"
 
 void GCIX(player *player, incoming_message *message) {
-    HashTable *pages = catalogue_manager_get_pages();
-
-    HashTableIter iter;
-    hashtable_iter_init(&iter, global.catalogue_manager.pages);
-    TableEntry *entry;
+    List *pages = catalogue_manager_get_pages();
 
     outgoing_message *catalogue_pages = om_create(126); // "A~"
-    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-        catalogue_page *page = entry->value;
+
+    for (size_t i = 0; i < list_size(pages); i++) {
+        catalogue_page *page = NULL;
+        list_get_at(pages, i, (void *) &page);
 
         if (player->player_data->rank >= page->min_role) {
             om_write_str_delimeter(catalogue_pages, page->name_index, 9);

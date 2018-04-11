@@ -13,7 +13,7 @@
  * Create the catalogue manager instance and load the pages.
  */
 void catalogue_manager_init() {
-    hashtable_new(&global.catalogue_manager.pages);
+    list_new(&global.catalogue_manager.pages);
     hashtable_new(&global.catalogue_manager.items);
 
     catalogue_query_pages();
@@ -26,7 +26,7 @@ void catalogue_manager_init() {
  * @param page the catalogue page struct
  */
 void catalogue_manager_add_page(catalogue_page *page) {
-    hashtable_add(global.catalogue_manager.pages, &page->id, page);
+    list_add(global.catalogue_manager.pages, page);
 }
 
 /**
@@ -51,13 +51,16 @@ void catalogue_manager_add_item(catalogue_item *item) {
  * @return the catalogue page
  */
 catalogue_page *catalogue_manager_get_page_by_id(int id) {
-    catalogue_page *page = NULL;
+    for (size_t i = 0; i < list_size(global.catalogue_manager.pages); i++) {
+        catalogue_page *page = NULL;
+        list_get_at(global.catalogue_manager.pages, i, (void *) &page);
 
-    if (hashtable_contains_key(global.catalogue_manager.pages, &id)) {
-        hashtable_get(global.catalogue_manager.pages, &id, (void *)&page);
+        if (page->id == id) {
+            return page;
+        }
     }
 
-    return page;
+    return NULL;
 }
 
 /**
@@ -67,19 +70,14 @@ catalogue_page *catalogue_manager_get_page_by_id(int id) {
  * @return the catalogue page struct
  */
 catalogue_page *catalogue_manager_get_page_by_index(char *page_index) {
-    HashTableIter iter;
-    hashtable_iter_init(&iter, global.catalogue_manager.pages);
-
-    TableEntry *entry;
-
-    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-        catalogue_page *page = entry->value;
+    for (size_t i = 0; i < list_size(global.catalogue_manager.pages); i++) {
+        catalogue_page *page = NULL;
+        list_get_at(global.catalogue_manager.pages, i, (void *) &page);
 
         if (strcmp(page->name_index, page_index) == 0) {
             return page;
         }
     }
-
 
     return NULL;
 }
@@ -89,7 +87,7 @@ catalogue_page *catalogue_manager_get_page_by_index(char *page_index) {
  *
  * @return list of pages
  */
-HashTable *catalogue_manager_get_pages() {
+List *catalogue_manager_get_pages() {
     return global.catalogue_manager.pages;
 }
 
@@ -98,7 +96,7 @@ HashTable *catalogue_manager_get_pages() {
  * Dispose model manager
  */
 void catalogue_manager_dispose() {
-    HashTableIter iter;
+    /*HashTableIter iter;
     TableEntry *entry;
     hashtable_iter_init(&iter, global.catalogue_manager.pages);
 
@@ -107,5 +105,5 @@ void catalogue_manager_dispose() {
         catalogue_page_dispose(page);
     }
 
-    hashtable_destroy(global.catalogue_manager.pages);
+    hashtable_destroy(global.catalogue_manager.pages);*/
 }
