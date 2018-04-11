@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 #include "shared.h"
+
+#include "list.h"
 #include "hashtable.h"
 
 #include "communication/messages/outgoing_message.h"
@@ -37,7 +39,9 @@ catalogue_page *catalogue_page_create(int id, int min_role, char *name_index, ch
     page->body = body;
     page->label_pick = label_pick;
     page->label_extra_s = label_extra_s;
+
     hashtable_new(&page->label_extra);
+    list_new(&page->items);
 
     if (label_extra_t != NULL) {
         char *new_line = strtok(label_extra_t,"\r\n");

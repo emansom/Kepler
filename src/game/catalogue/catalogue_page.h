@@ -2,6 +2,7 @@
 #define CATALOGUE_PAGE_H
 
 typedef struct hashtable_s HashTable;
+typedef struct list_s List;
 
 typedef struct catalogue_page_s {
     int id;
@@ -15,6 +16,7 @@ typedef struct catalogue_page_s {
     char *label_pick;
     char *label_extra_s;
     HashTable *label_extra;
+    List *items;
 } catalogue_page;
 
 catalogue_page *catalogue_page_create(int, int, char*, char*, char*, char*, char*, char*, char*, char*, char*);
