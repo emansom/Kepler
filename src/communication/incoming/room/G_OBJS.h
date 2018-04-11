@@ -19,7 +19,6 @@ void G_OBJS(player *player, incoming_message *message) {
     for (size_t i = 0; i < list_size(room->public_items); i++) {
         item *room_item;
         list_get_at(room->public_items, i, (void*)&room_item);
-
         sb_add_string(om->sb, room_item->custom_data);
         sb_add_string(om->sb, " ");
         sb_add_string(om->sb, room_item->class_name);
@@ -40,17 +39,14 @@ void G_OBJS(player *player, incoming_message *message) {
 
         sb_add_char(om->sb, 13);
     }
-
     player_send(player, om);
     om_cleanup(om);
 
     om = om_create(32); // "@`"
     om_write_int(om, (int)list_size(room->items));
-
     for (size_t i = 0; i < list_size(room->items); i++) {
         item *room_item;
         list_get_at(room->items, i, (void *) &room_item);
-
         om_write_int_delimeter(om, room_item->id, 2);
         om_write_str(om, room_item->class_name);
         om_write_int(om, room_item->coords->x);
@@ -65,7 +61,6 @@ void G_OBJS(player *player, incoming_message *message) {
         om_write_int(om, 0);
         om_write_str(om, room_item->custom_data);
     }
-
     player_send(player, om);
     om_cleanup(om);
 }
