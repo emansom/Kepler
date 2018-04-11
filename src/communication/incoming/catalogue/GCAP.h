@@ -9,7 +9,7 @@
 
 #include "game/player/player.h"
 
-void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoing_message *message);
+void serialise_catalogue_item(catalogue_item *item, outgoing_message *message);
 
 void GCAP(player *player, incoming_message *message) {
     char *content = im_get_content(message);
@@ -52,7 +52,7 @@ void GCAP(player *player, incoming_message *message) {
     for (size_t i = 0; i < list_size(page->items); i++) {
         catalogue_item * item = NULL;
         list_get_at(page->items, i, (void *) &item);
-        serialise_catalogue_item(page, item, catalogue_page);
+        serialise_catalogue_item(item, catalogue_page);
     }
 
     player_send(player, catalogue_page);
@@ -62,13 +62,14 @@ void GCAP(player *player, incoming_message *message) {
         free(content);
         free(page_name);
 }
+
 /**
+ * Serialise the catalogue item for the page.
  *
- * @param page
- * @param item
- * @param message
+ * @param item the catalogue item
+ * @param message the catalogue page outgoing message
  */
-void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoing_message *message) {
+void serialise_catalogue_item(catalogue_item *item, outgoing_message *message) {
     if (item->is_package) {
         return; // TODO: Catalogue packages
     }
@@ -90,21 +91,20 @@ void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoi
     sb_add_char(message->sb, 9);
 
     om_write_str_delimeter(message, "", 9);
-
     om_write_str_delimeter(message, item_type, 9);
     om_write_str_delimeter(message, item_icon, 9);
     om_write_str_delimeter(message, item_size, 9);
     om_write_str_delimeter(message, item_dimensions, 9);
     om_write_str_delimeter(message, item->sale_code, 9);
 
-    if (item->is_package || strcmp(item->definition->sprite, "poster")) {
+    if (item->is_package || strcmp(item->definition->sprite, "poster") == 0) {
         om_write_str_delimeter(message, "", 9);
     }
 
     if (item->is_package) {
         // TODO: Package display
     } else {
-        if (item->definition->behaviour->isWallItem) {
+        if (!item->definition->behaviour->isWallItem) {
             om_write_str_delimeter(message, item->definition->colour, 9);
         }
     }
