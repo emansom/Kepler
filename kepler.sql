@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/53,51,44','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523187766');
-INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523186936');
+INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/239,255,146','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523354111');
+INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523353927');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
