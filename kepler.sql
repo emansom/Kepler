@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `items_definitions` (
 	`length`	INTEGER,
 	`width`	INTEGER,
 	`top_height`	NUMERIC,
-	`behaviour`	TEXT
+	`behaviour_data`	TEXT
 );
 INSERT INTO `items_definitions` VALUES (1001,'1337','shelves_norja','#ffffff,#F7EBBC',1,1,2,'S');
 INSERT INTO `items_definitions` VALUES (1002,'1337','shelves_polyfon','0,0,0',2,1,1,'S');

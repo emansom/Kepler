@@ -5,8 +5,11 @@
 
 #include "game/catalogue/catalogue_manager.h"
 #include "game/catalogue/catalogue_page.h"
+#include "game/catalogue/catalogue_item.h"
 
 #include "game/player/player.h"
+
+void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoing_message *message);
 
 void GCAP(player *player, incoming_message *message) {
     char *content = im_get_content(message);
@@ -46,10 +49,28 @@ void GCAP(player *player, incoming_message *message) {
         }
     }
 
+    for (size_t i = 0; i < list_size(page->items); i++) {
+        catalogue_item * item = NULL;
+        list_get_at(page->items, i, (void *) &item);
+        serialise_catalogue_item(page, item, catalogue_page);
+    }
+
     player_send(player, catalogue_page);
     om_cleanup(catalogue_page);
 
     cleanup:
         free(content);
         free(page_name);
+}
+/**
+ *
+ * @param page
+ * @param item
+ * @param message
+ */
+void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoing_message *message) {
+    sb_add_string(message->sb, "p");
+    sb_add_string(message->sb, ":");
+
+    sb_add_char(message->sb, 13);
 }

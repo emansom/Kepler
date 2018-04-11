@@ -22,3 +22,23 @@ catalogue_item *catalogue_item_create(char *sale_code, int page_id, int order_id
     item->is_package = is_package;
     return item;
 }
+
+char *catalogue_item_get_name(catalogue_item *item) {
+    if (item->is_package) {
+        return item->package_name;
+    } else {
+
+    }
+}
+
+char *catalogue_item_get_description(catalogue_item *item) {
+
+}
+
+char *catalogue_item_get_type(catalogue_item *item) {
+
+}
+
+char *catalogue_item_get_icon(catalogue_item *item) {
+
+}
