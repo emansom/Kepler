@@ -72,5 +72,32 @@ void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoi
     sb_add_string(message->sb, "p");
     sb_add_string(message->sb, ":");
 
+    char *item_name = catalogue_item_get_name(item);
+    char *item_desc = catalogue_item_get_description(item);
+    char *item_type = catalogue_item_get_type(item);
+    char *item_icon = catalogue_item_get_icon(item);
+    char *item_size = catalogue_item_get_size(item);
+    char *item_dimensions = catalogue_item_get_dimensions(item);
+
+    om_write_str_delimeter(message, item_name, 9);
+    om_write_str_delimeter(message, item_desc, 9);
+
+    sb_add_int(message->sb, item->price);
+    sb_add_char(message->sb, 9);
+
+    om_write_str_delimeter(message, "null", 9);
+    om_write_str_delimeter(message, item_type, 9);
+    om_write_str_delimeter(message, item_icon, 9);
+    om_write_str_delimeter(message, item_size, 9);
+    om_write_str_delimeter(message, item_dimensions, 9);
+    om_write_str_delimeter(message, item->sale_code, 9);
+
+    free(item_name);
+    free(item_desc);
+    free(item_type);
+    free(item_icon);
+    free(item_size);
+    free(item_dimensions);
+
     sb_add_char(message->sb, 13);
 }
