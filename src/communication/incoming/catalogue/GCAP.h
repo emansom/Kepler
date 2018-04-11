@@ -85,7 +85,7 @@ void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoi
     sb_add_int(message->sb, item->price);
     sb_add_char(message->sb, 9);
 
-    om_write_str_delimeter(message, "null", 9);
+    om_write_str_delimeter(message, "", 9);
 
     om_write_str_delimeter(message, item_type, 9);
     om_write_str_delimeter(message, item_icon, 9);
@@ -94,7 +94,7 @@ void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoi
     om_write_str_delimeter(message, item->sale_code, 9);
 
     if (item->is_package || strcmp(item->definition->sprite, "poster")) {
-        om_write_str_delimeter(message, "null", 9);
+        om_write_str_delimeter(message, "", 9);
     }
 
     if (item->is_package) {
