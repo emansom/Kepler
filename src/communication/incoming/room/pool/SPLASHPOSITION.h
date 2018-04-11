@@ -81,6 +81,12 @@ void SPLASHPOSITION(player *diver, incoming_message *message) {
     char target[200];
     sprintf(target, "targetcamera %i", diver->room_user->instance_id);
 
+    outgoing_message *target_diver = om_create(71); // "AG"
+    sb_add_string(target_diver->sb, "cam1");
+    sb_add_string(target_diver->sb, " ");
+    sb_add_string(target_diver->sb, target);
+    room_send((room *) room_entity->room, target_diver);
+
     // Show diving score
     if (total > 0) {
         final = sum / total;
@@ -88,32 +94,21 @@ void SPLASHPOSITION(player *diver, incoming_message *message) {
         char score_text[200];
         sprintf(score_text, "showtext %s's score:/%.1f", diver->player_data->username, final);
 
-        outgoing_message *target_diver = om_create(71); // "AG"
-        sb_add_string(target_diver->sb, "cam1");
-        sb_add_string(target_diver->sb, " ");
-        sb_add_string(target_diver->sb, target);
-        room_send((room *) room_entity->room, target_diver);
-
         outgoing_message *score_message = om_create(71); // "AG"
         sb_add_string(score_message->sb, "cam1");
         sb_add_string(score_message->sb, " ");
         sb_add_string(score_message->sb, score_text);
         room_send((room *) room_entity->room, score_message);
+    }
 
-        for (size_t i = 0; i < list_size(room_entity->room->users); i++) {
-            player *room_player;
-            list_get_at(room_entity->room->users, i, (void *) &room_player);
+    // Reset all diving scores
+    for (size_t i = 0; i < list_size(room_entity->room->users); i++) {
+        player *room_player;
+        list_get_at(room_entity->room->users, i, (void *) &room_player);
 
-            if (room_player->room_user->lido_vote > 0) {
-                room_player->room_user->lido_vote = -1;
-            }
+        if (room_player->room_user->lido_vote > 0) {
+            room_player->room_user->lido_vote = -1;
         }
-    } else {
-        outgoing_message *target_diver = om_create(71); // "AG"
-        sb_add_string(target_diver->sb, "cam1");
-        sb_add_string(target_diver->sb, " ");
-        sb_add_string(target_diver->sb, target);
-        room_send((room *) room_entity->room, target_diver);
     }
 
     free(content_x);

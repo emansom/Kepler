@@ -107,7 +107,7 @@ char *im_get_content(incoming_message *im) {
  * @return the base64 value
  */
 char *im_read_str(incoming_message *im) {
-    if (im->counter > im->total_length) {
+    if ((im->counter - 2) > im->total_length) {
         return NULL;
     }
 

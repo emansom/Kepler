@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/239,255,146','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523354111');
+INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/239,255,146','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523430701');
 INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523353927');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
@@ -116,10 +116,7 @@ INSERT INTO `rooms_categories` VALUES (8,0,3,0,'Club-only Spaces',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (9,0,3,0,'Parks and Gardens',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (10,0,3,0,'Swimming Pools',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (11,0,3,0,'The Lobbies',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (12,0,3,0,'The Hallways',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (13,0,3,0,'Games',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (14,0,13,0,'BattleBall',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (15,0,13,0,'SnowStorm',1,0,1,6);
+INSERT INTO `rooms_categories` VALUES (12,-1,3,0,'The Hallways',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (16,0,7,0,'Hotel Rooftop',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (17,0,7,0,'Oldskool Disco',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (18,0,7,0,'Chromide Club',1,0,1,6);

@@ -168,7 +168,7 @@ void room_query_get_categories() {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT id, parent_id, name, public_spaces, allow_trading, minrole_access,minrole_setflatcat FROM rooms_categories ORDER BY id DESC", -1, &stmt, 0);
+    int status = sqlite3_prepare(conn, "SELECT id, parent_id, name, public_spaces, allow_trading, minrole_access,minrole_setflatcat FROM rooms_categories ORDER BY order_id ASC", -1, &stmt, 0);
 
     if (status != SQLITE_OK) {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
