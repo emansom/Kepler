@@ -69,6 +69,10 @@ void GCAP(player *player, incoming_message *message) {
  * @param message
  */
 void serialise_catalogue_item(catalogue_page *page, catalogue_item *item, outgoing_message *message) {
+    if (item->is_package) {
+        return; // TODO: Catalogue packages
+    }
+
     char *item_name = catalogue_item_get_name(item);
     char *item_desc = catalogue_item_get_description(item);
     char *item_type = catalogue_item_get_type(item);

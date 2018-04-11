@@ -38,7 +38,7 @@ char *item_definition_get_name(item_definition *definition, int special_sprite_i
             name = strdup("null");
         }
 
-        return name;
+        return strdup(name);
     }
 }
 
@@ -52,22 +52,25 @@ char *item_definition_get_desc(item_definition *definition, int special_sprite_i
         sb_add_string(sb, external_text_key);
         sb_add_string(sb, "_desc");
 
-        char *name = texts_manager_get_value_by_id(sb->data);
+        char *desc = texts_manager_get_value_by_id(sb->data);
         sb_cleanup(sb);
 
-        if (name == NULL) {
-            name = strdup("null");
+        if (desc == NULL) {
+            desc = strdup("null");
         }
 
-        return name;
+        return strdup(desc);
     }
 }
 
 char *item_definition_get_icon(item_definition *definition, int special_sprite_id) {
     stringbuilder *sb = sb_create();
     sb_add_string(sb, definition->sprite);
-    sb_add_string(sb, " ");
-    sb_add_int(sb, special_sprite_id);
+
+    if (special_sprite_id > 0) {
+        sb_add_string(sb, " ");
+        sb_add_int(sb, special_sprite_id);
+    }
 
     char *name = strdup(sb->data);
     sb_cleanup(sb);
