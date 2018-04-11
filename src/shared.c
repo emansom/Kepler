@@ -32,6 +32,17 @@ void filter_vulnerable_characters(char **str, bool remove_newline) {
     }
 }
 
+void replace_vulnerable_characters(char **str, bool remove_newline, char new_char) {
+    char *body = *str;
+    for (int i = 0; i < strlen(body); i++) {
+        char ch = body[i];
+
+        if (ch == 2 || ch == 9 || ch == 10 || ch == 12 || (remove_newline && ch == 13)) {
+            body[i] = new_char; //remove char completely
+        }
+    }
+}
+
 char *get_argument(char *str, char *delim, int index) {
     char *copy = strdup(str);
     char *value = NULL;

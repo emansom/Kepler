@@ -37,8 +37,8 @@ void texts_manager_parse(char *file_name) {
         char *key = get_argument(line, "=", 0);
         char *value = get_argument(line, "=", 1);
 
-        key[strcspn(key, "\n")] = 0;
-        value[strcspn(value, "\n")] = 0;
+        key[strcspn(key, "\n")] = 0; // strip character
+        value[strcspn(value, "\n")] = 0; // strip character
 
         filter_vulnerable_characters(&key, true);
         filter_vulnerable_characters(&value, true);

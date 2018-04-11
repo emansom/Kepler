@@ -21,20 +21,20 @@ void GCAP(player *player, incoming_message *message) {
         goto cleanup;
     }
 
-    outgoing_message *catalogue_page = om_create(127); // "A"
-    om_write_str_kv(catalogue_page, "i", page->name_index);
-    om_write_str_kv(catalogue_page, "n", page->name);
-    om_write_str_kv(catalogue_page, "l", page->layout);
-    om_write_str_kv(catalogue_page, "g", page->image_headline);
-    om_write_str_kv(catalogue_page, "e", page->image_teasers);
-    om_write_str_kv(catalogue_page, "h", page->body);
+    outgoing_message *om = om_create(127); // "A"
+    om_write_str_kv(om, "i", page->name_index);
+    om_write_str_kv(om, "n", page->name);
+    om_write_str_kv(om, "l", page->layout);
+    om_write_str_kv(om, "g", page->image_headline);
+    om_write_str_kv(om, "e", page->image_teasers);
+    om_write_str_kv(om, "h", page->body);
 
     if (page->label_pick != NULL) {
-        om_write_str_kv(catalogue_page, "w", page->label_pick);
+        om_write_str_kv(om, "w", page->label_pick);
     }
 
     if (page->label_extra_s != NULL) {
-        om_write_str_kv(catalogue_page, "s", page->label_extra_s);
+        om_write_str_kv(om, "s", page->label_extra_s);
     }
 
     for (int attribute_id = 0; attribute_id < 12; attribute_id++) {
@@ -45,18 +45,18 @@ void GCAP(player *player, incoming_message *message) {
         if (hashtable_contains_key(page->label_extra, key)) {
             char *value;
             hashtable_get(page->label_extra, key, (void*)&value);
-            om_write_str_kv(catalogue_page, message_key, value);
+            om_write_str_kv(om, message_key, value);
         }
     }
 
     for (size_t i = 0; i < list_size(page->items); i++) {
         catalogue_item * item = NULL;
         list_get_at(page->items, i, (void *) &item);
-        serialise_catalogue_item(item, catalogue_page);
+        serialise_catalogue_item(item, om);
     }
 
-    player_send(player, catalogue_page);
-    om_cleanup(catalogue_page);
+    player_send(player, om);
+    om_cleanup(om);
 
     cleanup:
         free(content);

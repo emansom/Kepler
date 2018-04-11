@@ -34,6 +34,7 @@ server global;
 char *get_time_formatted();
 char *get_time_formatted_custom(unsigned long);
 void filter_vulnerable_characters(char**, bool);
+void replace_vulnerable_characters(char**, bool, char);
 void **testing_iterate(List*);
 char *get_argument(char*, char*, int);
 char *replace(const char*, char, const char*);

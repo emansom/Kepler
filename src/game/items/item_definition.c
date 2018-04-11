@@ -21,6 +21,12 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
     return def;
 }
 
+/**
+ *
+ * @param definition
+ * @param special_sprite_id
+ * @return
+ */
 char *item_definition_get_name(item_definition *definition, int special_sprite_id) {
     if (definition->behaviour->isDecoration) {
         return strdup(definition->sprite);
@@ -42,6 +48,12 @@ char *item_definition_get_name(item_definition *definition, int special_sprite_i
     }
 }
 
+/**
+ *
+ * @param definition
+ * @param special_sprite_id
+ * @return
+ */
 char *item_definition_get_desc(item_definition *definition, int special_sprite_id) {
     if (definition->behaviour->isDecoration) {
         return strdup(definition->sprite);
@@ -63,6 +75,12 @@ char *item_definition_get_desc(item_definition *definition, int special_sprite_i
     }
 }
 
+/**
+ *
+ * @param definition
+ * @param special_sprite_id
+ * @return
+ */
 char *item_definition_get_icon(item_definition *definition, int special_sprite_id) {
     stringbuilder *sb = sb_create();
     sb_add_string(sb, definition->sprite);
@@ -79,6 +97,12 @@ char *item_definition_get_icon(item_definition *definition, int special_sprite_i
 }
 
 
+/**
+ *
+ * @param definition
+ * @param special_sprite_id
+ * @return
+ */
 char *item_definition_get_text_key(item_definition *definition, int special_sprite_id) {
     stringbuilder *sb = sb_create();
 
