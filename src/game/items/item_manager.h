@@ -1,11 +1,13 @@
 #ifndef ITEM_MANAGER_H
 #define ITEM_MANAGER_H
 
-typedef struct hashtable_s HashTable;
-typedef struct item_definition_s item_definition;
+#include "hashtable.h"
+#include "game/items/item_definition.h"
+#include "communication/messages/outgoing_message.h"
 
 struct item_manager {
     HashTable *definitions;
+    outgoing_message *sprite_index;
 };
 
 void item_manager_init();

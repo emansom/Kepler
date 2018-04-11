@@ -1,7 +1,5 @@
 #include "shared.h"
 
-#include "hashtable.h"
-
 #include "database/queries/furniture_query.h"
 #include "item_manager.h"
 
@@ -10,6 +8,20 @@
  */
 void item_manager_init() {
     global.item_manager.definitions = furniture_query_definitions();
+    global.item_manager.sprite_index = om_create(295); "Dg";
+    om_write_int(global.item_manager.sprite_index, (int)hashtable_size(global.item_manager.definitions));
+
+    HashTableIter iter;
+    TableEntry *entry;
+
+    hashtable_iter_init(&iter, global.item_manager.definitions);
+
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        item_definition *def = entry->value;
+
+        om_write_str(global.item_manager.sprite_index, def->sprite);
+        om_write_int(global.item_manager.sprite_index, def->cast_directory);
+    }
 }
 
 /**

@@ -79,6 +79,7 @@
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
 #include "communication/incoming/catalogue/GCAP.h"
+#include "communication/incoming/catalogue/GET_ALIAS_LIST.h"
 
 
 /**
@@ -159,6 +160,7 @@ void message_handler_init() {
     // Catalogue
     message_requests[101] = GCIX;
     message_requests[102] = GCAP;
+    message_requests[215] = GET_ALIAS_LIST;
 
     /*Client [0.0.0.0] incoming data: 203 / CK@Dalex@F123456
 hello!
