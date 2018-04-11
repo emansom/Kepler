@@ -37,6 +37,7 @@ file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
 file(GLOB items ${PROJECT_DIR}/game/items/*.c)
 file(GLOB messenger ${PROJECT_DIR}/game/messenger/*.c)
 file(GLOB catalogue ${PROJECT_DIR}/game/catalogue/*.c)
+file(GLOB texts ${PROJECT_DIR}/game/texts/*.c)
 
 # Tasks
 file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
@@ -62,7 +63,8 @@ add_executable(${EXECUTABLE_NAME}
         ${room_mapping}
         ${room_manager}
         ${messenger}
-        ${catalogue})
+        ${catalogue}
+        ${texts})
 
 find_package (Threads)
 

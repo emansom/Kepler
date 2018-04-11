@@ -36,6 +36,7 @@ int main(void) {
     print_info("\n");
     print_info("Initialising various server managers...\n");
 
+    texts_manager_init();
     player_manager_init();
     model_manager_init();
     category_manager_init();

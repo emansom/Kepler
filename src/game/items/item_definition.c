@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <game/texts/external_texts_manager.h>
 
 #include "item_definition.h"
 #include "item_behaviour.h"
@@ -30,8 +31,12 @@ char *item_definition_get_name(item_definition *definition, int special_sprite_i
         sb_add_string(sb, external_text_key);
         sb_add_string(sb, "_name");
 
-        char *name = strdup(sb->data);
+        char *name = texts_manager_get_value_by_id(sb->data);
         sb_cleanup(sb);
+
+        if (name == NULL) {
+            name = strdup("null");
+        }
 
         return name;
     }
@@ -47,8 +52,12 @@ char *item_definition_get_desc(item_definition *definition, int special_sprite_i
         sb_add_string(sb, external_text_key);
         sb_add_string(sb, "_desc");
 
-        char *name = strdup(sb->data);
+        char *name = texts_manager_get_value_by_id(sb->data);
         sb_cleanup(sb);
+
+        if (name == NULL) {
+            name = strdup("null");
+        }
 
         return name;
     }
