@@ -156,7 +156,7 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             && strcmp(to_item->class_name, "queue_tile2") == 0) {
 
             if (to_item->coords->x == 21 && to_item->coords->y == 9) {
-                return true;
+                return room_user->player->player_data->tickets > 0;
             } else {
                 return false;
             }

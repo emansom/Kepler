@@ -3,7 +3,7 @@
 
 #include <stdbool.h>
 
-#include "game/items/item_definition.h"
+#include "game/items/definition/item_definition.h"
 
 typedef struct catalogue_item_s {
     char *sale_code;

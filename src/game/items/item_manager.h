@@ -2,7 +2,7 @@
 #define ITEM_MANAGER_H
 
 #include "hashtable.h"
-#include "game/items/item_definition.h"
+#include "game/items/definition/item_definition.h"
 #include "communication/messages/outgoing_message.h"
 
 struct item_manager {

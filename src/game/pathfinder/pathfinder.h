@@ -1,7 +1,8 @@
 #ifndef PATHFINDER_H
 #define PATHFINDER_H
 
-typedef struct room_user_s room_user;
+#include "game/room/room_user.h"
+
 typedef struct node_s node;
 typedef struct deque_s Deque;
 typedef struct coord_s coord;

@@ -8,7 +8,7 @@
 #include "database/queries/furniture_query.h"
 #include "database/db_connection.h"
 
-#include "game/items/item_definition.h"
+#include "game/items/definition/item_definition.h"
 
 /**
  * Get all the furniture definitions from database.

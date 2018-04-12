@@ -39,10 +39,11 @@ room_category *category_create(int id, int parent_id, char *name, int public_spa
 }
 
 /**
+ * Gets if the user has permission to see this category.
  *
- * @param category
- * @param rank
- * @return
+ * @param category the category to check
+ * @param rank the rank
+ * @return true, if successful
  */
 int category_has_access(room_category *category, int rank) {
     return rank >= category->minrole_access;

@@ -22,10 +22,11 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
 }
 
 /**
+ * Get the item name by creating an external text key and reading external text entries.
  *
- * @param definition
- * @param special_sprite_id
- * @return
+ * @param definition the item definition
+ * @param special_sprite_id the special sprite id
+ * @return the name
  */
 char *item_definition_get_name(item_definition *definition, int special_sprite_id) {
     if (definition->behaviour->isDecoration) {
@@ -49,10 +50,11 @@ char *item_definition_get_name(item_definition *definition, int special_sprite_i
 }
 
 /**
+ * Get the item description by creating an external text key and reading external text entries.
  *
- * @param definition
- * @param special_sprite_id
- * @return
+ * @param definition the item definition
+ * @param special_sprite_id the special sprite id
+ * @return the description
  */
 char *item_definition_get_desc(item_definition *definition, int special_sprite_id) {
     if (definition->behaviour->isDecoration) {
@@ -76,10 +78,11 @@ char *item_definition_get_desc(item_definition *definition, int special_sprite_i
 }
 
 /**
+ * Create the catalogue icon through using the special sprite id.
  *
- * @param definition
- * @param special_sprite_id
- * @return
+ * @param definition the item definition
+ * @param special_sprite_id the special sprite id
+ * @return the catalogue icon
  */
 char *item_definition_get_icon(item_definition *definition, int special_sprite_id) {
     stringbuilder *sb = sb_create();
@@ -98,10 +101,11 @@ char *item_definition_get_icon(item_definition *definition, int special_sprite_i
 
 
 /**
+ * Get external text key by definition.
  *
- * @param definition
- * @param special_sprite_id
- * @return
+ * @param definition the item definition
+ * @param special_sprite_id the special sprite id
+ * @return the external text key
  */
 char *item_definition_get_text_key(item_definition *definition, int special_sprite_id) {
     stringbuilder *sb = sb_create();

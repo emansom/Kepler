@@ -1,7 +1,7 @@
 #ifndef ITEM_DEFINITION_H
 #define ITEM_DEFINITION_H
 
-#include "game/items/item_behaviour.h"
+#include "item_behaviour.h"
 
 typedef struct item_definition_s {
     int id;
