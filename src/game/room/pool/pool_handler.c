@@ -38,6 +38,7 @@ void pool_booth_exit(player *player) {
 
         if (strcmp(item->class_name, "poolBooth") == 0) {
             item_assign_program(item, "open");
+            player->room_user->walking_lock = false;
         }
     }
 
@@ -96,6 +97,7 @@ void pool_item_walk_on(player *p, item *item) {
 
     if (strcmp(item->class_name, "poolBooth") == 0) {
         item_assign_program(item, "close");
+        room_entity->walking_lock = true;
 
         outgoing_message *om = om_create(96); // "A`"
         player_send((player*)room_entity->player, om);

@@ -12,8 +12,8 @@ void BTCKS(player *session, incoming_message *message) {
         return;
     }
 
-    int cost_credits = -1;
-    int tickets_amount = -1;
+    int cost_credits;
+    int tickets_amount;
 
     if (mode == 1) {
         tickets_amount = 2;
@@ -31,9 +31,10 @@ void BTCKS(player *session, incoming_message *message) {
     }
 
     if (!query_player_exists_username(tickets_for)) {
-        char alert[130];
-        sprintf(alert, "Sorry, but the user you tried to buy %i tickets for doesn't exist in the hotel!<br>The tickets have not been bought.", tickets_amount);
-        send_alert(session, alert);
+        outgoing_message *om = om_create(76); // "AL"
+        sb_add_string(om->sb, tickets_for); // No user named <here> found. Gift not purchased.
+        player_send(session, om);
+        om_cleanup(om);
         goto cleanup;
     }
 

@@ -148,7 +148,7 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             if (to_item->current_program_state != NULL && strcmp(to_item->current_program_state, "close") == 0) {
                 return 0;
             } else {
-                return strlen(room_user->player->player_data->pool_figure) > 0;
+                return strcmp(to_item->class_name, "poolLift") == 0 ? strlen(room_user->player->player_data->pool_figure) > 0 : true;
             }
         }
 
@@ -156,7 +156,7 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             && strcmp(to_item->class_name, "queue_tile2") == 0) {
 
             if (to_item->coords->x == 21 && to_item->coords->y == 9) {
-                return room_user->player->player_data->tickets > 0;
+                return room_user->player->player_data->tickets > 0 && strlen(room_user->player->player_data->pool_figure) > 0;
             } else {
                 return false;
             }
