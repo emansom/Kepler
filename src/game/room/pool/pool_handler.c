@@ -5,6 +5,7 @@
 #include "deque.h"
 
 #include "communication/messages/outgoing_message.h"
+#include "database/queries/player_query.h"
 
 #include "pool_handler.h"
 #include "game/items/item.h"
@@ -82,13 +83,15 @@ void pool_item_walk_on(player *p, item *item) {
         room_send((room *) room_entity->room, target_diver);
 
         room_entity->walking_lock = true;
-        room_entity->player->player_data->tickets--;
 
         outgoing_message *om = om_create(125); // "A}"
         player_send((player*)room_entity->player, om);
         om_cleanup(om);
 
+        room_entity->player->player_data->tickets--;
         player_send_tickets((player*)room_entity->player);
+        query_player_save_currency((player *) room_entity->player);
+
     }
 
     if (strcmp(item->class_name, "poolBooth") == 0) {
