@@ -32,13 +32,10 @@ item *item_create(int id, int room_id, char *class_name, int sprite_id, int x, i
     room_item->id = id;
     room_item->room_id = room_id;
     room_item->class_name = class_name;
-    room_item->is_table = 0;
     room_item->sprite_id = sprite_id;
     room_item->custom_data = custom_data;
     room_item->current_program = NULL;
     room_item->current_program_state = NULL;
-    room_item->can_sit = 0;
-    room_item->is_solid = 0;
     room_item->coords = create_coord(x, y);
     room_item->coords->z = z;
     room_item->coords->rotation = rotation;

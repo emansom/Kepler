@@ -19,6 +19,7 @@
 #include "game/room/mapping/room_tile.h"
 
 #include <limits.h>
+#include <game/items/definition/item_definition.h>
 
 coord DIAGONAL_MOVE_POINTS[] = {
     { 0, -1, 0 },
@@ -162,12 +163,8 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             }
         }
 
-        if (to_item->is_solid == 1) {
-            return 0;
-        }
-
         if (from_item == NULL) {
-            if (is_final_move && (to_item->can_sit || !to_item->is_solid)) {
+            if (is_final_move && (to_item->definition->behaviour->canSitOnTop || to_item->definition->behaviour->canStandOnTop)) {
                 return 1;
             } else {
                 return 0;

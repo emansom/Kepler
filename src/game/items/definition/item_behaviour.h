@@ -30,6 +30,7 @@ typedef struct item_behaviour_s {
     bool isRedeemable;
     bool isSoundMachine;
     bool isSoundMachineSampleSet;
+    bool hasExtraParameter;
 } item_behaviour;
 
 item_behaviour *item_behaviour_create();

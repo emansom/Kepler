@@ -21,6 +21,20 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
     return def;
 }
 
+item_definition *item_definition_create_blank() {
+    item_definition *def = malloc(sizeof(item_definition));
+    def->id = -1;
+    def->cast_directory = -1;
+    def->sprite = strdup("");
+    def->colour = strdup("");
+    def->length = 1;
+    def->width = 1;
+    def->top_height = 1;
+    def->behaviour_data = strdup("");
+    def->behaviour = item_behaviour_parse(def);
+    return def;
+}
+
 /**
  * Get the item name by creating an external text key and reading external text entries.
  *

@@ -31,6 +31,7 @@ item_behaviour *item_behaviour_create() {
     behaviour->isRedeemable = false;
     behaviour->isSoundMachine = false;
     behaviour->isSoundMachineSampleSet = false;
+    behaviour->hasExtraParameter = false;
     return behaviour;
 }
 

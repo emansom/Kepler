@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <game/items/definition/item_definition.h>
 
 #include "array.h"
 #include "hashtable.h"
@@ -141,7 +142,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
             }
         }
 
-        if (item == NULL || !item->can_sit) {
+        if (item == NULL || !item->definition->behaviour->canSitOnTop) {
             if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
                 room_user_remove_status(room_user, "sit");
                 room_user_remove_status(room_user, "lay");
@@ -150,7 +151,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
         }
 
         if (item != NULL) {
-            if (item->can_sit) {
+            if (item->definition->behaviour->canSitOnTop) {
                 room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
                 coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
                 needs_update = true;

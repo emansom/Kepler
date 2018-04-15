@@ -66,7 +66,6 @@ char *catalogue_item_get_icon(catalogue_item *item) {
     } else {
         return item_definition_get_icon(item->definition, item->item_specialspriteid);
     }
-
 }
 
 char *catalogue_item_get_size(catalogue_item *item) {
