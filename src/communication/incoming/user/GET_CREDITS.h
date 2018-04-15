@@ -5,5 +5,4 @@
 
 void GET_CREDITS(player *player, incoming_message *message) {
     player_send_credits(player);
-
 }

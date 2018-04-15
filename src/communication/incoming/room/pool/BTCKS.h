@@ -23,9 +23,16 @@ void BTCKS(player *session, incoming_message *message) {
         cost_credits = 6;
     }
 
+    if (session->player_data->credits < cost_credits) {
+        outgoing_message *om = om_create(68); // "AD"
+        player_send(session, om);
+        om_cleanup(om);
+        goto cleanup;
+    }
+
     if (!query_player_exists_username(tickets_for)) {
         char alert[130];
-        sprintf(alert, "Sorry, but the user you tried to buy %i for doesn't exist in the hotel!<br>The tickets have not been bought.", tickets_amount);
+        sprintf(alert, "Sorry, but the user you tried to buy %i tickets for doesn't exist in the hotel!<br>The tickets have not been bought.", tickets_amount);
         send_alert(session, alert);
         goto cleanup;
     }
@@ -43,8 +50,13 @@ void BTCKS(player *session, incoming_message *message) {
             send_alert(ticket_receiver, alert);
         }
 
+        ticket_receiver->player_data->tickets = data->tickets;
         player_send_tickets(ticket_receiver);
     }
+
+    session->player_data->credits -= cost_credits;
+    query_player_save_currency(session);
+    player_send_credits(session);
 
     player_data_cleanup(data);
 

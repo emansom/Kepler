@@ -13,7 +13,7 @@ player_data *query_player_data(int);
 void query_player_save_last_online(player*);
 void query_player_save_looks(player*);
 void query_player_save_motto(player*);
-void query_player_currency(player*);
+void query_player_save_currency(player *);
 void query_player_save_tickets(int id, int tickets);
 
 #endif
