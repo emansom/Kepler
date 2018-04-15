@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1500318001270123000325504','ch=s02/239,255,146','M','de kepler whey','200',0,0,1,'I''m a new xddd','1523430701');
-INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523353927');
+INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','193',74,0,1,'I''m a new xddd','1523802901');
+INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523463369');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -221,7 +221,7 @@ CREATE TABLE IF NOT EXISTS `items_definitions` (
 	`length`	INTEGER,
 	`width`	INTEGER,
 	`top_height`	NUMERIC,
-	`behaviour_data`	TEXT
+	`behaviour`	TEXT
 );
 INSERT INTO `items_definitions` VALUES (1001,'1337','shelves_norja','#ffffff,#F7EBBC',1,1,2,'S');
 INSERT INTO `items_definitions` VALUES (1002,'1337','shelves_polyfon','0,0,0',2,1,1,'S');
@@ -2060,7 +2060,7 @@ INSERT INTO `catalogue_items` VALUES ('holodice',19,8,6,1213,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('cakewasalie',19,9,4,1207,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('menorah',19,10,3,1187,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('bunny',19,11,3,1210,0,NULL,NULL,0);
-INSERT INTO `catalogue_items` VALUES ('mummy',19,12,3,2490,44,NULL,NULL,0);
+INSERT INTO `catalogue_items` VALUES ('mummy',19,12,3,2409,44,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('wcandleset',19,13,3,1198,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rcandleset',19,14,3,1199,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('ham',19,15,3,1189,0,NULL,NULL,0);
