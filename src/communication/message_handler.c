@@ -61,6 +61,7 @@
 #include "communication/incoming/room/pool/SPLASHPOSITION.h"
 #include "communication/incoming/room/pool/DIVE.h"
 #include "communication/incoming/room/pool/SIGN.h"
+#include "communication/incoming/room/pool/BTCKS.h"
 
 // Room user
 #include "communication/incoming/room/user/QUIT.h"
@@ -142,6 +143,7 @@ void message_handler_init() {
     message_requests[106] = DIVE;
     message_requests[107] = SPLASHPOSITION;
     message_requests[104] = SIGN;
+    message_requests[105] = BTCKS;
 
     // Room user
     message_requests[53] = QUIT;

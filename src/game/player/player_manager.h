@@ -12,7 +12,7 @@ struct player_manager {
 void player_manager_init();
 player *player_manager_add(void*, char *ip);
 void player_manager_remove(player*);
-player *player_manager_find(void*);
+player *player_manager_find_by_name(char *name);
 player *player_manager_find_by_id(int);
 player_data *player_manager_get_data_by_id(int);
 void player_manager_dispose();

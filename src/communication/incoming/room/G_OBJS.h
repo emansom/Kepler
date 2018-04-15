@@ -5,6 +5,7 @@
 
 #include "game/items/item.h"
 #include "game/pathfinder/coord.h"
+#include "game/player/player.h"
 
 #include "util/stringbuilder.h"
 
@@ -14,8 +15,8 @@ void G_OBJS(player *player, incoming_message *message) {
     }
 
     room *room = player->room_user->room;
-    outgoing_message *om = om_create(30); // "@^"
 
+    outgoing_message *om = om_create(30); // "@^
     for (size_t i = 0; i < list_size(room->public_items); i++) {
         item *room_item;
         list_get_at(room->public_items, i, (void*)&room_item);
@@ -46,7 +47,7 @@ void G_OBJS(player *player, incoming_message *message) {
     om_write_int(om, (int)list_size(room->items));
     for (size_t i = 0; i < list_size(room->items); i++) {
         item *room_item;
-        list_get_at(room->items, i, (void *) &room_item);
+        list_get_at(room->items, i, (void*)&room_item);
         om_write_int_delimeter(om, room_item->id, 2);
         om_write_str(om, room_item->class_name);
         om_write_int(om, room_item->coords->x);

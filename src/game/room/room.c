@@ -151,8 +151,8 @@ void room_enter(room *room, player *player) {
    room_entity->current->z = room->room_data->model_data->door_z;
 
    coord_set_rotation(room_entity->current,
-                      room->room_data->model_data->door_dir,
-                      room->room_data->model_data->door_dir);
+      room->room_data->model_data->door_dir,
+      room->room_data->model_data->door_dir);
 
     list_add(room->users, player);
     room->room_data->visitors_now = list_size(room->users);

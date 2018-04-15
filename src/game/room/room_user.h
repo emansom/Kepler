@@ -3,9 +3,9 @@
 
 #include <stdbool.h>
 
-#include "game/player/player.h"
 #include "game/room/room.h"
 
+typedef struct room_s room;
 typedef struct item_s item;
 typedef struct deque_s Deque;
 typedef struct coord_s coord;

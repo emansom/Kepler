@@ -272,7 +272,7 @@ void room_user_cleanup(room_user *room_user) {
 }
 
 /**
- * Append user list to the packet
+ * Append user list to the packet.
  *
  * @param om the outgoing message
  * @param player the player

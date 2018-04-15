@@ -52,7 +52,7 @@ player *player_manager_find(void *stream) {
  * @return the player, if sound, otherwise returns NULL
  */
 player *player_manager_find_by_id(int player_id) {
-    for (int i = 0; i < list_size(global.player_manager.players); i++) {
+    for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
         player *p;
         list_get_at(global.player_manager.players, i, (void*)&p);
 
@@ -66,17 +66,36 @@ player *player_manager_find_by_id(int player_id) {
 
 /**
  * Find a player by user id
+ *
+ * @param player_id the player id
+ * @return the player, if sound, otherwise returns NULL
+ */
+player *player_manager_find_by_name(char *name) {
+    for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
+        player *p;
+        list_get_at(global.player_manager.players, i, (void*)&p);
+
+        if (strcmp(p->player_data->username, name) == 0) {
+            return p;
+        }
+    }
+
+    return NULL;
+}
+
+/**
+ * Find a player by user id
  * 
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
 player_data *player_manager_get_data_by_id(int player_id) {
-    for (int i = 0; i < list_size(global.player_manager.players); i++) {
+    for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
         player *p;
         list_get_at(global.player_manager.players, i, (void*)&p);
 
         if (p->player_data->id == player_id) {
-            return p->player_data;
+            return (player_data *) p->player_data;
         }
     }  
 

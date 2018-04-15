@@ -306,3 +306,24 @@ void query_player_save_currency(player *player) {
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
 }
+
+void query_player_save_tickets(int id, int tickets) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "UPDATE users SET tickets = ? WHERE id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, tickets);
+        sqlite3_bind_int(stmt, 2, id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+}

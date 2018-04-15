@@ -36,7 +36,7 @@ int main(void) {
     print_info("\n");
     print_info("Initialising various server managers...\n");
 
-    //printf("dec: %i\n", base64_decode("AI"));
+    printf("dec: %i\n", base64_decode("A|"));
 
     texts_manager_init();
     player_manager_init();

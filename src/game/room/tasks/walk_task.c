@@ -84,6 +84,7 @@ void process_user(player *player) {
         if (deque_size(room_entity->walk_list) > 0) {
             coord *next;
             deque_remove_first(room_entity->walk_list, (void*)&next);
+
             next->z = room_entity->room->room_data->model_data->heights[next->x][next->y];
 
             char value[30];
