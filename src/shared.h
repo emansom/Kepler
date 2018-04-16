@@ -31,6 +31,8 @@ typedef struct server_s {
 
 server global;
 
+int random_next(int, int);
+void substring(const char *inpStr, char *outStr, size_t startPos, size_t strLen);
 char *get_time_formatted();
 char *get_time_formatted_custom(unsigned long);
 void filter_vulnerable_characters(char**, bool);

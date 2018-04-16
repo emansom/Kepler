@@ -1,15 +1,16 @@
+#include <time.h>
+
 #include "shared.h"
 
 #include "sqlite3.h"
-#include "list.h"
 #include "lib/cthreadpool/thpool.h"
 
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
 #include "database/db_connection.h"
 
-#include "game/player/player.h"
-#include "game/pathfinder/pathfinder.h"
+#include "util/encryption/ciphering.h"
+#include "util/encryption/RC4.h"
 
 #include "util/threading.h"
 #include "util/encoding/base64encoding.h"
@@ -18,6 +19,8 @@
 void dispose_program();
 
 int main(void) {
+    srand((unsigned int) time(0));
+
     print_info("Kepler Habbo server...\n");
     print_info("Written by Quackster \n");
     print_info("\n");
@@ -35,6 +38,13 @@ int main(void) {
 
     print_info("\n");
     print_info("Initialising various server managers...\n");
+
+    char *key = strdup("94qi054a23r33de4q4632279k722ro0917e7i1o9w10r224hj6438795u4xh3c2");//ciphering_generate_key();
+    printf("Cipher key: %s\n", key);
+
+    encryption *enc = rc4_create(key);
+    char *dec = rc4_decipher(enc, "AF0BDF6626034D1045791C39A5E0E971BDF0B30E9C0D74564AE596B5F4DA0334CCD09ABB3F5ED3FF994E658F65B32A874B725E");
+    printf("deciphered: %s\n", dec);
 
     //printf("dec: %i\n", base64_decode("AL"));
 

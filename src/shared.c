@@ -7,6 +7,50 @@
 #include <ctype.h>
 #include <time.h>
 
+/**
+ * Get random number between lower and upper numbers.
+ *
+ * @param lower inclusive
+ * @param upper exclusive
+ * @return the random number
+ */
+int random_next(int min, int max) {
+    int num =  (rand()%(max-min)+min);
+    return num;
+}
+
+void substring(const char *inpStr, char *outStr, size_t startPos, size_t strLen) {
+    /* Cannot do anything with NULL. */
+    if (inpStr == NULL || outStr == NULL) return;
+
+    /* All negative positions to go from end, and cannot
+    start before start of string, force to start. */
+    if (startPos < 0) {
+        startPos = strlen (inpStr) + startPos;
+    }
+    if (startPos < 0) {
+        startPos = 0;
+    }
+
+    /* Force negative lengths to zero and cannot
+    start after end of string, force to end. */
+    if (strLen < 0) {
+        strLen = 0;
+    }
+    if (startPos > strlen (inpStr)) {
+        startPos = strlen (inpStr);
+    }
+
+    /* Adjust length if source string too short. */
+    if (strLen > strlen (&inpStr[startPos])) {
+        strLen = strlen (&inpStr[startPos]);
+    }
+
+    /* Copy string section */
+    strncpy(outStr, inpStr+startPos, strLen);
+    outStr[strLen] = '\0';
+}
+
 char *get_time_formatted() {
     char buff[20];
     time_t now = time(NULL);

@@ -12,6 +12,8 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "util/encoding/base64encoding.h"
+#include "util/encryption/RC4.h"
+
 #include "server/server_listener.h"
 
 
@@ -54,24 +56,32 @@ void server_on_write(uv_write_t* req, int status) {
  */
 void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     if (nread == UV_EOF) {
-        uv_close((uv_handle_t*) handle, server_on_connection_close);
+        uv_close((uv_handle_t *) handle, server_on_connection_close);
         return;
     }
 
     if (nread == 0) {
-        uv_close((uv_handle_t*) handle, server_on_connection_close);
+        uv_close((uv_handle_t *) handle, server_on_connection_close);
         return;
     }
 
     if (nread > 0) {
+        char *buffer = buf->base;
         player *p = handle->data;
+
         int amount_read = 0;
+
+        if (p->encryption != NULL) {
+            char sub[4096];
+            substring(buf->base, sub, 0, (size_t) nread);
+            strcpy(buffer, rc4_decipher((encryption *) p->encryption, sub));
+        }
 
         while (amount_read < nread) {
             char recv_length[] = {
-                    buf->base[amount_read++],
-                    buf->base[amount_read++],
-                    buf->base[amount_read++],
+                    buffer[amount_read++],
+                    buffer[amount_read++],
+                    buffer[amount_read++],
                     '\0'
             };
 
@@ -84,19 +94,23 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             char *message = malloc(message_length * sizeof(char));
 
             for (int i = 0; i < message_length - 1; i++) {
-                message[i] = buf->base[amount_read++];
+                message[i] = buffer[amount_read++];
             }
 
             message[message_length - 1] = '\0';
 
-            if (p != NULL) {
-                incoming_message *im = im_create(message);
+            incoming_message *im = im_create(message);
+
+            if (im->header_id > 0) {
                 message_handler_invoke(im, p);
                 im_cleanup(im);
             }
 
             free(message);
         }
+
+        //free(buffer);
+
     } else {
         uv_close((uv_handle_t *) handle, server_on_connection_close);
     }
@@ -117,18 +131,18 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     uv_tcp_t *client = malloc(sizeof(uv_tcp_t));
     uv_tcp_init(uv_default_loop(), client);
 
-    struct sockaddr_in client_addr;    
+    struct sockaddr_in client_addr;
     int client_addr_length;
 
     uv_stream_t *handle = (uv_stream_t*)client;
     uv_tcp_getpeername((const uv_tcp_t*) handle, (struct sockaddr*)&client_addr, &client_addr_length);
-    
+
     char ip[16];
     uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
 
     player *p = player_manager_add(handle, ip);
     client->data = p;
-    
+
     printf("Client [%s] has connected\n", p->ip_address);
     int result = uv_accept(server, handle);
 
