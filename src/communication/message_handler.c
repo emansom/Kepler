@@ -182,13 +182,6 @@ void message_handler_invoke(incoming_message *im, player *player) {
 
     free(preview);
 
-    if (im->header_id == 181) {
-        outgoing_message *om = om_create(257);
-        om_write_str(om, "RAHIIIKHJIPAIQAdd-MM-yyyy");
-        player_send(player, om);
-        om_cleanup(om);
-    }
-
     if (message_requests[im->header_id] == NULL) {
         return;
     }

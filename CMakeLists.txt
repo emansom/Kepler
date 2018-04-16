@@ -26,7 +26,6 @@ file(GLOB encoding ${PROJECT_DIR}/util/encoding/*.c)
 file(GLOB database ${PROJECT_DIR}/database/*.c)
 file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
 file(GLOB pathfinder ${PROJECT_DIR}/game/pathfinder/*.c)
-file(GLOB ciphering ${PROJECT_DIR}/util/encryption/*.c)
 
 # Kepler managers
 file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
@@ -53,7 +52,6 @@ add_executable(${EXECUTABLE_NAME}
         ${communication}
         ${server}
         ${encoding}
-        ${ciphering}
         ${database}
         ${queries}
         ${pathfinder}

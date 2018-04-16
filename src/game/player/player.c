@@ -24,7 +24,6 @@
  */
 player *player_create(void *socket, char *ip_address) {
     player *p = malloc(sizeof(player));
-    p->encryption = NULL;
     p->room_user = (void*)room_user_create(p);
     p->messenger = (void*)messenger_create();
     p->stream = socket;
