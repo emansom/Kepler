@@ -16,7 +16,7 @@
 void catalogue_manager_init() {
     list_new(&global.catalogue_manager.pages);
     list_new(&global.catalogue_manager.packages);
-    hashtable_new(&global.catalogue_manager.items);
+    list_new(&global.catalogue_manager.items);
 
     catalogue_query_pages();
     catalogue_query_packages();
@@ -48,7 +48,7 @@ void catalogue_manager_add_package(catalogue_package *package) {
  * @param item the item to add
  */
 void catalogue_manager_add_item(catalogue_item *item) {
-    hashtable_add(global.catalogue_manager.items, &item->sale_code, item);
+    list_add(global.catalogue_manager.items, item);
 
     catalogue_page *page = catalogue_manager_get_page_by_id(item->page_id);
 
@@ -101,14 +101,16 @@ catalogue_page *catalogue_manager_get_page_by_index(char *page_index) {
  * @param sale_code the sale code
  * @return the catalogue item
  */
-catalogue_page *catalogue_manager_get_item(char *sale_code) {
-    catalogue_page *item = NULL;
+catalogue_item *catalogue_manager_get_item(char *sale_code) {
+    for (size_t i = 0; i < list_size(global.catalogue_manager.items); i++) {
+        catalogue_item *item = NULL;
+        list_get_at(global.catalogue_manager.items, i, (void *) &item);
 
-    if (hashtable_contains_key(global.catalogue_manager.items, sale_code)) {
-        hashtable_get(global.catalogue_manager.items, sale_code, (void *)&item);
+        if (strcmp(item->sale_code, sale_code) == 0) {
+            return item;
+        }
     }
-
-    return item;
+    return NULL;
 }
 
 /**

@@ -10,7 +10,7 @@ typedef struct catalogue_package_s catalogue_package;
 
 struct catalogue_manager {
     List *pages;
-    HashTable *items;
+    List *items;
     List *packages;
 };
 
@@ -20,7 +20,7 @@ void catalogue_manager_add_package(catalogue_package *package);
 void catalogue_manager_add_item(catalogue_item *item);
 catalogue_page *catalogue_manager_get_page_by_id(int id);
 catalogue_page *catalogue_manager_get_page_by_index(char *index);
-catalogue_page *catalogue_manager_get_item(char *sale_code);
+catalogue_item *catalogue_manager_get_item(char *sale_code);
 List *catalogue_manager_get_pages();
 List *catalogue_manager_get_packages();
 void catalogue_manager_dispose();

@@ -80,8 +80,8 @@
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
 #include "communication/incoming/catalogue/GCAP.h"
+#include "communication/incoming/catalogue/GRPC.h"
 #include "communication/incoming/catalogue/GET_ALIAS_LIST.h"
-
 
 /**
  * Assigns all header handlers to this array
@@ -163,6 +163,7 @@ void message_handler_init() {
     message_requests[101] = GCIX;
     message_requests[102] = GCAP;
     message_requests[215] = GET_ALIAS_LIST;
+    message_requests[100] = GRPC;
 
     /*Client [0.0.0.0] incoming data: 203 / CK@Dalex@F123456
 hello!
