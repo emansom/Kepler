@@ -1,3 +1,4 @@
+#include <game/catalogue/catalogue_package.h>
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
@@ -70,10 +71,6 @@ void GCAP(player *player, incoming_message *message) {
  * @param message the catalogue page outgoing message
  */
 void serialise_catalogue_item(catalogue_item *item, outgoing_message *message) {
-    if (item->is_package) {
-        return; // TODO: Catalogue packages
-    }
-
     char *item_name = catalogue_item_get_name(item);
     char *item_desc = catalogue_item_get_description(item);
     char *item_type = catalogue_item_get_type(item);
@@ -83,13 +80,9 @@ void serialise_catalogue_item(catalogue_item *item, outgoing_message *message) {
 
     sb_add_string(message->sb, "p");
     sb_add_string(message->sb, ":");
-
     om_write_str_delimeter(message, item_name, 9);
     om_write_str_delimeter(message, item_desc, 9);
-
-    sb_add_int(message->sb, item->price);
-    sb_add_char(message->sb, 9);
-
+    sb_add_int(message->sb, item->price); sb_add_char(message->sb, 9);
     om_write_str_delimeter(message, "", 9);
     om_write_str_delimeter(message, item_type, 9);
     om_write_str_delimeter(message, item_icon, 9);
@@ -102,7 +95,22 @@ void serialise_catalogue_item(catalogue_item *item, outgoing_message *message) {
     }
 
     if (item->is_package) {
-        // TODO: Package display
+        sb_add_int(message->sb, (int) list_size(item->packages)); sb_add_char(message->sb, 9);
+
+        for (size_t i = 0; i < list_size(item->packages); i++) {
+            catalogue_package *pkg = NULL; list_get_at(item->packages, i, (void *) &pkg);
+
+            char *package_icon = item_definition_get_icon(pkg->definition, pkg->special_sprite_id);
+
+            om_write_str_delimeter(message, package_icon, 9);
+            sb_add_int(message->sb, pkg->amount); sb_add_char(message->sb, 9);
+            om_write_str_delimeter(message, pkg->definition->colour, 9);
+
+            printf("icon: %s\n", package_icon);
+
+            free(package_icon);
+        }
+
     } else {
         if (!item->definition->behaviour->isWallItem) {
             om_write_str_delimeter(message, item->definition->colour, 9);

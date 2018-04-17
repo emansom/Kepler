@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','193',74,0,1,'I''m a new xddd','1523802901');
+INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','193',74,0,1,'I''m a new xddd','1523986877');
 INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523463369');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
@@ -1892,6 +1892,30 @@ INSERT INTO `catalogue_pages` VALUES (20,20,1,'Bathroom','Bathroom','ctlg_layout
 INSERT INTO `catalogue_pages` VALUES (21,21,1,'Plants','Plants','ctlg_layout2','catalog_plants_headline1','catalog_plants_teaser1,','Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!','Click on the item you want for more information',NULL,NULL);
 INSERT INTO `catalogue_pages` VALUES (40,40,5,'staffHC','Club Shop','ctlg_layout2','catalog_club_headline1','catalog_hc_teaser,','Welcome to the Club Shop! All ''Habbo Club membership gifts'' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.','Click on the item you want for more information',NULL,NULL);
 INSERT INTO `catalogue_pages` VALUES (41,41,5,'Dragons','Dragons','ctlg_layout2','catalog_rares_headline1','','The Dragon page contains all of the Dragon Lamps.','Click on the item you want for more information',NULL,NULL);
+CREATE TABLE IF NOT EXISTS `catalogue_packages` (
+	`salecode`	TEXT,
+	`definition_id`	INTEGER,
+	`special_sprite_id`	INTEGER,
+	`amount`	INTEGER
+);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_red_5',1448,0,5);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_red_3',1448,0,3);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_blue_5',1442,0,5);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_blue_3',1442,0,3);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_green_5',1444,0,5);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_green_3',1444,0,3);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_navy_5',1445,0,5);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_navy_3',1445,0,3);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_purple_5',1447,0,5);
+INSERT INTO `catalogue_packages` VALUES ('deal_rollers_purple_3',1447,0,3);
+INSERT INTO `catalogue_packages` VALUES ('deal_dogfood',1321,0,6);
+INSERT INTO `catalogue_packages` VALUES ('deal_catfood',1322,0,6);
+INSERT INTO `catalogue_packages` VALUES ('deal_crocfood',1827,0,6);
+INSERT INTO `catalogue_packages` VALUES ('deal_cabbage',1323,0,6);
+INSERT INTO `catalogue_packages` VALUES ('deal_soundmachine1',1802,0,1);
+INSERT INTO `catalogue_packages` VALUES ('deal_soundmachine1',1858,0,1);
+INSERT INTO `catalogue_packages` VALUES ('deal_hcrollers',1780,0,5);
+INSERT INTO `catalogue_packages` VALUES ('deal_throne',1204,0,10);
 CREATE TABLE IF NOT EXISTS `catalogue_items` (
 	`sale_code`	TEXT,
 	`page_id`	INTEGER,

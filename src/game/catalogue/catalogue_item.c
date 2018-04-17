@@ -12,6 +12,11 @@
 
 #include "util/stringbuilder.h"
 
+#include "list.h"
+#include "catalogue_package.h"
+
+void load_catalogue_packges(catalogue_item *item);
+
 catalogue_item *catalogue_item_create(char *sale_code, int page_id, int order_id, int price, int definition_id, int item_specialspriteid, char *package_name, char *package_description, bool is_package) {
     catalogue_item *item = malloc(sizeof(catalogue_item));
     item->sale_code = strdup(sale_code);
@@ -20,16 +25,41 @@ catalogue_item *catalogue_item_create(char *sale_code, int page_id, int order_id
     item->price = price;
     item->definition_id = definition_id;
     item->item_specialspriteid = item_specialspriteid;
-    item->package_name = package_name;
-    item->package_description = package_description;
     item->is_package = is_package;
     item->definition = item_manager_get_definition_by_id(definition_id);
+
+    list_new(&item->packages);
+
+    if (item->is_package) {
+        item->package_name = strdup(package_name);
+        item->package_description = strdup(package_description);
+        load_catalogue_packges(item);
+    } else {
+        item->package_name = NULL;
+        item->package_description = NULL;
+    }
 
     if (item->definition == NULL) {
         printf("WARNING! The catalogue item with sale code '%s' has no definition!\n", sale_code);
     }
-
     return item;
+}
+
+/**
+ * Load catalogue packages through a list.
+ *
+ * @param item the catalogue items to load the packages for
+ */
+void load_catalogue_packges(catalogue_item *item) {
+    for (size_t i = 0; i < list_size(global.catalogue_manager.packages); i++) {
+        catalogue_package *package = NULL;
+        list_get_at(global.catalogue_manager.packages, i, (void *) &package);
+
+        if (strcmp(item->sale_code, package->sale_code) == 0) {
+            list_add(item->packages, package);
+        }
+    }
+
 }
 
 char *catalogue_item_get_name(catalogue_item *item) {

@@ -8,16 +8,20 @@
 #include "catalogue_manager.h"
 #include "catalogue_page.h"
 #include "catalogue_item.h"
+#include "catalogue_package.h"
 
 /**
  * Create the catalogue manager instance and load the pages.
  */
 void catalogue_manager_init() {
     list_new(&global.catalogue_manager.pages);
+    list_new(&global.catalogue_manager.packages);
     hashtable_new(&global.catalogue_manager.items);
 
     catalogue_query_pages();
+    catalogue_query_packages();
     catalogue_query_items();
+
 }
 
 /**
@@ -27,6 +31,15 @@ void catalogue_manager_init() {
  */
 void catalogue_manager_add_page(catalogue_page *page) {
     list_add(global.catalogue_manager.pages, page);
+}
+
+/**
+ * Add a package by it's given catalogue package struct.
+ *
+ * @param package the catalogue package struct
+ */
+void catalogue_manager_add_package(catalogue_package *package) {
+    list_add(global.catalogue_manager.packages, package);
 }
 
 /**
@@ -81,6 +94,32 @@ catalogue_page *catalogue_manager_get_page_by_index(char *page_index) {
 
     return NULL;
 }
+
+/**
+ * Get the catalogue item by sale code.
+ *
+ * @param sale_code the sale code
+ * @return the catalogue item
+ */
+catalogue_page *catalogue_manager_get_item(char *sale_code) {
+    catalogue_page *item = NULL;
+
+    if (hashtable_contains_key(global.catalogue_manager.items, sale_code)) {
+        hashtable_get(global.catalogue_manager.items, sale_code, (void *)&item);
+    }
+
+    return item;
+}
+
+/**
+ * Get the list of catalogue packages.
+ *
+ * @return the list of catalogue packages
+ */
+List *catalogue_manager_get_packages() {
+    return global.catalogue_manager.packages;
+}
+
 
 /**
  * Get the entire list of catalogue pages

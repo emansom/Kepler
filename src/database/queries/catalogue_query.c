@@ -9,6 +9,7 @@
 #include "game/catalogue/catalogue_manager.h"
 #include "game/catalogue/catalogue_page.h"
 #include "game/catalogue/catalogue_item.h"
+#include "game/catalogue/catalogue_package.h"
 
 #include "database/queries/catalogue_query.h"
 #include "database/db_connection.h"
@@ -91,6 +92,39 @@ void catalogue_query_items() {
         );
 
         catalogue_manager_add_item(item);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+}
+
+void catalogue_query_packages() {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "SELECT * FROM catalogue_packages", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        // No binding needed here, sir!
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    while (true) {
+        status = sqlite3_step(stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        catalogue_package *package = catalogue_package_create(
+                strdup((char *) sqlite3_column_text(stmt, 0)),
+                sqlite3_column_int(stmt, 1),
+                sqlite3_column_int(stmt, 2),
+                sqlite3_column_int(stmt, 3)
+        );
+
+        catalogue_manager_add_package(package);
     }
 
     sqlite3_finalize(stmt);
