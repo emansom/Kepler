@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','193',74,0,1,'I''m a new xddd','1523986877');
+INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','2',72,0,7,'I''m a new xddd','1523995990');
 INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523463369');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
@@ -1834,8 +1834,8 @@ INSERT INTO `items_definitions` VALUES (2982,'0','pillar0','',1,1,0,'P');
 INSERT INTO `items_definitions` VALUES (2985,'0','hw_ero4','',1,1,0,'P');
 CREATE TABLE IF NOT EXISTS `items` (
 	`id`	INTEGER,
-	`class_name`	TEXT,
-	`sprite_id`	INTEGER,
+	`room_id`	INTEGER,
+	`definition_id`	INTEGER,
 	`x`	TEXT,
 	`y`	TEXT,
 	`z`	NUMERIC,
