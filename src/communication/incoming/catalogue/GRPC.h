@@ -31,6 +31,17 @@ void GRPC(player *player, incoming_message *message) {
         goto cleanup;
     }
 
+
+    if (item->price > player->player_data->credits) {
+        outgoing_message *om = om_create(68); // "AD"
+        player_send(player, om);
+        om_cleanup(om);
+
+        goto cleanup;
+    }
+
+
+
     cleanup:
         if (content != NULL) {
             free(content);
