@@ -106,8 +106,6 @@ void serialise_catalogue_item(catalogue_item *item, outgoing_message *message) {
             sb_add_int(message->sb, pkg->amount); sb_add_char(message->sb, 9);
             om_write_str_delimeter(message, pkg->definition->colour, 9);
 
-            printf("icon: %s\n", package_icon);
-
             free(package_icon);
         }
 
