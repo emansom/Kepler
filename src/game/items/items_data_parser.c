@@ -88,7 +88,7 @@ List *item_parser_get_items(char *model) {
             || strcmp(room_item->class_name, "poolBooth") == 0
             || strcmp(room_item->class_name, "queue_tile2") == 0) {
             room_item->definition->behaviour->canSitOnTop = false;
-            room_item->definition->behaviour->canStandOnTop = false;
+            room_item->definition->behaviour->canStandOnTop = true;
         }
 
         if (strcmp(room_item->class_name, "queue_tile2") == 0) {
