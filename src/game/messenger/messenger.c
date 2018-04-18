@@ -157,7 +157,7 @@ void messenger_cleanup_list(List *messenger_entries) {
  * 
  * @param messenger the messenger struct instance
  */
-void messenger_cleanup(messenger *messenger_manager) {
+void messenger_dispose(messenger *messenger_manager) {
     if (messenger_manager->friends != NULL) {
         messenger_cleanup_list(messenger_manager->friends);
         messenger_manager->friends = NULL;

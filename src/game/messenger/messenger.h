@@ -27,6 +27,6 @@ void messenger_remove_request(messenger*, int);
 void messenger_remove_friend(messenger*, int);
 
 void messenger_cleanup_list(List*);
-void messenger_cleanup(messenger*);
+void messenger_dispose(messenger *);
 
 #endif

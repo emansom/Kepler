@@ -1,9 +1,11 @@
 #include <stdlib.h>
-#include <game/player/player.h>
 
 #include "list.h"
 
+#include "game/player/player.h"
 #include "game/inventory/inventory.h"
+
+#include "database/queries/item_query.h"
 
 inventory *inventory_create() {
     inventory *inv = malloc(sizeof(inventory));
@@ -14,13 +16,15 @@ inventory *inventory_create() {
 void inventory_init(player *player) {
     if (player->inventory->items != NULL) {
         list_destroy(player->inventory->items);
-    } else {
-        list_new(&player->inventory->items);
     }
 
-
+    player->inventory->items = item_query_get_inventory(player->player_data->id);
 }
 
 void inventory_dispose(inventory *inventory) {
+    if (inventory->items != NULL) {
+        list_destroy(inventory->items);
+    }
 
+    free(inventory);
 }

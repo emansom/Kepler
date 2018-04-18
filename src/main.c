@@ -48,8 +48,6 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
-    printf("%s\n", get_short_time_formatted());
-
     print_info("\n");
 
     server_settings *settings = malloc(sizeof(server_settings));

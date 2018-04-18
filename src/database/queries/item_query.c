@@ -1,10 +1,57 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "list.h"
 #include "sqlite3.h"
-#include "database/db_connection.h"
 
+#include "database/db_connection.h"
 #include "database/queries/item_query.h"
+
+#include "game/items/item.h"
+
+List *item_query_get_inventory(int user_id) {
+    List *items;
+    list_new(&items);
+
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "SELECT id,room_id,definition_id,x,y,z,rotation,custom_data FROM items WHERE user_id = ? AND room_id = 0", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, user_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    while (true) {
+        status = sqlite3_step(stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        //item *item_create(int id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data)
+        item *item = item_create(
+            sqlite3_column_int(stmt, 0),
+            sqlite3_column_int(stmt, 1),
+            sqlite3_column_int(stmt, 2),
+            sqlite3_column_int(stmt, 3),
+            sqlite3_column_int(stmt, 4),
+            sqlite3_column_double(stmt, 5),
+            sqlite3_column_int(stmt, 6),
+            strdup((char *) sqlite3_column_text(stmt, 7))
+        );
+
+        list_add(items, item);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
+
+    return items;
+}
 
 int item_query_create(int user_id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data) {
     sqlite3 *conn = db_create_connection();

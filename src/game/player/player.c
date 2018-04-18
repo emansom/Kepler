@@ -201,7 +201,11 @@ void player_cleanup(player *player) {
     }
 
     if (player->messenger != NULL) {
-        messenger_cleanup(player->messenger);
+        messenger_dispose(player->messenger);
+    }
+
+    if (player->inventory != NULL) {
+        inventory_dispose(player->inventory);
     }
 
     if (player->player_data != NULL) {
