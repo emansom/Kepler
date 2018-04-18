@@ -1,6 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
+#include <stdbool.h>
+
 typedef struct room_user_s room_user;
 typedef struct outgoing_message_s outgoing_message;
 typedef struct messenger_s messenger;
@@ -24,6 +26,7 @@ typedef struct player_data_s {
 
 typedef struct player_s {
     void *stream;
+    bool disconnected;
     char *ip_address;
     player_data *player_data;
     messenger *messenger;

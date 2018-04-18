@@ -32,6 +32,8 @@ void server_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
  */
 void server_on_connection_close(uv_handle_t *handle) {
     player *player = handle->data;
+    player->disconnected = false;
+
     printf("Client [%s] has disconnected\n", player->ip_address);
     player_cleanup(player);
 }
@@ -65,6 +67,13 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 
     if (nread > 0) {
         player *p = handle->data;
+
+        if (buf->base == NULL) {
+            p->disconnected = true;
+            return;
+        }
+
+
         int amount_read = 0;
 
         while (amount_read < nread) {

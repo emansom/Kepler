@@ -26,6 +26,7 @@
 player *player_create(void *socket, char *ip_address) {
     player *p = malloc(sizeof(player));
     p->stream = socket;
+    p->disconnected = false;
     p->ip_address = strdup(ip_address);
     p->player_data = NULL;
     p->logged_in = false;
@@ -84,7 +85,7 @@ void player_login(player *player) {
  * @param om the outgoing message
  */
 void player_send(player *p, outgoing_message *om) {
-    if (om == NULL || p == NULL) {
+    if (om == NULL || p == NULL || p->disconnected) {
         return;
     }
 
@@ -104,7 +105,8 @@ void player_send(player *p, outgoing_message *om) {
     req->handle = (void*) p;
     req->data = buffer.base;
 
-    uv_write(req, (uv_stream_t*)p->stream, &buffer, 1, &server_on_write);
+    int response = uv_write(req, (uv_stream_t *) p->stream, &buffer, 1, &server_on_write);
+    check_uv(response);
 }
 
 /**
@@ -217,8 +219,6 @@ void player_cleanup(player *player) {
     }
 
     free(player->ip_address);
-    free(player->stream);
-    free(player);
 }
 
 void player_data_cleanup(player_data *player_data) {

@@ -1,6 +1,8 @@
 #ifndef ROOM_H
 #define ROOM_H
 
+#include <stdbool.h>
+
 typedef struct list_s List;
 typedef struct player_s player;
 typedef struct room_model_s room_model;
@@ -21,7 +23,7 @@ typedef struct room_data_s {
     int wall;
     int floor;
     int show_name;
-    int superusers;
+    bool superusers;
     int accesstype;
     char *password;
     int visitors_now;
@@ -43,6 +45,9 @@ room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, in
 void room_enter(room*, player*);
 void room_load(room*, player*);
 void room_leave(room*, player*);
+bool room_is_owner(room *room, int user_id);
+bool room_has_rights(room *room, int user_id);
+void room_refresh_rights(room *room, player *player);
 void room_send(room*, outgoing_message*);
 void room_dispose(room*);
 

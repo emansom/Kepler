@@ -214,6 +214,67 @@ void room_load(room *room, player *player) {
     sb_add_int(om->sb, room->room_id);
     player_send(player, om);
     om_cleanup(om);
+
+    room_refresh_rights(room, player);
+}
+
+/**
+ * Get if the user id is owner of the room.
+ *
+ * @param room the room to check owner for
+ * @param user_id the id to check against
+ * @return true, if successful
+ */
+bool room_is_owner(room *room, int user_id) {
+    return room->room_data->owner_id == user_id;
+}
+
+/**
+ * Get if the player has rights.
+ *
+ * @param room the room to check rights for
+ * @param user_id the user id to check if they have rights
+ * @return true, if successful
+ */
+bool room_has_rights(room *room, int user_id) {
+    if (room->room_data->superusers) {
+        return true;
+    }
+
+    return true;
+}
+
+/**
+ * Refresh the room rights for the user.
+ *
+ * @param room the room to refresh inside for
+ * @param player the player to refresh the rights for
+ */
+void room_refresh_rights(room *room, player *player) {
+    char rights_value[10];
+    strcpy(rights_value, "");
+
+    outgoing_message *om;
+
+    if (room_has_rights(room, player->player_data->id)) {
+        om = om_create(42); // "@j"
+        player_send(player, om);
+        om_cleanup(om);
+    }
+
+    if (room_is_owner(room, player->player_data->id)) {
+        om = om_create(47); // "@o"
+        player_send(player, om);
+        om_cleanup(om);
+
+        strcpy(rights_value, "useradmin");
+    }
+
+    room_user_remove_status((room_user*) player->room_user, "flatctrl");
+
+    if (room_has_rights(room, player->player_data->id) || room_is_owner(room, player->player_data->id)) {
+        room_user_add_status((room_user *) player->room_user, "flatctrl", rights_value, -1, "", -1, -1);
+    }
 }
 
 /**

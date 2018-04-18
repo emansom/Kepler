@@ -18,6 +18,8 @@
 void dispose_program();
 
 int main(void) {
+    signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
+
     print_info("Kepler Habbo server...\n");
     print_info("Written by Quackster \n");
     print_info("\n");
