@@ -3,6 +3,8 @@
 
 #include "database/queries/item_query.h"
 
+#include "game/inventory/inventory.h"
+
 void GRPC(player *player, incoming_message *message) {
     char *content = im_get_content(message);
 
@@ -27,18 +29,18 @@ void GRPC(player *player, incoming_message *message) {
         goto cleanup;
     }
 
-    catalogue_item *item = (catalogue_item *) catalogue_manager_get_item(sale_code);
+    catalogue_item *store_item = (catalogue_item *) catalogue_manager_get_item(sale_code);
 
-    if (item == NULL) {
+    if (store_item == NULL) {
         goto cleanup;
     }
 
-    if (item->is_package) {
+    if (store_item->is_package) {
         goto cleanup; // TODO: Purchase packages
     }
 
 
-    if (item->price > player->player_data->credits) {
+    if (store_item->price > player->player_data->credits) {
         outgoing_message *om = om_create(68); // "AD"
         player_send(player, om);
         om_cleanup(om);
@@ -48,23 +50,22 @@ void GRPC(player *player, incoming_message *message) {
 
     char *custom_data = NULL;
 
-    if (!item->is_package) {
+    if (!store_item->is_package) {
         char *extra_data = get_argument(content, "\r", 4);
 
-
-        if (item->definition->behaviour->is_decoration) {
+        if (store_item->definition->behaviour->is_decoration) {
             if (is_numeric(extra_data)) {
                 custom_data = strdup(extra_data);
             }
         } else {
-            if (item->item_specialspriteid > 0) {
+            if (store_item->item_specialspriteid > 0) {
                 char num[10];
-                sprintf(num, "%i", item->item_specialspriteid);
+                sprintf(num, "%i", store_item->item_specialspriteid);
                 custom_data = strdup(num);
             }
         }
 
-        if (item->definition->behaviour->is_prize_trophy) {
+        if (store_item->definition->behaviour->is_prize_trophy) {
             filter_vulnerable_characters(&extra_data, true);
 
             char *short_date = get_short_time_formatted();
@@ -85,11 +86,14 @@ void GRPC(player *player, incoming_message *message) {
         free(extra_data);
     }
 
-    player->player_data->credits -= item->price;
+    player->player_data->credits -= store_item->price;
     player_send_credits(player);
-
-    item_query_create(player->player_data->id, 0, item->definition->id, 0, 0, 0, 0, custom_data);
     player_query_save_currency(player);
+
+    int item_id = item_query_create(player->player_data->id, 0, store_item->definition->id, 0, 0, 0, 0, custom_data);
+
+    item *inventory_item = item_create(item_id, 0, store_item->definition->id, 0, 0, 0, 0,"");
+    list_add(player->inventory->items, inventory_item);
 
     cleanup:
         if (content != NULL) {
