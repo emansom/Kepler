@@ -14,6 +14,8 @@
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
 
+#include "game/room/mapping/room_model.h"
+
 #include "shared.h"
 
 /**
@@ -50,7 +52,7 @@ void messenger_entry_serialise(int user_id, outgoing_message *response) {
             if (search_player->room_user->room != NULL) {
                 room *room = room_manager_get_by_id(search_player->room_user->room_id);
 
-                if (list_size(room->public_items) > 0) {
+                if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public room model
                     om_write_str(response, room->room_data->name);
                 } else {
                     om_write_str(response, "Floor1a");

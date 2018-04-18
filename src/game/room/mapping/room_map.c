@@ -1,3 +1,4 @@
+#include <game/items/definition/item_definition.h>
 #include "stdlib.h"
 #include "stdio.h"
 
@@ -78,9 +79,13 @@ void room_map_add_private_items(room *room) {
  * @param room the room instance
  */
 void room_map_add_public_items(room *room) {
-    for (size_t i = 0; i < list_size(room->public_items); i++) {
+    for (size_t i = 0; i < list_size(room->items); i++) {
         item *public_item;
-        list_get_at(room->public_items, i, (void *) &public_item);
+        list_get_at(room->items, i, (void *) &public_item);
+
+        if (!public_item->definition->behaviour->isPublicSpaceObject) {
+            continue;
+        }
 
         room_tile *tile = room->room_map->map[public_item->coords->x][public_item->coords->y];
 

@@ -36,7 +36,6 @@ typedef struct room_s {
     runnable *status_job;
     List *users;
     List *items;
-    List *public_items;
 } room;
 
 room *room_create(int);

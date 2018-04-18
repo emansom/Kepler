@@ -47,7 +47,6 @@ room *room_create(int room_id) {
     instance->walking_job = NULL;
     instance->status_job = NULL;
     list_new(&instance->users);
-    list_new(&instance->public_items);
     list_new(&instance->items);
     return instance;
 }
@@ -108,12 +107,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
 
         while (list_iter_next(&iter, (void*)&room_item) != CC_ITER_END) {
             room_item->room_id = id;
-
-            if (room_item->current_program != NULL && strcmp(room_item->current_program, "private") == 0) {
-                list_add(room->items, room_item);
-            } else {
-                list_add(room->public_items, room_item);
-            }
+            list_add(room->items, room_item);
         }
     }
 
@@ -252,7 +246,7 @@ void room_dispose(room *room) {
 
     room_map_destroy(room);
 
-    if (list_size(room->public_items) > 0) {
+    if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public room model
         return; // Prevent public rooms
     }
 
@@ -274,10 +268,8 @@ void room_dispose(room *room) {
 
     list_destroy(room->users);
     list_destroy(room->items);
-    list_destroy(room->public_items);
 
     room->users = NULL;
-    room->public_items = NULL;
     room->walking_job = NULL;
     room->status_job = NULL;
     

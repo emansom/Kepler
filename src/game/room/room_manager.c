@@ -134,7 +134,6 @@ void room_manager_dispose() {
         TableEntry *entry;
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
             room *room = entry->value;
-            list_remove_all(room->public_items);
             room_dispose(room);
         }
     }

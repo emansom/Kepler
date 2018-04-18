@@ -53,7 +53,7 @@ List *item_parser_get_items(char *model) {
 
         room_item->definition = item_definition_create_blank();
         room_item->definition->sprite = get_argument(line, " ", 1);
-        room_item->definition->behaviour->isPublicSpaceObject = true; // All items loaded this way are considered public space objects.
+        room_item->definition->behaviour->isPublicSpaceObject = true; // All items loaded this way are considered public space objects, except for queue_tile2.
 
         // Filter unwanted characters
         filter_vulnerable_characters(&room_item->definition->sprite, true);
@@ -96,6 +96,7 @@ List *item_parser_get_items(char *model) {
         if (strcmp(room_item->definition->sprite, "queue_tile2") == 0) {
             free(room_item->custom_data);
             room_item->custom_data = strdup("2");
+            room_item->definition->behaviour->isPublicSpaceObject = false;
         }
 
         list_add(items, room_item);
