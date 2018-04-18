@@ -28,7 +28,7 @@ player *player_create(void *socket, char *ip_address) {
     p->stream = socket;
     p->ip_address = strdup(ip_address);
     p->player_data = NULL;
-    p->disconnected = false;
+    p->logged_in = false;
     p->room_user = NULL;
     p->messenger = NULL;
     p->inventory = NULL;
@@ -74,7 +74,7 @@ void player_login(player *player) {
     player_query_save_last_online(player);
     room_manager_add_by_user_id(player->player_data->id);
 
-
+    player->logged_in = true;
 }
 
 /**
@@ -175,10 +175,6 @@ void player_cleanup(player *player) {
 
     player_manager_remove(player);
 
-    if (player->room_user->room != NULL) {
-        room_leave(player->room_user->room, player);
-    }
-
     if (player->player_data != NULL) {
         player_query_save_last_online(player);
 
@@ -197,15 +193,22 @@ void player_cleanup(player *player) {
     }
 
     if (player->room_user != NULL) {
+        if (player->room_user->room != NULL) {
+            room_leave(player->room_user->room, player);
+        }
+
         room_user_cleanup(player->room_user);
+        player->room_user = NULL;
     }
 
     if (player->messenger != NULL) {
         messenger_dispose(player->messenger);
+        player->messenger = NULL;
     }
 
     if (player->inventory != NULL) {
         inventory_dispose(player->inventory);
+        player->inventory = NULL;
     }
 
     if (player->player_data != NULL) {
@@ -216,8 +219,6 @@ void player_cleanup(player *player) {
     free(player->ip_address);
     free(player->stream);
     free(player);
-
-    player = NULL;
 }
 
 void player_data_cleanup(player_data *player_data) {

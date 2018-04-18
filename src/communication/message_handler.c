@@ -83,6 +83,12 @@
 #include "communication/incoming/catalogue/GRPC.h"
 #include "communication/incoming/catalogue/GET_ALIAS_LIST.h"
 
+// Inventory
+#include "communication/incoming/inventory/GETSTRIP.h"
+
+// Only allow these headers to be processed if the player is not logged in.
+int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43 };
+
 /**
  * Assigns all header handlers to this array
  */
@@ -165,6 +171,9 @@ void message_handler_init() {
     message_requests[215] = GET_ALIAS_LIST;
     message_requests[100] = GRPC;
 
+    // Inventory
+    message_requests[65] = GETSTRIP;
+
     /*Client [0.0.0.0] incoming data: 203 / CK@Dalex@F123456
 hello!
 Client [0.0.0.0] incoming data: 149 / BU@M@C123@H@J07.04.1992@C@F123456*/
@@ -183,10 +192,29 @@ void message_handler_invoke(incoming_message *im, player *player) {
 
     free(preview);
 
+    // Stop the server from crashing
+    if (im->header_id > 9999 || im->header_id < 0) {
+        return;
+    }
+
+    // Don't process any headers it can't find
     if (message_requests[im->header_id] == NULL) {
         return;
     }
 
     mh_request handle = message_requests[im->header_id];
-    handle(player, im);
+
+    if (player->logged_in) {
+        handle(player, im);
+    } else {
+
+        // If the user isn't logged in, we only process whitelisted headers.
+        for (int i = 0; i < (sizeof(packet_whitelist) / sizeof(packet_whitelist[0])); i++) {
+            int header_id = packet_whitelist[i];
+
+            if (header_id == im->header_id) {
+                handle(player, im);
+            }
+        }
+    }
 }

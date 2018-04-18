@@ -29,7 +29,7 @@ typedef struct player_s {
     messenger *messenger;
     inventory *inventory;
     room_user *room_user;
-    int disconnected;
+    int logged_in;
 } player;
 
 
