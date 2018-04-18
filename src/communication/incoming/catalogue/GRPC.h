@@ -40,7 +40,7 @@ void GRPC(player *player, incoming_message *message) {
         goto cleanup;
     }
 
-
+    
 
     cleanup:
         if (content != NULL) {

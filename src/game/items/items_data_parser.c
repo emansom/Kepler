@@ -42,7 +42,6 @@ List *item_parser_get_items(char *model) {
         item *room_item = item_create(
                 id++,
                 -1,
-                get_argument(line, " ", 1),
                 -1,
                 (int) strtol(str_x, NULL, 10),
                 (int) strtol(str_y, NULL, 10),
@@ -51,10 +50,13 @@ List *item_parser_get_items(char *model) {
                 get_argument(line, " ", 0)
         );
 
+
         room_item->definition = item_definition_create_blank();
+        room_item->definition->sprite = get_argument(line, " ", 1);
+        room_item->definition->behaviour->isPublicSpaceObject = true; // All items loaded this way are considered public space objects.
 
         // Filter unwanted characters
-        filter_vulnerable_characters(&room_item->class_name, true);
+        filter_vulnerable_characters(&room_item->definition->sprite, true);
 
         if (public_custom_data != NULL) {
             filter_vulnerable_characters(&public_custom_data, true);
@@ -67,31 +69,31 @@ List *item_parser_get_items(char *model) {
             }
         }
 
-        if (strstr(room_item->class_name, "chair") != NULL
-            || strstr(room_item->class_name, "bench") != NULL
-            || strstr(room_item->class_name, "seat") != NULL
-            || strstr(room_item->class_name, "stool") != NULL
-            || strstr(room_item->class_name, "sofa") != NULL
-            || strcmp(room_item->class_name, "l") == 0
-            || strcmp(room_item->class_name, "m") == 0
-            || strcmp(room_item->class_name, "k") == 0
-            || strcmp(room_item->class_name, "shift1") == 0) {
+        if (strstr(room_item->definition->sprite, "chair") != NULL
+            || strstr(room_item->definition->sprite, "bench") != NULL
+            || strstr(room_item->definition->sprite, "seat") != NULL
+            || strstr(room_item->definition->sprite, "stool") != NULL
+            || strstr(room_item->definition->sprite, "sofa") != NULL
+            || strcmp(room_item->definition->sprite, "l") == 0
+            || strcmp(room_item->definition->sprite, "m") == 0
+            || strcmp(room_item->definition->sprite, "k") == 0
+            || strcmp(room_item->definition->sprite, "shift1") == 0) {
             room_item->definition->behaviour->canSitOnTop = true;
         } else {
             room_item->definition->behaviour->canSitOnTop = false;
             room_item->definition->behaviour->canStandOnTop = false;
         }
 
-        if (strcmp(room_item->class_name, "poolEnter") == 0
-            || strcmp(room_item->class_name, "poolExit") == 0
-            || strcmp(room_item->class_name, "poolLift") == 0
-            || strcmp(room_item->class_name, "poolBooth") == 0
-            || strcmp(room_item->class_name, "queue_tile2") == 0) {
+        if (strcmp(room_item->definition->sprite, "poolEnter") == 0
+            || strcmp(room_item->definition->sprite, "poolExit") == 0
+            || strcmp(room_item->definition->sprite, "poolLift") == 0
+            || strcmp(room_item->definition->sprite, "poolBooth") == 0
+            || strcmp(room_item->definition->sprite, "queue_tile2") == 0) {
             room_item->definition->behaviour->canSitOnTop = false;
             room_item->definition->behaviour->canStandOnTop = true;
         }
 
-        if (strcmp(room_item->class_name, "queue_tile2") == 0) {
+        if (strcmp(room_item->definition->sprite, "queue_tile2") == 0) {
             free(room_item->custom_data);
             room_item->custom_data = strdup("2");
         }
@@ -124,10 +126,10 @@ List *item_parser_get_items(char *model) {
 
             char buf[100];
             if (strlen(custom_content) > 0) {
-                sprintf(buf, "%s %s %i %i %i %i%s\n", room_item->custom_data, room_item->class_name, room_item->x,
+                sprintf(buf, "%s %s %i %i %i %i%s\n", room_item->custom_data, room_item->definition->sprite, room_item->x,
                         room_item->y, (int) room_item->z, room_item->rotation, custom_content);
             } else {
-                sprintf(buf, "%s %s %i %i %i %i\n", room_item->custom_data, room_item->class_name, room_item->x,
+                sprintf(buf, "%s %s %i %i %i %i\n", room_item->custom_data, room_item->definition->sprite, room_item->x,
                         room_item->y, (int) room_item->z, room_item->rotation);
             }
             fputs(buf, file);

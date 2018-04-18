@@ -8,7 +8,9 @@
 #include "database/queries/player_query.h"
 
 #include "pool_handler.h"
+
 #include "game/items/item.h"
+#include "game/items/definition/item_definition.h"
 
 #include "game/player/player.h"
 
@@ -36,7 +38,7 @@ void pool_booth_exit(player *player) {
     if (tile != NULL && tile->highest_item != NULL) {
         item *item = tile->highest_item;
 
-        if (strcmp(item->class_name, "poolBooth") == 0) {
+        if (strcmp(item->definition->sprite, "poolBooth") == 0) {
             item_assign_program(item, "open");
             player->room_user->walking_lock = false;
         }
@@ -71,7 +73,7 @@ void pool_booth_exit(player *player) {
 void pool_item_walk_on(player *p, item *item) {
     room_user *room_entity = (room_user*)p->room_user;
 
-    if (strcmp(item->class_name, "poolLift") == 0) {
+    if (strcmp(item->definition->sprite, "poolLift") == 0) {
         item_assign_program(item, "close");
 
         char target[200];
@@ -95,7 +97,7 @@ void pool_item_walk_on(player *p, item *item) {
 
     }
 
-    if (strcmp(item->class_name, "poolBooth") == 0) {
+    if (strcmp(item->definition->sprite, "poolBooth") == 0) {
         item_assign_program(item, "close");
         room_entity->walking_lock = true;
 
@@ -105,7 +107,7 @@ void pool_item_walk_on(player *p, item *item) {
     }
 
     if (strcmp(room_entity->room->room_data->model_data->model_name, "pool_b") == 0) {
-        if (strcmp(item->class_name, "queue_tile2") == 0) {
+        if (strcmp(item->definition->sprite, "queue_tile2") == 0) {
             coord next;
             coord_get_front(item->coords, &next);
             walk_to(room_entity, next.x, next.y);
@@ -113,7 +115,7 @@ void pool_item_walk_on(player *p, item *item) {
     }
 
 
-    if (strcmp(item->class_name, "poolEnter") == 0) {
+    if (strcmp(item->definition->sprite, "poolEnter") == 0) {
         coord warp = { };
 
         if (item->coords->x == 20 && item->coords->y == 28) {
@@ -134,7 +136,7 @@ void pool_item_walk_on(player *p, item *item) {
         pool_warp_swim(p, item, warp, false);
     }
 
-    if (strcmp(item->class_name, "poolExit") == 0) {
+    if (strcmp(item->definition->sprite, "poolExit") == 0) {
         coord warp = { };
 
         if (item->coords->x == 21 && item->coords->y == 28) {
@@ -194,7 +196,7 @@ void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
  * @param public_item the item to add
  */
 void pool_setup_redirections(room *room, item *public_item) {
-    if (strcmp(public_item->class_name, "poolBooth") == 0) {
+    if (strcmp(public_item->definition->sprite, "poolBooth") == 0) {
         if (public_item->coords->x == 17 && public_item->coords->y == 11) {
             room->room_map->map[18][11]->highest_item = public_item;
         }

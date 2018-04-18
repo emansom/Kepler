@@ -7,8 +7,6 @@ typedef struct item_definition_s item_definition;
 typedef struct item_s {
     int id;
     int room_id;
-    char *class_name;
-    int sprite_id;
     coord *coords;
     char *custom_data;
     char *current_program;
@@ -16,7 +14,7 @@ typedef struct item_s {
     item_definition *definition;
 } item;
 
-item *item_create(int, int, char*, int, int, int, double, int, char*);
+item *item_create(int id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data);
 void item_assign_program(item*, char*);
 void item_dispose(item *item);
 

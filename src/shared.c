@@ -7,6 +7,11 @@
 #include <ctype.h>
 #include <time.h>
 
+/**
+ * Get the current time formatted, must be free'd at the end.
+ *
+ * @return the time as formatted
+ */
 char *get_time_formatted() {
     char buff[20];
     time_t now = time(NULL);
@@ -14,6 +19,12 @@ char *get_time_formatted() {
     return strdup(buff);
 }
 
+/**
+ * Get the time formatted by unix number, must be free'd at the end.
+ *
+ * @param time_seconds the unix timestamp
+ * @return the time formatted.
+ */
 char *get_time_formatted_custom(unsigned long time_seconds) {
     char buff[20];
     time_t now = (time_t)time_seconds;

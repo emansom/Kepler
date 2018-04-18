@@ -22,7 +22,7 @@ void G_OBJS(player *player, incoming_message *message) {
         list_get_at(room->public_items, i, (void*)&room_item);
         sb_add_string(om->sb, room_item->custom_data);
         sb_add_string(om->sb, " ");
-        sb_add_string(om->sb, room_item->class_name);
+        sb_add_string(om->sb, room_item->definition->sprite);
         sb_add_string(om->sb, " ");
         sb_add_int(om->sb, room_item->coords->x);
         sb_add_string(om->sb, " ");
@@ -49,7 +49,7 @@ void G_OBJS(player *player, incoming_message *message) {
         item *room_item;
         list_get_at(room->items, i, (void*)&room_item);
         om_write_int_delimeter(om, room_item->id, 2);
-        om_write_str(om, room_item->class_name);
+        om_write_str(om, room_item->definition->sprite);
         om_write_int(om, room_item->coords->x);
         om_write_int(om, room_item->coords->y);
         om_write_int(om, 1);

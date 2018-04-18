@@ -25,7 +25,7 @@ item_definition *item_definition_create_blank() {
     item_definition *def = malloc(sizeof(item_definition));
     def->id = -1;
     def->cast_directory = -1;
-    def->sprite = strdup("");
+    def->sprite = NULL;
     def->colour = strdup("");
     def->length = 1;
     def->width = 1;

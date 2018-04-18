@@ -61,7 +61,7 @@ void walk_to(room_user *room_user, int x, int y) {
     if (tile != NULL && tile->highest_item != NULL) {
         item *item = tile->highest_item;
 
-        if (strcmp(item->class_name, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
+        if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
             outgoing_message *om = om_create(73); // "AI"
             player_send((player *) room_user->player, om);
             om_cleanup(om);

@@ -27,18 +27,21 @@
  * @param custom_data the item custom data
  * @return
  */
-item *item_create(int id, int room_id, char *class_name, int sprite_id, int x, int y, double z, int rotation, char *custom_data) {
+item *item_create(int id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data) {
     item *room_item = malloc(sizeof(item));
     room_item->id = id;
     room_item->room_id = room_id;
-    room_item->class_name = class_name;
-    room_item->sprite_id = sprite_id;
     room_item->custom_data = custom_data;
     room_item->current_program = NULL;
     room_item->current_program_state = NULL;
     room_item->coords = create_coord(x, y);
     room_item->coords->z = z;
     room_item->coords->rotation = rotation;
+
+    if (definition_id > 0) {
+
+    }
+
     return room_item;
 }
 
@@ -81,7 +84,6 @@ void item_assign_program(item *room_item, char *program_state) {
  * @param item the item to dispose
  */
 void item_dispose(item *item) {
-    free(item->class_name);
     free(item->custom_data);
     free(item->coords);
 

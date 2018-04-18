@@ -55,7 +55,7 @@ void SPLASHPOSITION(player *diver, incoming_message *message) {
     if (tile != NULL && tile->highest_item != NULL) {
         item *item = tile->highest_item;
 
-        if (strcmp(item->class_name, "poolLift") == 0) {
+        if (strcmp(item->definition->sprite, "poolLift") == 0) {
             item_assign_program(item, "open");
         }
     }
