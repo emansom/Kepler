@@ -43,7 +43,7 @@ item_definition *item_definition_create_blank() {
  * @return the name
  */
 char *item_definition_get_name(item_definition *definition, int special_sprite_id) {
-    if (definition->behaviour->isDecoration) {
+    if (definition->behaviour->is_decoration) {
         return strdup(definition->sprite);
     } else {
         char *external_text_key = item_definition_get_text_key(definition, special_sprite_id);
@@ -71,7 +71,7 @@ char *item_definition_get_name(item_definition *definition, int special_sprite_i
  * @return the description
  */
 char *item_definition_get_desc(item_definition *definition, int special_sprite_id) {
-    if (definition->behaviour->isDecoration) {
+    if (definition->behaviour->is_decoration) {
         return strdup(definition->sprite);
     } else {
         char *external_text_key = item_definition_get_text_key(definition, special_sprite_id);
@@ -125,7 +125,7 @@ char *item_definition_get_text_key(item_definition *definition, int special_spri
     stringbuilder *sb = sb_create();
 
     if (special_sprite_id == 0) {
-        if (definition->behaviour->isWallItem) {
+        if (definition->behaviour->is_wall_item) {
             sb_add_string(sb, "wallitem");
         } else {
             sb_add_string(sb, "furni");

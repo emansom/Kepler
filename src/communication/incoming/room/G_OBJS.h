@@ -33,7 +33,7 @@ void G_OBJS(player *player, incoming_message *message) {
         sb_add_int(om->sb, room_item->coords->rotation);
         sb_add_string(om->sb, " ");
 
-        if (room_item->definition->behaviour->hasExtraParameter) {
+        if (room_item->definition->behaviour->has_extra_parameter) {
             sb_add_int(om->sb, 2);
             sb_add_string(om->sb, " ");
         }

@@ -82,7 +82,7 @@ char *catalogue_item_get_type(catalogue_item *item) {
     if (item->is_package) {
         return strdup("d");
     } else {
-        if (item->definition->behaviour->isWallItem) {
+        if (item->definition->behaviour->is_wall_item) {
             return strdup("i");
         } else {
             return strdup("s");
@@ -99,7 +99,7 @@ char *catalogue_item_get_icon(catalogue_item *item) {
 }
 
 char *catalogue_item_get_size(catalogue_item *item) {
-    if (item->is_package || item->definition->behaviour->isWallItem) {
+    if (item->is_package || item->definition->behaviour->is_wall_item) {
         return strdup("");
     } else {
         return strdup("0");
@@ -107,7 +107,7 @@ char *catalogue_item_get_size(catalogue_item *item) {
 }
 
 char *catalogue_item_get_dimensions(catalogue_item *item) {
-    if (item->is_package || item->definition->behaviour->isWallItem) {
+    if (item->is_package || item->definition->behaviour->is_wall_item) {
         return strdup("");
     } else {
         stringbuilder *sb = sb_create();

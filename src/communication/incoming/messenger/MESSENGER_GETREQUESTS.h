@@ -11,7 +11,7 @@ void MESSENGER_GETREQUESTS(player *p, incoming_message *message) {
         messenger_entry *request_entry;
         list_get_at(p->messenger->requests, i, (void*)&request_entry);
 
-        char *friends_name = query_player_username(request_entry->user_id);
+        char *friends_name = player_query_username(request_entry->user_id);
 
         if (friends_name == NULL) {
             continue;

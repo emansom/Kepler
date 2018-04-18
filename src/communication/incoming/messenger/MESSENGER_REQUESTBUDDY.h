@@ -5,7 +5,7 @@
 
 void MESSENGER_REQUESTBUDDY(player *session, incoming_message *message) {
     char *input_search = im_read_str(message);
-    int search_id = query_player_id(input_search);
+    int search_id = player_query_id(input_search);
 
     if (search_id == -1) {
         goto cleanup;

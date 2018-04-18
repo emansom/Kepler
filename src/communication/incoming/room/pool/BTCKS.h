@@ -30,7 +30,7 @@ void BTCKS(player *session, incoming_message *message) {
         goto cleanup;
     }
 
-    if (!query_player_exists_username(tickets_for)) {
+    if (!player_query_exists_username(tickets_for)) {
         outgoing_message *om = om_create(76); // "AL"
         sb_add_string(om->sb, tickets_for); // No user named <here> found. Gift not purchased.
         player_send(session, om);
@@ -38,9 +38,9 @@ void BTCKS(player *session, incoming_message *message) {
         goto cleanup;
     }
 
-    player_data *data = query_player_data(query_player_id(tickets_for));
+    player_data *data = player_query_data(player_query_id(tickets_for));
     data->tickets += tickets_amount;
-    query_player_save_tickets(data->id, data->tickets);
+    player_query_save_tickets(data->id, data->tickets);
 
     player *ticket_receiver = player_manager_find_by_name(tickets_for);
 
@@ -56,7 +56,7 @@ void BTCKS(player *session, incoming_message *message) {
     }
 
     session->player_data->credits -= cost_credits;
-    query_player_save_currency(session);
+    player_query_save_currency(session);
     player_send_credits(session);
 
     player_data_cleanup(data);

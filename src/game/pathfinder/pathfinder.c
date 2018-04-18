@@ -164,7 +164,7 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
         }
 
         if (from_item == NULL) {
-            if (is_final_move && (to_item->definition->behaviour->canSitOnTop || to_item->definition->behaviour->canStandOnTop)) {
+            if (is_final_move && (to_item->definition->behaviour->can_sit_on_top || to_item->definition->behaviour->can_stand_on_top)) {
                 return 1;
             } else {
                 return 0;

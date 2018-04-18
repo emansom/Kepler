@@ -7,11 +7,11 @@
 
 item_behaviour *item_behaviour_create() {
     item_behaviour *behaviour = malloc(sizeof(item_behaviour));
-    behaviour->isWallItem = false;
-    behaviour->isSolid = false;
-    behaviour->canSitOnTop = false;
-    behaviour->canLayOnTop = false;
-    behaviour->canStandOnTop = false;
+    behaviour->is_wall_item = false;
+    behaviour->is_solid = false;
+    behaviour->can_sit_on_top = false;
+    behaviour->can_lay_on_top = false;
+    behaviour->can_stand_on_top = false;
     behaviour->canStackOnTop = false;
     behaviour->isRoller = false;
     behaviour->isPublicSpaceObject = false;
@@ -22,16 +22,16 @@ item_behaviour *item_behaviour_create() {
     behaviour->customDataOnOff = false;
     behaviour->customDataNumericOnOff = false;
     behaviour->customDataNumericState = false;
-    behaviour->isDecoration = false;
+    behaviour->is_decoration = false;
     behaviour->isPostIt = false;
     behaviour->isDoor = false;
     behaviour->isTeleporter = false;
     behaviour->isDice = false;
-    behaviour->isPrizeTrophy = false;
+    behaviour->is_prize_trophy = false;
     behaviour->isRedeemable = false;
     behaviour->isSoundMachine = false;
     behaviour->isSoundMachineSampleSet = false;
-    behaviour->hasExtraParameter = false;
+    behaviour->has_extra_parameter = false;
     return behaviour;
 }
 
@@ -42,23 +42,23 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         char c = def->behaviour_data[i];
 
         if (c == 'W') {
-            behaviour->isWallItem = true;
+            behaviour->is_wall_item = true;
         }
 
         if (c == 'S') {
-            behaviour->isSolid = true;
+            behaviour->is_solid = true;
         }
 
         if (c == 'C') {
-            behaviour->canSitOnTop = true;
+            behaviour->can_sit_on_top = true;
         }
 
         if (c == 'B') {
-            behaviour->canLayOnTop = true;
+            behaviour->can_lay_on_top = true;
         }
 
         if (c == 'K') {
-            behaviour->canStandOnTop = true;
+            behaviour->can_stand_on_top = true;
         }
 
         if (c == 'R') {
@@ -102,7 +102,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'V') {
-            behaviour->isDecoration = true;
+            behaviour->is_decoration = true;
         }
 
         if (c == 'J') {
@@ -122,7 +122,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'Y') {
-            behaviour->isPrizeTrophy = true;
+            behaviour->is_prize_trophy = true;
         }
 
         if (c == 'Q') {

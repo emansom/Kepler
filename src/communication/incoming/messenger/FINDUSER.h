@@ -14,7 +14,7 @@ void FINDUSER(player *user, incoming_message *message) {
     }
 
     char *input_search = im_read_str(message);
-    int search_id = query_player_id(input_search);
+    int search_id = player_query_id(input_search);
 
     outgoing_message *msg = om_create(128); // "B@"
     om_write_str(msg, "MESSENGER");

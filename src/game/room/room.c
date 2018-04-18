@@ -76,7 +76,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
     room_data *data = malloc(sizeof(room_data));
     data->id = id;
     data->owner_id = owner_id;
-    data->owner_name = query_player_username(owner_id);
+    data->owner_name = player_query_username(owner_id);
     data->category = category;
     data->name = strdup(name);
     data->description = strdup(description);

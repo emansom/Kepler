@@ -93,7 +93,7 @@ void pool_item_walk_on(player *p, item *item) {
 
         room_entity->player->player_data->tickets--;
         player_send_tickets((player*)room_entity->player);
-        query_player_save_currency((player *) room_entity->player);
+        player_query_save_currency((player *) room_entity->player);
 
     }
 

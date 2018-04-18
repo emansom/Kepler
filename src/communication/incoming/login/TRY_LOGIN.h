@@ -7,13 +7,13 @@ void TRY_LOGIN(player *player, incoming_message *message) {
     char *username = im_read_str(message);
     char *password = im_read_str(message);
 
-    int player_id = query_player_login(username, password);
+    int player_id = player_query_login(username, password);
 
     if (player_id == -1) {
         send_localised_error(player, "login incorrect");
         return;
     } else {
-        player_data *data = query_player_data(player_id);
+        player_data *data = player_query_data(player_id);
         player->player_data = data;
     }
 

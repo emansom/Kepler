@@ -35,6 +35,7 @@ file(GLOB room_pool ${PROJECT_DIR}/game/room/pool/*.c)
 file(GLOB room_manager ${PROJECT_DIR}/game/room/manager/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
 file(GLOB items ${PROJECT_DIR}/game/items/*.c)
+file(GLOB inventory ${PROJECT_DIR}/game/inventory/*.c)
 file(GLOB items_definition ${PROJECT_DIR}/game/items/definition/*.c)
 file(GLOB messenger ${PROJECT_DIR}/game/messenger/*.c)
 file(GLOB catalogue ${PROJECT_DIR}/game/catalogue/*.c)
@@ -55,11 +56,13 @@ add_executable(${EXECUTABLE_NAME}
         ${database}
         ${queries}
         ${pathfinder}
+
         ${players}
         ${room}
         ${room_pool}
         ${navigator}
         ${items}
+        ${inventory}
         ${items_definition}
         ${tasks}
         ${room_mapping}

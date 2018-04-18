@@ -18,5 +18,5 @@ void MESSENGER_ASSIGNPERSMSG(player *player, incoming_message *message) {
     player_send(player, response);
     om_cleanup(response);
 
-    query_player_save_motto(player);
+    player_query_save_motto(player);
 }

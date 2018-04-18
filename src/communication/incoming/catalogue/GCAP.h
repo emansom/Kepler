@@ -110,7 +110,7 @@ void serialise_catalogue_item(catalogue_item *item, outgoing_message *message) {
         }
 
     } else {
-        if (!item->definition->behaviour->isWallItem) {
+        if (!item->definition->behaviour->is_wall_item) {
             om_write_str_delimeter(message, item->definition->colour, 9);
         }
     }

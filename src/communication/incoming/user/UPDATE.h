@@ -48,7 +48,7 @@ void UPDATE(player *player, incoming_message *message) {
     }
 
     query_player_save_looks(player);
-    query_player_save_motto(player);
+    player_query_save_motto(player);
     GET_INFO(player, message);
 
     /*char *content;

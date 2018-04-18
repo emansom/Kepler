@@ -32,6 +32,7 @@ typedef struct server_s {
 server global;
 
 char *get_time_formatted();
+char *get_short_time_formatted();
 char *get_time_formatted_custom(unsigned long);
 void filter_vulnerable_characters(char**, bool);
 void replace_vulnerable_characters(char**, bool, char);

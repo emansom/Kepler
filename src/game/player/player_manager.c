@@ -99,7 +99,7 @@ player_data *player_manager_get_data_by_id(int player_id) {
         }
     }  
 
-    return query_player_data(player_id);
+    return player_query_data(player_id);
 }
 
 /**

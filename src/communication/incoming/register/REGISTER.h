@@ -32,7 +32,7 @@ void REGISTER(player *player, incoming_message *message) {
     bool kick_user = false;
 
     if (valid_password(name, password) == 0 && get_name_check_code(name) == 0) {
-        query_player_create(name, figure, gender, password);
+        player_query_create(name, figure, gender, password);
     } else {
         kick_user = true;
     }

@@ -1,5 +1,6 @@
 #include <stdio.h>
 
+#include "game/inventory/inventory.h"
 #include "game/messenger/messenger.h"
 
 #include "game/player/player.h"
@@ -24,12 +25,13 @@
  */
 player *player_create(void *socket, char *ip_address) {
     player *p = malloc(sizeof(player));
-    p->room_user = (void*)room_user_create(p);
-    p->messenger = (void*)messenger_create();
     p->stream = socket;
     p->ip_address = strdup(ip_address);
     p->player_data = NULL;
-    p->disconnected = 0;
+    p->disconnected = false;
+    p->room_user = NULL;
+    p->messenger = NULL;
+    p->inventory = NULL;
     return p;
 }
 
@@ -61,9 +63,18 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
  * @param p the player struct
  */
 void player_login(player *player) {
-    query_player_save_last_online(player);
-    room_manager_add_by_user_id(player->player_data->id);
+    player->room_user = (void*)room_user_create(player);
+
+    player->messenger = (void*)messenger_create();
     messenger_init(player);
+
+    player->inventory = (void*)inventory_create();
+    inventory_init(player);
+
+    player_query_save_last_online(player);
+    room_manager_add_by_user_id(player->player_data->id);
+
+
 }
 
 /**
@@ -169,7 +180,7 @@ void player_cleanup(player *player) {
     }
 
     if (player->player_data != NULL) {
-        query_player_save_last_online(player);
+        player_query_save_last_online(player);
 
         List *rooms = room_manager_get_by_user_id(player->player_data->id);
 

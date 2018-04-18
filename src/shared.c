@@ -19,6 +19,13 @@ char *get_time_formatted() {
     return strdup(buff);
 }
 
+char *get_short_time_formatted() {
+    char buff[20];
+    time_t now = time(NULL);
+    strftime(buff, 20, "%m-%d-%Y", localtime(&now));
+    return strdup(buff);
+}
+
 /**
  * Get the time formatted by unix number, must be free'd at the end.
  *
@@ -129,7 +136,7 @@ int get_name_check_code(char *username) {
     if (strlen(username) > 15 || !valid_string(username, "1234567890qwertyuiopasdfghjklzxcvbnm-+=?!@:.,$")) {
         return 2;
     } else {
-        if (query_player_exists_username(username)) {
+        if (player_query_exists_username(username)) {
             return 4;
         } else {
             return 0;

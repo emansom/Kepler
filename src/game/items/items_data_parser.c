@@ -62,7 +62,7 @@ List *item_parser_get_items(char *model) {
             filter_vulnerable_characters(&public_custom_data, true);
 
             if (public_custom_data[0] == '2') {
-                room_item->definition->behaviour->hasExtraParameter = true;
+                room_item->definition->behaviour->has_extra_parameter = true;
                 free(public_custom_data);
             } else {
                 room_item->current_program = public_custom_data;
@@ -78,10 +78,10 @@ List *item_parser_get_items(char *model) {
             || strcmp(room_item->definition->sprite, "m") == 0
             || strcmp(room_item->definition->sprite, "k") == 0
             || strcmp(room_item->definition->sprite, "shift1") == 0) {
-            room_item->definition->behaviour->canSitOnTop = true;
+            room_item->definition->behaviour->can_sit_on_top = true;
         } else {
-            room_item->definition->behaviour->canSitOnTop = false;
-            room_item->definition->behaviour->canStandOnTop = false;
+            room_item->definition->behaviour->can_sit_on_top = false;
+            room_item->definition->behaviour->can_stand_on_top = false;
         }
 
         if (strcmp(room_item->definition->sprite, "poolEnter") == 0
@@ -89,8 +89,8 @@ List *item_parser_get_items(char *model) {
             || strcmp(room_item->definition->sprite, "poolLift") == 0
             || strcmp(room_item->definition->sprite, "poolBooth") == 0
             || strcmp(room_item->definition->sprite, "queue_tile2") == 0) {
-            room_item->definition->behaviour->canSitOnTop = false;
-            room_item->definition->behaviour->canStandOnTop = true;
+            room_item->definition->behaviour->can_sit_on_top = false;
+            room_item->definition->behaviour->can_stand_on_top = true;
         }
 
         if (strcmp(room_item->definition->sprite, "queue_tile2") == 0) {

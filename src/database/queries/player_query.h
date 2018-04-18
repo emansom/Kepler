@@ -4,16 +4,16 @@
 typedef struct player_s player;
 typedef struct player_data_s player_data;
 
-char *query_player_username(int);
-int query_player_id(char*);
-int query_player_login(char*, char*);
-int query_player_exists_username(char *username);
-int query_player_create(char*,char*,char*,char*);
-player_data *query_player_data(int);
-void query_player_save_last_online(player*);
-void query_player_save_looks(player*);
-void query_player_save_motto(player*);
-void query_player_save_currency(player *);
-void query_player_save_tickets(int id, int tickets);
+char *player_query_username(int user_id);
+int player_query_id(char *username);
+int player_query_login(char *username, char *password);
+int player_query_exists_username(char *username);
+int player_query_create(char *username, char *password, char *figure, char *motto);
+player_data *player_query_data(int id);
+void player_query_save_last_online(player *);
+void query_player_save_looks(player *player);
+void player_query_save_motto(player *player);
+void player_query_save_currency(player *player);
+void player_query_save_tickets(int id, int tickets);
 
 #endif

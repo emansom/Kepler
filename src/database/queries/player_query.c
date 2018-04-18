@@ -14,7 +14,7 @@
  * @param user_id
  * @return
  */
-char *query_player_username(int user_id) {
+char *player_query_username(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -44,7 +44,7 @@ char *query_player_username(int user_id) {
  * @param user_id
  * @return
  */
-int query_player_id(char *username) {
+int player_query_id(char *username) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -76,7 +76,7 @@ int query_player_id(char *username) {
  * @param password the password
  * @return the user id, -1 if not successful
  */
-int query_player_login(char *username, char *password) {
+int player_query_login(char *username, char *password) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -107,7 +107,7 @@ int query_player_login(char *username, char *password) {
  * @param username the username
  * @return true, if successful
  */
-int query_player_exists_username(char *username) {
+int player_query_exists_username(char *username) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -133,7 +133,7 @@ int query_player_exists_username(char *username) {
  * @param id the user id
  * @return the player data struct
  */
-player_data *query_player_data(int id) {
+player_data *player_query_data(int id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -182,7 +182,7 @@ player_data *query_player_data(int id) {
  *
  * @return the inserted player id
  */
-int query_player_create(char *username, char *figure, char *gender, char *password) {
+int player_query_create(char *username, char *figure, char *gender, char *password) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -238,7 +238,7 @@ void query_player_save_looks(player *player) {
     sqlite3_close(conn);
 }
 
-void query_player_save_last_online(player *player) {
+void player_query_save_last_online(player *player) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -262,7 +262,7 @@ void query_player_save_last_online(player *player) {
     sqlite3_close(conn);
 }
 
-void query_player_save_motto(player *player) {
+void player_query_save_motto(player *player) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -284,7 +284,7 @@ void query_player_save_motto(player *player) {
     sqlite3_close(conn);
 }
 
-void query_player_save_currency(player *player) {
+void player_query_save_currency(player *player) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
@@ -307,7 +307,7 @@ void query_player_save_currency(player *player) {
     sqlite3_close(conn);
 }
 
-void query_player_save_tickets(int id, int tickets) {
+void player_query_save_tickets(int id, int tickets) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 

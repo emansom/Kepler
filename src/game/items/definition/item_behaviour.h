@@ -6,11 +6,11 @@
 typedef struct item_definition_s item_definition;
 
 typedef struct item_behaviour_s {
-    bool isWallItem;
-    bool isSolid;
-    bool canSitOnTop;
-    bool canLayOnTop;
-    bool canStandOnTop;
+    bool is_wall_item;
+    bool is_solid;
+    bool can_sit_on_top;
+    bool can_lay_on_top;
+    bool can_stand_on_top;
     bool canStackOnTop;
     bool isRoller;
     bool isPublicSpaceObject;
@@ -21,16 +21,16 @@ typedef struct item_behaviour_s {
     bool customDataOnOff;
     bool customDataNumericOnOff;
     bool customDataNumericState;
-    bool isDecoration;
+    bool is_decoration;
     bool isPostIt;
     bool isDoor;
     bool isTeleporter;
     bool isDice;
-    bool isPrizeTrophy;
+    bool is_prize_trophy;
     bool isRedeemable;
     bool isSoundMachine;
     bool isSoundMachineSampleSet;
-    bool hasExtraParameter;
+    bool has_extra_parameter;
 } item_behaviour;
 
 item_behaviour *item_behaviour_create();
