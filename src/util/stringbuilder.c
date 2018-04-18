@@ -60,9 +60,36 @@ void sb_add_int(stringbuilder *sb, int integer) {
 }
 
 /**
+ * Adds a string to the stringbuilder with a delimeter
  *
- * @param sb
- * @param d
+ * @param sb the stringbuilder
+ * @param data the string
+ * @paam delim the delimeter
+ */
+void sb_add_string_delimeter(stringbuilder *sb, const char *data, char delim) {
+    sb_add_string(sb, data);
+    sb_add_char(sb, delim);
+}
+
+
+/**
+ * Adds an integer to the stringbuilder with a delimeter
+ *
+ * @param sb the stringbuilder
+ * @param integer the int
+ * @paam delim the delimeter
+ */
+void sb_add_int_delimeter(stringbuilder *sb, int integer, char delim) {
+    sb_add_int(sb, integer);
+    sb_add_char(sb, delim);
+}
+
+
+/**
+ * Adds an double to the stringbuilder
+ *
+ * @param sb the stringbuilder
+ * @param d the double
  */
 void sb_add_float(stringbuilder *sb, double d) {
     char data[11];

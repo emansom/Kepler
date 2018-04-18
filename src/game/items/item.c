@@ -9,8 +9,10 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
+#include "game/items/item_manager.h"
 
 #include "communication/messages/outgoing_message.h"
+
 
 #include "util/stringbuilder.h"
 
@@ -39,10 +41,53 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     room_item->coords->rotation = rotation;
 
     if (definition_id > 0) {
-
+        room_item->definition = item_manager_get_definition_by_id(definition_id);
     }
 
     return room_item;
+}
+
+/**
+ * Get the string used for packets to append for the hand.
+ *
+ * @param item the item to append
+ * @param strip_slot_id it's strip slot id
+ * @return the string to append
+ */
+char *item_strip_string(item *item, int strip_slot_id) {
+    stringbuilder *sb = sb_create();
+
+    sb_add_string_delimeter(sb, "SI", 30);
+    sb_add_int_delimeter(sb, item->id, 30);
+    sb_add_int_delimeter(sb, strip_slot_id, 30);
+
+    if (item->definition->behaviour->is_wall_item) {
+        sb_add_string_delimeter(sb, "I", 30);
+    } else {
+        sb_add_string_delimeter(sb, "S", 30);
+    }
+
+    sb_add_int_delimeter(sb, strip_slot_id, 30);
+    sb_add_string_delimeter(sb, item->definition->sprite, 30);
+
+    if (item->definition->behaviour->is_wall_item) {
+        sb_add_string_delimeter(sb, item->custom_data, 30);
+        sb_add_string_delimeter(sb, "0", 30);
+    } else {
+        sb_add_int_delimeter(sb, item->definition->length, 30);
+        sb_add_int_delimeter(sb, item->definition->width, 30);
+        sb_add_string_delimeter(sb, item->custom_data, 30);
+        sb_add_string_delimeter(sb, item->definition->colour, 30);
+        sb_add_string_delimeter(sb, "0", 30);
+        sb_add_string_delimeter(sb, item->definition->sprite, 30);
+    }
+
+    sb_add_string(sb, "/");
+
+    char *str = strdup(sb->data);
+    sb_cleanup(sb);
+
+    return str;
 }
 
 /**
