@@ -54,7 +54,7 @@ void inventory_change_view(inventory *inventory, char *strip_view) {
         inventory->hand_strip_page_index++;
     }
 
-    if (strcmp(strip_view, "prew") == 0) {
+    if (strcmp(strip_view, "prev") == 0) {
         if (inventory->hand_strip_page_index > 0) {
             inventory->hand_strip_page_index--;
         }
@@ -70,7 +70,7 @@ void inventory_change_view(inventory *inventory, char *strip_view) {
  *
  * @param inventory the inventory to get the casts for
  */
-char *inventory_get_casts(inventory *inventory, int *count) {
+char *inventory_get_casts(inventory *inventory) {
     stringbuilder *sb = sb_create();
 
     int start_id = 0;
@@ -92,8 +92,6 @@ char *inventory_get_casts(inventory *inventory, int *count) {
             inventory->hand_strip_page_index--;
             goto calculate_strip_offset;
         }
-
-        *count = *count + 1;
 
         for (int strip_slot_id = start_id; strip_slot_id < end_id; strip_slot_id++) {
             item *item;

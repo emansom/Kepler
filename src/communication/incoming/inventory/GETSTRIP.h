@@ -10,13 +10,12 @@ void GETSTRIP(player *player, incoming_message *im) {
     inventory *inv = (inventory *) player->inventory;
     inventory_change_view(inv, strip_view);
 
-    int total_count = 0;
-    char *item_casts = inventory_get_casts(inv, &total_count);
+    char *item_casts = inventory_get_casts(inv);
 
     outgoing_message *om = om_create(140); // "BL"
     sb_add_string(om->sb, item_casts);
     sb_add_char(om->sb, 13);
-    sb_add_int(om->sb, total_count);
+    sb_add_int(om->sb, (int) list_size(inv->items));
     player_send(player, om);
     om_cleanup(om);
 

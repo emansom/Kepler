@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','2',72,0,7,'I''m a new xddd','1523995990');
+INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','9905',72,0,7,'I''m a new xddd','1524060096');
 INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523463369');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
@@ -1833,7 +1833,8 @@ INSERT INTO `items_definitions` VALUES (2980,'0','hw_ero3','',1,1,0,'P');
 INSERT INTO `items_definitions` VALUES (2982,'0','pillar0','',1,1,0,'P');
 INSERT INTO `items_definitions` VALUES (2985,'0','hw_ero4','',1,1,0,'P');
 CREATE TABLE IF NOT EXISTS `items` (
-	`id`	INTEGER,
+	`id`	INTEGER PRIMARY KEY AUTOINCREMENT,
+	`user_id`	INTEGER,
 	`room_id`	INTEGER,
 	`definition_id`	INTEGER,
 	`x`	TEXT,
@@ -1842,6 +1843,18 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`rotation`	INTEGER,
 	`custom_data`	TEXT
 );
+INSERT INTO `items` VALUES (2,1,0,2408,'0','0',0,0,'601');
+INSERT INTO `items` VALUES (3,1,0,1618,'0','0',0,0,'');
+INSERT INTO `items` VALUES (4,1,0,1145,'0','0',0,0,'');
+INSERT INTO `items` VALUES (5,1,0,1825,'0','0',0,0,'');
+INSERT INTO `items` VALUES (6,1,0,1454,'0','0',0,0,'');
+INSERT INTO `items` VALUES (7,1,0,1304,'0','0',0,0,'alex	04-18-2018	Hello :o');
+INSERT INTO `items` VALUES (8,1,0,2409,'0','0',0,0,'508');
+INSERT INTO `items` VALUES (9,1,0,2409,'0','0',0,0,'507');
+INSERT INTO `items` VALUES (10,1,0,1029,'0','0',0,0,'');
+INSERT INTO `items` VALUES (11,1,0,1007,'0','0',0,0,'');
+INSERT INTO `items` VALUES (12,1,0,1044,'0','0',0,0,'');
+INSERT INTO `items` VALUES (13,1,0,1116,'0','0',0,0,'');
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,
 	`order_id`	INTEGER,

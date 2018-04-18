@@ -51,9 +51,16 @@ void GRPC(player *player, incoming_message *message) {
     if (!item->is_package) {
         char *extra_data = get_argument(content, "\r", 4);
 
+
         if (item->definition->behaviour->is_decoration) {
             if (is_numeric(extra_data)) {
                 custom_data = strdup(extra_data);
+            }
+        } else {
+            if (item->item_specialspriteid > 0) {
+                char num[10];
+                sprintf(num, "%i", item->item_specialspriteid);
+                custom_data = strdup(num);
             }
         }
 
