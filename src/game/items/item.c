@@ -52,6 +52,22 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     return room_item;
 }
 
+bool item_is_walkable(item *item) {
+    if (item->definition->behaviour->can_lay_on_top) {
+        return true;
+    }
+
+    if (item->definition->behaviour->can_sit_on_top) {
+        return true;
+    }
+
+    if (item->definition->behaviour->can_stand_on_top) {
+        return true;
+    }
+
+    return false;
+}
+
 char *item_as_string(item *item) {
     stringbuilder *sb = sb_create();
 

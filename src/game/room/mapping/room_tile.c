@@ -3,8 +3,10 @@
 #include "room_tile.h"
 
 #include "game/items/item.h"
+
 #include "game/room/room.h"
 #include "game/room/mapping/room_model.h"
+#include "game/room/mapping/room_map.h"
 
 /**
  * Create the room tile with the list of items and players on each tile.
@@ -15,17 +17,46 @@
 room_tile *room_tile_create(room *room, int x, int y) {
     room_tile *tile = malloc(sizeof(room_tile));
     tile->room = room;
-
+    tile->x = x;
+    tile->y = y;
     list_new(&tile->items);
     list_new(&tile->players);
     return tile;
 }
 
-void room_tile_reset(room_tile *tile, room *room, int x, int y) {
+void room_tile_reset(room_tile *tile, room *room) {
     tile->highest_item = NULL;
-    tile->tile_height =  room->room_data->model_data->heights[x][y];
+    tile->tile_height =  room->room_data->model_data->heights[tile->x][tile->y];
     list_remove_all(tile->items);
     list_remove_all(tile->players);
+}
+
+bool room_tile_is_walkable(room *room, int x, int y) {
+    if (x < 0 || y < 0) {
+        return false;
+    }
+
+    if (x >= room->room_data->model_data->map_size_x || y >= room->room_data->model_data->map_size_y) {
+        return false;
+    }
+
+    if (room->room_data->model_data->states[x][y] == CLOSED) {
+        return false;
+    }
+
+    room_tile *tile = room->room_map->map[x][y];
+
+    if (tile == NULL) {
+        return false;
+    }
+
+    if (tile->highest_item != NULL) {
+        if (!item_is_walkable(tile->highest_item)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**

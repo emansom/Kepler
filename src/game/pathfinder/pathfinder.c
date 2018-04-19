@@ -92,24 +92,12 @@ Deque *create_path(room_user *room_user) {
 int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move) {
     room *room_instance = (void *)room_user->room;
 
-    if (from.x < 0 || from.y < 0 || to.x < 0 || to.y < 0) {
-        return 0;
+    if (!room_tile_is_walkable(room_instance, from.x, from.y)) {
+        return false;
     }
 
-    if (from.x >= room_instance->room_data->model_data->map_size_x || from.y >= room_instance->room_data->model_data->map_size_y) {
-        return 0;
-    }
-
-    if (to.x >= room_instance->room_data->model_data->map_size_x || to.y >= room_instance->room_data->model_data->map_size_y) {
-        return 0;
-    }
-
-    if (room_instance->room_data->model_data->states[to.x][to.y] == CLOSED) {
-        return 0;
-    }
-
-    if (room_instance->room_data->model_data->states[from.x][from.y] == CLOSED) {
-        return 0;
+    if (!room_tile_is_walkable(room_instance, to.x, to.y)) {
+        return false;
     }
 
     double old_height = room_instance->room_map->map[from.x][from.y]->tile_height;
@@ -145,11 +133,13 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
     }
 
     if (to_item != NULL) {
-        if (strcmp(to_item->definition->sprite, "poolLift") == 0 || strcmp(to_item->definition->sprite, "poolBooth") == 0) {
+        if (strcmp(to_item->definition->sprite, "poolLift") == 0 ||
+            strcmp(to_item->definition->sprite, "poolBooth") == 0) {
             if (to_item->current_program_state != NULL && strcmp(to_item->current_program_state, "close") == 0) {
                 return 0;
             } else {
-                return strcmp(to_item->definition->sprite, "poolLift") == 0 ? strlen(room_user->player->player_data->pool_figure) > 0 : true;
+                return strcmp(to_item->definition->sprite, "poolLift") == 0 ?
+                       strlen(room_user->player->player_data->pool_figure) > 0 : true;
             }
         }
 
@@ -157,14 +147,32 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             && strcmp(to_item->definition->sprite, "queue_tile2") == 0) {
 
             if (to_item->coords->x == 21 && to_item->coords->y == 9) {
-                return room_user->player->player_data->tickets > 0 && strlen(room_user->player->player_data->pool_figure) > 0;
+                return room_user->player->player_data->tickets > 0 &&
+                       strlen(room_user->player->player_data->pool_figure) > 0;
             } else {
                 return false;
             }
         }
-
-        return to_item->definition->behaviour->can_stand_on_top || to_item->definition->behaviour->can_sit_on_top || to_item->definition->behaviour->can_lay_on_top;
     }
+
+    if (from.x != room_instance->room_data->model_data->door_x
+        && from.y != room_instance->room_data->model_data->door_y) {
+
+        if (!room_tile_is_walkable(room_instance, from.x, from.y)) {
+            return false;
+        }
+
+        if (from.x != room_user->current->x && from.y != room_user->current->y) {
+            if (from_item != NULL) {
+                if (!is_final_move) {
+                    return from_item->definition->behaviour->can_stand_on_top;
+                } else {
+                    return item_is_walkable(from_item);
+                }
+            }
+        }
+    }
+    //return to_item->definition->behaviour->can_stand_on_top || to_item->definition->behaviour->can_sit_on_top || to_item->definition->behaviour->can_lay_on_top;
 
     return true;
 }

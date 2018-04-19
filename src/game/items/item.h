@@ -1,6 +1,8 @@
 #ifndef ITEM_H
 #define ITEM_H
 
+#include <shared.h>
+
 typedef struct coord_s coord;
 typedef struct item_definition_s item_definition;
 
@@ -15,6 +17,7 @@ typedef struct item_s {
 } item;
 
 item *item_create(int id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data);
+bool item_is_walkable(item *item);
 char *item_as_string(item *item);
 char *item_strip_string(item *item, int strip_slot_id);
 void item_assign_program(item*, char*);

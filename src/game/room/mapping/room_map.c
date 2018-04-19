@@ -69,7 +69,7 @@ void room_map_regenerate(room *room) {
     for (int x = 0; x < room->room_data->model_data->map_size_x; x++) { 
         for (int y = 0; y < room->room_data->model_data->map_size_y; y++) { 
             room_tile *tile = room->room_map->map[x][y];
-            room_tile_reset(tile, room, x, y);
+            room_tile_reset(tile, room);
         }
     }
 
