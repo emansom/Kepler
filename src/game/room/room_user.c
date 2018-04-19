@@ -146,7 +146,6 @@ void stop_walking(room_user *room_user, bool is_silent) {
         }
 
         if (item != NULL) {
-            printf("item stop: %s\n", item->definition->sprite);
             if (item->definition->behaviour->can_sit_on_top) {
                 char sit_height[11];
                 sprintf(sit_height, " %1.f", item->definition->top_height);
