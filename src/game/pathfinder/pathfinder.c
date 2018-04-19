@@ -89,7 +89,7 @@ Deque *create_path(room_user *room_user) {
  * @param is_final_move
  * @return
  */
-int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move) {
+int is_valid_tile(room_user *room_user, coord from, coord to, bool is_final_move) {
     room *room_instance = (void *)room_user->room;
 
     if (!room_tile_is_walkable(room_instance, from.x, from.y)) {
@@ -126,7 +126,6 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             if (strcmp(room_user->room->room_data->model_data->model_name, "pool_b") == 0
                 && strcmp(from_item->definition->sprite, "queue_tile2") == 0
                 && strcmp(to_item->definition->sprite, "queue_tile2") == 0) {
-
                 return true;
             }
         }
@@ -154,25 +153,6 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             }
         }
     }
-
-    if (from.x != room_instance->room_data->model_data->door_x
-        && from.y != room_instance->room_data->model_data->door_y) {
-
-        if (!room_tile_is_walkable(room_instance, from.x, from.y)) {
-            return false;
-        }
-
-        if (from.x != room_user->current->x && from.y != room_user->current->y) {
-            if (from_item != NULL) {
-                if (!is_final_move) {
-                    return from_item->definition->behaviour->can_stand_on_top;
-                } else {
-                    return item_is_walkable(from_item);
-                }
-            }
-        }
-    }
-    //return to_item->definition->behaviour->can_stand_on_top || to_item->definition->behaviour->can_sit_on_top || to_item->definition->behaviour->can_lay_on_top;
 
     return true;
 }
@@ -218,7 +198,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
             tmp.x = p->current->x + DIAGONAL_MOVE_POINTS[i].x;
             tmp.y = p->current->y + DIAGONAL_MOVE_POINTS[i].y;
 
-            int is_final_move = (tmp.x == room_user->goal->x && tmp.y == room_user->goal->y);
+            bool is_final_move = (tmp.x == room_user->goal->x && tmp.y == room_user->goal->y);
 
             c.x = p->current->x;
             c.y = p->current->y;

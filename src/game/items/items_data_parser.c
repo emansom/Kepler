@@ -79,6 +79,7 @@ List *item_parser_get_items(char *model) {
             || strcmp(room_item->definition->sprite, "k") == 0
             || strcmp(room_item->definition->sprite, "shift1") == 0) {
             room_item->definition->behaviour->can_sit_on_top = true;
+            room_item->definition->behaviour->can_stand_on_top = false;
             room_item->definition->top_height = 1;
         } else {
             room_item->definition->behaviour->can_sit_on_top = false;
