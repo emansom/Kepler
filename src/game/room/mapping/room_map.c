@@ -8,6 +8,7 @@
 #include "room_map.h"
 
 #include "game/pathfinder/coord.h"
+#include "game/pathfinder/affected_tiles.h"
 
 #include "game/items/item.h"
 #include "game/items/definition/item_definition.h"
@@ -99,16 +100,42 @@ void room_map_add_items(room *room) {
             continue;
         }
 
-        tile->highest_item = item;
         room_tile_add_item(tile, item);
+
+        if (tile->tile_height < item_total_height(item)) {
+            tile->tile_height = item_total_height(item);
+            tile->highest_item = item;
+
+            List *affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, item->coords->x, item->coords->y, item->coords->rotation);
+
+            for (size_t j = 0; j < list_size(affected_tiles); j++) {
+                coord *pos;
+                list_get_at(affected_tiles, j, (void*)&pos);
+
+                if (pos->x == item->coords->x && pos->y == item->coords->y) {
+                    continue;
+                }
+
+                room_tile *affected_tile = room->room_map->map[pos->x][pos->y];
+
+                if (affected_tile == NULL) {
+                    continue;
+                }
+
+                affected_tile->tile_height = item_total_height(item);
+                affected_tile->highest_item = item;
+
+                free(pos);
+            }
+
+            list_destroy(affected_tiles);
+        }
 
         if (item->definition->behaviour->is_public_space_object) {
             pool_setup_redirections(room, item);
         }
     }
 }
-
-
 
 /**
  * Add a specific item to the room map

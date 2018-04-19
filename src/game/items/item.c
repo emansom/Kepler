@@ -50,8 +50,7 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
 char *item_as_string(item *item) {
     stringbuilder *sb = sb_create();
 
-    if (item->definition->behaviour->is_public_space_object) {
-
+    if (item->definition->behaviour->is_wall_item) {
 
 
     } else {
@@ -159,6 +158,11 @@ void item_assign_program(item *room_item, char *program_state) {
     } else {
         room_item->current_program_state = NULL;
     }
+}
+
+double item_total_height(item *item) {
+    double height = item->coords->z + item->definition->stack_height;
+    return height;
 }
 
 /**

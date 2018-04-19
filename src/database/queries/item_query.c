@@ -34,7 +34,6 @@ List *item_query_get_inventory(int user_id) {
             break;
         }
 
-        //item *item_create(int id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data)
         item *item = item_create(
             sqlite3_column_int(stmt, 0),
             sqlite3_column_int(stmt, 1),
@@ -52,6 +51,47 @@ List *item_query_get_inventory(int user_id) {
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
 
+    return items;
+}
+
+List *item_query_get_room_items(int room_id) {
+    List *items;
+    list_new(&items);
+
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "SELECT id,room_id,definition_id,x,y,z,rotation,custom_data FROM items WHERE room_id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, room_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    while (true) {
+        status = sqlite3_step(stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        item *item = item_create(
+                sqlite3_column_int(stmt, 0),
+                sqlite3_column_int(stmt, 1),
+                sqlite3_column_int(stmt, 2),
+                sqlite3_column_int(stmt, 3),
+                sqlite3_column_int(stmt, 4),
+                sqlite3_column_double(stmt, 5),
+                sqlite3_column_int(stmt, 6),
+                strdup((char *) sqlite3_column_text(stmt, 7))
+        );
+
+        list_add(items, item);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
 
     return items;
 }
@@ -109,8 +149,8 @@ void item_query_save(item *item) {
         sqlite3_bind_int(stmt, 4, item->coords->y);
         sqlite3_bind_double(stmt, 5, item->coords->z);
         sqlite3_bind_int(stmt, 6, item->coords->rotation);
-        sqlite3_bind_text(stmt, 8, item->custom_data, (int) strlen(item->custom_data), SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 7, item->id);
+        sqlite3_bind_text(stmt, 7, item->custom_data, (int) strlen(item->custom_data), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 8, item->id);
 
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));

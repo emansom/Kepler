@@ -152,7 +152,10 @@ void stop_walking(room_user *room_user, bool is_silent) {
 
         if (item != NULL) {
             if (item->definition->behaviour->can_sit_on_top) {
-                room_user_add_status(room_user, "sit", " 1.0", -1, "", 0, 0);
+                char sit_height[11];
+                sprintf(sit_height, " %1.f", item->definition->top_height);
+
+                room_user_add_status(room_user, "sit", sit_height, -1, "", 0, 0);
                 coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
                 needs_update = true;
             }

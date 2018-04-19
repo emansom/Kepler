@@ -85,7 +85,7 @@ void process_user(player *player) {
             coord *next;
             deque_remove_first(room_entity->walk_list, (void*)&next);
 
-            next->z = room_entity->room->room_data->model_data->heights[next->x][next->y];
+            next->z = room_entity->room->room_map->map[next->x][next->y]->tile_height;
 
             char value[30];
             sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);

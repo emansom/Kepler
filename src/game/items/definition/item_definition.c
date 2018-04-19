@@ -15,9 +15,21 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
     def->colour = strdup(colour);
     def->length = length;
     def->width = width;
-    def->top_height = top_height;
+    def->stack_height = top_height;
+    def->top_height = def->stack_height;
     def->behaviour_data = strdup(behaviour);
     def->behaviour = item_behaviour_parse(def);
+
+    if (!def->behaviour->canStackOnTop) {
+        def->stack_height = 0;
+    }
+
+
+
+    if (def->stack_height == 0) {
+        def->stack_height = 0.001;
+    }
+
     return def;
 }
 
@@ -29,9 +41,14 @@ item_definition *item_definition_create_blank() {
     def->colour = strdup("");
     def->length = 1;
     def->width = 1;
-    def->top_height = 1;
+    def->stack_height = 0;
     def->behaviour_data = strdup("");
     def->behaviour = item_behaviour_parse(def);
+
+    if (def->stack_height == 0) {
+        def->stack_height = 0.001;
+    }
+
     return def;
 }
 

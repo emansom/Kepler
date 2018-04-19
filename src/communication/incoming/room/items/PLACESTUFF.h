@@ -3,7 +3,10 @@
 
 #include "game/inventory/inventory.h"
 #include "game/player/player.h"
+
 #include "game/room/room.h"
+#include "game/room/mapping/room_map.h"
+
 #include "game/items/item.h"
 
 void PLACESTUFF(player *player, incoming_message *message) {
@@ -53,8 +56,8 @@ void PLACESTUFF(player *player, incoming_message *message) {
         item->coords->rotation = 0;
     }
 
-
     room_map_add_item(player->room_user->room, item);
+    list_remove(inv->items, item, NULL);
 
     cleanup:
         free(content);

@@ -10,6 +10,7 @@ typedef struct item_definition_s {
     char *colour;
     int length;
     int width;
+    double stack_height;
     double top_height;
     char *behaviour_data;
     item_behaviour *behaviour;

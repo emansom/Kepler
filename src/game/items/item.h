@@ -18,6 +18,7 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
 char *item_as_string(item *item);
 char *item_strip_string(item *item, int strip_slot_id);
 void item_assign_program(item*, char*);
+double item_total_height(item *item);
 void item_dispose(item *item);
 
 #endif

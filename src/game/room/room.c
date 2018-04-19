@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-#include <game/room/manager/room_entity_manager.h>
 
 #include "shared.h"
 
@@ -17,8 +16,10 @@
 
 #include "mapping/room_model.h"
 #include "mapping/room_model_manager.h"
-
 #include "mapping/room_map.h"
+
+#include "manager/room_item_manager.h"
+#include "manager/room_entity_manager.h"
 
 #include "tasks/walk_task.h"
 #include "tasks/status_task.h"
@@ -32,6 +33,8 @@
 
 #include "database/queries/player_query.h"
 #include "communication/messages/outgoing_message.h"
+
+void room_load_data(room *room);
 
 /**
  * Create a room instance.
@@ -126,7 +129,7 @@ void room_enter(room *room, player *player) {
     }
 
     if (list_size(room->users) == 0) {
-        room_map_init(room);
+        room_load_data(room);
     }
 
     if (room->room_data->model_data == NULL) {
@@ -172,6 +175,16 @@ void room_enter(room *room, player *player) {
     /*outgoing_message *om = om_create(73); // "AI"
     player_send(player, om);
     om_cleanup(om);*/
+}
+
+/**
+ * Used to load data if they're the first to enter the room.
+ *
+ * @param room the room to load the data for
+ */
+void room_load_data(room *room) {
+    room_item_manager_load(room);
+    room_map_init(room);
 }
 
 /**
@@ -310,6 +323,8 @@ void room_dispose(room *room) {
     if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public room model
         return; // Prevent public rooms
     }
+
+    room_item_manager_dispose(room);
 
     if (player_manager_find_by_id(room->room_data->owner_id) != NULL) {
         return;

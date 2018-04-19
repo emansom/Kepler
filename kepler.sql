@@ -220,7 +220,7 @@ CREATE TABLE IF NOT EXISTS `items_definitions` (
 	`colour`	TEXT,
 	`length`	INTEGER,
 	`width`	INTEGER,
-	`top_height`	NUMERIC,
+	`stack_height`	NUMERIC,
 	`behaviour`	TEXT
 );
 INSERT INTO `items_definitions` VALUES (1001,'1337','shelves_norja','#ffffff,#F7EBBC',1,1,2,'S');
