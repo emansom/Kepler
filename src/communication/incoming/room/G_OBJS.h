@@ -55,9 +55,6 @@ void G_OBJS(player *player, incoming_message *message) {
 
         char *item_string = item_as_string(item);
         sb_add_string(om->sb, item_string);
-
-        printf("item string: %s\n", item_string);
-
         free(item_string);
     }
 

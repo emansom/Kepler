@@ -12,6 +12,7 @@ typedef struct room_map_s {
 void room_map_init(room *);
 void room_map_regenerate(room *);
 void room_map_add_item(room *room, item *item);
+void room_map_remove_item(room *room, item *item);
 void room_map_item_adjustment(room *room, item *item, bool rotation);
 void room_map_destroy(room*);
 

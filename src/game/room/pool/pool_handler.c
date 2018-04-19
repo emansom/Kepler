@@ -177,7 +177,7 @@ void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
 
     room_entity->current->x = warp.x;
     room_entity->current->y = warp.y;
-    room_entity->current->z = room_entity->room->room_data->model_data->heights[warp.x][warp.y];
+    room_entity->current->z = room_entity->room->room_map->map[warp.x][warp.y]->tile_height;
 
     if (!exit) {
         room_user_add_status(room_entity, "swim", "", -1, "", 0, 0);

@@ -38,6 +38,10 @@ void sb_ensure_capacity(stringbuilder *sb, int length) {
  * @param data the string
  */
 void sb_add_string(stringbuilder *sb, const char *data) {
+    if (data == NULL) {
+        return;
+    }
+
     sb_ensure_capacity(sb, strlen(data) + 1); //+1 for terminated string
 
     for (int i = 0; i < strlen(data); i++) {

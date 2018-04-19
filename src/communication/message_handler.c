@@ -79,6 +79,7 @@
 
 // Room items
 #include "communication/incoming/room/items/PLACESTUFF.h"
+#include "communication/incoming/room/items/ADDSTRIPITEM.h"
 
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
@@ -179,6 +180,7 @@ void message_handler_init() {
 
     // Inventory
     message_requests[65] = GETSTRIP;
+    message_requests[67] = ADDSTRIPITEM;
 
     /*Client [0.0.0.0] incoming data: 203 / CK@Dalex@F123456
 hello!

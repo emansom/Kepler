@@ -112,8 +112,8 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
         return 0;
     }
 
-    double old_height = room_instance->room_data->model_data->heights[from.x][from.y];
-    double new_height = room_instance->room_data->model_data->heights[to.x][to.y];
+    double old_height = room_instance->room_map->map[from.x][from.y]->tile_height;
+    double new_height = room_instance->room_map->map[to.x][to.y]->tile_height;
 
     if (old_height - 4 >= new_height) {
         return 0;
@@ -163,16 +163,10 @@ int is_valid_tile(room_user *room_user, coord from, coord to, int is_final_move)
             }
         }
 
-        if (from_item == NULL) {
-            if (is_final_move && (to_item->definition->behaviour->can_sit_on_top || to_item->definition->behaviour->can_stand_on_top)) {
-                return 1;
-            } else {
-                return 0;
-            }
-        }
+        return to_item->definition->behaviour->can_stand_on_top || to_item->definition->behaviour->can_sit_on_top || to_item->definition->behaviour->can_lay_on_top;
     }
 
-    return 1; // 1 for true
+    return true;
 }
 
 /**

@@ -33,6 +33,11 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     item *room_item = malloc(sizeof(item));
     room_item->id = id;
     room_item->room_id = room_id;
+
+    if (custom_data == NULL) {
+        custom_data = strdup("");
+    }
+
     room_item->custom_data = custom_data;
     room_item->current_program = NULL;
     room_item->current_program_state = NULL;

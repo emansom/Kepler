@@ -24,8 +24,6 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
         def->stack_height = 0;
     }
 
-
-
     if (def->stack_height == 0) {
         def->stack_height = 0.001;
     }
@@ -42,6 +40,7 @@ item_definition *item_definition_create_blank() {
     def->length = 1;
     def->width = 1;
     def->stack_height = 0;
+    def->top_height = 1;
     def->behaviour_data = strdup("");
     def->behaviour = item_behaviour_parse(def);
 

@@ -69,8 +69,7 @@ void room_map_regenerate(room *room) {
     for (int x = 0; x < room->room_data->model_data->map_size_x; x++) { 
         for (int y = 0; y < room->room_data->model_data->map_size_y; y++) { 
             room_tile *tile = room->room_map->map[x][y];
-            list_remove_all(tile->items);
-            list_remove_all(tile->players);
+            room_tile_reset(tile, room, x, y);
         }
     }
 
@@ -102,7 +101,9 @@ void room_map_add_items(room *room) {
 
         room_tile_add_item(tile, item);
 
-        if (tile->tile_height < item_total_height(item)) {
+        if (item->definition->behaviour->is_public_space_object
+            || tile->tile_height < item_total_height(item)) {
+
             tile->tile_height = item_total_height(item);
             tile->highest_item = item;
 
@@ -154,6 +155,7 @@ void room_map_add_item(room *room, item *item) {
         room_map_regenerate(room);
 
         item_str = item_as_string(item);
+
         outgoing_message *om = om_create(93); // "A]"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
@@ -162,6 +164,33 @@ void room_map_add_item(room *room, item *item) {
     item_query_save(item);
     free(item_str);
 }
+
+void room_map_remove_item(room *room, item *item) {
+    item->room_id = room->room_id;
+    list_remove(room->items, item, (void*)&item);
+
+    char *item_str = NULL;
+
+    if (item->definition->behaviour->is_wall_item) {
+
+    } else {
+        room_map_regenerate(room);
+        item_str = item_as_string(item);
+
+        outgoing_message *om = om_create(94); // "A^"
+        sb_add_string(om->sb, item_str);
+        room_send(room, om);
+    }
+
+    item->room_id = 0;
+    item->coords->x = 0;
+    item->coords->y = 0;
+    item->coords->z = 0;
+
+    item_query_save(item);
+    free(item_str);
+}
+
 /**
  * Handle item adjustment.
  *

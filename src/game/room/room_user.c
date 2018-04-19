@@ -78,18 +78,13 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-
-
     //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
-    /*room_tile *tile = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
+    /*room_tile *tiles = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
-    if (tile != NULL && tile->highest_item != NULL) {
-        item *item = tile->highest_item;
-
-        strcmp(to_item->class_name, "queue_tile2")
-
-        printf("Item: %s\n", item->class_name);
+    if (tile != NULL && tiles->highest_item != NULL) {
+        item *items = tiles->highest_item;
+        printf("Item: %s\n", items->definition->sprite);
     }*/
 
     Deque *path = create_path(room_user);
@@ -151,6 +146,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
         }
 
         if (item != NULL) {
+            printf("item stop: %s\n", item->definition->sprite);
             if (item->definition->behaviour->can_sit_on_top) {
                 char sit_height[11];
                 sprintf(sit_height, " %1.f", item->definition->top_height);
