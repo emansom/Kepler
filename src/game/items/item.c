@@ -47,6 +47,44 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     return room_item;
 }
 
+char *item_as_string(item *item) {
+    stringbuilder *sb = sb_create();
+
+    if (item->definition->behaviour->is_public_space_object) {
+
+
+
+    } else {
+        if (!item->definition->behaviour->is_public_space_object) {
+            sb_add_int_delimeter(sb, item->id, 2);
+            sb_add_string_delimeter(sb, item->definition->sprite, 2);
+            sb_add_wired(sb, item->coords->x);
+            sb_add_wired(sb, item->coords->y);
+            sb_add_wired(sb, item->definition->length);
+            sb_add_wired(sb, item->definition->width);
+            sb_add_wired(sb, item->coords->rotation);
+            sb_add_float_delimeter(sb, item->coords->z, 2);
+            sb_add_string_delimeter(sb, item->definition->colour, 2);
+            sb_add_string_delimeter(sb, "", 2);
+            sb_add_wired(sb, 0);
+            sb_add_string_delimeter(sb, item->custom_data, 2);
+        } else {
+            sb_add_string_delimeter(sb, item->custom_data, ' ');
+            sb_add_string_delimeter(sb, item->definition->sprite, ' ');
+            sb_add_int_delimeter(sb, item->coords->x, ' ');
+            sb_add_int_delimeter(sb, item->coords->y, ' ');
+            sb_add_int_delimeter(sb, (int) item->coords->z, ' ');
+            sb_add_int(sb, item->coords->rotation);
+            sb_add_char(sb, 13);
+        }
+    }
+
+    char *str = strdup(sb->data);
+    sb_cleanup(sb);
+
+    return str;
+}
+
 /**
  * Get the string used for packets to append for the hand.
  *

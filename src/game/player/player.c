@@ -106,7 +106,6 @@ void player_send(player *p, outgoing_message *om) {
     req->data = buffer.base;
 
     int response = uv_write(req, (uv_stream_t *) p->stream, &buffer, 1, &server_on_write);
-    check_uv(response);
 }
 
 /**

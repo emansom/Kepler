@@ -2,6 +2,7 @@
 #define INVENTORY_H
 
 typedef struct list_s List;
+typedef struct item_s item;
 typedef struct player_s player;
 
 typedef struct inventory_s {
@@ -11,6 +12,7 @@ typedef struct inventory_s {
 
 inventory *inventory_create();
 void inventory_init(player *player);
+item *inventory_get_item(inventory *inventory, int item_id);
 void inventory_change_view(inventory *inventory, char *strip_view);
 char *inventory_get_casts(inventory*);
 void inventory_dispose(inventory *inventory);

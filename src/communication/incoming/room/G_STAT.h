@@ -30,6 +30,5 @@ void G_STAT(player *session, incoming_message *message) {
 
     player_send(session, players);
     om_cleanup(players);
-
     session->room_user->needs_update = 1;
 }

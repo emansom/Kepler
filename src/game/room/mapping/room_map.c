@@ -1,8 +1,8 @@
-#include <game/items/definition/item_definition.h>
 #include "stdlib.h"
 #include "stdio.h"
 
 #include "list.h"
+#include "database/queries/item_query.h"
 
 #include "room_tile.h"
 #include "room_map.h"
@@ -10,12 +10,36 @@
 #include "game/pathfinder/coord.h"
 
 #include "game/items/item.h"
+#include "game/items/definition/item_definition.h"
 
 #include "game/room/room.h"
 #include "game/room/mapping/room_model.h"
 #include "game/room/pool/pool_handler.h"
 
+#include "communication/messages/outgoing_message.h"
+
+#include "util/stringbuilder.h"
+
 void room_map_add_items(room *room);
+
+/**
+ * Sort list by heights.
+ *
+ * @param e1 the first item
+ * @param e2 the second item
+ * @return whether to sort
+ */
+int cmp(void const *e1, void const *e2) {
+    item *i = (*((item**) e1));
+    item *j = (*((item**) e2));
+
+    if (i->coords->z < j->coords->z)
+        return -1;
+    if (i->coords->z == j->coords->z)
+        return 0;
+
+    return 1;
+}
 
 /**
  * Initalises the room map for the furniture collision.
@@ -28,7 +52,7 @@ void room_map_init(room *room) {
 
         for (int x = 0; x < room->room_data->model_data->map_size_x; x++) {
             for (int y = 0; y < room->room_data->model_data->map_size_y; y++) {
-                room->room_map->map[x][y] = room_tile_create(room);
+                room->room_map->map[x][y] = room_tile_create(room, x, y);
             }
         }
     }
@@ -59,23 +83,92 @@ void room_map_regenerate(room *room) {
  * @param room the room instance
  */
 void room_map_add_items(room *room) {
-    for (size_t i = 0; i < list_size(room->items); i++) {
-        item *public_item;
-        list_get_at(room->items, i, (void*)&public_item);
+    list_sort_in_place(room->items, cmp);
 
-        room_tile *tile = room->room_map->map[public_item->coords->x][public_item->coords->y];
+    for (size_t i = 0; i < list_size(room->items); i++) {
+        item *item;
+        list_get_at(room->items, i, (void*)&item);
+
+        if (item->definition->behaviour->is_wall_item) {
+            continue;
+        }
+
+        room_tile *tile = room->room_map->map[item->coords->x][item->coords->y];
 
         if (tile == NULL) {
             continue;
         }
 
-        tile->highest_item = public_item;
-        room_tile_add_item(tile, public_item);
+        tile->highest_item = item;
+        room_tile_add_item(tile, item);
 
-        if (public_item->definition->behaviour->isPublicSpaceObject) {
-            pool_setup_redirections(room, public_item);
+        if (item->definition->behaviour->is_public_space_object) {
+            pool_setup_redirections(room, item);
         }
     }
+}
+
+
+
+/**
+ * Add a specific item to the room map
+ *
+ * @param room the room to add the map item to
+ * @param item the item to add
+ */
+void room_map_add_item(room *room, item *item) {
+    item->room_id = room->room_id;
+    list_add(room->items, item);
+
+    char *item_str = NULL;
+
+    if (!item->definition->behaviour->is_wall_item) {
+        room_map_item_adjustment(room, item, false);
+        room_map_regenerate(room);
+
+        item_str = item_as_string(item);
+        outgoing_message *om = om_create(93); // "A]"
+        sb_add_string(om->sb, item_str);
+        room_send(room, om);
+    }
+
+    item_query_save(item);
+    free(item_str);
+}
+/**
+ * Handle item adjustment.
+ *
+ * @param moveItem the item
+ * @param rotation the rotation only
+ */
+void room_map_item_adjustment(room *room, item *item, bool rotation) {
+    if (rotation) {
+
+    } else {
+        room_tile *tile = room->room_map->map[item->coords->x][item->coords->y];
+
+        if (tile == NULL) {
+            return;
+        }
+
+        item->coords->z = tile->tile_height;
+    }
+    /*if (rotation) {
+        for (Item item : this.getTile(moveItem.getPosition().getX(), moveItem.getPosition().getY()).getItems()) {
+            if (item.getId() == moveItem.getId()) {
+                continue;
+            }
+
+            if (item.getPosition().getZ() < moveItem.getPosition().getZ()) {
+                continue;
+            }
+
+            item.getPosition().setRotation(moveItem.getPosition().getRotation());
+            item.updateStatus();
+        }
+    } else {
+        moveItem.getPosition().setZ(this.getTileHeight(moveItem.getPosition().getX(), moveItem.getPosition().getY()));
+    }*/
 }
 
 /**

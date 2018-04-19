@@ -10,9 +10,10 @@ typedef struct room_tile_s {
     room *room;
     List *items;
     List *players;
+    double tile_height;
 } room_tile;
 
-room_tile *room_tile_create(room *room);
+room_tile *room_tile_create(room *room, int x, int y);
 void room_tile_add_item(room_tile*, item*);
 void room_tile_destroy(room_tile*, room*);
 

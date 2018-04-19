@@ -44,6 +44,8 @@ void G_USRS(player *p, incoming_message *message) {
     append_user_list(players, p);
     room_send(room, players);
 
+    room_refresh_rights(room, p);
+
 
     /*char instance_id[11];
     sprintf(instance_id, "%i", player->player_data->id);

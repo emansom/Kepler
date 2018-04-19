@@ -13,7 +13,7 @@ typedef struct item_behaviour_s {
     bool can_stand_on_top;
     bool canStackOnTop;
     bool isRoller;
-    bool isPublicSpaceObject;
+    bool is_public_space_object;
     bool isInvisible;
     bool requiresRightsForInteraction;
     bool requiresTouchingForInteraction;

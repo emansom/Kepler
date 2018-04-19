@@ -1,8 +1,7 @@
 #include "incoming_message.h"
+
 #include "util/encoding/base64encoding.h"
 #include "util/encoding/vl64encoding.h"
-
-#include "shared.h"
 
 /**
  * Creates an incoming message give by a char array

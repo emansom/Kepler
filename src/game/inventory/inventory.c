@@ -40,6 +40,25 @@ void inventory_init(player *player) {
 }
 
 /**
+ * Get item by item id.
+ *
+ * @param item_id the item id used
+ * @return the item found
+ */
+item *inventory_get_item(inventory *inventory, int item_id) {
+    for (size_t i = 0; i < list_size(inventory->items); i++) {
+        item *item;
+        list_get_at(inventory->items, i, (void*) &item);
+
+        if (item->id == item_id) {
+            return item;
+        }
+    }
+
+    return NULL;
+}
+
+/**
  * Change the view of the inventory, used for pagination.
  *
  * @param inventory the inventory to change

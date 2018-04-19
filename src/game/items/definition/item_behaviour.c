@@ -14,7 +14,7 @@ item_behaviour *item_behaviour_create() {
     behaviour->can_stand_on_top = false;
     behaviour->canStackOnTop = false;
     behaviour->isRoller = false;
-    behaviour->isPublicSpaceObject = false;
+    behaviour->is_public_space_object = false;
     behaviour->isInvisible = false;
     behaviour->requiresRightsForInteraction = false;
     behaviour->requiresTouchingForInteraction = false;
@@ -66,7 +66,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'P') {
-            behaviour->isPublicSpaceObject = true;
+            behaviour->is_public_space_object = true;
         }
 
         if (c == 'I') {

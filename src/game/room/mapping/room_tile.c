@@ -12,10 +12,11 @@
  * @param room the room struct
  * @return the room tile struct
  */
-room_tile *room_tile_create(room *room) {
+room_tile *room_tile_create(room *room, int x, int y) {
     room_tile *tile = malloc(sizeof(room_tile));
     tile->room = room;
     tile->highest_item = NULL;
+    tile->tile_height =  room->room_data->model_data->heights[x][y];
     list_new(&tile->items);
     list_new(&tile->players);
     return tile;

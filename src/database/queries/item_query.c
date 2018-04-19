@@ -8,6 +8,9 @@
 #include "database/queries/item_query.h"
 
 #include "game/items/item.h"
+#include "game/items/definition/item_definition.h"
+
+#include "game/pathfinder/coord.h"
 
 List *item_query_get_inventory(int user_id) {
     List *items;
@@ -90,4 +93,34 @@ int item_query_create(int user_id, int room_id, int definition_id, int x, int y,
     sqlite3_close(conn);
 
     return item_id;
+}
+
+void item_query_save(item *item) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int item_id = -1;
+    int status = sqlite3_prepare(conn, "UPDATE items SET room_id = ?, definition_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ? WHERE id = ? LIMIT 1", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, item->room_id);
+        sqlite3_bind_int(stmt, 2, item->definition->id);
+        sqlite3_bind_int(stmt, 3, item->coords->x);
+        sqlite3_bind_int(stmt, 4, item->coords->y);
+        sqlite3_bind_double(stmt, 5, item->coords->z);
+        sqlite3_bind_int(stmt, 6, item->coords->rotation);
+        sqlite3_bind_text(stmt, 8, item->custom_data, (int) strlen(item->custom_data), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 7, item->id);
+
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+
 }

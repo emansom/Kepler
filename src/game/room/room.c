@@ -214,8 +214,6 @@ void room_load(room *room, player *player) {
     sb_add_int(om->sb, room->room_id);
     player_send(player, om);
     om_cleanup(om);
-
-    room_refresh_rights(room, player);
 }
 
 /**
@@ -251,7 +249,7 @@ bool room_has_rights(room *room, int user_id) {
  * @param player the player to refresh the rights for
  */
 void room_refresh_rights(room *room, player *player) {
-    char rights_value[10];
+    char rights_value[15];
     strcpy(rights_value, "");
 
     outgoing_message *om;
@@ -267,13 +265,15 @@ void room_refresh_rights(room *room, player *player) {
         player_send(player, om);
         om_cleanup(om);
 
-        strcpy(rights_value, "useradmin");
+        strcpy(rights_value, " useradmin");
     }
 
-    room_user_remove_status((room_user*) player->room_user, "flatctrl");
+    room_user *room_entity = (room_user*) player->room_user;
+    room_user_remove_status(room_entity, "flatctrl");
 
     if (room_has_rights(room, player->player_data->id) || room_is_owner(room, player->player_data->id)) {
-        room_user_add_status((room_user *) player->room_user, "flatctrl", rights_value, -1, "", -1, -1);
+        room_user_add_status(room_entity, "flatctrl", rights_value, -1, "", -1, -1);
+        room_entity->needs_update = true;
     }
 }
 
