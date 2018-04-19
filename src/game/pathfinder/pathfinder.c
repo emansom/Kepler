@@ -154,6 +154,26 @@ int is_valid_tile(room_user *room_user, coord from, coord to, bool is_final_move
         }
     }
 
+    if (from.x != room_instance->room_data->model_data->door_x
+        && from.y != room_instance->room_data->model_data->door_y) {
+
+        if (to_item != NULL) {
+            if (is_final_move) {
+                return item_is_walkable(to_item);
+            } else {
+
+                room_tile *current_tile = room_instance->room_map->map[from.x][from.y];
+
+                if (current_tile->highest_item != NULL) {
+                    return item_is_walkable(current_tile->highest_item);
+                } else {
+                    return to_item->definition->behaviour->can_stand_on_top;
+                }
+            }
+        }
+    }
+
+
     return true;
 }
 
