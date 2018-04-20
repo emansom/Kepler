@@ -85,13 +85,13 @@ void process_user(player *player) {
             coord *next;
             deque_remove_first(room_entity->walk_list, (void*)&next);
 
-            room_tile *current_tile = room_entity->room->room_map->map[room_entity->current->x][room_entity->current->y];
-            room_tile *next_tile = room_entity->room->room_map->map[next->x][next->y];
+            room_tile *tile_current = room_entity->room->room_map->map[room_entity->current->x][room_entity->current->y];
+            room_tile *tile_next = room_entity->room->room_map->map[next->x][next->y];
 
-            next->z = next_tile->tile_height;
+            tile_current->entity = NULL;
+            tile_next->entity = room_entity;
 
-            current_tile->entity = NULL;
-            next_tile->entity = room_entity;
+            next->z = tile_next->tile_height;
 
             char value[30];
             sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
@@ -110,6 +110,6 @@ void process_user(player *player) {
             stop_walking(room_entity, false);
         }
 
-        player->room_user->needs_update = 1;
+        player->room_user->needs_update = true;
     }
 }

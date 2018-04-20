@@ -72,7 +72,7 @@ void walk_to(room_user *room_user, int x, int y) {
             return;
         }
     }
-    
+
     if (room_user->next != NULL) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;

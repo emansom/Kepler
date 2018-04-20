@@ -200,6 +200,7 @@ void room_leave(room *room, player *room_player) {
     list_remove(room->users, room_player, NULL);
     room->room_data->visitors_now = list_size(room->users);
 
+    // Remove current user from tile
     room_tile *current_tile = room->room_map->map[room_player->room_user->current->x][room_player->room_user->current->y];
     current_tile->entity = NULL;
 

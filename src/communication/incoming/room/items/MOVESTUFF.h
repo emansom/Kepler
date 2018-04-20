@@ -57,6 +57,7 @@ void MOVESTUFF(player *player, incoming_message *message) {
     coord old_position;
     old_position.x = item->coords->x;
     old_position.y = item->coords->y;
+    old_position.rotation = item->coords->rotation;
 
     item->coords->x = (int) strtol(str_x, NULL, 10);
     item->coords->y = (int) strtol(str_y, NULL, 10);
@@ -64,7 +65,7 @@ void MOVESTUFF(player *player, incoming_message *message) {
 
     bool rotation = false;
 
-    if (item->coords->x == old_position.x && item->coords->y == old_position.y) {
+    if (item->coords->rotation != old_position.rotation) {
         rotation = true;
     }
 

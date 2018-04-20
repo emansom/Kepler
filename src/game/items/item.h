@@ -10,13 +10,14 @@ typedef struct item_s {
     int id;
     int room_id;
     coord *coords;
+    char *wall_position;
     char *custom_data;
     char *current_program;
     char *current_program_state;
     item_definition *definition;
 } item;
 
-item *item_create(int id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data);
+item *item_create(int id, int room_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data);
 bool item_is_walkable(item *item);
 char *item_as_string(item *item);
 char *item_strip_string(item *item, int strip_slot_id);

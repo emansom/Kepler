@@ -29,7 +29,7 @@
  * @param custom_data the item custom data
  * @return
  */
-item *item_create(int id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data) {
+item *item_create(int id, int room_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data) {
     item *room_item = malloc(sizeof(item));
     room_item->id = id;
     room_item->room_id = room_id;
@@ -44,6 +44,7 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     room_item->coords = create_coord(x, y);
     room_item->coords->z = z;
     room_item->coords->rotation = rotation;
+    room_item->wall_position = wall_position;
 
     if (definition_id > 0) {
         room_item->definition = item_manager_get_definition_by_id(definition_id);
@@ -72,6 +73,21 @@ char *item_as_string(item *item) {
     stringbuilder *sb = sb_create();
 
     if (item->definition->behaviour->is_wall_item) {
+        sb_add_int_delimeter(sb, item->id, 9);
+        sb_add_string_delimeter(sb, item->definition->sprite, 9);
+        sb_add_string_delimeter(sb, " ", 9);
+        sb_add_string_delimeter(sb, item->wall_position, 9);
+
+        if (item->custom_data != NULL) {
+            sb_add_string(sb, item->custom_data);
+        }
+
+/*            FSB.appendTabbedValue(this.ID.ToString());
+            FSB.appendTabbedValue(this.Definition.Sprite);
+            FSB.appendTabbedValue(" ");
+            FSB.appendTabbedValue(this.wallPosition);
+            if(this.customData != null)
+                FSB.Append(this.customData);*/
 
 
     } else {

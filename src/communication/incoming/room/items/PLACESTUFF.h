@@ -42,7 +42,11 @@ void PLACESTUFF(player *player, incoming_message *message) {
     }
 
     if (item->definition->behaviour->is_wall_item) {
+        char id_as_string[10];
+        sprintf(id_as_string, "%i", item->id);
 
+        char *wall_position = strdup(content + strlen(id_as_string) + 1);
+        item->wall_position = wall_position;
 
     } else {
         str_x = get_argument(content, " ", 1);

@@ -90,7 +90,7 @@ void GRPC(player *player, incoming_message *message) {
     player_send_credits(player);
 
     int item_id = item_query_create(player->player_data->id, 0, store_item->definition->id, 0, 0, 0, 0, custom_data);
-    item *inventory_item = item_create(item_id, 0, store_item->definition->id, 0, 0, 0, 0, custom_data);
+    item *inventory_item = item_create(item_id, 0, store_item->definition->id, 0, 0, 0, NULL, 0, custom_data);
 
     list_add(player->inventory->items, inventory_item);
     player_query_save_currency(player);

@@ -46,6 +46,7 @@ List *item_parser_get_items(char *model) {
                 (int) strtol(str_x, NULL, 10),
                 (int) strtol(str_y, NULL, 10),
                 (int) strtol(str_z, NULL, 10),
+                NULL,
                 (int) strtol(str_rotation, NULL, 10),
                 get_argument(line, " ", 0)
         );
