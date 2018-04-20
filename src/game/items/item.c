@@ -211,6 +211,10 @@ void item_dispose(item *item) {
     free(item->custom_data);
     free(item->coords);
 
+    if (item->wall_position != NULL) {
+        free(item->wall_position);
+    }
+
     if (item->current_program != NULL) {
         free(item->current_program);
     }
