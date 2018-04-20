@@ -19,19 +19,20 @@ room_tile *room_tile_create(room *room, int x, int y) {
     tile->room = room;
     tile->x = x;
     tile->y = y;
+    tile->entity = NULL;
+    tile->highest_item = NULL;
     list_new(&tile->items);
-    list_new(&tile->players);
     return tile;
 }
 
 void room_tile_reset(room_tile *tile, room *room) {
     tile->highest_item = NULL;
+    tile->entity = NULL;
     tile->tile_height =  room->room_data->model_data->heights[tile->x][tile->y];
     list_remove_all(tile->items);
-    list_remove_all(tile->players);
 }
 
-bool room_tile_is_walkable(room *room, int x, int y) {
+bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
     if (x < 0 || y < 0) {
         return false;
     }
@@ -50,7 +51,16 @@ bool room_tile_is_walkable(room *room, int x, int y) {
         return false;
     }
 
-    if (tile->highest_item != NULL) {
+    // If the room isn't a public room
+    if (list_size(room->room_data->model_data->public_items) == 0) {
+        if (tile->entity != NULL) {
+            if (tile->entity != room_user) {
+                return false;
+            }
+        }
+    }
+
+        if (tile->highest_item != NULL) {
         if (!item_is_walkable(tile->highest_item)) {
             return false;
         }
@@ -78,7 +88,6 @@ void room_tile_add_item(room_tile *tile, item *item) {
  * @param room the room struct
  */
 void room_tile_destroy(room_tile *tile, room *room) {
-    list_destroy(tile->players);
     list_destroy(tile->items);
     free(tile);
 }

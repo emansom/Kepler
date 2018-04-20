@@ -92,11 +92,11 @@ Deque *create_path(room_user *room_user) {
 int is_valid_tile(room_user *room_user, coord from, coord to, bool is_final_move) {
     room *room_instance = (void *)room_user->room;
 
-    if (!room_tile_is_walkable(room_instance, from.x, from.y)) {
+    if (!room_tile_is_walkable(room_instance, room_user, from.x, from.y)) {
         return false;
     }
 
-    if (!room_tile_is_walkable(room_instance, to.x, to.y)) {
+    if (!room_tile_is_walkable(room_instance, room_user, to.x, to.y)) {
         return false;
     }
 

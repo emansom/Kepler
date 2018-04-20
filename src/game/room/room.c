@@ -17,6 +17,7 @@
 #include "mapping/room_model.h"
 #include "mapping/room_model_manager.h"
 #include "mapping/room_map.h"
+#include "mapping/room_tile.h"
 
 #include "manager/room_item_manager.h"
 #include "manager/room_entity_manager.h"
@@ -198,6 +199,9 @@ void room_leave(room *room, player *room_player) {
 
     list_remove(room->users, room_player, NULL);
     room->room_data->visitors_now = list_size(room->users);
+
+    room_tile *current_tile = room->room_map->map[room_player->room_user->current->x][room_player->room_user->current->y];
+    current_tile->entity = NULL;
 
     room_user_reset((room_user*) room_player->room_user);
 

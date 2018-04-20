@@ -176,6 +176,10 @@ void player_cleanup(player *player) {
 
     player_manager_remove(player);
 
+    if (player->room_user->room != NULL) {
+        room_leave(player->room_user->room, player);
+    }
+
     if (player->player_data != NULL) {
         player_query_save_last_online(player);
 
@@ -194,10 +198,6 @@ void player_cleanup(player *player) {
     }
 
     if (player->room_user != NULL) {
-        if (player->room_user->room != NULL) {
-            room_leave(player->room_user->room, player);
-        }
-
         room_user_cleanup(player->room_user);
         player->room_user = NULL;
     }

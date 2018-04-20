@@ -191,6 +191,26 @@ void room_map_remove_item(room *room, item *item) {
     free(item_str);
 }
 
+void room_map_move_item(room *room, item *item, bool rotation) {
+    item->room_id = room->room_id;
+
+    char *item_str = NULL;
+
+    if (!item->definition->behaviour->is_wall_item) {
+        room_map_item_adjustment(room, item, false);
+        room_map_regenerate(room);
+
+        item_str = item_as_string(item);
+
+        outgoing_message *om = om_create(95); // "A_"
+        sb_add_string(om->sb, item_str);
+        room_send(room, om);
+    }
+
+    item_query_save(item);
+    free(item_str);
+}
+
 /**
  * Handle item adjustment.
  *

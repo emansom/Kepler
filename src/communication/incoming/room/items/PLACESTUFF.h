@@ -42,7 +42,8 @@ void PLACESTUFF(player *player, incoming_message *message) {
     }
 
     if (item->definition->behaviour->is_wall_item) {
-        printf("Is wall item\n");
+
+
     } else {
         str_x = get_argument(content, " ", 1);
         str_y = get_argument(content, " ", 2);
@@ -68,5 +69,9 @@ void PLACESTUFF(player *player, incoming_message *message) {
 
         if (str_x != NULL) {
             free(str_x);
+        }
+
+        if (str_y != NULL) {
+            free(str_y);
         }
 }

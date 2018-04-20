@@ -56,6 +56,10 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
+    if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
+        return;
+    }
+
     room_tile *tile = room_user->room->room_map->map[x][y];
 
     if (tile != NULL && tile->highest_item != NULL) {
@@ -68,7 +72,7 @@ void walk_to(room_user *room_user, int x, int y) {
             return;
         }
     }
-
+    
     if (room_user->next != NULL) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
@@ -137,7 +141,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
             }
         }
 
-        if (item == NULL || !item->definition->behaviour->can_sit_on_top) {
+        if (item == NULL || (!item->definition->behaviour->can_sit_on_top && !item->definition->behaviour->can_lay_on_top)) {
             if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
                 room_user_remove_status(room_user, "sit");
                 room_user_remove_status(room_user, "lay");
