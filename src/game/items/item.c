@@ -53,6 +53,12 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     return room_item;
 }
 
+/**
+ * Gets whether or not the item is walkable.
+ *
+ * @param item the item to check
+ * @return true, if successful
+ */
 bool item_is_walkable(item *item) {
     if (item->definition->behaviour->can_lay_on_top) {
         return true;
@@ -69,6 +75,13 @@ bool item_is_walkable(item *item) {
     return false;
 }
 
+/**
+ * Get the item represented as a string for various item packets.
+ * Must be free'd after use.
+ *
+ * @param item the item to get the string for
+ * @return the string representation of the time.
+ */
 char *item_as_string(item *item) {
     stringbuilder *sb = sb_create();
 
@@ -81,14 +94,6 @@ char *item_as_string(item *item) {
         if (item->custom_data != NULL) {
             sb_add_string(sb, item->custom_data);
         }
-
-/*            FSB.appendTabbedValue(this.ID.ToString());
-            FSB.appendTabbedValue(this.Definition.Sprite);
-            FSB.appendTabbedValue(" ");
-            FSB.appendTabbedValue(this.wallPosition);
-            if(this.customData != null)
-                FSB.Append(this.customData);*/
-
 
     } else {
         if (!item->definition->behaviour->is_public_space_object) {
@@ -197,6 +202,13 @@ void item_assign_program(item *room_item, char *program_state) {
     }
 }
 
+/**
+ * Gets the total height of the item, the height of the item itself
+ * plus the stack height.
+ *
+ * @param item the item to get the height for
+ * @return the total height
+ */
 double item_total_height(item *item) {
     double height = item->coords->z + item->definition->stack_height;
     return height;

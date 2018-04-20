@@ -53,7 +53,7 @@ bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
 
     // If the room isn't a public room
     if (list_size(room->room_data->model_data->public_items) == 0) {
-        if (tile->entity != NULL) {
+        if (tile->entity != NULL && room_user != NULL) {
             if (tile->entity != room_user) {
                 return false;
             }
