@@ -83,7 +83,7 @@ List *item_query_get_room_items(int room_id) {
                 sqlite3_column_int(stmt, 2),
                 sqlite3_column_int(stmt, 3),
                 sqlite3_column_int(stmt, 4),
-                sqlite3_column_int(stmt, 5),
+                sqlite3_column_double(stmt, 5),
                 strdup((char *) sqlite3_column_text(stmt, 6)),
                 sqlite3_column_int(stmt, 7),
                 strdup((char *) sqlite3_column_text(stmt, 8))
@@ -141,7 +141,6 @@ void item_query_save(item *item) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int item_id = -1;
     int status = sqlite3_prepare(conn, "UPDATE items SET room_id = ?, definition_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ?, wall_position = ? WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
@@ -172,4 +171,25 @@ void item_query_save(item *item) {
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
 
+}
+
+void item_query_delete(int item_id) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "DELETE FROM items WHERE id = ? LIMIT 1", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, item_id);
+
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
 }

@@ -75,7 +75,7 @@ room *room_create(int room_id) {
  * @param visitors_max
  * @return
  */
-room_data *room_create_data(room *room, int id, int owner_id, int category, char *name, char *description, char *model, char *ccts, int wallpaper, int floor, int showname, int superusers, int accesstype, char *password, int visitors_now, int visitors_max) {
+room_data *room_create_data(room *room, int id, int owner_id, int category, char *name, char *description, char *model, char *ccts, int wallpaper, int floor, int showname, bool superusers, int accesstype, char *password, int visitors_now, int visitors_max) {
     room_data *data = malloc(sizeof(room_data));
     data->id = id;
     data->owner_id = owner_id;
@@ -92,7 +92,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
         data->ccts = strdup(ccts);
     }
 
-    data->wall = wallpaper;
+    data->wallpaper = wallpaper;
     data->floor = floor;
     data->show_name = showname;
     data->superusers = superusers;
@@ -232,6 +232,22 @@ void room_load(room *room, player *player) {
     sb_add_int(om->sb, room->room_id);
     player_send(player, om);
     om_cleanup(om);
+
+    if (room->room_data->wallpaper > 0) {
+        om = om_create(46); // "@n"
+        sb_add_string(om->sb, "wallpaper/");
+        sb_add_int(om->sb, room->room_data->wallpaper);
+        player_send(player, om);
+        om_cleanup(om);
+    }
+
+    if (room->room_data->floor > 0) {
+        om = om_create(46); // "@n"
+        sb_add_string(om->sb, "floor/");
+        sb_add_int(om->sb, room->room_data->floor);
+        player_send(player, om);
+        om_cleanup(om);
+    }
 }
 
 /**

@@ -20,7 +20,7 @@ typedef struct room_data_s {
     char *model;
     room_model *model_data;
     char *ccts;
-    int wall;
+    int wallpaper;
     int floor;
     int show_name;
     bool superusers;
@@ -41,7 +41,7 @@ typedef struct room_s {
 } room;
 
 room *room_create(int);
-room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, int, int, char*, int, int);
+room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, bool, int, char*, int, int);
 void room_enter(room*, player*);
 void room_load(room*, player*);
 void room_leave(room*, player*);

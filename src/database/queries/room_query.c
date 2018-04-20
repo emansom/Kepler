@@ -208,7 +208,7 @@ void query_room_save(room *room) {
         sqlite3_bind_int(stmt, 1, room->room_data->category);
         sqlite3_bind_text(stmt, 2, room->room_data->name, strlen(room->room_data->name), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 3, room->room_data->description, strlen(room->room_data->description), SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 4, room->room_data->wall);
+        sqlite3_bind_int(stmt, 4, room->room_data->wallpaper);
         sqlite3_bind_int(stmt, 5, room->room_data->floor);
         sqlite3_bind_int(stmt, 6, room->room_data->show_name);
         sqlite3_bind_int(stmt, 7, room->room_data->superusers);

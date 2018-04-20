@@ -19,8 +19,6 @@ void G_ITEMS(player *player, incoming_message *message) {
         list_get_at(wall_items, i, (void*)&room_item);
         char *item_string = item_as_string(room_item);
 
-        printf("name %s\n", room_item->definition->sprite);
-
         sb_add_string(om->sb, item_string);
         sb_add_char(om->sb, 13);
 

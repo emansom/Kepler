@@ -148,39 +148,71 @@ void room_map_add_item(room *room, item *item) {
     item->room_id = room->room_id;
     list_add(room->items, item);
 
-    char *item_str = item_as_string(item);
+
 
     if (item->definition->behaviour->is_wall_item) {
+        char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(83); // "AS"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+
+        free(item_str);
     } else {
         room_map_item_adjustment(room, item, false);
         room_map_regenerate(room);
 
+        char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(93); // "A]"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+
+        free(item_str);
     }
 
     item_query_save(item);
-    free(item_str);
+}
+
+void room_map_move_item(room *room, item *item, bool rotation) {
+    item->room_id = room->room_id;
+
+    if (!item->definition->behaviour->is_wall_item) {
+        room_map_item_adjustment(room, item, rotation);
+        room_map_regenerate(room);
+
+        char *item_str = item_as_string(item);
+
+        outgoing_message *om = om_create(95); // "A_"
+        sb_add_string(om->sb, item_str);
+        room_send(room, om);
+
+        free(item_str);
+    } else {
+
+    }
+
+    item_query_save(item);
 }
 
 void room_map_remove_item(room *room, item *item) {
     item->room_id = room->room_id;
     list_remove(room->items, item, (void*)&item);
 
-    char *item_str = item_as_string(item);
 
     if (item->definition->behaviour->is_wall_item) {
-
+        outgoing_message *om = om_create(84); // "AT"
+        sb_add_int(om->sb, item->id);
+        room_send(room, om);
     } else {
         room_map_regenerate(room);
+        char *item_str = item_as_string(item);
 
         outgoing_message *om = om_create(94); // "A^"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+
+        free(item_str);
     }
 
     item->room_id = 0;
@@ -189,27 +221,6 @@ void room_map_remove_item(room *room, item *item) {
     item->coords->z = 0;
 
     item_query_save(item);
-    free(item_str);
-}
-
-void room_map_move_item(room *room, item *item, bool rotation) {
-    item->room_id = room->room_id;
-
-    char *item_str = item_as_string(item);
-
-    if (!item->definition->behaviour->is_wall_item) {
-        room_map_item_adjustment(room, item, rotation);
-        room_map_regenerate(room);
-
-        outgoing_message *om = om_create(95); // "A_"
-        sb_add_string(om->sb, item_str);
-        room_send(room, om);
-    } else {
-
-    }
-
-    item_query_save(item);
-    free(item_str);
 }
 
 /**
@@ -219,10 +230,9 @@ void room_map_move_item(room *room, item *item, bool rotation) {
  * @param rotation the rotation only
  */
 void room_map_item_adjustment(room *room, item *item, bool rotation) {
-    printf("Is rotation %s\n", rotation ? "true" : "false");
     if (rotation) {
 
-    } else {
+   } else {
         room_tile *tile = room->room_map->map[item->coords->x][item->coords->y];
 
         if (tile == NULL) {

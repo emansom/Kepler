@@ -57,7 +57,7 @@ void walk_to(room_user *room_user, int x, int y) {
     }
 
     if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
-        return;
+       // return;
     }
 
     room_tile *tile = room_user->room->room_map->map[x][y];
@@ -84,12 +84,12 @@ void walk_to(room_user *room_user, int x, int y) {
 
     //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
-    /*room_tile *tiles = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
+    room_tile *tiles = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
     if (tile != NULL && tiles->highest_item != NULL) {
         item *items = tiles->highest_item;
-        printf("Item: %s\n", items->definition->sprite);
-    }*/
+        printf("Item: %s and height %f\n", items->definition->sprite, item_total_height(items));
+    }
 
     Deque *path = create_path(room_user);
     
