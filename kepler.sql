@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','9905',72,0,7,'I''m a new xddd','1524060096');
-INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1523463369');
+INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','9555',70,0,7,'I''m a new xddd','1524236465');
+INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1524227409');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -196,7 +196,9 @@ INSERT INTO `rooms` VALUES (1045,0,6,'Ice Cafe','ice_cafe','ice_cafe','hh_room_i
 INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_netcafe',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,0,'false',0,'',0,100);
-INSERT INTO `rooms` VALUES (1049,1,114,'mein room','ddwdwd','model_c',NULL,0,0,0,0,0,'',0,25);
+INSERT INTO `rooms` VALUES (1049,1,114,'mein room','ddwdwd','model_c',NULL,1004,610,0,0,0,'',0,25);
+INSERT INTO `rooms` VALUES (1050,2,118,'test','','model_a',NULL,0,0,1,0,0,'',0,25);
+INSERT INTO `rooms` VALUES (1051,1,0,'another room','','model_f',NULL,0,0,1,0,0,'',0,25);
 CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
@@ -220,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `items_definitions` (
 	`colour`	TEXT,
 	`length`	INTEGER,
 	`width`	INTEGER,
-	`stack_height`	NUMERIC,
+	`top_height`	NUMERIC,
 	`behaviour`	TEXT
 );
 INSERT INTO `items_definitions` VALUES (1001,'1337','shelves_norja','#ffffff,#F7EBBC',1,1,2,'S');
@@ -1840,21 +1842,17 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`x`	TEXT,
 	`y`	TEXT,
 	`z`	NUMERIC,
+	`wall_position`	TEXT,
 	`rotation`	INTEGER,
 	`custom_data`	TEXT
 );
-INSERT INTO `items` VALUES (2,1,0,2408,'0','0',0,0,'601');
-INSERT INTO `items` VALUES (3,1,0,1618,'0','0',0,0,'');
-INSERT INTO `items` VALUES (4,1,0,1145,'0','0',0,0,'');
-INSERT INTO `items` VALUES (5,1,0,1825,'0','0',0,0,'');
-INSERT INTO `items` VALUES (6,1,0,1454,'0','0',0,0,'');
-INSERT INTO `items` VALUES (7,1,0,1304,'0','0',0,0,'alex	04-18-2018	Hello :o');
-INSERT INTO `items` VALUES (8,1,0,2409,'0','0',0,0,'508');
-INSERT INTO `items` VALUES (9,1,0,2409,'0','0',0,0,'507');
-INSERT INTO `items` VALUES (10,1,0,1029,'0','0',0,0,'');
-INSERT INTO `items` VALUES (11,1,0,1007,'0','0',0,0,'');
-INSERT INTO `items` VALUES (12,1,0,1044,'0','0',0,0,'');
-INSERT INTO `items` VALUES (13,1,0,1116,'0','0',0,0,'');
+INSERT INTO `items` VALUES (43,1,1049,1013,'5','9',0.001,'',2,'');
+INSERT INTO `items` VALUES (47,1,1049,2409,'0','0',0,':w=4,10 l=46,36 l',0,'9');
+INSERT INTO `items` VALUES (48,1,1049,2409,'0','0',0,':w=5,4 l=43,78 r',0,'5');
+INSERT INTO `items` VALUES (49,1,1049,1110,'5','6',0,'',2,'');
+INSERT INTO `items` VALUES (50,1,1049,1126,'8','5',0.5,'',4,'');
+INSERT INTO `items` VALUES (51,1,1049,1105,'7','9',0,'',0,'');
+INSERT INTO `items` VALUES (52,1,1049,1011,'8','5',0,'',0,'');
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,
 	`order_id`	INTEGER,
@@ -1887,7 +1885,7 @@ INSERT INTO `catalogue_pages` VALUES (7,7,1,'Pets','Pets','ctlg_pets','catalog_p
 INSERT INTO `catalogue_pages` VALUES (4,4,1,'Bank','Exchange','ctlg_layout2','catalog_bank_headline1','catalog_bank_teaser,','The Habbo Exchange is where you can convert your Habbo Credits into a tradable currency. You can use this tradable currency to exchange Habbo Credits for Furni!','Click on the item you want for more information','EPIC YAY!',NULL);
 INSERT INTO `catalogue_pages` VALUES (5,5,1,'Rollers','Rollers','ctlg_layout2','catalog_roller_headline1','','Move your imagination, while you move your Habbo!  Perfect for mazes, games, for keeping your queue moving or making your pet go round in circles for hours.  Available in multi-packs ? the more you buy the cheaper the Roller! Pink Rollers out now!','Click on a Roller to see more information!','You can fit 30 Rollers in a user flat!',NULL);
 INSERT INTO `catalogue_pages` VALUES (6,6,1,'Teleporters','Teleporters','ctlg_productpage3','catalog_doors_headline1','catalog_door_a,catalog_door_c,catalog_door_b,','Beam your user from one room to another with one of our cunningly disguised, space age teleports. Now you can link any two rooms together! Teleports are sold in pairs, so if you trade for them, check you''re getting a linked pair.','Click on the item you want for more information','Beam!',NULL);
-INSERT INTO `catalogue_pages` VALUES (8,8,1,'Petstuff','Pet accessories','ctlg_layout2','catalog_pet_headline2','ctlg_pet_teaser1,','You''ll need to take care of your pet to keep it happy and healthy. This section of has EVERYTHING you’ll need to satisfy your pet’s needs.  PLEASE NOTE:  No fish were harmed in the creating of this section! (just jews)','Click on the item you want for more information','You''ll have to share it!',NULL);
+INSERT INTO `catalogue_pages` VALUES (8,8,1,'Petstuff','Pet accessories','ctlg_layout2','catalog_pet_headline2','ctlg_pet_teaser1,','You''''ll need to take care of your pet to keep it happy and healthy. This section of the Catalogue has EVERYTHING you''ll need to satisfy your pet''s needs.','Click on the item you want for more information','You''ll have to share it!',NULL);
 INSERT INTO `catalogue_pages` VALUES (9,9,1,'Area','Area','Area','catalog_area_headline1','catalog_area_teaser1,','Introducing the Area Collection...  Clean, chunky lines set this collection apart as a preserve of the down-to-earth person. It''s beautiful in its simplicity, and welcoming to everyone.','Click on the item you want for more information','2: Beautiful in it''s simplicity!',NULL);
 INSERT INTO `catalogue_pages` VALUES (10,10,1,'Gothic','Gothic','ctlg_layout2','catalog_gothic_headline1','catalog_gothic_teaser1,','The Gothic section is full of medieval looking items. Create your own Gothic castle!','Click on the item you want for more information',NULL,NULL);
 INSERT INTO `catalogue_pages` VALUES (11,11,1,'Soundmachines','Trax','ctlg_soundmachine','catalog_djshop_headline1','catalog_djshop_teaser1,','Bring sound to your room! Purchase a sound machine plus some sample packs and create your own songs to play in your flat!<br>Moar soundsets coming soon!','Click on the item you want for more information',NULL,NULL);
