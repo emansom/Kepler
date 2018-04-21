@@ -19,7 +19,10 @@ void SETFLATINFO(player *player, incoming_message *message) {
 
     if (room == NULL) {
         goto cleanup;
-        return;
+    }
+
+    if (room->room_data->owner_id != player->player_data->id) {
+        goto cleanup;
     }
 
     int split_count = 0;
