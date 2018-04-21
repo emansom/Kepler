@@ -11,6 +11,7 @@ void SUSERF(player *player, incoming_message *message) {
     List *rooms = room_manager_get_by_user_id(player->player_data->id);
 
     if (list_size(rooms) > 0) {
+        list_sort_in_place(rooms, room_manager_sort);
 
         outgoing_message *om = om_create(16); // "@P"
 

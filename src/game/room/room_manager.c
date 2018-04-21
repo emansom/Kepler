@@ -128,6 +128,28 @@ void room_manager_remove(int room_id) {
 }
 
 /**
+ * Sort list by room population. Highest populated rooms appear first.
+ *
+ * @param e1 the first room
+ * @param e2 the second room
+ * @return whether to sort
+ */
+int room_manager_sort(void const *e1, void const *e2) {
+    room *i = (*((room**) e1));
+    room *j = (*((room**) e2));
+
+    size_t room_size_i = list_size(i->users);
+    size_t room_size_j = list_size(j->users);
+
+    if (room_size_i > room_size_j)
+        return -1;
+    if (room_size_i == room_size_j)
+        return 0;
+
+    return 1;
+}
+
+/**
  * Dispose room manager.
  */
 void room_manager_dispose() {

@@ -30,6 +30,7 @@ void NAVIGATE(player *player, incoming_message *message) {
         om_write_int(navigator, parent_category->parent_id); 
 
         List *rooms = category_manager_get_rooms(parent_category->id);
+        list_sort_in_place(rooms, room_manager_sort);
 
         if (parent_category->category_type == PRIVATE) {
             om_write_int(navigator, (int)list_size(rooms));  // room count
