@@ -204,9 +204,23 @@ void room_leave(room *room, player *room_player) {
     room_tile *current_tile = room->room_map->map[room_player->room_user->current->x][room_player->room_user->current->y];
     current_tile->entity = NULL;
 
+    outgoing_message *om;
+
+    // Reset item program state for pool items
+    item *item = current_tile->highest_item;
+    if (item != NULL) {
+        if (item->current_program != NULL &&
+            (strcmp(item->current_program, "curtains1") == 0
+             || strcmp(item->current_program, "curtains2") == 0
+             || strcmp(item->current_program, "door") == 0)) {
+
+            item_assign_program(item, "open");
+        }
+    }
+
     room_user_reset((room_user*) room_player->room_user);
 
-    outgoing_message *om = om_create(29); // "@]"
+    om = om_create(29); // "@]"
     sb_add_int(om->sb, room_player->room_user->instance_id);
     room_send(room, om);
 
@@ -247,6 +261,33 @@ void room_load(room *room, player *player) {
         sb_add_int(om->sb, room->room_data->floor);
         player_send(player, om);
         om_cleanup(om);
+    }
+
+    // Show new player current state of an item program for pools
+    for (size_t i = 0; i < list_size(room->items); i++) {
+        item *item;
+        list_get_at(room->items, i, (void *) &item);
+
+        if (!item->definition->behaviour->is_public_space_object) {
+            continue;
+        }
+
+        if (item->current_program != NULL &&
+            (strcmp(item->current_program, "curtains1") == 0
+             || strcmp(item->current_program, "curtains2") == 0
+             || strcmp(item->current_program, "door") == 0)) {
+
+            om = om_create(71); // "AG"
+            sb_add_string(om->sb, item->current_program);
+
+            if (item->current_program_state != NULL && strlen(item->current_program_state) > 0) {
+                sb_add_string(om->sb, " ");
+                om_write_str(om, item->current_program_state);
+            }
+
+            player_send(player, om);
+            om_cleanup(om);
+        }
     }
 }
 

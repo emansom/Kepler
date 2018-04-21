@@ -67,6 +67,15 @@ List *item_parser_get_items(char *model) {
                 free(public_custom_data);
             } else {
                 room_item->current_program = public_custom_data;
+                //printf("Name %s and item program %s\n", room_item->definition->sprite, public_custom_data);
+
+                if (room_item->current_program != NULL &&
+                    (strcmp(room_item->current_program, "curtains1") == 0
+                     || strcmp(room_item->current_program, "curtains2") == 0
+                     || strcmp(room_item->current_program, "door") == 0)) {
+
+                    item_assign_program(room_item, "open");
+                }
             }
         }
 

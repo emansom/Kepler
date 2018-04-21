@@ -231,10 +231,7 @@ int room_user_has_status(room_user *room_user, char *key) {
  * @param room_user
  */
 void room_user_reset(room_user *room_user) {
-    if (room_user->room != NULL) {
-        stop_walking(room_user, false);
-    }
-
+    room_user_clear_walk_list(room_user);
     room_user_remove_status(room_user, "swim");
     room_user_remove_status(room_user, "sit");
     room_user_remove_status(room_user, "lay");

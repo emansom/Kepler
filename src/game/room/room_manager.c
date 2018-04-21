@@ -103,7 +103,11 @@ List *room_manager_get_by_user_id(int user_id) {
  * @return the room
  */
 room *room_manager_get_by_id(int room_id) {
-    void *room = NULL;
+    room *room = NULL;
+
+    if (room_id < 0) {
+        return room;
+    }
 
     if (hashtable_contains_key(global.room_manager.rooms, &room_id)) {
         hashtable_get(global.room_manager.rooms, &room_id, (void *)&room);
