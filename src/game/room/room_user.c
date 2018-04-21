@@ -56,8 +56,10 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
+    printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+
     if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
-       // return;
+        return;
     }
 
     room_tile *tile = room_user->room->room_map->map[x][y];
@@ -84,12 +86,12 @@ void walk_to(room_user *room_user, int x, int y) {
 
     //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
 
-    room_tile *tiles = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
+    /*room_tile *tiles = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
     if (tile != NULL && tiles->highest_item != NULL) {
         item *items = tiles->highest_item;
         printf("Item: %s and height %f\n", items->definition->sprite, item_total_height(items));
-    }
+    }*/
 
     Deque *path = create_path(room_user);
     
@@ -128,39 +130,42 @@ void stop_walking(room_user *room_user, bool is_silent) {
     room_user_clear_walk_list(room_user);
     room_user->is_walking = false;
 
+    if (!is_silent) {
+        room_user_invoke_item(room_user);
+    }
+}
+
+void room_user_invoke_item(room_user *room_user) {
     bool needs_update = false;
 
-    if (!is_silent) {
-        item *item = NULL;
+    item *item = NULL;
+    room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
 
-        room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
+    if (tile != NULL) {
+        if (tile->highest_item != NULL) {
+            item = tile->highest_item;
+        }
+    }
 
-        if (tile != NULL) {
-            if (tile->highest_item != NULL) {
-                item = tile->highest_item;
-            }
+    if (item == NULL || (!item->definition->behaviour->can_sit_on_top && !item->definition->behaviour->can_lay_on_top)) {
+        if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
+            room_user_remove_status(room_user, "sit");
+            room_user_remove_status(room_user, "lay");
+            needs_update = true;
+        }
+    }
+
+    if (item != NULL) {
+        if (item->definition->behaviour->can_sit_on_top) {
+            char sit_height[11];
+            sprintf(sit_height, " %1.f", item->definition->top_height);
+
+            room_user_add_status(room_user, "sit", sit_height, -1, "", 0, 0);
+            coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
+            needs_update = true;
         }
 
-        if (item == NULL || (!item->definition->behaviour->can_sit_on_top && !item->definition->behaviour->can_lay_on_top)) {
-            if (room_user_has_status(room_user, "sit") || room_user_has_status(room_user, "lay")) {
-                room_user_remove_status(room_user, "sit");
-                room_user_remove_status(room_user, "lay");
-                needs_update = true;
-            }
-        }
-
-        if (item != NULL) {
-            if (item->definition->behaviour->can_sit_on_top) {
-                char sit_height[11];
-                sprintf(sit_height, " %1.f", item->definition->top_height);
-
-                room_user_add_status(room_user, "sit", sit_height, -1, "", 0, 0);
-                coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
-                needs_update = true;
-            }
-
-            pool_item_walk_on((player *) room_user->player, item);
-        }
+        pool_item_walk_on((player*) room_user->player, item);
     }
 
     room_user->needs_update = needs_update;

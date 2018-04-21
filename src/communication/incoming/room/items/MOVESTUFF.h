@@ -69,7 +69,7 @@ void MOVESTUFF(player *player, incoming_message *message) {
         rotation = true;
     }
 
-    room_map_move_item(player->room_user->room, item, rotation);
+    room_map_move_item(player->room_user->room, item, rotation, &old_position);
 
     cleanup:
         free(content);

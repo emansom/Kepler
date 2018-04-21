@@ -1,3 +1,4 @@
+#include <game/player/player.h>
 #include "stdlib.h"
 #include "stdio.h"
 
@@ -7,6 +8,8 @@
 #include "room_tile.h"
 #include "room_map.h"
 
+#include "game/player/player.h"
+
 #include "game/pathfinder/coord.h"
 #include "game/pathfinder/affected_tiles.h"
 
@@ -14,6 +17,7 @@
 #include "game/items/definition/item_definition.h"
 
 #include "game/room/room.h"
+#include "game/room/room_user.h"
 #include "game/room/mapping/room_model.h"
 #include "game/room/pool/pool_handler.h"
 
@@ -66,11 +70,26 @@ void room_map_init(room *room) {
  * @param room the room instance
  */
 void room_map_regenerate(room *room) {
+    // Reset all tiles
     for (int x = 0; x < room->room_data->model_data->map_size_x; x++) { 
         for (int y = 0; y < room->room_data->model_data->map_size_y; y++) { 
             room_tile *tile = room->room_map->map[x][y];
             room_tile_reset(tile, room);
         }
+    }
+
+    // Add players to tiles
+    for (size_t i = 0; i < list_size(room->users); i++) {
+        player *room_player;
+        list_get_at(room->users, i, (void *) &room_player);
+
+        room_tile *tile = room->room_map->map[room_player->room_user->current->x][room_player->room_user->current->y];
+
+        if (tile == NULL) {
+            continue;
+        }
+
+        tile->entity = (room_user *) room_player->room_user;
     }
 
     room_map_add_items(room);
@@ -148,8 +167,6 @@ void room_map_add_item(room *room, item *item) {
     item->room_id = room->room_id;
     list_add(room->items, item);
 
-
-
     if (item->definition->behaviour->is_wall_item) {
         char *item_str = item_as_string(item);
 
@@ -171,10 +188,17 @@ void room_map_add_item(room *room, item *item) {
         free(item_str);
     }
 
+    item_update_entities(item, room, NULL);
     item_query_save(item);
 }
 
-void room_map_move_item(room *room, item *item, bool rotation) {
+/**
+ *
+ * @param room
+ * @param item
+ * @param rotation
+ */
+void room_map_move_item(room *room, item *item, bool rotation, coord *old_position) {
     item->room_id = room->room_id;
 
     if (!item->definition->behaviour->is_wall_item) {
@@ -188,17 +212,20 @@ void room_map_move_item(room *room, item *item, bool rotation) {
         room_send(room, om);
 
         free(item_str);
-    } else {
-
     }
 
+    item_update_entities(item, room, old_position);
     item_query_save(item);
 }
 
+/**
+ *
+ * @param room
+ * @param item
+ */
 void room_map_remove_item(room *room, item *item) {
     item->room_id = room->room_id;
     list_remove(room->items, item, (void*)&item);
-
 
     if (item->definition->behaviour->is_wall_item) {
         outgoing_message *om = om_create(84); // "AT"
@@ -220,6 +247,7 @@ void room_map_remove_item(room *room, item *item) {
     item->coords->y = 0;
     item->coords->z = 0;
 
+    item_update_entities(item, room, NULL);
     item_query_save(item);
 }
 

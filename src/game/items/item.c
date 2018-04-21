@@ -2,18 +2,21 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "list.h"
+
 #include "item.h"
+#include "item_manager.h"
 
 #include "game/pathfinder/coord.h"
+#include "game/pathfinder/affected_tiles.h"
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
-#include "game/items/item_manager.h"
+#include "game/room/mapping/room_tile.h"
+#include "game/room/mapping/room_map.h"
 
 #include "communication/messages/outgoing_message.h"
-
-
 #include "util/stringbuilder.h"
 
 /**
@@ -51,6 +54,69 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     }
 
     return room_item;
+}
+
+/**
+ * Update user statuses on items with their old position and new position.
+ *
+ * @param item the item to update for
+ * @param room the room to update inside
+ * @param old_position the old position of the item
+ */
+void item_update_entities(item *item, room *room, coord *old_position) {
+    if (item->definition->behaviour->is_wall_item) {
+        return;
+    }
+
+    List *entities_to_update;
+    list_new(&entities_to_update);
+
+    // Do old position updates
+    if (old_position != NULL) {
+        List *affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, old_position->x, old_position->y, old_position->rotation);
+
+        for (size_t i = 0; i < list_size(affected_tiles); i++) {
+            coord *pos;
+            list_get_at(affected_tiles, i, (void *) &pos);
+
+            room_tile *tile = room->room_map->map[pos->x][pos->y];
+
+            if (tile != NULL && tile->entity != NULL) {
+                list_add(entities_to_update, tile->entity);
+            }
+
+            free(pos);
+        }
+
+        list_destroy(affected_tiles);
+    }
+
+    // Do new position updates
+    List *new_affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, item->coords->x, item->coords->y, item->coords->rotation);
+
+    for (size_t i = 0; i < list_size(new_affected_tiles); i++) {
+        coord *pos;
+        list_get_at(new_affected_tiles, i, (void *) &pos);
+
+        room_tile *tile = room->room_map->map[pos->x][pos->y];
+
+        if (tile != NULL && tile->entity != NULL) {
+            list_add(entities_to_update, tile->entity);
+        }
+
+        free(pos);
+    }
+
+    list_destroy(new_affected_tiles);
+
+    for (size_t i = 0; i < list_size(entities_to_update); i++) {
+        room_user *room_user;
+        list_get_at(entities_to_update, i, (void*)&room_user);
+
+        room_user_invoke_item(room_user);
+    }
+
+    list_destroy(entities_to_update);
 }
 
 /**
