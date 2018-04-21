@@ -73,20 +73,8 @@ void MOVESTUFF(player *player, incoming_message *message) {
 
     cleanup:
         free(content);
-
-        if (str_id != NULL) {
-            free(str_id);
-        }
-
-        if (str_x != NULL) {
-            free(str_x);
-        }
-
-        if (str_rot != NULL) {
-            free(str_rot);
-        }
-
-        if (str_y != NULL) {
-            free(str_y);
-        }
+		free(str_id);
+		free(str_x);
+		free(str_rot);
+		free(str_y);
 }

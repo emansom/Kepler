@@ -45,8 +45,5 @@ void ADDSTRIPITEM(player *player, incoming_message *message) {
 
     cleanup:
         free(content);
-
-        if (remove_data_item_id != NULL) {
-            free(remove_data_item_id);
-        }
+        free(remove_data_item_id);
 }

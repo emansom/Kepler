@@ -32,15 +32,7 @@ void UPDATE_ACCOUNT(player *player, incoming_message *message) {
 
 
     cleanup:
-        if (password != NULL) {
-            free(password);
-        }
-
-        if (date_of_birth != NULL) {
-            free(date_of_birth);
-        }
-            
-        if (new_password != NULL) {
-            free(new_password);
-        }
+		free(password);
+		free(date_of_birth);
+		free(new_password);
 }

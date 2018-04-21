@@ -66,16 +66,8 @@ void PLACESTUFF(player *player, incoming_message *message) {
 
     cleanup:
         free(content);
-
-        if (str_id != NULL) {
-            free(str_id);
-        }
-
-        if (str_x != NULL) {
-            free(str_x);
-        }
-
-        if (str_y != NULL) {
-            free(str_y);
-        }
+		free(str_id);
+		free(str_x);
+		free(str_y);
+        
 }

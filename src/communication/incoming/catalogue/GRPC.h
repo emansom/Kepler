@@ -99,15 +99,8 @@ void GRPC(player *player, incoming_message *message) {
     inventory_send(inv, "update", player);
 
     cleanup:
-        if (content != NULL) {
-            free(content);
-        }
-
-        if (page != NULL) {
-            free(page);
-        }
-
-        if (sale_code != NULL) {
-            free(sale_code);
-        }
+		free(content);
+		free(page);
+		free(sale_code);
+        
 }

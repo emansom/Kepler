@@ -60,12 +60,6 @@ void FLATPROPBYITEM(player *player, incoming_message *message) {
 
     cleanup:
         free(content);
-
-        if (str_mode != NULL) {
-            free(str_mode);
-        }
-
-        if (str_id != NULL) {
-            free(str_id);
-        }
+		free(str_mode);
+		free(str_id);
 }

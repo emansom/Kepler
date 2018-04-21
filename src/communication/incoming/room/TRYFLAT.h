@@ -38,8 +38,5 @@ void TRYFLAT(player *player, incoming_message *message) {
 
     cleanup:
         free(content);
-
-        if (password != NULL) {
-            free(password);
-        }
+		free(password);
 }
