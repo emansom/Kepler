@@ -28,7 +28,7 @@
 void room_map_add_items(room *room);
 
 /**
- * Sort list by heights.
+ * Sort list by item heights. Lowest height items come first.
  *
  * @param e1 the first item
  * @param e2 the second item
@@ -102,7 +102,10 @@ void room_map_regenerate(room *room) {
  * @param room the room instance
  */
 void room_map_add_items(room *room) {
-    list_sort_in_place(room->items, cmp);
+    List *items;
+
+    list_copy_shallow(room->items, &items);
+    list_sort_in_place(items, cmp);
 
     for (size_t i = 0; i < list_size(room->items); i++) {
         item *item;
@@ -155,6 +158,8 @@ void room_map_add_items(room *room) {
             pool_setup_redirections(room, item);
         }
     }
+
+    list_destroy(items);
 }
 
 /**
