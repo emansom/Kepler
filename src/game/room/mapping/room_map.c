@@ -242,12 +242,13 @@ void room_map_remove_item(room *room, item *item) {
         free(item_str);
     }
 
+    item_update_entities(item, room, NULL);
+
     item->room_id = 0;
     item->coords->x = 0;
     item->coords->y = 0;
     item->coords->z = 0;
 
-    item_update_entities(item, room, NULL);
     item_query_save(item);
 }
 
