@@ -182,6 +182,11 @@ char *item_as_string(item *item) {
             sb_add_int_delimeter(sb, item->coords->y, ' ');
             sb_add_int_delimeter(sb, (int) item->coords->z, ' ');
             sb_add_int(sb, item->coords->rotation);
+
+            if (item->definition->behaviour->has_extra_parameter) {
+                sb_add_string(sb, " 2");
+            }
+
             sb_add_char(sb, 13);
         }
     }
