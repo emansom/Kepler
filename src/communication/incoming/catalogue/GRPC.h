@@ -5,7 +5,7 @@
 
 #include "game/inventory/inventory.h"
 
-void GRPC(player *player, incoming_message *message) {
+void GRPC(session *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     char *page = get_argument(content, "\r", 1);
@@ -42,7 +42,7 @@ void GRPC(player *player, incoming_message *message) {
 
     if (store_item->price > player->player_data->credits) {
         outgoing_message *om = om_create(68); // "AD"
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
 
         goto cleanup;
@@ -87,7 +87,7 @@ void GRPC(player *player, incoming_message *message) {
     }
 
     player->player_data->credits -= store_item->price;
-    player_send_credits(player);
+    session_send_credits(player);
 
     int item_id = item_query_create(player->player_data->id, 0, store_item->definition->id, 0, 0, 0, 0, custom_data);
     item *inventory_item = item_create(item_id, 0, store_item->definition->id, 0, 0, 0, NULL, 0, custom_data);

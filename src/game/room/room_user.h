@@ -13,7 +13,8 @@ typedef struct outgoing_message_s outgoing_message;
 typedef struct hashtable_s HashTable;
 
 typedef struct room_user_s {
-    player *player;
+    session *player;
+    int authenticate_id;
     int instance_id;
     int room_id;
     room *room;
@@ -38,13 +39,13 @@ typedef struct room_user_status_s {
     int lifetime_expire;
 } room_user_status;
 
-room_user *room_user_create(player*);
+room_user *room_user_create(session*);
 void walk_to(room_user*, int, int);
 void stop_walking(room_user*, bool silent);
 void room_user_invoke_item(room_user *room_user);
 void room_user_clear_walk_list(room_user*);
-void append_user_list(outgoing_message*, player*);
-void append_user_status(outgoing_message*, player*);
+void append_user_list(outgoing_message*, session*);
+void append_user_status(outgoing_message*, session*);
 void room_user_reset(room_user*);
 void room_user_cleanup(room_user*);
 void room_user_add_status(room_user*,char*,char*,int,char*,int,int);

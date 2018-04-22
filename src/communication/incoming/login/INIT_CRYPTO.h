@@ -3,10 +3,10 @@
 
 #include "game/player/player.h"
 
-void INIT_CRYPTO(player *player, incoming_message *message) {
+void INIT_CRYPTO(session *player, incoming_message *message) {
     outgoing_message *init_crypto = om_create(277);
     om_write_int(init_crypto, 1);
     om_write_int(init_crypto, 0);
-    player_send(player, init_crypto);
+    session_send(player, init_crypto);
     om_cleanup(init_crypto);
 }

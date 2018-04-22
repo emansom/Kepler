@@ -3,7 +3,7 @@
 
 #include "database/queries/player_query.h"
 
-void MESSENGER_ASSIGNPERSMSG(player *player, incoming_message *message) {
+void MESSENGER_ASSIGNPERSMSG(session *player, incoming_message *message) {
     if (player->player_data == NULL) {
         return;
     }
@@ -15,7 +15,7 @@ void MESSENGER_ASSIGNPERSMSG(player *player, incoming_message *message) {
 
     outgoing_message *response = om_create(147); // "BS"
     om_write_str(response, player->player_data->console_motto);
-    player_send(player, response);
+    session_send(player, response);
     om_cleanup(response);
 
     player_query_save_motto(player);

@@ -8,7 +8,7 @@
 
 #include "list.h"
 
-void NAVIGATE(player *player, incoming_message *message) {
+void NAVIGATE(session *player, incoming_message *message) {
     int hide_full = im_read_vl64(message);
     int category_id = im_read_vl64(message);
 
@@ -105,6 +105,6 @@ void NAVIGATE(player *player, incoming_message *message) {
         list_destroy(child_categories);
     }
         
-    player_send(player, navigator);
+    session_send(player, navigator);
     om_cleanup(navigator);
 }

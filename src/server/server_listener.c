@@ -31,7 +31,7 @@ void server_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
  * @param handle
  */
 void server_on_connection_close(uv_handle_t *handle) {
-    player *player = handle->data;
+    session *player = handle->data;
     player->disconnected = false;
 
     printf("Client [%s] has disconnected\n", player->ip_address);
@@ -66,7 +66,7 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     }
 
     if (nread > 0) {
-        player *p = handle->data;
+        session *p = handle->data;
 
         if (buf->base == NULL) {
             p->disconnected = true;
@@ -135,7 +135,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     char ip[16];
     uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
 
-    player *p = player_manager_add(handle, ip);
+    session *p = player_manager_add(handle, ip);
     client->data = p;
     
     printf("Client [%s] has connected\n", p->ip_address);
@@ -143,7 +143,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
 
     if(result == 0) {
         outgoing_message *msg = om_create(0); // "@@"
-        player_send(p, msg);
+        session_send(p, msg);
         om_cleanup(msg);
 
         uv_read_start(handle, server_alloc_buffer, server_on_read);

@@ -9,7 +9,7 @@
 
 #include "game/items/item.h"
 
-void PLACESTUFF(player *player, incoming_message *message) {
+void PLACESTUFF(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

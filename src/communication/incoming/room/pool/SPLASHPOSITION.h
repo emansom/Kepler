@@ -9,7 +9,7 @@
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
 
-void SPLASHPOSITION(player *diver, incoming_message *message) {
+void SPLASHPOSITION(session *diver, incoming_message *message) {
     char *content = im_get_content(message);
 
     if (content == NULL) {
@@ -65,7 +65,7 @@ void SPLASHPOSITION(player *diver, incoming_message *message) {
 
     // Count votes
     for (size_t i = 0; i < list_size(room_entity->room->users); i++) {
-        player * room_player;
+        session * room_player;
         list_get_at(room_entity->room->users, i, (void *) &room_player);
 
         if (room_player->player_data->id == diver->player_data->id) {
@@ -103,7 +103,7 @@ void SPLASHPOSITION(player *diver, incoming_message *message) {
 
     // Reset all diving scores
     for (size_t i = 0; i < list_size(room_entity->room->users); i++) {
-        player *room_player;
+        session *room_player;
         list_get_at(room_entity->room->users, i, (void *) &room_player);
 
         if (room_player->room_user->lido_vote > 0) {

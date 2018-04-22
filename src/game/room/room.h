@@ -4,7 +4,7 @@
 #include <stdbool.h>
 
 typedef struct list_s List;
-typedef struct player_s player;
+typedef struct session_s session;
 typedef struct room_model_s room_model;
 typedef struct outgoing_message_s outgoing_message;
 typedef struct runnable_s runnable;
@@ -42,12 +42,12 @@ typedef struct room_s {
 
 room *room_create(int);
 room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, bool, int, char*, int, int);
-void room_enter(room*, player*);
-void room_load(room*, player*);
-void room_leave(room*, player*);
+void room_enter(room*, session*);
+void room_load(room*, session*);
+void room_leave(room*, session*);
 bool room_is_owner(room *room, int user_id);
 bool room_has_rights(room *room, int user_id);
-void room_refresh_rights(room *room, player *player);
+void room_refresh_rights(room *room, session *player);
 void room_send(room*, outgoing_message*);
 void room_dispose(room*);
 

@@ -9,28 +9,28 @@
 
 #include "list.h"
 
-void CHAT(player *session, incoming_message *im) {
-    if (session->room_user->room == NULL) {
+void CHAT(session *player, incoming_message *im) {
+    if (player->room_user->room == NULL) {
         return;
     }
     
     char *message = im_read_str(im);
     filter_vulnerable_characters(&message, true);
 
-    room *room = session->room_user->room;
+    room *room = player->room_user->room;
 
-    int source_x = session->room_user->current->x;
-    int source_y = session->room_user->current->y;
+    int source_x = player->room_user->current->x;
+    int source_y = player->room_user->current->y;
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        player *room_player;
+        session *room_player;
         list_get_at(room->users, i, (void*)&room_player);
 
         int dist_x = abs(source_x - room_player->room_user->current->x) - 1;
         int dist_y = abs(source_y - room_player->room_user->current->y) - 1;
 
         outgoing_message *om = om_create(24); // "@X"
-        om_write_int(om, session->room_user->instance_id);
+        om_write_int(om, player->room_user->instance_id);
 
         if (dist_x < 9 && dist_y < 9) {// User can hear
             if (dist_x <= 6 && dist_y <= 6) {// User can hear full message
@@ -61,7 +61,7 @@ void CHAT(player *session, incoming_message *im) {
                 free(garble_message);
             }
 
-            player_send(room_player, om);
+            session_send(room_player, om);
             om_cleanup(om);
         }
     }

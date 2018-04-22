@@ -4,7 +4,7 @@
 #include "database/queries/player_query.h"
 #include "game/room/pool/pool_handler.h"
 
-void DIVE(player *player, incoming_message *message) {
+void DIVE(session *player, incoming_message *message) {
     char *diving_combination = im_get_content(message);
 
     if (diving_combination == NULL) {

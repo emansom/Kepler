@@ -49,7 +49,7 @@ messenger_message *messenger_message_create(int id, int sender_id, int receiver_
  *
  * @param player the player instance
  */
-void messenger_init(player *player) {
+void messenger_init(session *player) {
     if (player->messenger->friends == NULL) {
         player->messenger->friends = messenger_query_get_friends(player->player_data->id);
     }

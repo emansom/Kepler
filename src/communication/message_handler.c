@@ -94,7 +94,7 @@
 // Inventory
 #include "communication/incoming/inventory/GETSTRIP.h"
 
-// Only allow these headers to be processed if the player is not logged in.
+// Only allow these headers to be processed if the session is not logged in.
 int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43 };
 
 /**
@@ -201,7 +201,7 @@ Client [0.0.0.0] incoming data: 149 / BU@M@C123@H@J07.04.1992@C@F123456*/
  * @param im the incoming message struct
  * @param player the player struct
  */
-void message_handler_invoke(incoming_message *im, player *player) {
+void message_handler_invoke(incoming_message *im, session *player) {
     char *preview = strdup(im->data);
     replace_vulnerable_characters(&preview, true, '|');
 

@@ -31,7 +31,7 @@ inventory *inventory_create() {
  *
  * @param player the player to load
  */
-void inventory_init(player *player) {
+void inventory_init(session *player) {
     if (player->inventory->items != NULL) {
         inventory_clear(player->inventory->items);
     }
@@ -40,7 +40,7 @@ void inventory_init(player *player) {
     player->inventory->items = item_query_get_inventory(player->player_data->id);
 }
 
-void inventory_send(inventory *inv, char *strip_view, player *player) {
+void inventory_send(inventory *inv, char *strip_view, session *player) {
     inventory_change_view(inv, strip_view);
     char *item_casts = inventory_get_casts(inv);
 
@@ -48,7 +48,7 @@ void inventory_send(inventory *inv, char *strip_view, player *player) {
     sb_add_string(om->sb, item_casts);
     sb_add_char(om->sb, 13);
     sb_add_int(om->sb, (int) list_size(inv->items));
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 
     free(item_casts);

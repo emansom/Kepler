@@ -24,14 +24,14 @@
 #include "game/room/mapping/room_map.h"
 #include "game/room/mapping/room_tile.h"
 
-void pool_warp_swim(player*, item*, coord warp, bool exit);
+void pool_warp_swim(session*, item*, coord warp, bool exit);
 
 /**
  * Handle walking out of booth
  *
  * @param player the player to handle
  */
-void pool_booth_exit(player *player) {
+void pool_booth_exit(session *player) {
     // Open up booth
     room_tile *tile = player->room_user->room->room_map->map[player->room_user->current->x][player->room_user->current->y];
 
@@ -70,7 +70,7 @@ void pool_booth_exit(player *player) {
  *
  * @param player the player to handle
  */
-void pool_item_walk_on(player *p, item *item) {
+void pool_item_walk_on(session *p, item *item) {
     room_user *room_entity = (room_user*)p->room_user;
 
     if (strcmp(item->definition->sprite, "poolLift") == 0) {
@@ -88,12 +88,12 @@ void pool_item_walk_on(player *p, item *item) {
         room_entity->walking_lock = true;
 
         outgoing_message *om = om_create(125); // "A}"
-        player_send((player*)room_entity->player, om);
+        session_send((session*)room_entity->player, om);
         om_cleanup(om);
 
         room_entity->player->player_data->tickets--;
-        player_send_tickets((player*)room_entity->player);
-        player_query_save_currency((player *) room_entity->player);
+        session_send_tickets((session*)room_entity->player);
+        player_query_save_currency((session *) room_entity->player);
 
     }
 
@@ -102,7 +102,7 @@ void pool_item_walk_on(player *p, item *item) {
         room_entity->walking_lock = true;
 
         outgoing_message *om = om_create(96); // "A`"
-        player_send((player*)room_entity->player, om);
+        session_send((session*)room_entity->player, om);
         om_cleanup(om);
     }
 
@@ -171,7 +171,7 @@ void pool_item_walk_on(player *p, item *item) {
  * @param warp the coordinates to warp to
  * @param exit true or false whether they're exiting or entering
  */
-void pool_warp_swim(player *p, item *item, coord warp, bool exit) {
+void pool_warp_swim(session *p, item *item, coord warp, bool exit) {
     room_user *room_entity = (room_user*)p->room_user;
     stop_walking(room_entity, true);
 

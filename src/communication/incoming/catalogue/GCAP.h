@@ -12,7 +12,7 @@
 
 void serialise_catalogue_item(catalogue_item *item, outgoing_message *message);
 
-void GCAP(player *player, incoming_message *message) {
+void GCAP(session *player, incoming_message *message) {
     char *content = im_get_content(message);
     char *page_name = get_argument(content, "/", 1);
 
@@ -56,7 +56,7 @@ void GCAP(player *player, incoming_message *message) {
         serialise_catalogue_item(item, om);
     }
 
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 
     cleanup:

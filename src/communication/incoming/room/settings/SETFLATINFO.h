@@ -6,7 +6,7 @@
 
 #include "database/queries/room_query.h"
 
-void SETFLATINFO(player *player, incoming_message *message) {
+void SETFLATINFO(session *player, incoming_message *message) {
     char *content = im_get_content(message);
     char *argument = get_argument(content, "/", 0);
 

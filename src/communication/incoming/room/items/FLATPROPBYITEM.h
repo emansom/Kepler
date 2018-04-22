@@ -10,7 +10,7 @@
 #include "database/queries/room_query.h"
 #include "database/queries/item_query.h"
 
-void FLATPROPBYITEM(player *player, incoming_message *message) {
+void FLATPROPBYITEM(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

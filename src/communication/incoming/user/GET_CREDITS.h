@@ -3,6 +3,6 @@
 
 #include "game/player/player.h"
 
-void GET_CREDITS(player *player, incoming_message *message) {
-    player_send_credits(player);
+void GET_CREDITS(session *player, incoming_message *message) {
+    session_send_credits(player);
 }

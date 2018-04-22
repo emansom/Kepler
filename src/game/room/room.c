@@ -124,7 +124,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  * @param om the outgoing message
  * @param player the player
  */
-void room_enter(room *room, player *player) {
+void room_enter(room *room, session *player) {
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player);
     }
@@ -174,7 +174,7 @@ void room_enter(room *room, player *player) {
     }
 
     /*outgoing_message *om = om_create(73); // "AI"
-    player_send(player, om);
+    session_send(session, om);
     om_cleanup(om);*/
 }
 
@@ -192,7 +192,7 @@ void room_load_data(room *room) {
  * Leave room handler, will make room and id for the room user reset back to NULL and 0.
  * And remove the character from the room.
  */
-void room_leave(room *room, player *room_player) {
+void room_leave(room *room, session *room_player) {
     if (!list_contains(room->users, room_player)) {
         return;
     }
@@ -234,24 +234,24 @@ void room_leave(room *room, player *room_player) {
  * @param om the outgoing message
  * @param player the player
  */
-void room_load(room *room, player *player) {
+void room_load(room *room, session *player) {
     outgoing_message *om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 
     om = om_create(69); // "AE"
     sb_add_string(om->sb, room->room_data->model);
     sb_add_string(om->sb, " ");
     sb_add_int(om->sb, room->room_id);
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 
     if (room->room_data->wallpaper > 0) {
         om = om_create(46); // "@n"
         sb_add_string(om->sb, "wallpaper/");
         sb_add_int(om->sb, room->room_data->wallpaper);
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
     }
 
@@ -259,11 +259,11 @@ void room_load(room *room, player *player) {
         om = om_create(46); // "@n"
         sb_add_string(om->sb, "floor/");
         sb_add_int(om->sb, room->room_data->floor);
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
     }
 
-    // Show new player current state of an item program for pools
+    // Show new session current state of an item program for pools
     for (size_t i = 0; i < list_size(room->items); i++) {
         item *item;
         list_get_at(room->items, i, (void *) &item);
@@ -285,10 +285,12 @@ void room_load(room *room, player *player) {
                 om_write_str(om, item->current_program_state);
             }
 
-            player_send(player, om);
+            session_send(player, om);
             om_cleanup(om);
         }
     }
+
+    player->room_user->authenticate_id = 0;
 }
 
 /**
@@ -323,7 +325,7 @@ bool room_has_rights(room *room, int user_id) {
  * @param room the room to refresh inside for
  * @param player the player to refresh the rights for
  */
-void room_refresh_rights(room *room, player *player) {
+void room_refresh_rights(room *room, session *player) {
     char rights_value[15];
     strcpy(rights_value, "");
 
@@ -331,13 +333,13 @@ void room_refresh_rights(room *room, player *player) {
 
     if (room_has_rights(room, player->player_data->id)) {
         om = om_create(42); // "@j"
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
     }
 
     if (room_is_owner(room, player->player_data->id)) {
         om = om_create(47); // "@o"
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
 
         strcpy(rights_value, " useradmin");
@@ -362,9 +364,9 @@ void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        player *room_player;
+        session *room_player;
         list_get_at(room->users, i, (void*)&room_player);
-        player_send(room_player, message);
+        session_send(room_player, message);
     }
 
     om_cleanup(message);

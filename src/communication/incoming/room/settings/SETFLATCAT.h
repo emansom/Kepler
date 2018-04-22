@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void SETFLATCAT(player *player, incoming_message *message) {
+void SETFLATCAT(session *player, incoming_message *message) {
     int room_id = im_read_vl64(message);
     int category_id = im_read_vl64(message);
 

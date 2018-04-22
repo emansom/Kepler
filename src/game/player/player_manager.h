@@ -2,7 +2,7 @@
 #define PLAYER_MANAGER_H
 
 typedef struct list_s List;
-typedef struct player_s player;
+typedef struct session_s session;
 typedef struct player_data_s player_data;
 
 struct player_manager {
@@ -10,10 +10,10 @@ struct player_manager {
 };
 
 void player_manager_init();
-player *player_manager_add(void*, char *ip);
-void player_manager_remove(player*);
-player *player_manager_find_by_name(char *name);
-player *player_manager_find_by_id(int);
+session *player_manager_add(void*, char *ip);
+void player_manager_remove(session*);
+session *player_manager_find_by_name(char *name);
+session *player_manager_find_by_id(int);
 player_data *player_manager_get_data_by_id(int);
 void player_manager_dispose();
 

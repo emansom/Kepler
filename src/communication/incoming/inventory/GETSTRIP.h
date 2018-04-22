@@ -4,7 +4,7 @@
 #include "game/inventory/inventory.h"
 
 // Credits to Nillus from Woodpecker v3, very helpful code!
-void GETSTRIP(player *player, incoming_message *im) {
+void GETSTRIP(session *player, incoming_message *im) {
     char *strip_view = im_get_content(im);
 
     inventory *inv = (inventory *) player->inventory;

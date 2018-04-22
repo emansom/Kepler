@@ -9,7 +9,7 @@
 
 #include "list.h"
 
-void MESSENGERINIT(player *p, incoming_message *message) {
+void MESSENGERINIT(session *p, incoming_message *message) {
     if (p->player_data == NULL) {
         return;
     }
@@ -27,7 +27,7 @@ void MESSENGERINIT(player *p, incoming_message *message) {
         messenger_entry_serialise(friend->user_id, friends_list);
     }
 
-    player_send(p, friends_list);
+    session_send(p, friends_list);
     om_cleanup(friends_list);
 
     /* V14 messenger sends message 191 and message 233 after receiving @L, V13 does not.

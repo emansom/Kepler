@@ -5,35 +5,35 @@
 
 #include "database/queries/messenger_query.h"
 
-void MESSENGER_ACCEPTBUDDY(player *session, incoming_message *message) {
+void MESSENGER_ACCEPTBUDDY(session *player, incoming_message *message) {
     int friend_id = im_read_vl64(message);
 
-    if (!messenger_has_request(session->messenger, friend_id)) {
+    if (!messenger_has_request(player->messenger, friend_id)) {
         return;
     }
 
-    messenger_query_delete_request(session->player_data->id, friend_id);
-    messenger_query_delete_request(friend_id, session->player_data->id);
+    messenger_query_delete_request(player->player_data->id, friend_id);
+    messenger_query_delete_request(friend_id, player->player_data->id);
 
     outgoing_message *response = om_create(137); // "BI"
     messenger_entry_serialise(friend_id, response);
-    player_send(session, response);
+    session_send(player, response);
     om_cleanup(response);
 
-    player *friend = player_manager_find_by_id(friend_id);
+    session *friend = player_manager_find_by_id(friend_id);
 
     if (friend != NULL) {    
         response = om_create(137); // "BI"
-        messenger_entry_serialise(session->player_data->id, response);
-        player_send(friend, response);
+        messenger_entry_serialise(player->player_data->id, response);
+        session_send(friend, response);
         om_cleanup(response);
 
-        list_add(friend->messenger->friends, messenger_entry_create(session->player_data->id));
+        list_add(friend->messenger->friends, messenger_entry_create(player->player_data->id));
     }
 
-    list_add(session->messenger->friends, messenger_entry_create(friend_id));
+    list_add(player->messenger->friends, messenger_entry_create(friend_id));
 
     if (friend != NULL) {
-        messenger_remove_request(friend->messenger, session->player_data->id);
+        messenger_remove_request(friend->messenger, player->player_data->id);
     }
 }

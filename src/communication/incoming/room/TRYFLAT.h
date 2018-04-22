@@ -5,9 +5,9 @@
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
 
-bool ring_doorbell_alerted(room *pS, player *pPlayer_s);
+bool ring_doorbell_alerted(room *pS, session *pPlayer_s);
 
-void TRYFLAT(player *player, incoming_message *message) {
+void TRYFLAT(session *player, incoming_message *message) {
     int room_id = 0;
 
     char *content = im_get_content(message);
@@ -44,13 +44,15 @@ void TRYFLAT(player *player, incoming_message *message) {
         }
 
         outgoing_message *om = om_create(message_id);
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
         return;
     }
 
+    player->room_user->authenticate_id = room->room_id;
+
     outgoing_message *interest = om_create(41); // "@i"
-    player_send(player, interest);
+    session_send(player, interest);
     om_cleanup(interest);
 
     cleanup:
@@ -58,17 +60,17 @@ void TRYFLAT(player *player, incoming_message *message) {
         free(password);
 }
 
-bool ring_doorbell_alerted(room *room, player *ringing) {
+bool ring_doorbell_alerted(room *room, session *ringing) {
     bool sent_ring_alert = false;
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        player *room_player;
+        session *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
         if (room_has_rights(room, room_player->player_data->id)) {
             outgoing_message *om = om_create(91); // "A["
             sb_add_string(om->sb, ringing->player_data->username);
-            player_send(room_player, om);
+            session_send(room_player, om);
             om_cleanup(om);
 
             sent_ring_alert = true;

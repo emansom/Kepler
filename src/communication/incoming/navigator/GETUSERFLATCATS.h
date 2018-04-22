@@ -5,7 +5,7 @@
 
 #include "list.h"
 
-void GETUSERFLATCATS(player *player, incoming_message *message) {
+void GETUSERFLATCATS(session *player, incoming_message *message) {
     outgoing_message *navigator = om_create(221); // "C]"
 
     // Count categories that this user can actually access
@@ -34,7 +34,7 @@ void GETUSERFLATCATS(player *player, incoming_message *message) {
         }
     }
 
-    player_send(player, navigator);
+    session_send(player, navigator);
     om_cleanup(navigator);
     
     list_destroy(categories);

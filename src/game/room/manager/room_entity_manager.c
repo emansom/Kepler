@@ -35,7 +35,7 @@ int create_instance_id(room_user *room_user) {
  */
 room_user *get_room_user_by_instance_id(room *room, int instance_id) {
     for (size_t i = 0; i < list_size(room->users); i++) {
-        player *room_player;
+        session *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
         if (room_player->room_user->instance_id == instance_id) {

@@ -27,9 +27,10 @@
 /*
  *
  */
-room_user *room_user_create(player *player) {
+room_user *room_user_create(session *player) {
     room_user *user = malloc(sizeof(room_user));
     user->player = player;
+    user->authenticate_id = 0;
     user->instance_id = 0;
     user->room_id = 0;
     user->room = NULL;
@@ -69,7 +70,7 @@ void walk_to(room_user *room_user, int x, int y) {
 
         if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
             outgoing_message *om = om_create(73); // "AI"
-            player_send((player *) room_user->player, om);
+            session_send((session *) room_user->player, om);
             om_cleanup(om);
             return;
         }
@@ -165,7 +166,7 @@ void room_user_invoke_item(room_user *room_user) {
             needs_update = true;
         }
 
-        pool_item_walk_on((player*) room_user->player, item);
+        pool_item_walk_on((session*) room_user->player, item);
     }
 
     room_user->needs_update = needs_update;
@@ -242,6 +243,7 @@ void room_user_reset(room_user *room_user) {
     room_user->room = NULL;
     room_user->walking_lock = false;
     room_user->lido_vote = -1;
+    room_user->authenticate_id = 0;
 
     if (room_user->next != NULL) {
         free(room_user->next);
@@ -282,7 +284,7 @@ void room_user_cleanup(room_user *room_user) {
  * @param om the outgoing message
  * @param player the player
  */
-void append_user_list(outgoing_message *players, player *player) {
+void append_user_list(outgoing_message *players, session *player) {
     char user_id[11], instance_id[11];
     sprintf(user_id, "%i", player->player_data->id);
     sprintf(instance_id, "%i", player->room_user->instance_id);
@@ -321,7 +323,7 @@ void append_user_list(outgoing_message *players, player *player) {
  * @param om the outgoing message
  * @param player the player
  */
-void append_user_status(outgoing_message *om, player *player) {
+void append_user_status(outgoing_message *om, session *player) {
     sb_add_int(om->sb, player->room_user->instance_id);
     sb_add_string(om->sb, " ");
     sb_add_int(om->sb, player->room_user->current->x);

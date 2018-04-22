@@ -11,7 +11,7 @@
 
 #include "util/stringbuilder.h"
 
-void G_OBJS(player *player, incoming_message *message) {
+void G_OBJS(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
@@ -31,7 +31,7 @@ void G_OBJS(player *player, incoming_message *message) {
         free(item_string);
     }
 
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 
     om = om_create(32); // "@`"
@@ -46,7 +46,7 @@ void G_OBJS(player *player, incoming_message *message) {
         free(item_string);
     }
 
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 
     list_destroy(public_items);

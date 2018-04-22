@@ -24,7 +24,7 @@ typedef struct player_data_s {
     unsigned long last_online;
 } player_data;
 
-typedef struct player_s {
+typedef struct session_s {
     void *stream;
     bool disconnected;
     char *ip_address;
@@ -33,18 +33,18 @@ typedef struct player_s {
     inventory *inventory;
     room_user *room_user;
     int logged_in;
-} player;
+} session;
 
 
-player *player_create(void*, char*);
+session *player_create(void*, char*);
 player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *);
-void player_login(player*);
-void player_send(player*, outgoing_message*);
-void player_send_credits(player*);
-void player_send_tickets(player*);
-void send_localised_error(player*, char*);
-void send_alert(player*, char*);
-void player_cleanup(player*);
+void player_login(session*);
+void session_send(session*, outgoing_message*);
+void session_send_credits(session*);
+void session_send_tickets(session*);
+void send_localised_error(session*, char*);
+void send_alert(session*, char*);
+void player_cleanup(session*);
 void player_data_cleanup(player_data*);
 
 #endif

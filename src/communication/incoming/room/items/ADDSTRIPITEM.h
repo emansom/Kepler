@@ -10,7 +10,7 @@
 
 #include "game/items/item.h"
 
-void ADDSTRIPITEM(player *player, incoming_message *message) {
+void ADDSTRIPITEM(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

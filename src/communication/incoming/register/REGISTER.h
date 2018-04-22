@@ -5,7 +5,7 @@
 
 #include "shared.h"
 
-void REGISTER(player *player, incoming_message *message) {
+void REGISTER(session *player, incoming_message *message) {
     im_read_b64_int(message);
     char *name = im_read_str(message);
 

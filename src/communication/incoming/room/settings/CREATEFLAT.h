@@ -6,7 +6,7 @@
 
 #include "database/queries/room_user_query.h"
 
-void CREATEFLAT(player *player, incoming_message *message) {
+void CREATEFLAT(session *player, incoming_message *message) {
     // Client [0.0.0.0] incoming data: 29 / @]/first floor/xddd/model_a/open/1
     char *content = im_get_content(message);
     char *floor_setting = get_argument(content, "/", 0);
@@ -44,7 +44,7 @@ void CREATEFLAT(player *player, incoming_message *message) {
     sb_add_int(om->sb, room_id);
     sb_add_char(om->sb, 13);
     sb_add_string(om->sb, room_name);
-    player_send(player, om);
+    session_send(player, om);
 
     cleanup:
         free(floor_setting);

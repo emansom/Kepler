@@ -8,7 +8,7 @@
 
 #include "database/queries/player_query.h"
 
-void FINDUSER(player *user, incoming_message *message) {
+void FINDUSER(session *user, incoming_message *message) {
     if (user->player_data == NULL) {
         return;
     }
@@ -26,7 +26,7 @@ void FINDUSER(player *user, incoming_message *message) {
         om_write_int(msg, 0);
     }
 
-    player_send(user, msg);
+    session_send(user, msg);
     om_cleanup(msg);
 
     free(input_search);

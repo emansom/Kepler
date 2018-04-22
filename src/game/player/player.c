@@ -23,8 +23,8 @@
  * Creates a new player
  * @return player struct
  */
-player *player_create(void *socket, char *ip_address) {
-    player *p = malloc(sizeof(player));
+session *player_create(void *socket, char *ip_address) {
+    session *p = malloc(sizeof(session));
     p->stream = socket;
     p->disconnected = false;
     p->ip_address = strdup(ip_address);
@@ -63,7 +63,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
  * 
  * @param p the player struct
  */
-void player_login(player *player) {
+void player_login(session *player) {
     player->room_user = (void*)room_user_create(player);
 
     player->messenger = (void*)messenger_create();
@@ -84,7 +84,7 @@ void player_login(player *player) {
  * @param p the player struct
  * @param om the outgoing message
  */
-void player_send(player *p, outgoing_message *om) {
+void session_send(session *p, outgoing_message *om) {
     if (om == NULL || p == NULL || p->disconnected) {
         return;
     }
@@ -114,10 +114,10 @@ void player_send(player *p, outgoing_message *om) {
  * @param p the player
  * @param error the error message
  */
-void send_localised_error(player *p, char *error) {
+void send_localised_error(session *p, char *error) {
     outgoing_message *om = om_create(33); // @a
     om_write_str(om, error);
-    player_send(p, om);
+    session_send(p, om);
     om_cleanup(om);
 }
 
@@ -127,10 +127,10 @@ void send_localised_error(player *p, char *error) {
  * @param p the player
  * @param greeting the alert message
  */
-void send_alert(player *p, char *greeting) {
+void send_alert(session *p, char *greeting) {
     outgoing_message *welcome_message = om_create(139); // BK
     om_write_str(welcome_message, greeting);
-    player_send(p, welcome_message);
+    session_send(p, welcome_message);
     om_cleanup(welcome_message);
 }
 
@@ -139,14 +139,14 @@ void send_alert(player *p, char *greeting) {
  *
  * @param player the player to send to
  */
-void player_send_credits(player *player) {
+void session_send_credits(session *player) {
     char credits_string[10 + 1]; ///"num + /0";
     sprintf(credits_string, "%i", player->player_data->credits);
 
     outgoing_message *credits = om_create(6); // "@F"
     om_write_str(credits, credits_string);
     sb_add_string(credits->sb, ".0");
-    player_send(player, credits);
+    session_send(player, credits);
     om_cleanup(credits);
 }
 
@@ -155,13 +155,13 @@ void player_send_credits(player *player) {
  *
  * @param player the player to send to
  */
-void player_send_tickets(player *player) {
+void session_send_tickets(session *player) {
     char credits_string[10 + 1]; ///"num + /0";
     sprintf(credits_string, "%i", player->player_data->tickets);
 
     outgoing_message *credits = om_create(124); // "A|"
     sb_add_string(credits->sb, credits_string);
-    player_send(player, credits);
+    session_send(player, credits);
     om_cleanup(credits);
 }
 
@@ -169,7 +169,7 @@ void player_send_tickets(player *player) {
  * Called when a connection is closed
  * @param player the player struct
  */
-void player_cleanup(player *player) {
+void player_cleanup(session *player) {
     if (player == NULL) {
         return;
     }

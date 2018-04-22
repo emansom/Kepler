@@ -8,7 +8,7 @@
 
 #include "game/player/player.h"
 
-void GCIX(player *player, incoming_message *message) {
+void GCIX(session *player, incoming_message *message) {
     List *pages = catalogue_manager_get_pages();
 
     outgoing_message *catalogue_pages = om_create(126); // "A~"
@@ -23,6 +23,6 @@ void GCIX(player *player, incoming_message *message) {
         }
     }
 
-    player_send(player, catalogue_pages);
+    session_send(player, catalogue_pages);
     om_cleanup(catalogue_pages);
 }

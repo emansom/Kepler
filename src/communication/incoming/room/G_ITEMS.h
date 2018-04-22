@@ -5,7 +5,7 @@
 
 #include "game/room/manager/room_item_manager.h"
 
-void G_ITEMS(player *player, incoming_message *message) {
+void G_ITEMS(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
@@ -25,7 +25,7 @@ void G_ITEMS(player *player, incoming_message *message) {
         free(item_string);
     }
 
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 
     list_destroy(wall_items);

@@ -19,7 +19,7 @@ void process_user_status(room_user *room_user);
  */
 void status_task(room *room) {
     for (size_t i = 0; i < list_size(room->users); i++) {
-        player *room_player;
+        session *room_player;
         list_get_at(room->users, i, (void*)&room_player);
         process_user_status((void*)room_player->room_user);
     }

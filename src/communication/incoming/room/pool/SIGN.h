@@ -4,7 +4,7 @@
 #include "database/queries/player_query.h"
 #include "game/room/pool/pool_handler.h"
 
-void SIGN(player *player, incoming_message *message) {
+void SIGN(session *player, incoming_message *message) {
     char *vote = im_get_content(message);
 
     if (vote == NULL) {

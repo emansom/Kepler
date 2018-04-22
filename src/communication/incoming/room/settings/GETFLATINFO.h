@@ -3,7 +3,7 @@
 
 #include "game/player/player.h"
 
-void GETFLATINFO(player *player, incoming_message *message) {
+void GETFLATINFO(session *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     if (is_numeric(content)) {
@@ -28,7 +28,7 @@ void GETFLATINFO(player *player, incoming_message *message) {
         om_write_int(flat_info, 1); // has trading
         om_write_int(flat_info, room->room_data->visitors_now); // current visitors
         om_write_int(flat_info, room->room_data->visitors_max); // max visitors
-        player_send(player, flat_info);
+        session_send(player, flat_info);
         om_cleanup(flat_info);
     }
 

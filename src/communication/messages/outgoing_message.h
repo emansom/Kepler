@@ -1,7 +1,7 @@
 #ifndef OUTGOING_MESSAGE_H
 #define OUTGOING_MESSAGE_H
 
-typedef struct player_s player;
+typedef struct session_s session;
 typedef struct stringbuilder_s stringbuilder;
 
 typedef struct outgoing_message_s {

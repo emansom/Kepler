@@ -6,7 +6,7 @@
 
 #include "database/queries/room_query.h"
 
-void UPDATEFLAT(player *player, incoming_message *message) {
+void UPDATEFLAT(session *player, incoming_message *message) {
     char *content = im_get_content(message);
     char *str_id = get_argument(content, "/", 0);
 

@@ -37,7 +37,7 @@ messenger_entry *messenger_entry_create(int user_id) {
  */
 void messenger_entry_serialise(int user_id, outgoing_message *response) {
     player_data *data = player_manager_get_data_by_id(user_id);
-    player *search_player = player_manager_find_by_id(user_id);
+    session *search_player = player_manager_find_by_id(user_id);
 
     if (data != NULL) {
         om_write_int(response, data->id);

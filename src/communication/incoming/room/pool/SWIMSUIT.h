@@ -4,7 +4,7 @@
 #include "database/queries/player_query.h"
 #include "game/room/pool/pool_handler.h"
 
-void SWIMSUIT(player *player, incoming_message *message) {
+void SWIMSUIT(session *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     if (content == NULL) {
@@ -28,7 +28,7 @@ void SWIMSUIT(player *player, incoming_message *message) {
     pool_booth_exit(player);
 
     // Save looks to database
-    query_player_save_looks(player);
+    query_session_save_looks(player);
 
     cleanup:
         free(content);

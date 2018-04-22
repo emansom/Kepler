@@ -6,7 +6,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void MESSENGER_GETMESSAGES(player *p, incoming_message *message) {
+void MESSENGER_GETMESSAGES(session *p, incoming_message *message) {
     for (int i = 0; i < list_size(p->messenger->messages); i++) {
         messenger_message *message;
         list_get_at(p->messenger->messages, i, (void*)&message);
@@ -17,7 +17,7 @@ void MESSENGER_GETMESSAGES(player *p, incoming_message *message) {
         om_write_int(response, message->receiver_id);
         om_write_str(response, message->date);
         om_write_str(response, message->body);
-        player_send(p, response);
+        session_send(p, response);
         om_cleanup(response);
     }
 }

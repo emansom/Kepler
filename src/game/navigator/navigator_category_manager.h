@@ -5,7 +5,7 @@ typedef struct list_s List;
 typedef struct hashtable_s HashTable;
 typedef struct outgoing_message_s outgoing_message;
 typedef struct room_s room;
-typedef struct player_s player;
+typedef struct session_s session;
 typedef struct room_category_s room_category;
 
 typedef enum room_category_type_e room_category_type;

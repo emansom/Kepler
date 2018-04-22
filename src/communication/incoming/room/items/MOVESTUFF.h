@@ -12,7 +12,7 @@
 
 #include "game/pathfinder/coord.h"
 
-void MOVESTUFF(player *player, incoming_message *message) {
+void MOVESTUFF(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

@@ -19,8 +19,8 @@ void player_manager_init() {
  * @param stream the dyad stream
  * @return the player
  */
-player *player_manager_add(void *stream, char *ip) {
-    player *p = player_create(stream, ip);
+session *player_manager_add(void *stream, char *ip) {
+    session *p = player_create(stream, ip);
     list_add(global.player_manager.players, p);
     return p;
 }
@@ -29,7 +29,7 @@ player *player_manager_add(void *stream, char *ip) {
  * Removes a player by the given stream
  * @param stream the dyad stream
  */
-void player_manager_remove(player *p) {
+void player_manager_remove(session *p) {
     if (list_contains(global.player_manager.players, p)) {
         list_remove(global.player_manager.players, p, NULL);
     }
@@ -41,7 +41,7 @@ void player_manager_remove(player *p) {
  * @param stream the stream
  * @return the player
  */
-player *player_manager_find(void *stream) {
+session *player_manager_find(void *stream) {
     return NULL;
 }
 
@@ -51,9 +51,9 @@ player *player_manager_find(void *stream) {
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
-player *player_manager_find_by_id(int player_id) {
+session *player_manager_find_by_id(int player_id) {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-        player *p;
+        session *p;
         list_get_at(global.player_manager.players, i, (void*)&p);
 
         if (p->player_data->id == player_id) {
@@ -70,9 +70,9 @@ player *player_manager_find_by_id(int player_id) {
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
-player *player_manager_find_by_name(char *name) {
+session *player_manager_find_by_name(char *name) {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-        player *p;
+        session *p;
         list_get_at(global.player_manager.players, i, (void*)&p);
 
         if (strcmp(p->player_data->username, name) == 0) {
@@ -91,7 +91,7 @@ player *player_manager_find_by_name(char *name) {
  */
 player_data *player_manager_get_data_by_id(int player_id) {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-        player *p;
+        session *p;
         list_get_at(global.player_manager.players, i, (void*)&p);
 
         if (p->player_data->id == player_id) {
@@ -107,7 +107,7 @@ player_data *player_manager_get_data_by_id(int player_id) {
  */
 void player_manager_dispose() {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-        player *player;
+        session *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
 
         uv_close((uv_handle_t *) player->stream, server_on_connection_close);

@@ -7,7 +7,7 @@
 #include "game/room/room_manager.h"
 #include "list.h"
 
-void SUSERF(player *player, incoming_message *message) {
+void SUSERF(session *player, incoming_message *message) {
     List *rooms = room_manager_get_by_user_id(player->player_data->id);
 
     if (list_size(rooms) > 0) {
@@ -44,12 +44,12 @@ void SUSERF(player *player, incoming_message *message) {
             om_write_char(om, 13);
         }
 
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
     } else {
         outgoing_message *om = om_create(57); // "@y"
         om_write_str(om, player->player_data->username);
-        player_send(player, om);
+        session_send(player, om);
         om_cleanup(om);
     }
 

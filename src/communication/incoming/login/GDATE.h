@@ -4,7 +4,7 @@
 #include "game/player/player.h"
 #include "time.h"
 
-void GDATE(player *player, incoming_message *message) {
+void GDATE(session *player, incoming_message *message) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
 
@@ -13,6 +13,6 @@ void GDATE(player *player, incoming_message *message) {
     
     outgoing_message *om = om_create(163); // "Bc"
     om_write_str(om, date);
-    player_send(player, om);
+    session_send(player, om);
     om_cleanup(om);
 }
