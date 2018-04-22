@@ -37,21 +37,20 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     room_item->id = id;
     room_item->room_id = room_id;
 
+    if (definition_id > 0) {
+        room_item->definition = item_manager_get_definition_by_id(definition_id);
+    }
+
     if (custom_data == NULL) {
         custom_data = strdup("");
     }
 
+    room_item->coords = create_coord_height(x, y, z);
     room_item->custom_data = custom_data;
     room_item->current_program = NULL;
     room_item->current_program_state = NULL;
-    room_item->coords = create_coord(x, y);
-    room_item->coords->z = z;
     room_item->coords->rotation = rotation;
     room_item->wall_position = wall_position;
-
-    if (definition_id > 0) {
-        room_item->definition = item_manager_get_definition_by_id(definition_id);
-    }
 
     return room_item;
 }

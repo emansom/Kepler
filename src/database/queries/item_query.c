@@ -77,6 +77,10 @@ List *item_query_get_room_items(int room_id) {
             break;
         }
 
+        //double z = sqlite3_column_double(stmt, 5);
+        //printf("Item def %i and %f\n", sqlite3_column_int(stmt, 0), z);
+
+        // item *item_create(int id, int room_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data)
         item *item = item_create(
                 sqlite3_column_int(stmt, 0),
                 sqlite3_column_int(stmt, 1),

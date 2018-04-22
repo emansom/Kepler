@@ -60,7 +60,7 @@ bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
         }
     }
 
-        if (tile->highest_item != NULL) {
+    if (tile->highest_item != NULL) {
         if (!item_is_walkable(tile->highest_item)) {
             return false;
         }

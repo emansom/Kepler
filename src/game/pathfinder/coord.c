@@ -23,6 +23,26 @@ coord *create_coord(int x, int y) {
 }
 
 /**
+ * Create a coordinate struct with given default parameters
+ *
+ * @param x the x coordinate
+ * @param y the y coordinate
+ * @param z the z coordinate
+ *
+ * @return coord ptr
+ */
+coord *create_coord_height(int x, int y, double z) {
+    coord *pos = malloc(sizeof(coord));
+    pos->x = x;
+    pos->y = y;
+    pos->z = z;
+    pos->head_rotation = 0;
+    pos->body_rotation = 0;
+    pos->rotation = 0;
+    return pos;
+}
+
+/**
  * Get the distance squared between two points.
  * 
  * @param first the first coordinate to compare

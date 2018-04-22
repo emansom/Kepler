@@ -107,9 +107,9 @@ void room_map_add_items(room *room) {
     list_copy_shallow(room->items, &items);
     list_sort_in_place(items, cmp);
 
-    for (size_t i = 0; i < list_size(room->items); i++) {
+    for (size_t i = 0; i < list_size(items); i++) {
         item *item;
-        list_get_at(room->items, i, (void*)&item);
+        list_get_at(items, i, (void*)&item);
 
         if (item->definition->behaviour->is_wall_item) {
             continue;
