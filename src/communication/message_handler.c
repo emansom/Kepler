@@ -55,6 +55,7 @@
 #include "communication/incoming/room/G_STAT.h"
 #include "communication/incoming/room/G_USRS.h"
 #include "communication/incoming/room/GET_FURNI_REVISIONS.h"
+#include "communication/incoming/room/LETUSERIN.h"
 
 // Pool
 #include "communication/incoming/room/pool/SWIMSUIT.h"
@@ -150,6 +151,7 @@ void message_handler_init() {
     message_requests[63] = G_ITEMS;
     message_requests[61] = G_USRS;
     message_requests[213] = GET_FURNI_REVISIONS;
+    message_requests[98] = LETUSERIN;
 
     // Pool
     message_requests[116] = SWIMSUIT;
