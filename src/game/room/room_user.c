@@ -307,14 +307,10 @@ void append_user_list(outgoing_message *players, session *player) {
     om_write_str_kv(players, "n", player->player_data->username);
     om_write_str_kv(players, "f", player->player_data->figure);
     om_write_str_kv(players, "s", player->player_data->sex);
-    sb_add_string(players->sb, "l");
-    sb_add_string(players->sb, ":");
-    sb_add_int(players->sb, player->room_user->current->x);
-    sb_add_string(players->sb, " ");
-    sb_add_int(players->sb, player->room_user->current->y);
-    sb_add_string(players->sb, " ");
-    sb_add_float(players->sb, player->room_user->current->z);
-    sb_add_char(players->sb, 13);
+    sb_add_string(players->sb, "l:");
+    sb_add_int_delimeter(players->sb, player->room_user->current->x, ' ');
+    sb_add_int_delimeter(players->sb, player->room_user->current->y, ' ');
+    sb_add_float_delimeter(players->sb, player->room_user->current->z, (char)13);
 
     if (strlen(player->player_data->motto) > 0) {
         om_write_str_kv(players, "c", player->player_data->motto);
@@ -337,18 +333,12 @@ void append_user_list(outgoing_message *players, session *player) {
  * @param player the player
  */
 void append_user_status(outgoing_message *om, session *player) {
-    sb_add_int(om->sb, player->room_user->instance_id);
-    sb_add_string(om->sb, " ");
-    sb_add_int(om->sb, player->room_user->current->x);
-    sb_add_string(om->sb, ",");
-    sb_add_int(om->sb, player->room_user->current->y);
-    sb_add_string(om->sb, ",");
-    sb_add_float(om->sb, player->room_user->current->z);
-    sb_add_string(om->sb, ",");
-    sb_add_int(om->sb, player->room_user->current->head_rotation);
-    sb_add_string(om->sb, ",");
-    sb_add_int(om->sb, player->room_user->current->body_rotation);
-    sb_add_string(om->sb, "/");
+    sb_add_int_delimeter(om->sb, player->room_user->instance_id, ' ');
+    sb_add_int_delimeter(om->sb, player->room_user->current->x, ',');
+    sb_add_int_delimeter(om->sb, player->room_user->current->y, ',');
+    sb_add_float_delimeter(om->sb, player->room_user->current->z, ',');
+    sb_add_int_delimeter(om->sb, player->room_user->current->head_rotation, ',');
+    sb_add_int_delimeter(om->sb, player->room_user->current->body_rotation, '/');
 
     if (hashtable_size(player->room_user->statuses) > 0) {
         HashTableIter iter;
