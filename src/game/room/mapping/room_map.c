@@ -275,6 +275,11 @@ void room_map_item_adjustment(room *room, item *item, bool rotation) {
 
         item->coords->z = tile->tile_height;
     }
+
+    if (item->coords->z > 8) {
+        item->coords->z = 8;
+    }
+
     /*if (rotation) {
         for (Item item : this.getTile(moveItem.getPosition().getX(), moveItem.getPosition().getY()).getItems()) {
             if (item.getId() == moveItem.getId()) {
