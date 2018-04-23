@@ -24,16 +24,16 @@
  * @return player struct
  */
 session *player_create(void *socket, char *ip_address) {
-    session *p = malloc(sizeof(session));
-    p->stream = socket;
-    p->disconnected = false;
-    p->ip_address = strdup(ip_address);
-    p->player_data = NULL;
-    p->logged_in = false;
-    p->room_user = NULL;
-    p->messenger = NULL;
-    p->inventory = NULL;
-    return p;
+    session *player = malloc(sizeof(session));
+    player->stream = socket;
+    player->disconnected = false;
+    player->ip_address = strdup(ip_address);
+    player->player_data = NULL;
+    player->logged_in = false;
+    player->room_user = NULL;
+    player->messenger = NULL;
+    player->inventory = NULL;
+    return player;
 }
 
 /**
@@ -220,6 +220,7 @@ void player_cleanup(session *player) {
     }
 
     free(player->ip_address);
+    free(player->stream);
 }
 
 void player_data_cleanup(player_data *player_data) {

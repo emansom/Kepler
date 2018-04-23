@@ -16,10 +16,11 @@
 
 
 /**
+ * Allocate buffer for reading data.
  *
- * @param handle
- * @param size
- * @param buf
+ * @param handle the socket that the data is going to
+ * @param size the size of the data
+ * @param buf the buffer containing the data
  */
 void server_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
     buf->base = malloc(size);
@@ -27,8 +28,9 @@ void server_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
 }
 
 /**
+ * Handle connection close.
  *
- * @param handle
+ * @param handle the session that closed
  */
 void server_on_connection_close(uv_handle_t *handle) {
     session *player = handle->data;
@@ -39,9 +41,10 @@ void server_on_connection_close(uv_handle_t *handle) {
 }
 
 /**
+ * Cleanup buffer after writing data.
  *
- * @param req
- * @param status
+ * @param req the write request buffer
+ * @param status the status of the write
  */
 void server_on_write(uv_write_t* req, int status) {
     free(req->data);
@@ -49,10 +52,11 @@ void server_on_write(uv_write_t* req, int status) {
 }
 
 /**
+ * Read incoming data from socket.
  *
- * @param handle
- * @param nread
- * @param buf
+ * @param handle the socket to read from
+ * @param nread the amount of bytes read
+ * @param buf the buffer containing the data
  */
 void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     if (nread == UV_EOF) {
@@ -66,13 +70,12 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     }
 
     if (nread > 0) {
-        session *p = handle->data;
+        session *player = handle->data;
 
         if (buf->base == NULL) {
-            p->disconnected = true;
+            player->disconnected = true;
             return;
         }
-
 
         int amount_read = 0;
 
@@ -98,9 +101,9 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 
             message[message_length - 1] = '\0';
 
-            if (p != NULL) {
+            if (player != NULL) {
                 incoming_message *im = im_create(message);
-                message_handler_invoke(im, p);
+                message_handler_invoke(im, player);
                 im_cleanup(im);
             }
 
@@ -114,9 +117,10 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 }
 
 /**
+ * Handle new connection handler.
  *
- * @param server
- * @param status
+ * @param server the server to read the client
+ * @param status the status of the client
  */
 void server_on_new_connection(uv_stream_t *server, int status) {
     if (status == -1) {

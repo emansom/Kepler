@@ -17,12 +17,6 @@
 
 void dispose_program();
 
-typedef struct test_s {
-    int i;
-} test;
-
-
-
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
 
