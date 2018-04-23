@@ -136,7 +136,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     uv_stream_t *handle = (uv_stream_t*)client;
     uv_tcp_getpeername((const uv_tcp_t*) handle, (struct sockaddr*)&client_addr, &client_addr_length);
     
-    char ip[16];
+    char ip[256];
     uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
 
     session *p = player_manager_add(handle, ip);

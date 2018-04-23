@@ -342,8 +342,8 @@ void append_user_status(outgoing_message *om, session *player) {
 
     if (hashtable_size(player->room_user->statuses) > 0) {
         HashTableIter iter;
-        TableEntry *entry;
 
+        TableEntry *entry;
         hashtable_iter_init(&iter, player->room_user->statuses);
 
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
