@@ -24,8 +24,11 @@
 #include "deque.h"
 #include "communication/messages/outgoing_message.h"
 
-/*
+/**
+ * Create room user by the given entity.
  *
+ * @param player the entity for the room user
+ * @return the room user struct to return
  */
 room_user *room_user_create(session *player) {
     room_user *user = malloc(sizeof(room_user));
@@ -47,10 +50,11 @@ room_user *room_user_create(session *player) {
 }
 
 /**
+ * Send walk request to room.
  *
- * @param room_user
- * @param x
- * @param y
+ * @param room_user the room user that wants to walk
+ * @param x the x coord
+ * @param y the y corord
  */
 void walk_to(room_user *room_user, int x, int y) {
     if (room_user->room == NULL) {
