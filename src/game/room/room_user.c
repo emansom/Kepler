@@ -139,6 +139,13 @@ void stop_walking(room_user *room_user, bool is_silent) {
 void room_user_invoke_item(room_user *room_user) {
     bool needs_update = false;
 
+    double height = room_user->room->room_map->map[room_user->current->x][room_user->current->y]->tile_height;
+
+    if (height != room_user->current->z) {
+        room_user->current->z = height;
+        needs_update = true;
+    }
+
     item *item = NULL;
     room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
 
@@ -168,6 +175,8 @@ void room_user_invoke_item(room_user *room_user) {
 
         pool_item_walk_on((session*) room_user->player, item);
     }
+
+
 
     room_user->needs_update = needs_update;
 }
