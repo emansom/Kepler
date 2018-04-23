@@ -112,5 +112,6 @@ void do_purchase(session *player, item_definition *def, char *extra_data, int sp
 
     int item_id = item_query_create(player->player_data->id, 0, def->id, 0, 0, 0, 0, custom_data);
     item *inventory_item = item_create(item_id, 0, def->id, 0, 0, 0, NULL, 0, custom_data);
+
     list_add(player->inventory->items, inventory_item);
 }
