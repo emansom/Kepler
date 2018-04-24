@@ -11,7 +11,7 @@
 #include "database/queries/room_query.h"
 
 void NAVIGATE(session *player, incoming_message *message) {
-    bool hide_full = (bool) im_read_vl64(message);
+    int hide_full = im_read_vl64(message);
     int category_id = im_read_vl64(message);
 
     room_category *parent_category = category_manager_get_by_id(category_id);
@@ -35,22 +35,36 @@ void NAVIGATE(session *player, incoming_message *message) {
         List *rooms = category_manager_get_rooms(parent_category->id);
         List *recent_rooms = NULL;
 
-        list_sort_in_place(rooms, room_manager_sort);
-
         if (parent_category->category_type == PRIVATE) {
-             recent_rooms = room_query_recent_rooms(50, parent_category->id);
+            recent_rooms = room_query_recent_rooms(10, parent_category->id);
 
+            // Get recent rooms from database for catgeory
             for (size_t i = 0; i < list_size(recent_rooms); i++) {
                 room *instance;
-                list_get_at(recent_rooms, i, (void *) &instance);
+                list_get_at(recent_rooms, i, (void*)&instance);
 
                 if (room_manager_get_by_id(instance->room_id) == NULL) {
                     list_add(rooms, instance);
+                } else {
+                    list_remove(recent_rooms, instance, NULL); // Remove rooms that are already loaded into server.
                 }
             }
 
-            om_write_int(navigator, (int)list_size(rooms));  // room count
+            // Remove full rooms if hide full
+            for (size_t i = 0; i < list_size(rooms); i++) {
+                room *instance;
+                list_get_at(rooms, i, (void *) &instance);
+
+                if (hide_full && (instance->room_data->visitors_now >= instance->room_data->visitors_max)) {
+                    list_remove(rooms, instance, NULL);
+                }
+            }
+
+            // Add integer for the amount of public rooms
+            om_write_int(navigator, (int) list_size(rooms));  // room count
         }
+
+        list_sort_in_place(rooms, room_manager_sort);
 
         for (size_t i = 0; i < list_size(rooms); i++) {
             room *instance;
@@ -101,15 +115,6 @@ void NAVIGATE(session *player, incoming_message *message) {
 
         List *child_categories = category_manager_get_by_parent_id(parent_category->id);
 
-        /* Navigator.Append(
-         * Encoding.encodeVL64(subCataIDs[i]) +
-         * Encoding.encodeVL64(0) +
-         * subName + Convert.ToChar(2) +
-         * Encoding.encodeVL64(visitorCount) +
-         * Encoding.encodeVL64(visitorMax) +
-         * Encoding.encodeVL64(cataID));
-                                    }*/
-
         for (size_t i = 0; i < list_size(child_categories); i++) {
             room_category *category;
             list_get_at(child_categories, i, (void*)&category);
@@ -117,12 +122,12 @@ void NAVIGATE(session *player, incoming_message *message) {
             int current_visitors = category_manager_get_current_vistors(category->id);
             int max_visitors = category_manager_get_max_vistors(category->id);
 
-            if (category_has_access(category, player->player_data->rank) && (!hide_full || current_visitors < max_visitors)) {
+            if (category_has_access(category, player->player_data->rank)) {
                 om_write_int(navigator, category->id);
                 om_write_int(navigator, 0);
                 om_write_str(navigator, category->name);
                 om_write_int(navigator, current_visitors);
-                om_write_int(navigator, max_visitors); 
+                om_write_int(navigator, max_visitors);
                 om_write_int(navigator, parent_category->id); 
             }
         }
@@ -132,18 +137,19 @@ void NAVIGATE(session *player, incoming_message *message) {
                 room *instance;
                 list_get_at(recent_rooms, i, (void *) &instance);
 
-                printf("disposed %i\n", instance->room_id);
-
-                room_dispose(instance);
+                if (room_manager_get_by_id(instance->room_id) == NULL) {
+                    room_dispose(instance);
+                }
             }
 
             list_destroy(recent_rooms);
         }
 
+
         list_destroy(rooms);
         list_destroy(child_categories);
     }
-        
-    session_send(player, navigator);
+
+    player_send(player, navigator);
     om_cleanup(navigator);
 }

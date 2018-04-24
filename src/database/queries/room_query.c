@@ -116,10 +116,9 @@ List *room_query_get_by_owner_id(int owner_id) {
         }
 
         room *room = room_create(sqlite3_column_int(stmt, 0));
-        room_data *room_data = room_create_data_sqlite(room, stmt);
-        room->room_data = room_data;
-        list_add(rooms, room);
+        room->room_data = room_create_data_sqlite(room, stmt);
 
+        list_add(rooms, room);
     }
 
     sqlite3_finalize(stmt);
@@ -156,8 +155,8 @@ List *room_query_recent_rooms(int limit, int category_id) {
         }
 
         room *room = room_create(sqlite3_column_int(stmt, 0));
-        room_data *room_data = room_create_data_sqlite(room, stmt);
-        room->room_data = room_data;
+        room->room_data = room_create_data_sqlite(room, stmt);
+
         list_add(rooms, room);
 
     }
@@ -186,6 +185,8 @@ room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt) {
             sqlite3_column_int(stmt, 13),
             sqlite3_column_int(stmt, 14)
     );
+
+    return room_data;
 }
 
 /**
