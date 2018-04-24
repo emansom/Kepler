@@ -10,7 +10,7 @@ void APPROVENAME(session *player, incoming_message *message) {
 
     outgoing_message *om = om_create(36); // "@d"
     om_write_int(om, name_check_code);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     free(username);

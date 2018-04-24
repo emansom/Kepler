@@ -34,7 +34,7 @@ void GETFLATINFO(session *player, incoming_message *message) {
         om_write_int(flat_info, 1); // has trading
         om_write_int(flat_info, room->room_data->visitors_now); // current visitors
         om_write_int(flat_info, room->room_data->visitors_max); // max visitors
-        session_send(player, flat_info);
+        player_send(player, flat_info);
         om_cleanup(flat_info);
 
         if (dispose_after) {

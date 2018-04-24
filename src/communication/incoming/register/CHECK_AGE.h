@@ -6,6 +6,6 @@
 void CHECK_AGE(session *player, incoming_message *message) {
     outgoing_message *om = om_create(271); // "DO"
     om_write_str_int(om, 1);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 }

@@ -39,7 +39,7 @@ typedef struct session_s {
 session *player_create(void*, char*);
 player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *);
 void player_login(session*);
-void session_send(session*, outgoing_message*);
+void player_send(session *, outgoing_message *);
 void session_send_credits(session*);
 void session_send_tickets(session*);
 void send_localised_error(session*, char*);

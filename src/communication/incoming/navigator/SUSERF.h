@@ -44,12 +44,12 @@ void SUSERF(session *player, incoming_message *message) {
             om_write_char(om, 13);
         }
 
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
     } else {
         outgoing_message *om = om_create(57); // "@y"
         om_write_str(om, player->player_data->username);
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
     }
 

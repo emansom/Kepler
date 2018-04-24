@@ -34,7 +34,7 @@ void GETUSERFLATCATS(session *player, incoming_message *message) {
         }
     }
 
-    session_send(player, navigator);
+    player_send(player, navigator);
     om_cleanup(navigator);
     
     list_destroy(categories);

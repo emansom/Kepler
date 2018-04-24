@@ -29,7 +29,7 @@ void G_STAT(session *player, incoming_message *message) {
         append_user_status(players, room_player);
     }
 
-    session_send(player, players);
+    player_send(player, players);
     om_cleanup(players);
     player->room_user->needs_update = 1;
 }

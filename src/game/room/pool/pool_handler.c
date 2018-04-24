@@ -88,7 +88,7 @@ void pool_item_walk_on(session *p, item *item) {
         room_entity->walking_lock = true;
 
         outgoing_message *om = om_create(125); // "A}"
-        session_send((session*)room_entity->player, om);
+        player_send((session *) room_entity->player, om);
         om_cleanup(om);
 
         room_entity->player->player_data->tickets--;
@@ -102,7 +102,7 @@ void pool_item_walk_on(session *p, item *item) {
         room_entity->walking_lock = true;
 
         outgoing_message *om = om_create(96); // "A`"
-        session_send((session*)room_entity->player, om);
+        player_send((session *) room_entity->player, om);
         om_cleanup(om);
     }
 

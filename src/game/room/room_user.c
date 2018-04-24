@@ -74,7 +74,7 @@ void walk_to(room_user *room_user, int x, int y) {
 
         if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
             outgoing_message *om = om_create(73); // "AI"
-            session_send((session *) room_user->player, om);
+            player_send((session *) room_user->player, om);
             om_cleanup(om);
             return;
         }

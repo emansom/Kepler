@@ -10,10 +10,10 @@
 #include "game/player/player.h"
 
 void GET_ALIAS_LIST(session *player, incoming_message *message) {
-    session_send(player, global.item_manager.sprite_index);
+    player_send(player, global.item_manager.sprite_index);
 
     outgoing_message *om = om_create(297); // "Di"
     om_write_int(om, 0);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 }

@@ -48,7 +48,7 @@ void inventory_send(inventory *inv, char *strip_view, session *player) {
     sb_add_string(om->sb, item_casts);
     sb_add_char(om->sb, 13);
     sb_add_int(om->sb, (int) list_size(inv->items));
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     free(item_casts);

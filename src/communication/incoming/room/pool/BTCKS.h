@@ -25,7 +25,7 @@ void BTCKS(session *player, incoming_message *message) {
 
     if (player->player_data->credits < cost_credits) {
         outgoing_message *om = om_create(68); // "AD"
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
         goto cleanup;
     }
@@ -33,7 +33,7 @@ void BTCKS(session *player, incoming_message *message) {
     if (!player_query_exists_username(tickets_for)) {
         outgoing_message *om = om_create(76); // "AL"
         sb_add_string(om->sb, tickets_for); // No user named <here> found. Gift not purchased.
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
         goto cleanup;
     }

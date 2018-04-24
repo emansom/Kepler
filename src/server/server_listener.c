@@ -147,7 +147,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
 
     if(result == 0) {
         outgoing_message *msg = om_create(0); // "@@"
-        session_send(p, msg);
+        player_send(p, msg);
         om_cleanup(msg);
 
         uv_read_start(handle, server_alloc_buffer, server_on_read);

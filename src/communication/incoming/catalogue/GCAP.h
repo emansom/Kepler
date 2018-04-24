@@ -56,7 +56,7 @@ void GCAP(session *player, incoming_message *message) {
         serialise_catalogue_item(item, om);
     }
 
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     cleanup:

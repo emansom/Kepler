@@ -26,7 +26,7 @@ void FINDUSER(session *user, incoming_message *message) {
         om_write_int(msg, 0);
     }
 
-    session_send(user, msg);
+    player_send(user, msg);
     om_cleanup(msg);
 
     free(input_search);

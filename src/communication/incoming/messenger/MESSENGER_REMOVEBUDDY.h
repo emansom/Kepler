@@ -20,7 +20,7 @@ void MESSENGER_REMOVEBUDDY(session *player, incoming_message *message) {
     outgoing_message *response = om_create(138); // "BJ"
     om_write_int(response, 1);
     om_write_int(response, friend_id);
-    session_send(player, response);
+    player_send(player, response);
     om_cleanup(response);
 
     session *friend = player_manager_find_by_id(friend_id);
@@ -29,7 +29,7 @@ void MESSENGER_REMOVEBUDDY(session *player, incoming_message *message) {
         response = om_create(138); // "BJ"
         om_write_int(response, 1);
         om_write_int(response, player->player_data->id);
-        session_send(friend, response);
+        player_send(friend, response);
         om_cleanup(response);
 
         messenger_remove_friend(friend->messenger, friend_id);

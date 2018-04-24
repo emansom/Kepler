@@ -44,7 +44,7 @@ void CREATEFLAT(session *player, incoming_message *message) {
     sb_add_int(om->sb, room_id);
     sb_add_char(om->sb, 13);
     sb_add_string(om->sb, room_name);
-    session_send(player, om);
+    player_send(player, om);
 
     cleanup:
         free(floor_setting);

@@ -25,7 +25,7 @@ void G_USRS(session *p, incoming_message *message) {
         append_user_list(players, user);
     }
 
-    session_send(p, players);
+    player_send(p, players);
     om_cleanup(players);*/
 
     outgoing_message *players;
@@ -36,8 +36,8 @@ void G_USRS(session *p, incoming_message *message) {
         list_get_at(room->users, i, (void*)&room_player);
         append_user_list(players, room_player);
     }
-    
-    session_send(p, players);
+
+    player_send(p, players);
     om_cleanup(players);
 
     players = om_create(28); // "@\"
@@ -63,6 +63,6 @@ void G_USRS(session *p, incoming_message *message) {
     sb_add_float(players->sb, session->room_user->room->room_data->model_data->door_z);
     sb_add_char(players->sb, 13);
     om_write_str_kv(players, "c", session->player_data->motto);
-    session_send(session, players);
+    player_send(session, players);
     om_cleanup(players);*/
 }

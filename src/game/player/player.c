@@ -84,7 +84,7 @@ void player_login(session *player) {
  * @param p the player struct
  * @param om the outgoing message
  */
-void session_send(session *p, outgoing_message *om) {
+void player_send(session *p, outgoing_message *om) {
     if (om == NULL || p == NULL || p->disconnected) {
         return;
     }
@@ -117,7 +117,7 @@ void session_send(session *p, outgoing_message *om) {
 void send_localised_error(session *p, char *error) {
     outgoing_message *om = om_create(33); // @a
     om_write_str(om, error);
-    session_send(p, om);
+    player_send(p, om);
     om_cleanup(om);
 }
 
@@ -130,7 +130,7 @@ void send_localised_error(session *p, char *error) {
 void send_alert(session *p, char *greeting) {
     outgoing_message *welcome_message = om_create(139); // BK
     om_write_str(welcome_message, greeting);
-    session_send(p, welcome_message);
+    player_send(p, welcome_message);
     om_cleanup(welcome_message);
 }
 
@@ -146,7 +146,7 @@ void session_send_credits(session *player) {
     outgoing_message *credits = om_create(6); // "@F"
     om_write_str(credits, credits_string);
     sb_add_string(credits->sb, ".0");
-    session_send(player, credits);
+    player_send(player, credits);
     om_cleanup(credits);
 }
 
@@ -161,7 +161,7 @@ void session_send_tickets(session *player) {
 
     outgoing_message *credits = om_create(124); // "A|"
     sb_add_string(credits->sb, credits_string);
-    session_send(player, credits);
+    player_send(player, credits);
     om_cleanup(credits);
 }
 

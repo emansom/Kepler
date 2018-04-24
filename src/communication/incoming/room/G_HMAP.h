@@ -15,6 +15,6 @@ void G_HMAP(session *player, incoming_message *message) {
 
     outgoing_message *om = om_create(31); // "@_"
     om_write_str(om, player->room_user->room->room_data->model_data->heightmap);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 }

@@ -30,7 +30,7 @@ void MESSENGER_REQUESTBUDDY(session *player, incoming_message *message) {
         outgoing_message *response = om_create(132); // "BD"
         om_write_int(response, player->player_data->id);
         om_write_str(response, player->player_data->username);
-        session_send(requested_player, response);
+        player_send(requested_player, response);
         om_cleanup(response);
 
         list_add(requested_player->messenger->requests, messenger_entry_create(player->player_data->id));

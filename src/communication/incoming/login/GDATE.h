@@ -13,6 +13,6 @@ void GDATE(session *player, incoming_message *message) {
     
     outgoing_message *om = om_create(163); // "Bc"
     om_write_str(om, date);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 }

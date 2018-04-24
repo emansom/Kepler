@@ -174,7 +174,7 @@ void room_enter(room *room, session *player) {
     }
 
     /*outgoing_message *om = om_create(73); // "AI"
-    session_send(session, om);
+    player_send(session, om);
     om_cleanup(om);*/
 }
 
@@ -237,21 +237,21 @@ void room_leave(room *room, session *room_player) {
 void room_load(room *room, session *player) {
     outgoing_message *om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     om = om_create(69); // "AE"
     sb_add_string(om->sb, room->room_data->model);
     sb_add_string(om->sb, " ");
     sb_add_int(om->sb, room->room_id);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     if (room->room_data->wallpaper > 0) {
         om = om_create(46); // "@n"
         sb_add_string(om->sb, "wallpaper/");
         sb_add_int(om->sb, room->room_data->wallpaper);
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
     }
 
@@ -259,7 +259,7 @@ void room_load(room *room, session *player) {
         om = om_create(46); // "@n"
         sb_add_string(om->sb, "floor/");
         sb_add_int(om->sb, room->room_data->floor);
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
     }
 
@@ -285,7 +285,7 @@ void room_load(room *room, session *player) {
                 om_write_str(om, item->current_program_state);
             }
 
-            session_send(player, om);
+            player_send(player, om);
             om_cleanup(om);
         }
     }
@@ -333,13 +333,13 @@ void room_refresh_rights(room *room, session *player) {
 
     if (room_has_rights(room, player->player_data->id)) {
         om = om_create(42); // "@j"
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
     }
 
     if (room_is_owner(room, player->player_data->id)) {
         om = om_create(47); // "@o"
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
 
         strcpy(rights_value, " useradmin");
@@ -366,7 +366,7 @@ void room_send(room *room, outgoing_message *message) {
     for (size_t i = 0; i < list_size(room->users); i++) {
         session *room_player;
         list_get_at(room->users, i, (void*)&room_player);
-        session_send(room_player, message);
+        player_send(room_player, message);
     }
 
     om_cleanup(message);

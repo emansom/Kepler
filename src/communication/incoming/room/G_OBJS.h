@@ -31,7 +31,7 @@ void G_OBJS(session *player, incoming_message *message) {
         free(item_string);
     }
 
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     om = om_create(32); // "@`"
@@ -46,7 +46,7 @@ void G_OBJS(session *player, incoming_message *message) {
         free(item_string);
     }
 
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     list_destroy(public_items);

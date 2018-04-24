@@ -35,7 +35,7 @@ void MESSENGER_SENDMSG(session *player, incoming_message *message) {
             om_write_int(response, player->player_data->id);
             om_write_str(response, date);
             om_write_str(response, chat_message);
-            session_send(player_friend, response);
+            player_send(player_friend, response);
             om_cleanup(response);
         }
 

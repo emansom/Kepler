@@ -9,7 +9,7 @@ void APPROVE_PASSWORD(session *player, incoming_message *message) {
 
     outgoing_message *om = om_create(282); // "DZ"
     om_write_int(om, valid_password(username, password));
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     free(username);

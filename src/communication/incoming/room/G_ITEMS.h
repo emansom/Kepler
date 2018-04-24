@@ -25,7 +25,7 @@ void G_ITEMS(session *player, incoming_message *message) {
         free(item_string);
     }
 
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     list_destroy(wall_items);

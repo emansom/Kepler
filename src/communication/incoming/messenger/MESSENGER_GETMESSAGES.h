@@ -17,7 +17,7 @@ void MESSENGER_GETMESSAGES(session *p, incoming_message *message) {
         om_write_int(response, message->receiver_id);
         om_write_str(response, message->date);
         om_write_str(response, message->body);
-        session_send(p, response);
+        player_send(p, response);
         om_cleanup(response);
     }
 }

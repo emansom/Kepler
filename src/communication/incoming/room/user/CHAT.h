@@ -61,7 +61,7 @@ void CHAT(session *player, incoming_message *im) {
                 free(garble_message);
             }
 
-            session_send(room_player, om);
+            player_send(room_player, om);
             om_cleanup(om);
         }
     }

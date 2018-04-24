@@ -41,7 +41,7 @@ void GRPC(session *player, incoming_message *message) {
 
     if (store_item->price > player->player_data->credits) {
         outgoing_message *om = om_create(68); // "AD"
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
 
         goto cleanup;

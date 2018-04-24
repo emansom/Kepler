@@ -20,7 +20,7 @@ void MESSENGER_GETREQUESTS(session *p, incoming_message *message) {
         outgoing_message *request = om_create(132); // "BD"
         om_write_int(request, request_entry->user_id);
         om_write_str(request, friends_name);
-        session_send(p, request);
+        player_send(p, request);
         om_cleanup(request);
         
         free(friends_name);

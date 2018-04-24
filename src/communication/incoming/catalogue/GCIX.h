@@ -23,6 +23,6 @@ void GCIX(session *player, incoming_message *message) {
         }
     }
 
-    session_send(player, catalogue_pages);
+    player_send(player, catalogue_pages);
     om_cleanup(catalogue_pages);
 }

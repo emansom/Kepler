@@ -38,7 +38,7 @@ void LETUSERIN(session *user, incoming_message *message) {
     }
 
     outgoing_message *om = om_create(message_id);
-    session_send(to_enter, om);
+    player_send(to_enter, om);
     om_cleanup(om);
 
     cleanup:

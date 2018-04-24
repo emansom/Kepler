@@ -21,11 +21,11 @@ void TRY_LOGIN(session *player, incoming_message *message) {
 
     outgoing_message *fuserights_message = om_create(2); // @B
     om_write_str(fuserights_message, "default\2fuse_login\2fuse_buy_credits\2fuse_trade\2fuse_room_queue_default\2fuse_performance_panel");
-    session_send(player, fuserights_message);
+    player_send(player, fuserights_message);
     om_cleanup(fuserights_message);
 
     outgoing_message *authenticate_message = om_create(3); // @C
-    session_send(player, authenticate_message);
+    player_send(player, authenticate_message);
     om_cleanup(authenticate_message);
 
     char greeting[50];

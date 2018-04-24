@@ -50,7 +50,7 @@ void TRYFLAT(session *player, incoming_message *message) {
         }
 
         outgoing_message *om = om_create(message_id);
-        session_send(player, om);
+        player_send(player, om);
         om_cleanup(om);
         return;
     }
@@ -58,7 +58,7 @@ void TRYFLAT(session *player, incoming_message *message) {
     player->room_user->authenticate_id = room->room_id;
 
     outgoing_message *interest = om_create(41); // "@i"
-    session_send(player, interest);
+    player_send(player, interest);
     om_cleanup(interest);
 
     if (dispose_after) {
@@ -80,7 +80,7 @@ bool ring_doorbell_alerted(room *room, session *ringing) {
         if (room_has_rights(room, room_player->player_data->id)) {
             outgoing_message *om = om_create(91); // "A["
             sb_add_string(om->sb, ringing->player_data->username);
-            session_send(room_player, om);
+            player_send(room_player, om);
             om_cleanup(om);
 
             sent_ring_alert = true;

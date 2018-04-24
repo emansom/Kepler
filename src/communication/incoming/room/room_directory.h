@@ -8,7 +8,7 @@ void room_directory(session *player, incoming_message *message) {
     bool is_public = (content[0] == 'A');
 
     outgoing_message *om = om_create(19); // "@S"
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
     if (is_public) {
@@ -28,6 +28,6 @@ void room_directory(session *player, incoming_message *message) {
     free(content);
     /*om = om_create(166); // "Bf"
     om_write_raw_str(om, "/client/");
-    session_send(session, om);
+    player_send(session, om);
     om_cleanup(om);*/
 }

@@ -27,7 +27,7 @@ void UPDATE_ACCOUNT(session *player, incoming_message *message) {
     }
 
     om_write_int(om, error_id);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 
 

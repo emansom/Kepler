@@ -17,7 +17,7 @@ void MESSENGER_ACCEPTBUDDY(session *player, incoming_message *message) {
 
     outgoing_message *response = om_create(137); // "BI"
     messenger_entry_serialise(friend_id, response);
-    session_send(player, response);
+    player_send(player, response);
     om_cleanup(response);
 
     session *friend = player_manager_find_by_id(friend_id);
@@ -25,7 +25,7 @@ void MESSENGER_ACCEPTBUDDY(session *player, incoming_message *message) {
     if (friend != NULL) {    
         response = om_create(137); // "BI"
         messenger_entry_serialise(player->player_data->id, response);
-        session_send(friend, response);
+        player_send(friend, response);
         om_cleanup(response);
 
         list_add(friend->messenger->friends, messenger_entry_create(player->player_data->id));

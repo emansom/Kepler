@@ -4,6 +4,6 @@
 void GETINTERST(session *player, incoming_message *message) {
     outgoing_message *om = om_create(258); // "DB"
     om_write_str_int(om, 0);
-    session_send(player, om);
+    player_send(player, om);
     om_cleanup(om);
 }
