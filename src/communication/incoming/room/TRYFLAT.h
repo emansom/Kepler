@@ -30,6 +30,12 @@ void TRYFLAT(session *player, incoming_message *message) {
     }
 
     room *room = room_manager_get_by_id(room_id);
+    bool dispose_after = false;
+
+    if (room == NULL) {
+        room = room_query_get_by_room_id(room_id);
+        dispose_after = true;
+    }
 
     if (room == NULL) {
         goto cleanup;
@@ -54,6 +60,10 @@ void TRYFLAT(session *player, incoming_message *message) {
     outgoing_message *interest = om_create(41); // "@i"
     session_send(player, interest);
     om_cleanup(interest);
+
+    if (dispose_after) {
+        room_dispose(room);
+    }
 
     cleanup:
         free(content);

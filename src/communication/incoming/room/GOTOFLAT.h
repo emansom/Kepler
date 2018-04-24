@@ -10,13 +10,22 @@ void GOTOFLAT(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    room *room = room_manager_get_by_id((int)strtol(content, NULL, 10));
+    int room_id = (int)strtol(content, NULL, 10);
+    room *room = room_manager_get_by_id(room_id);
 
-    if (room == NULL) {
+    if (player->room_user->authenticate_id != room_id) {
         goto cleanup;
     }
 
-    if (player->room_user->authenticate_id != room->room_id) {
+    if (room == NULL) {
+        room = room_query_get_by_room_id(room_id);
+
+        if (room != NULL) {
+            hashtable_add(global.room_manager.rooms, &room->room_id, room);
+        }
+    }
+
+    if (room == NULL) {
         goto cleanup;
     }
 

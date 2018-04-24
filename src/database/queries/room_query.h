@@ -7,6 +7,7 @@ typedef struct room_s room;
 
 List *room_query_get_by_owner_id(int);
 room *room_query_get_by_room_id(int);
+List *room_query_recent_rooms(int limit, int category_id);
 
 void room_query_get_models();
 void room_query_get_categories();
