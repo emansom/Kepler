@@ -52,6 +52,7 @@ room *room_create(int room_id) {
     instance->status_job = NULL;
     list_new(&instance->users);
     list_new(&instance->items);
+    instance->tick = 0;
     return instance;
 }
 
@@ -410,6 +411,7 @@ void room_dispose(room *room, bool override) {
         return; // Prevent public rooms
     }
 
+    room->tick = 0;
     room_item_manager_dispose(room);
 
     if (!override) {
