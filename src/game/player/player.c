@@ -116,7 +116,7 @@ void player_send(session *p, outgoing_message *om) {
  */
 void send_localised_error(session *p, char *error) {
     outgoing_message *om = om_create(33); // @a
-    om_write_str(om, error);
+    sb_add_string(om->sb, error);
     player_send(p, om);
     om_cleanup(om);
 }
