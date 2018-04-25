@@ -17,6 +17,8 @@ void CHAT(session *player, incoming_message *im) {
     char *message = im_read_str(im);
     filter_vulnerable_characters(&message, true);
 
+    room_user_move_mouth((room_user *) player->room_user, message);
+
     room *room = player->room_user->room;
 
     int source_x = player->room_user->current->x;

@@ -140,6 +140,74 @@ void stop_walking(room_user *room_user, bool is_silent) {
     }
 }
 
+/**
+ * Animates the users mouth when speaking and detects any gestures.
+ *
+ * @param room_user the room user to animate for
+ * @param text the text to read for any gestures and to find animation times
+ */
+void room_user_move_mouth(room_user *room_user, char *text) {
+    int talk_duration = 1;
+
+    if (strlen(text) > 1) {
+        if (strlen(text) >= 10) {
+            talk_duration = 5;
+        } else {
+            talk_duration = (int) (strlen(text) / 2);
+        }
+    }
+
+    bool found_gesture = false;
+    char gesture[5];
+
+    if (strstr(text, ":)") != NULL
+        || strstr(text, ":-)") != NULL
+        || strstr(text, ":p") != NULL
+        || strstr(text, ":d") != NULL
+        || strstr(text, ":D") != NULL
+        || strstr(text, ";)") != NULL
+        || strstr(text, ";-)") != NULL) {
+        strcpy(gesture, " sml");
+        found_gesture = true;
+    }
+
+    if (!found_gesture &&
+        strstr(text, ":s") != NULL
+        || strstr(text, ":(") != NULL
+        || strstr(text, ":-(") != NULL
+        || strstr(text, ":'(") != NULL) {
+        strcpy(gesture, " sad");
+        found_gesture = true;
+    }
+
+    if (!found_gesture &&
+        strstr(text, ":o") != NULL
+        || strstr(text, ":O") != NULL) {
+        strcpy(gesture, " srp");
+        found_gesture = true;
+    }
+
+
+    if (!found_gesture &&
+        strstr(text, ":@") != NULL
+        || strstr(text, ">:(") != NULL) {
+        strcpy(gesture, " agr");
+        found_gesture = true;
+    }
+
+    if (found_gesture) {
+        room_user_add_status(room_user, "gest", gesture, 5, "", -1, -1);
+    }
+
+    room_user_add_status(room_user, "talk", "", talk_duration, "", -1, -1);
+    room_user->needs_update = true;
+}
+
+/**
+ * Triggers the current item that the player on top of.
+ *
+ * @param room_user the room user to trigger for
+ */
 void room_user_invoke_item(room_user *room_user) {
     bool needs_update = false;
 
