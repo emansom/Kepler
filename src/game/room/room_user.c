@@ -249,6 +249,7 @@ void room_user_reset(room_user *room_user) {
     room_user_remove_status(room_user, "swim");
     room_user_remove_status(room_user, "sit");
     room_user_remove_status(room_user, "lay");
+    room_user_remove_status(room_user, "flatctrl");
 
     room_user->is_walking = 0;
     room_user->needs_update = 0;

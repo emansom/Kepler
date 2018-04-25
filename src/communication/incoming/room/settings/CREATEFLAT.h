@@ -45,6 +45,7 @@ void CREATEFLAT(session *player, incoming_message *message) {
     sb_add_char(om->sb, 13);
     sb_add_string(om->sb, room_name);
     player_send(player, om);
+    om_cleanup(om);
 
     cleanup:
         free(floor_setting);

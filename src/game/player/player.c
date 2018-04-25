@@ -178,7 +178,7 @@ void player_cleanup(session *player) {
 
     if (player->room_user != NULL) {
         if (player->room_user->room != NULL) {
-            room_leave(player->room_user->room, player);
+            room_leave(player->room_user->room, player, false);
         }
     }
 

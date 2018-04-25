@@ -9,5 +9,5 @@ void QUIT(session *player, incoming_message *message) {
         return;
     }
 
-    room_leave(player->room_user->room, player);
+    room_leave(player->room_user->room, player, false);
 }

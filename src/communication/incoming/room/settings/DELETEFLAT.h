@@ -26,15 +26,16 @@ void DELETEFLAT(session *player, incoming_message *message) {
     }
 
     if (room_is_owner(room, player->player_data->id)) {
+        room_kickall(room);
+
+        if (list_size(room->items) <= 0) {
+            room_item_manager_load(room);
+        }
+
         delete_room_items(room->items);
 
         room_dispose(room, true);
         room_query_delete(room_id);
-
-
-        if (dispose_after) {
-            room_dispose(room, false);
-        }
     }
 
     cleanup:
@@ -42,9 +43,14 @@ void DELETEFLAT(session *player, incoming_message *message) {
 }
 
 void delete_room_items(List *items) {
-    for (size_t i = 0; i < list_size(items); i++) {
-        item *item;
-        list_get_at(items, i, (void *) &item);
-        item_manager_delete(item);
+    if (list_size(items) > 0) {
+        for (size_t i = 0; i < list_size(items); i++) {
+            item *item;
+            list_get_at(items, i, (void *) &item);
+
+            item_manager_delete(item);
+        }
+
+        list_remove_all(items);
     }
 }

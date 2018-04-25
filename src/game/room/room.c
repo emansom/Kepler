@@ -126,7 +126,7 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
  */
 void room_enter(room *room, session *player) {
     if (player->room_user->room != NULL) {
-        room_leave(player->room_user->room, player);
+        room_leave(player->room_user->room, player, false);
     }
 
     if (list_size(room->users) == 0) {
@@ -192,7 +192,7 @@ void room_load_data(room *room) {
  * Leave room handler, will make room and id for the room user reset back to NULL and 0.
  * And remove the character from the room.
  */
-void room_leave(room *room, session *room_player) {
+void room_leave(room *room, session *room_player, bool hotel_view) {
     if (!list_contains(room->users, room_player)) {
         return;
     }
@@ -226,6 +226,20 @@ void room_leave(room *room, session *room_player) {
 
     room_player->room_user->room = NULL;
     room_dispose(room, false);
+
+    if (hotel_view) {
+        om = om_create(18); // "@R"
+        player_send(room_player, om);
+        om_cleanup(om);
+    }
+}
+
+void room_kickall(room *room) {
+    for (size_t i = 0; i < list_size(room->users); i++) {
+        session *user;
+        list_get_at(room->users, i, (void *) &user);
+        room_leave(room, user, true);
+    }
 }
 
 /**
@@ -406,6 +420,12 @@ void room_dispose(room *room, bool override) {
         free(room->room_data->password);
         free(room->room_data);
         room->room_data = NULL;
+    }
+
+    for (size_t i = 0; i < list_size(room->items); i++) {
+        item *item;
+        list_get_at(room->items, i, (void *) &item);
+        item_dispose(item);
     }
 
     list_destroy(room->users);
