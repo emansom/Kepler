@@ -30,7 +30,7 @@ void UPDATEFLAT(session *player, incoming_message *message) {
         room->room_data->accesstype = 0;
     } else if (strcmp(str_access_type, "closed") == 0) {
         room->room_data->accesstype = 1;
-    } else if (strcmp(str_access_type, "pasword") == 0) {
+    } else if (strcmp(str_access_type, "password") == 0) {
         room->room_data->accesstype = 2;
     }
 
