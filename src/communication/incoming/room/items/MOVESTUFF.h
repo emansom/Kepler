@@ -59,6 +59,12 @@ void MOVESTUFF(session *player, incoming_message *message) {
     old_position.y = item->coords->y;
     old_position.rotation = item->coords->rotation;
 
+    if (old_position.x == (int) strtol(str_x, NULL, 10) &&
+        old_position.y == (int) strtol(str_y, NULL, 10) &&
+        old_position.rotation == (int) strtol(str_rot, NULL, 10)) {
+        goto cleanup; // Do absolutely nothing because the item technically didn't move at all
+    }
+
     item->coords->x = (int) strtol(str_x, NULL, 10);
     item->coords->y = (int) strtol(str_y, NULL, 10);
     item->coords->rotation = (int) strtol(str_rot, NULL, 10);
