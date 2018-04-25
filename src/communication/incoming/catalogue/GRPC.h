@@ -56,7 +56,9 @@ void GRPC(session *player, incoming_message *message) {
             catalogue_package *package;
             list_get_at(store_item->packages, i, (void *) &package);
 
-            do_purchase(player, package->definition, NULL, package->special_sprite_id);
+            for (int j = 0; j < package->amount; j++) {
+                do_purchase(player, package->definition, NULL, package->special_sprite_id);
+            }
         }
     }
 
