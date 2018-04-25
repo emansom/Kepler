@@ -42,6 +42,7 @@
 #include "communication/incoming/navigator/NAVIGATE.h"
 #include "communication/incoming/navigator/SUSERF.h"
 #include "communication/incoming/navigator/GETUSERFLATCATS.h"
+#include "communication/incoming/navigator/RECOMMENDED_ROOMS.h"
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
@@ -138,6 +139,7 @@ void message_handler_init() {
     message_requests[150] = NAVIGATE;
     message_requests[16] = SUSERF;
     message_requests[151] = GETUSERFLATCATS;
+    message_requests[264] = RECOMMENDED_ROOMS;
 
     // Room
     message_requests[182] = GETINTERST;

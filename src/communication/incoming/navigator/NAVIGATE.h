@@ -38,18 +38,6 @@ void NAVIGATE(session *player, incoming_message *message) {
         if (parent_category->category_type == PRIVATE) {
             recent_rooms = room_query_recent_rooms(10, parent_category->id);
 
-            // Get recent rooms from database for catgeory
-            for (size_t i = 0; i < list_size(recent_rooms); i++) {
-                room *instance;
-                list_get_at(recent_rooms, i, (void*)&instance);
-
-                if (room_manager_get_by_id(instance->room_id) == NULL) {
-                    list_add(rooms, instance);
-                } else {
-                    list_remove(recent_rooms, instance, NULL); // Remove rooms that are already loaded into server.
-                }
-            }
-
             // Remove full rooms if hide full
             for (size_t i = 0; i < list_size(rooms); i++) {
                 room *instance;

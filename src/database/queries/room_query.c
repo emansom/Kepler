@@ -6,7 +6,7 @@
 #include "hashtable.h"
 
 #include "game/room/room.h"
-
+#include "game/room/room_manager.h"
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_model_manager.h"
 
@@ -115,8 +115,15 @@ List *room_query_get_by_owner_id(int owner_id) {
             break;
         }
 
-        room *room = room_create(sqlite3_column_int(stmt, 0));
-        room->room_data = room_create_data_sqlite(room, stmt);
+        int room_id = sqlite3_column_int(stmt, 0);
+        room *room = NULL;
+
+        if (room_manager_get_by_id(room_id) != NULL) {
+            room = room_manager_get_by_id(room_id);
+        } else {
+            room = room_create(sqlite3_column_int(stmt, 0));
+            room->room_data = room_create_data_sqlite(room, stmt);
+        }
 
         list_add(rooms, room);
     }
@@ -154,8 +161,58 @@ List *room_query_recent_rooms(int limit, int category_id) {
             break;
         }
 
-        room *room = room_create(sqlite3_column_int(stmt, 0));
-        room->room_data = room_create_data_sqlite(room, stmt);
+        int room_id = sqlite3_column_int(stmt, 0);
+        room *room = NULL;
+
+        if (room_manager_get_by_id(room_id) != NULL) {
+            room = room_manager_get_by_id(room_id);
+        } else {
+            room = room_create(sqlite3_column_int(stmt, 0));
+            room->room_data = room_create_data_sqlite(room, stmt);
+        }
+
+        list_add(rooms, room);
+
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+    return rooms;
+}
+
+List *room_query_random_rooms(int limit) {
+    List *rooms;
+    list_new(&rooms);
+
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare(conn, "SELECT * FROM rooms WHERE owner_id > 0 ORDER BY RANDOM() LIMIT ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, limit);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    while (true) {
+        status = sqlite3_step(stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        int room_id = sqlite3_column_int(stmt, 0);
+        room *room = NULL;
+
+        printf("Test123\n");
+
+        if (room_manager_get_by_id(room_id) != NULL) {
+            room = room_manager_get_by_id(room_id);
+        } else {
+            room = room_create(sqlite3_column_int(stmt, 0));
+            room->room_data = room_create_data_sqlite(room, stmt);
+        }
 
         list_add(rooms, room);
 
