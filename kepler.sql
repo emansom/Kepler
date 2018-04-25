@@ -14,8 +14,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0'
 );
-INSERT INTO `users` VALUES (1,'alex','123','1550618001270123000325504','ch=s02/53,51,44','M','de kepler whey','9555',70,0,7,'I''m a new xddd','1524236465');
-INSERT INTO `users` VALUES (2,'lol','123','1500318001270123000325504','','M','de kepler whey','200',0,0,1,'I''m a new user!','1524227409');
+INSERT INTO `users` VALUES (1,'alex','123','1770118001270123000326001','ch=s02/53,51,44','M','de kepler whey','9353',66,0,7,'I''m a new xddd','1524629925');
+INSERT INTO `users` VALUES (2,'lol','123','1700118001270123000325517','','M','de kepler whey','199',2,0,1,'I''m a new user!','1524615860');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -123,7 +123,6 @@ INSERT INTO `rooms_categories` VALUES (18,0,7,0,'Chromide Club',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (19,0,7,0,'Club Massiva',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (20,0,9,0,'The Laughing Lions Park',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (21,0,9,0,'The Green Heart',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (22,0,10,0,'The Lido',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (101,0,4,0,'Staff HQ',0,1,4,5);
 INSERT INTO `rooms_categories` VALUES (112,0,4,0,'Restaurant, Bar & Night Club Rooms',0,0,1,1);
 INSERT INTO `rooms_categories` VALUES (113,0,4,0,'Trade floor',0,0,1,1);
@@ -151,8 +150,8 @@ CREATE TABLE IF NOT EXISTS `rooms` (
 	`visitors_max`	int ( 3 ) NOT NULL DEFAULT '25'
 );
 INSERT INTO `rooms` VALUES (1001,0,3,'Welcome Lounge','welcome_lounge','newbie_lobby','hh_room_nlobby',0,0,0,'false',0,'',0,40);
-INSERT INTO `rooms` VALUES (1003,0,5,'Theatredome','theatredrome','theater','hh_room_theater',0,0,0,'false',0,'',0,100);
-INSERT INTO `rooms` VALUES (1004,0,5,'Library','library','library','hh_room_library',0,0,0,'false',0,'',0,30);
+INSERT INTO `rooms` VALUES (1003,0,3,'Theatredome','theatredrome','theater','hh_room_theater',0,0,0,'false',0,'',0,100);
+INSERT INTO `rooms` VALUES (1004,0,3,'Library','library','library','hh_room_library',0,0,0,'false',0,'',0,30);
 INSERT INTO `rooms` VALUES (1005,0,5,'TV Studio','tv_studio','tv_studio','hh_room_tv_studio_general',0,0,0,'false',0,'',0,20);
 INSERT INTO `rooms` VALUES (1006,0,5,'Cinema','habbo_cinema','cinema_a','hh_room_cinema',0,0,0,'false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1007,0,5,'Power Gym','sport','sport','hh_room_sport',0,0,0,'false',0,'',0,35);
@@ -185,8 +184,8 @@ INSERT INTO `rooms` VALUES (1034,0,20,'The Laughing Lions - Gate','gate_park','g
 INSERT INTO `rooms` VALUES (1035,0,20,'The Laughing Lions - Picnic','gate_park','gate_park_2','hh_room_gate_park',0,0,0,'false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1036,0,21,'The Park','park','park_a','hh_room_park_general,hh_room_park',0,0,0,'false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1037,0,21,'The Infobus','park','park_b','hh_room_park_general,hh_room_park',0,0,0,'false',0,'',0,20);
-INSERT INTO `rooms` VALUES (1038,0,22,'Lido A','habbo_lido','pool_a','hh_room_pool,hh_people_pool',0,0,0,'false',0,'',0,60);
-INSERT INTO `rooms` VALUES (1039,0,22,'Lido B','habbo_lido_ii','pool_b','hh_room_pool,hh_people_pool',0,0,0,'false',0,'',0,60);
+INSERT INTO `rooms` VALUES (1038,0,10,'Lido A','habbo_lido','pool_a','hh_room_pool,hh_people_pool',0,0,0,'false',0,'',0,60);
+INSERT INTO `rooms` VALUES (1039,0,10,'Lido B','habbo_lido_ii','pool_b','hh_room_pool,hh_people_pool',0,0,0,'false',0,'',0,60);
 INSERT INTO `rooms` VALUES (1040,0,10,'Rooftop Rumble','rooftop_rumble','md_a','hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu',0,0,0,'false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1041,0,11,'Main Lobby','main_lobby','lobby_a','hh_room_lobby',0,0,0,'false',0,'',0,100);
 INSERT INTO `rooms` VALUES (1042,0,11,'Basement Lobby','basement_lobby','floorlobby_a','hh_room_floorlobbies',0,0,0,'false',0,'',0,50);
@@ -196,9 +195,10 @@ INSERT INTO `rooms` VALUES (1045,0,6,'Ice Cafe','ice_cafe','ice_cafe','hh_room_i
 INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_netcafe',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,0,'false',0,'',0,100);
-INSERT INTO `rooms` VALUES (1049,1,114,'mein room','ddwdwd','model_c',NULL,1004,610,0,0,0,'',0,25);
-INSERT INTO `rooms` VALUES (1050,2,118,'test','','model_a',NULL,0,0,1,0,0,'',0,25);
-INSERT INTO `rooms` VALUES (1051,1,0,'another room','','model_f',NULL,0,0,1,0,0,'',0,25);
+INSERT INTO `rooms` VALUES (1049,1,114,'Alex''s Main Room','The main room for a guy called Alex...','model_c',NULL,1004,610,1,0,0,'123',0,25);
+INSERT INTO `rooms` VALUES (1050,2,118,'test','','model_a',NULL,0,0,1,0,0,'',0,0);
+INSERT INTO `rooms` VALUES (1051,1,114,'another room','','model_f',NULL,2703,507,1,0,0,'',0,25);
+INSERT INTO `rooms` VALUES (1052,1,115,'test123','','model_f',NULL,0,0,1,0,0,'',0,25);
 CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
@@ -211,6 +211,7 @@ CREATE TABLE IF NOT EXISTS `messenger_messages` (
 	`body`	TEXT NOT NULL,
 	`date`	TEXT NOT NULL
 );
+INSERT INTO `messenger_messages` VALUES (5,1,2,'0','xd','2018-04-23 07:42:53');
 CREATE TABLE IF NOT EXISTS `messenger_friends` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
@@ -1846,13 +1847,21 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`rotation`	INTEGER,
 	`custom_data`	TEXT
 );
-INSERT INTO `items` VALUES (43,1,1049,1013,'5','9',0.001,'',2,'');
-INSERT INTO `items` VALUES (47,1,1049,2409,'0','0',0,':w=4,10 l=46,36 l',0,'9');
-INSERT INTO `items` VALUES (48,1,1049,2409,'0','0',0,':w=5,4 l=43,78 r',0,'5');
-INSERT INTO `items` VALUES (49,1,1049,1110,'5','6',0,'',2,'');
-INSERT INTO `items` VALUES (50,1,1049,1126,'8','5',0.5,'',4,'');
-INSERT INTO `items` VALUES (51,1,1049,1105,'7','9',0,'',0,'');
-INSERT INTO `items` VALUES (52,1,1049,1011,'8','5',0,'',0,'');
+INSERT INTO `items` VALUES (43,1,1049,1013,'5','9',0,'',2,'');
+INSERT INTO `items` VALUES (47,1,1049,2409,'0','0',0,':w=4,10 l=41,38 l',0,'9');
+INSERT INTO `items` VALUES (48,1,1049,2409,'0','0',0,':w=5,4 l=55,78 r',0,'5');
+INSERT INTO `items` VALUES (49,1,1049,1110,'5','6',0,'',0,'');
+INSERT INTO `items` VALUES (50,1,1049,1126,'7','5',0.5,'',4,'');
+INSERT INTO `items` VALUES (51,1,1049,1105,'8','7',0.001,'',0,'');
+INSERT INTO `items` VALUES (52,1,1049,1011,'7','5',0,'',2,'');
+INSERT INTO `items` VALUES (57,1,1049,1309,'5','5',0,'',0,'alex	04-21-2018	testing 123');
+INSERT INTO `items` VALUES (59,1,1049,1103,'7','6',0,'',0,'');
+INSERT INTO `items` VALUES (60,1,1049,1002,'9','5',0,'',0,'');
+INSERT INTO `items` VALUES (64,1,1049,2409,'0','0',0,':w=4,6 l=32,41 l',0,'513');
+INSERT INTO `items` VALUES (76,1,1049,1021,'8','10',0.001,'',0,'');
+INSERT INTO `items` VALUES (77,1,1049,1031,'5','8',0,'',0,'');
+INSERT INTO `items` VALUES (78,1,1049,1106,'5','8',1,'',0,'');
+INSERT INTO `items` VALUES (89,1,1051,1448,'7','5',0,'',0,'');
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,
 	`order_id`	INTEGER,
