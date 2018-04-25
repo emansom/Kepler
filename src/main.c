@@ -12,6 +12,8 @@
 #include "game/pathfinder/pathfinder.h"
 
 #include "util/threading.h"
+#include "util/configuration/configuration.h"
+
 #include "util/encoding/base64encoding.h"
 #include "util/encoding/vl64encoding.h"
 
@@ -23,6 +25,8 @@ int main(void) {
     print_info("Kepler Habbo server...\n");
     print_info("Written by Quackster \n");
     print_info("\n");
+
+    configuration_init();
     print_info("Testing SQLite connection...\n");
 
     sqlite3 *con = db_create_connection();
@@ -51,8 +55,8 @@ int main(void) {
     print_info("\n");
 
     server_settings *settings = malloc(sizeof(server_settings));
-    strcpy(settings->ip, "127.0.0.1");
-    settings->port = 12321;
+    strcpy(settings->ip, configuration_get("server.ip.address"));
+    settings->port = configuration_get_number("server.port");
 
     pthread_t server_thread;
     start_server(settings, &server_thread);

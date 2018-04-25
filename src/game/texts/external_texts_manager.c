@@ -37,6 +37,10 @@ void texts_manager_parse(char *file_name) {
         char *key = get_argument(line, "=", 0);
         char *value = get_argument(line, "=", 1);
 
+        if (key == NULL || value == NULL) {
+            continue;
+        }
+
         key[strcspn(key, "\n")] = 0; // strip character
         value[strcspn(value, "\n")] = 0; // strip character
 

@@ -3,11 +3,6 @@
 
 typedef struct sqlite3 sqlite3;
 
-typedef struct db_details_s {
-    char database_name[50];
-} connection_details;
-
-connection_details db_connection_settings();
 sqlite3 *db_create_connection();
 char *copy_str(const unsigned char*);
 

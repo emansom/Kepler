@@ -19,6 +19,7 @@ file(GLOB cthreadpool ${PROJECT_DIR}/lib/cthreadpool/*.c)
 # Kepler classes
 file(GLOB src ${PROJECT_DIR}/*.c)
 file(GLOB util ${PROJECT_DIR}/util/*.c)
+file(GLOB configuration ${PROJECT_DIR}/util/configuration/*.c)
 file(GLOB communication ${PROJECT_DIR}/communication/*.c)
 file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
@@ -47,8 +48,10 @@ file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 add_executable(${EXECUTABLE_NAME}
         ${collections}
         ${cthreadpool}
+
         ${src}
         ${util}
+        ${configuration}
         ${messages}
         ${communication}
         ${server}

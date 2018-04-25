@@ -15,6 +15,7 @@
 #include "game/navigator/navigator_category_manager.h"
 
 #include "util/threading.h"
+#include "util/configuration/configuration.h"
 
 #define PREFIX "Kepler"
 
@@ -27,6 +28,7 @@ typedef struct server_s {
     struct catalogue_manager catalogue_manager;
     struct item_manager item_manager;
     struct texts_manager texts_manager;
+    struct configuration configuration;
 } server;
 
 server global;

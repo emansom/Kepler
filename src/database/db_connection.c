@@ -1,17 +1,9 @@
 #include "sqlite3.h"
-#include "db_connection.h"
 #include "shared.h"
 
-/**
- * Get the connection details instance
- *
- * @return the connection details
- */
-connection_details db_connection_settings() {
-    connection_details settings = {};
-    strcpy(settings.database_name, "Kepler.db");
-    return settings;
-}
+#include "db_connection.h"
+#include "util/configuration/configuration.h"
+
 
 /**
  *
@@ -54,13 +46,13 @@ sqlite3 *db_create_connection() {
     int run_query = 0;
     char *err_msg = 0;
 
-    if (!(file = fopen(db_connection_settings().database_name, "r"))) {
+    if (!(file = fopen(configuration_get("database.filename"), "r"))) {
         print_info("Database does not exist, creating...\n");
         run_query = 1;
     }
 
     sqlite3 *db;
-    int rc = sqlite3_open(db_connection_settings().database_name, &db);
+    int rc = sqlite3_open(configuration_get("database.filename"), &db);
 
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
