@@ -234,6 +234,10 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
     }
 }
 
+/**
+ * Kick all users from the current room
+ * @param room
+ */
 void room_kickall(room *room) {
     for (size_t i = 0; i < list_size(room->users); i++) {
         session *user;
@@ -326,11 +330,15 @@ bool room_is_owner(room *room, int user_id) {
  * @return true, if successful
  */
 bool room_has_rights(room *room, int user_id) {
+    if (room->room_data->owner_id == user_id) { // Of course room owners have rights, duh!
+        return true;
+    }
+
     if (room->room_data->superusers) {
         return true;
     }
 
-    return true;
+    return false;
 }
 
 /**
