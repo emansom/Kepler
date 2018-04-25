@@ -49,7 +49,7 @@ bool room_is_owner(room *room, int user_id);
 bool room_has_rights(room *room, int user_id);
 void room_refresh_rights(room *room, session *player);
 void room_send(room*, outgoing_message*);
-void room_dispose(room*);
+void room_dispose(room*, bool override);
 
 
 #endif

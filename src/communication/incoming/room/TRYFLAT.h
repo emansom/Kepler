@@ -62,7 +62,7 @@ void TRYFLAT(session *player, incoming_message *message) {
     om_cleanup(interest);
 
     if (dispose_after) {
-        room_dispose(room);
+        room_dispose(room, false);
     }
 
     cleanup:

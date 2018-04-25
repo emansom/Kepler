@@ -135,16 +135,40 @@ void room_manager_remove(int room_id) {
  * @return whether to sort
  */
 int room_manager_sort(void const *e1, void const *e2) {
-    room *i = (*((room**) e1));
-    room *j = (*((room**) e2));
+    room *i = (*((room **) e1));
+    room *j = (*((room **) e2));
 
     size_t room_size_i = list_size(i->users);
     size_t room_size_j = list_size(j->users);
 
     if (room_size_i > room_size_j)
         return -1;
-    if (room_size_i == room_size_j)
+
+    if (room_size_i == room_size_j) {
         return 0;
+    }
+
+    return 1;
+}
+
+/**
+ * Sort room ID listing so the rooms with the lowest ID appear first, that is, the most
+ * recent.
+ *
+ * @param e1 the first room
+ * @param e2 the second room
+ * @return whether to sort
+ */
+int room_manager_sort_id(void const *e1, void const *e2) {
+    room *i = (*((room **) e1));
+    room *j = (*((room **) e2));
+
+    if (i->room_id < j->room_id)
+        return -1;
+
+    if (i->room_id == j->room_id) {
+        return 0;
+    }
 
     return 1;
 }
@@ -160,7 +184,7 @@ void room_manager_dispose() {
         TableEntry *entry;
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
             room *room = entry->value;
-            room_dispose(room);
+            room_dispose(room, false);
         }
     }
 

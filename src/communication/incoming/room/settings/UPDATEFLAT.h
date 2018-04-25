@@ -20,7 +20,7 @@ void UPDATEFLAT(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    if (room->room_data->owner_id != player->player_data->id) {
+    if (!room_is_owner(room, player->player_data->id)) {
         goto cleanup;
     }
 

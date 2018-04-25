@@ -1,7 +1,10 @@
 #include "shared.h"
 
+#include "database/queries/item_query.h"
 #include "database/queries/furniture_query.h"
+
 #include "item_manager.h"
+#include "item.h"
 
 /**
  * Load item definitions.
@@ -22,6 +25,16 @@ void item_manager_init() {
         om_write_str(global.item_manager.sprite_index, def->sprite);
         om_write_int(global.item_manager.sprite_index, def->cast_directory);
     }
+}
+
+/**
+ * Delete the item.
+ *
+ * @param item
+ */
+void item_manager_delete(item *item) {
+    item_query_delete(item->room_id);
+    item_dispose(item);
 }
 
 /**

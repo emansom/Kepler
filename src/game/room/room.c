@@ -225,7 +225,7 @@ void room_leave(room *room, session *room_player) {
     room_send(room, om);
 
     room_player->room_user->room = NULL;
-    room_dispose(room);
+    room_dispose(room, false);
 }
 
 /**
@@ -377,7 +377,7 @@ void room_send(room *room, outgoing_message *message) {
  * 
  * @param room the room instance.
  */
-void room_dispose(room *room) {
+void room_dispose(room *room, bool override) {
     if (list_size(room->users) > 0) {
         return;
     }
@@ -390,8 +390,10 @@ void room_dispose(room *room) {
 
     room_item_manager_dispose(room);
 
-    if (player_manager_find_by_id(room->room_data->owner_id) != NULL) {
-        return;
+    if (!override) {
+        if (player_manager_find_by_id(room->room_data->owner_id) != NULL) {
+            return;
+        }
     }
 
     room_manager_remove(room->room_id);

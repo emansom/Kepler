@@ -192,7 +192,7 @@ void player_cleanup(session *player) {
             list_get_at(rooms, i, (void*)&room);
 
             if (room != NULL) {
-                room_dispose(room);
+                room_dispose(room, false);
             }
         }
 

@@ -52,6 +52,7 @@ void NAVIGATE(session *player, incoming_message *message) {
             om_write_int(navigator, (int) list_size(rooms));  // room count
         }
 
+        list_sort_in_place(rooms, room_manager_sort_id);
         list_sort_in_place(rooms, room_manager_sort);
 
         for (size_t i = 0; i < list_size(rooms); i++) {
@@ -126,7 +127,7 @@ void NAVIGATE(session *player, incoming_message *message) {
                 list_get_at(recent_rooms, i, (void *) &instance);
 
                 if (room_manager_get_by_id(instance->room_id) == NULL) {
-                    room_dispose(instance);
+                    room_dispose(instance, false);
                 }
             }
 

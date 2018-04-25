@@ -79,6 +79,7 @@
 #include "communication/incoming/room/settings/GETFLATINFO.h"
 #include "communication/incoming/room/settings/SETFLATCAT.h"
 #include "communication/incoming/room/settings/UPDATEFLAT.h"
+#include "communication/incoming/room/settings/DELETEFLAT.h"
 
 // Room items
 #include "communication/incoming/room/items/PLACESTUFF.h"
@@ -176,6 +177,7 @@ void message_handler_init() {
     message_requests[24] = UPDATEFLAT;
     message_requests[152] = GETFLATCAT;
     message_requests[153] = SETFLATCAT;
+    message_requests[23] = DELETEFLAT;
 
     // Room items
     message_requests[90] = PLACESTUFF;

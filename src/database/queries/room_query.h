@@ -13,5 +13,6 @@ List *room_query_random_rooms(int limit);
 void room_query_get_models();
 void room_query_get_categories();
 void query_room_save(room*);
+void room_query_delete(int room_id);
 
 #endif

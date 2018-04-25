@@ -10,6 +10,28 @@
 #include "navigator_category_manager.h"
 
 /**
+ * Sort
+ *
+ * @param e1 the first category
+ * @param e2 the second category
+ * @return whether to sort
+ */
+int category_manager_compare(void const *e1, void const *e2) {
+    room_category *i = (*((room_category**) e1));
+    room_category *j = (*((room_category**) e2));
+
+    if (i->id < j->id) {
+        return -1;
+    }
+
+    if (i->id == j->id) {
+        return 0;
+    }
+
+    return 1;
+}
+
+/**
  * Navigator category manager
  */
 void category_manager_init() {
@@ -63,6 +85,7 @@ List *category_manager_flat_categories() {
         }
     }
 
+    list_sort_in_place(categories, category_manager_compare);
     return categories;
 }
 
@@ -88,6 +111,7 @@ List *category_manager_get_by_parent_id(int category_id) {
         }
     }
 
+    list_sort_in_place(sub_categories, category_manager_compare);
     return sub_categories;
 }
 

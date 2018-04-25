@@ -53,7 +53,7 @@ void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
             list_get_at(rooms, i, (void *) &instance);
 
             if (room_manager_get_by_id(instance->room_id) == NULL) {
-                room_dispose(instance);
+                room_dispose(instance, false);
             }
         }
 

@@ -21,7 +21,7 @@ void SETFLATCAT(session *player, incoming_message *message) {
         return;
     }
 
-    if (room->room_data->owner_id != player->player_data->id) {
+    if (!room_is_owner(room, player->player_data->id)) {
         return;
     }
 
