@@ -11,8 +11,8 @@ typedef struct item_behaviour_s {
     bool can_sit_on_top;
     bool can_lay_on_top;
     bool can_stand_on_top;
-    bool canStackOnTop;
-    bool isRoller;
+    bool can_stack_on_top;
+    bool is_roller;
     bool is_public_space_object;
     bool isInvisible;
     bool requiresRightsForInteraction;

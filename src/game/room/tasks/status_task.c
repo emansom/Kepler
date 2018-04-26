@@ -4,6 +4,7 @@
 #include "list.h"
 
 #include "status_task.h"
+#include "roller_task.h"
 
 #include "game/player/player.h"
 
@@ -27,7 +28,7 @@ void status_task(room *room) {
     }
 
     if (room->tick % 3 == 0) {
-        printf("Every 3 seconds has been called...\n");
+        do_roller_task(room);
     }
 }
 
@@ -42,10 +43,9 @@ void process_user_status(room_user *room_user) {
     }
 
     HashTableIter iter;
-    TableEntry *entry;
-
     hashtable_iter_init(&iter, room_user->statuses);
 
+    TableEntry *entry;
     while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
         char *key = entry->key;
         room_user_status *rus = entry->value;

@@ -11,6 +11,7 @@ typedef struct item_s {
     int id;
     int room_id;
     coord *coords;
+    item *item_below;
     char *wall_position;
     char *custom_data;
     char *current_program;

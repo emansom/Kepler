@@ -20,7 +20,7 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
     def->behaviour_data = strdup(behaviour);
     def->behaviour = item_behaviour_parse(def);
 
-    if (!def->behaviour->canStackOnTop) {
+    if (!def->behaviour->can_stack_on_top) {
         def->stack_height = 0;
     }
 

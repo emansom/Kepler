@@ -12,8 +12,8 @@ item_behaviour *item_behaviour_create() {
     behaviour->can_sit_on_top = false;
     behaviour->can_lay_on_top = false;
     behaviour->can_stand_on_top = false;
-    behaviour->canStackOnTop = false;
-    behaviour->isRoller = false;
+    behaviour->can_stack_on_top = false;
+    behaviour->is_roller = false;
     behaviour->is_public_space_object = false;
     behaviour->isInvisible = false;
     behaviour->requiresRightsForInteraction = false;
@@ -62,7 +62,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'R') {
-            behaviour->isRoller = true;
+            behaviour->is_roller = true;
         }
 
         if (c == 'P') {
@@ -98,7 +98,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'H') {
-            behaviour->canStackOnTop = true;
+            behaviour->can_stack_on_top = true;
         }
 
         if (c == 'V') {

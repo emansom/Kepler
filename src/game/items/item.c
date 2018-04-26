@@ -46,6 +46,7 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
     }
 
     room_item->coords = create_coord_height(x, y, z);
+    room_item->item_below = NULL;
     room_item->custom_data = custom_data;
     room_item->current_program = NULL;
     room_item->current_program_state = NULL;
