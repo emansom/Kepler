@@ -115,6 +115,8 @@ void room_map_add_items(room *room) {
             continue;
         }
 
+        item->item_below = NULL;
+
         room_tile *tile = room->room_map->map[item->coords->x][item->coords->y];
 
         if (tile == NULL) {
@@ -126,6 +128,7 @@ void room_map_add_items(room *room) {
         if (item->definition->behaviour->is_public_space_object
             || tile->tile_height < item_total_height(item)) {
 
+            item->item_below = tile->highest_item;
             tile->tile_height = item_total_height(item);
             tile->highest_item = item;
 

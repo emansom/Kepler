@@ -22,9 +22,6 @@ void do_roller_task(room *room) {
             continue;
         }
 
-        List *process;
-        list_new(&process);
-
         room_tile *item_tile = room->room_map->map[roller->coords->x][roller->coords->y];
 
         if (item_tile == NULL) {
@@ -41,7 +38,7 @@ void do_roller_task(room *room) {
         }
 
         if (item_tile->entity != NULL) {
-            do_roller_player(room, roller, item_tile->entity);
+            do_roller_player(room, roller, item_tile->entity);;
         }
     }
 
@@ -59,14 +56,19 @@ bool do_roller_item(room *room, item *roller, item *item) {
         return false;
     }
 
-    coord front;
-    coord_get_front(roller->coords, &front);
+    coord to;
+    coord_get_front(roller->coords, &to);
 
-    if (!room_tile_is_walkable(room, NULL, front.x, front.y)) {
+    coord from;
+    from.x = item->coords->x;
+    from.y = item->coords->y;
+    from.z = item->coords->z;
+
+    if (!room_tile_is_walkable(room, NULL, to.x, to.y)) {
         return false;
     }
 
-    room_tile *front_tile = room->room_map->map[front.x][front.y];
+    room_tile *front_tile = room->room_map->map[to.x][to.y];
     double next_height = front_tile->tile_height;
 
     if (front_tile->highest_item != NULL) {
@@ -97,21 +99,23 @@ bool do_roller_item(room *room, item *roller, item *item) {
         }
     }
 
+    to.z = next_height;
+
+    item->coords->x = to.x + 0;
+    item->coords->y = to.y + 0;
+    item->coords->z = to.z + 0;
+
     outgoing_message *om = om_create(230);
-    om_write_int(om, item->coords->x);
-    om_write_int(om, item->coords->y);
-    om_write_int(om, front.x);
-    om_write_int(om, front.y);
+    om_write_int(om, from.x);
+    om_write_int(om, from.y);
+    om_write_int(om, to.x);
+    om_write_int(om, to.y);
     om_write_int(om, 1);
     om_write_int(om, item->id);
-    sb_add_float_delimeter(om->sb, item->coords->z, 2);
-    sb_add_float_delimeter(om->sb, next_height, 2);
+    sb_add_float_delimeter(om->sb, from.z, 2);
+    sb_add_float_delimeter(om->sb, to.z, 2);
     om_write_int(om, roller->id);
     room_send(room, om);
-
-    item->coords->x = front.x;
-    item->coords->y = front.y;
-    item->coords->z = next_height;
 
     return true;
 }
@@ -125,38 +129,45 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
         return;
     }
 
-    coord front;
-    coord_get_front(roller->coords, &front);
+    coord to;
+    coord_get_front(roller->coords, &to);
 
-    if (!room_tile_is_walkable(room, room_entity, front.x, front.y)) {
+    coord from;
+    from.x = room_entity->current->x;
+    from.y = room_entity->current->y;
+
+    if (!room_tile_is_walkable(room, room_entity, to.x, to.y)) {
         return;
     }
 
     room_tile *previous_tile = room->room_map->map[room_entity->current->x][room_entity->current->y];
-    room_tile *front_tile = room->room_map->map[front.x][front.y];
+    room_tile *front_tile = room->room_map->map[to.x][to.y];
+
     double next_height = front_tile->tile_height;
+    to.z = next_height;
 
     previous_tile->entity = NULL;
     front_tile->entity = room_entity;
 
-    outgoing_message *om = om_create(230);
-    om_write_int(om, room_entity->current->x);
-    om_write_int(om, room_entity->current->y);
-    om_write_int(om, front.x);
-    om_write_int(om, front.y);
+    room_entity->current->x = to.x + 0;
+    room_entity->current->y = to.y + 0;
+    room_entity->current->z = to.z + 0;
 
+    outgoing_message *om = om_create(230);
+    om_write_int(om, from.x);
+    om_write_int(om, from.y);
+    om_write_int(om, to.x);
+    om_write_int(om, to.y);
     om_write_int(om, 0);
     om_write_int(om, roller->id);
     om_write_int(om, 2);
     om_write_int(om, room_entity->instance_id);
-
-    sb_add_float_delimeter(om->sb, room_entity->current->z, 2);
-    sb_add_float_delimeter(om->sb, next_height, 2);
+    sb_add_float_delimeter(om->sb, from.z, 2);
+    sb_add_float_delimeter(om->sb, to.z, 2);
     room_send(room, om);
 
-    room_user_invoke_item(room_entity);
-    room_entity->current->x = front.x;
-    room_entity->current->y = front.y;
-    room_entity->current->z = next_height;
+
+    //room_user_invoke_item(room_entity);
+
 
 }
