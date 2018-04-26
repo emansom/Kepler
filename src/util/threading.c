@@ -33,6 +33,10 @@ runnable *create_runnable() {
 void do_room_task(runnable *run){
     room *room = (void*)run->room;
 
+    if (room_manager_get_by_id(run->room_id) == NULL) {
+        return;
+    }
+
     if (list_size(room->users) == 0) {
         room->walking_job = NULL;
         room->status_job = NULL;
@@ -44,8 +48,10 @@ void do_room_task(runnable *run){
         if (room_manager_get_by_id(run->room_id) != NULL) {
             thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
         } else {
-            room->walking_job = NULL;
-            room->status_job = NULL;
+            if (room_manager_get_by_id(run->room_id) != NULL) {
+                room->walking_job = NULL;
+                room->status_job = NULL;
+            }
             free(run);
         }
     }

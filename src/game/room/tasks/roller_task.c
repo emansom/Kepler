@@ -94,10 +94,8 @@ bool do_roller_item(room *room, item *roller, item *item) {
     om_write_int(om, item->coords->y);
     om_write_int(om, front.x);
     om_write_int(om, front.y);
-
     om_write_int(om, 1);
     om_write_int(om, item->id);
-
     sb_add_float_delimeter(om->sb, item->coords->z, 2);
     sb_add_float_delimeter(om->sb, next_height, 2);
     om_write_int(om, roller->id);
