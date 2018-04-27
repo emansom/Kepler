@@ -162,11 +162,10 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
         return;
     }
 
-    room_tile *previous_tile = room->room_map->map[room_entity->current->x][room_entity->current->y];
+    room_tile *previous_tile = room->room_map->map[from.x][from.y];
     room_tile *front_tile = room->room_map->map[to.x][to.y];
 
-    double next_height = front_tile->tile_height;
-    to.z = next_height;
+    to.z = front_tile->tile_height;
 
     previous_tile->entity = NULL;
     front_tile->entity = room_entity;
