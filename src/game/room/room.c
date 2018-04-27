@@ -22,7 +22,7 @@
 #include "manager/room_item_manager.h"
 #include "manager/room_entity_manager.h"
 
-#include "tasks/walk_task.h"
+#include "tasks/room_task.h"
 #include "tasks/status_task.h"
 
 #include "game/player/player.h"
@@ -52,7 +52,9 @@ room *room_create(int room_id) {
     instance->status_job = NULL;
     list_new(&instance->users);
     list_new(&instance->items);
-    instance->tick = 0;
+    instance->roller_tick = 0;
+    instance->status_tick = 0;
+    instance->walk_tick = 0;
     return instance;
 }
 
@@ -158,7 +160,7 @@ void room_enter(room *room, session *player) {
 
     if (room->walking_job == NULL) {
         room->walking_job = create_runnable();
-        room->walking_job->request = walk_task;
+        room->walking_job->request = room_task;
         room->walking_job->room = (void*) room;
         room->walking_job->room_id = room->room_id;
         room->walking_job->millis = 460;
@@ -411,7 +413,6 @@ void room_dispose(room *room, bool override) {
         return; // Prevent public rooms
     }
 
-    room->tick = 0;
     room_item_manager_dispose(room);
 
     if (!override) {
@@ -444,7 +445,7 @@ void room_dispose(room *room, bool override) {
     room->users = NULL;
     room->walking_job = NULL;
     room->status_job = NULL;
-    
+
     free(room);
     room = NULL;
 }
