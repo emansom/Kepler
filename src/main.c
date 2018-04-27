@@ -1,6 +1,6 @@
 #include "shared.h"
 
-#include "sqlite3.h"
+#include "lib/sqlite3/sqlite3.h"
 #include "list.h"
 #include "lib/cthreadpool/thpool.h"
 
@@ -74,7 +74,7 @@ int main(void) {
             break;
         }
     }
-    
+
     return EXIT_SUCCESS;
 }
 

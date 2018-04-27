@@ -2,7 +2,7 @@
 #include <string.h>
 #include <time.h>
 
-#include "sqlite3.h"
+#include "lib/sqlite3/sqlite3.h"
 
 #include "game/player/player.h"
 
@@ -187,7 +187,7 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare(conn, "INSERT INTO users (username, password, sex, figure, pool_figure, last_online) VALUES (?,?,?,?,?,?)", -1, &stmt, 0);
-    
+
     char last_online[100];
     sprintf(last_online, "%lu", (unsigned long)time(NULL));
 
@@ -208,7 +208,7 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
     }
 
     int user_id = (int)sqlite3_last_insert_rowid(conn);
-    
+
     sqlite3_finalize(stmt);
     sqlite3_close(conn);
 

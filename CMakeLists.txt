@@ -8,11 +8,13 @@ set(PROJECT_DIR src)
 INCLUDE_DIRECTORIES(src)
 
 # Incldude library directories
+include_directories(${PROJECT_DIR}/lib/sqlite3/)
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/cthreadpool/)
 link_directories(/usr/local/lib/)
 
 # Load source files for libraries
+file(GLOB sqlite3 ${PROJECT_DIR}/lib/sqlite3/*.c)
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
 file(GLOB cthreadpool ${PROJECT_DIR}/lib/cthreadpool/*.c)
 
@@ -46,6 +48,7 @@ file(GLOB texts ${PROJECT_DIR}/game/texts/*.c)
 file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 
 add_executable(${EXECUTABLE_NAME}
+	${sqlite3}
         ${collections}
         ${cthreadpool}
 
@@ -77,5 +80,4 @@ add_executable(${EXECUTABLE_NAME}
 find_package (Threads)
 
 target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(${EXECUTABLE_NAME} sqlite3)
-target_link_libraries(${EXECUTABLE_NAME} uv)
+target_link_libraries(${EXECUTABLE_NAME} dl uv)
