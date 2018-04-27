@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "lib/sqlite3/sqlite3.h"
+#include "sqlite3.h"
 
 #include "game/room/room.h"
 #include "database/queries/room_user_query.h"

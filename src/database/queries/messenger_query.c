@@ -6,7 +6,7 @@
 #include "game/messenger/messenger.h"
 #include "game/messenger/messenger_entry.h"
 
-#include "lib/sqlite3/sqlite3.h"
+#include "sqlite3.h"
 #include "list.h"
 
 /** 
