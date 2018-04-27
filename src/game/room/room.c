@@ -161,7 +161,7 @@ void room_enter(room *room, session *player) {
         room->walking_job->request = walk_task;
         room->walking_job->room = (void*) room;
         room->walking_job->room_id = room->room_id;
-        room->walking_job->millis = 500;
+        room->walking_job->millis = 460;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
     }
 

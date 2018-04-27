@@ -163,20 +163,23 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     coord to;
     coord_get_front(roller->coords, &to);
 
-    coord from;
-    from.x = room_entity->current->x;
-    from.y = room_entity->current->y;
-
     if (!room_tile_is_walkable(room, room_entity, to.x, to.y)) {
         return;
     }
 
+    coord from;
+    from.x = room_entity->current->x;
+    from.y = room_entity->current->y;
+
     room_tile *previous_tile = room->room_map->map[from.x][from.y];
     room_tile *next_tile = room->room_map->map[to.x][to.y];
+
     to.z = next_tile->tile_height;
 
-    previous_tile->entity = NULL;
-    next_tile->entity = room_entity;
+    room_entity->current->x = to.x;
+    room_entity->current->y = to.y;
+    room_entity->current->z = to.z;
+    room_entity->needs_update = true;
 
     outgoing_message *om = om_create(230);
     om_write_int(om, from.x);
@@ -191,9 +194,9 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     sb_add_float_delimeter(om->sb, to.z, 2);
     room_send(room, om);
 
-    room_entity->current->x = to.x;
-    room_entity->current->y = to.y;
-    room_entity->current->z = to.z;
+
+    previous_tile->entity = NULL;
+    next_tile->entity = room_entity;
 
     //room_user_invoke_item(room_entity);
 }
