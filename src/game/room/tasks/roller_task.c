@@ -11,12 +11,17 @@
 
 #include "util/stringbuilder.h"
 
+/**
+ * Task called for rollers inside room.
+ *
+ * @param room the room to call the task for
+ */
 void do_roller_task(room *room) {
     bool regenerate_map = false;
 
-    for (size_t i = 0; i < list_size(room->items); i++) {
+    for (size_t roller_index = 0; roller_index < list_size(room->items); roller_index++) {
         item *roller;
-        list_get_at(room->items, i, (void *) &roller);
+        list_get_at(room->items, roller_index, (void *) &roller);
 
         if (!roller->definition->behaviour->is_roller) {
             continue;
@@ -28,17 +33,19 @@ void do_roller_task(room *room) {
             continue;
         }
 
-        for (size_t j = 0; j < list_size(item_tile->items); j++) {
+        for (size_t item_index = 0; item_index < list_size(item_tile->items); item_index++) {
             item *item;
-            list_get_at(item_tile->items, j, (void *) &item);
+            list_get_at(item_tile->items, item_index, (void *) &item);
 
             if (do_roller_item(room, roller, item)) {
                 regenerate_map = true;
             }
         }
 
-        if (item_tile->entity != NULL) {
-            do_roller_player(room, roller, item_tile->entity);;
+        room_user *room_entity = item_tile->entity;
+
+        if (room_entity != NULL) {
+            do_roller_player(room, roller, room_entity);
         }
     }
 
@@ -47,6 +54,14 @@ void do_roller_task(room *room) {
     }
 }
 
+/**
+ * Handle rolling item on top of roller.
+ *
+ * @param room the room the item is rolling in
+ * @param roller the roller being utilised
+ * @param item the item that is rolling
+ * @return true, if item rolled.
+ */
 bool do_roller_item(room *room, item *roller, item *item) {
     if (item->id == roller->id) {
         return false;
@@ -101,9 +116,9 @@ bool do_roller_item(room *room, item *roller, item *item) {
 
     to.z = next_height;
 
-    item->coords->x = to.x + 0;
-    item->coords->y = to.y + 0;
-    item->coords->z = to.z + 0;
+    item->coords->x = to.x;
+    item->coords->y = to.y;
+    item->coords->z = to.z;
 
     outgoing_message *om = om_create(230);
     om_write_int(om, from.x);
@@ -120,6 +135,13 @@ bool do_roller_item(room *room, item *roller, item *item) {
     return true;
 }
 
+/**
+ * Handle rolling player on top of roller.
+ *
+ * @param room the room the item is rolling in
+ * @param roller the roller being utilised
+ * @param room_entity the entity that is rolling
+ */
 void do_roller_player(room *room, item *roller, room_user *room_entity) {
     if (room_entity->is_walking) {
         return;
@@ -149,9 +171,9 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     previous_tile->entity = NULL;
     front_tile->entity = room_entity;
 
-    room_entity->current->x = to.x + 0;
-    room_entity->current->y = to.y + 0;
-    room_entity->current->z = to.z + 0;
+    room_entity->current->x = to.x;
+    room_entity->current->y = to.y;
+    room_entity->current->z = to.z;
 
     outgoing_message *om = om_create(230);
     om_write_int(om, from.x);
@@ -166,8 +188,5 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     sb_add_float_delimeter(om->sb, to.z, 2);
     room_send(room, om);
 
-
     //room_user_invoke_item(room_entity);
-
-
 }
