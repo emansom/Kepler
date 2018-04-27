@@ -3,7 +3,7 @@
 
 #include "hashtable.h"
 
-#include "sqlite3.h"
+#include "lib/sqlite3/sqlite3.h"
 
 #include "database/queries/furniture_query.h"
 #include "database/db_connection.h"
