@@ -84,6 +84,9 @@ void walk_to(room_user *room_user, int x, int y) {
         room_user->current->x = room_user->next->x;
         room_user->current->y = room_user->next->y;
         room_user->needs_update = true;
+
+        free(room_user->next);
+        room_user->next = NULL;
     }
 
     room_user->goal->x = x;
@@ -122,6 +125,7 @@ void room_user_clear_walk_list(room_user *room_user) {
 
         deque_destroy(room_user->walk_list);
         room_user->walk_list = NULL;
+        room_user->next = NULL;
     }
 }
 
@@ -137,6 +141,11 @@ void stop_walking(room_user *room_user, bool is_silent) {
 
     if (!is_silent) {
         room_user_invoke_item(room_user);
+    }
+
+    if (room_user->next != NULL) {
+        free(room_user->next);
+        room_user->next = NULL;
     }
 }
 

@@ -85,6 +85,15 @@ void process_user(session *player) {
             coord *next;
             deque_remove_first(room_entity->walk_list, (void*)&next);
 
+            if (!room_tile_is_walkable((room*) room_entity->room, room_entity, next->x, next->y)) {
+                room_entity->next = NULL;
+                free(next);
+
+                walk_to(room_entity, room_entity->goal->x, room_entity->goal->y);
+                process_user(player);
+                return;
+            }
+
             room_tile *tile_current = room_entity->room->room_map->map[room_entity->current->x][room_entity->current->y];
             room_tile *tile_next = room_entity->room->room_map->map[next->x][next->y];
 
