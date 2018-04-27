@@ -50,8 +50,9 @@ void do_roller_task(room *room) {
         if (room_entity != NULL) {
             if (!hashtable_contains_key(blacklist, &room_entity->player->player_data->id)) {
                 hashtable_add(blacklist, &room_entity->player->player_data->id, room_entity);
-                
+
                 do_roller_player(room, roller, room_entity);
+            }
         }
     }
 
@@ -171,12 +172,11 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     }
 
     room_tile *previous_tile = room->room_map->map[from.x][from.y];
-    room_tile *front_tile = room->room_map->map[to.x][to.y];
-
-    to.z = front_tile->tile_height;
+    room_tile *next_tile = room->room_map->map[to.x][to.y];
+    to.z = next_tile->tile_height;
 
     previous_tile->entity = NULL;
-    front_tile->entity = room_entity;
+    next_tile->entity = room_entity;
 
     outgoing_message *om = om_create(230);
     om_write_int(om, from.x);
