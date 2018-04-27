@@ -17,6 +17,9 @@
  * @param room the room to call the task for
  */
 void do_roller_task(room *room) {
+    HashTable *blacklist;
+    hashtable_new(&blacklist);
+
     bool regenerate_map = false;
 
     for (size_t roller_index = 0; roller_index < list_size(room->items); roller_index++) {
@@ -45,13 +48,18 @@ void do_roller_task(room *room) {
         room_user *room_entity = item_tile->entity;
 
         if (room_entity != NULL) {
-            do_roller_player(room, roller, room_entity);
+            if (!hashtable_contains_key(blacklist, &room_entity->player->player_data->id)) {
+                hashtable_add(blacklist, &room_entity->player->player_data->id, room_entity);
+                
+                do_roller_player(room, roller, room_entity);
         }
     }
 
     if (regenerate_map) {
         room_map_regenerate(room);
     }
+
+    hashtable_destroy(blacklist);
 }
 
 /**
@@ -170,10 +178,6 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     previous_tile->entity = NULL;
     front_tile->entity = room_entity;
 
-    room_entity->current->x = to.x;
-    room_entity->current->y = to.y;
-    room_entity->current->z = to.z;
-
     outgoing_message *om = om_create(230);
     om_write_int(om, from.x);
     om_write_int(om, from.y);
@@ -186,6 +190,10 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     sb_add_float_delimeter(om->sb, from.z, 2);
     sb_add_float_delimeter(om->sb, to.z, 2);
     room_send(room, om);
+
+    room_entity->current->x = to.x;
+    room_entity->current->y = to.y;
+    room_entity->current->z = to.z;
 
     //room_user_invoke_item(room_entity);
 }
