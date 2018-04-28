@@ -194,7 +194,6 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     sb_add_float_delimeter(om->sb, to.z, 2);
     room_send(room, om);
 
-
     previous_tile->entity = NULL;
     next_tile->entity = room_entity;
 

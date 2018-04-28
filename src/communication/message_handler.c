@@ -86,6 +86,8 @@
 #include "communication/incoming/room/items/ADDSTRIPITEM.h"
 #include "communication/incoming/room/items/MOVESTUFF.h"
 #include "communication/incoming/room/items/FLATPROPBYITEM.h"
+#include "communication/incoming/room/items/SETSTUFFDATA.h"
+#include "communication/incoming/room/items/REMOVESTUFF.h"
 
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
@@ -182,6 +184,8 @@ void message_handler_init() {
     // Room items
     message_requests[90] = PLACESTUFF;
     message_requests[73] = MOVESTUFF;
+    message_requests[99] = REMOVESTUFF;
+    message_requests[74] = SETSTUFFDATA;
 
     // Catalogue
     message_requests[101] = GCIX;

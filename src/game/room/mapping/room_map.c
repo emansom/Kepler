@@ -103,7 +103,6 @@ void room_map_regenerate(room *room) {
  */
 void room_map_add_items(room *room) {
     List *items;
-
     list_copy_shallow(room->items, &items);
     list_sort_in_place(items, cmp);
 
@@ -232,8 +231,7 @@ void room_map_move_item(room *room, item *item, bool rotation, coord *old_positi
  * @param item
  */
 void room_map_remove_item(room *room, item *item) {
-    item->room_id = room->room_id;
-    list_remove(room->items, item, (void*)&item);
+    list_remove(room->items, item, NULL);
 
     if (item->definition->behaviour->is_wall_item) {
         outgoing_message *om = om_create(84); // "AT"
