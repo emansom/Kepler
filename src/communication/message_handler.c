@@ -71,6 +71,7 @@
 #include "communication/incoming/room/user/CHAT.h"
 #include "communication/incoming/room/user/SHOUT.h"
 #include "communication/incoming/room/user/WAVE.h"
+#include "communication/incoming/room/user/LOOKTO.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -88,6 +89,7 @@
 #include "communication/incoming/room/items/FLATPROPBYITEM.h"
 #include "communication/incoming/room/items/SETSTUFFDATA.h"
 #include "communication/incoming/room/items/REMOVESTUFF.h"
+#include "communication/incoming/room/items/REMOVEITEM.h"
 
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
@@ -171,6 +173,7 @@ void message_handler_init() {
     message_requests[52] = CHAT;
     message_requests[55] = SHOUT;
     message_requests[94] = WAVE;
+    message_requests[79] = LOOKTO;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
@@ -185,6 +188,7 @@ void message_handler_init() {
     message_requests[90] = PLACESTUFF;
     message_requests[73] = MOVESTUFF;
     message_requests[99] = REMOVESTUFF;
+    message_requests[85] = REMOVEITEM;
     message_requests[74] = SETSTUFFDATA;
 
     // Catalogue

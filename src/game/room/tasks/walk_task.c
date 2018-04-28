@@ -105,7 +105,7 @@ void process_user(session *player) {
             char value[30];
             sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
 
-            int rotation = calculate(room_entity->current->x, room_entity->current->y, next->x, next->y);
+            int rotation = calculate_walk_direction(room_entity->current->x, room_entity->current->y, next->x, next->y);
             coord_set_rotation(room_entity->current, rotation, rotation);
 
             room_user_remove_status(room_entity, "sit");
