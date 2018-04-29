@@ -30,7 +30,7 @@ void do_roller_task(room *room) {
             continue;
         }
 
-        room_tile *item_tile = room->room_map->map[roller->coords->x][roller->coords->y];
+        room_tile *item_tile = room->room_map->map[roller->position->x][roller->position->y];
 
         if (item_tile == NULL) {
             continue;
@@ -76,17 +76,17 @@ bool do_roller_item(room *room, item *roller, item *item) {
         return false;
     }
 
-    if (item->coords->z < roller->coords->z) {
+    if (item->position->z < roller->position->z) {
         return false;
     }
 
     coord to;
-    coord_get_front(roller->coords, &to);
+    coord_get_front(roller->position, &to);
 
     coord from;
-    from.x = item->coords->x;
-    from.y = item->coords->y;
-    from.z = item->coords->z;
+    from.x = item->position->x;
+    from.y = item->position->y;
+    from.z = item->position->z;
 
     if (!room_tile_is_walkable(room, NULL, to.x, to.y)) {
         return false;
@@ -105,7 +105,7 @@ bool do_roller_item(room *room, item *roller, item *item) {
 
     if (item->item_below != NULL) {
         if (!item->item_below->definition->behaviour->is_roller) {
-            next_height = item->coords->z;
+            next_height = item->position->z;
 
             bool subtract_roller_height = false;
 
@@ -125,9 +125,9 @@ bool do_roller_item(room *room, item *roller, item *item) {
 
     to.z = next_height;
 
-    item->coords->x = to.x;
-    item->coords->y = to.y;
-    item->coords->z = to.z;
+    item->position->x = to.x;
+    item->position->y = to.y;
+    item->position->z = to.z;
 
     outgoing_message *om = om_create(230);
     om_write_int(om, from.x);
@@ -156,12 +156,12 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
         return;
     }
 
-    if (room_entity->current->z < roller->coords->z) {
+    if (room_entity->current->z < roller->position->z) {
         return;
     }
 
     coord to;
-    coord_get_front(roller->coords, &to);
+    coord_get_front(roller->position, &to);
 
     if (!room_tile_is_walkable(room, room_entity, to.x, to.y)) {
         return;

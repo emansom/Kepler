@@ -56,9 +56,9 @@ void PLACESTUFF(session *player, incoming_message *message) {
             goto cleanup;
         }
 
-        item->coords->x = (int) strtol(str_x, NULL, 10);
-        item->coords->y = (int) strtol(str_y, NULL, 10);
-        item->coords->rotation = 0;
+        item->position->x = (int) strtol(str_x, NULL, 10);
+        item->position->y = (int) strtol(str_y, NULL, 10);
+        item->position->rotation = 0;
     }
 
     room_map_add_item(player->room_user->room, item);

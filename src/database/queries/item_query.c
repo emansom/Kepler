@@ -146,10 +146,10 @@ void item_query_save(item *item) {
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, item->room_id);
         sqlite3_bind_int(stmt, 2, item->definition->id);
-        sqlite3_bind_int(stmt, 3, item->coords->x);
-        sqlite3_bind_int(stmt, 4, item->coords->y);
-        sqlite3_bind_double(stmt, 5, item->coords->z);
-        sqlite3_bind_int(stmt, 6, item->coords->rotation);
+        sqlite3_bind_int(stmt, 3, item->position->x);
+        sqlite3_bind_int(stmt, 4, item->position->y);
+        sqlite3_bind_double(stmt, 5, item->position->z);
+        sqlite3_bind_int(stmt, 6, item->position->rotation);
         sqlite3_bind_text(stmt, 7, item->custom_data, (int) strlen(item->custom_data), SQLITE_STATIC);
 
         if (item->wall_position != NULL) {

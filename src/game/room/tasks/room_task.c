@@ -7,12 +7,12 @@
 #include "status_task.h"
 #include "walk_task.h"
 
+/**
+ * Room task called every 460ns.
+ *
+ * @param room the room for the task to run inside
+ */
 void room_task(room *room) {
-    /*if (room->status_tick >= 1000) {
-        room->status_tick = 0;
-        status_task(room);
-    }*/
-
     if (room->walk_tick >= 460) {
         room->walk_tick = 0;
         walk_task(room);
@@ -23,7 +23,6 @@ void room_task(room *room) {
         do_roller_task(room);
     }
 
-    //room->status_tick += 460;
     room->roller_tick += 460;
     room->walk_tick += 460;
 }

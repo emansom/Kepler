@@ -145,7 +145,7 @@ int is_valid_tile(room_user *room_user, coord from, coord to, bool is_final_move
         if (strcmp(room_user->room->room_data->model_data->model_name, "pool_b") == 0
             && strcmp(to_item->definition->sprite, "queue_tile2") == 0) {
 
-            if (to_item->coords->x == 21 && to_item->coords->y == 9) {
+            if (to_item->position->x == 21 && to_item->position->y == 9) {
                 return room_user->player->player_data->tickets > 0 &&
                        strlen(room_user->player->player_data->pool_figure) > 0;
             } else {

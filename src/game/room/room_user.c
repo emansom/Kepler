@@ -250,7 +250,7 @@ void room_user_invoke_item(room_user *room_user) {
             sprintf(sit_height, " %1.f", item->definition->top_height);
 
             room_user_add_status(room_user, "sit", sit_height, -1, "", 0, 0);
-            coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
+            coord_set_rotation(room_user->current, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }
 

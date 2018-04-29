@@ -45,12 +45,12 @@ item *item_create(int id, int room_id, int definition_id, int x, int y, double z
         custom_data = strdup("");
     }
 
-    room_item->coords = create_coord_height(x, y, z);
+    room_item->position = create_coord_height(x, y, z);
     room_item->item_below = NULL;
     room_item->custom_data = custom_data;
     room_item->current_program = NULL;
     room_item->current_program_state = NULL;
-    room_item->coords->rotation = rotation;
+    room_item->position->rotation = rotation;
     room_item->wall_position = wall_position;
 
     return room_item;
@@ -92,7 +92,7 @@ void item_update_entities(item *item, room *room, coord *old_position) {
     }
 
     // Do new position updates
-    List *new_affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, item->coords->x, item->coords->y, item->coords->rotation);
+    List *new_affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, item->position->x, item->position->y, item->position->rotation);
 
     for (size_t i = 0; i < list_size(new_affected_tiles); i++) {
         coord *pos;
@@ -169,12 +169,12 @@ char *item_as_string(item *item) {
         if (!item->definition->behaviour->is_public_space_object) {
             sb_add_int_delimeter(sb, item->id, 2);
             sb_add_string_delimeter(sb, item->definition->sprite, 2);
-            sb_add_wired(sb, item->coords->x);
-            sb_add_wired(sb, item->coords->y);
+            sb_add_wired(sb, item->position->x);
+            sb_add_wired(sb, item->position->y);
             sb_add_wired(sb, item->definition->length);
             sb_add_wired(sb, item->definition->width);
-            sb_add_wired(sb, item->coords->rotation);
-            sb_add_float_delimeter(sb, item->coords->z, 2);
+            sb_add_wired(sb, item->position->rotation);
+            sb_add_float_delimeter(sb, item->position->z, 2);
             sb_add_string_delimeter(sb, item->definition->colour, 2);
             sb_add_string_delimeter(sb, "", 2);
             sb_add_wired(sb, 0);
@@ -182,10 +182,10 @@ char *item_as_string(item *item) {
         } else {
             sb_add_string_delimeter(sb, item->custom_data, ' ');
             sb_add_string_delimeter(sb, item->definition->sprite, ' ');
-            sb_add_int_delimeter(sb, item->coords->x, ' ');
-            sb_add_int_delimeter(sb, item->coords->y, ' ');
-            sb_add_int_delimeter(sb, (int) item->coords->z, ' ');
-            sb_add_int(sb, item->coords->rotation);
+            sb_add_int_delimeter(sb, item->position->x, ' ');
+            sb_add_int_delimeter(sb, item->position->y, ' ');
+            sb_add_int_delimeter(sb, (int) item->position->z, ' ');
+            sb_add_int(sb, item->position->rotation);
 
             if (item->definition->behaviour->has_extra_parameter) {
                 sb_add_string(sb, " 2");
@@ -285,7 +285,7 @@ void item_assign_program(item *room_item, char *program_state) {
  * @return the total height
  */
 double item_total_height(item *item) {
-    double height = item->coords->z + item->definition->stack_height;
+    double height = item->position->z + item->definition->stack_height;
     return height;
 }
 
@@ -296,7 +296,7 @@ double item_total_height(item *item) {
  */
 void item_dispose(item *item) {
     free(item->custom_data);
-    free(item->coords);
+    free(item->position);
 
     if (item->wall_position != NULL) {
         free(item->wall_position);

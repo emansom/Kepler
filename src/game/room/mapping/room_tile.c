@@ -25,6 +25,12 @@ room_tile *room_tile_create(room *room, int x, int y) {
     return tile;
 }
 
+/**
+ * Reset a tile to its defaults.
+ *
+ * @param tile the tile to reset
+ * @param room the room the tile was in
+ */
 void room_tile_reset(room_tile *tile, room *room) {
     tile->highest_item = NULL;
     tile->entity = NULL;
@@ -32,6 +38,15 @@ void room_tile_reset(room_tile *tile, room *room) {
     list_remove_all(tile->items);
 }
 
+/**
+ * Get if the tile is walkable.
+ *
+ * @param room the room to check inside
+ * @param room_user the room user to check for (may be NULL)
+ * @param x the x coordinate to check
+ * @param y the y coordinate to check
+ * @return true, if successful
+ */
 bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
     if (x < 0 || y < 0) {
         return false;
@@ -51,7 +66,6 @@ bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
         return false;
     }
 
-    // If the room isn't a public room
     if (list_size(room->room_data->model_data->public_items) == 0) {
         if (tile->entity != NULL && room_user != NULL) {
             if (tile->entity != room_user) {
