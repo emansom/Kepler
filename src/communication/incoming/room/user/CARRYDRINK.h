@@ -49,8 +49,8 @@ void CARRYDRINK(session *player, incoming_message *message) {
     int drink_id = (int) strtol(content, NULL, 10);
 
     if (drink_id >= 0 && drink_id <= 25) {
-        char *carryStatus[8];
-        char *useStatus[8];
+        char *carry_status[8];
+        char *use_status[8];
 
         char drink_as_string[11];
         sprintf(drink_as_string, " %i", drink_id);
@@ -58,25 +58,25 @@ void CARRYDRINK(session *player, incoming_message *message) {
         enum drink_type type = drinks[drink_id];
 
         if (type == DRINK) {
-            strcpy((char *) carryStatus, "carryd");
-            strcpy((char *) useStatus, "drink");
+            strcpy((char*)carry_status, "carryd");
+            strcpy((char*)use_status, "drink");
         }
 
         if (type == EAT) {
-            strcpy((char *) carryStatus, "carryf");
-            strcpy((char *) useStatus, "eat");
+            strcpy((char*)carry_status, "carryf");
+            strcpy((char*)use_status, "eat");
         }
 
         if (type == ITEM) {
-            strcpy((char *) carryStatus, "cri");
-            strcpy((char *) useStatus, "usei");
+            strcpy((char*)carry_status, "cri");
+            strcpy((char*)use_status, "usei");
         }
 
         room_user_remove_status(player->room_user, "cri");
         room_user_remove_status(player->room_user, "carryf");
         room_user_remove_status(player->room_user, "carryd");
 
-        room_user_add_status(player->room_user, strdup((char*) carryStatus), drink_as_string, 120, (char*)useStatus, 12, 1);
+        room_user_add_status(player->room_user, strdup((char*) carry_status), drink_as_string, 120, (char*)use_status, 12, 1);
         player->room_user->needs_update = true;
     }
 }

@@ -444,6 +444,4 @@ void append_user_status(outgoing_message *om, session *player) {
     }
 
     sb_add_char(om->sb, 13);
-
-    printf("Status string: %s\n", om->sb->data);
 }
