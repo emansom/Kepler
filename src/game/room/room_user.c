@@ -1,9 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <game/items/definition/item_definition.h>
+#include <stdbool.h>
 
 #include "array.h"
 #include "hashtable.h"
+#include "deque.h"
 
 #include "game/player/player.h"
 
@@ -16,12 +17,12 @@
 #include "game/room/pool/pool_handler.h"
 
 #include "game/items/item.h"
+#include "game/items/definition/item_definition.h"
 
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
 
 #include "util/stringbuilder.h"
-#include "deque.h"
 #include "communication/messages/outgoing_message.h"
 
 /**
@@ -38,6 +39,7 @@ room_user *room_user_create(session *player) {
     user->room_id = 0;
     user->room = NULL;
     user->is_walking = 0;
+    user->is_typing = 0;
     user->needs_update = 0;
     user->lido_vote = -1;
     user->current = create_coord(0, 0);
