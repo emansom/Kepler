@@ -115,7 +115,7 @@ void process_user(session *player) {
             room_entity->next = next;
         } else {
             room_entity->next = NULL;
-            room_entity->is_walking = 0;
+            room_entity->is_walking = false;
             stop_walking(room_entity, false);
         }
 
