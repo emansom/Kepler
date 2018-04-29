@@ -231,6 +231,8 @@ void room_map_move_item(room *room, item *item, bool rotation, coord *old_positi
  * @param item
  */
 void room_map_remove_item(room *room, item *item) {
+    list_remove(room->items, item, NULL);
+
     if (item->definition->behaviour->is_wall_item) {
         outgoing_message *om = om_create(84); // "AT"
         sb_add_int(om->sb, item->id);
@@ -252,8 +254,6 @@ void room_map_remove_item(room *room, item *item) {
     item->coords->x = 0;
     item->coords->y = 0;
     item->coords->z = 0;
-
-    list_remove(room->items, item, NULL);
     item_query_save(item);
 }
 
