@@ -15,8 +15,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`last_online`	TEXT NOT NULL DEFAULT '0',
 	'sso_ticket'	TEXT DEFAULT NULL
 );
-INSERT INTO `users` VALUES (1,'alex','123','hd-180-1','ch=s02/53,51,44','M','de kepler whey','9353',66,0,7,'I''m a new xddd','1524629925','verysafe');
-INSERT INTO `users` VALUES (2,'lol','123','hd-180-1','','M','de kepler whey','199',2,0,1,'I''m a new user!','1524615860','ssohere');
+INSERT INTO `users` VALUES (1,'alex','123','1770118001270123000326001','ch=s02/53,51,44','M','de kepler whey','9353',66,0,7,'I''m a new xddd','1524629925','verysafe');
+INSERT INTO `users` VALUES (2,'lol','123','1700118001270123000325517','','M','de kepler whey','199',2,0,1,'I''m a new user!','1524615860','ssohere');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
