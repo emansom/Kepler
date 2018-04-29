@@ -72,6 +72,10 @@ void CARRYDRINK(session *player, incoming_message *message) {
             strcpy((char *) useStatus, "usei");
         }
 
+        room_user_remove_status(player->room_user, "cri");
+        room_user_remove_status(player->room_user, "carryf");
+        room_user_remove_status(player->room_user, "carryd");
+
         room_user_add_status(player->room_user, strdup((char*) carryStatus), drink_as_string, 120, (char*)useStatus, 12, 1);
         player->room_user->needs_update = true;
     }
