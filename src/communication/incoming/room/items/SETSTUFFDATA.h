@@ -65,7 +65,7 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
         om_write_str(om, "");
         room_send(player->room_user->room, om);
 
-        if (item->definition->behaviour->custom_data_true_false) {
+        if (!item->definition->behaviour->custom_data_true_false) {
             item_query_save(item);
         }
     }
