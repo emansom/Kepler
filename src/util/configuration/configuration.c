@@ -46,7 +46,6 @@ void configuration_read(FILE *file) {
         }
 
         filter_vulnerable_characters(&line, true);
-
         char *found = strstr(line, "=" );
 
         if (found != NULL) {

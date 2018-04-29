@@ -176,6 +176,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
 
     to.z = next_tile->tile_height;
 
+    room_user_invoke_item(room_entity);
     room_entity->current->x = to.x;
     room_entity->current->y = to.y;
     room_entity->current->z = to.z;
@@ -196,6 +197,4 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
 
     previous_tile->entity = NULL;
     next_tile->entity = room_entity;
-
-    //room_user_invoke_item(room_entity);
 }
