@@ -39,7 +39,6 @@ void do_room_task(runnable *run){
 
     if (list_size(room->users) == 0) {
         room->walking_job = NULL;
-        room->status_job = NULL;
         free(run);
     } else {
         run->request(room);
@@ -50,7 +49,6 @@ void do_room_task(runnable *run){
         } else {
             if (room_manager_get_by_id(run->room_id) != NULL) {
                 room->walking_job = NULL;
-                room->status_job = NULL;
             }
             free(run);
         }

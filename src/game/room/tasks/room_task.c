@@ -13,16 +13,17 @@
  * @param room the room for the task to run inside
  */
 void room_task(room *room) {
-    if (room->walk_tick >= 460) {
-        room->walk_tick = 0;
+    if ((room->tick % 500) == 0) {
         walk_task(room);
     }
 
-    if (room->roller_tick >= 3000) {
-        room->roller_tick = 0;
+    if ((room->tick % 1000) == 0) {
+        status_task(room);
+    }
+
+    if ((room->tick % 3000) == 0) {
         do_roller_task(room);
     }
 
-    room->roller_tick += 460;
-    room->walk_tick += 460;
+    room->tick += 500;
 }

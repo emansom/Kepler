@@ -18,7 +18,7 @@ typedef struct room_user_s {
     int instance_id;
     int room_id;
     room *room;
-    coord *current;
+    coord *position;
     coord *goal;
     coord *next;
     Deque *walk_list;

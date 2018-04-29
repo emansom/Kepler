@@ -188,8 +188,8 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
     coord tmp;
 
     p->current = create_node();
-    p->current->x = room_user->current->x;
-    p->current->y = room_user->current->y;
+    p->current->x = room_user->position->x;
+    p->current->y = room_user->position->y;
 
     for (int x = 0; x < map_size_x ; x++) { 
          for (int y = 0; y < map_size_y ; y++) { 

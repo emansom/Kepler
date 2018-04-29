@@ -156,7 +156,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
         return;
     }
 
-    if (room_entity->current->z < roller->position->z) {
+    if (room_entity->position->z < roller->position->z) {
         return;
     }
 
@@ -168,8 +168,8 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     }
 
     coord from;
-    from.x = room_entity->current->x;
-    from.y = room_entity->current->y;
+    from.x = room_entity->position->x;
+    from.y = room_entity->position->y;
 
     room_tile *previous_tile = room->room_map->map[from.x][from.y];
     room_tile *next_tile = room->room_map->map[to.x][to.y];
@@ -177,9 +177,9 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     to.z = next_tile->tile_height;
 
     room_user_invoke_item(room_entity);
-    room_entity->current->x = to.x;
-    room_entity->current->y = to.y;
-    room_entity->current->z = to.z;
+    room_entity->position->x = to.x;
+    room_entity->position->y = to.y;
+    room_entity->position->z = to.z;
     room_entity->needs_update = true;
 
     outgoing_message *om = om_create(230);

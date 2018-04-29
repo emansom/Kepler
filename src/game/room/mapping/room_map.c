@@ -83,7 +83,7 @@ void room_map_regenerate(room *room) {
         session *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
-        room_tile *tile = room->room_map->map[room_player->room_user->current->x][room_player->room_user->current->y];
+        room_tile *tile = room->room_map->map[room_player->room_user->position->x][room_player->room_user->position->y];
 
         if (tile == NULL) {
             continue;
@@ -106,9 +106,9 @@ void room_map_add_items(room *room) {
     list_copy_shallow(room->items, &items);
     list_sort_in_place(items, cmp);
 
-    for (size_t i = 0; i < list_size(items); i++) {
+    for (size_t item_index = 0; item_index < list_size(items); item_index++) {
         item *item;
-        list_get_at(items, i, (void*)&item);
+        list_get_at(items, item_index, (void*)&item);
 
         if (item->definition->behaviour->is_wall_item) {
             continue;
@@ -133,9 +133,9 @@ void room_map_add_items(room *room) {
 
             List *affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, item->position->x, item->position->y, item->position->rotation);
 
-            for (size_t j = 0; j < list_size(affected_tiles); j++) {
+            for (size_t i = 0; i < list_size(affected_tiles); i++) {
                 coord *pos;
-                list_get_at(affected_tiles, j, (void*)&pos);
+                list_get_at(affected_tiles, i, (void*)&pos);
 
                 if (pos->x == item->position->x && pos->y == item->position->y) {
                     continue;

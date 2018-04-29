@@ -21,15 +21,15 @@ void CHAT(session *player, incoming_message *im) {
 
     room *room = player->room_user->room;
 
-    int source_x = player->room_user->current->x;
-    int source_y = player->room_user->current->y;
+    int source_x = player->room_user->position->x;
+    int source_y = player->room_user->position->y;
 
     for (size_t i = 0; i < list_size(room->users); i++) {
         session *room_player;
         list_get_at(room->users, i, (void*)&room_player);
 
-        int dist_x = abs(source_x - room_player->room_user->current->x) - 1;
-        int dist_y = abs(source_y - room_player->room_user->current->y) - 1;
+        int dist_x = abs(source_x - room_player->room_user->position->x) - 1;
+        int dist_y = abs(source_y - room_player->room_user->position->y) - 1;
 
         outgoing_message *om = om_create(24); // "@X"
         om_write_int(om, player->room_user->instance_id);

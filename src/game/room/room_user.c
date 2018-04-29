@@ -40,7 +40,7 @@ room_user *room_user_create(session *player) {
     user->is_walking = 0;
     user->needs_update = 0;
     user->lido_vote = -1;
-    user->current = create_coord(0, 0);
+    user->position = create_coord(0, 0);
     user->goal = create_coord(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
@@ -61,7 +61,7 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
-    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
 
     if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
         return;
@@ -81,8 +81,8 @@ void walk_to(room_user *room_user, int x, int y) {
     }
 
     if (room_user->next != NULL) {
-        room_user->current->x = room_user->next->x;
-        room_user->current->y = room_user->next->y;
+        room_user->position->x = room_user->next->x;
+        room_user->position->y = room_user->next->y;
         room_user->needs_update = true;
 
         free(room_user->next);
@@ -92,7 +92,7 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->x = x;
     room_user->goal->y = y;
 
-    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
 
     /*room_tile *tiles = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
 
@@ -220,15 +220,15 @@ void room_user_move_mouth(room_user *room_user, char *text) {
 void room_user_invoke_item(room_user *room_user) {
     bool needs_update = false;
 
-    double height = room_user->room->room_map->map[room_user->current->x][room_user->current->y]->tile_height;
+    double height = room_user->room->room_map->map[room_user->position->x][room_user->position->y]->tile_height;
 
-    if (height != room_user->current->z) {
-        room_user->current->z = height;
+    if (height != room_user->position->z) {
+        room_user->position->z = height;
         needs_update = true;
     }
 
     item *item = NULL;
-    room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
+    room_tile *tile = room_user->room->room_map->map[room_user->position->x][room_user->position->y];
 
     if (tile != NULL) {
         if (tile->highest_item != NULL) {
@@ -250,7 +250,7 @@ void room_user_invoke_item(room_user *room_user) {
             sprintf(sit_height, " %1.f", item->definition->top_height);
 
             room_user_add_status(room_user, "sit", sit_height, -1, "", 0, 0);
-            coord_set_rotation(room_user->current, item->position->rotation ,item->position->rotation);
+            coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }
 
@@ -350,9 +350,9 @@ void room_user_reset(room_user *room_user) {
 void room_user_cleanup(room_user *room_user) {
     room_user_reset(room_user);
     
-    if (room_user->current != NULL) {
-        free(room_user->current);
-        room_user->current = NULL;
+    if (room_user->position != NULL) {
+        free(room_user->position);
+        room_user->position = NULL;
     }
 
     if (room_user->goal != NULL) {
@@ -386,9 +386,9 @@ void append_user_list(outgoing_message *players, session *player) {
     om_write_str_kv(players, "f", player->player_data->figure);
     om_write_str_kv(players, "s", player->player_data->sex);
     sb_add_string(players->sb, "l:");
-    sb_add_int_delimeter(players->sb, player->room_user->current->x, ' ');
-    sb_add_int_delimeter(players->sb, player->room_user->current->y, ' ');
-    sb_add_float_delimeter(players->sb, player->room_user->current->z, (char)13);
+    sb_add_int_delimeter(players->sb, player->room_user->position->x, ' ');
+    sb_add_int_delimeter(players->sb, player->room_user->position->y, ' ');
+    sb_add_float_delimeter(players->sb, player->room_user->position->z, (char)13);
 
     if (strlen(player->player_data->motto) > 0) {
         om_write_str_kv(players, "c", player->player_data->motto);
@@ -412,11 +412,11 @@ void append_user_list(outgoing_message *players, session *player) {
  */
 void append_user_status(outgoing_message *om, session *player) {
     sb_add_int_delimeter(om->sb, player->room_user->instance_id, ' ');
-    sb_add_int_delimeter(om->sb, player->room_user->current->x, ',');
-    sb_add_int_delimeter(om->sb, player->room_user->current->y, ',');
-    sb_add_float_delimeter(om->sb, player->room_user->current->z, ',');
-    sb_add_int_delimeter(om->sb, player->room_user->current->head_rotation, ',');
-    sb_add_int_delimeter(om->sb, player->room_user->current->body_rotation, '/');
+    sb_add_int_delimeter(om->sb, player->room_user->position->x, ',');
+    sb_add_int_delimeter(om->sb, player->room_user->position->y, ',');
+    sb_add_float_delimeter(om->sb, player->room_user->position->z, ',');
+    sb_add_int_delimeter(om->sb, player->room_user->position->head_rotation, ',');
+    sb_add_int_delimeter(om->sb, player->room_user->position->body_rotation, '/');
 
     if (hashtable_size(player->room_user->statuses) > 0) {
         HashTableIter iter;

@@ -49,12 +49,9 @@ room *room_create(int room_id) {
     instance->room_data = NULL;
     instance->room_map = NULL;
     instance->walking_job = NULL;
-    instance->status_job = NULL;
     list_new(&instance->users);
     list_new(&instance->items);
-    instance->roller_tick = 0;
-    instance->status_tick = 0;
-    instance->walk_tick = 0;
+    instance->tick = 0;
     return instance;
 }
 
@@ -147,11 +144,11 @@ void room_enter(room *room, session *player) {
    room_entity->room_id = room->room_id;
    room_entity->instance_id = create_instance_id((room_user*)room_entity);
 
-   room_entity->current->x = room->room_data->model_data->door_x;
-   room_entity->current->y = room->room_data->model_data->door_y;
-   room_entity->current->z = room->room_data->model_data->door_z;
+   room_entity->position->x = room->room_data->model_data->door_x;
+   room_entity->position->y = room->room_data->model_data->door_y;
+   room_entity->position->z = room->room_data->model_data->door_z;
 
-   coord_set_rotation(room_entity->current,
+   coord_set_rotation(room_entity->position,
       room->room_data->model_data->door_dir,
       room->room_data->model_data->door_dir);
 
@@ -163,17 +160,8 @@ void room_enter(room *room, session *player) {
         room->walking_job->request = room_task;
         room->walking_job->room = (void*) room;
         room->walking_job->room_id = room->room_id;
-        room->walking_job->millis = 460;
+        room->walking_job->millis = 500;
         thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
-    }
-
-    if (room->status_job == NULL) {
-        room->status_job = create_runnable();
-        room->status_job->request = status_task;
-        room->status_job->room = (void*) room;
-        room->status_job->room_id = room->room_id;
-        room->status_job->millis = 1000;
-        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->status_job);
     }
 
     /*outgoing_message *om = om_create(73); // "AI"
@@ -204,7 +192,7 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
     room->room_data->visitors_now = list_size(room->users);
 
     // Remove current user from tile
-    room_tile *current_tile = room->room_map->map[room_player->room_user->current->x][room_player->room_user->current->y];
+    room_tile *current_tile = room->room_map->map[room_player->room_user->position->x][room_player->room_user->position->y];
     current_tile->entity = NULL;
 
     outgoing_message *om;
@@ -407,6 +395,7 @@ void room_dispose(room *room, bool override) {
         return;
     }
 
+    room->tick = 0;
     room_map_destroy(room);
 
     if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public room model
@@ -444,7 +433,6 @@ void room_dispose(room *room, bool override) {
 
     room->users = NULL;
     room->walking_job = NULL;
-    room->status_job = NULL;
 
     free(room);
     room = NULL;
