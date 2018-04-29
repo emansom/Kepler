@@ -47,7 +47,6 @@ void CARRYDRINK(session *player, incoming_message *message) {
     drinks[25] = DRINK; // Lovejuice
 
     int drink_id = (int) strtol(content, NULL, 10);
-    printf("player: %i\n", drink_id);
 
     if (drink_id >= 0 && drink_id <= 25) {
         char *carryStatus[8];
