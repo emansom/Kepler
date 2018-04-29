@@ -180,7 +180,7 @@ void pool_warp_swim(session *p, item *item, coord warp, bool exit) {
     room_entity->position->z = room_entity->room->room_map->map[warp.x][warp.y]->tile_height;
 
     if (!exit) {
-        room_user_add_status(room_entity, "swim", "", -1, "", 0, 0);
+        room_user_add_status(room_entity, "swim", "", -1, "", -1, -1);
     } else {
         room_user_remove_status(room_entity, "swim");
     }

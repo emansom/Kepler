@@ -31,7 +31,7 @@ typedef struct session_s {
     struct player_data_s *player_data;
     messenger *messenger;
     inventory *inventory;
-    room_user *room_user;
+    struct room_user_s *room_user;
     int logged_in;
 } session;
 

@@ -14,14 +14,17 @@ void SHOUT(session *player, incoming_message *im) {
     }
 
     char *message = im_read_str(im);
-    filter_vulnerable_characters(&message, true);
 
-    room_user_move_mouth((room_user *) player->room_user, message);
+    if (message != NULL) {
+        filter_vulnerable_characters(&message, true);
 
-    outgoing_message *om = om_create(26); // "@Z"
-    om_write_int(om, player->room_user->instance_id);
-    om_write_str(om, message);
-    room_send(player->room_user->room, om);
+        room_user_move_mouth((room_user *) player->room_user, message);
+
+        outgoing_message *om = om_create(26); // "@Z"
+        om_write_int(om, player->room_user->instance_id);
+        om_write_str(om, message);
+        room_send(player->room_user->room, om);
+    }
 
     free(message);
 }

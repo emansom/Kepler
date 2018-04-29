@@ -72,6 +72,7 @@
 #include "communication/incoming/room/user/SHOUT.h"
 #include "communication/incoming/room/user/WAVE.h"
 #include "communication/incoming/room/user/LOOKTO.h"
+#include "communication/incoming/room/user/CARRYDRINK.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -174,6 +175,7 @@ void message_handler_init() {
     message_requests[55] = SHOUT;
     message_requests[94] = WAVE;
     message_requests[79] = LOOKTO;
+    message_requests[80] = CARRYDRINK;
 
     // Room settings
     message_requests[21] = GETFLATINFO;

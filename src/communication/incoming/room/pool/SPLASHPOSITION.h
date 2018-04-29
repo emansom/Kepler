@@ -42,7 +42,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
     room_entity->walking_lock = false;
 
     // Immediately update status
-    room_user_add_status(room_entity, "swim", "", -1, "", 0, 0);
+    room_user_add_status(room_entity, "swim", "", -1, "", -1, -1);
 
     outgoing_message *players = om_create(34); // "@b
     append_user_status(players, diver);

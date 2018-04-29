@@ -30,13 +30,16 @@ typedef struct room_user_s {
 } room_user;
 
 typedef struct room_user_status_s {
+    char *key;
     char *value;
     int sec_lifetime;
-    char *action;
     int sec_action_switch;
-    int sec_action_length;
-    int action_expire;
-    int lifetime_expire;
+    int sec_action_lifetime;
+    int sec_switch_lifetime;
+    char *action;
+    int lifetime_countdown;
+    int action_countdown;
+    int action_switch_countdown;
 } room_user_status;
 
 room_user *room_user_create(session*);

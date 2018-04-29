@@ -111,7 +111,7 @@ void process_user(session *player) {
             room_user_remove_status(room_entity, "sit");
             room_user_remove_status(room_entity, "lay");
 
-            room_user_add_status(room_entity, "mv", value, -1, "", 0, 0);
+            room_user_add_status(room_entity, "mv", value, -1, "", -1, -1);
             room_entity->next = next;
         } else {
             room_entity->next = NULL;
