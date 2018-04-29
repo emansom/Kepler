@@ -138,6 +138,10 @@ bool item_is_walkable(item *item) {
         return true;
     }
 
+    if (item->definition->behaviour->is_door) {
+        return strcmp(item->custom_data, "O") == 0;
+    }
+
     return false;
 }
 

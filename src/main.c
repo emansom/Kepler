@@ -51,8 +51,6 @@ int main(void) {
     catalogue_manager_init();
     message_handler_init();
     create_thread_pool();
-
-    //printf("%i\n", base64_decode("@R"));
     print_info("\n");
 
     server_settings *settings = malloc(sizeof(server_settings));

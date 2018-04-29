@@ -49,6 +49,9 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
         }
     } else {
 
+        if (strcmp(str_data, "O") == 0 || strcmp(str_data, "C") == 0) {
+            new_data = strdup(str_data);
+        }
     }
 
     if (new_data != NULL) {
