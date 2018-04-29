@@ -97,9 +97,27 @@ player_data *player_manager_get_data_by_id(int player_id) {
         if (p->player_data->id == player_id) {
             return (player_data *) p->player_data;
         }
-    }  
+    }
 
     return player_query_data(player_id);
+}
+
+/**
+* Destroy session by player id
+*
+* @param player_id the player id
+*/
+void player_manager_destroy_session_by_id(int player_id) {
+    for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
+        session *p;
+        list_get_at(global.player_manager.players, i, (void*)&p);
+
+        if (!p->logged_in || p->player_data->id != player_id) {
+            continue;
+        }
+
+        uv_close((uv_handle_t *) p->stream, server_on_connection_close);
+    }
 }
 
 /**

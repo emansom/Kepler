@@ -10,6 +10,7 @@
 #include "communication/incoming/login/GENERATEKEY.h"
 #include "communication/incoming/login/TRY_LOGIN.h"
 #include "communication/incoming/login/GDATE.h"
+#include "communication/incoming/login/SSO.h"
 
 // Register
 #include "communication/incoming/register/APPROVENAME.h"
@@ -97,7 +98,7 @@
 #include "communication/incoming/inventory/GETSTRIP.h"
 
 // Only allow these headers to be processed if the session is not logged in.
-int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43 };
+int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204 };
 
 /**
  * Assigns all header handlers to this array
@@ -108,6 +109,7 @@ void message_handler_init() {
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
     message_requests[49] = GDATE;
+    message_requests[204] = SSO;
 
     // Register
     message_requests[42] = APPROVENAME;
