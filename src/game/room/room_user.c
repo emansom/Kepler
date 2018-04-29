@@ -249,7 +249,7 @@ void room_user_invoke_item(room_user *room_user) {
             char sit_height[11];
             sprintf(sit_height, " %1.f", item->definition->top_height);
 
-            room_user_add_status(room_user, "sit", sit_height, -1, "", 0, 0);
+            room_user_add_status(room_user, "sit", sit_height, -1, "", -1, -1);
             coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }
@@ -274,17 +274,22 @@ void room_user_invoke_item(room_user *room_user) {
  * @param sec_action_switch the amount of seconds needed until the action gets switched
  * @param sec_action_length the amount of seconds needed for the action to stay until the action switches back
  */
-void room_user_add_status(room_user *room_user, char *key, char *value, int sec_lifetime, char *action, int sec_action_switch, int sec_action_length) {
+void room_user_add_status(room_user *room_user, char *key, char *value, int sec_lifetime, char *action, int sec_action_switch, int sec_switch_lifetime) {
     room_user_remove_status(room_user, key);
 
     room_user_status *status = malloc(sizeof(room_user_status));
+    status->key = key;
     status->value = strdup(value);
-    status->sec_lifetime = sec_lifetime;
-    status->lifetime_expire = sec_lifetime;
     status->action = strdup(action);
+
+    status->sec_lifetime = sec_lifetime;
     status->sec_action_switch = sec_action_switch;
-    status->sec_action_length = sec_action_length;
-    status->action_expire = sec_action_length;
+    status->sec_switch_lifetime = sec_switch_lifetime;
+
+    status->lifetime_countdown = sec_lifetime;
+    status->action_countdown = sec_action_switch;
+    status->action_switch_countdown = -1;
+
     hashtable_add(room_user->statuses, key, status);
 }
 
@@ -327,6 +332,11 @@ void room_user_reset(room_user *room_user) {
     room_user_remove_status(room_user, "sit");
     room_user_remove_status(room_user, "lay");
     room_user_remove_status(room_user, "flatctrl");
+
+    // Carry items
+    room_user_remove_status(room_user, "carryf");
+    room_user_remove_status(room_user, "carryd");
+    room_user_remove_status(room_user, "cri");
 
     room_user->is_walking = 0;
     room_user->needs_update = 0;
@@ -425,14 +435,15 @@ void append_user_status(outgoing_message *om, session *player) {
         hashtable_iter_init(&iter, player->room_user->statuses);
 
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-            char *key = entry->key;
             room_user_status *rus = entry->value;
 
-            sb_add_string(om->sb, key);
+            sb_add_string(om->sb, rus->key);
             sb_add_string(om->sb, rus->value);
             sb_add_string(om->sb, "/");
         }
     }
 
     sb_add_char(om->sb, 13);
+
+    printf("Status string: %s\n", om->sb->data);
 }

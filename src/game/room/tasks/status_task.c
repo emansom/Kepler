@@ -48,9 +48,32 @@ void process_user_status(room_user *room_user) {
         char *key = entry->key;
         room_user_status *rus = entry->value;
 
-        if (rus->lifetime_expire > 0) {
-            rus->lifetime_expire--;
-        } else if (rus->lifetime_expire == 0) {
+        if (rus->action_switch_countdown > 0) {
+            rus->action_switch_countdown--;
+        } else if (rus->action_switch_countdown == 0) {
+            rus->action_switch_countdown = -1;
+            rus->action_countdown = rus->sec_action_switch;
+
+            // Swap back to original key and update status
+            rus->key = key;
+            room_user->needs_update = true;
+        }
+
+        if (rus->action_countdown > 0) {
+            rus->action_countdown--;
+        } else if (rus->action_countdown == 0) {
+            rus->action_countdown = -1;
+            rus->action_switch_countdown = rus->sec_switch_lifetime;
+
+            // Swap key to action and update status
+            rus->key = rus->action;
+            room_user->needs_update = true;
+        }
+
+        if (rus->lifetime_countdown > 0) {
+            rus->lifetime_countdown--;
+        } else if (rus->lifetime_countdown == 0) {
+            rus->lifetime_countdown = -1;
             room_user_remove_status(room_user, key);
             room_user->needs_update = 1;
         }
