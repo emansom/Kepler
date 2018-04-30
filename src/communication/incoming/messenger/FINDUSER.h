@@ -14,20 +14,23 @@ void FINDUSER(session *user, incoming_message *message) {
     }
 
     char *input_search = im_read_str(message);
-    int search_id = player_query_id(input_search);
 
-    outgoing_message *msg = om_create(128); // "B@"
-    om_write_str(msg, "MESSENGER");
+    if (input_search != NULL) {
+        int search_id = player_query_id(input_search);
 
-    if (search_id > 0) {
-        messenger_entry_serialise(search_id, msg);
+        outgoing_message *msg = om_create(128); // "B@"
+        om_write_str(msg, "MESSENGER");
 
-    } else {
-        om_write_int(msg, 0);
+        if (search_id > 0) {
+            messenger_entry_serialise(search_id, msg);
+
+        } else {
+            om_write_int(msg, 0);
+        }
+
+        player_send(user, msg);
+        om_cleanup(msg);
     }
-
-    player_send(user, msg);
-    om_cleanup(msg);
 
     free(input_search);
 }
