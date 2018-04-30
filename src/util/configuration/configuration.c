@@ -35,8 +35,13 @@ void configuration_new() {
     fprintf(fp, "\n");
     fprintf(fp, "[Game]\n");
     fprintf(fp, "sso.tickets.enabled=%s\n", "1");
+    fprintf(fp, "\n");
     fprintf(fp, "welcome.message.enabled=%s\n", "1");
     fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");
+    fprintf(fp, "\n");
+    fprintf(fp, "# 1 tick = 500ms, 6 is 3 seconds\n");
+    fprintf(fp, "roller.tick.default=%s\n", "6");
+    fprintf(fp, "\n");
     fclose(fp);
 }
 
