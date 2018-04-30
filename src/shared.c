@@ -89,7 +89,24 @@ char *strlwr(char *str) {
     return str;
 }
 
-char *replace(const char *s, char ch, const char *repl) {
+char* replace(char* orig_str, char* old_token, char* new_token)
+{
+    char*       new_str = 0;
+    const char* pos = strstr(orig_str, old_token);
+
+    if (pos)
+    {
+        new_str = calloc(1, strlen(orig_str) - strlen(old_token) + strlen(new_token) + 1);
+
+        strncpy(new_str, orig_str, pos - orig_str);
+        strcat(new_str, new_token);
+        strcat(new_str, pos + strlen(old_token));
+    }
+
+    return new_str;
+}
+
+char *replace_char(const char *s, char ch, char *repl) {
     int count = 0;
     const char *t;
     for(t=s; *t; t++)
