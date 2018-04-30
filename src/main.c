@@ -27,12 +27,20 @@ int main(void) {
     print_info("\n");
 
     configuration_init();
-    print_info("Testing SQLite connection...\n");
 
     if (!sqlite3_threadsafe()) {
         print_info("SQLite not threadsafe");
         return EXIT_FAILURE;
+    } else {
+        print_info("Telling SQLite to use serialized mode\n");
+
+        if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
+            fprintf(stderr, "Could not configurate SQLite to use serialized mode\n");
+            return EXIT_FAILURE;
+        }
     }
+
+    print_info("Testing SQLite connection...\n");
 
     sqlite3 *con = db_create_connection();
 
@@ -46,14 +54,20 @@ int main(void) {
 
         sqlite3_stmt *stmt;
 
-        int status = sqlite3_prepare(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+        int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
 
         if (status != SQLITE_OK) {
             fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(con));
         }
 
-        if (sqlite3_step(stmt) != SQLITE_DONE) {
-            printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(con));
+        if (sqlite3_step(stmt) != SQLITE_ROW) {
+            fprintf(stderr, "Could not step (execute) stmt. %s\n", sqlite3_errmsg(con));
+        }
+
+        char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
+
+        if (strcmp(chosen_journal_mode, "wal")) {
+            fprintf(stderr, "WAL not supported, now using: %s\n", chosen_journal_mode);
         }
 
         sqlite3_finalize(stmt);
