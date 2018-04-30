@@ -152,7 +152,7 @@ void walk_to(room_user *room_user, int x, int y) {
 
         if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
             outgoing_message *om = om_create(73); // "AI"
-            player_send((session *) room_user->player, om);
+            player_send(room_user->player, om);
             om_cleanup(om);
             return;
         }
@@ -319,7 +319,7 @@ void room_user_carry_item(room_user *room_user, int carry_id) {
         ITEM
     };
 
-    enum drink_type drinks[26];
+    enum drink_type drinks[26] = { DRINK };
     drinks[1] = DRINK;  // Tea
     drinks[2] = DRINK;  // Juice
     drinks[3] = EAT;    // Carrot
@@ -374,8 +374,7 @@ void room_user_carry_item(room_user *room_user, int carry_id) {
         room_user_remove_status(room_user, "carryf");
         room_user_remove_status(room_user, "carryd");
 
-        room_user_add_status(room_user, strdup((char *) carry_status), drink_as_string, 120,
-                             (char *) use_status, 12, 1);
+        room_user_add_status(room_user, strdup((char*) carry_status), drink_as_string, 120, (char*) use_status, 12, 1);
         room_user->needs_update = true;
     }
 }
