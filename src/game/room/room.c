@@ -22,7 +22,7 @@
 #include "manager/room_item_manager.h"
 #include "manager/room_entity_manager.h"
 
-#include "tasks/room_task.h"
+#include "room_task.h"
 #include "tasks/status_task.h"
 
 #include "game/player/player.h"
@@ -48,7 +48,7 @@ room *room_create(int room_id) {
     instance->room_id = room_id;
     instance->room_data = NULL;
     instance->room_map = NULL;
-    instance->walking_job = NULL;
+    instance->room_schedule_job = NULL;
     list_new(&instance->users);
     list_new(&instance->items);
     instance->tick = 0;
@@ -119,6 +119,16 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
 }
 
 /**
+ * Used to load data if they're the first to enter the room.
+ *
+ * @param room the room to load the data for
+ */
+void room_load_data(room *room) {
+    room_item_manager_load(room);
+    room_map_init(room);
+}
+
+/**
  * Room entry handler.
  *
  * @param om the outgoing message
@@ -137,46 +147,36 @@ void room_enter(room *room, session *player) {
         printf("Room %i has invalid model data.\n", room->room_data->id);
         return;
     }
-    
-    room_user *room_entity = (room_user *) player->room_user;
 
-   room_entity->room = room;
-   room_entity->room_id = room->room_id;
-   room_entity->instance_id = create_instance_id((room_user*)room_entity);
+    room_user *room_entity = player->room_user;
 
-   room_entity->position->x = room->room_data->model_data->door_x;
-   room_entity->position->y = room->room_data->model_data->door_y;
-   room_entity->position->z = room->room_data->model_data->door_z;
+    room_entity->room = room;
+    room_entity->room_id = room->room_id;
+    room_entity->instance_id = create_instance_id(room_entity);
 
-   coord_set_rotation(room_entity->position,
-      room->room_data->model_data->door_dir,
-      room->room_data->model_data->door_dir);
+    room_entity->position->x = room->room_data->model_data->door_x;
+    room_entity->position->y = room->room_data->model_data->door_y;
+    room_entity->position->z = room->room_data->model_data->door_z;
+
+    coord_set_rotation(room_entity->position,
+                       room->room_data->model_data->door_dir,
+                       room->room_data->model_data->door_dir);
 
     list_add(room->users, player);
-    room->room_data->visitors_now = list_size(room->users);
+    room->room_data->visitors_now = (int) list_size(room->users);
 
-    if (room->walking_job == NULL) {
-        room->walking_job = create_runnable();
-        room->walking_job->request = room_task;
-        room->walking_job->room = (void*) room;
-        room->walking_job->room_id = room->room_id;
-        room->walking_job->millis = 500;
-        thpool_add_work(global.thread_manager.pool, (void*)do_room_task, room->walking_job);
+    if (room->room_schedule_job == NULL) {
+        room->room_schedule_job = create_runnable();
+        room->room_schedule_job->request = room_task;
+        room->room_schedule_job->room = room;
+        room->room_schedule_job->room_id = room->room_id;
+        room->room_schedule_job->millis = 500;
+        thpool_add_work(global.thread_manager.pool, (void *) do_room_task, room->room_schedule_job);
     }
 
     /*outgoing_message *om = om_create(73); // "AI"
     player_send(session, om);
     om_cleanup(om);*/
-}
-
-/**
- * Used to load data if they're the first to enter the room.
- *
- * @param room the room to load the data for
- */
-void room_load_data(room *room) {
-    room_item_manager_load(room);
-    room_map_init(room);
 }
 
 /**
@@ -189,7 +189,7 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
     }
 
     list_remove(room->users, room_player, NULL);
-    room->room_data->visitors_now = list_size(room->users);
+    room->room_data->visitors_now = (int) list_size(room->users);
 
     // Remove current user from tile
     room_tile *current_tile = room->room_map->map[room_player->room_user->position->x][room_player->room_user->position->y];
@@ -209,8 +209,10 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
         }
     }
 
-    room_user_reset((room_user*) room_player->room_user);
+    // Reset room user
+    room_user_reset(room_player->room_user);
 
+    // Make figure vanish from the room
     om = om_create(29); // "@]"
     sb_add_int(om->sb, room_player->room_user->instance_id);
     room_send(room, om);
@@ -218,6 +220,7 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
     room_player->room_user->room = NULL;
     room_dispose(room, false);
 
+    // Go to hotel view, if told so.
     if (hotel_view) {
         om = om_create(18); // "@R"
         player_send(room_player, om);
@@ -432,7 +435,7 @@ void room_dispose(room *room, bool override) {
     list_destroy(room->items);
 
     room->users = NULL;
-    room->walking_job = NULL;
+    room->room_schedule_job = NULL;
 
     free(room);
     room = NULL;

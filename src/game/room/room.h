@@ -34,7 +34,7 @@ typedef struct room_s {
     int room_id;
     struct room_data_s *room_data;
     room_map *room_map;
-    runnable *walking_job;
+    runnable *room_schedule_job;
     List *users;
     List *items;
     unsigned long tick;

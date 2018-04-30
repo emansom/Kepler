@@ -3,9 +3,9 @@
 
 #include "game/room/room.h"
 
-#include "roller_task.h"
-#include "status_task.h"
-#include "walk_task.h"
+#include "game/room/tasks/roller_task.h"
+#include "game/room/tasks/status_task.h"
+#include "game/room/tasks/walk_task.h"
 
 /**
  * Room task called every 460ns.

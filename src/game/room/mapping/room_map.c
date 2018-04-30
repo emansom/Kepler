@@ -89,7 +89,7 @@ void room_map_regenerate(room *room) {
             continue;
         }
 
-        tile->entity = (room_user *) room_player->room_user;
+        tile->entity = room_player->room_user;
     }
 
     room_map_add_items(room);
@@ -270,7 +270,7 @@ void room_map_item_adjustment(room *room, item *adjusted_item, bool rotation) {
     }
 
     if (rotation) {
-        for (size_t i = 0; i < list_size(tile->items); i++) {
+        /*for (size_t i = 0; i < list_size(tile->items); i++) {
             item *item;
             list_get_at(tile->items, i, (void *) &item);
 
@@ -291,34 +291,14 @@ void room_map_item_adjustment(room *room, item *adjusted_item, bool rotation) {
             sb_add_string(om->sb, item_str);
             room_send(room, om);
             free(item_str);
-        }
-
-
+        }*/
    } else {
-
         adjusted_item->position->z = tile->tile_height;
     }
 
     if (adjusted_item->position->z > 8) {
         adjusted_item->position->z = 8;
     }
-
-    /*if (rotation) {
-        for (Item item : this.getTile(moveItem.getPosition().getX(), moveItem.getPosition().getY()).getItems()) {
-            if (item.getId() == moveItem.getId()) {
-                continue;
-            }
-
-            if (item.getPosition().getZ() < moveItem.getPosition().getZ()) {
-                continue;
-            }
-
-            item.getPosition().setRotation(moveItem.getPosition().getRotation());
-            item.updateStatus();
-        }
-    } else {
-        moveItem.getPosition().setZ(this.getTileHeight(moveItem.getPosition().getX(), moveItem.getPosition().getY()));
-    }*/
 }
 
 /**

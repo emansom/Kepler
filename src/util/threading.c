@@ -38,7 +38,7 @@ void do_room_task(runnable *run){
     }
 
     if (list_size(room->users) == 0) {
-        room->walking_job = NULL;
+        room->room_schedule_job = NULL;
         free(run);
     } else {
         run->request(room);
@@ -48,7 +48,7 @@ void do_room_task(runnable *run){
             thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
         } else {
             if (room_manager_get_by_id(run->room_id) != NULL) {
-                room->walking_job = NULL;
+                room->room_schedule_job = NULL;
             }
             free(run);
         }
