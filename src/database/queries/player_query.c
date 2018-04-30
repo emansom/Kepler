@@ -70,7 +70,7 @@ int player_query_id(char *username) {
 }
 
 /**
- * Retrives the user ID if there was a successful login.
+ * Retrieves the user ID if there was a successful login.
  *
  * @param username the username
  * @param password the password
@@ -86,6 +86,36 @@ int player_query_login(char *username, char *password) {
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, password, -1, SQLITE_STATIC);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    int step = sqlite3_step(stmt);
+
+    if (step == SQLITE_ROW) {
+        SUCCESS = sqlite3_column_int(stmt, 0);
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(conn);
+    return SUCCESS;
+}
+
+/**
+ * Retrieves the user ID if a SSO ticket matches
+ *
+ * @param ticket the SSO (Single Sign On) ticket
+ * @return the user id, -1 if not successful
+ */
+int player_query_sso(char *ticket) {
+    sqlite3 *conn = db_create_connection();
+    sqlite3_stmt *stmt;
+
+    int SUCCESS = -1;
+    int status = sqlite3_prepare(conn, "SELECT id FROM users WHERE sso_ticket = ? LIMIT 1", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, ticket, -1, SQLITE_STATIC);
     } else {
         fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }

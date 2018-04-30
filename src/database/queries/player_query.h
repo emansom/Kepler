@@ -7,6 +7,7 @@ typedef struct player_data_s player_data;
 char *player_query_username(int user_id);
 int player_query_id(char *username);
 int player_query_login(char *username, char *password);
+int player_query_sso(char *ticket);
 int player_query_exists_username(char *username);
 int player_query_create(char *username, char *password, char *figure, char *motto);
 player_data *player_query_data(int id);
