@@ -7,7 +7,7 @@ void TRY_LOGIN(session *player, incoming_message *message) {
     char *username = im_read_str(message);
     char *password = im_read_str(message);
 
-    if (username == NULL || password == NULL) {
+    if (username != NULL || password != NULL) {
         int player_id = player_query_login(username, password);
 
         if (player_id == -1) {
