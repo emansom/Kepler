@@ -34,8 +34,8 @@ int main(void) {
     } else {
         print_info("Telling SQLite to use serialized mode\n");
 
-        if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
-            fprintf(stderr, "Could not configurate SQLite to use serialized mode\n");
+        if (sqlite3_config(SQLITE_CONFIG_MULTITHREAD) != SQLITE_OK) {
+            fprintf(stderr, "Could not configurate SQLite to use multithread mode\n");
             return EXIT_FAILURE;
         }
     }
