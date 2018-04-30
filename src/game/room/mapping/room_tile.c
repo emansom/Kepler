@@ -1,6 +1,9 @@
+#include <game/room/room_user.h>
 #include "list.h"
 
 #include "room_tile.h"
+
+#include "game/pathfinder/coord.h"
 
 #include "game/items/item.h"
 
@@ -76,7 +79,12 @@ bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
 
     if (tile->highest_item != NULL) {
         if (!item_is_walkable(tile->highest_item)) {
-            return false;
+
+            if (room_user != NULL) {
+                return (tile->highest_item->position->x == room_user->position->x && tile->highest_item->position->y == room_user->position->y);
+            } else {
+                return false;
+            }
         }
     }
 
