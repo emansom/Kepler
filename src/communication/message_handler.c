@@ -114,7 +114,10 @@ void message_handler_init() {
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
     message_requests[49] = GDATE;
-    message_requests[204] = SSO;
+
+    if (configuration_get_number("sso.tickets.enabled")) {
+        message_requests[204] = SSO;
+    }
 
     // Register
     message_requests[42] = APPROVENAME;

@@ -32,6 +32,11 @@ void configuration_new() {
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.port=%i\n", 12321);
     fprintf(fp, "server.ip.address=%s\n", "127.0.0.1");
+    fprintf(fp, "\n");
+    fprintf(fp, "[Game]\n");
+    fprintf(fp, "sso.tickets.enabled=%s\n", "1");
+    fprintf(fp, "welcome.message.enabled=%s\n", "1");
+    fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");
     fclose(fp);
 }
 
