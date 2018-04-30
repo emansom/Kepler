@@ -29,6 +29,11 @@ int main(void) {
     configuration_init();
     print_info("Testing SQLite connection...\n");
 
+    if (!sqlite3_threadsafe()) {
+        print_info("SQLite not threadsafe");
+        return EXIT_FAILURE;
+    }
+
     sqlite3 *con = db_create_connection();
 
     if (con == NULL) {
@@ -36,6 +41,22 @@ int main(void) {
         return EXIT_FAILURE;
     } else {
         print_info("The connection to the database was successful!\n");
+
+        print_info("Telling SQLite to use WAL mode\n");
+
+        sqlite3_stmt *stmt;
+
+        int status = sqlite3_prepare(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+
+        if (status != SQLITE_OK) {
+            fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(con));
+        }
+
+        if (sqlite3_step(stmt) != SQLITE_DONE) {
+            printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(con));
+        }
+
+        sqlite3_finalize(stmt);
         sqlite3_close(con);
     }
 

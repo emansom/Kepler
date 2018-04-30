@@ -67,13 +67,16 @@ sqlite3 *db_create_connection() {
 
             if (rc != SQLITE_OK ) {
                 fprintf(stderr, "SQL error: %s\n", err_msg);
-                sqlite3_free(err_msg);        
+                sqlite3_free(err_msg);
                 sqlite3_close(db);
-            } 
+            }
 
             free(buffer);
         }
     }
+
+    // Retry for 100ms long to get a mutex lock
+    sqlite3_busy_timeout(db, 100);
 
     if (file != NULL) {
         fclose(file);
