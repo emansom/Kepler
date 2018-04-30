@@ -2,7 +2,7 @@
 #include "hashtable.h"
 #include "configuration.h"
 
-#define CONFIGURATION_FILE "configuration.conf"
+#define CONFIGURATION_FILE "config.ini"
 
 void configuration_init() {
     hashtable_new(&global.configuration.entries);
