@@ -23,7 +23,7 @@ void GRPC(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    catalogue_page *store_page = (catalogue_page *) catalogue_manager_get_page_by_index(page);
+    catalogue_page *store_page = catalogue_manager_get_page_by_index(page);
 
     if (store_page == NULL) {
         goto cleanup;
@@ -33,7 +33,7 @@ void GRPC(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    catalogue_item *store_item = (catalogue_item *) catalogue_manager_get_item(sale_code);
+    catalogue_item *store_item = catalogue_manager_get_item(sale_code);
 
     if (store_item == NULL) {
         goto cleanup;
@@ -71,10 +71,9 @@ void GRPC(session *player, incoming_message *message) {
     inventory_send(inv, "update", player);
 
     cleanup:
-		free(content);
-		free(page);
-		free(sale_code);
-        
+    free(content);
+    free(page);
+    free(sale_code);
 }
 
 void do_purchase(session *player, item_definition *def, char *extra_data, int special_sprite_id) {
