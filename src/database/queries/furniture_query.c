@@ -22,7 +22,7 @@ HashTable *furniture_query_definitions() {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT * FROM items_definitions", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT * FROM items_definitions", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
     } else {
