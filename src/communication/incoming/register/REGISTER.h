@@ -29,12 +29,14 @@ void REGISTER(session *player, incoming_message *message) {
     im_read(message, 11);
     char *password = im_read_str(message);
 
-    bool kick_user = false;
+    if (name != NULL && figure != NULL && gender != NULL && password != NULL) {
+        bool kick_user = false;
 
-    if (valid_password(name, password) == 0 && get_name_check_code(name) == 0) {
-        player_query_create(name, figure, gender, password);
-    } else {
-        kick_user = true;
+        if (valid_password(name, password) == 0 && get_name_check_code(name) == 0) {
+            player_query_create(name, figure, gender, password);
+        } else {
+            kick_user = true;
+        }
     }
 
     free(name);

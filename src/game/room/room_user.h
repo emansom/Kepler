@@ -5,7 +5,6 @@
 
 #include "game/room/room.h"
 
-typedef struct room_s room;
 typedef struct item_s item;
 typedef struct deque_s Deque;
 typedef struct coord_s coord;
@@ -17,7 +16,7 @@ typedef struct room_user_s {
     int authenticate_id;
     int instance_id;
     int room_id;
-    room *room;
+    struct room_s *room;
     coord *position;
     coord *goal;
     coord *next;
