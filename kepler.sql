@@ -197,18 +197,13 @@ INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_net
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,0,'false',0,'',0,100);
 INSERT INTO `rooms` VALUES (1050,2,118,'test','','model_a',NULL,0,0,1,0,0,'',0,0);
-<<<<<<< HEAD
-INSERT INTO `rooms` VALUES (1051,1,114,'another room','','model_f',NULL,2703,507,1,0,0,'',0,25);
-INSERT INTO `rooms` VALUES (1052,1,115,'test123','','model_f',NULL,0,0,1,0,0,'',0,25);
+INSERT INTO `rooms` VALUES (1055,1,120,'Alex''s Room','','model_a',NULL,903,610,1,0,0,'123',0,25);
+INSERT INTO `rooms` VALUES (1057,1,0,'Lounge Room','','model_c',NULL,2304,610,1,0,0,'',0,25);
 CREATE TABLE `guestroom_votes` (
 	`user_id`	INTEGER,
 	`room_id`	INTEGER,
 	`vote`	INTEGER
 );
-=======
-INSERT INTO `rooms` VALUES (1055,1,120,'Alex''s Room','','model_a',NULL,903,610,1,0,0,'123',0,25);
-INSERT INTO `rooms` VALUES (1057,1,0,'Lounge Room','','model_c',NULL,2304,610,1,0,0,'',0,25);
->>>>>>> origin/master
 CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
