@@ -199,6 +199,11 @@ INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den
 INSERT INTO `rooms` VALUES (1050,2,118,'test','','model_a',NULL,0,0,1,0,0,'',0,0);
 INSERT INTO `rooms` VALUES (1055,1,120,'Alex''s Room','','model_a',NULL,903,610,1,0,0,'123',0,25);
 INSERT INTO `rooms` VALUES (1057,1,0,'Lounge Room','','model_c',NULL,2304,610,1,0,0,'',0,25);
+CREATE TABLE `guestroom_votes` (
+	`user_id`	INTEGER,
+	`room_id`	INTEGER,
+	`vote`	INTEGER
+);
 CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER

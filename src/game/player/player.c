@@ -64,7 +64,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
 
 /**
  * Called when a connection is successfully opened
- * 
+ *
  * @param p the player struct
  */
 void player_login(session *player) {
@@ -102,7 +102,7 @@ void player_login(session *player) {
 
 /**
  * Send an outgoing message to the socket
- * 
+ *
  * @param p the player struct
  * @param om the outgoing message
  */
@@ -110,6 +110,13 @@ void player_send(session *p, outgoing_message *om) {
     if (om == NULL || p == NULL || p->disconnected) {
         return;
     }
+
+    char *preview = strdup(om->sb->data);
+    replace_vulnerable_characters(&preview, true, '|');
+
+    printf("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
+
+    free(preview);
 
     om_finalise(om);
 
@@ -132,7 +139,7 @@ void player_send(session *p, outgoing_message *om) {
 
 /**
  * Sends the key of an error, whose description value is inside the external_texts of the client.
- * 
+ *
  * @param p the player
  * @param error the error message
  */
@@ -145,7 +152,7 @@ void send_localised_error(session *p, char *error) {
 
 /**
  * Send an alert to the player
- * 
+ *
  * @param p the player
  * @param greeting the alert message
  */

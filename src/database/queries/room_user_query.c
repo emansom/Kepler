@@ -20,7 +20,7 @@ int query_room_create(int owner_id, char *room_name, char *room_model, char *roo
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "INSERT INTO rooms (owner_id, name, description, model, showname, password) VALUES (?,?,?,?,?, '')", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "INSERT INTO rooms (owner_id, name, description, model, showname, password) VALUES (?,?,?,?,?, '')", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, owner_id);

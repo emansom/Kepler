@@ -1,7 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "hashtable.h"
+#include "deque.h"
 
 #include "game/player/player.h"
 
@@ -20,8 +22,6 @@
 #include "game/pathfinder/coord.h"
 
 #include "util/stringbuilder.h"
-#include "deque.h"
-
 #include "communication/messages/outgoing_message.h"
 
 /**
@@ -38,6 +38,7 @@ room_user *room_user_create(session *player) {
     user->room_id = 0;
     user->room = NULL;
     user->is_walking = false;
+    user->is_typing = false;
     user->needs_update = 0;
     user->lido_vote = -1;
     user->position = create_coord(0, 0);
@@ -171,7 +172,7 @@ void walk_to(room_user *room_user, int x, int y) {
     room_user->goal->y = y;
 
     Deque *path = create_path(room_user);
-    
+
     if (path != NULL && deque_size(path) > 0) {
         room_user_clear_walk_list(room_user);
         room_user->walk_list = path;

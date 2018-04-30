@@ -21,7 +21,7 @@ List *messenger_query_get_friends(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT to_id, from_id FROM messenger_friends WHERE to_id = ? OR from_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT to_id, from_id FROM messenger_friends WHERE to_id = ? OR from_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
@@ -71,7 +71,7 @@ List *messenger_query_get_requests(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT from_id FROM messenger_requests WHERE to_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT from_id FROM messenger_requests WHERE to_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
@@ -112,7 +112,7 @@ int messenger_query_new_request(int from_id, int to_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "INSERT INTO messenger_requests (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "INSERT INTO messenger_requests (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
@@ -145,7 +145,7 @@ int messenger_query_new_friend(int from_id, int to_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "INSERT INTO messenger_friends (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "INSERT INTO messenger_friends (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
@@ -174,7 +174,7 @@ int messenger_query_delete_request(int from_id, int to_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "DELETE FROM messenger_requests WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "DELETE FROM messenger_requests WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
@@ -203,7 +203,7 @@ int messenger_query_delete_friend(int from_id, int to_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "DELETE FROM messenger_friends WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "DELETE FROM messenger_friends WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
@@ -233,7 +233,7 @@ int messenger_query_request_exists(int from_id, int to_id) {
     sqlite3_stmt *stmt;
 
     int result = 0;
-    int status = sqlite3_prepare(conn, "SELECT * FROM messenger_requests WHERE to_id = ? AND from_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT * FROM messenger_requests WHERE to_id = ? AND from_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, to_id);
@@ -264,7 +264,7 @@ int messenger_query_new_message(int receiver_id, int sender_id, char *body, char
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "INSERT INTO messenger_messages (receiver_id, sender_id, unread, body, date) VALUES (?, ?, ?, ?, ?)", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "INSERT INTO messenger_messages (receiver_id, sender_id, unread, body, date) VALUES (?, ?, ?, ?, ?)", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, receiver_id);
@@ -301,7 +301,7 @@ List *messenger_query_unread_messages(int user_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT id,receiver_id,sender_id,body,date FROM messenger_messages WHERE receiver_id = ? AND unread = 1", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT id,receiver_id,sender_id,body,date FROM messenger_messages WHERE receiver_id = ? AND unread = 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
@@ -339,7 +339,7 @@ void messenger_query_mark_read(int message_id) {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "UPDATE messenger_messages SET unread = 0 WHERE id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "UPDATE messenger_messages SET unread = 0 WHERE id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, message_id);

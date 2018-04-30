@@ -27,6 +27,19 @@ int main(void) {
     print_info("\n");
 
     configuration_init();
+
+    if (!sqlite3_threadsafe()) {
+        print_info("SQLite not threadsafe");
+        return EXIT_FAILURE;
+    } else {
+        print_info("Telling SQLite to use multi-thread mode\n");
+
+        if (sqlite3_config(SQLITE_CONFIG_MULTITHREAD) != SQLITE_OK) {
+            fprintf(stderr, "Could not configurate SQLite to use multi-thread mode\n");
+            return EXIT_FAILURE;
+        }
+    }
+
     print_info("Testing SQLite connection...\n");
 
     sqlite3 *con = db_create_connection();
@@ -36,6 +49,28 @@ int main(void) {
         return EXIT_FAILURE;
     } else {
         print_info("The connection to the database was successful!\n");
+
+        print_info("Telling SQLite to use WAL mode\n");
+
+        sqlite3_stmt *stmt;
+
+        int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+
+        if (status != SQLITE_OK) {
+            fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(con));
+        }
+
+        if (sqlite3_step(stmt) != SQLITE_ROW) {
+            fprintf(stderr, "Could not step (execute) stmt. %s\n", sqlite3_errmsg(con));
+        }
+
+        char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
+
+        if (strcmp(chosen_journal_mode, "wal")) {
+            fprintf(stderr, "WAL not supported, now using: %s\n", chosen_journal_mode);
+        }
+
+        sqlite3_finalize(stmt);
         sqlite3_close(con);
     }
 

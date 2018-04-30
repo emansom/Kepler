@@ -21,7 +21,7 @@ void catalogue_query_pages() {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT id, min_role, name_index, name, layout, image_headline, image_teasers, body, label_pick, label_extra_s, label_extra_t FROM catalogue_pages", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT id, min_role, name_index, name, layout, image_headline, image_teasers, body, label_pick, label_extra_s, label_extra_t FROM catalogue_pages", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         // No binding needed here, sir!
@@ -64,7 +64,7 @@ void catalogue_query_items() {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT * FROM catalogue_items", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT * FROM catalogue_items", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         // No binding needed here, sir!
@@ -102,7 +102,7 @@ void catalogue_query_packages() {
     sqlite3 *conn = db_create_connection();
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare(conn, "SELECT * FROM catalogue_packages", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT * FROM catalogue_packages", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         // No binding needed here, sir!

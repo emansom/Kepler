@@ -58,6 +58,7 @@
 #include "communication/incoming/room/G_USRS.h"
 #include "communication/incoming/room/GET_FURNI_REVISIONS.h"
 #include "communication/incoming/room/LETUSERIN.h"
+#include "communication/incoming/room/RATEFLAT.h"
 
 // Pool
 #include "communication/incoming/room/pool/SWIMSUIT.h"
@@ -74,6 +75,8 @@
 #include "communication/incoming/room/user/WAVE.h"
 #include "communication/incoming/room/user/LOOKTO.h"
 #include "communication/incoming/room/user/CARRYDRINK.h"
+#include "communication/incoming/room/user/USER_START_TYPING.h"
+#include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -134,7 +137,7 @@ void message_handler_init() {
     message_requests[149] = UPDATE_ACCOUNT;
 
     // Messenger
-    message_requests[12] = MESSENGERINIT; 
+    message_requests[12] = MESSENGERINIT;
     message_requests[41] = FINDUSER;
     message_requests[40] = MESSENGER_REMOVEBUDDY;
     message_requests[36] = MESSENGER_ASSIGNPERSMSG;
@@ -145,7 +148,7 @@ void message_handler_init() {
     message_requests[33] = MESSENGER_SENDMSG;
     message_requests[191] = MESSENGER_GETMESSAGES;
     message_requests[32] = MESSENGER_MARKREAD;
-    
+
     // Navigator
     message_requests[150] = NAVIGATE;
     message_requests[16] = SUSERF;
@@ -165,6 +168,7 @@ void message_handler_init() {
     message_requests[61] = G_USRS;
     message_requests[213] = GET_FURNI_REVISIONS;
     message_requests[98] = LETUSERIN;
+    message_requests[261] = RATEFLAT;
 
     // Pool
     message_requests[116] = SWIMSUIT;
@@ -181,6 +185,8 @@ void message_handler_init() {
     message_requests[94] = WAVE;
     message_requests[79] = LOOKTO;
     message_requests[80] = CARRYDRINK;
+    message_requests[317] = USER_START_TYPING;
+    message_requests[318] = USER_CANCEL_TYPING;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
