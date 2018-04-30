@@ -12,7 +12,7 @@ void GETUSERFLATCATS(session *player, incoming_message *message) {
     List *categories = category_manager_flat_categories();
     int accessible_categories = 0;
 
-    for (int i = 0; i < list_size(categories); i++) {
+    for (size_t i = 0; i < list_size(categories); i++) {
         room_category *category;
         list_get_at(categories, i, (void*)&category);
 
@@ -24,7 +24,7 @@ void GETUSERFLATCATS(session *player, incoming_message *message) {
     // Start appending accessible categories
     om_write_int(navigator, accessible_categories); // category count
 
-    for (int i = 0; i < list_size(categories); i++) {
+    for (size_t i = 0; i < list_size(categories); i++) {
         room_category *category;
         list_get_at(categories, i, (void*)&category);
 

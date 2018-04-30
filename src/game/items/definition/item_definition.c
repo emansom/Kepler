@@ -51,6 +51,14 @@ item_definition *item_definition_create_blank() {
     return def;
 }
 
+bool item_contains_custom_data(item_definition *definition) {
+    return definition->behaviour->custom_data_numeric_on_off
+            || definition->behaviour->custom_data_true_false
+            || definition->behaviour->customDataNumericState
+            || definition->behaviour->custom_data_on_off
+            || definition->behaviour->is_door;
+}
+
 /**
  * Get the item name by creating an external text key and reading external text entries.
  *

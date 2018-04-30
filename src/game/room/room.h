@@ -32,15 +32,12 @@ typedef struct room_data_s {
 
 typedef struct room_s {
     int room_id;
-    room_data *room_data;
+    struct room_data_s *room_data;
     room_map *room_map;
-    runnable *walking_job;
-    runnable *status_job;
+    runnable *room_schedule_job;
     List *users;
     List *items;
-    unsigned long walk_tick;
-    unsigned long status_tick;
-    unsigned long roller_tick;
+    unsigned long tick;
 } room;
 
 room *room_create(int);

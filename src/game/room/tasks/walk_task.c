@@ -75,9 +75,9 @@ void process_user(session *player) {
 
     if (room_entity->is_walking) {
         if (room_entity->next != NULL) {
-            room_entity->current->x = room_entity->next->x;
-            room_entity->current->y = room_entity->next->y;
-            room_entity->current->z = room_entity->next->z;
+            room_entity->position->x = room_entity->next->x;
+            room_entity->position->y = room_entity->next->y;
+            room_entity->position->z = room_entity->next->z;
             free(room_entity->next);
         }
 
@@ -85,7 +85,7 @@ void process_user(session *player) {
             coord *next;
             deque_remove_first(room_entity->walk_list, (void*)&next);
 
-            if (!room_tile_is_walkable((room*) room_entity->room, room_entity, next->x, next->y)) {
+            if (!room_tile_is_walkable(room_entity->room, room_entity, next->x, next->y)) {
                 room_entity->next = NULL;
                 free(next);
 
@@ -94,7 +94,7 @@ void process_user(session *player) {
                 return;
             }
 
-            room_tile *tile_current = room_entity->room->room_map->map[room_entity->current->x][room_entity->current->y];
+            room_tile *tile_current = room_entity->room->room_map->map[room_entity->position->x][room_entity->position->y];
             room_tile *tile_next = room_entity->room->room_map->map[next->x][next->y];
 
             tile_current->entity = NULL;
@@ -105,17 +105,17 @@ void process_user(session *player) {
             char value[30];
             sprintf(value, " %i,%i,%.2f", next->x, next->y, next->z);
 
-            int rotation = calculate(room_entity->current->x, room_entity->current->y, next->x, next->y);
-            coord_set_rotation(room_entity->current, rotation, rotation);
+            int rotation = calculate_walk_direction(room_entity->position->x, room_entity->position->y, next->x, next->y);
+            coord_set_rotation(room_entity->position, rotation, rotation);
 
             room_user_remove_status(room_entity, "sit");
             room_user_remove_status(room_entity, "lay");
 
-            room_user_add_status(room_entity, "mv", value, -1, "", 0, 0);
+            room_user_add_status(room_entity, "mv", value, -1, "", -1, -1);
             room_entity->next = next;
         } else {
             room_entity->next = NULL;
-            room_entity->is_walking = 0;
+            room_entity->is_walking = false;
             stop_walking(room_entity, false);
         }
 

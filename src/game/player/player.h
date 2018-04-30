@@ -2,11 +2,7 @@
 #define PLAYER_H
 
 #include <stdbool.h>
-
-typedef struct room_user_s room_user;
 typedef struct outgoing_message_s outgoing_message;
-typedef struct messenger_s messenger;
-typedef struct inventory_s inventory;
 
 typedef struct player_data_s {
     int id;
@@ -28,13 +24,12 @@ typedef struct session_s {
     void *stream;
     bool disconnected;
     char *ip_address;
-    player_data *player_data;
-    messenger *messenger;
-    inventory *inventory;
-    room_user *room_user;
+    struct player_data_s *player_data;
+    struct messenger_s *messenger;
+    struct inventory_s *inventory;
+    struct room_user_s *room_user;
     int logged_in;
 } session;
-
 
 session *player_create(void*, char*);
 player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *);

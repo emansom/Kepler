@@ -41,6 +41,11 @@ char *get_time_formatted_custom(unsigned long time_seconds) {
 
 void filter_vulnerable_characters(char **str, bool remove_newline) {
     char *body = *str;
+
+    if (body == NULL) {
+        return;
+    }
+
     for (int i = 0; i < strlen(body); i++) {
         char ch = body[i];
 
@@ -52,6 +57,11 @@ void filter_vulnerable_characters(char **str, bool remove_newline) {
 
 void replace_vulnerable_characters(char **str, bool remove_newline, char new_char) {
     char *body = *str;
+
+    if (body == NULL) {
+        return;
+    }
+
     for (int i = 0; i < strlen(body); i++) {
         char ch = body[i];
 
@@ -62,6 +72,10 @@ void replace_vulnerable_characters(char **str, bool remove_newline, char new_cha
 }
 
 char *get_argument(char *str, char *delim, int index) {
+    if (str == NULL || delim == NULL) {
+        return NULL;
+    }
+
     char *copy = strdup(str);
     char *value = NULL;
 
@@ -79,6 +93,10 @@ char *get_argument(char *str, char *delim, int index) {
 }
 
 char *strlwr(char *str) {
+    if (str == NULL) {
+        return NULL;
+    }
+
     unsigned char *p = (unsigned char *)str;
 
     while (*p) {
@@ -89,17 +107,40 @@ char *strlwr(char *str) {
     return str;
 }
 
-char *replace(const char *s, char ch, const char *repl) {
+char* replace(char* orig_str, char* old_token, char* new_token) {
+    if (orig_str == NULL || old_token == NULL || new_token == NULL) {
+        return false;
+    }
+
+    char *new_str = 0;
+    const char *pos = strstr(orig_str, old_token);
+
+    if (pos) {
+        new_str = calloc(1, strlen(orig_str) - strlen(old_token) + strlen(new_token) + 1);
+
+        strncpy(new_str, orig_str, pos - orig_str);
+        strcat(new_str, new_token);
+        strcat(new_str, pos + strlen(old_token));
+    }
+
+    return new_str;
+}
+
+char *replace_char(const char *s, char ch, char *repl) {
+    if (s == NULL || repl == NULL) {
+        return false;
+    }
+
     int count = 0;
     const char *t;
-    for(t=s; *t; t++)
+    for (t = s; *t; t++)
         count += (*t == ch);
 
     size_t rlen = strlen(repl);
-    char *res = malloc(strlen(s) + (rlen-1)*count + 1);
+    char *res = malloc(strlen(s) + (rlen - 1) * count + 1);
     char *ptr = res;
-    for(t=s; *t; t++) {
-        if(*t == ch) {
+    for (t = s; *t; t++) {
+        if (*t == ch) {
             memcpy(ptr, repl, rlen);
             ptr += rlen;
         } else {
@@ -111,6 +152,10 @@ char *replace(const char *s, char ch, const char *repl) {
 }
 
 int valid_password(const char *username, const char *password) {
+    if (username == NULL || password == NULL) {
+        return 2;
+    }
+
     char *temp_username = strdup(username);
     char *temp_password = strdup(username);
 
@@ -133,6 +178,10 @@ int valid_password(const char *username, const char *password) {
 }
 
 int get_name_check_code(char *username) {
+    if (username == NULL) {
+        return 2;
+    }
+
     if (strlen(username) > 15 || !valid_string(username, "1234567890qwertyuiopasdfghjklzxcvbnm-+=?!@:.,$")) {
         return 2;
     } else {
@@ -154,6 +203,10 @@ bool is_numeric(const char *s) {
 }
 
 bool has_numbers(const char *str) {
+    if (str == NULL) {
+        return false;
+    }
+
     for (int i = 0; i < strlen(str); i++) {
         if (isdigit(str[i])) {
             return true;
@@ -164,6 +217,10 @@ bool has_numbers(const char *str) {
 }
 
 bool valid_string(char *str, char *allowed_chars) {
+    if (str == NULL) {
+        return false;
+    }
+
     bool valid = false;
 
     for (int j = 0; j < strlen(str); j++) {

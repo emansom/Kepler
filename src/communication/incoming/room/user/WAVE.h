@@ -13,7 +13,7 @@ void WAVE(session *player, incoming_message *im) {
     }
 
     if (!room_user_has_status(player->room_user, "wave")) {
-        room_user_add_status(player->room_user, "wave", "", 2, "", 0, 0);
+        room_user_add_status(player->room_user, "wave", "", 2, "", -1, -1);
         player->room_user->needs_update = 1;
     }
 

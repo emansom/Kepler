@@ -73,6 +73,8 @@
 #include "communication/incoming/room/user/CHAT.h"
 #include "communication/incoming/room/user/SHOUT.h"
 #include "communication/incoming/room/user/WAVE.h"
+#include "communication/incoming/room/user/LOOKTO.h"
+#include "communication/incoming/room/user/CARRYDRINK.h"
 #include "communication/incoming/room/user/USER_START_TYPING.h"
 #include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
 
@@ -90,6 +92,9 @@
 #include "communication/incoming/room/items/ADDSTRIPITEM.h"
 #include "communication/incoming/room/items/MOVESTUFF.h"
 #include "communication/incoming/room/items/FLATPROPBYITEM.h"
+#include "communication/incoming/room/items/SETSTUFFDATA.h"
+#include "communication/incoming/room/items/REMOVESTUFF.h"
+#include "communication/incoming/room/items/REMOVEITEM.h"
 
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
@@ -112,7 +117,10 @@ void message_handler_init() {
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
     message_requests[49] = GDATE;
-    message_requests[204] = SSO;
+
+    if (configuration_get_number("sso.tickets.enabled")) {
+        message_requests[204] = SSO;
+    }
 
     // Register
     message_requests[42] = APPROVENAME;
@@ -129,7 +137,7 @@ void message_handler_init() {
     message_requests[149] = UPDATE_ACCOUNT;
 
     // Messenger
-    message_requests[12] = MESSENGERINIT; 
+    message_requests[12] = MESSENGERINIT;
     message_requests[41] = FINDUSER;
     message_requests[40] = MESSENGER_REMOVEBUDDY;
     message_requests[36] = MESSENGER_ASSIGNPERSMSG;
@@ -140,7 +148,7 @@ void message_handler_init() {
     message_requests[33] = MESSENGER_SENDMSG;
     message_requests[191] = MESSENGER_GETMESSAGES;
     message_requests[32] = MESSENGER_MARKREAD;
-    
+
     // Navigator
     message_requests[150] = NAVIGATE;
     message_requests[16] = SUSERF;
@@ -175,8 +183,13 @@ void message_handler_init() {
     message_requests[52] = CHAT;
     message_requests[55] = SHOUT;
     message_requests[94] = WAVE;
+<<<<<<< HEAD
     message_requests[317] = USER_START_TYPING;
     message_requests[318] = USER_CANCEL_TYPING;
+=======
+    message_requests[79] = LOOKTO;
+    message_requests[80] = CARRYDRINK;
+>>>>>>> origin/master
 
     // Room settings
     message_requests[21] = GETFLATINFO;
@@ -190,6 +203,9 @@ void message_handler_init() {
     // Room items
     message_requests[90] = PLACESTUFF;
     message_requests[73] = MOVESTUFF;
+    message_requests[99] = REMOVESTUFF;
+    message_requests[85] = REMOVEITEM;
+    message_requests[74] = SETSTUFFDATA;
 
     // Catalogue
     message_requests[101] = GCIX;

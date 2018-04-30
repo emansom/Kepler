@@ -15,56 +15,59 @@ void CHAT(session *player, incoming_message *im) {
     }
     
     char *message = im_read_str(im);
-    filter_vulnerable_characters(&message, true);
 
-    room_user_move_mouth((room_user *) player->room_user, message);
+    if (message != NULL) {
+        filter_vulnerable_characters(&message, true);
 
-    room *room = player->room_user->room;
+        room_user_move_mouth((room_user *) player->room_user, message);
 
-    int source_x = player->room_user->current->x;
-    int source_y = player->room_user->current->y;
+        room *room = player->room_user->room;
 
-    for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
-        list_get_at(room->users, i, (void*)&room_player);
+        int source_x = player->room_user->position->x;
+        int source_y = player->room_user->position->y;
 
-        int dist_x = abs(source_x - room_player->room_user->current->x) - 1;
-        int dist_y = abs(source_y - room_player->room_user->current->y) - 1;
+        for (size_t i = 0; i < list_size(room->users); i++) {
+            session *room_player;
+            list_get_at(room->users, i, (void *) &room_player);
 
-        outgoing_message *om = om_create(24); // "@X"
-        om_write_int(om, player->room_user->instance_id);
+            int dist_x = abs(source_x - room_player->room_user->position->x) - 1;
+            int dist_y = abs(source_y - room_player->room_user->position->y) - 1;
 
-        if (dist_x < 9 && dist_y < 9) {// User can hear
-            if (dist_x <= 6 && dist_y <= 6) {// User can hear full message
-                om_write_str(om, message);
-            } else {
-                int garble_intensity = dist_x;
+            outgoing_message *om = om_create(24); // "@X"
+            om_write_int(om, player->room_user->instance_id);
 
-                if (dist_y < dist_x) {
-                    garble_intensity = dist_y;
-                }
-                
-                garble_intensity -= 4;
-                char *garble_message = strdup(message);
+            if (dist_x < 9 && dist_y < 9) {// User can hear
+                if (dist_x <= 6 && dist_y <= 6) {// User can hear full message
+                    om_write_str(om, message);
+                } else {
+                    int garble_intensity = dist_x;
 
-                for (int pos = 0; pos < strlen(garble_message); pos++) {
-                    int intensity = ((rand() & 7) + garble_intensity);
-
-                    if (intensity > 3 && 
-                        garble_message[pos] != ' ' &&  
-                        garble_message[pos] != ',' && 
-                        garble_message[pos] != '?' && 
-                        garble_message[pos] != '!') {
-                        garble_message[pos] = '.';
+                    if (dist_y < dist_x) {
+                        garble_intensity = dist_y;
                     }
+
+                    garble_intensity -= 4;
+                    char *garble_message = strdup(message);
+
+                    for (int pos = 0; pos < strlen(garble_message); pos++) {
+                        int intensity = ((rand() & 7) + garble_intensity);
+
+                        if (intensity > 3 &&
+                            garble_message[pos] != ' ' &&
+                            garble_message[pos] != ',' &&
+                            garble_message[pos] != '?' &&
+                            garble_message[pos] != '!') {
+                            garble_message[pos] = '.';
+                        }
+                    }
+
+                    om_write_str(om, garble_message);
+                    free(garble_message);
                 }
 
-                om_write_str(om, garble_message);
-                free(garble_message);
+                player_send(room_player, om);
+                om_cleanup(om);
             }
-
-            player_send(room_player, om);
-            om_cleanup(om);
         }
     }
 

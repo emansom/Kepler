@@ -33,7 +33,7 @@ void pool_warp_swim(session*, item*, coord warp, bool exit);
  */
 void pool_booth_exit(session *player) {
     // Open up booth
-    room_tile *tile = player->room_user->room->room_map->map[player->room_user->current->x][player->room_user->current->y];
+    room_tile *tile = player->room_user->room->room_map->map[player->room_user->position->x][player->room_user->position->y];
 
     if (tile != NULL && tile->highest_item != NULL) {
         item *item = tile->highest_item;
@@ -47,9 +47,9 @@ void pool_booth_exit(session *player) {
     // Handle walking out of pool
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0) {
         // Walk out of the booth
-        if (player->room_user->current->y == 11) {
+        if (player->room_user->position->y == 11) {
             walk_to((room_user*) player->room_user, 19, 11);
-        } else if (player->room_user->current->y == 9) {
+        } else if (player->room_user->position->y == 9) {
             walk_to((room_user*) player->room_user, 19, 9);
         }
     }
@@ -57,9 +57,9 @@ void pool_booth_exit(session *player) {
     // Handle walking out of wobble squabble area
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "md_a") == 0) {
         // Walk out of the booth
-        if (player->room_user->current->x == 8) {
+        if (player->room_user->position->x == 8) {
             walk_to((room_user*) player->room_user, 8, 2);
-        } else if (player->room_user->current->x == 9) {
+        } else if (player->room_user->position->x == 9) {
             walk_to((room_user*) player->room_user, 9, 2);
         }
     }
@@ -109,7 +109,7 @@ void pool_item_walk_on(session *p, item *item) {
     if (strcmp(room_entity->room->room_data->model_data->model_name, "pool_b") == 0) {
         if (strcmp(item->definition->sprite, "queue_tile2") == 0) {
             coord next;
-            coord_get_front(item->coords, &next);
+            coord_get_front(item->position, &next);
             walk_to(room_entity, next.x, next.y);
         }
     }
@@ -118,17 +118,17 @@ void pool_item_walk_on(session *p, item *item) {
     if (strcmp(item->definition->sprite, "poolEnter") == 0) {
         coord warp = { };
 
-        if (item->coords->x == 20 && item->coords->y == 28) {
+        if (item->position->x == 20 && item->position->y == 28) {
             warp.x = 21;
             warp.y = 28;
         }
 
-        if (item->coords->x == 17 && item->coords->y == 21) {
+        if (item->position->x == 17 && item->position->y == 21) {
             warp.x = 17;
             warp.y = 22;
         }
 
-        if (item->coords->x == 31 && item->coords->y == 10) {
+        if (item->position->x == 31 && item->position->y == 10) {
             warp.x = 31;
             warp.y = 11;
         }
@@ -139,22 +139,22 @@ void pool_item_walk_on(session *p, item *item) {
     if (strcmp(item->definition->sprite, "poolExit") == 0) {
         coord warp = { };
 
-        if (item->coords->x == 21 && item->coords->y == 28) {
+        if (item->position->x == 21 && item->position->y == 28) {
             warp.x = 20;
             warp.y = 28;
         }
 
-        if (item->coords->x == 17 && item->coords->y == 22) {
+        if (item->position->x == 17 && item->position->y == 22) {
             warp.x = 17;
             warp.y = 21;
         }
 
-        if (item->coords->x == 20 && item->coords->y == 19) {
+        if (item->position->x == 20 && item->position->y == 19) {
             warp.x = 19;
             warp.y = 19;
         }
 
-        if (item->coords->x == 31 && item->coords->y == 11) {
+        if (item->position->x == 31 && item->position->y == 11) {
             warp.x = 31;
             warp.y = 10;
         }
@@ -175,12 +175,12 @@ void pool_warp_swim(session *p, item *item, coord warp, bool exit) {
     room_user *room_entity = (room_user*)p->room_user;
     stop_walking(room_entity, true);
 
-    room_entity->current->x = warp.x;
-    room_entity->current->y = warp.y;
-    room_entity->current->z = room_entity->room->room_map->map[warp.x][warp.y]->tile_height;
+    room_entity->position->x = warp.x;
+    room_entity->position->y = warp.y;
+    room_entity->position->z = room_entity->room->room_map->map[warp.x][warp.y]->tile_height;
 
     if (!exit) {
-        room_user_add_status(room_entity, "swim", "", -1, "", 0, 0);
+        room_user_add_status(room_entity, "swim", "", -1, "", -1, -1);
     } else {
         room_user_remove_status(room_entity, "swim");
     }
@@ -197,19 +197,19 @@ void pool_warp_swim(session *p, item *item, coord warp, bool exit) {
  */
 void pool_setup_redirections(room *room, item *public_item) {
     if (strcmp(public_item->definition->sprite, "poolBooth") == 0) {
-        if (public_item->coords->x == 17 && public_item->coords->y == 11) {
+        if (public_item->position->x == 17 && public_item->position->y == 11) {
             room->room_map->map[18][11]->highest_item = public_item;
         }
 
-        if (public_item->coords->x == 17 && public_item->coords->y == 9) {
+        if (public_item->position->x == 17 && public_item->position->y == 9) {
             room->room_map->map[18][9]->highest_item = public_item;
         }
 
-        if (public_item->coords->x == 8 && public_item->coords->y == 1) {
+        if (public_item->position->x == 8 && public_item->position->y == 1) {
             room->room_map->map[8][0]->highest_item = public_item;
         }
 
-        if (public_item->coords->x == 9 && public_item->coords->y == 1) {
+        if (public_item->position->x == 9 && public_item->position->y == 1) {
             room->room_map->map[9][0]->highest_item = public_item;
         }
     }

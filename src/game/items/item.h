@@ -10,7 +10,7 @@ typedef struct item_definition_s item_definition;
 typedef struct item_s {
     int id;
     int room_id;
-    coord *coords;
+    coord *position;
     item *item_below;
     char *wall_position;
     char *custom_data;

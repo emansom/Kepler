@@ -1,15 +1,16 @@
 #ifndef ROOM_TILE_H
 #define ROOM_TILE_H
 
+#include "game/room/room.h"
+
 typedef struct list_s List;
-typedef struct room_s room;
 typedef struct room_user_s room_user;
 typedef struct item_s item;
 
 typedef struct room_tile_s {
     room_user *entity;
     item *highest_item;
-    room *room;
+    struct room_s *room;
     List *items;
     double tile_height;
     int x;

@@ -11,6 +11,8 @@
 #include "game/room/room_manager.h"
 
 #include "util/stringbuilder.h"
+#include "util/configuration/configuration.h"
+
 #include "communication/messages/outgoing_message.h"
 
 #include "server/server_listener.h"
@@ -18,6 +20,8 @@
 
 #include "uv.h"
 #include "list.h"
+
+#include "shared.h"
 
 /**
  * Creates a new player
@@ -64,16 +68,34 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
  * @param p the player struct
  */
 void player_login(session *player) {
-    player->room_user = (void*)room_user_create(player);
+    outgoing_message *om;
 
-    player->messenger = (void*)messenger_create();
+    player->room_user = room_user_create(player);
+    player->messenger = messenger_create();
+    player->inventory = inventory_create();
+
     messenger_init(player);
-
-    player->inventory = (void*)inventory_create();
     inventory_init(player);
 
     player_query_save_last_online(player);
     room_manager_add_by_user_id(player->player_data->id);
+
+    om = om_create(2); // @B
+    om_write_str(om, "default\2fuse_login\2fuse_buy_credits\2fuse_trade\2fuse_room_queue_default\2fuse_performance_panel");
+    player_send(player, om);
+    om_cleanup(om);
+
+    om = om_create(3); // @C
+    player_send(player, om);
+    om_cleanup(om);
+
+    if (configuration_get_number("welcome.message.enabled")) {
+        char *welcome_template = configuration_get("welcome.message.content");
+        char *welcome_custom = replace(welcome_template, "%username%", player->player_data->username);
+
+        send_alert(player, welcome_custom);
+        free(welcome_custom);
+    }
 
     player->logged_in = true;
 }

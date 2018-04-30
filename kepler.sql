@@ -13,10 +13,10 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`rank`	INTEGER NOT NULL DEFAULT 1,
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0',
-	`sso_ticket`	TEXT DEFAULT NULL
+	`sso_ticket`	TEXT
 );
-INSERT INTO `users` VALUES (1,'alex','123','hd-180-1','ch=s02/53,51,44','M','de kepler whey','9353',66,0,7,'I''m a new xddd','1524629925','verysafe');
-INSERT INTO `users` VALUES (2,'lol','123','hd-180-1','','M','de kepler whey','199',2,0,1,'I''m a new user!','1524615860','ssohere');
+INSERT INTO `users` VALUES (1,'alex','123','1770118007270123000324018','ch=s02/53,51,44','M','de kepler whey','9065',66,0,7,'I''m a new xddd','1525070362','verysafe');
+INSERT INTO `users` VALUES (2,'lol','123','1700118001270123000325517','','M','de kepler whey','177',2,0,1,'I''m a new user!','1525070333','ssohere');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
@@ -196,8 +196,8 @@ INSERT INTO `rooms` VALUES (1045,0,6,'Ice Cafe','ice_cafe','ice_cafe','hh_room_i
 INSERT INTO `rooms` VALUES (1046,0,6,'Net Cafe','netcafe','netcafe','hh_room_netcafe',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1047,0,5,'Beauty Salon','beauty_salon_loreal','beauty_salon0','hh_room_beauty_salon_general',0,0,0,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1048,0,5,'The Den','the_den','cr_staff','hh_room_den',0,0,0,'false',0,'',0,100);
-INSERT INTO `rooms` VALUES (1049,1,114,'Alex''s Main Room','The main room for a guy called Alex...','model_c',NULL,1004,610,1,0,0,'123',0,25);
 INSERT INTO `rooms` VALUES (1050,2,118,'test','','model_a',NULL,0,0,1,0,0,'',0,0);
+<<<<<<< HEAD
 INSERT INTO `rooms` VALUES (1051,1,114,'another room','','model_f',NULL,2703,507,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1052,1,115,'test123','','model_f',NULL,0,0,1,0,0,'',0,25);
 CREATE TABLE `guestroom_votes` (
@@ -205,6 +205,10 @@ CREATE TABLE `guestroom_votes` (
 	`room_id`	INTEGER,
 	`vote`	INTEGER
 );
+=======
+INSERT INTO `rooms` VALUES (1055,1,120,'Alex''s Room','','model_a',NULL,903,610,1,0,0,'123',0,25);
+INSERT INTO `rooms` VALUES (1057,1,0,'Lounge Room','','model_c',NULL,2304,610,1,0,0,'',0,25);
+>>>>>>> origin/master
 CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
@@ -1868,6 +1872,64 @@ INSERT INTO `items` VALUES (76,1,1049,1021,'8','10',0.001,'',0,'');
 INSERT INTO `items` VALUES (77,1,1049,1031,'5','8',0,'',0,'');
 INSERT INTO `items` VALUES (78,1,1049,1106,'5','8',1,'',0,'');
 INSERT INTO `items` VALUES (89,1,1051,1448,'7','5',0,'',0,'');
+INSERT INTO `items` VALUES (92,1,1055,1013,'4','7',0,'',2,'');
+INSERT INTO `items` VALUES (94,1,1055,1031,'11','1',0,'',0,'');
+INSERT INTO `items` VALUES (95,1,1055,1003,'4','1',0,'',0,'');
+INSERT INTO `items` VALUES (96,1,1055,1225,'6','1',0,'',6,'');
+INSERT INTO `items` VALUES (97,2,1050,1448,'8','6',0,'',0,'');
+INSERT INTO `items` VALUES (98,2,1050,1448,'7','5',0,'',0,'');
+INSERT INTO `items` VALUES (99,2,1050,1448,'7','6',0,'',2,'');
+INSERT INTO `items` VALUES (100,2,1050,1448,'8','5',0,'',6,'');
+INSERT INTO `items` VALUES (101,1,1056,1448,'4','4',0,'',2,'');
+INSERT INTO `items` VALUES (102,1,1056,1448,'6','4',0,'',0,'');
+INSERT INTO `items` VALUES (103,1,1056,1448,'4','2',0,'',4,'');
+INSERT INTO `items` VALUES (104,1,1056,1448,'6','3',0,'',0,'');
+INSERT INTO `items` VALUES (106,1,1057,1303,'9','5',0.451,'',6,'alex	04-26-2018	Quackster :o');
+INSERT INTO `items` VALUES (107,1,1056,1448,'6','2',0,'',2,'');
+INSERT INTO `items` VALUES (108,1,1056,1448,'5','4',0,'',2,'');
+INSERT INTO `items` VALUES (109,1,1056,1448,'4','3',0,'',4,'');
+INSERT INTO `items` VALUES (110,1,1056,1448,'5','2',0,'',6,'');
+INSERT INTO `items` VALUES (111,1,1055,1178,'4','12',0,'',2,'TRUE');
+INSERT INTO `items` VALUES (112,1,1055,1176,'7','1',0,'',0,'2');
+INSERT INTO `items` VALUES (113,1,1055,1172,'4','3',0,'',2,'TRUE');
+INSERT INTO `items` VALUES (115,1,1055,1031,'4','10',0,'',0,'');
+INSERT INTO `items` VALUES (116,1,1055,1159,'4','10',1,'',2,'');
+INSERT INTO `items` VALUES (117,1,1055,2409,'0','0',0,':w=3,8 l=34,45 l',0,'15');
+INSERT INTO `items` VALUES (118,1,1055,2409,'0','0',0,':w=10,0 l=36,66 r',0,'6');
+INSERT INTO `items` VALUES (126,1,1057,1126,'7','7',1.451,'',2,'ON');
+INSERT INTO `items` VALUES (127,1,1057,1011,'7','7',0.451,'',0,'');
+INSERT INTO `items` VALUES (130,1,1055,1152,'6','8',0,'',0,'');
+INSERT INTO `items` VALUES (131,1,0,1113,'0','0',0,'',0,'');
+INSERT INTO `items` VALUES (132,1,0,1113,'0','0',0,'',0,'');
+INSERT INTO `items` VALUES (133,1,0,1218,'0','0',0,'',0,'C');
+INSERT INTO `items` VALUES (134,1,0,1114,'0','0',0,'',0,'');
+INSERT INTO `items` VALUES (135,1,0,1114,'0','0',0,'',6,'');
+INSERT INTO `items` VALUES (136,1,1057,1442,'7','6',0.001,'',0,'');
+INSERT INTO `items` VALUES (137,1,1057,1442,'7','5',0.001,'',2,'');
+INSERT INTO `items` VALUES (138,1,1057,1442,'7','9',0.001,'',0,'');
+INSERT INTO `items` VALUES (139,1,1057,1442,'7','7',0.001,'',0,'');
+INSERT INTO `items` VALUES (140,1,1057,1442,'7','8',0.001,'',0,'');
+INSERT INTO `items` VALUES (141,1,1057,1442,'9','8',0.001,'',4,'');
+INSERT INTO `items` VALUES (142,1,1057,1442,'9','6',0.001,'',4,'');
+INSERT INTO `items` VALUES (143,1,1057,1442,'8','9',0.001,'',6,'');
+INSERT INTO `items` VALUES (144,1,1057,1442,'9','7',0.001,'',4,'');
+INSERT INTO `items` VALUES (145,1,1057,1442,'9','9',0.001,'',6,'');
+INSERT INTO `items` VALUES (146,1,1057,1442,'9','5',0.001,'',4,'');
+INSERT INTO `items` VALUES (147,1,0,1442,'0','0',0,'',4,'');
+INSERT INTO `items` VALUES (148,1,1057,1442,'8','5',0.001,'',2,'');
+INSERT INTO `items` VALUES (149,1,1057,2409,'0','0',0,':w=7,4 l=34,63 r',0,'55');
+INSERT INTO `items` VALUES (150,1,1057,2409,'0','0',0,':w=4,10 l=48,31 l',0,'513');
+INSERT INTO `items` VALUES (151,1,1057,1011,'7','7',0.951,'',0,'');
+INSERT INTO `items` VALUES (152,1,1055,1017,'4','5',0,'',0,'');
+INSERT INTO `items` VALUES (153,1,1057,1075,'5','7',0,'',0,'');
+INSERT INTO `items` VALUES (154,1,1055,1045,'7','4',0,'',2,'');
+INSERT INTO `items` VALUES (157,1,0,1442,'0','0',0,'',0,'');
+INSERT INTO `items` VALUES (158,1,1055,1112,'7','11',0.001,'',0,'');
+INSERT INTO `items` VALUES (159,1,0,1012,'0','0',0,'',2,'');
+INSERT INTO `items` VALUES (161,1,1055,1106,'11','1',1,'',0,'');
+INSERT INTO `items` VALUES (162,1,0,1105,'0','0',0,'',0,'');
+INSERT INTO `items` VALUES (163,1,1055,1012,'9','1',0,'',2,'');
+INSERT INTO `items` VALUES (164,1,1055,1012,'11','3',0,'',0,'');
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,
 	`order_id`	INTEGER,

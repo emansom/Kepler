@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "array.h"
 #include "hashtable.h"
 #include "deque.h"
 
@@ -34,15 +33,15 @@
 room_user *room_user_create(session *player) {
     room_user *user = malloc(sizeof(room_user));
     user->player = player;
-    user->authenticate_id = 0;
+    user->authenticate_id = -1;
     user->instance_id = 0;
     user->room_id = 0;
     user->room = NULL;
-    user->is_walking = 0;
-    user->is_typing = 0;
+    user->is_walking = false;
+    user->is_typing = false;
     user->needs_update = 0;
     user->lido_vote = -1;
-    user->current = create_coord(0, 0);
+    user->position = create_coord(0, 0);
     user->goal = create_coord(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
@@ -52,65 +51,63 @@ room_user *room_user_create(session *player) {
 }
 
 /**
- * Send walk request to room.
+ *  Called when a player either leaves a room, or disconnects.
  *
- * @param room_user the room user that wants to walk
- * @param x the x coord
- * @param y the y corord
+ * @param room_user
  */
-void walk_to(room_user *room_user, int x, int y) {
-    if (room_user->room == NULL) {
-        return;
-    }
+void room_user_reset(room_user *room_user) {
+    stop_walking(room_user, true);
+    room_user_remove_status(room_user, "swim");
+    room_user_remove_status(room_user, "sit");
+    room_user_remove_status(room_user, "lay");
+    room_user_remove_status(room_user, "flatctrl");
 
-    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
+    // Carry items
+    room_user_remove_status(room_user, "carryf");
+    room_user_remove_status(room_user, "carryd");
+    room_user_remove_status(room_user, "cri");
 
-    if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
-        return;
-    }
-
-    room_tile *tile = room_user->room->room_map->map[x][y];
-
-    if (tile != NULL && tile->highest_item != NULL) {
-        item *item = tile->highest_item;
-
-        if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
-            outgoing_message *om = om_create(73); // "AI"
-            player_send((session *) room_user->player, om);
-            om_cleanup(om);
-            return;
-        }
-    }
+    room_user->is_walking = false;
+    room_user->needs_update = false;
+    room_user->walking_lock = false;
+    room_user->lido_vote = -1;
+    room_user->authenticate_id = -1;
+    room_user->room_id = 0;
+    room_user->room = NULL;
 
     if (room_user->next != NULL) {
-        room_user->current->x = room_user->next->x;
-        room_user->current->y = room_user->next->y;
-        room_user->needs_update = true;
-
         free(room_user->next);
         room_user->next = NULL;
     }
-
-    room_user->goal->x = x;
-    room_user->goal->y = y;
-
-    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->current->x, room_user->current->y, room_user->room_id);
-
-    /*room_tile *tiles = room_user->room->room_map->map[room_user->goal->x][room_user->goal->y];
-
-    if (tile != NULL && tiles->highest_item != NULL) {
-        item *items = tiles->highest_item;
-        printf("Item: %s and height %f\n", items->definition->sprite, item_total_height(items));
-    }*/
-
-    Deque *path = create_path(room_user);
-    
-    if (path != NULL && deque_size(path) > 0) {
-        room_user_clear_walk_list(room_user);
-        room_user->walk_list = path;
-        room_user->is_walking = true;
-    }
 }
+
+/**
+ * Called when a player disconnects.
+ *
+ * @param room_user
+ */
+void room_user_cleanup(room_user *room_user) {
+    room_user_reset(room_user);
+
+    if (room_user->position != NULL) {
+        free(room_user->position);
+        room_user->position = NULL;
+    }
+
+    if (room_user->goal != NULL) {
+        free(room_user->goal);
+        room_user->goal = NULL;
+    }
+
+    if (room_user->statuses != NULL) {
+        hashtable_destroy(room_user->statuses);
+        room_user->statuses = NULL;
+    }
+
+    room_user->room = NULL;
+    free(room_user);
+}
+
 
 /**
  * Clear the walk list, called by the server automatically.
@@ -132,22 +129,74 @@ void room_user_clear_walk_list(room_user *room_user) {
 }
 
 /**
+ * Send walk request to room.
+ *
+ * @param room_user the room user that wants to walk
+ * @param x the x coord
+ * @param y the y corord
+ */
+void walk_to(room_user *room_user, int x, int y) {
+    if (room_user->room == NULL) {
+        return;
+    }
+
+    //printf("User requested path %i, %i from path %i, %i in room %i.\n", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
+
+    if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
+        return;
+    }
+
+    room_tile *tile = room_user->room->room_map->map[x][y];
+
+    if (tile != NULL && tile->highest_item != NULL) {
+        item *item = tile->highest_item;
+
+        if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
+            outgoing_message *om = om_create(73); // "AI"
+            player_send(room_user->player, om);
+            om_cleanup(om);
+            return;
+        }
+    }
+
+    if (room_user->next != NULL) {
+        room_user->position->x = room_user->next->x;
+        room_user->position->y = room_user->next->y;
+        room_user->needs_update = true;
+
+        free(room_user->next);
+        room_user->next = NULL;
+    }
+
+    room_user->goal->x = x;
+    room_user->goal->y = y;
+
+    Deque *path = create_path(room_user);
+
+    if (path != NULL && deque_size(path) > 0) {
+        room_user_clear_walk_list(room_user);
+        room_user->walk_list = path;
+        room_user->is_walking = true;
+    }
+}
+
+/**
  * Forcibly stops the user from walking, will clear/update statuses and auto manage memory.
  *
  * @param room_user the room user
  */
 void stop_walking(room_user *room_user, bool is_silent) {
+    if (room_user->next != NULL) {
+        free(room_user->next);
+        room_user->next = NULL;
+    }
+
     room_user_remove_status(room_user, "mv");
     room_user_clear_walk_list(room_user);
     room_user->is_walking = false;
 
     if (!is_silent) {
         room_user_invoke_item(room_user);
-    }
-
-    if (room_user->next != NULL) {
-        free(room_user->next);
-        room_user->next = NULL;
     }
 }
 
@@ -222,15 +271,15 @@ void room_user_move_mouth(room_user *room_user, char *text) {
 void room_user_invoke_item(room_user *room_user) {
     bool needs_update = false;
 
-    double height = room_user->room->room_map->map[room_user->current->x][room_user->current->y]->tile_height;
+    double height = room_user->room->room_map->map[room_user->position->x][room_user->position->y]->tile_height;
 
-    if (height != room_user->current->z) {
-        room_user->current->z = height;
+    if (height != room_user->position->z) {
+        room_user->position->z = height;
         needs_update = true;
     }
 
     item *item = NULL;
-    room_tile *tile = room_user->room->room_map->map[room_user->current->x][room_user->current->y];
+    room_tile *tile = room_user->room->room_map->map[room_user->position->x][room_user->position->y];
 
     if (tile != NULL) {
         if (tile->highest_item != NULL) {
@@ -251,17 +300,82 @@ void room_user_invoke_item(room_user *room_user) {
             char sit_height[11];
             sprintf(sit_height, " %1.f", item->definition->top_height);
 
-            room_user_add_status(room_user, "sit", sit_height, -1, "", 0, 0);
-            coord_set_rotation(room_user->current, item->coords->rotation ,item->coords->rotation);
+            room_user_add_status(room_user, "sit", sit_height, -1, "", -1, -1);
+            coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }
 
-        pool_item_walk_on((session*) room_user->player, item);
+        pool_item_walk_on(room_user->player, item);
     }
 
-
-
     room_user->needs_update = needs_update;
+}
+
+void room_user_carry_item(room_user *room_user, int carry_id) {
+    enum drink_type {
+        DRINK,
+        EAT,
+        ITEM
+    };
+
+    enum drink_type drinks[26] = { DRINK };
+    drinks[1] = DRINK;  // Tea
+    drinks[2] = DRINK;  // Juice
+    drinks[3] = EAT;    // Carrot
+    drinks[4] = EAT;    // Ice-cream
+    drinks[5] = DRINK;  // Milk
+    drinks[6] = DRINK;  // Blackcurrant
+    drinks[7] = DRINK;  // Water
+    drinks[8] = DRINK;  // Regular
+    drinks[9] = DRINK;  // Decaff
+    drinks[10] = DRINK; // Latte
+    drinks[11] = DRINK; // Mocha
+    drinks[12] = DRINK; // Macchiato
+    drinks[13] = DRINK; // Espresso
+    drinks[14] = DRINK; // Filter
+    drinks[15] = DRINK; // Iced
+    drinks[16] = DRINK; // Cappuccino
+    drinks[17] = DRINK; // Java
+    drinks[18] = DRINK; // Tap
+    drinks[19] = DRINK; // H*bbo Cola
+    drinks[20] = ITEM;  // Camera
+    drinks[21] = EAT;   // Hamburger
+    drinks[22] = DRINK; // Lime H*bbo Soda
+    drinks[23] = DRINK; // Beetroot H*bbo Soda
+    drinks[24] = DRINK; // Bubble juice from 1999
+    drinks[25] = DRINK; // Lovejuice
+
+    if (carry_id >= 0 && carry_id <= 25) {
+        char *carry_status[8];
+        char *use_status[8];
+
+        char drink_as_string[11];
+        sprintf(drink_as_string, " %i", carry_id);
+
+        enum drink_type type = drinks[carry_id];
+
+        if (type == DRINK) {
+            strcpy((char *) carry_status, "carryd");
+            strcpy((char *) use_status, "drink");
+        }
+
+        if (type == EAT) {
+            strcpy((char *) carry_status, "carryf");
+            strcpy((char *) use_status, "eat");
+        }
+
+        if (type == ITEM) {
+            strcpy((char *) carry_status, "cri");
+            strcpy((char *) use_status, "usei");
+        }
+
+        room_user_remove_status(room_user, "cri");
+        room_user_remove_status(room_user, "carryf");
+        room_user_remove_status(room_user, "carryd");
+
+        room_user_add_status(room_user, strdup((char*) carry_status), drink_as_string, 120, (char*) use_status, 12, 1);
+        room_user->needs_update = true;
+    }
 }
 
 /**
@@ -276,17 +390,22 @@ void room_user_invoke_item(room_user *room_user) {
  * @param sec_action_switch the amount of seconds needed until the action gets switched
  * @param sec_action_length the amount of seconds needed for the action to stay until the action switches back
  */
-void room_user_add_status(room_user *room_user, char *key, char *value, int sec_lifetime, char *action, int sec_action_switch, int sec_action_length) {
+void room_user_add_status(room_user *room_user, char *key, char *value, int sec_lifetime, char *action, int sec_action_switch, int sec_switch_lifetime) {
     room_user_remove_status(room_user, key);
 
     room_user_status *status = malloc(sizeof(room_user_status));
+    status->key = key;
     status->value = strdup(value);
-    status->sec_lifetime = sec_lifetime;
-    status->lifetime_expire = sec_lifetime;
     status->action = strdup(action);
+
+    status->sec_lifetime = sec_lifetime;
     status->sec_action_switch = sec_action_switch;
-    status->sec_action_length = sec_action_length;
-    status->action_expire = sec_action_length;
+    status->sec_switch_lifetime = sec_switch_lifetime;
+
+    status->lifetime_countdown = sec_lifetime;
+    status->action_countdown = sec_action_switch;
+    status->action_switch_countdown = -1;
+
     hashtable_add(room_user->statuses, key, status);
 }
 
@@ -316,125 +435,4 @@ void room_user_remove_status(room_user *room_user, char *key) {
  */
 int room_user_has_status(room_user *room_user, char *key) {
     return hashtable_contains_key(room_user->statuses, key);
-}
-
-/**
- *  Called when a player either leaves a room, or disconnects.
- * 
- * @param room_user
- */
-void room_user_reset(room_user *room_user) {
-    room_user_clear_walk_list(room_user);
-    room_user_remove_status(room_user, "swim");
-    room_user_remove_status(room_user, "sit");
-    room_user_remove_status(room_user, "lay");
-    room_user_remove_status(room_user, "flatctrl");
-
-    room_user->is_walking = 0;
-    room_user->needs_update = 0;
-    room_user->room_id = 0;
-    room_user->room = NULL;
-    room_user->walking_lock = false;
-    room_user->lido_vote = -1;
-    room_user->authenticate_id = 0;
-
-    if (room_user->next != NULL) {
-        free(room_user->next);
-        room_user->next = NULL;
-    }
-}
-
-/**
- * Called when a player disconnects.
- * 
- * @param room_user
- */
-void room_user_cleanup(room_user *room_user) {
-    room_user_reset(room_user);
-    
-    if (room_user->current != NULL) {
-        free(room_user->current);
-        room_user->current = NULL;
-    }
-
-    if (room_user->goal != NULL) {
-        free(room_user->goal);
-        room_user->goal = NULL;
-    }
-
-    if (room_user->statuses != NULL) {
-        hashtable_destroy(room_user->statuses);
-        room_user->statuses = NULL;
-    }
-    
-    room_user->room = NULL;
-    free(room_user);
-}
-
-/**
- * Append user list to the packet.
- *
- * @param om the outgoing message
- * @param player the player
- */
-void append_user_list(outgoing_message *players, session *player) {
-    char user_id[11], instance_id[11];
-    sprintf(user_id, "%i", player->player_data->id);
-    sprintf(instance_id, "%i", player->room_user->instance_id);
-
-    om_write_str_kv(players, "i", instance_id);
-    om_write_str_kv(players, "a", user_id);
-    om_write_str_kv(players, "n", player->player_data->username);
-    om_write_str_kv(players, "f", player->player_data->figure);
-    om_write_str_kv(players, "s", player->player_data->sex);
-    sb_add_string(players->sb, "l:");
-    sb_add_int_delimeter(players->sb, player->room_user->current->x, ' ');
-    sb_add_int_delimeter(players->sb, player->room_user->current->y, ' ');
-    sb_add_float_delimeter(players->sb, player->room_user->current->z, (char)13);
-
-    if (strlen(player->player_data->motto) > 0) {
-        om_write_str_kv(players, "c", player->player_data->motto);
-    }
-
-    if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0
-        || strcmp(player->room_user->room->room_data->model_data->model_name, "pool_b") == 0
-        || strcmp(player->room_user->room->room_data->model_data->model_name, "md_a") == 0) {
-
-        if (strlen(player->player_data->pool_figure) > 0) {
-            om_write_str_kv(players, "p", player->player_data->pool_figure);
-        }
-    }
-}
-
-/**
- * Append user statuses to the packet
- *
- * @param om the outgoing message
- * @param player the player
- */
-void append_user_status(outgoing_message *om, session *player) {
-    sb_add_int_delimeter(om->sb, player->room_user->instance_id, ' ');
-    sb_add_int_delimeter(om->sb, player->room_user->current->x, ',');
-    sb_add_int_delimeter(om->sb, player->room_user->current->y, ',');
-    sb_add_float_delimeter(om->sb, player->room_user->current->z, ',');
-    sb_add_int_delimeter(om->sb, player->room_user->current->head_rotation, ',');
-    sb_add_int_delimeter(om->sb, player->room_user->current->body_rotation, '/');
-
-    if (hashtable_size(player->room_user->statuses) > 0) {
-        HashTableIter iter;
-
-        TableEntry *entry;
-        hashtable_iter_init(&iter, player->room_user->statuses);
-
-        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-            char *key = entry->key;
-            room_user_status *rus = entry->value;
-
-            sb_add_string(om->sb, key);
-            sb_add_string(om->sb, rus->value);
-            sb_add_string(om->sb, "/");
-        }
-    }
-
-    sb_add_char(om->sb, 13);
 }

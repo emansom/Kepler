@@ -15,7 +15,7 @@ void remove_friend(session *player, int friend_id) {
     session *friend = player_manager_find_by_id(friend_id);
 
     if (friend != NULL) {
-        messenger_remove_request(friend->messenger, friend_id);
+        messenger_remove_request((messenger *) friend->messenger, friend_id);
     }
 }
 

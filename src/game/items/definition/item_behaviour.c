@@ -16,15 +16,15 @@ item_behaviour *item_behaviour_create() {
     behaviour->is_roller = false;
     behaviour->is_public_space_object = false;
     behaviour->isInvisible = false;
-    behaviour->requiresRightsForInteraction = false;
+    behaviour->requires_rights_for_interaction = false;
     behaviour->requiresTouchingForInteraction = false;
-    behaviour->customDataTrueFalse = false;
-    behaviour->customDataOnOff = false;
-    behaviour->customDataNumericOnOff = false;
+    behaviour->custom_data_true_false = false;
+    behaviour->custom_data_on_off = false;
+    behaviour->custom_data_numeric_on_off = false;
     behaviour->customDataNumericState = false;
     behaviour->is_decoration = false;
     behaviour->isPostIt = false;
-    behaviour->isDoor = false;
+    behaviour->is_door = false;
     behaviour->isTeleporter = false;
     behaviour->isDice = false;
     behaviour->is_prize_trophy = false;
@@ -74,7 +74,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'G') {
-            behaviour->requiresRightsForInteraction = true;
+            behaviour->requires_rights_for_interaction = true;
         }
 
         if (c == 'T') {
@@ -82,15 +82,15 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'U') {
-            behaviour->customDataTrueFalse = true;
+            behaviour->custom_data_true_false = true;
         }
 
         if (c == 'O') {
-            behaviour->customDataOnOff = true;
+            behaviour->custom_data_on_off = true;
         }
 
         if (c == 'M') {
-            behaviour->customDataNumericOnOff = true;
+            behaviour->custom_data_numeric_on_off = true;
         }
 
         if (c == 'Z') {
@@ -110,7 +110,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'D') {
-            behaviour->isDoor = true;
+            behaviour->is_door = true;
         }
 
         if (c == 'X') {

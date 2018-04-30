@@ -11,7 +11,7 @@ void texts_manager_parse(char*);
  */
 void texts_manager_init() {
     hashtable_new(&global.texts_manager.texts);
-    texts_manager_parse("external_texts.txt");
+    texts_manager_parse("data/external_texts.txt");
 }
 
 /**

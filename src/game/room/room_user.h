@@ -5,7 +5,6 @@
 
 #include "game/room/room.h"
 
-typedef struct room_s room;
 typedef struct item_s item;
 typedef struct deque_s Deque;
 typedef struct coord_s coord;
@@ -17,8 +16,8 @@ typedef struct room_user_s {
     int authenticate_id;
     int instance_id;
     int room_id;
-    room *room;
-    coord *current;
+    struct room_s *room;
+    coord *position;
     coord *goal;
     coord *next;
     Deque *walk_list;
@@ -31,13 +30,16 @@ typedef struct room_user_s {
 } room_user;
 
 typedef struct room_user_status_s {
+    char *key;
     char *value;
     int sec_lifetime;
-    char *action;
     int sec_action_switch;
-    int sec_action_length;
-    int action_expire;
-    int lifetime_expire;
+    int sec_action_lifetime;
+    int sec_switch_lifetime;
+    char *action;
+    int lifetime_countdown;
+    int action_countdown;
+    int action_switch_countdown;
 } room_user_status;
 
 room_user *room_user_create(session*);
@@ -48,6 +50,7 @@ void room_user_invoke_item(room_user *room_user);
 void room_user_clear_walk_list(room_user*);
 void append_user_list(outgoing_message*, session*);
 void append_user_status(outgoing_message*, session*);
+void room_user_carry_item(room_user *room_user, int carry_id);
 void room_user_reset(room_user*);
 void room_user_cleanup(room_user*);
 void room_user_add_status(room_user*,char*,char*,int,char*,int,int);

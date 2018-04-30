@@ -34,7 +34,7 @@ void SIGN(session *player, incoming_message *message) {
     char vote_id[11];
     sprintf(vote_id, " %i", voting_id);
 
-    room_user_add_status(room_entity, "sign", vote_id, 5, "", 0, 0);
+    room_user_add_status(room_entity, "sign", vote_id, 5, "", -1, -1);
     room_entity->needs_update = true;
 
     cleanup:

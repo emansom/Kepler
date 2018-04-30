@@ -34,15 +34,15 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
     walk_destination.y = (int) strtol(content_y, NULL, 10);
 
     room_user *room_entity = (room_user *) diver->room_user;
-    room_tile *tile = room_entity->room->room_map->map[room_entity->current->x][room_entity->current->y];
+    room_tile *tile = room_entity->room->room_map->map[room_entity->position->x][room_entity->position->y];
 
-    room_entity->current->x = walk_destination.x;
-    room_entity->current->y = walk_destination.y;
-    room_entity->current->z = room_entity->room->room_data->model_data->heights[room_entity->current->x][room_entity->current->y];
+    room_entity->position->x = walk_destination.x;
+    room_entity->position->y = walk_destination.y;
+    room_entity->position->z = room_entity->room->room_data->model_data->heights[room_entity->position->x][room_entity->position->y];
     room_entity->walking_lock = false;
 
     // Immediately update status
-    room_user_add_status(room_entity, "swim", "", -1, "", 0, 0);
+    room_user_add_status(room_entity, "swim", "", -1, "", -1, -1);
 
     outgoing_message *players = om_create(34); // "@b
     append_user_status(players, diver);

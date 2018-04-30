@@ -38,9 +38,9 @@ int cmp(void const *e1, void const *e2) {
     item *i = (*((item**) e1));
     item *j = (*((item**) e2));
 
-    if (i->coords->z < j->coords->z)
+    if (i->position->z < j->position->z)
         return -1;
-    if (i->coords->z == j->coords->z)
+    if (i->position->z == j->position->z)
         return 0;
 
     return 1;
@@ -83,13 +83,13 @@ void room_map_regenerate(room *room) {
         session *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
-        room_tile *tile = room->room_map->map[room_player->room_user->current->x][room_player->room_user->current->y];
+        room_tile *tile = room->room_map->map[room_player->room_user->position->x][room_player->room_user->position->y];
 
         if (tile == NULL) {
             continue;
         }
 
-        tile->entity = (room_user *) room_player->room_user;
+        tile->entity = room_player->room_user;
     }
 
     room_map_add_items(room);
@@ -103,13 +103,12 @@ void room_map_regenerate(room *room) {
  */
 void room_map_add_items(room *room) {
     List *items;
-
     list_copy_shallow(room->items, &items);
     list_sort_in_place(items, cmp);
 
-    for (size_t i = 0; i < list_size(items); i++) {
+    for (size_t item_index = 0; item_index < list_size(items); item_index++) {
         item *item;
-        list_get_at(items, i, (void*)&item);
+        list_get_at(items, item_index, (void*)&item);
 
         if (item->definition->behaviour->is_wall_item) {
             continue;
@@ -117,7 +116,7 @@ void room_map_add_items(room *room) {
 
         item->item_below = NULL;
 
-        room_tile *tile = room->room_map->map[item->coords->x][item->coords->y];
+        room_tile *tile = room->room_map->map[item->position->x][item->position->y];
 
         if (tile == NULL) {
             continue;
@@ -132,13 +131,13 @@ void room_map_add_items(room *room) {
             tile->tile_height = item_total_height(item);
             tile->highest_item = item;
 
-            List *affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, item->coords->x, item->coords->y, item->coords->rotation);
+            List *affected_tiles = get_affected_tiles(item->definition->length, item->definition->width, item->position->x, item->position->y, item->position->rotation);
 
-            for (size_t j = 0; j < list_size(affected_tiles); j++) {
+            for (size_t i = 0; i < list_size(affected_tiles); i++) {
                 coord *pos;
-                list_get_at(affected_tiles, j, (void*)&pos);
+                list_get_at(affected_tiles, i, (void*)&pos);
 
-                if (pos->x == item->coords->x && pos->y == item->coords->y) {
+                if (pos->x == item->position->x && pos->y == item->position->y) {
                     continue;
                 }
 
@@ -177,22 +176,18 @@ void room_map_add_item(room *room, item *item) {
 
     if (item->definition->behaviour->is_wall_item) {
         char *item_str = item_as_string(item);
-
         outgoing_message *om = om_create(83); // "AS"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
-
         free(item_str);
     } else {
         room_map_item_adjustment(room, item, false);
         room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
-
         outgoing_message *om = om_create(93); // "A]"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
-
         free(item_str);
     }
 
@@ -201,24 +196,27 @@ void room_map_add_item(room *room, item *item) {
 }
 
 /**
+ * Move an item, will regenerate the map if the item is a floor item.
  *
- * @param room
- * @param item
- * @param rotation
+ * @param room the room the item is in
+ * @param item the item that is moving
+ * @param rotation whether it's just rotation or not
+ *        (don't regenerate map or adjust position if it's just a rotation)
  */
 void room_map_move_item(room *room, item *item, bool rotation, coord *old_position) {
     item->room_id = room->room_id;
 
     if (!item->definition->behaviour->is_wall_item) {
         room_map_item_adjustment(room, item, rotation);
-        room_map_regenerate(room);
+
+        if (!rotation) {
+            room_map_regenerate(room);
+        }
 
         char *item_str = item_as_string(item);
-
         outgoing_message *om = om_create(95); // "A_"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
-
         free(item_str);
     }
 
@@ -227,13 +225,13 @@ void room_map_move_item(room *room, item *item, bool rotation, coord *old_positi
 }
 
 /**
+ * Remove an item from the room.
  *
- * @param room
- * @param item
+ * @param room the room to remove the item from
+ * @param item the item that is being removed
  */
 void room_map_remove_item(room *room, item *item) {
-    item->room_id = room->room_id;
-    list_remove(room->items, item, (void*)&item);
+    list_remove(room->items, item, NULL);
 
     if (item->definition->behaviour->is_wall_item) {
         outgoing_message *om = om_create(84); // "AT"
@@ -241,22 +239,20 @@ void room_map_remove_item(room *room, item *item) {
         room_send(room, om);
     } else {
         room_map_regenerate(room);
-        char *item_str = item_as_string(item);
 
+        char *item_str = item_as_string(item);
         outgoing_message *om = om_create(94); // "A^"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
-
         free(item_str);
     }
 
     item_update_entities(item, room, NULL);
 
     item->room_id = 0;
-    item->coords->x = 0;
-    item->coords->y = 0;
-    item->coords->z = 0;
-
+    item->position->x = 0;
+    item->position->y = 0;
+    item->position->z = 0;
     item_query_save(item);
 }
 
@@ -266,39 +262,43 @@ void room_map_remove_item(room *room, item *item) {
  * @param moveItem the item
  * @param rotation the rotation only
  */
-void room_map_item_adjustment(room *room, item *item, bool rotation) {
+void room_map_item_adjustment(room *room, item *adjusted_item, bool rotation) {
+    room_tile *tile = room->room_map->map[adjusted_item->position->x][adjusted_item->position->y];
+
+    if (tile == NULL) {
+        return;
+    }
+
     if (rotation) {
+        /*for (size_t i = 0; i < list_size(tile->items); i++) {
+            item *item;
+            list_get_at(tile->items, i, (void *) &item);
 
+            if (item->id == adjusted_item->id) {
+                continue;
+            }
+
+            if (item->position->z < adjusted_item->position->z) {
+                continue;
+            }
+
+            // Set rotation of the entire tile stack
+            item->position->rotation = adjusted_item->position->rotation;
+
+            // Update room users
+            char *item_str = item_as_string(item);
+            outgoing_message *om = om_create(95); // "A_"
+            sb_add_string(om->sb, item_str);
+            room_send(room, om);
+            free(item_str);
+        }*/
    } else {
-        room_tile *tile = room->room_map->map[item->coords->x][item->coords->y];
-
-        if (tile == NULL) {
-            return;
-        }
-
-        item->coords->z = tile->tile_height;
+        adjusted_item->position->z = tile->tile_height;
     }
 
-    if (item->coords->z > 8) {
-        item->coords->z = 8;
+    if (adjusted_item->position->z > 8) {
+        adjusted_item->position->z = 8;
     }
-
-    /*if (rotation) {
-        for (Item item : this.getTile(moveItem.getPosition().getX(), moveItem.getPosition().getY()).getItems()) {
-            if (item.getId() == moveItem.getId()) {
-                continue;
-            }
-
-            if (item.getPosition().getZ() < moveItem.getPosition().getZ()) {
-                continue;
-            }
-
-            item.getPosition().setRotation(moveItem.getPosition().getRotation());
-            item.updateStatus();
-        }
-    } else {
-        moveItem.getPosition().setZ(this.getTileHeight(moveItem.getPosition().getX(), moveItem.getPosition().getY()));
-    }*/
 }
 
 /**
