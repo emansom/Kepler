@@ -75,7 +75,7 @@ void process_user_status(room_user *room_user) {
         } else if (rus->lifetime_countdown == 0) {
             rus->lifetime_countdown = -1;
             room_user_remove_status(room_user, key);
-            room_user->needs_update = 1;
+            room_user->needs_update = true;
         }
     }
 }
