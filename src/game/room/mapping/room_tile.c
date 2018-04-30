@@ -55,7 +55,8 @@ bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
         return false;
     }
 
-    if (x >= room->room_data->model_data->map_size_x || y >= room->room_data->model_data->map_size_y) {
+    if (x >= room->room_data->model_data->map_size_x ||
+        y >= room->room_data->model_data->map_size_y) {
         return false;
     }
 
@@ -79,9 +80,10 @@ bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
 
     if (tile->highest_item != NULL) {
         if (!item_is_walkable(tile->highest_item)) {
-
             if (room_user != NULL) {
-                return (tile->highest_item->position->x == room_user->position->x && tile->highest_item->position->y == room_user->position->y);
+                // Allow player to move out of item if they're stuck.
+                return (tile->highest_item->position->x == room_user->position->x &&
+                        tile->highest_item->position->y == room_user->position->y);
             } else {
                 return false;
             }
