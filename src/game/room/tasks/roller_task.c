@@ -1,13 +1,15 @@
-#include <game/room/room_user.h>
+
 #include "list.h"
 #include "roller_task.h"
 
 #include "game/pathfinder/coord.h"
 
+#include "game/room/room_user.h"
 #include "game/room/mapping/room_map.h"
 #include "game/room/mapping/room_tile.h"
 
 #include "game/player/player.h"
+#include "database/queries/item_query.h"
 
 #include "util/stringbuilder.h"
 
@@ -141,6 +143,7 @@ bool do_roller_item(room *room, item *roller, item *item) {
     om_write_int(om, roller->id);
     room_send(room, om);
 
+    item_query_save(item);
     return true;
 }
 
