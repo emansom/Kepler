@@ -183,13 +183,10 @@ void message_handler_init() {
     message_requests[52] = CHAT;
     message_requests[55] = SHOUT;
     message_requests[94] = WAVE;
-<<<<<<< HEAD
-    message_requests[317] = USER_START_TYPING;
-    message_requests[318] = USER_CANCEL_TYPING;
-=======
     message_requests[79] = LOOKTO;
     message_requests[80] = CARRYDRINK;
->>>>>>> origin/master
+    message_requests[317] = USER_START_TYPING;
+    message_requests[318] = USER_CANCEL_TYPING;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
