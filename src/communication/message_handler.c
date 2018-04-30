@@ -58,6 +58,7 @@
 #include "communication/incoming/room/G_USRS.h"
 #include "communication/incoming/room/GET_FURNI_REVISIONS.h"
 #include "communication/incoming/room/LETUSERIN.h"
+#include "communication/incoming/room/RATEFLAT.h"
 
 // Pool
 #include "communication/incoming/room/pool/SWIMSUIT.h"
@@ -72,6 +73,8 @@
 #include "communication/incoming/room/user/CHAT.h"
 #include "communication/incoming/room/user/SHOUT.h"
 #include "communication/incoming/room/user/WAVE.h"
+#include "communication/incoming/room/user/USER_START_TYPING.h"
+#include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -157,6 +160,7 @@ void message_handler_init() {
     message_requests[61] = G_USRS;
     message_requests[213] = GET_FURNI_REVISIONS;
     message_requests[98] = LETUSERIN;
+    message_requests[261] = RATEFLAT;
 
     // Pool
     message_requests[116] = SWIMSUIT;
@@ -171,6 +175,8 @@ void message_handler_init() {
     message_requests[52] = CHAT;
     message_requests[55] = SHOUT;
     message_requests[94] = WAVE;
+    message_requests[317] = USER_START_TYPING;
+    message_requests[318] = USER_CANCEL_TYPING;
 
     // Room settings
     message_requests[21] = GETFLATINFO;

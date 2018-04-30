@@ -33,6 +33,7 @@
 #include "game/pathfinder/coord.h"
 
 #include "database/queries/player_query.h"
+#include "database/queries/room_query.h"
 #include "communication/messages/outgoing_message.h"
 
 void room_load_data(room *room);
@@ -60,7 +61,7 @@ room *room_create(int room_id) {
 
 /**
  * Create a room data instance.
- * 
+ *
  * @param id
  * @param owner_id
  * @param category
@@ -140,7 +141,7 @@ void room_enter(room *room, session *player) {
         printf("Room %i has invalid model data.\n", room->room_data->id);
         return;
     }
-    
+
     room_user *room_entity = (room_user *) player->room_user;
 
    room_entity->room = room;
@@ -311,6 +312,23 @@ void room_load(room *room, session *player) {
         }
     }
 
+    // TODO: move votes to room object and load on initialization to reduce query load
+
+    // Check if already voted, return if voted
+    int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
+    int vote_count = -1;
+
+    // If user already has voted, we sent total vote count
+    // else we sent -1, making the vote selector pop up
+    if (voted != -1) {
+        vote_count = room_query_count_votes(room->room_data->id);
+    }
+
+    om = om_create(345); // "EY"
+    om_write_int(om, vote_count);
+    player_send(player, om);
+    om_cleanup(om);
+
     player->room_user->authenticate_id = 0;
 }
 
@@ -381,7 +399,7 @@ void room_refresh_rights(room *room, session *player) {
 
 /**
  * Send an outgoing message to all the room users.
- * 
+ *
  * @param room the room
  * @param message the outgoing message to send
  */
@@ -399,7 +417,7 @@ void room_send(room *room, outgoing_message *message) {
 
 /**
  * Cleanup a room instance.
- * 
+ *
  * @param room the room instance.
  */
 void room_dispose(room *room, bool override) {

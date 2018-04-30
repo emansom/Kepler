@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`rank`	INTEGER NOT NULL DEFAULT 1,
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0',
-	'sso_ticket'	TEXT DEFAULT NULL
+	`sso_ticket`	TEXT DEFAULT NULL
 );
 INSERT INTO `users` VALUES (1,'alex','123','hd-180-1','ch=s02/53,51,44','M','de kepler whey','9353',66,0,7,'I''m a new xddd','1524629925','verysafe');
 INSERT INTO `users` VALUES (2,'lol','123','hd-180-1','','M','de kepler whey','199',2,0,1,'I''m a new user!','1524615860','ssohere');
@@ -200,6 +200,11 @@ INSERT INTO `rooms` VALUES (1049,1,114,'Alex''s Main Room','The main room for a 
 INSERT INTO `rooms` VALUES (1050,2,118,'test','','model_a',NULL,0,0,1,0,0,'',0,0);
 INSERT INTO `rooms` VALUES (1051,1,114,'another room','','model_f',NULL,2703,507,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1052,1,115,'test123','','model_f',NULL,0,0,1,0,0,'',0,25);
+CREATE TABLE `guestroom_votes` (
+	`user_id`	INTEGER,
+	`room_id`	INTEGER,
+	`vote`	INTEGER
+);
 CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
