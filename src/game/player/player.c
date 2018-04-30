@@ -70,9 +70,9 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
 void player_login(session *player) {
     outgoing_message *om;
 
-    player->room_user = (void*)room_user_create(player);
-    player->messenger = (void*)messenger_create();
-    player->inventory = (void*)inventory_create();
+    player->room_user = room_user_create(player);
+    player->messenger = messenger_create();
+    player->inventory = inventory_create();
 
     messenger_init(player);
     inventory_init(player);

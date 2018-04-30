@@ -302,7 +302,7 @@ void room_load(room *room, session *player) {
         }
     }
 
-    player->room_user->authenticate_id = 0;
+    player->room_user->authenticate_id = -1;
 }
 
 /**

@@ -33,11 +33,11 @@
 room_user *room_user_create(session *player) {
     room_user *user = malloc(sizeof(room_user));
     user->player = player;
-    user->authenticate_id = 0;
+    user->authenticate_id = -1;
     user->instance_id = 0;
     user->room_id = 0;
     user->room = NULL;
-    user->is_walking = 0;
+    user->is_walking = false;
     user->needs_update = 0;
     user->lido_vote = -1;
     user->position = create_coord(0, 0);
@@ -66,13 +66,13 @@ void room_user_reset(room_user *room_user) {
     room_user_remove_status(room_user, "carryd");
     room_user_remove_status(room_user, "cri");
 
-    room_user->is_walking = 0;
-    room_user->needs_update = 0;
-    room_user->room_id = 0;
-    room_user->room = NULL;
+    room_user->is_walking = false;
+    room_user->needs_update = false;
     room_user->walking_lock = false;
     room_user->lido_vote = -1;
-    room_user->authenticate_id = 0;
+    room_user->authenticate_id = -1;
+    room_user->room_id = 0;
+    room_user->room = NULL;
 
     if (room_user->next != NULL) {
         free(room_user->next);
@@ -304,10 +304,8 @@ void room_user_invoke_item(room_user *room_user) {
             needs_update = true;
         }
 
-        pool_item_walk_on((session*) room_user->player, item);
+        pool_item_walk_on(room_user->player, item);
     }
-
-
 
     room_user->needs_update = needs_update;
 }
