@@ -48,7 +48,7 @@ void do_room_task(runnable *run){
 
     room = room_manager_get_by_id(run->room_id);
 
-    if (room != NULL && list_size(room->users) >= 0) {
+    if (room != NULL && list_size(room->users) > 0) {
         thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
     }
 }
