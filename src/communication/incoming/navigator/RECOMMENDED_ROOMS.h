@@ -5,7 +5,7 @@
 
 #include "list.h"
 
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
 
 void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
     List *rooms = room_query_random_rooms(3);
@@ -18,13 +18,13 @@ void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
         room *instance;
         list_get_at(rooms, i, (void *) &instance);
 
-        om_write_int(navigator, instance->room_data->id); // room id
+        om_write_int(navigator, instance->room_data->id); // rooms id
         om_write_str(navigator, instance->room_data->name);
 
         if (player->player_data->id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
-            om_write_str(navigator, instance->room_data->owner_name); // room owner
+            om_write_str(navigator, instance->room_data->owner_name); // rooms owner
         } else {
-            om_write_str(navigator, "-"); // room owner
+            om_write_str(navigator, "-"); // rooms owner
         }
 
         if (instance->room_data->accesstype == 2) {

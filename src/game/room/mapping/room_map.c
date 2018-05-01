@@ -3,7 +3,7 @@
 #include "stdio.h"
 
 #include "list.h"
-#include "database/queries/item_query.h"
+#include "database/queries/items/item_query.h"
 
 #include "room_tile.h"
 #include "room_map.h"
@@ -285,11 +285,11 @@ void room_map_item_adjustment(room *room, item *adjusted_item, bool rotation) {
             // Set rotation of the entire tile stack
             item->position->rotation = adjusted_item->position->rotation;
 
-            // Update room users
+            // Update rooms users
             char *item_str = item_as_string(item);
             outgoing_message *om = om_create(95); // "A_"
             sb_add_string(om->sb, item_str);
-            room_send(room, om);
+            room_send(rooms, om);
             free(item_str);
         }*/
    } else {

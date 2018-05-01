@@ -7,7 +7,7 @@
 #include "sqlite3.h"
 
 #include "database/db_connection.h"
-#include "database/queries/item_query.h"
+#include "item_query.h"
 
 #include "game/items/item.h"
 #include "game/items/definition/item_definition.h"

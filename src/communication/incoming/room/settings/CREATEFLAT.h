@@ -4,7 +4,7 @@
 #include "game/player/player.h"
 #include "game/room/room.h"
 
-#include "database/queries/room_user_query.h"
+#include "database/queries/rooms/room_user_query.h"
 
 void CREATEFLAT(session *player, incoming_message *message) {
     // Client [0.0.0.0] incoming data: 29 / @]/first floor/xddd/model_a/open/1
@@ -32,7 +32,7 @@ void CREATEFLAT(session *player, incoming_message *message) {
         return;
     }
 
-    if (list_size(model->public_items) > 0) { // model is a public room model
+    if (list_size(model->public_items) > 0) { // model is a public rooms model
         goto cleanup;
         return;
     }

@@ -7,8 +7,8 @@
 #include "game/room/room.h"
 #include "game/items/item.h"
 
-#include "database/queries/room_query.h"
-#include "database/queries/item_query.h"
+#include "database/queries/rooms/room_query.h"
+#include "database/queries/items/item_query.h"
 
 void FLATPROPBYITEM(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {

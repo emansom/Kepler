@@ -4,7 +4,7 @@
 #include "game/player/player.h"
 #include "game/room/room.h"
 
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
 
 void UPDATEFLAT(session *player, incoming_message *message) {
     char *content = im_get_content(message);

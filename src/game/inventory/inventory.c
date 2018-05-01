@@ -8,7 +8,7 @@
 #include "game/inventory/inventory.h"
 #include "game/items/item.h"
 
-#include "database/queries/item_query.h"
+#include "database/queries/items/item_query.h"
 #include "util/stringbuilder.h"
 
 void inventory_clear(List *items);

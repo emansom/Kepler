@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "database/queries/item_query.h"
+#include "database/queries/items/item_query.h"
 
 #include "game/items/item.h"
 #include "game/inventory/inventory.h"

@@ -16,7 +16,7 @@ void G_USRS(session *p, incoming_message *message) {
     room *room = p->room_user->room;
 
     /*ListIter iter;
-    list_iter_init(&iter, room->users);
+    list_iter_init(&iter, rooms->users);
    
     outgoing_message *players = om_create(28); // "@\"
     
@@ -58,9 +58,9 @@ void G_USRS(session *p, incoming_message *message) {
     om_write_str_kv(players, "f", session->player_data->figure);
     sb_add_string(players->sb, "l");
     sb_add_string(players->sb, ":");
-    sb_add_int(players->sb, session->room_user->room->room_data->model_data->door_x);
-    sb_add_int(players->sb, session->room_user->room->room_data->model_data->door_y);
-    sb_add_float(players->sb, session->room_user->room->room_data->model_data->door_z);
+    sb_add_int(players->sb, session->room_user->rooms->room_data->model_data->door_x);
+    sb_add_int(players->sb, session->room_user->rooms->room_data->model_data->door_y);
+    sb_add_float(players->sb, session->room_user->rooms->room_data->model_data->door_z);
     sb_add_char(players->sb, 13);
     om_write_str_kv(players, "c", session->player_data->motto);
     player_send(session, players);

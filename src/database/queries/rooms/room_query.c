@@ -15,7 +15,7 @@
 #include "game/navigator/navigator_category.h"
 #include "game/navigator/navigator_category_manager.h"
 
-#include "database/queries/room_query.h"
+#include "room_query.h"
 #include "database/db_connection.h"
 
 room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt);

@@ -8,7 +8,7 @@
 
 #include "list.h"
 
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
 
 void NAVIGATE(session *player, incoming_message *message) {
     int hide_full = im_read_vl64(message);
@@ -49,7 +49,7 @@ void NAVIGATE(session *player, incoming_message *message) {
             }
 
             // Add integer for the amount of public rooms
-            om_write_int(navigator, (int) list_size(rooms));  // room count
+            om_write_int(navigator, (int) list_size(rooms));  // rooms count
         }
 
         list_sort_in_place(rooms, room_manager_sort_id);
@@ -60,14 +60,14 @@ void NAVIGATE(session *player, incoming_message *message) {
             list_get_at(rooms, i, (void *) &instance);
 
             if (parent_category->category_type == PUBLIC) {
-                om_write_int(navigator, instance->room_data->id); // room id
+                om_write_int(navigator, instance->room_data->id); // rooms id
                 om_write_int(navigator, 1);
                 om_write_str(navigator, instance->room_data->name);
                 om_write_int(navigator, instance->room_data->visitors_now); // current visitors
                 om_write_int(navigator, instance->room_data->visitors_max); // max vistors
                 om_write_int(navigator, instance->room_data->category); // category id
                 om_write_str(navigator, instance->room_data->description); // description
-                om_write_int(navigator, instance->room_data->id); // room id
+                om_write_int(navigator, instance->room_data->id); // rooms id
                 om_write_int(navigator, 0);
                 om_write_str(navigator, instance->room_data->ccts);
                 om_write_int(navigator, 0);
@@ -75,13 +75,13 @@ void NAVIGATE(session *player, incoming_message *message) {
             }
 
             if (parent_category->category_type == PRIVATE) {
-                om_write_int(navigator, instance->room_data->id); // room id
+                om_write_int(navigator, instance->room_data->id); // rooms id
                 om_write_str(navigator, instance->room_data->name);
 
                 if (player->player_data->id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
-                    om_write_str(navigator, instance->room_data->owner_name); // room owner
+                    om_write_str(navigator, instance->room_data->owner_name); // rooms owner
                 } else {
-                    om_write_str(navigator, "-"); // room owner
+                    om_write_str(navigator, "-"); // rooms owner
                 }
 
                 if (instance->room_data->accesstype == 2) {

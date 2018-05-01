@@ -4,7 +4,7 @@
 #include "hashtable.h"
 
 #include "game/room/room.h"
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
 
 #include "navigator_category.h"
 #include "navigator_category_manager.h"

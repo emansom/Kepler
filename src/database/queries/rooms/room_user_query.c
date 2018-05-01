@@ -6,7 +6,7 @@
 #include "shared.h"
 
 #include "game/room/room.h"
-#include "database/queries/room_user_query.h"
+#include "room_user_query.h"
 
 #include "database/db_connection.h"
 

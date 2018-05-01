@@ -33,7 +33,8 @@
 #include "game/pathfinder/coord.h"
 
 #include "database/queries/player_query.h"
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
+
 #include "communication/messages/outgoing_message.h"
 
 void room_load_data(room *room);
@@ -210,10 +211,10 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
         }
     }
 
-    // Reset room user
+    // Reset rooms user
     room_user_reset(room_player->room_user);
 
-    // Make figure vanish from the room
+    // Make figure vanish from the rooms
     om = om_create(29); // "@]"
     sb_add_int(om->sb, room_player->room_user->instance_id);
     room_send(room, om);
@@ -303,7 +304,7 @@ void room_load(room *room, session *player) {
         }
     }
 
-    // TODO: move votes to room object and load on initialization to reduce query load
+    // TODO: move votes to rooms object and load on initialization to reduce query load
 
     // Check if already voted, return if voted
     int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
@@ -342,7 +343,7 @@ bool room_is_owner(room *room, int user_id) {
  * @return true, if successful
  */
 bool room_has_rights(room *room, int user_id) {
-    if (room->room_data->owner_id == user_id) { // Of course room owners have rights, duh!
+    if (room->room_data->owner_id == user_id) { // Of course rooms owners have rights, duh!
         return true;
     }
 
@@ -419,7 +420,7 @@ void room_dispose(room *room, bool override) {
     room->tick = 0;
     room_map_destroy(room);
 
-    if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public room model
+    if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public rooms model
         return; // Prevent public rooms
     }
 

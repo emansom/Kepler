@@ -9,7 +9,7 @@
 #include "game/room/mapping/room_tile.h"
 
 #include "game/player/player.h"
-#include "database/queries/item_query.h"
+#include "database/queries/items/item_query.h"
 
 #include "util/stringbuilder.h"
 
