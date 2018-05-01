@@ -282,7 +282,7 @@ int messenger_query_new_message(int receiver_id, int sender_id, char *body, char
         printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
     }
 
-    int row_id = sqlite3_last_insert_rowid(conn);
+    int row_id = (int) sqlite3_last_insert_rowid(conn);
 
     sqlite3_finalize(stmt);
     //sqlite3_close(conn);
