@@ -19,6 +19,9 @@
 
 void dispose_program();
 
+#define COMMAND_INPUT_LENGTH 200
+bool handle_command(char *command);
+
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
     signal(SIGINT, dispose_program); // Handle cleanup on Ctrl-C
@@ -33,7 +36,9 @@ int main(void) {
         print_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        print_info("Telling SQLite to use serialized mode\n");
+        if (configuration_get_bool("show.database.messages")) {
+            print_info("Telling SQLite to use serialized mode\n");
+        }
 
         if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
             fprintf(stderr, "Could not configurate SQLite to use serialized mode\n");
@@ -52,7 +57,9 @@ int main(void) {
     } else {
         print_info("The connection to the database was successful!\n");
 
-        print_info("Telling SQLite to use WAL mode\n");
+        if (configuration_get_bool("show.database.messages")) {
+            print_info("Telling SQLite to use WAL mode\n");
+        }
 
         sqlite3_stmt *stmt;
 
@@ -68,12 +75,11 @@ int main(void) {
 
         char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
 
-        if (strcmp(chosen_journal_mode, "wal")) {
+        if (strcmp(chosen_journal_mode, "wal") != 0) {
             fprintf(stderr, "WAL not supported, now using: %s\n", chosen_journal_mode);
         }
 
         sqlite3_finalize(stmt);
-
         global.DB = con;
     }
 
@@ -92,26 +98,58 @@ int main(void) {
     print_info("\n");
 
     server_settings *settings = malloc(sizeof(server_settings));
-    strcpy(settings->ip, configuration_get("server.ip.address"));
+    strcpy(settings->ip, configuration_get_string("server.ip.address"));
     settings->port = configuration_get_number("server.port");
+
+    //dump_db(global.DB, "test.sql");
 
     pthread_t server_thread;
     start_server(settings, &server_thread);
 
     while (true) {
-        char command[50];
-        fgets(command, 10, stdin);
+        char command[COMMAND_INPUT_LENGTH];
+        fgets(command, COMMAND_INPUT_LENGTH, stdin);
 
         char *filter_command = (char*)command;
         filter_vulnerable_characters(&filter_command, true); // Strip unneeded characters
 
-        if (strcmp(filter_command, "q") == 0 || strcmp(filter_command, "quit") == 0) {
-            dispose_program();
+        if (handle_command(filter_command)) {
             break;
         }
     }
 
     return EXIT_SUCCESS;
+}
+
+bool handle_command(char *command) {
+    if (starts_with(command, "query") || starts_with(command, "sql")) {
+        int amount_to_strip = -1;
+
+        if (starts_with(command, "sql")) {
+            amount_to_strip = 4; // "sql " to remove
+        } else {
+            amount_to_strip = 6; // "query "  to remove
+        }
+
+        char *query_to_run = (command + amount_to_strip);
+
+        if (strlen(query_to_run) <= 0) {
+            printf("The query was empty!\n");
+            return false;
+        }
+
+        int modified_rows = db_execute_query(query_to_run);
+        printf("Executed query (%s) with modified rows: %i\n", query_to_run, modified_rows);
+
+        return false;
+    }
+
+    if (strcmp(command, "q") == 0 || strcmp(command, "quit") == 0) {
+        dispose_program();
+        return true;
+    }
+
+    return false;
 }
 
 /**
@@ -121,14 +159,18 @@ void dispose_program() {
     printf("Shutting down server!\n");
     thpool_destroy(global.thread_manager.pool);
     player_manager_dispose();
-    model_manager_dispose();
     room_manager_dispose();
+    model_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();
+<<<<<<< HEAD
 
     if (sqlite3_close(global.DB) != SQLITE_OK) {
         fprintf(stderr, "Could not close SQLite database: %s\n", sqlite3_errmsg(con));
     }
 
+=======
+    sqlite3_close(global.DB);
+>>>>>>> upstream/master
     printf("Done!\n");
 }

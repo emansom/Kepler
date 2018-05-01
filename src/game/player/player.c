@@ -89,8 +89,8 @@ void player_login(session *player) {
     player_send(player, om);
     om_cleanup(om);
 
-    if (configuration_get_number("welcome.message.enabled")) {
-        char *welcome_template = configuration_get("welcome.message.content");
+    if (configuration_get_bool("welcome.message.enabled")) {
+        char *welcome_template = configuration_get_string("welcome.message.content");
         char *welcome_custom = replace(welcome_template, "%username%", player->player_data->username);
 
         send_alert(player, welcome_custom);
@@ -111,12 +111,14 @@ void player_send(session *p, outgoing_message *om) {
         return;
     }
 
-    char *preview = strdup(om->sb->data);
-    replace_vulnerable_characters(&preview, true, '|');
+    if (configuration_get_bool("show.outgoing.packets")) {
+        char *preview = strdup(om->sb->data);
+        replace_vulnerable_characters(&preview, true, '|');
 
-    printf("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
+        printf("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
 
-    free(preview);
+        free(preview);
+    }
 
     om_finalise(om);
 

@@ -4,6 +4,10 @@
 
 #define CONFIGURATION_FILE "config.ini"
 
+/**
+ * Loads the configuration, will create a fresh file if
+ * the config file cannot be found.
+ */
 void configuration_init() {
     hashtable_new(&global.configuration.entries);
 
@@ -24,17 +28,22 @@ void configuration_init() {
     }
 }
 
+/**
+ * This command is called automatically to create a new config file
+ * with default settings.
+ */
 void configuration_new() {
     FILE *fp = fopen(CONFIGURATION_FILE, "wb");
     fprintf(fp, "[Database]\n");
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
+    fprintf(fp, "database.logging=%s\n", "Kepler.db");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.port=%i\n", 12321);
     fprintf(fp, "server.ip.address=%s\n", "127.0.0.1");
     fprintf(fp, "\n");
     fprintf(fp, "[Game]\n");
-    fprintf(fp, "sso.tickets.enabled=%s\n", "1");
+    fprintf(fp, "sso.tickets.enabled=%s\n", "false");
     fprintf(fp, "\n");
     fprintf(fp, "welcome.message.enabled=%s\n", "1");
     fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");
@@ -42,9 +51,18 @@ void configuration_new() {
     fprintf(fp, "# 1 tick = 500ms, 6 is 3 seconds\n");
     fprintf(fp, "roller.tick.default=%s\n", "6");
     fprintf(fp, "\n");
+    fprintf(fp, "[Console]\n");
+    fprintf(fp, "show.incoming.packets=%s\n", "false");
+    fprintf(fp, "show.outgoing.packets=%s\n", "false");
+    fprintf(fp, "show.database.messages=%s\n", "false");
     fclose(fp);
 }
 
+/**
+ * Read the configuration file with a key/value system seperated by '='
+ *
+ * @param file the file handle to create for
+ */
 void configuration_read(FILE *file) {
     char *line = NULL;
     size_t len = 0;
@@ -72,19 +90,53 @@ void configuration_read(FILE *file) {
     free(line);
 }
 
-char *configuration_get(char *key) {
+/**
+ * Gets a string by its key in the configuration. Will return NULL
+ * if the key could not be found.
+ *
+ * @param key the key to find the value for
+ * @return the value, if successful
+ */
+char *configuration_get_string(char *key) {
+    if (hashtable_contains_key(global.configuration.entries, key)) {
+        char *value;
+        hashtable_get(global.configuration.entries, key, (void*)&value);
+
+        return value;
+    }
+
+    return NULL;
+}
+
+/**
+ * Gets a boolean by its key in the configuration. Will return false
+ * if the key could not be found.
+ *
+ * @param key the key to find the value for
+ * @return the value, if successful
+ */
+bool configuration_get_bool(char *key) {
     if (hashtable_contains_key(global.configuration.entries, key)) {
         char *value;
         hashtable_get(global.configuration.entries, key, (void*)&value);
 
         if (is_numeric(value)) {
-            return NULL;
+            return strtol(value, NULL, 10) == 1 ? true : false;
         } else {
-            return value;
+            return strcmp(value, "true") == 0;
         }
     }
+
+    return false;
 }
 
+/**
+ * Gets a integer by its key in the configuration. Will return -1
+ * if the key could not be found.
+ *
+ * @param key the key to find the value for
+ * @return the value, if successful
+ */
 int configuration_get_number(char *key) {
     if (hashtable_contains_key(global.configuration.entries, key)) {
         char *value;
@@ -95,5 +147,5 @@ int configuration_get_number(char *key) {
         }
     }
 
-    return 0;
+    return -1;
 }

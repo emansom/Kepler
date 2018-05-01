@@ -163,6 +163,10 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
         return;
     }
 
+    if (room_entity->room == NULL) {
+        return;
+    }
+
     coord to;
     coord_get_front(roller->position, &to);
 

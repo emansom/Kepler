@@ -92,6 +92,9 @@ char *get_argument(char *str, char *delim, int index) {
     return value;
 }
 
+/*
+ * Return a string that's been converted, does not require to be freed.
+ */
 char *strlwr(char *str) {
     if (str == NULL) {
         return NULL;
@@ -107,25 +110,63 @@ char *strlwr(char *str) {
     return str;
 }
 
-char* replace(char* orig_str, char* old_token, char* new_token) {
-    if (orig_str == NULL || old_token == NULL || new_token == NULL) {
-        return false;
+/**
+  * Replace all occurences of a string with another string, will return a string that requires to be freed.
+ * @param str
+ * @param sub
+ * @param replace
+ * @return
+ */
+char* replace(char *str, char *sub, char *replace) {
+    char *pos = str;
+
+    int count = 0;
+    const char *tmp = str;
+    tmp = strstr(tmp, sub);
+
+    while (tmp) {
+        count++;
+        tmp++;
+        tmp = strstr(tmp, sub);
     }
 
-    char *new_str = 0;
-    const char *pos = strstr(orig_str, old_token);
-
-    if (pos) {
-        new_str = calloc(1, strlen(orig_str) - strlen(old_token) + strlen(new_token) + 1);
-
-        strncpy(new_str, orig_str, pos - orig_str);
-        strcat(new_str, new_token);
-        strcat(new_str, pos + strlen(old_token));
+    if (0 >= count) {
+        return strdup(str);
     }
 
-    return new_str;
+    size_t size = (strlen(str) - (strlen(sub) * count) + strlen(replace) * count) + 1;
+
+    char *result = (char *) malloc(size);
+
+    if (NULL == result) {
+        return NULL;
+    }
+
+    memset(result, '\0', size);
+
+    char *current;
+    while ((current = strstr(pos, sub))) {
+        int len = (int) (current - pos);
+        strncat(result, pos, (size_t) len);
+        strncat(result, replace, strlen(replace));
+        pos = current + strlen(sub);
+    }
+
+    if (pos != (str + strlen(str))) {
+        strncat(result, pos, (str - pos));
+    }
+
+    return result;
 }
 
+/**
+ * Replace a character with a string, will return a string that requires to be freed.
+ *
+ * @param s
+ * @param ch
+ * @param repl
+ * @return
+ */
 char *replace_char(const char *s, char ch, char *repl) {
     if (s == NULL || repl == NULL) {
         return false;
@@ -182,7 +223,7 @@ int get_name_check_code(char *username) {
         return 2;
     }
 
-    if (strlen(username) > 15 || !valid_string(username, "1234567890qwertyuiopasdfghjklzxcvbnm-+=?!@:.,$")) {
+    if (strlen(username) > 15 || !has_allowed_characters(username, "1234567890qwertyuiopasdfghjklzxcvbnm-+=?!@:.,$")) {
         return 2;
     } else {
         if (player_query_exists_username(username)) {
@@ -216,7 +257,7 @@ bool has_numbers(const char *str) {
     return false;
 }
 
-bool valid_string(char *str, char *allowed_chars) {
+bool has_allowed_characters(char *str, char *allowed_chars) {
     if (str == NULL) {
         return false;
     }
@@ -237,16 +278,17 @@ bool valid_string(char *str, char *allowed_chars) {
     return valid;
 }
 
-void print_info(const char *format, ...) {
-    printf("[%s] ", PREFIX);
-    va_list args;
-    va_start(args, format);
-    vprintf(format, args);
-    va_end(args);
+bool starts_with(const char *restrict string, const char *restrict prefix) {
+    while (*prefix) {
+        if (*prefix++ != *string++)
+            return 0;
+    }
+
+    return 1;
 }
 
-void print_error(const char *format, ...) {
-    printf("[%s] ERROR: ", PREFIX);
+void print_info(const char *format, ...) {
+    printf("[%s] ", PREFIX);
     va_list args;
     va_start(args, format);
     vprintf(format, args);

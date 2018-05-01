@@ -7,9 +7,10 @@
 
 
 /**
+ * Loads the .sql file from disk to create a new db, must be manually freed.
  *
- * @param path
- * @return
+ * @param path the file to load
+ * @return the file contents
  */
 char* load_file(char const* path) {
     char* buffer = NULL;
@@ -47,14 +48,14 @@ sqlite3 *db_create_connection() {
     int run_query = 0;
     char *err_msg = 0;
 
-    if (!(file = fopen(configuration_get("database.filename"), "r"))) {
+    if (!(file = fopen(configuration_get_string("database.filename"), "r"))) {
         print_info("Database does not exist, creating...\n");
         run_query = 1;
     }
 
     sqlite3 *db;
 
-    int rc = sqlite3_open_v2(configuration_get("database.filename"), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
+    int rc = sqlite3_open_v2(configuration_get_string("database.filename"), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
 
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
@@ -84,10 +85,20 @@ sqlite3 *db_create_connection() {
     return db;
 }
 
-void db_print_error(const char *format, ...) {
-    print_info("SQLite Error: ");
-    va_list args;
-    va_start(args, format);
-    vprintf(format, args);
-    va_end(args);
+/**
+ * Execute a string given to the database
+ *
+ * @param query the query to execute
+ */
+int db_execute_query(char *query) {
+    char *err_msg = 0;
+    int rc = sqlite3_exec(global.DB, query, 0, 0, &err_msg);
+
+    if (rc != SQLITE_OK ) {
+        fprintf(stderr, "SQL error: %s\n", err_msg);
+        sqlite3_free(err_msg);
+        return -1;
+    };
+
+    return sqlite3_changes(global.DB);
 }

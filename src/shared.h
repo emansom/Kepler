@@ -42,7 +42,6 @@ char *get_short_time_formatted();
 char *get_time_formatted_custom(unsigned long);
 void filter_vulnerable_characters(char**, bool);
 void replace_vulnerable_characters(char**, bool, char);
-void **testing_iterate(List*);
 char *get_argument(char*, char*, int);
 char* replace(char* str, char* a, char* b);
 char *replace_char(const char *, char, char *);
@@ -50,9 +49,8 @@ int valid_password(const char*, const char*);
 int get_name_check_code(char*);
 bool is_numeric(const char*);
 bool has_numbers(const char*);
-bool valid_string(char*, char*);
+bool has_allowed_characters(char *, char *);
+bool starts_with(const char *pre, const char *str);
 void print_info(const char *, ...);
-void print_error(const char *, ...);
-char * read_line();
 
 #endif
