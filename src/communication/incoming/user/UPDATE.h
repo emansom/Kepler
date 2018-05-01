@@ -8,7 +8,7 @@ void UPDATE(session *player, incoming_message *message) {
         if (update_id == 4) {
             char *content = im_read_str(message);
             filter_vulnerable_characters(&content, true);
-            
+
             if (content != NULL) {
                 if (is_numeric(content) && strlen(content) == 25) {
                     free(player->player_data->figure);
@@ -60,7 +60,7 @@ void UPDATE(session *player, incoming_message *message) {
         if (is_numeric(content)) {
             free(session->player_data->figure);
             session->player_data->figure = strdup(content);
-            printf("figure: %s\n", session->player_data->figure);
+            log_debug("figure: %s", session->player_data->figure);
         }
 
         free(content);
@@ -76,7 +76,7 @@ void UPDATE(session *player, incoming_message *message) {
             free(session->player_data->sex);
             session->player_data->sex = sex;
 
-            printf("sex updated\n");
+            log_debug("sex updated");
         }
 
         free(content);
@@ -88,7 +88,7 @@ void UPDATE(session *player, incoming_message *message) {
     if (content != NULL) {
         free(session->player_data->motto);
         session->player_data->motto = strdup(content);
-        printf("motto: %s\n", session->player_data->motto);
+        log_debug("motto: %s", session->player_data->motto);
         free(content);
     }*/
 }

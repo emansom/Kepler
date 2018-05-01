@@ -286,11 +286,3 @@ bool starts_with(const char *restrict string, const char *restrict prefix) {
 
     return 1;
 }
-
-void print_info(const char *format, ...) {
-    printf("[%s] ", PREFIX);
-    va_list args;
-    va_start(args, format);
-    vprintf(format, args);
-    va_end(args);
-}

@@ -3,6 +3,8 @@
 
 #include "database/queries/messenger_query.h"
 
+#include "log.h"
+
 void MESSENGER_REQUESTBUDDY(session *player, incoming_message *message) {
     char *input_search = im_read_str(message);
     int search_id = player_query_id(input_search);
@@ -13,13 +15,13 @@ void MESSENGER_REQUESTBUDDY(session *player, incoming_message *message) {
     }
 
     if (messenger_is_friends(player->messenger, search_id)) {
-        print_info("debug 0");
+        log_debug("debug 0");
         goto cleanup;
         return;
     }
 
     if (!messenger_query_new_request(player->player_data->id, search_id)) {
-        print_info("debug 1");
+        log_debug("debug 1");
         goto cleanup;
         return;
     }

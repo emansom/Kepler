@@ -3,9 +3,10 @@
 #include "main.h"
 #include "shared.h"
 
-#include "lib/sqlite3/sqlite3.h"
+#include "sqlite3.h"
 #include "list.h"
-#include "lib/cthreadpool/thpool.h"
+#include "thpool.h"
+#include "log.h"
 
 #include "server/server_listener.h"
 #include "communication/message_handler.h"
@@ -24,65 +25,60 @@ int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
     signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
 
-    print_info("Kepler Habbo server...\n");
-    print_info("Written by Quackster \n");
-    print_info("\n");
+    log_info("Kepler Habbo server...");
+    log_info("Written by Quackster");
 
     configuration_init();
 
+    log_set_level(LOG_INFO);
+
+    if (configuration_get_bool("debug")) {
+        log_set_level(LOG_DEBUG);
+    }
+
     if (!sqlite3_threadsafe()) {
-        print_info("SQLite not threadsafe");
+        log_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        if (configuration_get_bool("show.database.messages")) {
-            print_info("Telling SQLite to use serialized mode\n");
-        }
+        log_debug("Telling SQLite to use serialized mode");
 
         if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
-            fprintf(stderr, "Could not configurate SQLite to use serialized mode\n");
+            log_fatal("Could not configurate SQLite to use serialized mode");
             return EXIT_FAILURE;
         }
     }
 
-    print_info("Testing SQLite connection...\n");
+    log_info("Testing SQLite connection...");
 
     sqlite3 *con = db_create_connection();
 
     if (con == NULL) {
-        print_info("The connection to the database was unsuccessful, program aborted!\n");
+        log_info("The connection to the database was unsuccessful, program aborted!");
         sqlite3_close(con);
         return EXIT_FAILURE;
-    } else {
-        print_info("The connection to the database was successful!\n");
-
-        if (configuration_get_bool("show.database.messages")) {
-            print_info("Telling SQLite to use WAL mode\n");
-        }
-
-        sqlite3_stmt *stmt;
-
-        int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
-
-        if (status != SQLITE_OK) {
-            fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(con));
-        }
-
-        if (sqlite3_step(stmt) != SQLITE_ROW) {
-            fprintf(stderr, "Could not step (execute) stmt. %s\n", sqlite3_errmsg(con));
-        }
-
-        char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
-
-        if (strcmp(chosen_journal_mode, "wal") != 0) {
-            fprintf(stderr, "WAL not supported, now using: %s\n", chosen_journal_mode);
-        }
-
-        sqlite3_finalize(stmt);
-        global.DB = con;
     }
 
-    print_info("\n");
-    print_info("Initialising various server managers...\n");
+    log_info("The connection to the database was successful!");
+
+    log_debug("Telling SQLite to use WAL mode");
+
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+
+    db_check_prepare(status, con);
+    db_check_step(sqlite3_step(stmt), con, stmt);
+
+    char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
+
+    if (strcmp(chosen_journal_mode, "wal") != 0) {
+        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), con);
+    global.DB = con;
+
+    log_info("Initialising various server managers...");
 
     texts_manager_init();
     player_manager_init();
@@ -93,13 +89,10 @@ int main(void) {
     catalogue_manager_init();
     message_handler_init();
     create_thread_pool();
-    print_info("\n");
 
     server_settings *settings = malloc(sizeof(server_settings));
     strcpy(settings->ip, configuration_get_string("server.ip.address"));
     settings->port = configuration_get_number("server.port");
-
-    //dump_db(global.DB, "test.sql");
 
     pthread_t server_thread;
     start_server(settings, &server_thread);
@@ -132,12 +125,12 @@ bool handle_command(char *command) {
         char *query_to_run = (command + amount_to_strip);
 
         if (strlen(query_to_run) <= 0) {
-            printf("The query was empty!\n");
+            log_error("The query was empty!\n");
             return false;
         }
 
         int modified_rows = db_execute_query(query_to_run);
-        printf("Executed query (%s) with modified rows: %i\n", query_to_run, modified_rows);
+        log_info("Executed query (%s) with modified rows: %i\n", query_to_run, modified_rows);
 
         return false;
     }
@@ -162,7 +155,7 @@ void exit_program() {
  * Destroys program, clears all memory, except server listen instances.
  */
 void dispose_program() {
-    printf("Shutting down server!\n");
+    log_info("Shutting down server!");
 
     thpool_destroy(global.thread_manager.pool);
 
@@ -173,8 +166,8 @@ void dispose_program() {
     category_manager_dispose();
 
     if (sqlite3_close(global.DB) != SQLITE_OK) {
-        fprintf(stderr, "Could not close SQLite database: %s\n", sqlite3_errmsg(global.DB));
+        log_fatal("Could not close SQLite database: %s", sqlite3_errmsg(global.DB));
     }
 
-    printf("Done!\n");
+    log_info("Have a nice day!");
 }

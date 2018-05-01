@@ -10,6 +10,7 @@
 #include "sqlite3.h"
 #include "shared.h"
 #include "list.h"
+#include "log.h"
 
 /**
  * Get friends by user id
@@ -105,7 +106,7 @@ List *messenger_query_get_requests(int user_id) {
  */
 int messenger_query_new_request(int from_id, int to_id) {
     if (messenger_query_request_exists(from_id, to_id)) {
-        printf("debug 3\n");
+        log_debug("debug 3");
         return 0;
     }
 

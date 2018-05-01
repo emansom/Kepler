@@ -9,7 +9,7 @@ void G_USRS(session *p, incoming_message *message) {
     }
 
     if (p->room_user->room->room_data->model_data == NULL) {
-        printf("Room %i has invalid model data.\n", p->room_user->room->room_data->id);
+        log_fatal("Room %i has invalid model data.", p->room_user->room->room_data->id);
         return;
     }
 
@@ -17,9 +17,9 @@ void G_USRS(session *p, incoming_message *message) {
 
     /*ListIter iter;
     list_iter_init(&iter, rooms->users);
-   
+
     outgoing_message *players = om_create(28); // "@\"
-    
+
     session *user;
     while (list_iter_next(&iter, (void*) &user) != CC_ITER_END) {
         append_user_list(players, user);

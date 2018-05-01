@@ -3,8 +3,9 @@
 #include <stdio.h>
 
 #include "shared.h"
-
+#include "log.h"
 #include "list.h"
+
 #include "util/stringbuilder.h"
 #include "util/threading.h"
 
@@ -190,7 +191,7 @@ void room_enter(room *room, session *player) {
     }
 
     if (room->room_data->model_data == NULL) {
-        printf("Room %i has invalid model data.\n", room->room_data->id);
+        log_debug("Room %i has invalid model data.", room->room_data->id);
         return;
     }
 

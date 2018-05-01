@@ -6,6 +6,7 @@
 #include "list.h"
 #include "hashtable.h"
 #include "shared.h"
+#include "log.h"
 
 #include "game/room/room.h"
 #include "game/room/room_manager.h"
@@ -28,7 +29,7 @@ void room_query_get_models() {
     int status = sqlite3_prepare_v2(conn, "SELECT door_x, door_y, door_z, door_dir, heightmap, model_id, model_name FROM rooms_models", -1, &stmt, 0);
 
     if (db_check_prepare(status, conn) != SQLITE_OK) {
-        fprintf(stderr, "Could not load models, invalid query.\n");
+        log_fatal("Could not load models, invalid query.");
         return;
     }
 

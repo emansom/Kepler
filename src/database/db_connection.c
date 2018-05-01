@@ -1,7 +1,9 @@
 #include <stdbool.h>
+
 #include "sqlite3.h"
 #include "main.h"
 #include "shared.h"
+#include "log.h"
 
 #include "db_connection.h"
 #include "util/configuration/configuration.h"
@@ -51,27 +53,30 @@ sqlite3 *db_create_connection() {
     bool run_query = false;
 
     if (!(file = fopen(configuration_get_string("database.filename"), "r"))) {
-        print_info("Database does not exist, creating...\n");
+        log_warn("Database does not exist, creating...");
         run_query = true;
     }
 
     sqlite3 *db;
 
+    // Open database in read/write mode, create if not exists and use serialized mode
+    // In serialized mode (FULLMUTEX) a connection can be shared across N threads
+    // without having to worry about any synchronization or locking
     int rc = sqlite3_open_v2(configuration_get_string("database.filename"), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
 
     if (rc != SQLITE_OK) {
-        fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
+        log_fatal("Cannot open database: %s", sqlite3_errmsg(db));
         sqlite3_close(db);
         return NULL;
     } else {
         if (run_query) {
-            print_info("Executing queries...\n");
+            log_info("Executing queries...");
 
             char *buffer = load_file("kepler.sql");
             rc = sqlite3_exec(db, buffer, 0, 0, &err_msg);
 
             if (rc != SQLITE_OK ) {
-                fprintf(stderr, "SQL error: %s\n", err_msg);
+                log_fatal("SQL error: %s", err_msg);
                 sqlite3_free(err_msg);
                 sqlite3_close(db);
             }
@@ -97,7 +102,7 @@ int db_execute_query(char *query) {
     int rc = sqlite3_exec(global.DB, query, 0, 0, &err_msg);
 
     if (rc != SQLITE_OK ) {
-        fprintf(stderr, "SQL error: %s\n", err_msg);
+        log_fatal("SQL error: %s", err_msg);
         sqlite3_free(err_msg);
         return -1;
     };
@@ -113,7 +118,7 @@ int db_execute_query(char *query) {
  */
 int db_check_prepare(int status, sqlite3 *conn) {
     if (status != SQLITE_OK) {
-        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(conn));
+        log_fatal("Failed to prepare statement: %s", sqlite3_errmsg(conn));
 
         // Cleanup
         sqlite3_close(conn);
@@ -133,7 +138,7 @@ int db_check_prepare(int status, sqlite3 *conn) {
  */
 int db_check_finalize(int status, sqlite3 *conn) {
     if (status != SQLITE_OK) {
-        fprintf(stderr, "Could not finalize (cleanup) stmt. %s\n", sqlite3_errmsg(conn));
+        log_fatal("Could not finalize (cleanup) stmt. %s", sqlite3_errmsg(conn));
 
         // Cleanup
         sqlite3_close(conn);
@@ -154,7 +159,7 @@ int db_check_finalize(int status, sqlite3 *conn) {
  */
 int db_check_step(int status, sqlite3 *conn, sqlite3_stmt *stmt) {
     if (status != SQLITE_DONE && status != SQLITE_ROW) {
-        fprintf(stderr, "Could not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+        log_fatal("Could not step (execute) stmt. %s", sqlite3_errmsg(conn));
 
         // Cleanup
         sqlite3_finalize(stmt);
