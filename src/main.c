@@ -21,6 +21,7 @@ void dispose_program();
 
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
+    signal(SIGINT, dispose_program); // Handle cleanup on Ctrl-C
 
     print_info("Kepler Habbo server...\n");
     print_info("Written by Quackster \n");
@@ -124,5 +125,10 @@ void dispose_program() {
     room_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();
+
+    if (sqlite3_close(global.DB) != SQLITE_OK) {
+        fprintf(stderr, "Could not close SQLite database: %s\n", sqlite3_errmsg(con));
+    }
+
     printf("Done!\n");
 }
