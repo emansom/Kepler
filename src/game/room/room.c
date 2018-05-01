@@ -179,27 +179,11 @@ void room_load_data(room *room) {
  * @param om the outgoing message
  * @param player the player
  */
-void room_enter(int room_id, session *player) {
-        // Leave other room
+void room_enter(room *room, session *player) {
+    // Leave other room
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player, false);
     }
-
-    room *room = room_manager_get_by_id(room_id);
-
-    /* check to make sure it will be loaded into the system if the owner is not online*/
-    if (room == NULL) {
-        room = room_query_get_by_room_id(room_id);
-
-        if (room != NULL) {
-            hashtable_add(global.room_manager.rooms, &room->room_id, room);
-        }
-    }
-
-    if (room == NULL) {
-        return;
-    }
-    /* end safety check*/
 
     if (list_size(room->users) == 0) {
         room_load_data(room);
@@ -239,6 +223,74 @@ void room_enter(int room_id, session *player) {
     /*outgoing_message *om = om_create(73); // "AI"
     player_send(session, om);
     om_cleanup(om);*/
+}
+
+/**
+ * Leave room handler, will make room and id for the room user reset back to NULL and 0.
+ * And remove the character from the room.
+ */
+void room_leave(room *room, session *player, bool hotel_view) {
+    if (!list_contains(room->users, player)) {
+        return;
+    }
+
+    list_remove(room->users, player, NULL);
+    room->room_data->visitors_now = (int) list_size(room->users);
+
+    // Remove current user from tile
+    room_tile *current_tile = room->room_map->map[player->room_user->position->x][player->room_user->position->y];
+    current_tile->entity = NULL;
+
+    outgoing_message *om;
+
+    // Reset item program state for pool items
+    item *item = current_tile->highest_item;
+    if (item != NULL) {
+        if (item->current_program != NULL &&
+            (strcmp(item->current_program, "curtains1") == 0
+             || strcmp(item->current_program, "curtains2") == 0
+             || strcmp(item->current_program, "door") == 0)) {
+
+            item_assign_program(item, "open");
+        }
+    }
+
+    // Make figure vanish from the rooms
+    om = om_create(29); // "@]"
+    sb_add_int(om->sb, player->room_user->instance_id);
+    room_send(room, om);
+
+    // Reset rooms user
+    room_user_reset(player->room_user);
+    room_dispose(room, false);
+
+    // Go to hotel view, if told so.
+    if (hotel_view) {
+        om = om_create(18); // "@R"
+        player_send(player, om);
+        om_cleanup(om);
+    }
+}
+
+/**
+ * Kick all users from the current room
+ * @param room
+ */
+void room_kickall(room *room) {
+    for (size_t i = 0; i < list_size(room->users); i++) {
+        session *user;
+        list_get_at(room->users, i, (void *) &user);
+        room_leave(room, user, true);
+    }
+}
+
+/**
+ * Send packets to start the room entance.
+ *
+ * @param om the outgoing message
+ * @param player the player
+ */
+void room_load(room *room, session *player) {
     outgoing_message *om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
     player_send(player, om);
@@ -312,70 +364,6 @@ void room_enter(int room_id, session *player) {
     om_cleanup(om);
 
     player->room_user->authenticate_id = -1;
-}
-
-/**
- * Leave room handler, will make room and id for the room user reset back to NULL and 0.
- * And remove the character from the room.
- */
-void room_leave(room *room, session *player, bool hotel_view) {
-    if (!list_contains(room->users, player)) {
-        return;
-    }
-
-    list_remove(room->users, player, NULL);
-    room->room_data->visitors_now = (int) list_size(room->users);
-
-    // Tell schedule job to stop if there's no users left
-    if (room->room_data->visitors_now == 0) {
-        room->room_schedule_job->stop = true;
-    }
-
-    // Remove current user from tile
-    room_tile *current_tile = room->room_map->map[player->room_user->position->x][player->room_user->position->y];
-    current_tile->entity = NULL;
-
-    outgoing_message *om;
-
-    // Reset item program state for pool items
-    item *item = current_tile->highest_item;
-    if (item != NULL) {
-        if (item->current_program != NULL &&
-            (strcmp(item->current_program, "curtains1") == 0
-             || strcmp(item->current_program, "curtains2") == 0
-             || strcmp(item->current_program, "door") == 0)) {
-
-            item_assign_program(item, "open");
-        }
-    }
-
-    // Make figure vanish from the rooms
-    om = om_create(29); // "@]"
-    sb_add_int(om->sb, player->room_user->instance_id);
-    room_send(room, om);
-
-    // Reset rooms user
-    room_user_reset(player->room_user);
-    room_dispose(room, false);
-
-    // Go to hotel view, if told so.
-    if (hotel_view) {
-        om = om_create(18); // "@R"
-        player_send(player, om);
-        om_cleanup(om);
-    }
-}
-
-/**
- * Kick all users from the current room
- * @param room
- */
-void room_kickall(room *room) {
-    for (size_t i = 0; i < list_size(room->users); i++) {
-        session *user;
-        list_get_at(room->users, i, (void *) &user);
-        room_leave(room, user, true);
-    }
 }
 
 /**
@@ -508,7 +496,8 @@ void room_dispose(room *room, bool override) {
     list_destroy(room->items);
 
     room->users = NULL;
-    
+    room->room_schedule_job = NULL;
+
     free(room);
     room = NULL;
 }
