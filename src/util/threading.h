@@ -20,6 +20,7 @@ typedef struct runnable_s {
     struct room_s *room;
     int room_id;
     int millis;
+    bool stop;
 } runnable;
 
 void do_room_task(runnable*);
