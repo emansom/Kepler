@@ -34,6 +34,7 @@
 
 #include "database/queries/player_query.h"
 #include "database/queries/rooms/room_query.h"
+#include "database/queries/rooms/room_vote_query.h"
 
 #include "communication/messages/outgoing_message.h"
 

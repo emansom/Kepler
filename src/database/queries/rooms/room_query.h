@@ -10,9 +10,6 @@ room *room_query_get_by_room_id(int);
 List *room_query_recent_rooms(int limit, int category_id);
 List *room_query_random_rooms(int limit);
 
-int room_query_check_voted(int room_id, int player_id);
-void room_query_vote(int room_id, int player_id, int answer);
-int room_query_count_votes(int room_id);
 void room_query_get_models();
 void room_query_get_categories();
 void query_room_save(room*);

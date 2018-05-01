@@ -8,6 +8,8 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
+#include "database/queries/rooms/room_vote_query.h"
+
 void RATEFLAT(session *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
