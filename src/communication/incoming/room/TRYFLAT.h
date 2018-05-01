@@ -63,12 +63,7 @@ void TRYFLAT(session *player, incoming_message *message) {
         }
     }
 
-    // Leave other room
-    if (player->room_user->room != NULL) {
-        room_leave(player->room_user->room, player, false);
-    }
-
-    player->room_user->authenticate_id = room->room_id;
+    player->room_user->authenticate_id = room_id;
 
     outgoing_message *interest = om_create(41); // "@i"
     player_send(player, interest);
