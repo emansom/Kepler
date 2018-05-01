@@ -17,12 +17,7 @@ void room_directory(session *player, incoming_message *message) {
         int len;
         int room_id = vl64_decode(contents_chopped, &len);
 
-        room *room = room_manager_get_by_id(room_id);
-
-        if (room != NULL) {
-            room_enter(room, player);
-            room_load(room, player);
-        }
+        room_enter(room_id, player);
     } 
 
     free(content);

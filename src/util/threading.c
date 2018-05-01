@@ -23,6 +23,7 @@ runnable *create_runnable() {
     r->request = NULL;
     r->self = r;
     r->millis = 500;
+    r->stop = false;
     return r;
 }
 /**
@@ -30,29 +31,18 @@ runnable *create_runnable() {
  *
  * @param run the runnable task
  */
-void do_room_task(runnable *run){
-    room *room = (void*)run->room;
+void do_room_task(runnable *run) {
+    room *room = (void *) run->room;
 
-    if (room_manager_get_by_id(run->room_id) == NULL) {
+    if (run->stop || run->room == NULL) {
+        free(run);
         return;
     }
 
-    if (list_size(room->users) == 0) {
-        room->room_schedule_job = NULL;
-        free(run);
-    } else {
-        if (room_manager_get_by_id(run->room_id) != NULL) {
-            run->request(room);
-            usleep((__useconds_t) run->millis*1000);
+    run->request(room);
+    usleep((__useconds_t) run->millis * 1000);
 
-            thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
-        } else {
-            if (room_manager_get_by_id(run->room_id) != NULL) {
-                room->room_schedule_job = NULL;
-            }
-            free(run);
-        }
-    }
+    thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
 }
 
 /**
