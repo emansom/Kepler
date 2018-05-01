@@ -121,6 +121,48 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
     return data;
 }
 
+void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
+    if (list_size(instance->room_data->model_data->public_items) > 0) {
+        om_write_int(navigator, instance->room_data->id); // rooms id
+        om_write_int(navigator, 1);
+        om_write_str(navigator, instance->room_data->name);
+        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+        om_write_int(navigator, instance->room_data->category); // category id
+        om_write_str(navigator, instance->room_data->description); // description
+        om_write_int(navigator, instance->room_data->id); // rooms id
+        om_write_int(navigator, 0);
+        om_write_str(navigator, instance->room_data->ccts);
+        om_write_int(navigator, 0);
+        om_write_int(navigator, 1);
+    } else {
+        om_write_int(navigator, instance->room_data->id); // rooms id
+        om_write_str(navigator, instance->room_data->name);
+
+        if (player_id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
+            om_write_str(navigator, instance->room_data->owner_name); // rooms owner
+        } else {
+            om_write_str(navigator, "-"); // rooms owner
+        }
+
+        if (instance->room_data->accesstype == 2) {
+            om_write_str(navigator, "password");
+        }
+
+        if (instance->room_data->accesstype == 1) {
+            om_write_str(navigator, "closed");
+        }
+
+        if (instance->room_data->accesstype == 0) {
+            om_write_str(navigator, "open");
+        }
+
+        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+        om_write_str(navigator, instance->room_data->description); // description
+    }
+}
+
 /**
  * Used to load data if they're the first to enter the room.
  *

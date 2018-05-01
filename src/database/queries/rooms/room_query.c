@@ -18,8 +18,6 @@
 #include "room_query.h"
 #include "database/db_connection.h"
 
-room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt);
-
 /**
  * Loads all room models and adds them into the room model manager.
  */
