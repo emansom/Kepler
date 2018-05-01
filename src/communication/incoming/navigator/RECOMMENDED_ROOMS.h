@@ -24,6 +24,7 @@ void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
     player_send(player, navigator);
     om_cleanup(navigator);
 
+    // Clear recommended rooms if they weren't already loaded
     if (rooms != NULL) {
         for (size_t i = 0; i < list_size(rooms); i++) {
             room *instance;
@@ -33,9 +34,10 @@ void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
                 room_dispose(instance, false);
             }
         }
-
-        list_destroy(rooms);
     }
+
+    // Destroy list of favourite rooms
+    list_destroy(rooms);
 }
 
 

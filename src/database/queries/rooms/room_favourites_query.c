@@ -67,6 +67,38 @@ void room_query_favourite(int room_id, int player_id) {
     //sqlite3_close(conn);
 }
 
+/**
+ * Remove a room favourite by given user id and room id.
+ *
+ * @param player_id the favourite to remove the room id for
+ * @param room_id the room id to remove
+ */
+void room_query_remove_favourite(int room_id, int player_id) {
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare_v2(conn, "DELETE FROM guestroom_favourites WHERE user_id = ? AND room_id = ?", -1, &stmt, 0);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, player_id);
+        sqlite3_bind_int(stmt, 2, room_id);
+    } else {
+        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    }
+
+    if (sqlite3_step(stmt) != SQLITE_DONE) {
+        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    }
+
+    sqlite3_finalize(stmt);
+}
+
+/**
+ * Get list of room favourites by player id.
+ *
+ * @param player_id the player id to get the favourites for
+ * @return the list of rooms
+ */
 List *room_query_favourites(int player_id) {
     List *favourites;
     list_new(&favourites);

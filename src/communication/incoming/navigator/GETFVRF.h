@@ -22,5 +22,18 @@ void GETFVRF(session *player, incoming_message *message) {
     player_send(player, om);
     om_cleanup(om);
 
+    // Clear room favourites if they weren't already loaded prior in the server
+    if (favourite_rooms != NULL) {
+        for (size_t i = 0; i < list_size(favourite_rooms); i++) {
+            room *instance;
+            list_get_at(favourite_rooms, i, (void *) &instance);
+
+            if (room_manager_get_by_id(instance->room_id) == NULL) {
+                room_dispose(instance, false);
+            }
+        }
+    }
+
+    // Destroy list of favourite rooms
     list_destroy(favourite_rooms);
 }
