@@ -29,14 +29,15 @@ void room_query_get_models() {
 
     int status = sqlite3_prepare_v2(conn, "SELECT door_x, door_y, door_z, door_dir, heightmap, model_id, model_name FROM rooms_models", -1, &stmt, 0);
 
-    if (status != SQLITE_OK) {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    if (db_check_prepare(status, conn) != SQLITE_OK) {
+        fprintf(stderr, "Could not load models, invalid query.\n");
+        return;
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -53,8 +54,7 @@ void room_query_get_models() {
         model_manager_add(model);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 /**
@@ -70,13 +70,13 @@ room *room_query_get_by_room_id(int room_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, room_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
 
-    status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
+    }
 
     if (status == SQLITE_ROW) {
         instance = room_create(sqlite3_column_int(stmt, 0));
@@ -84,8 +84,7 @@ room *room_query_get_by_room_id(int room_id) {
         instance->room_data = room_data;
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return instance;
 }
@@ -104,16 +103,16 @@ List *room_query_get_by_owner_id(int owner_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE owner_id = ? ORDER BY id DESC", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, owner_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -130,8 +129,8 @@ List *room_query_get_by_owner_id(int owner_id) {
         list_add(rooms, room);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
     return rooms;
 }
 
@@ -149,17 +148,17 @@ List *room_query_recent_rooms(int limit, int category_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE category = ? AND owner_id > 0 ORDER BY id DESC LIMIT ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, category_id);
         sqlite3_bind_int(stmt, 2, limit);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -174,11 +173,10 @@ List *room_query_recent_rooms(int limit, int category_id) {
         }
 
         list_add(rooms, room);
-
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
     return rooms;
 }
 
@@ -191,16 +189,16 @@ List *room_query_random_rooms(int limit) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE owner_id > 0 ORDER BY RANDOM() LIMIT ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, limit);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -215,11 +213,10 @@ List *room_query_random_rooms(int limit) {
         }
 
         list_add(rooms, room);
-
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
     return rooms;
 }
 
@@ -254,21 +251,20 @@ int room_query_check_voted(int room_id, int player_id) {
     int VOTED = -1;
     int status = sqlite3_prepare_v2(conn, "SELECT user_id FROM guestroom_votes WHERE user_id = ? AND room_id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
         sqlite3_bind_int(stmt, 2, room_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
-    int step = sqlite3_step(stmt);
+    int step = db_check_step(sqlite3_step(stmt), conn, stmt);
 
     if (step == SQLITE_ROW) {
         VOTED = sqlite3_column_int(stmt, 0);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return VOTED;
 }
@@ -280,20 +276,17 @@ void room_query_vote(int room_id, int player_id, int answer) {
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO guestroom_votes (user_id,room_id,vote) VALUES (?,?,?)", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
         sqlite3_bind_int(stmt, 2, room_id);
         sqlite3_bind_int(stmt, 3, answer);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 int room_query_count_votes(int room_id) {
@@ -304,20 +297,19 @@ int room_query_count_votes(int room_id) {
     int VOTE_COUNT = -1;
     int status = sqlite3_prepare_v2(conn, " SELECT sum(vote) FROM guestroom_votes WHERE room_id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, room_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
-    int step = sqlite3_step(stmt);
+    int step = db_check_step(sqlite3_step(stmt), conn, stmt);
 
     if (step == SQLITE_ROW) {
         VOTE_COUNT = sqlite3_column_int(stmt, 0);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return VOTE_COUNT;
 }
@@ -331,14 +323,17 @@ void room_query_get_categories() {
 
     int status = sqlite3_prepare_v2(conn, "SELECT id, parent_id, name, public_spaces, allow_trading, minrole_access,minrole_setflatcat FROM rooms_categories", -1, &stmt, 0);
 
-    if (status != SQLITE_OK) {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+    db_check_prepare(status, conn);
+
+    if (db_check_prepare(status, conn) != SQLITE_OK) {
+        fprintf(stderr, "Could not load categories, invalid query.\n");
+        return;
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -355,8 +350,7 @@ void room_query_get_categories() {
         category_manager_add(category);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void query_room_save(room *room) {
@@ -364,6 +358,8 @@ void query_room_save(room *room) {
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE rooms SET category = ?, name = ?, description = ?, wallpaper = ?, floor = ?, showname = ?, superusers = ?, accesstype = ?, password = ?, visitors_max = ? WHERE id = ?", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, room->room_data->category);
@@ -377,13 +373,11 @@ void query_room_save(room *room) {
         sqlite3_bind_text(stmt, 9, room->room_data->password, strlen(room->room_data->password), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 10, room->room_data->visitors_max);
         sqlite3_bind_int(stmt, 11, room->room_data->id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    sqlite3_step(stmt);
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void room_query_delete(int room_id) {
@@ -392,13 +386,13 @@ void room_query_delete(int room_id) {
 
     int status = sqlite3_prepare_v2(conn, "DELETE FROM rooms WHERE id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, room_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    sqlite3_step(stmt);
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }

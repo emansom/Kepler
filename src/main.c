@@ -1,3 +1,6 @@
+#include <stdbool.h>
+
+#include "main.h"
 #include "shared.h"
 
 #include "lib/sqlite3/sqlite3.h"
@@ -17,14 +20,9 @@
 #include "util/encoding/base64encoding.h"
 #include "util/encoding/vl64encoding.h"
 
-void dispose_program();
-
-#define COMMAND_INPUT_LENGTH 200
-bool handle_command(char *command);
-
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    signal(SIGINT, dispose_program); // Handle cleanup on Ctrl-C
+    signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
 
     print_info("Kepler Habbo server...\n");
     print_info("Written by Quackster \n");
@@ -153,6 +151,14 @@ bool handle_command(char *command) {
 }
 
 /**
+ * Exits program, calls dispose_program
+ */
+void exit_program() {
+    dispose_program();
+    exit(EXIT_SUCCESS);
+}
+
+/**
  * Destroys program, clears all memory, except server listen instances.
  */
 void dispose_program() {
@@ -163,14 +169,10 @@ void dispose_program() {
     model_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();
-<<<<<<< HEAD
 
     if (sqlite3_close(global.DB) != SQLITE_OK) {
-        fprintf(stderr, "Could not close SQLite database: %s\n", sqlite3_errmsg(con));
+        fprintf(stderr, "Could not close SQLite database: %s\n", sqlite3_errmsg(global.DB));
     }
 
-=======
-    sqlite3_close(global.DB);
->>>>>>> upstream/master
     printf("Done!\n");
 }

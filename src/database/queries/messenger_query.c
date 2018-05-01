@@ -25,15 +25,15 @@ List *messenger_query_get_friends(int user_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT to_id, from_id FROM messenger_friends WHERE to_id = ? OR from_id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
         sqlite3_bind_int(stmt, 2, user_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -54,8 +54,7 @@ List *messenger_query_get_friends(int user_id) {
         list_add(friends, (void*)friend);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return friends;
 }
@@ -75,14 +74,14 @@ List *messenger_query_get_requests(int user_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT from_id FROM messenger_requests WHERE to_id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -93,8 +92,7 @@ List *messenger_query_get_requests(int user_id) {
         list_add(requests, (void*)friend);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return requests;
 }
@@ -116,19 +114,16 @@ int messenger_query_new_request(int from_id, int to_id) {
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO messenger_requests (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
         sqlite3_bind_int(stmt, 2, to_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return 1;
 }
@@ -149,19 +144,16 @@ int messenger_query_new_friend(int from_id, int to_id) {
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO messenger_friends (from_id, to_id) VALUES (?, ?)", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
         sqlite3_bind_int(stmt, 2, to_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return 1;
 }
@@ -178,19 +170,16 @@ int messenger_query_delete_request(int from_id, int to_id) {
 
     int status = sqlite3_prepare_v2(conn, "DELETE FROM messenger_requests WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
         sqlite3_bind_int(stmt, 2, to_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return 1;
 }
@@ -207,19 +196,16 @@ int messenger_query_delete_friend(int from_id, int to_id) {
 
     int status = sqlite3_prepare_v2(conn, "DELETE FROM messenger_friends WHERE from_id = ? AND to_id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, from_id);
         sqlite3_bind_int(stmt, 2, to_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return 1;
 }
@@ -237,21 +223,20 @@ int messenger_query_request_exists(int from_id, int to_id) {
     int result = 0;
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM messenger_requests WHERE to_id = ? AND from_id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, to_id);
         sqlite3_bind_int(stmt, 2, from_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
-    int step = sqlite3_step(stmt);
+    int step = db_check_step(sqlite3_step(stmt), conn, stmt);
 
     if (step == SQLITE_ROW) {
         result = 1;
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return result;
 }
@@ -268,24 +253,21 @@ int messenger_query_new_message(int receiver_id, int sender_id, char *body, char
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO messenger_messages (receiver_id, sender_id, unread, body, date) VALUES (?, ?, ?, ?, ?)", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, receiver_id);
         sqlite3_bind_int(stmt, 2, sender_id);
         sqlite3_bind_int(stmt, 3, 1);
         sqlite3_bind_text(stmt, 4, body, -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 5, date, -1, SQLITE_STATIC);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
     int row_id = sqlite3_last_insert_rowid(conn);
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return row_id;
 }
@@ -305,14 +287,14 @@ List *messenger_query_unread_messages(int user_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT id,receiver_id,sender_id,body,date FROM messenger_messages WHERE receiver_id = ? AND unread = 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -328,8 +310,7 @@ List *messenger_query_unread_messages(int user_id) {
         list_add(messages, msg);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return messages;
 }
@@ -343,16 +324,13 @@ void messenger_query_mark_read(int message_id) {
 
     int status = sqlite3_prepare_v2(conn, "UPDATE messenger_messages SET unread = 0 WHERE id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, message_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }

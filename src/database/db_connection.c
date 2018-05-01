@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include "sqlite3.h"
+#include "main.h"
 #include "shared.h"
 
 #include "db_connection.h"
@@ -101,4 +102,66 @@ int db_execute_query(char *query) {
     };
 
     return sqlite3_changes(global.DB);
+}
+
+/**
+ * Check return status of prepare, log if not okay
+ *
+ * @param status return value of sqlite3_prepare_v2
+ * @param conn SQLite3 connection
+ */
+int db_check_prepare(int status, sqlite3 *conn) {
+    if (status != SQLITE_OK) {
+        fprintf(stderr, "Failed to prepare statement: %s\n", sqlite3_errmsg(conn));
+
+        // Cleanup
+        sqlite3_close(conn);
+        dispose_program();
+
+        // We exit on error to keep ACID consistency
+        exit(EXIT_FAILURE);
+    }
+    return status;
+}
+
+/**
+ * Check return status of finalize, log if not okay
+ *
+ * @param status return value of sqlite3_finalize
+ * @param conn SQLite3 connection
+ */
+int db_check_finalize(int status, sqlite3 *conn) {
+    if (status != SQLITE_OK) {
+        fprintf(stderr, "Could not finalize (cleanup) stmt. %s\n", sqlite3_errmsg(conn));
+
+        // Cleanup
+        sqlite3_close(conn);
+        dispose_program();
+
+        // We exit on error to keep ACID consistency
+        exit(EXIT_FAILURE);
+    }
+    return status;
+}
+
+/**
+ * Check return status of step, log if not okay
+ *
+ * @param status return value of sqlite3_step
+ * @param conn SQLite3 connection
+ * @param stmt SQLite3 statement
+ */
+int db_check_step(int status, sqlite3 *conn, sqlite3_stmt *stmt) {
+    if (status != SQLITE_DONE && status != SQLITE_ROW) {
+        fprintf(stderr, "Could not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+
+        // Cleanup
+        sqlite3_finalize(stmt);
+        sqlite3_close(conn);
+        dispose_program();
+
+        // We exit on error to keep ACID consistency
+        exit(EXIT_FAILURE);
+    }
+    return status;
 }

@@ -23,14 +23,14 @@ List *item_query_get_inventory(int user_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT id,room_id,definition_id,x,y,z,wall_position,rotation,custom_data FROM items WHERE user_id = ? AND room_id = 0", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -51,8 +51,7 @@ List *item_query_get_inventory(int user_id) {
         list_add(items, item);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+     db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return items;
 }
@@ -66,14 +65,14 @@ List *item_query_get_room_items(int room_id) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT id,room_id,definition_id,x,y,z,wall_position,rotation,custom_data FROM items WHERE room_id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, room_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
     }
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -94,8 +93,7 @@ List *item_query_get_room_items(int room_id) {
         list_add(items, item);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return items;
 }
@@ -106,6 +104,8 @@ int item_query_create(int user_id, int room_id, int definition_id, int x, int y,
 
     int item_id = -1;
     int status = sqlite3_prepare_v2(conn, "INSERT INTO items (user_id, room_id, definition_id, x, y, z, rotation, custom_data, wall_position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, '')", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
@@ -122,18 +122,14 @@ int item_query_create(int user_id, int room_id, int definition_id, int x, int y,
             sqlite3_bind_text(stmt, 8, "", 0, SQLITE_STATIC);
         }
 
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    } else {
+    if (status == SQLITE_DONE) {
         item_id = (int)sqlite3_last_insert_rowid(conn);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return item_id;
 }
@@ -143,6 +139,8 @@ void item_query_save(item *item) {
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE items SET room_id = ?, definition_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ?, wall_position = ? WHERE id = ? LIMIT 1", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, item->room_id);
@@ -161,17 +159,10 @@ void item_query_save(item *item) {
 
         sqlite3_bind_int(stmt, 9, item->id);
 
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
-
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void item_query_delete(int item_id) {
@@ -180,17 +171,13 @@ void item_query_delete(int item_id) {
 
     int status = sqlite3_prepare_v2(conn, "DELETE FROM items WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, item_id);
 
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
