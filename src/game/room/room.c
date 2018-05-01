@@ -229,16 +229,16 @@ void room_enter(room *room, session *player) {
  * Leave room handler, will make room and id for the room user reset back to NULL and 0.
  * And remove the character from the room.
  */
-void room_leave(room *room, session *room_player, bool hotel_view) {
-    if (!list_contains(room->users, room_player)) {
+void room_leave(room *room, session *player, bool hotel_view) {
+    if (!list_contains(room->users, player)) {
         return;
     }
 
-    list_remove(room->users, room_player, NULL);
+    list_remove(room->users, player, NULL);
     room->room_data->visitors_now = (int) list_size(room->users);
 
     // Remove current user from tile
-    room_tile *current_tile = room->room_map->map[room_player->room_user->position->x][room_player->room_user->position->y];
+    room_tile *current_tile = room->room_map->map[player->room_user->position->x][player->room_user->position->y];
     current_tile->entity = NULL;
 
     outgoing_message *om;
@@ -255,21 +255,19 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
         }
     }
 
-    // Reset rooms user
-    room_user_reset(room_player->room_user);
-
     // Make figure vanish from the rooms
     om = om_create(29); // "@]"
-    sb_add_int(om->sb, room_player->room_user->instance_id);
+    sb_add_int(om->sb, player->room_user->instance_id);
     room_send(room, om);
 
-    room_player->room_user->room = NULL;
+    // Reset rooms user
+    room_user_reset(player->room_user);
     room_dispose(room, false);
 
     // Go to hotel view, if told so.
     if (hotel_view) {
         om = om_create(18); // "@R"
-        player_send(room_player, om);
+        player_send(player, om);
         om_cleanup(om);
     }
 }
