@@ -37,7 +37,7 @@ void player_manager_remove(session *p) {
 
 /**
  * Finds a player by a given stream
- * 
+ *
  * @param stream the stream
  * @return the player
  */
@@ -47,7 +47,7 @@ session *player_manager_find(void *stream) {
 
 /**
  * Find a player by user id
- * 
+ *
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
@@ -59,7 +59,7 @@ session *player_manager_find_by_id(int player_id) {
         if (p->player_data->id == player_id) {
             return p;
         }
-    }  
+    }
 
     return NULL;
 }
@@ -85,7 +85,7 @@ session *player_manager_find_by_name(char *name) {
 
 /**
  * Find a player by user id
- * 
+ *
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
@@ -94,7 +94,7 @@ player_data *player_manager_get_data_by_id(int player_id) {
         session *p;
         list_get_at(global.player_manager.players, i, (void*)&p);
 
-        if (p->player_data->id == player_id) {
+        if (p->player_data != NULL && p->player_data->id == player_id) {
             return (player_data *) p->player_data;
         }
     }
