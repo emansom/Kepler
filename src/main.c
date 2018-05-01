@@ -60,7 +60,7 @@ int main(void) {
 
     log_info("The connection to the database was successful!");
 
-    log_debug("Telling SQLite to use WAL mode");
+    log_debug("Telling SQLite to use WAL for journaling");
 
     sqlite3_stmt *stmt;
 
