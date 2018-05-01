@@ -70,11 +70,10 @@ bool room_tile_is_walkable(room *room, room_user *room_user, int x, int y) {
         return false;
     }
 
+    // Let users walk into each other on public rooms (so people cannot block lido ladders, etc)
     if (list_size(room->room_data->model_data->public_items) == 0) {
-        if (tile->entity != NULL && room_user != NULL) {
-            if (tile->entity != room_user) {
-                return false;
-            }
+        if (tile->entity != NULL) {
+            return tile->entity == room_user; // true if you're the same person
         }
     }
 
