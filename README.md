@@ -2,6 +2,19 @@
 
 Kepler is a small TCP server written in C powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 13 client from 2006 era. The aim is to fully replicate this version by writing the back-end server in the C11 language.
 
+## Cloning this repository
+
+```
+$ git clone --recursive https://github.com/Quackster/Kepler
+```
+
+**or**
+
+```
+$ git clone https://github.com/Quackster/Kepler
+$ git submodule update --init --recursive
+```
+
 ## Compile Kepler
 
 These commands will compile and run Kepler, first make sure you're in the directory of Kepler.
