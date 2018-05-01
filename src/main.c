@@ -19,6 +19,9 @@
 
 void dispose_program();
 
+#define COMMAND_INPUT_LENGTH 200
+bool handle_command(char *command);
+
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
 
@@ -76,7 +79,6 @@ int main(void) {
         }
 
         sqlite3_finalize(stmt);
-
         global.DB = con;
     }
 
@@ -98,23 +100,55 @@ int main(void) {
     strcpy(settings->ip, configuration_get_string("server.ip.address"));
     settings->port = configuration_get_number("server.port");
 
+    //dump_db(global.DB, "test.sql");
+
     pthread_t server_thread;
     start_server(settings, &server_thread);
 
     while (true) {
-        char command[50];
-        fgets(command, 10, stdin);
+        char command[COMMAND_INPUT_LENGTH];
+        fgets(command, COMMAND_INPUT_LENGTH, stdin);
 
         char *filter_command = (char*)command;
         filter_vulnerable_characters(&filter_command, true); // Strip unneeded characters
 
-        if (strcmp(filter_command, "q") == 0 || strcmp(filter_command, "quit") == 0) {
-            dispose_program();
+        if (handle_command(filter_command)) {
             break;
         }
     }
 
     return EXIT_SUCCESS;
+}
+
+bool handle_command(char *command) {
+    if (starts_with(command, "query") || starts_with(command, "sql")) {
+        int amount_to_strip = -1;
+
+        if (starts_with(command, "sql")) {
+            amount_to_strip = 4; // "sql " to remove
+        } else {
+            amount_to_strip = 6; // "query "  to remove
+        }
+
+        char *query_to_run = (command + amount_to_strip);
+
+        if (strlen(query_to_run) <= 0) {
+            printf("The query was empty!\n");
+            return false;
+        }
+
+        int modified_rows = db_execute_query(query_to_run);
+        printf("Executed query (%s) with modified rows: %i\n", query_to_run, modified_rows);
+
+        return false;
+    }
+
+    if (strcmp(command, "q") == 0 || strcmp(command, "quit") == 0) {
+        dispose_program();
+        return true;
+    }
+
+    return false;
 }
 
 /**
