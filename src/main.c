@@ -32,7 +32,9 @@ int main(void) {
         print_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        print_info("Telling SQLite to use serialized mode\n");
+        if (configuration_get_bool("show.incoming.packets")) {
+            print_info("Telling SQLite to use serialized mode\n");
+        }
 
         if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
             fprintf(stderr, "Could not configurate SQLite to use serialized mode\n");
@@ -51,7 +53,9 @@ int main(void) {
     } else {
         print_info("The connection to the database was successful!\n");
 
-        print_info("Telling SQLite to use WAL mode\n");
+        if (configuration_get_bool("show.incoming.packets")) {
+            print_info("Telling SQLite to use WAL mode\n");
+        }
 
         sqlite3_stmt *stmt;
 
@@ -67,7 +71,7 @@ int main(void) {
 
         char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
 
-        if (strcmp(chosen_journal_mode, "wal")) {
+        if (strcmp(chosen_journal_mode, "wal") != 0) {
             fprintf(stderr, "WAL not supported, now using: %s\n", chosen_journal_mode);
         }
 
