@@ -157,11 +157,11 @@ bool handle_command(char *command) {
 void dispose_program() {
     printf("Shutting down server!\n");
     thpool_destroy(global.thread_manager.pool);
+    sqlite3_close(global.DB);
     player_manager_dispose();
     room_manager_dispose();
     model_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();
-    sqlite3_close(global.DB);
     printf("Done!\n");
 }
