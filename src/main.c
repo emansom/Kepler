@@ -32,7 +32,7 @@ int main(void) {
         print_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        if (configuration_get_bool("show.incoming.packets")) {
+        if (configuration_get_bool("show.database.messages")) {
             print_info("Telling SQLite to use serialized mode\n");
         }
 
@@ -53,7 +53,7 @@ int main(void) {
     } else {
         print_info("The connection to the database was successful!\n");
 
-        if (configuration_get_bool("show.incoming.packets")) {
+        if (configuration_get_bool("show.database.messages")) {
             print_info("Telling SQLite to use WAL mode\n");
         }
 
