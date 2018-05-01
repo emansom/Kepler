@@ -15,11 +15,13 @@
 #include "game/navigator/navigator_category.h"
 #include "game/navigator/navigator_category_manager.h"
 
-#include "room_query.h"
+#include "database/queries/room_query.h"
 #include "database/db_connection.h"
 
+room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt);
+
 /**
- * Loads all room models and adds them into the room model manager.
+ *
  */
 void room_query_get_models() {
     sqlite3 *conn = global.DB;
@@ -35,7 +37,7 @@ void room_query_get_models() {
     while (true) {
         status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -56,44 +58,9 @@ void room_query_get_models() {
 }
 
 /**
- * Load room categories into category manager
- */
-void room_query_get_categories() {
-    sqlite3 *conn = global.DB;
-    sqlite3_stmt *stmt;
-
-    int status = sqlite3_prepare_v2(conn, "SELECT id, parent_id, name, public_spaces, allow_trading, minrole_access,minrole_setflatcat FROM rooms_categories", -1, &stmt, 0);
-
-    db_check_prepare(status, conn);
-
-    while (true) {
-        status = db_check_step(sqlite3_step(stmt), conn, stmt);
-
-        if (status != SQLITE_ROW) {
-            break;
-        }
-
-        room_category *category = category_create(
-                sqlite3_column_int(stmt, 0),
-                sqlite3_column_int(stmt, 1),
-                (char*)sqlite3_column_text(stmt, 2),
-                sqlite3_column_int(stmt, 3),
-                sqlite3_column_int(stmt, 4),
-                sqlite3_column_int(stmt, 5),
-                sqlite3_column_int(stmt, 6)
-        );
-
-        category_manager_add(category);
-    }
-
-    db_check_finalize(sqlite3_finalize(stmt), conn);
-}
-
-/**
- * Gets a room instance by room id, will return NULL if no value exists.
  *
  * @param room_id the room id
- * @return the room instance
+ * @return
  */
 room *room_query_get_by_room_id(int room_id) {
     room *instance = NULL;
@@ -123,10 +90,9 @@ room *room_query_get_by_room_id(int room_id) {
 }
 
 /**
- * Gets all rooms as a list by owner id.
  *
- * @param owner_id the owner id of the rooms
- * @return the list of rooms
+ * @param owner_id
+ * @return
  */
 List *room_query_get_by_owner_id(int owner_id) {
     List *rooms;
@@ -146,7 +112,7 @@ List *room_query_get_by_owner_id(int owner_id) {
     while (true) {
         status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -169,10 +135,9 @@ List *room_query_get_by_owner_id(int owner_id) {
 }
 
 /**
- * Gets recently created rooms within a given catgeory, and the limit of rooms to select.
  *
- * @param limit the limit of rows to select
- * @return the list of recently created rooms
+ * @param limit
+ * @return
  */
 List *room_query_recent_rooms(int limit, int category_id) {
     List *rooms;
@@ -193,7 +158,7 @@ List *room_query_recent_rooms(int limit, int category_id) {
     while (true) {
         status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -215,12 +180,6 @@ List *room_query_recent_rooms(int limit, int category_id) {
     return rooms;
 }
 
-/**
- * Get random rooms, this doesn't include public rooms.
- *
- * @param limit the limit of random rooms to select.
- * @return the list of random rooms
- */
 List *room_query_random_rooms(int limit) {
     List *rooms;
     list_new(&rooms);
@@ -239,7 +198,7 @@ List *room_query_random_rooms(int limit) {
     while (true) {
         status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-        if (status != SQLITE_ROW) {
+        if (status == SQLITE_DONE) {
             break;
         }
 
@@ -259,6 +218,139 @@ List *room_query_random_rooms(int limit) {
     db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return rooms;
+}
+
+room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt) {
+    room_data *room_data = room_create_data(
+            room,
+            room->room_id,
+            sqlite3_column_int(stmt, 1),
+            sqlite3_column_int(stmt, 2),
+            (char*)sqlite3_column_text(stmt, 3),
+            (char*)sqlite3_column_text(stmt, 4),
+            (char*)sqlite3_column_text(stmt, 5),
+            (char*)sqlite3_column_text(stmt, 6),
+            sqlite3_column_int(stmt, 7),
+            sqlite3_column_int(stmt, 8),
+            sqlite3_column_int(stmt, 9),
+            sqlite3_column_int(stmt, 10),
+            sqlite3_column_int(stmt, 11),
+            (char*)sqlite3_column_text(stmt, 12),
+            sqlite3_column_int(stmt, 13),
+            sqlite3_column_int(stmt, 14)
+    );
+
+    return room_data;
+}
+
+int room_query_check_voted(int room_id, int player_id) {
+    // SELECT user_id FROM guestroom_votes WHERE user_id = ? AND room_id = ? LIMIT 1
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    int VOTED = -1;
+    int status = sqlite3_prepare_v2(conn, "SELECT user_id FROM guestroom_votes WHERE user_id = ? AND room_id = ? LIMIT 1", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, player_id);
+        sqlite3_bind_int(stmt, 2, room_id);
+    }
+
+    int step = db_check_step(sqlite3_step(stmt), conn, stmt);
+
+    if (step == SQLITE_ROW) {
+        VOTED = sqlite3_column_int(stmt, 0);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
+    return VOTED;
+}
+
+void room_query_vote(int room_id, int player_id, int answer) {
+    // INSERT INTO guestroom_votes (user_id,room_id,vote) VALUES (?,?,?)
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare_v2(conn, "INSERT INTO guestroom_votes (user_id,room_id,vote) VALUES (?,?,?)", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, player_id);
+        sqlite3_bind_int(stmt, 2, room_id);
+        sqlite3_bind_int(stmt, 3, answer);
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+}
+
+int room_query_count_votes(int room_id) {
+    // SELECT sum(vote) FROM guestroom_votes WHERE room_id = ? LIMIT 1
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    int VOTE_COUNT = -1;
+    int status = sqlite3_prepare_v2(conn, " SELECT sum(vote) FROM guestroom_votes WHERE room_id = ? LIMIT 1", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int(stmt, 1, room_id);
+    }
+
+    int step = db_check_step(sqlite3_step(stmt), conn, stmt);
+
+    if (step == SQLITE_ROW) {
+        VOTE_COUNT = sqlite3_column_int(stmt, 0);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
+    return VOTE_COUNT;
+}
+
+/**
+ * Get room categories
+ */
+void room_query_get_categories() {
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare_v2(conn, "SELECT id, parent_id, name, public_spaces, allow_trading, minrole_access,minrole_setflatcat FROM rooms_categories", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
+
+    if (db_check_prepare(status, conn) != SQLITE_OK) {
+        fprintf(stderr, "Could not load categories, invalid query.\n");
+        return;
+    }
+
+    while (true) {
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
+
+        if (status == SQLITE_DONE) {
+            break;
+        }
+
+        room_category *category = category_create(
+            sqlite3_column_int(stmt, 0),
+            sqlite3_column_int(stmt, 1),
+            (char*)sqlite3_column_text(stmt, 2),
+            sqlite3_column_int(stmt, 3),
+            sqlite3_column_int(stmt, 4),
+            sqlite3_column_int(stmt, 5),
+            sqlite3_column_int(stmt, 6)
+        );
+
+        category_manager_add(category);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void query_room_save(room *room) {
@@ -287,30 +379,6 @@ void query_room_save(room *room) {
 
     db_check_finalize(sqlite3_finalize(stmt), conn);
 }
-
-room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt) {
-    room_data *room_data = room_create_data(
-            room,
-            room->room_id,
-            sqlite3_column_int(stmt, 1),
-            sqlite3_column_int(stmt, 2),
-            (char*)sqlite3_column_text(stmt, 3),
-            (char*)sqlite3_column_text(stmt, 4),
-            (char*)sqlite3_column_text(stmt, 5),
-            (char*)sqlite3_column_text(stmt, 6),
-            sqlite3_column_int(stmt, 7),
-            sqlite3_column_int(stmt, 8),
-            sqlite3_column_int(stmt, 9),
-            sqlite3_column_int(stmt, 10),
-            sqlite3_column_int(stmt, 11),
-            (char*)sqlite3_column_text(stmt, 12),
-            sqlite3_column_int(stmt, 13),
-            sqlite3_column_int(stmt, 14)
-    );
-
-    return room_data;
-}
-
 
 void room_query_delete(int room_id) {
     sqlite3 *conn = global.DB;

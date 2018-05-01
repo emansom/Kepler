@@ -20,21 +20,22 @@ int room_query_check_voted(int room_id, int player_id) {
     int VOTED = -1;
     int status = sqlite3_prepare_v2(conn, "SELECT user_id FROM users_room_votes WHERE user_id = ? AND room_id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
+    int step = -1;
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
         sqlite3_bind_int(stmt, 2, room_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
 
-    int step = sqlite3_step(stmt);
+        step = db_check_step(sqlite3_step(stmt), conn, stmt);
+    }
 
     if (step == SQLITE_ROW) {
         VOTED = sqlite3_column_int(stmt, 0);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return VOTED;
 }
@@ -53,20 +54,17 @@ void room_query_vote(int room_id, int player_id, int answer) {
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO users_room_votes (user_id,room_id,vote) VALUES (?,?,?)", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
         sqlite3_bind_int(stmt, 2, room_id);
         sqlite3_bind_int(stmt, 3, answer);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 /**
@@ -83,20 +81,21 @@ int room_query_count_votes(int room_id) {
     int VOTE_COUNT = -1;
     int status = sqlite3_prepare_v2(conn, " SELECT sum(vote) FROM users_room_votes WHERE room_id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
+    int step = -1;
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, room_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
 
-    int step = sqlite3_step(stmt);
+        step = db_check_step(sqlite3_step(stmt), conn, stmt);
+    }
 
     if (step == SQLITE_ROW) {
         VOTE_COUNT = sqlite3_column_int(stmt, 0);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return VOTE_COUNT;
 }

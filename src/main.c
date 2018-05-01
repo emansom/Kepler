@@ -163,7 +163,7 @@ void exit_program() {
  */
 void dispose_program() {
     printf("Shutting down server!\n");
-    
+
     thpool_destroy(global.thread_manager.pool);
 
     player_manager_dispose();
