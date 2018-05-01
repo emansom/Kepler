@@ -77,7 +77,7 @@ void room_query_remove_favourite(int room_id, int player_id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "DELETE FROM user_room_favourites WHERE user_id = ? AND room_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "DELETE FROM users_room_favourites WHERE user_id = ? AND room_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
@@ -106,7 +106,7 @@ List *room_query_favourites(int player_id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "SELECT room_id FROM user_room_favourites WHERE user_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT room_id FROM users_room_favourites WHERE user_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
