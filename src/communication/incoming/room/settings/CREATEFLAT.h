@@ -37,7 +37,7 @@ void CREATEFLAT(session *player, incoming_message *message) {
         return;
     }
 
-    int room_id = query_room_create(player->player_data->id, room_name, room_select_model, room_show_name);
+    int room_id = room_query_create(player->player_data->id, room_name, room_select_model, room_show_name);
     room_manager_add(room_id);
 
     outgoing_message *om = om_create(59); // "@{"
