@@ -1,5 +1,8 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
+
+#include "shared.h"
 
 #include "sqlite3.h"
 
@@ -18,7 +21,7 @@
  *
  */
 void catalogue_query_pages() {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT id, min_role, name_index, name, layout, image_headline, image_teasers, body, label_pick, label_extra_s, label_extra_t FROM catalogue_pages", -1, &stmt, 0);
@@ -54,14 +57,14 @@ void catalogue_query_pages() {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 /**
  *
  */
 void catalogue_query_items() {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM catalogue_items", -1, &stmt, 0);
@@ -95,11 +98,11 @@ void catalogue_query_items() {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 void catalogue_query_packages() {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM catalogue_packages", -1, &stmt, 0);
@@ -128,5 +131,5 @@ void catalogue_query_packages() {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }

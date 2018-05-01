@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "list.h"
+#include "shared.h"
 #include "sqlite3.h"
 
 #include "database/db_connection.h"
@@ -16,7 +18,7 @@ List *item_query_get_inventory(int user_id) {
     List *items;
     list_new(&items);
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT id,room_id,definition_id,x,y,z,wall_position,rotation,custom_data FROM items WHERE user_id = ? AND room_id = 0", -1, &stmt, 0);
@@ -50,7 +52,7 @@ List *item_query_get_inventory(int user_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return items;
 }
@@ -59,7 +61,7 @@ List *item_query_get_room_items(int room_id) {
     List *items;
     list_new(&items);
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT id,room_id,definition_id,x,y,z,wall_position,rotation,custom_data FROM items WHERE room_id = ?", -1, &stmt, 0);
@@ -93,13 +95,13 @@ List *item_query_get_room_items(int room_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return items;
 }
 
 int item_query_create(int user_id, int room_id, int definition_id, int x, int y, double z, int rotation, char *custom_data) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int item_id = -1;
@@ -126,19 +128,18 @@ int item_query_create(int user_id, int room_id, int definition_id, int x, int y,
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-        return 1;
     } else {
         item_id = (int)sqlite3_last_insert_rowid(conn);
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return item_id;
 }
 
 void item_query_save(item *item) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE items SET room_id = ?, definition_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ?, wall_position = ? WHERE id = ? LIMIT 1", -1, &stmt, 0);
@@ -169,12 +170,12 @@ void item_query_save(item *item) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
 }
 
 void item_query_delete(int item_id) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "DELETE FROM items WHERE id = ? LIMIT 1", -1, &stmt, 0);
@@ -191,5 +192,5 @@ void item_query_delete(int item_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
