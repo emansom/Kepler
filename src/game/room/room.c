@@ -215,7 +215,6 @@ void room_enter(room *room, session *player) {
     if (room->room_schedule_job == NULL) {
         room->room_schedule_job = create_runnable();
         room->room_schedule_job->request = room_task;
-        room->room_schedule_job->room = room;
         room->room_schedule_job->room_id = room->room_id;
         room->room_schedule_job->millis = 500;
         thpool_add_work(global.thread_manager.pool, (void *) do_room_task, room->room_schedule_job);
@@ -497,8 +496,6 @@ void room_dispose(room *room, bool override) {
     list_destroy(room->items);
 
     room->users = NULL;
-    room->room_schedule_job = NULL;
 
     free(room);
-    room = NULL;
 }
