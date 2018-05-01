@@ -39,7 +39,7 @@ void RATEFLAT(session *player, incoming_message *im) {
 
     room *room = player->room_user->room;
 
-    // TODO: optimize this by not doing queries at all (rooms should have map of who voted)
+    // TODO: optimize this by not doing queries at all (room should have map of who voted)
     // Send new vote count only to users who have voted
     // because else their vote selector UI disappears
     for (size_t i = 0; i < list_size(room->users); i++) {
