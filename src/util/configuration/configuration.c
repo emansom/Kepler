@@ -1,4 +1,5 @@
 #include "shared.h"
+#include "log.h"
 #include "hashtable.h"
 #include "configuration.h"
 
@@ -14,8 +15,7 @@ void configuration_init() {
     FILE *file = fopen(CONFIGURATION_FILE, "r");
 
     if (!file) {
-        print_info("Configuration file does not exist, creating...\n");
-        print_info("\n");
+        log_info("Configuration file does not exist, creating...");
 
         configuration_new();
         file = fopen(CONFIGURATION_FILE, "r");
@@ -52,9 +52,7 @@ void configuration_new() {
     fprintf(fp, "roller.tick.default=%s\n", "6");
     fprintf(fp, "\n");
     fprintf(fp, "[Console]\n");
-    fprintf(fp, "show.incoming.packets=%s\n", "false");
-    fprintf(fp, "show.outgoing.packets=%s\n", "false");
-    fprintf(fp, "show.database.messages=%s\n", "false");
+    fprintf(fp, "debug=%s\n", "false");
     fclose(fp);
 }
 

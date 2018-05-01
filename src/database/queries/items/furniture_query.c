@@ -25,13 +25,10 @@ HashTable *furniture_query_definitions() {
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM items_definitions", -1, &stmt, 0);
 
-    if (status == SQLITE_OK) {
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
+    db_check_prepare(status, conn);
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -51,8 +48,7 @@ HashTable *furniture_query_definitions() {
         hashtable_add(furniture, &def->id, def);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return furniture;
 }

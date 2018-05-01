@@ -3,6 +3,8 @@
 #include <stdio.h>
 
 #include "shared.h"
+#include "list.h"
+#include "log.h"
 
 #include "communication/messages/outgoing_message.h"
 
@@ -12,7 +14,6 @@
 
 #include "util/stringbuilder.h"
 
-#include "list.h"
 #include "catalogue_package.h"
 
 void load_catalogue_packges(catalogue_item *item);
@@ -40,7 +41,7 @@ catalogue_item *catalogue_item_create(char *sale_code, int page_id, int order_id
     }
 
     if (item->definition == NULL) {
-        printf("WARNING! The catalogue item with sale code '%s' has no definition!\n", sale_code);
+        log_warn("WARNING! The catalogue item with sale code '%s' has no definition!", sale_code);
     }
     return item;
 }

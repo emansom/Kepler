@@ -23,20 +23,19 @@ char *player_query_username(int user_id) {
     char *username = NULL;
     int status = sqlite3_prepare_v2(conn, "SELECT username FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, user_id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    int step = sqlite3_step(stmt);
-
-    if (step == SQLITE_ROW) {
+    if (status == SQLITE_ROW) {
         username = strdup((char*)sqlite3_column_text(stmt, 0));
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return username;
 }
@@ -53,20 +52,19 @@ int player_query_id(char *username) {
     int USER_ID = -1;
     int status = sqlite3_prepare_v2(conn, "SELECT id FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    int step = sqlite3_step(stmt);
-
-    if (step == SQLITE_ROW) {
+    if (status == SQLITE_ROW) {
         USER_ID = sqlite3_column_int(stmt, 0);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return USER_ID;
 }
@@ -85,21 +83,21 @@ int player_query_login(char *username, char *password) {
     int SUCCESS = -1;
     int status = sqlite3_prepare_v2(conn, "SELECT id FROM users WHERE username = ? AND password = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, password, -1, SQLITE_STATIC);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    int step = sqlite3_step(stmt);
-
-    if (step == SQLITE_ROW) {
+    if (status == SQLITE_ROW) {
         SUCCESS = sqlite3_column_int(stmt, 0);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
     return SUCCESS;
 }
 
@@ -116,20 +114,20 @@ int player_query_sso(char *ticket) {
     int SUCCESS = -1;
     int status = sqlite3_prepare_v2(conn, "SELECT id FROM users WHERE sso_ticket = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, ticket, -1, SQLITE_STATIC);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    int step = sqlite3_step(stmt);
-
-    if (step == SQLITE_ROW) {
+    if (status == SQLITE_ROW) {
         SUCCESS = sqlite3_column_int(stmt, 0);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
     return SUCCESS;
 }
 
@@ -145,18 +143,17 @@ int player_query_exists_username(char *username) {
 
     int status = sqlite3_prepare_v2(conn, "SELECT id FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    int step = sqlite3_step(stmt);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
-
-    return step == SQLITE_ROW; // row exists
+    return status == SQLITE_ROW; // row exists
 }
 
 /**
@@ -172,15 +169,17 @@ player_data *player_query_data(int id) {
     player_data *player_data = NULL;
     int status = sqlite3_prepare_v2(conn, "SELECT id,username,password,figure,pool_figure,credits,motto,sex,tickets,film,rank,console_motto,last_online FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
 
-    int step = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
-    if (step == SQLITE_ROW) {
+        if (status != SQLITE_ROW) {
+            return NULL;
+        }
+
         player_data = player_create_data(
             sqlite3_column_int(stmt, 0),
             (char*)sqlite3_column_text(stmt, 1),
@@ -198,8 +197,7 @@ player_data *player_query_data(int id) {
         );
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return player_data;
 }
@@ -220,6 +218,8 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO users (username, password, sex, figure, pool_figure, last_online) VALUES (?,?,?,?,?,?)", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     char last_online[100];
     sprintf(last_online, "%lu", (unsigned long)time(NULL));
 
@@ -230,18 +230,17 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
         sqlite3_bind_text(stmt, 4, figure, strlen(figure), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 5, "", strlen(""), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 6, last_online, strlen(last_online), SQLITE_STATIC);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
+    int user_id = -1;
+
+    if (status == SQLITE_OK) {
+        user_id = (int)sqlite3_last_insert_rowid(conn);
     }
 
-    int user_id = (int)sqlite3_last_insert_rowid(conn);
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 
     return user_id;
 }
@@ -250,23 +249,20 @@ void query_session_save_looks(session *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", -1, &stmt, 0);\
+
+    db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, player->player_data->figure, strlen(player->player_data->figure), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, player->player_data->pool_figure, strlen(player->player_data->pool_figure), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 3, player->player_data->sex, strlen(player->player_data->sex), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 4, player->player_data->id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void player_query_save_last_online(session *player) {
@@ -275,22 +271,19 @@ void player_query_save_last_online(session *player) {
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET last_online = ? WHERE id = ?", -1, &stmt, 0);
 
-    char last_online[100];
-    sprintf(last_online, "%lu", (unsigned long)time(NULL));
+    db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
+        char last_online[100];
+        sprintf(last_online, "%lu", (unsigned long)time(NULL));
+
         sqlite3_bind_text(stmt, 1, last_online, strlen(last_online), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 2, player->player_data->id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        fprintf(stderr, "Could not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void player_query_save_motto(session *player) {
@@ -299,20 +292,17 @@ void player_query_save_motto(session *player) {
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET motto = ?, console_motto = ? WHERE id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, player->player_data->motto, strlen(player->player_data->motto), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, player->player_data->console_motto, strlen(player->player_data->console_motto), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 3, player->player_data->id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void player_query_save_currency(session *player) {
@@ -321,21 +311,18 @@ void player_query_save_currency(session *player) {
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET credits = ?, tickets = ?, film = ? WHERE id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player->player_data->credits);
         sqlite3_bind_int(stmt, 2, player->player_data->tickets);
         sqlite3_bind_int(stmt, 3, player->player_data->film);
         sqlite3_bind_int(stmt, 4, player->player_data->id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void player_query_save_tickets(int id, int tickets) {
@@ -344,17 +331,14 @@ void player_query_save_tickets(int id, int tickets) {
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET tickets = ? WHERE id = ?", -1, &stmt, 0);
 
+    db_check_prepare(status, conn);
+
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, tickets);
         sqlite3_bind_int(stmt, 2, id);
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    if (sqlite3_step(stmt) != SQLITE_DONE) {
-        printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-    }
-
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }

@@ -2,6 +2,7 @@
 
 #include "hashtable.h"
 #include "shared.h"
+#include "log.h"
 
 #include "game/player/player.h"
 #include "game/player/player_manager.h"
@@ -36,7 +37,7 @@ void server_on_connection_close(uv_handle_t *handle) {
     session *player = handle->data;
     player->disconnected = false;
 
-    printf("Client [%s] has disconnected\n", player->ip_address);
+    log_info("Client [%s] has disconnected", player->ip_address);
     player_cleanup(player);
 }
 
@@ -130,19 +131,19 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     uv_tcp_t *client = malloc(sizeof(uv_tcp_t));
     uv_tcp_init(uv_default_loop(), client);
 
-    struct sockaddr_in client_addr;    
+    struct sockaddr_in client_addr;
     int client_addr_length;
 
     uv_stream_t *handle = (uv_stream_t*)client;
     uv_tcp_getpeername((const uv_tcp_t*) handle, (struct sockaddr*)&client_addr, &client_addr_length);
-    
+
     char ip[256];
     uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
 
     session *p = player_manager_add(handle, ip);
     client->data = p;
-    
-    printf("Client [%s] has connected\n", p->ip_address);
+
+    log_info("Client [%s] has connected", p->ip_address);
     int result = uv_accept(server, handle);
 
     if(result == 0) {
@@ -186,11 +187,11 @@ void *listen_server(void *arguments)  {
  * @param server_thread the thread to initialise
  */
 void start_server(server_settings *settings, pthread_t *server_thread) {
-    print_info("Starting server on port %i...\n", settings->port);
+    log_info("Starting server on port %i...", settings->port);
 
     if (pthread_create(server_thread, NULL, &listen_server, (void*) settings) != 0) {
-        printf("Uh-oh!\n");
+        log_fatal("Uh-oh! Unable to spawn server thread");
     } else {
-        print_info("Server successfully started!\n", settings->port);
+        log_info("Server successfully started!", settings->port);
     }
 }

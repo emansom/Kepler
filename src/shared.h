@@ -51,6 +51,5 @@ bool is_numeric(const char*);
 bool has_numbers(const char*);
 bool has_allowed_characters(char *, char *);
 bool starts_with(const char *pre, const char *str);
-void print_info(const char *, ...);
 
 #endif

@@ -140,7 +140,7 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
-    //printf("User requested path %i, %i from path %i, %i in rooms %i.\n", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
+    //log_debug("User requested path %i, %i from path %i, %i in rooms %i.", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
 
     if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
         return;

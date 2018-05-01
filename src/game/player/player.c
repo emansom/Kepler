@@ -1,5 +1,10 @@
 #include <stdio.h>
 
+#include "uv.h"
+#include "list.h"
+#include "log.h"
+#include "shared.h"
+
 #include "game/inventory/inventory.h"
 #include "game/messenger/messenger.h"
 
@@ -17,11 +22,6 @@
 
 #include "server/server_listener.h"
 #include "database/queries/player_query.h"
-
-#include "uv.h"
-#include "list.h"
-
-#include "shared.h"
 
 /**
  * Creates a new player
@@ -111,14 +111,12 @@ void player_send(session *p, outgoing_message *om) {
         return;
     }
 
-    if (configuration_get_bool("show.outgoing.packets")) {
-        char *preview = strdup(om->sb->data);
-        replace_vulnerable_characters(&preview, true, '|');
+    char *preview = strdup(om->sb->data);
+    replace_vulnerable_characters(&preview, true, '|');
 
-        printf("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
+    log_debug("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
 
-        free(preview);
-    }
+    free(preview);
 
     om_finalise(om);
 

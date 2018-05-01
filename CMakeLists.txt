@@ -11,12 +11,14 @@ INCLUDE_DIRECTORIES(src)
 include_directories(${PROJECT_DIR}/lib/sqlite3/)
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/cthreadpool/)
+include_directories(${PROJECT_DIR}/lib/)
 link_directories(/usr/local/lib/)
 
 # Load source files for libraries
 file(GLOB sqlite3 ${PROJECT_DIR}/lib/sqlite3/*.c)
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
 file(GLOB cthreadpool ${PROJECT_DIR}/lib/cthreadpool/*.c)
+file(GLOB log ${PROJECT_DIR}/lib/log.c)
 
 # Kepler classes
 file(GLOB src ${PROJECT_DIR}/*.c)
@@ -51,10 +53,14 @@ file(GLOB texts ${PROJECT_DIR}/game/texts/*.c)
 # Tasks
 file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 
+# Enable color in log.c library
+add_definitions(-DLOG_USE_COLOR)
+
 add_executable(${EXECUTABLE_NAME}
 	${sqlite3}
         ${collections}
         ${cthreadpool}
+	${log}
 
         ${src}
         ${util}

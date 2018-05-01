@@ -26,14 +26,10 @@ void catalogue_query_pages() {
 
     int status = sqlite3_prepare_v2(conn, "SELECT id, min_role, name_index, name, layout, image_headline, image_teasers, body, label_pick, label_extra_s, label_extra_t FROM catalogue_pages", -1, &stmt, 0);
 
-    if (status == SQLITE_OK) {
-        // No binding needed here, sir!
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
+    db_check_prepare(status, conn);
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -56,8 +52,7 @@ void catalogue_query_pages() {
         catalogue_manager_add_page(page);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 /**
@@ -69,14 +64,10 @@ void catalogue_query_items() {
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM catalogue_items", -1, &stmt, 0);
 
-    if (status == SQLITE_OK) {
-        // No binding needed here, sir!
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
+    db_check_prepare(status, conn);
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -97,8 +88,7 @@ void catalogue_query_items() {
         catalogue_manager_add_item(item);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
 void catalogue_query_packages() {
@@ -107,14 +97,10 @@ void catalogue_query_packages() {
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM catalogue_packages", -1, &stmt, 0);
 
-    if (status == SQLITE_OK) {
-        // No binding needed here, sir!
-    } else {
-        fprintf(stderr, "Failed to execute statement: %s\n", sqlite3_errmsg(conn));
-    }
+    db_check_prepare(status, conn);
 
     while (true) {
-        status = sqlite3_step(stmt);
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
 
         if (status != SQLITE_ROW) {
             break;
@@ -130,6 +116,5 @@ void catalogue_query_packages() {
         catalogue_manager_add_package(package);
     }
 
-    sqlite3_finalize(stmt);
-    //sqlite3_close(conn);
+    db_check_finalize(sqlite3_finalize(stmt), conn);
 }

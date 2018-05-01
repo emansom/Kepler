@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "log.h"
+
 #include "game/items/item_manager.h"
 #include "catalogue_package.h"
 
@@ -13,7 +15,7 @@ catalogue_package *catalogue_package_create(char *salecode, int definition_id, i
     package->definition = item_manager_get_definition_by_id(definition_id);
 
     if (package->definition == NULL) {
-        printf("Warning! The package %s has no valid definition\n", package->sale_code);
+        log_warn("Warning! The package %s has no valid definition", package->sale_code);
     }
 
     return package;
