@@ -181,8 +181,6 @@ int dump_db (sqlite3 *db, char *filename)
                         strcat (cmd, new_data);
                         strcat (cmd, "'");
 
-                        printf("%s\n", new_data);
-
                         free(new_data);
                         free(temp);
                     }
