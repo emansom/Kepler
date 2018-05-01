@@ -32,10 +32,10 @@ int main(void) {
         print_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        print_info("Telling SQLite to use multi-thread mode\n");
+        print_info("Telling SQLite to use serialized mode\n");
 
-        if (sqlite3_config(SQLITE_CONFIG_MULTITHREAD) != SQLITE_OK) {
-            fprintf(stderr, "Could not configurate SQLite to use multi-thread mode\n");
+        if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
+            fprintf(stderr, "Could not configurate SQLite to use serialized mode\n");
             return EXIT_FAILURE;
         }
     }
@@ -46,6 +46,7 @@ int main(void) {
 
     if (con == NULL) {
         print_info("The connection to the database was unsuccessful, program aborted!\n");
+        sqlite3_close(con);
         return EXIT_FAILURE;
     } else {
         print_info("The connection to the database was successful!\n");
@@ -71,7 +72,8 @@ int main(void) {
         }
 
         sqlite3_finalize(stmt);
-        sqlite3_close(con);
+
+        global.DB = con;
     }
 
     print_info("\n");

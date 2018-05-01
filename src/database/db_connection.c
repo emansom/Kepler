@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include "sqlite3.h"
 #include "shared.h"
 
@@ -52,7 +53,8 @@ sqlite3 *db_create_connection() {
     }
 
     sqlite3 *db;
-    int rc = sqlite3_open_v2(configuration_get("database.filename"), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_NOMUTEX, NULL);
+
+    int rc = sqlite3_open_v2(configuration_get("database.filename"), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
 
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));
@@ -76,7 +78,7 @@ sqlite3 *db_create_connection() {
     }
 
     // Retry for 100ms long to get a mutex lock
-    sqlite3_busy_timeout(db, 100);
+    //sqlite3_busy_timeout(db, 100);
 
     if (file != NULL) {
         fclose(file);

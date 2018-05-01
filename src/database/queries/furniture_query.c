@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "hashtable.h"
-
+#include "shared.h"
 #include "sqlite3.h"
 
 #include "database/queries/furniture_query.h"
@@ -19,7 +20,7 @@ HashTable *furniture_query_definitions() {
     HashTable *furniture;
     hashtable_new(&furniture);
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM items_definitions", -1, &stmt, 0);
@@ -51,7 +52,7 @@ HashTable *furniture_query_definitions() {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return furniture;
 }

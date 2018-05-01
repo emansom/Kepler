@@ -1,9 +1,11 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "sqlite3.h"
 
 #include "list.h"
 #include "hashtable.h"
+#include "shared.h"
 
 #include "game/room/room.h"
 #include "game/room/room_manager.h"
@@ -22,7 +24,7 @@ room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt);
  *
  */
 void room_query_get_models() {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT door_x, door_y, door_z, door_dir, heightmap, model_id, model_name FROM rooms_models", -1, &stmt, 0);
@@ -52,7 +54,7 @@ void room_query_get_models() {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 /**
@@ -63,7 +65,7 @@ void room_query_get_models() {
 room *room_query_get_by_room_id(int room_id) {
     room *instance = NULL;
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE id = ? LIMIT 1", -1, &stmt, 0);
@@ -83,7 +85,7 @@ room *room_query_get_by_room_id(int room_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return instance;
 }
@@ -97,7 +99,7 @@ List *room_query_get_by_owner_id(int owner_id) {
     List *rooms;
     list_new(&rooms);
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE owner_id = ? ORDER BY id DESC", -1, &stmt, 0);
@@ -129,7 +131,7 @@ List *room_query_get_by_owner_id(int owner_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
     return rooms;
 }
 
@@ -142,7 +144,7 @@ List *room_query_recent_rooms(int limit, int category_id) {
     List *rooms;
     list_new(&rooms);
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE category = ? AND owner_id > 0 ORDER BY id DESC LIMIT ?", -1, &stmt, 0);
@@ -176,7 +178,7 @@ List *room_query_recent_rooms(int limit, int category_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
     return rooms;
 }
 
@@ -184,7 +186,7 @@ List *room_query_random_rooms(int limit) {
     List *rooms;
     list_new(&rooms);
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE owner_id > 0 ORDER BY RANDOM() LIMIT ?", -1, &stmt, 0);
@@ -217,7 +219,7 @@ List *room_query_random_rooms(int limit) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
     return rooms;
 }
 
@@ -246,7 +248,7 @@ room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt) {
 
 int room_query_check_voted(int room_id, int player_id) {
     // SELECT user_id FROM guestroom_votes WHERE user_id = ? AND room_id = ? LIMIT 1
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int VOTED = -1;
@@ -266,14 +268,14 @@ int room_query_check_voted(int room_id, int player_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return VOTED;
 }
 
 void room_query_vote(int room_id, int player_id, int answer) {
     // INSERT INTO guestroom_votes (user_id,room_id,vote) VALUES (?,?,?)
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO guestroom_votes (user_id,room_id,vote) VALUES (?,?,?)", -1, &stmt, 0);
@@ -291,12 +293,12 @@ void room_query_vote(int room_id, int player_id, int answer) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 int room_query_count_votes(int room_id) {
     // SELECT sum(vote) FROM guestroom_votes WHERE room_id = ? LIMIT 1
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int VOTE_COUNT = -1;
@@ -315,7 +317,7 @@ int room_query_count_votes(int room_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return VOTE_COUNT;
 }
@@ -324,7 +326,7 @@ int room_query_count_votes(int room_id) {
  * Get room categories
  */
 void room_query_get_categories() {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT id, parent_id, name, public_spaces, allow_trading, minrole_access,minrole_setflatcat FROM rooms_categories", -1, &stmt, 0);
@@ -354,11 +356,11 @@ void room_query_get_categories() {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 void query_room_save(room *room) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE rooms SET category = ?, name = ?, description = ?, wallpaper = ?, floor = ?, showname = ?, superusers = ?, accesstype = ?, password = ?, visitors_max = ? WHERE id = ?", -1, &stmt, 0);
@@ -381,11 +383,11 @@ void query_room_save(room *room) {
 
     sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 void room_query_delete(int room_id) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "DELETE FROM rooms WHERE id = ?", -1, &stmt, 0);
@@ -398,5 +400,5 @@ void room_query_delete(int room_id) {
 
     sqlite3_step(stmt);
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }

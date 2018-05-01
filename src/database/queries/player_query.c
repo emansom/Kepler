@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <time.h>
+#include <stdbool.h>
 
 #include "sqlite3.h"
+#include "shared.h"
 
 #include "game/player/player.h"
 
@@ -15,7 +17,7 @@
  * @return
  */
 char *player_query_username(int user_id) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     char *username = NULL;
@@ -34,7 +36,7 @@ char *player_query_username(int user_id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return username;
 }
@@ -45,7 +47,7 @@ char *player_query_username(int user_id) {
  * @return
  */
 int player_query_id(char *username) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int USER_ID = -1;
@@ -64,7 +66,7 @@ int player_query_id(char *username) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return USER_ID;
 }
@@ -77,7 +79,7 @@ int player_query_id(char *username) {
  * @return the user id, -1 if not successful
  */
 int player_query_login(char *username, char *password) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int SUCCESS = -1;
@@ -97,7 +99,7 @@ int player_query_login(char *username, char *password) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
     return SUCCESS;
 }
 
@@ -108,7 +110,7 @@ int player_query_login(char *username, char *password) {
  * @return the user id, -1 if not successful
  */
 int player_query_sso(char *ticket) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int SUCCESS = -1;
@@ -127,7 +129,7 @@ int player_query_sso(char *ticket) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
     return SUCCESS;
 }
 
@@ -138,7 +140,7 @@ int player_query_sso(char *ticket) {
  * @return true, if successful
  */
 int player_query_exists_username(char *username) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT id FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
@@ -152,7 +154,7 @@ int player_query_exists_username(char *username) {
     int step = sqlite3_step(stmt);
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return step == SQLITE_ROW; // row exists
 }
@@ -164,7 +166,7 @@ int player_query_exists_username(char *username) {
  * @return the player data struct
  */
 player_data *player_query_data(int id) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     player_data *player_data = NULL;
@@ -197,7 +199,7 @@ player_data *player_query_data(int id) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return player_data;
 }
@@ -213,7 +215,7 @@ player_data *player_query_data(int id) {
  * @return the inserted player id
  */
 int player_query_create(char *username, char *figure, char *gender, char *password) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO users (username, password, sex, figure, pool_figure, last_online) VALUES (?,?,?,?,?,?)", -1, &stmt, 0);
@@ -239,13 +241,13 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
     int user_id = (int)sqlite3_last_insert_rowid(conn);
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return user_id;
 }
 
 void query_session_save_looks(session *player) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", -1, &stmt, 0);
@@ -264,11 +266,11 @@ void query_session_save_looks(session *player) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 void player_query_save_last_online(session *player) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET last_online = ? WHERE id = ?", -1, &stmt, 0);
@@ -288,11 +290,11 @@ void player_query_save_last_online(session *player) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 void player_query_save_motto(session *player) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET motto = ?, console_motto = ? WHERE id = ?", -1, &stmt, 0);
@@ -310,11 +312,11 @@ void player_query_save_motto(session *player) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 void player_query_save_currency(session *player) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET credits = ?, tickets = ?, film = ? WHERE id = ?", -1, &stmt, 0);
@@ -333,11 +335,11 @@ void player_query_save_currency(session *player) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }
 
 void player_query_save_tickets(int id, int tickets) {
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "UPDATE users SET tickets = ? WHERE id = ?", -1, &stmt, 0);
@@ -354,5 +356,5 @@ void player_query_save_tickets(int id, int tickets) {
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 }

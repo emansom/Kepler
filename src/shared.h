@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include "sqlite3.h"
 
 #include "game/items/item_manager.h"
 #include "game/player/player_manager.h"
@@ -19,6 +20,8 @@
 
 #define PREFIX "Kepler"
 
+typedef struct sqlite3 sqlite3;
+
 typedef struct server_s {
     struct thread_manager thread_manager;
     struct player_manager player_manager;
@@ -29,6 +32,7 @@ typedef struct server_s {
     struct item_manager item_manager;
     struct texts_manager texts_manager;
     struct configuration configuration;
+    struct sqlite3 *DB;
 } server;
 
 server global;

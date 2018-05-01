@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 #include "sqlite3.h"
+#include "shared.h"
 
 #include "game/room/room.h"
 #include "database/queries/room_user_query.h"
@@ -17,7 +19,7 @@ int query_room_create(int owner_id, char *room_name, char *room_model, char *roo
         showname = 0;
     }
 
-    sqlite3 *conn = db_create_connection();
+    sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "INSERT INTO rooms (owner_id, name, description, model, showname, password) VALUES (?,?,?,?,?, '')", -1, &stmt, 0);
@@ -34,13 +36,12 @@ int query_room_create(int owner_id, char *room_name, char *room_model, char *roo
 
     if (sqlite3_step(stmt) != SQLITE_DONE) {
         printf("\nCould not step (execute) stmt. %s\n", sqlite3_errmsg(conn));
-        return 1;
     } else {
         room_id = (int)sqlite3_last_insert_rowid(conn);
     }
 
     sqlite3_finalize(stmt);
-    sqlite3_close(conn);
+    //sqlite3_close(conn);
 
     return room_id;
 }
