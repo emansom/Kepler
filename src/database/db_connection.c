@@ -47,14 +47,14 @@ sqlite3 *db_create_connection() {
     int run_query = 0;
     char *err_msg = 0;
 
-    if (!(file = fopen(configuration_get("database.filename"), "r"))) {
+    if (!(file = fopen(configuration_get_string("database.filename"), "r"))) {
         print_info("Database does not exist, creating...\n");
         run_query = 1;
     }
 
     sqlite3 *db;
 
-    int rc = sqlite3_open_v2(configuration_get("database.filename"), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
+    int rc = sqlite3_open_v2(configuration_get_string("database.filename"), &db, SQLITE_OPEN_READWRITE | SQLITE_OPEN_CREATE | SQLITE_OPEN_FULLMUTEX, NULL);
 
     if (rc != SQLITE_OK) {
         fprintf(stderr, "Cannot open database: %s\n", sqlite3_errmsg(db));

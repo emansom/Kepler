@@ -4,6 +4,10 @@
 
 #define CONFIGURATION_FILE "config.ini"
 
+/**
+ * Loads the configuration, will create a fresh file if
+ * the config file cannot be found.
+ */
 void configuration_init() {
     hashtable_new(&global.configuration.entries);
 
@@ -24,10 +28,15 @@ void configuration_init() {
     }
 }
 
+/**
+ * This command is called automatically to create a new config file
+ * with default settings.
+ */
 void configuration_new() {
     FILE *fp = fopen(CONFIGURATION_FILE, "wb");
     fprintf(fp, "[Database]\n");
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
+    fprintf(fp, "database.logging=%s\n", "Kepler.db");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.port=%i\n", 12321);
@@ -45,6 +54,11 @@ void configuration_new() {
     fclose(fp);
 }
 
+/**
+ * Read the configuration file with a key/value system seperated by '='
+ *
+ * @param file the file handle to create for
+ */
 void configuration_read(FILE *file) {
     char *line = NULL;
     size_t len = 0;
@@ -72,19 +86,31 @@ void configuration_read(FILE *file) {
     free(line);
 }
 
-char *configuration_get(char *key) {
+/**
+ * Gets a string by its key in the configuration. Will return NULL
+ * if the key could not be found.
+ *
+ * @param key the key to find the value for
+ * @return the value, if successful
+ */
+char *configuration_get_string(char *key) {
     if (hashtable_contains_key(global.configuration.entries, key)) {
         char *value;
         hashtable_get(global.configuration.entries, key, (void*)&value);
 
-        if (is_numeric(value)) {
-            return NULL;
-        } else {
-            return value;
-        }
+        return value;
     }
+
+    return NULL;
 }
 
+/**
+ * Gets a integer by its key in the configuration. Will return -1
+ * if the key could not be found.
+ *
+ * @param key the key to find the value for
+ * @return the value, if successful
+ */
 int configuration_get_number(char *key) {
     if (hashtable_contains_key(global.configuration.entries, key)) {
         char *value;
@@ -95,5 +121,5 @@ int configuration_get_number(char *key) {
         }
     }
 
-    return 0;
+    return -1;
 }

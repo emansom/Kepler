@@ -90,7 +90,7 @@ void player_login(session *player) {
     om_cleanup(om);
 
     if (configuration_get_number("welcome.message.enabled")) {
-        char *welcome_template = configuration_get("welcome.message.content");
+        char *welcome_template = configuration_get_string("welcome.message.content");
         char *welcome_custom = replace(welcome_template, "%username%", player->player_data->username);
 
         send_alert(player, welcome_custom);

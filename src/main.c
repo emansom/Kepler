@@ -91,7 +91,7 @@ int main(void) {
     print_info("\n");
 
     server_settings *settings = malloc(sizeof(server_settings));
-    strcpy(settings->ip, configuration_get("server.ip.address"));
+    strcpy(settings->ip, configuration_get_string("server.ip.address"));
     settings->port = configuration_get_number("server.port");
 
     pthread_t server_thread;
