@@ -1,7 +1,7 @@
 #include "shared.h"
 #include "list.h"
 
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
 
 #include "game/items/item.h"
 #include "game/items/items_data_parser.h"

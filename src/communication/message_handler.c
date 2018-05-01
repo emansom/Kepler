@@ -44,6 +44,9 @@
 #include "communication/incoming/navigator/SUSERF.h"
 #include "communication/incoming/navigator/GETUSERFLATCATS.h"
 #include "communication/incoming/navigator/RECOMMENDED_ROOMS.h"
+#include "communication/incoming/navigator/ADD_FAVOURITE_ROOM.h"
+#include "communication/incoming/navigator/REMOVE_FAVOURITE_ROOM.h"
+#include "communication/incoming/navigator/GETFVRF.h"
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
@@ -154,6 +157,9 @@ void message_handler_init() {
     message_requests[16] = SUSERF;
     message_requests[151] = GETUSERFLATCATS;
     message_requests[264] = RECOMMENDED_ROOMS;
+    message_requests[19] = ADD_FAVOURITE_ROOM;
+    message_requests[20] = REMOVE_FAVOURITE_ROOM;
+    message_requests[18] = GETFVRF;
 
     // Room
     message_requests[182] = GETINTERST;

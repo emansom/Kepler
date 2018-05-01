@@ -8,7 +8,7 @@
 #include "game/room/room.h"
 #include "game/items/definition/item_definition.h"
 
-#include "database/queries/item_query.h"
+#include "database/queries/items/item_query.h"
 
 List *room_item_manager_floor_items(room *room) {
     List *items;

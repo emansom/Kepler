@@ -1096,7 +1096,7 @@ enum cc_stat array_zip_iter_add(ArrayZipIter *iter, void *e1, void *e2)
     Array  *ar1  = iter->ar1;
     Array  *ar2  = iter->ar2;
 
-    /* Make sure both array buffers have room */
+    /* Make sure both array buffers have rooms */
     if ((ar1->size == ar1->capacity && (expand_capacity(ar1) != CC_OK)) ||
             (ar2->size == ar2->capacity && (expand_capacity(ar2) != CC_OK)))
         return CC_ERR_ALLOC;

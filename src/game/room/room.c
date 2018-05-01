@@ -33,7 +33,9 @@
 #include "game/pathfinder/coord.h"
 
 #include "database/queries/player_query.h"
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
+#include "database/queries/rooms/room_vote_query.h"
+
 #include "communication/messages/outgoing_message.h"
 
 void room_load_data(room *room);
@@ -119,6 +121,48 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
     return data;
 }
 
+void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
+    if (list_size(instance->room_data->model_data->public_items) > 0) {
+        om_write_int(navigator, instance->room_data->id); // rooms id
+        om_write_int(navigator, 1);
+        om_write_str(navigator, instance->room_data->name);
+        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+        om_write_int(navigator, instance->room_data->category); // category id
+        om_write_str(navigator, instance->room_data->description); // description
+        om_write_int(navigator, instance->room_data->id); // rooms id
+        om_write_int(navigator, 0);
+        om_write_str(navigator, instance->room_data->ccts);
+        om_write_int(navigator, 0);
+        om_write_int(navigator, 1);
+    } else {
+        om_write_int(navigator, instance->room_data->id); // rooms id
+        om_write_str(navigator, instance->room_data->name);
+
+        if (player_id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
+            om_write_str(navigator, instance->room_data->owner_name); // rooms owner
+        } else {
+            om_write_str(navigator, "-"); // rooms owner
+        }
+
+        if (instance->room_data->accesstype == 2) {
+            om_write_str(navigator, "password");
+        }
+
+        if (instance->room_data->accesstype == 1) {
+            om_write_str(navigator, "closed");
+        }
+
+        if (instance->room_data->accesstype == 0) {
+            om_write_str(navigator, "open");
+        }
+
+        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
+        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+        om_write_str(navigator, instance->room_data->description); // description
+    }
+}
+
 /**
  * Used to load data if they're the first to enter the room.
  *
@@ -136,6 +180,7 @@ void room_load_data(room *room) {
  * @param player the player
  */
 void room_enter(room *room, session *player) {
+    // Leave other room
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player, false);
     }
@@ -184,16 +229,16 @@ void room_enter(room *room, session *player) {
  * Leave room handler, will make room and id for the room user reset back to NULL and 0.
  * And remove the character from the room.
  */
-void room_leave(room *room, session *room_player, bool hotel_view) {
-    if (!list_contains(room->users, room_player)) {
+void room_leave(room *room, session *player, bool hotel_view) {
+    if (!list_contains(room->users, player)) {
         return;
     }
 
-    list_remove(room->users, room_player, NULL);
+    list_remove(room->users, player, NULL);
     room->room_data->visitors_now = (int) list_size(room->users);
 
     // Remove current user from tile
-    room_tile *current_tile = room->room_map->map[room_player->room_user->position->x][room_player->room_user->position->y];
+    room_tile *current_tile = room->room_map->map[player->room_user->position->x][player->room_user->position->y];
     current_tile->entity = NULL;
 
     outgoing_message *om;
@@ -210,21 +255,19 @@ void room_leave(room *room, session *room_player, bool hotel_view) {
         }
     }
 
-    // Reset room user
-    room_user_reset(room_player->room_user);
-
-    // Make figure vanish from the room
+    // Make figure vanish from the rooms
     om = om_create(29); // "@]"
-    sb_add_int(om->sb, room_player->room_user->instance_id);
+    sb_add_int(om->sb, player->room_user->instance_id);
     room_send(room, om);
 
-    room_player->room_user->room = NULL;
+    // Reset rooms user
+    room_user_reset(player->room_user);
     room_dispose(room, false);
 
     // Go to hotel view, if told so.
     if (hotel_view) {
         om = om_create(18); // "@R"
-        player_send(room_player, om);
+        player_send(player, om);
         om_cleanup(om);
     }
 }
@@ -303,7 +346,7 @@ void room_load(room *room, session *player) {
         }
     }
 
-    // TODO: move votes to room object and load on initialization to reduce query load
+    // TODO: move votes to rooms object and load on initialization to reduce query load
 
     // Check if already voted, return if voted
     int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
@@ -342,7 +385,7 @@ bool room_is_owner(room *room, int user_id) {
  * @return true, if successful
  */
 bool room_has_rights(room *room, int user_id) {
-    if (room->room_data->owner_id == user_id) { // Of course room owners have rights, duh!
+    if (room->room_data->owner_id == user_id) { // Of course rooms owners have rights, duh!
         return true;
     }
 
@@ -419,7 +462,7 @@ void room_dispose(room *room, bool override) {
     room->tick = 0;
     room_map_destroy(room);
 
-    if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public room model
+    if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public rooms model
         return; // Prevent public rooms
     }
 

@@ -27,8 +27,12 @@ file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
 file(GLOB encoding ${PROJECT_DIR}/util/encoding/*.c)
 file(GLOB database ${PROJECT_DIR}/database/*.c)
-file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
 file(GLOB pathfinder ${PROJECT_DIR}/game/pathfinder/*.c)
+
+# Query classes
+file(GLOB queries ${PROJECT_DIR}/database/queries/*.c)
+file(GLOB queries_items ${PROJECT_DIR}/database/queries/items/*.c)
+file(GLOB queries_rooms ${PROJECT_DIR}/database/queries/rooms/*.c)
 
 # Kepler managers
 file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
@@ -60,8 +64,11 @@ add_executable(${EXECUTABLE_NAME}
         ${server}
         ${encoding}
         ${database}
-        ${queries}
         ${pathfinder}
+
+		${queries}
+		${queries_items}
+		${queries_rooms}
 
         ${players}
         ${room}

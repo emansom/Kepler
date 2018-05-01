@@ -1196,7 +1196,7 @@ enum cc_stat deque_zip_iter_add(DequeZipIter *iter, void *e1, void *e2)
         return CC_ERR_OUT_OF_RANGE;
 
     /* While this check is performed by a call to deque_add_at, it is necessary to know
-       in advance whether both deque buffers have enough room before inserting new elements
+       in advance whether both deque buffers have enough rooms before inserting new elements
        because this operation must insert either both elements, or none.*/
     if ((iter->d1->capacity == iter->d1->size && expand_capacity(iter->d1) != CC_OK) &&
         (iter->d2->capacity == iter->d2->size && expand_capacity(iter->d2) != CC_OK)) {

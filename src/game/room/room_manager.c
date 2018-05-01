@@ -4,7 +4,7 @@
 #include "list.h"
 
 #include "room.h"
-#include "database/queries/room_query.h"
+#include "database/queries/rooms/room_query.h"
 
 void room_manager_add_public_rooms();
 
@@ -51,8 +51,8 @@ void room_manager_add(int room_id) {
 }
 
 /*
- * Add rooms by user id, will check if the room exists
- * before adding a new room.
+ * Add rooms by user id, will check if the rooms exists
+ * before adding a new rooms.
  */
 void room_manager_add_by_user_id(int user_id) {
     List *rooms = room_query_get_by_owner_id(user_id);

@@ -24,23 +24,23 @@ void GETFLATINFO(session *player, incoming_message *message) {
     }
 
     outgoing_message *flat_info = om_create(54); // "@v"
-    om_write_int(flat_info, room->room_data->superusers); // flat all rights
-    om_write_int(flat_info, room->room_data->accesstype); // room state
-    om_write_int(flat_info, room->room_data->id); // room id
+    om_write_int(flat_info, room->room_data->superusers);
+    om_write_int(flat_info, room->room_data->accesstype);
+    om_write_int(flat_info, room->room_data->id);
 
     if (player->player_data->id == room->room_data->owner_id || room->room_data->show_name == 1) {
-        om_write_str(flat_info, room->room_data->owner_name); // room owner
+        om_write_str(flat_info, room->room_data->owner_name);
     } else {
-        om_write_str(flat_info, "-"); // room owner
+        om_write_str(flat_info, "-");
     }
 
-    om_write_str(flat_info, room->room_data->model); // room model
-    om_write_str(flat_info, room->room_data->name); // room name
-    om_write_str(flat_info, room->room_data->description); // room description
-    om_write_int(flat_info, room->room_data->show_name); // show owner name
+    om_write_str(flat_info, room->room_data->model);
+    om_write_str(flat_info, room->room_data->name);
+    om_write_str(flat_info, room->room_data->description);
+    om_write_int(flat_info, room->room_data->show_name);
     om_write_int(flat_info, 1); // has trading
-    om_write_int(flat_info, room->room_data->visitors_now); // current visitors
-    om_write_int(flat_info, room->room_data->visitors_max); // max visitors
+    om_write_int(flat_info, room->room_data->visitors_now); 
+    om_write_int(flat_info, room->room_data->visitors_max);
     player_send(player, flat_info);
     om_cleanup(flat_info);
 

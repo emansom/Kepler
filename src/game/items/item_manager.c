@@ -1,7 +1,7 @@
 #include "shared.h"
 
-#include "database/queries/item_query.h"
-#include "database/queries/furniture_query.h"
+#include "database/queries/items/item_query.h"
+#include "database/queries/items/furniture_query.h"
 
 #include "item_manager.h"
 #include "item.h"

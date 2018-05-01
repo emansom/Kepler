@@ -5,7 +5,7 @@
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
 
-bool ring_doorbell_alerted(room*, session*);
+bool ring_doorbell_alerted(room *room, session *ringing);
 
 void TRYFLAT(session *player, incoming_message *message) {
     int room_id = 0;
@@ -63,7 +63,12 @@ void TRYFLAT(session *player, incoming_message *message) {
         }
     }
 
-    player->room_user->authenticate_id = room->room_id;
+    // Leave other room
+    if (player->room_user->room != NULL) {
+        room_leave(player->room_user->room, player, false);
+    }
+
+    player->room_user->authenticate_id = room_id;
 
     outgoing_message *interest = om_create(41); // "@i"
     player_send(player, interest);

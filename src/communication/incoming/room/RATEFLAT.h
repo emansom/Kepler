@@ -8,6 +8,8 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
+#include "database/queries/rooms/room_vote_query.h"
+
 void RATEFLAT(session *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
@@ -58,5 +60,5 @@ void RATEFLAT(session *player, incoming_message *im) {
         om_cleanup(om);
     }
 
-    // TODO: loop through all room users and send new vote count to users who haven't voted yet
+    // TODO: loop through all rooms users and send new vote count to users who haven't voted yet
 }

@@ -265,7 +265,7 @@ int messenger_query_new_message(int receiver_id, int sender_id, char *body, char
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }
 
-    int row_id = sqlite3_last_insert_rowid(conn);
+    int row_id = (int) sqlite3_last_insert_rowid(conn);
 
     db_check_finalize(sqlite3_finalize(stmt), conn);
 

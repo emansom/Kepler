@@ -6,7 +6,7 @@
 #include "shared.h"
 #include "sqlite3.h"
 
-#include "database/queries/furniture_query.h"
+#include "furniture_query.h"
 #include "database/db_connection.h"
 
 #include "game/items/definition/item_definition.h"

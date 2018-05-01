@@ -46,12 +46,13 @@ char* load_file(char const* path) {
  */
 sqlite3 *db_create_connection() {
     FILE *file = NULL;
-    int run_query = 0;
-    char *err_msg = 0;
+    char *err_msg = NULL;
+
+    bool run_query = false;
 
     if (!(file = fopen(configuration_get_string("database.filename"), "r"))) {
         print_info("Database does not exist, creating...\n");
-        run_query = 1;
+        run_query = true;
     }
 
     sqlite3 *db;
@@ -92,7 +93,7 @@ sqlite3 *db_create_connection() {
  * @param query the query to execute
  */
 int db_execute_query(char *query) {
-    char *err_msg = 0;
+    char *err_msg;
     int rc = sqlite3_exec(global.DB, query, 0, 0, &err_msg);
 
     if (rc != SQLITE_OK ) {

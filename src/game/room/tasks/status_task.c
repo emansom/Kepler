@@ -25,8 +25,8 @@ void status_task(room *room) {
         process_user_status((void*)room_player->room_user);
     }
 
-    /*if (room->tick % 3 == 0) {
-        do_roller_task(room);
+    /*if (rooms->tick % 3 == 0) {
+        do_roller_task(rooms);
     }*/
 }
 
