@@ -19,7 +19,7 @@ int room_query_check_favourite(int room_id, int player_id) {
     sqlite3_stmt *stmt;
 
     int VOTED = -1;
-    int status = sqlite3_prepare_v2(conn, "SELECT user_id FROM guestroom_favourites WHERE user_id = ? AND room_id = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT user_id FROM user_room_favourites WHERE user_id = ? AND room_id = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
@@ -50,7 +50,7 @@ void room_query_favourite(int room_id, int player_id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "INSERT INTO guestroom_favourites (user_id,room_id) VALUES (?,?)", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "INSERT INTO user_room_favourites (user_id,room_id) VALUES (?,?)", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
@@ -77,7 +77,7 @@ void room_query_remove_favourite(int room_id, int player_id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "DELETE FROM guestroom_favourites WHERE user_id = ? AND room_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "DELETE FROM user_room_favourites WHERE user_id = ? AND room_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
@@ -106,7 +106,7 @@ List *room_query_favourites(int player_id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "SELECT room_id FROM guestroom_favourites WHERE user_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT room_id FROM user_room_favourites WHERE user_id = ?", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);

@@ -1,4 +1,15 @@
 BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS `users_room_votes` (
+	`user_id`	INTEGER,
+	`room_id`	INTEGER,
+	`vote`	INTEGER
+);
+INSERT INTO `users_room_votes` VALUES (1,1050,-1);
+CREATE TABLE IF NOT EXISTS `users_room_favourites` (
+	`room_id`	INTEGER,
+	`user_id`	INTEGER
+);
+INSERT INTO `users_room_favourites` VALUES (1050,1);
 CREATE TABLE IF NOT EXISTS `users` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`username`	TEXT DEFAULT NULL,
@@ -15,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`last_online`	TEXT NOT NULL DEFAULT '0',
 	`sso_ticket`	TEXT
 );
-INSERT INTO `users` VALUES (1,'alex','123','1770118007270123000324018','ch=s02/53,51,44','M','de kepler whey','9065',66,0,7,'I''m a new xddd','1525171040','verysafe');
+INSERT INTO `users` VALUES (1,'alex','123','1770118007270123000324018','ch=s02/53,51,44','M','de kepler whey','9065',66,0,7,'I''m a new xddd','1525181115','verysafe');
 INSERT INTO `users` VALUES (2,'lol','123','1700118001270123000325517','','M','de kepler whey','177',2,0,1,'I''m a new user!','1525070333','ssohere');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
@@ -1920,15 +1931,6 @@ INSERT INTO `items` VALUES (161,1,1055,1106,'11','1',1,'',0,'');
 INSERT INTO `items` VALUES (162,1,0,1105,'0','0',0,'',0,'');
 INSERT INTO `items` VALUES (163,1,1055,1012,'9','1',0,'',2,'');
 INSERT INTO `items` VALUES (164,1,1055,1012,'11','3',0,'',0,'');
-CREATE TABLE IF NOT EXISTS `guestroom_votes` (
-	`user_id`	INTEGER,
-	`room_id`	INTEGER,
-	`vote`	INTEGER
-);
-CREATE TABLE IF NOT EXISTS `guestroom_favourites` (
-	`room_id`	INTEGER,
-	`user_id`	INTEGER
-);
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,
 	`order_id`	INTEGER,

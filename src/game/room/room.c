@@ -180,10 +180,6 @@ void room_load_data(room *room) {
  * @param player the player
  */
 void room_enter(room *room, session *player) {
-    if (player->room_user->room != NULL) {
-        room_leave(player->room_user->room, player, false);
-    }
-
     if (list_size(room->users) == 0) {
         room_load_data(room);
     }

@@ -51,7 +51,7 @@ void room_query_vote(int room_id, int player_id, int answer) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "INSERT INTO guestroom_votes (user_id,room_id,vote) VALUES (?,?,?)", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "INSERT INTO user_room_votes (user_id,room_id,vote) VALUES (?,?,?)", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, player_id);
@@ -81,7 +81,7 @@ int room_query_count_votes(int room_id) {
     sqlite3_stmt *stmt;
 
     int VOTE_COUNT = -1;
-    int status = sqlite3_prepare_v2(conn, " SELECT sum(vote) FROM guestroom_votes WHERE room_id = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, " SELECT sum(vote) FROM user_room_votes WHERE room_id = ? LIMIT 1", -1, &stmt, 0);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, room_id);
