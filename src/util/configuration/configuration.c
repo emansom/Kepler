@@ -43,7 +43,7 @@ void configuration_new() {
     fprintf(fp, "server.ip.address=%s\n", "127.0.0.1");
     fprintf(fp, "\n");
     fprintf(fp, "[Game]\n");
-    fprintf(fp, "sso.tickets.enabled=%s\n", "1");
+    fprintf(fp, "sso.tickets.enabled=%s\n", "false");
     fprintf(fp, "\n");
     fprintf(fp, "welcome.message.enabled=%s\n", "1");
     fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");
@@ -51,6 +51,10 @@ void configuration_new() {
     fprintf(fp, "# 1 tick = 500ms, 6 is 3 seconds\n");
     fprintf(fp, "roller.tick.default=%s\n", "6");
     fprintf(fp, "\n");
+    fprintf(fp, "[Console]\n");
+    fprintf(fp, "show.incoming.packets=%s\n", "false");
+    fprintf(fp, "show.outgoing.packets=%s\n", "false");
+    fprintf(fp, "show.database.messages=%s\n", "false");
     fclose(fp);
 }
 
@@ -102,6 +106,28 @@ char *configuration_get_string(char *key) {
     }
 
     return NULL;
+}
+
+/**
+ * Gets a boolean by its key in the configuration. Will return false
+ * if the key could not be found.
+ *
+ * @param key the key to find the value for
+ * @return the value, if successful
+ */
+bool configuration_get_bool(char *key) {
+    if (hashtable_contains_key(global.configuration.entries, key)) {
+        char *value;
+        hashtable_get(global.configuration.entries, key, (void*)&value);
+
+        if (is_numeric(value)) {
+            return strtol(value, NULL, 10) == 1 ? true : false;
+        } else {
+            return strcmp(value, "true") == 0;
+        }
+    }
+
+    return false;
 }
 
 /**

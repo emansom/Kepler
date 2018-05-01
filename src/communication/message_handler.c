@@ -118,7 +118,7 @@ void message_handler_init() {
     message_requests[4] = TRY_LOGIN;
     message_requests[49] = GDATE;
 
-    if (configuration_get_number("sso.tickets.enabled")) {
+    if (configuration_get_bool("sso.tickets.enabled")) {
         message_requests[204] = SSO;
     }
 
