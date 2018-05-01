@@ -77,9 +77,6 @@ sqlite3 *db_create_connection() {
         }
     }
 
-    // Retry for 100ms long to get a mutex lock
-    //sqlite3_busy_timeout(db, 100);
-
     if (file != NULL) {
         fclose(file);
     }
