@@ -21,7 +21,7 @@ void room_task(room *room) {
         status_task(room);
     }
 
-    if ((room->tick % (configuration_get_number("roller.tick.default") * 500)) == 0) {
+    if ((room->tick % (configuration_get_int("roller.tick.default") * 500)) == 0) {
         do_roller_task(room);
     }
 

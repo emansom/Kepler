@@ -45,7 +45,7 @@ void configuration_new() {
     fprintf(fp, "[Game]\n");
     fprintf(fp, "sso.tickets.enabled=%s\n", "false");
     fprintf(fp, "\n");
-    fprintf(fp, "welcome.message.enabled=%s\n", "1");
+    fprintf(fp, "welcome.message.enabled=%s\n", "true");
     fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");
     fprintf(fp, "\n");
     fprintf(fp, "# 1 tick = 500ms, 6 is 3 seconds\n");
@@ -53,6 +53,8 @@ void configuration_new() {
     fprintf(fp, "\n");
     fprintf(fp, "[Console]\n");
     fprintf(fp, "debug=%s\n", "false");
+    fprintf(fp, "debug.incoming.packets=%s\n", "false");
+    fprintf(fp, "debug.outgoing.packets=%s\n", "false");
     fclose(fp);
 }
 
@@ -135,7 +137,7 @@ bool configuration_get_bool(char *key) {
  * @param key the key to find the value for
  * @return the value, if successful
  */
-int configuration_get_number(char *key) {
+int configuration_get_int(char *key) {
     if (hashtable_contains_key(global.configuration.entries, key)) {
         char *value;
         hashtable_get(global.configuration.entries, key, (void *) &value);

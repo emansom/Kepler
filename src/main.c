@@ -59,11 +59,9 @@ int main(void) {
     }
 
     log_info("The connection to the database was successful!");
-
     log_debug("Telling SQLite to use WAL for journaling");
 
     sqlite3_stmt *stmt;
-
     int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
 
     db_check_prepare(status, con);
@@ -92,7 +90,7 @@ int main(void) {
 
     server_settings *settings = malloc(sizeof(server_settings));
     strcpy(settings->ip, configuration_get_string("server.ip.address"));
-    settings->port = configuration_get_number("server.port");
+    settings->port = configuration_get_int("server.port");
 
     pthread_t server_thread;
     start_server(settings, &server_thread);
