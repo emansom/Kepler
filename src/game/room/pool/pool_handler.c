@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include <util/stringbuilder.h>
+#include <time.h>
 
 #include "deque.h"
 
@@ -23,6 +23,8 @@
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_map.h"
 #include "game/room/mapping/room_tile.h"
+
+#include "util/stringbuilder.h"
 
 void pool_warp_swim(session*, item*, coord warp, bool exit);
 
@@ -86,6 +88,7 @@ void pool_item_walk_on(session *p, item *item) {
         room_send((room *) room_entity->room, target_diver);
 
         room_entity->walking_lock = true;
+        room_entity->lido_dive_timer = (int) (time(NULL) + 60); // Give the user 30 seconds or else they'll be kicked.
 
         outgoing_message *om = om_create(125); // "A}"
         player_send((session *) room_entity->player, om);

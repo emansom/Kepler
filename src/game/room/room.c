@@ -238,9 +238,9 @@ void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
-        list_get_at(room->users, i, (void*)&room_player);
-        player_send(room_player, message);
+        session *player;
+        list_get_at(room->users, i, (void*)&player);
+        player_send(player, message);
     }
 
     om_cleanup(message);

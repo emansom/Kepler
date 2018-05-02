@@ -33,6 +33,7 @@ typedef struct server_s {
     struct texts_manager texts_manager;
     struct configuration configuration;
     struct sqlite3 *DB;
+    bool is_shutdown;
 } server;
 
 server global;

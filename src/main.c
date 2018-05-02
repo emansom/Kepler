@@ -12,6 +12,7 @@
 #include "communication/message_handler.h"
 #include "database/db_connection.h"
 
+#include "game/game_thread.h"
 #include "game/player/player.h"
 #include "game/pathfinder/pathfinder.h"
 
@@ -74,7 +75,9 @@ int main(void) {
     }
 
     db_check_finalize(sqlite3_finalize(stmt), con);
+
     global.DB = con;
+    global.is_shutdown = false;
 
     log_info("Initialising various server managers...");
 
@@ -87,6 +90,9 @@ int main(void) {
     catalogue_manager_init();
     message_handler_init();
     create_thread_pool();
+
+    pthread_t game_thread;
+    game_thread_init(&game_thread);
 
     server_settings *settings = malloc(sizeof(server_settings));
     strcpy(settings->ip, configuration_get_string("server.ip.address"));

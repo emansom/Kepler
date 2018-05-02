@@ -24,9 +24,10 @@ typedef struct room_user_s {
     int is_walking;
     int is_typing;
     int needs_update;
-    int lido_vote;
     HashTable *statuses;
     bool walking_lock;
+    int lido_vote;
+    int lido_dive_timer;
 } room_user;
 
 typedef struct room_user_status_s {
