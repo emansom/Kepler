@@ -6,17 +6,19 @@
 #include <string.h>
 #include <stdio.h>
 
-#include "game/player/player.h"
 #include "room_user.h"
 
-#include "database/queries/player_query.h"
+#include "game/pathfinder/coord.h"
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_map.h"
 
 #include "game/room/manager/room_item_manager.h"
 #include "game/room/manager/room_entity_manager.h"
 
+#include "game/player/player.h"
 #include "game/items/item.h"
+
+#include "database/queries/player_query.h"
 
 /**
  * Create a room instance.
@@ -244,6 +246,29 @@ void room_send(room *room, outgoing_message *message) {
     }
 
     om_cleanup(message);
+}
+
+List *room_nearby_players(room *room, room_user *room_user, coord *position, int distance) {
+    List *players;
+    list_new(&players);
+
+    for (size_t i = 0; i < list_size(room->users); i++) {
+        session *player;
+        list_get_at(room->users, i, (void *) &player);
+
+        if (player->room_user->instance_id == room_user->instance_id) {
+            continue;
+        }
+
+        coord *current_point = room_user->position;
+        coord *player_point = player->room_user->position;
+
+        if (coord_distance_squared(*current_point, *player_point) <= distance) {
+            list_add(players, player);
+        }
+    }
+
+    return players;
 }
 
 /**

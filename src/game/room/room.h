@@ -3,6 +3,8 @@
 
 #include <stdbool.h>
 
+typedef struct room_user_s room_user;
+typedef struct coord_s coord;
 typedef struct list_s List;
 typedef struct session_s session;
 typedef struct room_model_s room_model;
@@ -50,6 +52,7 @@ bool room_has_rights(room *room, int user_id);
 void room_refresh_rights(room *room, session *player);
 void room_send(room*, outgoing_message*);
 void room_dispose(room*, bool force_dispose);
+List *room_nearby_players(room *room, room_user *room_user, coord *position, int distance);
 
 
 #endif

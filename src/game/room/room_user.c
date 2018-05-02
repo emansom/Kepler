@@ -2,8 +2,10 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <game/pathfinder/rotation.h>
 
 #include "hashtable.h"
+#include "list.h"
 #include "deque.h"
 
 #include "game/player/player.h"
@@ -67,6 +69,7 @@ void room_user_reset(room_user *room_user) {
     room_user->room_id = 0;
     room_user->room = NULL;
 
+    room_user->room_look_at_timer = -1;
     room_user->lido_vote = -1;
     room_user_reset_idle_timer(room_user);
 
@@ -205,7 +208,7 @@ void room_user_reset_idle_timer(room_user *room_user) {
  * @param room_user the room user to animate for
  * @param text the text to read for any gestures and to find animation times
  */
-void room_user_move_mouth(room_user *room_user, char *text) {
+void room_user_show_chat(room_user *room_user, char *text, bool is_shout) {
     int talk_duration = 1;
 
     if (strlen(text) > 1) {
@@ -259,7 +262,51 @@ void room_user_move_mouth(room_user *room_user, char *text) {
     }
 
     room_user_add_status(room_user, "talk", "", talk_duration, "", -1, -1);
+
+    List *players;
+
+    if (is_shout) {
+        players = room_user->room->users;
+    } else {
+        players = room_nearby_players(room_user->room, room_user, room_user->position, 10);
+    }
+
+    for (size_t i = 0; i < list_size(players); i++) {
+        session *player;
+        list_get_at(players, i, (void *) &player);
+
+        // Look at player talking
+        room_user_look(player->room_user, room_user->position);
+    }
+
     room_user->needs_update = true;
+
+    if (!is_shout) {
+        list_destroy(players);
+    }
+}
+
+void room_user_look(room_user *room_user, coord *towards) {
+    if (room_user->is_walking) {
+        return;
+    }
+
+    int diff = room_user->position->rotation - calculate_human_direction(room_user->position->x, room_user->position->y, towards->x, towards->y);
+
+
+    if ((room_user->position->rotation % 2) == 0) {
+
+        if (diff > 0) {
+            room_user->position->head_rotation = (room_user->position->rotation - 1);
+        } else if (diff < 0) {
+            room_user->position->head_rotation = (room_user->position->rotation + 1);
+        } else {
+            room_user->position->head_rotation = (room_user->position->rotation);
+        }
+    }
+
+    room_user->needs_update = true;
+    room_user->room_look_at_timer = (int) (time(NULL) + 6); // head reset back in 6 seconds
 }
 
 /**

@@ -50,7 +50,21 @@ coord *create_coord_height(int x, int y, double z) {
  * 
  * @return distance
  */
-int distance_squared(coord first, coord second) {
+int coord_distance_squared(coord first, coord second) {
+    int dx = first.x - second.x;
+    int dy = first.y - second.y;
+    return (dx * dx) + (dy * dy);
+}
+
+/**
+ * Get the distance squared between two points.
+ *
+ * @param first the first coordinate to compare
+ * @param second the second coordinate to compare
+ *
+ * @return distance
+ */
+int coord_distance(coord first, coord second) {
     int dx = first.x - second.x;
     int dy = first.y - second.y;
     return (dx * dx) + (dy * dy);
