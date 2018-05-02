@@ -169,10 +169,10 @@ List *room_query_get_by_owner_id(int owner_id) {
 }
 
 /**
- * Gets all rooms as a list by owner id.
+ * Gets all rooms through search either by the owner name sounding familiar or the room name.
  *
- * @param owner_id the owner id of the rooms
- * @return the list of rooms
+ * @param search_query the search query
+ * @return the list of rooms found
  */
 List *room_query_search(char *search_query) {
     List *rooms;
