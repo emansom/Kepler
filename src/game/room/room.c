@@ -1,45 +1,22 @@
-#include <stdlib.h>
-#include <string.h>
-#include <stdio.h>
-
 #include "shared.h"
 #include "log.h"
 #include "list.h"
 
-#include "util/stringbuilder.h"
-#include "util/threading.h"
-
-#include "deque.h"
-#include "thpool.h"
-
-#include "room.h"
-#include "room_user.h"
-
-#include "mapping/room_model.h"
-#include "mapping/room_model_manager.h"
-#include "mapping/room_map.h"
-#include "mapping/room_tile.h"
-
-#include "manager/room_item_manager.h"
-#include "manager/room_entity_manager.h"
-
-#include "room_task.h"
-#include "tasks/status_task.h"
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
 
 #include "game/player/player.h"
-#include "game/player/player_manager.h"
-
-#include "game/items/item.h"
-#include "game/navigator/navigator_category_manager.h"
-#include "game/pathfinder/coord.h"
+#include "room_user.h"
 
 #include "database/queries/player_query.h"
-#include "database/queries/rooms/room_query.h"
-#include "database/queries/rooms/room_vote_query.h"
+#include "game/room/mapping/room_model.h"
+#include "game/room/mapping/room_map.h"
 
-#include "communication/messages/outgoing_message.h"
+#include "game/room/manager/room_item_manager.h"
+#include "game/room/manager/room_entity_manager.h"
 
-void room_load_data(room *room);
+#include "game/items/item.h"
 
 /**
  * Create a room instance.
@@ -172,180 +149,6 @@ void room_append_data(room *instance, outgoing_message *navigator, int player_id
 void room_load_data(room *room) {
     room_item_manager_load(room);
     room_map_init(room);
-}
-
-/**
- * Room entry handler.
- *
- * @param om the outgoing message
- * @param player the player
- */
-void room_enter(room *room, session *player) {
-    // Leave other room
-    if (player->room_user->room != NULL) {
-        room_leave(player->room_user->room, player, false);
-    }
-
-    if (list_size(room->users) == 0) {
-        room_load_data(room);
-    }
-
-    if (room->room_data->model_data == NULL) {
-        log_debug("Room %i has invalid model data.", room->room_data->id);
-        return;
-    }
-
-    room_user *room_entity = player->room_user;
-
-    room_entity->room = room;
-    room_entity->room_id = room->room_id;
-    room_entity->instance_id = create_instance_id(room_entity);
-
-    room_entity->position->x = room->room_data->model_data->door_x;
-    room_entity->position->y = room->room_data->model_data->door_y;
-    room_entity->position->z = room->room_data->model_data->door_z;
-
-    coord_set_rotation(room_entity->position,
-                       room->room_data->model_data->door_dir,
-                       room->room_data->model_data->door_dir);
-
-    list_add(room->users, player);
-    room->room_data->visitors_now = (int) list_size(room->users);
-
-    if (room->room_schedule_job == NULL) {
-        room->room_schedule_job = create_runnable();
-        room->room_schedule_job->request = room_task;
-        room->room_schedule_job->room_id = room->room_id;
-        room->room_schedule_job->millis = 500;
-        thpool_add_work(global.thread_manager.pool, (void *) do_room_task, room->room_schedule_job);
-    }
-
-    /*outgoing_message *om = om_create(73); // "AI"
-    player_send(session, om);
-    om_cleanup(om);*/
-
-    outgoing_message *om = om_create(166); // "Bf"
-    om_write_str(om, "/client/");
-    player_send(player, om);
-    om_cleanup(om);
-
-    om = om_create(69); // "AE"
-    sb_add_string(om->sb, room->room_data->model);
-    sb_add_string(om->sb, " ");
-    sb_add_int(om->sb, room->room_id);
-    player_send(player, om);
-    om_cleanup(om);
-
-    if (room->room_data->wallpaper > 0) {
-        om = om_create(46); // "@n"
-        sb_add_string(om->sb, "wallpaper/");
-        sb_add_int(om->sb, room->room_data->wallpaper);
-        player_send(player, om);
-        om_cleanup(om);
-    }
-
-    if (room->room_data->floor > 0) {
-        om = om_create(46); // "@n"
-        sb_add_string(om->sb, "floor/");
-        sb_add_int(om->sb, room->room_data->floor);
-        player_send(player, om);
-        om_cleanup(om);
-    }
-
-    // TODO: move votes to rooms object and load on initialization to reduce query load
-    // Check if already voted, return if voted
-    int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
-    int vote_count = -1;
-
-    // If user already has voted, we sent total vote count
-    // else we sent -1, making the vote selector pop up
-    if (voted != -1) {
-        vote_count = room_query_count_votes(room->room_data->id);
-    }
-
-    om = om_create(345); // "EY"
-    om_write_int(om, vote_count);
-    player_send(player, om);
-    om_cleanup(om);
-
-    // Show new session current state of an item program for pools
-    if (list_size(room->room_data->model_data->public_items) > 0) {
-        for (size_t i = 0; i < list_size(room->items); i++) {
-            item *item;
-            list_get_at(room->items, i, (void *) &item);
-
-            if (!item->definition->behaviour->is_public_space_object) {
-                continue;
-            }
-
-            if (item->current_program != NULL &&
-                (strcmp(item->current_program, "curtains1") == 0
-                 || strcmp(item->current_program, "curtains2") == 0
-                 || strcmp(item->current_program, "door") == 0)) {
-
-                om = om_create(71); // "AG"
-                sb_add_string(om->sb, item->current_program);
-
-                if (item->current_program_state != NULL && strlen(item->current_program_state) > 0) {
-                    sb_add_string(om->sb, " ");
-                    om_write_str(om, item->current_program_state);
-                }
-
-                player_send(player, om);
-                om_cleanup(om);
-            }
-        }
-    }
-
-
-    player->room_user->authenticate_id = -1;
-}
-
-/**
- * Leave room handler, will make room and id for the room user reset back to NULL and 0.
- * And remove the character from the room.
- */
-void room_leave(room *room, session *player, bool hotel_view) {
-    if (!list_contains(room->users, player)) {
-        return;
-    }
-
-    list_remove(room->users, player, NULL);
-    room->room_data->visitors_now = (int) list_size(room->users);
-
-    // Remove current user from tile
-    room_tile *current_tile = room->room_map->map[player->room_user->position->x][player->room_user->position->y];
-    current_tile->entity = NULL;
-
-    outgoing_message *om;
-
-    // Reset item program state for pool items
-    item *item = current_tile->highest_item;
-    if (item != NULL) {
-        if (item->current_program != NULL &&
-            (strcmp(item->current_program, "curtains1") == 0
-             || strcmp(item->current_program, "curtains2") == 0
-             || strcmp(item->current_program, "door") == 0)) {
-
-            item_assign_program(item, "open");
-        }
-    }
-
-    // Make figure vanish from the rooms
-    om = om_create(29); // "@]"
-    sb_add_int(om->sb, player->room_user->instance_id);
-    room_send(room, om);
-
-    // Reset rooms user
-    room_user_reset(player->room_user);
-    room_dispose(room, false);
-
-    // Go to hotel view, if told so.
-    if (hotel_view) {
-        om = om_create(18); // "@R"
-        player_send(player, om);
-        om_cleanup(om);
-    }
 }
 
 /**

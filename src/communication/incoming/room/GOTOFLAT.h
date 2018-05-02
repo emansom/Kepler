@@ -2,6 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "game/room/room.h"
+#include "game/room/manager/room_entity_manager.h"
 
 void GOTOFLAT(session *player, incoming_message *message) {
     char *content = im_get_content(message);
@@ -30,6 +31,7 @@ void GOTOFLAT(session *player, incoming_message *message) {
     }
 
     room_enter(room, player);
+
     cleanup:
         free(content);
 }
