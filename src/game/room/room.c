@@ -454,7 +454,7 @@ void room_send(room *room, outgoing_message *message) {
  *
  * @param room the room instance.
  */
-void room_dispose(room *room, bool override) {
+void room_dispose(room *room, bool force_dispose) {
     if (list_size(room->users) > 0) {
         return;
     }
@@ -468,7 +468,7 @@ void room_dispose(room *room, bool override) {
 
     room_item_manager_dispose(room);
 
-    if (!override) {
+    if (!force_dispose) {
         if (player_manager_find_by_id(room->room_data->owner_id) != NULL) {
             return;
         }

@@ -36,7 +36,7 @@ void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
         }
     }
 
-    // Destroy list of favourite rooms
+    // Destroy list of recent rooms
     list_destroy(rooms);
 }
 
