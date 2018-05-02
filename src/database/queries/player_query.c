@@ -2,9 +2,12 @@
 #include <string.h>
 #include <time.h>
 #include <stdbool.h>
+#include <sodium.h>
 
 #include "sqlite3.h"
 #include "shared.h"
+#include "main.h"
+#include "log.h"
 
 #include "game/player/player.h"
 
@@ -80,8 +83,8 @@ int player_query_login(char *username, char *password) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int SUCCESS = -1;
-    int status = sqlite3_prepare_v2(conn, "SELECT id FROM users WHERE username = ? AND password = ? LIMIT 1", -1, &stmt, 0);
+    int USER_ID = -1;
+    int status = sqlite3_prepare_v2(conn, "SELECT id,password FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 
@@ -93,12 +96,18 @@ int player_query_login(char *username, char *password) {
     }
 
     if (status == SQLITE_ROW) {
-        SUCCESS = sqlite3_column_int(stmt, 0);
+        USER_ID = sqlite3_column_int(stmt, 0);
+        char *hashed_password = (char*)sqlite3_column_text(stmt, 1);
+
+        if (crypto_pwhash_str_verify(hashed_password, password, strlen(password)) != 0) {
+            // Wrong password
+            return -1;
+        }
     }
 
     db_check_finalize(sqlite3_finalize(stmt), conn);
 
-    return SUCCESS;
+    return USER_ID;
 }
 
 /**
@@ -213,6 +222,21 @@ player_data *player_query_data(int id) {
  * @return the inserted player id
  */
 int player_query_create(char *username, char *figure, char *gender, char *password) {
+    // Hash password
+    if (sodium_init() < 0) {
+        log_fatal("Could not initialize password hashing library");
+        exit_program();
+        return -1;
+    }
+
+    char hashed_password[crypto_pwhash_STRBYTES];
+
+    if (crypto_pwhash_str(hashed_password, password, strlen(password), crypto_pwhash_OPSLIMIT_INTERACTIVE, crypto_pwhash_MEMLIMIT_INTERACTIVE) != 0) {
+        log_fatal("Not enough memory to hash passwords");
+        exit_program();
+        return -1;
+    }
+
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
@@ -225,7 +249,7 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
 
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, strlen(username), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, password, strlen(password), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, hashed_password, strlen(hashed_password), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 3, gender, strlen(gender), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 4, figure, strlen(figure), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 5, "", strlen(""), SQLITE_STATIC);

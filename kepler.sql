@@ -26,8 +26,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`last_online`	TEXT NOT NULL DEFAULT '0',
 	`sso_ticket`	TEXT
 );
-INSERT INTO `users` VALUES (1,'alex','123','1770118007270123000324018','ch=s02/53,51,44','M','de kepler whey','9065',66,0,7,'I''m a new xddd','1525181115','verysafe');
-INSERT INTO `users` VALUES (2,'lol','123','1700118001270123000325517','','M','de kepler whey','177',2,0,1,'I''m a new user!','1525070333','ssohere');
+INSERT INTO `users` VALUES (1,'alex','$argon2i$v=19$m=4096,t=3,p=1$YWlkc2FpZHM$otU/z2U9LCJgMogRyvNqQCevBOZsSy/1I0aJGZhxGAE','1770118007270123000324018','ch=s02/53,51,44','M','de kepler whey','9065',66,0,7,'I''m a new xddd','1525181115','verysafe');
+INSERT INTO `users` VALUES (2,'lol','$argon2i$v=19$m=4096,t=3,p=1$dHlmdXNhYWE$dfrrRlYWlORmBWLHMAkJYg7jOGPiacX4vKomi1R94NE','1700118001270123000325517','','M','de kepler whey','177',2,0,1,'I''m a new user!','1525070333','ssohere');
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
 	`model_name`	TEXT,
