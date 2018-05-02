@@ -68,7 +68,7 @@ void GRPC(session *player, incoming_message *message) {
     player_query_save_currency(player);
 
     inventory *inv = (inventory *) player->inventory;
-    inventory_send(inv, "update", player);
+    inventory_send(inv, "last", player);
 
     cleanup:
     free(content);
