@@ -233,7 +233,7 @@ Client [0.0.0.0] incoming data: 149 / BU@M@C123@H@J07.04.1992@C@F123456*/
  * @param player the player struct
  */
 void message_handler_invoke(incoming_message *im, session *player) {
-    if (configuration_get_bool("debug.incoming.packets")) {
+    if (configuration_get_bool("debug")) {
         char *preview = strdup(im->data);
         replace_vulnerable_characters(&preview, true, '|');
         log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);

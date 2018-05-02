@@ -53,8 +53,6 @@ void configuration_new() {
     fprintf(fp, "\n");
     fprintf(fp, "[Console]\n");
     fprintf(fp, "debug=%s\n", "false");
-    fprintf(fp, "debug.incoming.packets=%s\n", "false");
-    fprintf(fp, "debug.outgoing.packets=%s\n", "false");
     fclose(fp);
 }
 
