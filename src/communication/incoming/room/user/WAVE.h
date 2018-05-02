@@ -17,6 +17,8 @@ void WAVE(session *player, incoming_message *im) {
         player->room_user->needs_update = 1;
     }
 
+    room_user_reset_idle_timer(player->room_user);
+
     /*if (!room_user_has_status(session->room_user, "wave")) {
         thpool_add_work(global.thread_manager.pool, (void*)wave_task, session->room_user);
     }*/

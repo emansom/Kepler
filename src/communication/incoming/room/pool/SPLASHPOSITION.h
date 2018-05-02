@@ -34,7 +34,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
     walk_destination.y = (int) strtol(content_y, NULL, 10);
 
     room_user *room_entity = diver->room_user;
-    room_entity->lido_dive_timer = -1;
+    room_user_reset_idle_timer(room_entity);
 
     room_tile *tile = room_entity->room->room_map->map[room_entity->position->x][room_entity->position->y];
 

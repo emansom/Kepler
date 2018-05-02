@@ -90,6 +90,7 @@ void room_enter(room *room, session *player) {
     room_entity->room = room;
     room_entity->room_id = room->room_id;
     room_entity->instance_id = create_instance_id(room_entity);
+    room_user_reset_idle_timer(player->room_user);
 
     room_entity->position->x = room->room_data->model_data->door_x;
     room_entity->position->y = room->room_data->model_data->door_y;

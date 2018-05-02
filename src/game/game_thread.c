@@ -35,7 +35,11 @@ void *game_thread_task(unsigned long ticks) {
         session *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
 
-        if (player->room_user->lido_dive_timer != -1 && time(NULL) > player->room_user->lido_dive_timer) {
+        if (!player->logged_in) {
+            continue;
+        }
+
+        if (player->room_user->room != NULL && time(NULL) > player->room_user->room_idle_timer) {
             room_leave(player->room_user->room, player, true); // Kick and send to hotel view
         }
 

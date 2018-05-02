@@ -34,7 +34,9 @@ void LOOKTO(session *player, incoming_message *message) {
 
     int rotation = calculate_human_direction(room_entity->position->x, room_entity->position->y, towards_x, towards_y);
     coord_set_rotation(room_entity->position, rotation, rotation);
+
     room_entity->needs_update = true;
+    room_user_reset_idle_timer(player->room_user);
 
     cleanup:
     free(content);

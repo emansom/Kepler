@@ -19,6 +19,7 @@ void CHAT(session *player, incoming_message *im) {
     if (message != NULL) {
         filter_vulnerable_characters(&message, true);
 
+        room_user_reset_idle_timer(player->room_user);
         room_user_move_mouth((room_user *) player->room_user, message);
 
         room *room = player->room_user->room;

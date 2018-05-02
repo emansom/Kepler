@@ -19,6 +19,7 @@ void SHOUT(session *player, incoming_message *im) {
         filter_vulnerable_characters(&message, true);
 
         room_user_move_mouth((room_user *) player->room_user, message);
+        room_user_reset_idle_timer(player->room_user);
 
         outgoing_message *om = om_create(26); // "@Z"
         om_write_int(om, player->room_user->instance_id);

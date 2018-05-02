@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "hashtable.h"
 #include "deque.h"
@@ -67,7 +68,7 @@ void room_user_reset(room_user *room_user) {
     room_user->room = NULL;
 
     room_user->lido_vote = -1;
-    room_user->lido_dive_timer = -1;
+    room_user_reset_idle_timer(room_user);
 
     if (room_user->next != NULL) {
         free(room_user->next);
@@ -192,6 +193,10 @@ void stop_walking(room_user *room_user, bool is_silent) {
     if (!is_silent) {
         room_user_invoke_item(room_user);
     }
+}
+
+void room_user_reset_idle_timer(room_user *room_user) {
+    room_user->room_idle_timer = (int) (time(NULL) + 300); // Give the user 5 minutes to idle or they'll be kicked.
 }
 
 /**
