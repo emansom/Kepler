@@ -28,6 +28,10 @@ void LOOKTO(session *player, incoming_message *message) {
 
     room_user *room_entity = player->room_user;
 
+    if (room_user_has_status(room_entity, "sit") || room_user_has_status(room_entity, "lay")) {
+        goto cleanup;
+    }
+
     int rotation = calculate_human_direction(room_entity->position->x, room_entity->position->y, towards_x, towards_y);
     coord_set_rotation(room_entity->position, rotation, rotation);
     room_entity->needs_update = true;
