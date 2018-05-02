@@ -33,20 +33,12 @@
 room_user *room_user_create(session *player) {
     room_user *user = malloc(sizeof(room_user));
     user->player = player;
-    user->authenticate_id = -1;
-    user->instance_id = 0;
-    user->room_id = 0;
-    user->room = NULL;
-    user->is_walking = false;
-    user->is_typing = false;
-    user->needs_update = 0;
-    user->lido_vote = -1;
     user->position = create_coord(0, 0);
     user->goal = create_coord(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
-    user->walking_lock = false;
     hashtable_new(&user->statuses);
+    room_user_reset(user);
     return user;
 }
 
@@ -70,10 +62,12 @@ void room_user_reset(room_user *room_user) {
     room_user->is_walking = false;
     room_user->needs_update = false;
     room_user->walking_lock = false;
-    room_user->lido_vote = -1;
     room_user->authenticate_id = -1;
     room_user->room_id = 0;
     room_user->room = NULL;
+
+    room_user->lido_vote = -1;
+    room_user->lido_dive_timer = -1;
 
     if (room_user->next != NULL) {
         free(room_user->next);
