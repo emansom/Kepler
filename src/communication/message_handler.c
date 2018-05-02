@@ -47,6 +47,7 @@
 #include "communication/incoming/navigator/ADD_FAVOURITE_ROOM.h"
 #include "communication/incoming/navigator/REMOVE_FAVOURITE_ROOM.h"
 #include "communication/incoming/navigator/GETFVRF.h"
+#include "communication/incoming/navigator/SRCHF.h"
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
@@ -160,6 +161,7 @@ void message_handler_init() {
     message_requests[19] = ADD_FAVOURITE_ROOM;
     message_requests[20] = REMOVE_FAVOURITE_ROOM;
     message_requests[18] = GETFVRF;
+    message_requests[17] = SRCHF;
 
     // Room
     message_requests[182] = GETINTERST;

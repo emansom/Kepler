@@ -137,11 +137,63 @@ List *room_query_get_by_owner_id(int owner_id) {
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE owner_id = ? ORDER BY id DESC", -1, &stmt, 0);
-
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, owner_id);
+    }
+
+    while (true) {
+        status = db_check_step(sqlite3_step(stmt), conn, stmt);
+
+        if (status != SQLITE_ROW) {
+            break;
+        }
+
+        int room_id = sqlite3_column_int(stmt, 0);
+        room *room = NULL;
+
+        if (room_manager_get_by_id(room_id) != NULL) {
+            room = room_manager_get_by_id(room_id);
+        } else {
+            room = room_create(sqlite3_column_int(stmt, 0));
+            room->room_data = room_create_data_sqlite(room, stmt);
+        }
+
+        list_add(rooms, room);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+
+    return rooms;
+}
+
+/**
+ * Gets all rooms as a list by owner id.
+ *
+ * @param owner_id the owner id of the rooms
+ * @return the list of rooms
+ */
+List *room_query_search(char *search_query) {
+    List *rooms;
+    list_new(&rooms);
+
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    // SELECT rooms either by name or owner
+    int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms INNER JOIN users ON rooms.owner_id = users.id WHERE users.username LIKE ? OR rooms.name LIKE ? LIMIT 30", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
+
+    if (status == SQLITE_OK) {
+        char room_query[200];
+        strcpy(room_query, "%");
+        strcat(room_query, search_query);
+        strcat(room_query, "%");
+
+        sqlite3_bind_text(stmt, 1, room_query, strlen(room_query), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, room_query, strlen(room_query), SQLITE_STATIC);
     }
 
     while (true) {
@@ -183,7 +235,6 @@ List *room_query_recent_rooms(int limit, int category_id) {
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM rooms WHERE category = ? AND owner_id > 0 ORDER BY id DESC LIMIT ?", -1, &stmt, 0);
-
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
