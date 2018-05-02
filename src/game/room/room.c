@@ -223,6 +223,82 @@ void room_enter(room *room, session *player) {
     /*outgoing_message *om = om_create(73); // "AI"
     player_send(session, om);
     om_cleanup(om);*/
+
+    outgoing_message *om = om_create(166); // "Bf"
+    om_write_str(om, "/client/");
+    player_send(player, om);
+    om_cleanup(om);
+
+    om = om_create(69); // "AE"
+    sb_add_string(om->sb, room->room_data->model);
+    sb_add_string(om->sb, " ");
+    sb_add_int(om->sb, room->room_id);
+    player_send(player, om);
+    om_cleanup(om);
+
+    if (room->room_data->wallpaper > 0) {
+        om = om_create(46); // "@n"
+        sb_add_string(om->sb, "wallpaper/");
+        sb_add_int(om->sb, room->room_data->wallpaper);
+        player_send(player, om);
+        om_cleanup(om);
+    }
+
+    if (room->room_data->floor > 0) {
+        om = om_create(46); // "@n"
+        sb_add_string(om->sb, "floor/");
+        sb_add_int(om->sb, room->room_data->floor);
+        player_send(player, om);
+        om_cleanup(om);
+    }
+
+    // TODO: move votes to rooms object and load on initialization to reduce query load
+    // Check if already voted, return if voted
+    int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
+    int vote_count = -1;
+
+    // If user already has voted, we sent total vote count
+    // else we sent -1, making the vote selector pop up
+    if (voted != -1) {
+        vote_count = room_query_count_votes(room->room_data->id);
+    }
+
+    om = om_create(345); // "EY"
+    om_write_int(om, vote_count);
+    player_send(player, om);
+    om_cleanup(om);
+
+    // Show new session current state of an item program for pools
+    if (list_size(room->room_data->model_data->public_items) > 0) {
+        for (size_t i = 0; i < list_size(room->items); i++) {
+            item *item;
+            list_get_at(room->items, i, (void *) &item);
+
+            if (!item->definition->behaviour->is_public_space_object) {
+                continue;
+            }
+
+            if (item->current_program != NULL &&
+                (strcmp(item->current_program, "curtains1") == 0
+                 || strcmp(item->current_program, "curtains2") == 0
+                 || strcmp(item->current_program, "door") == 0)) {
+
+                om = om_create(71); // "AG"
+                sb_add_string(om->sb, item->current_program);
+
+                if (item->current_program_state != NULL && strlen(item->current_program_state) > 0) {
+                    sb_add_string(om->sb, " ");
+                    om_write_str(om, item->current_program_state);
+                }
+
+                player_send(player, om);
+                om_cleanup(om);
+            }
+        }
+    }
+
+
+    player->room_user->authenticate_id = -1;
 }
 
 /**
@@ -282,88 +358,6 @@ void room_kickall(room *room) {
         list_get_at(room->users, i, (void *) &user);
         room_leave(room, user, true);
     }
-}
-
-/**
- * Send packets to start the room entance.
- *
- * @param om the outgoing message
- * @param player the player
- */
-void room_load(room *room, session *player) {
-    outgoing_message *om = om_create(166); // "Bf"
-    om_write_str(om, "/client/");
-    player_send(player, om);
-    om_cleanup(om);
-
-    om = om_create(69); // "AE"
-    sb_add_string(om->sb, room->room_data->model);
-    sb_add_string(om->sb, " ");
-    sb_add_int(om->sb, room->room_id);
-    player_send(player, om);
-    om_cleanup(om);
-
-    if (room->room_data->wallpaper > 0) {
-        om = om_create(46); // "@n"
-        sb_add_string(om->sb, "wallpaper/");
-        sb_add_int(om->sb, room->room_data->wallpaper);
-        player_send(player, om);
-        om_cleanup(om);
-    }
-
-    if (room->room_data->floor > 0) {
-        om = om_create(46); // "@n"
-        sb_add_string(om->sb, "floor/");
-        sb_add_int(om->sb, room->room_data->floor);
-        player_send(player, om);
-        om_cleanup(om);
-    }
-
-    // Show new session current state of an item program for pools
-    for (size_t i = 0; i < list_size(room->items); i++) {
-        item *item;
-        list_get_at(room->items, i, (void *) &item);
-
-        if (!item->definition->behaviour->is_public_space_object) {
-            continue;
-        }
-
-        if (item->current_program != NULL &&
-            (strcmp(item->current_program, "curtains1") == 0
-             || strcmp(item->current_program, "curtains2") == 0
-             || strcmp(item->current_program, "door") == 0)) {
-
-            om = om_create(71); // "AG"
-            sb_add_string(om->sb, item->current_program);
-
-            if (item->current_program_state != NULL && strlen(item->current_program_state) > 0) {
-                sb_add_string(om->sb, " ");
-                om_write_str(om, item->current_program_state);
-            }
-
-            player_send(player, om);
-            om_cleanup(om);
-        }
-    }
-
-    // TODO: move votes to rooms object and load on initialization to reduce query load
-
-    // Check if already voted, return if voted
-    int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
-    int vote_count = -1;
-
-    // If user already has voted, we sent total vote count
-    // else we sent -1, making the vote selector pop up
-    if (voted != -1) {
-        vote_count = room_query_count_votes(room->room_data->id);
-    }
-
-    om = om_create(345); // "EY"
-    om_write_int(om, vote_count);
-    player_send(player, om);
-    om_cleanup(om);
-
-    player->room_user->authenticate_id = -1;
 }
 
 /**

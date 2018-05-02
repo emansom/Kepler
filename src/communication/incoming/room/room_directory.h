@@ -21,7 +21,6 @@ void room_directory(session *player, incoming_message *message) {
 
         if (room != NULL) {
             room_enter(room, player);
-            room_load(room, player);
         }
     } 
 
