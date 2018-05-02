@@ -57,10 +57,10 @@ file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 add_definitions(-DLOG_USE_COLOR)
 
 add_executable(${EXECUTABLE_NAME}
-	${sqlite3}
+        ${sqlite3}
         ${collections}
         ${cthreadpool}
-	${log}
+        ${log}
 
         ${src}
         ${util}
@@ -72,9 +72,9 @@ add_executable(${EXECUTABLE_NAME}
         ${database}
         ${pathfinder}
 
-		${queries}
-		${queries_items}
-		${queries_rooms}
+        ${queries}
+        ${queries_items}
+        ${queries_rooms}
 
         ${players}
         ${room}
@@ -93,4 +93,4 @@ add_executable(${EXECUTABLE_NAME}
 find_package (Threads)
 
 target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(${EXECUTABLE_NAME} dl uv)
+target_link_libraries(${EXECUTABLE_NAME} dl uv pthread)
