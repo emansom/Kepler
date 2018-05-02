@@ -73,7 +73,7 @@ void pool_booth_exit(session *player) {
  * @param player the player to handle
  */
 void pool_item_walk_on(session *p, item *item) {
-    room_user *room_entity = (room_user*)p->room_user;
+    room_user *room_entity = p->room_user;
 
     if (strcmp(item->definition->sprite, "poolLift") == 0) {
         item_assign_program(item, "close");
@@ -91,12 +91,12 @@ void pool_item_walk_on(session *p, item *item) {
         room_entity->room_idle_timer = (int) (time(NULL) + 60); // Normally we use "room_user_reset_idle_timer" but for diving, we cut the time down.
 
         outgoing_message *om = om_create(125); // "A}"
-        player_send((session *) room_entity->player, om);
+        player_send(room_entity->player, om);
         om_cleanup(om);
 
         room_entity->player->player_data->tickets--;
-        session_send_tickets((session*)room_entity->player);
-        player_query_save_currency((session *) room_entity->player);
+        session_send_tickets(room_entity->player);
+        player_query_save_currency(room_entity->player);
 
     }
 
@@ -105,7 +105,7 @@ void pool_item_walk_on(session *p, item *item) {
         room_entity->walking_lock = true;
 
         outgoing_message *om = om_create(96); // "A`"
-        player_send((session *) room_entity->player, om);
+        player_send(room_entity->player, om);
         om_cleanup(om);
     }
 
@@ -169,13 +169,13 @@ void pool_item_walk_on(session *p, item *item) {
 /**
  * Warp to the pool/ladder and remove/add swim state.
  *
- * @param p the player to warp
+ * @param player the player to warp
  * @param item the warp they're sending the state (such as splash) to clients
  * @param warp the coordinates to warp to
  * @param exit true or false whether they're exiting or entering
  */
-void pool_warp_swim(session *p, item *item, coord warp, bool exit) {
-    room_user *room_entity = (room_user*)p->room_user;
+void pool_warp_swim(session *player, item *item, coord warp, bool exit) {
+    room_user *room_entity = player->room_user;
     stop_walking(room_entity, true);
 
     room_entity->position->x = warp.x;
