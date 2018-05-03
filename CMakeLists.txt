@@ -5,6 +5,9 @@ set(EXECUTABLE_NAME Kepler)
 set(CMAKE_C_STANDARD 11)
 set(PROJECT_DIR src)
 
+# Find libsodium on this system
+include(${PROJECT_DIR}/lib/libsodium/contrib/Findsodium.cmake)
+
 INCLUDE_DIRECTORIES(src)
 
 # Incldude library directories
@@ -58,10 +61,10 @@ file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 add_definitions(-DLOG_USE_COLOR)
 
 add_executable(${EXECUTABLE_NAME}
-	${sqlite3}
+        ${sqlite3}
         ${collections}
         ${cthreadpool}
-	${log}
+        ${log}
 
         ${src}
         ${util}
@@ -73,9 +76,9 @@ add_executable(${EXECUTABLE_NAME}
         ${database}
         ${pathfinder}
 
-		${queries}
-		${queries_items}
-		${queries_rooms}
+        ${queries}
+        ${queries_items}
+        ${queries_rooms}
 
         ${game}
         ${players}
@@ -95,4 +98,4 @@ add_executable(${EXECUTABLE_NAME}
 find_package (Threads)
 
 target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(${EXECUTABLE_NAME} dl uv)
+target_link_libraries(${EXECUTABLE_NAME} dl uv pthread sodium)

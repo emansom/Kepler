@@ -2,6 +2,7 @@
 #include "string.h"
 
 #include "database/queries/player_query.h"
+#include "util/configuration/configuration.h"
 
 #include <stdarg.h>
 #include <ctype.h>
@@ -226,6 +227,11 @@ int valid_password(const char *username, const char *password) {
 int get_name_check_code(char *username) {
     if (username == NULL) {
         return 2;
+    }
+
+    // Some fuckings to that guy that got rich of other people's work
+    if (configuration_get_bool("fuck.aaron") && (strcmp("Aaron", username) || strcmp("Sojobo", username))) {
+        return AARON_IS_A_FAG;
     }
 
     if (strlen(username) > 15 || !has_allowed_characters(username, "1234567890qwertyuiopasdfghjklzxcvbnm-+=?!@:.,$")) {

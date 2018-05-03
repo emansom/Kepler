@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "uv.h"
 #include "list.h"
@@ -102,6 +103,19 @@ void player_login(session *player) {
 }
 
 /**
+ * Disconnect user
+ *
+ * @param p the player struct
+ */
+void player_disconnect(session *p) {
+    if (p == NULL || p->disconnected) {
+        return;
+    }
+
+    uv_close((uv_handle_t *) p->stream, server_on_connection_close);
+}
+
+/**
  * Send an outgoing message to the socket
  *
  * @param p the player struct
@@ -154,13 +168,13 @@ void send_localised_error(session *p, char *error) {
  * Send an alert to the player
  *
  * @param p the player
- * @param greeting the alert message
+ * @param text the alert message
  */
-void send_alert(session *p, char *greeting) {
-    outgoing_message *welcome_message = om_create(139); // BK
-    om_write_str(welcome_message, greeting);
-    player_send(p, welcome_message);
-    om_cleanup(welcome_message);
+void send_alert(session *p, char *text) {
+    outgoing_message *alert = om_create(139); // BK
+    om_write_str(alert, text);
+    player_send(p, alert);
+    om_cleanup(alert);
 }
 
 /**

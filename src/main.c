@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <sodium.h>
 
 #include "main.h"
 #include "shared.h"
@@ -31,17 +32,30 @@ int main(void) {
 
     configuration_init();
 
-    log_set_level(LOG_INFO);
+    // Always enable debug log level in debug builds
+    // Release builds will use info log level
+    #ifndef NDEBUG
+        log_set_level(LOG_DEBUG);
+    #else
+        log_set_level(LOG_INFO);
+    #endif
 
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
+    }
+
+    log_debug("Initializing password hashing library");
+
+    if (sodium_init() < 0) {
+        log_fatal("Could not initialize password hashing library");
+        return EXIT_FAILURE;
     }
 
     if (!sqlite3_threadsafe()) {
         log_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        log_debug("Telling SQLite to use serialized mode");
+        log_debug("Configuring SQLite to use serialized mode");
 
         if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
             log_fatal("Could not configurate SQLite to use serialized mode");
@@ -62,7 +76,7 @@ int main(void) {
     log_info("The connection to the database was successful!");
 
     if (!configuration_get_bool("database.disable.wal")) {
-        log_debug("Telling SQLite to use WAL for journaling");
+        log_debug("Configuring SQLite to use WAL for journaling");
 
         sqlite3_stmt *stmt;
         int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);

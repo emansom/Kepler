@@ -50,6 +50,7 @@ void stop_walking(room_user*, bool silent);
 void room_user_reset_idle_timer(room_user *room_user);
 void room_user_show_chat(room_user *room_user, char *text, bool is_shout);
 void room_user_look(room_user *room_user, coord *towards);
+bool room_user_process_command(room_user *room_user, char *text);
 void room_user_invoke_item(room_user *room_user);
 void room_user_clear_walk_list(room_user*);
 void append_user_list(outgoing_message*, session*);

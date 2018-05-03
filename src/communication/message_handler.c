@@ -226,11 +226,6 @@ void message_handler_init() {
     message_requests[65] = GETSTRIP;
     message_requests[67] = ADDSTRIPITEM;
     message_requests[66] = FLATPROPBYITEM;
-
-
-    /*Client [0.0.0.0] incoming data: 203 / CK@Dalex@F123456
-hello!
-Client [0.0.0.0] incoming data: 149 / BU@M@C123@H@J07.04.1992@C@F123456*/
 }
 
 /**

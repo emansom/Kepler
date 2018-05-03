@@ -35,7 +35,7 @@ void server_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
  */
 void server_on_connection_close(uv_handle_t *handle) {
     session *player = handle->data;
-    player->disconnected = false;
+    player->disconnected = true;
 
     log_info("Client [%s] has disconnected", player->ip_address);
     player_cleanup(player);

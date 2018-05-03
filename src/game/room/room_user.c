@@ -310,6 +310,30 @@ void room_user_look(room_user *room_user, coord *towards) {
 }
 
 /**
+ * Processes commands, returns true if speech bubble is not to be sent to room
+ *
+ * @param room_user the room user
+ * @param text the text to read for the command
+ */
+bool room_user_process_command(room_user *room_user, char *text) {
+    if (strstr(text, "o/") != NULL) {
+        if (!room_user_has_status(room_user, "wave")) {
+            room_user_add_status(room_user, "wave", "", 2, "", -1, -1);
+            room_user->needs_update = true;
+            return false;
+        }
+    }
+
+    // TODO: better way to handle commands
+    if (strcmp(text, ":about") == 0) {
+        send_alert(room_user->player, "Kepler server\nMade by Quackster");
+        return true;
+    }
+
+    return false;
+}
+
+/**
  * Triggers the current item that the player on top of.
  *
  * @param room_user the room user to trigger for
