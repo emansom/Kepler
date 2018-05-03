@@ -14,6 +14,12 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
         return;
     }
 
+    // If item is a public furniture then we do this...
+    if (strstr(message->data, "/") != NULL) {
+        log_debug("Infobus fridge called..");
+        return;
+    }
+
     char *str_item_id = im_read_str(message);
     char *str_data = im_read_str(message);
 
@@ -62,10 +68,10 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
 
         item->custom_data = new_data;
 
-        outgoing_message *om = om_create(88);
+        outgoing_message *om = om_create(88); // "AX"
         sb_add_int_delimeter(om->sb, item->id, 2);
-        om_write_str(om, item->custom_data);
-        om_write_str(om, "");
+        sb_add_string_delimeter(om->sb, item->custom_data, 2);
+        sb_add_string_delimeter(om->sb, "", 2);
         room_send(player->room_user->room, om);
 
         if (!item->definition->behaviour->custom_data_true_false) {
@@ -76,5 +82,4 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
     cleanup:
     free(str_item_id);
     free(str_data);
-
 }
