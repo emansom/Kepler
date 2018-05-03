@@ -13,10 +13,12 @@ void CARRYDRINK(session *player, incoming_message *message) {
         return;
     }
 
-    int drink_id = (int) strtol(content, NULL, 10);
+    if (isdigit(*content)) {
+        int drink_id = (int) strtol(content, NULL, 10);
 
-    if (drink_id >= 0 && drink_id <= 25) {
-        room_user_carry_item(player->room_user, drink_id);
+        room_user_carry_item(player->room_user, drink_id, NULL);
         room_user_reset_idle_timer(player->room_user);
+    } else {
+        room_user_carry_item(player->room_user, 0, content);
     }
 }
