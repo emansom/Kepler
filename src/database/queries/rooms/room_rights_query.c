@@ -89,10 +89,8 @@ List *room_query_rights(int room_id) {
             break;
         }
 
-        int *user_id = malloc(sizeof(int));
-        *user_id = sqlite3_column_int(stmt, 0);
-
-        list_add(rights, user_id);
+        rights_entry *entry = rights_entry_create(sqlite3_column_int(stmt, 0));
+        list_add(rights, entry);
     }
 
     db_check_finalize(sqlite3_finalize(stmt), conn);

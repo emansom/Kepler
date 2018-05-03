@@ -12,6 +12,10 @@ typedef struct outgoing_message_s outgoing_message;
 typedef struct runnable_s runnable;
 typedef struct room_map_s room_map;
 
+typedef struct rights_entry_s {
+    int user_id;
+} rights_entry;
+
 typedef struct room_data_s {
     int id;
     int owner_id;
@@ -45,6 +49,7 @@ typedef struct room_s {
 
 room *room_create(int);
 room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, bool, int, char*, int, int);
+rights_entry *rights_entry_create(int user_id);
 void room_append_data(room *instance, outgoing_message *navigator, int player_id);
 void room_load_data(room *room);
 void room_kickall(room*);

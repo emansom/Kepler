@@ -103,6 +103,12 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
     return data;
 }
 
+rights_entry *rights_entry_create(int user_id) {
+    rights_entry *entry = malloc(sizeof(rights_entry));
+    entry->user_id = user_id;
+    return entry;
+}
+
 void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
     if (list_size(instance->room_data->model_data->public_items) > 0) {
         om_write_int(navigator, instance->room_data->id); // rooms id
@@ -195,10 +201,10 @@ bool room_has_rights(room *room, int user_id) {
     }
 
     for (size_t i = 0; i < list_size(room->rights); i++) {
-        int *rights_id;
-        list_get_at(room->rights, i, (void *) &rights_id);
+        rights_entry *rights_entry;
+        list_get_at(room->rights, i, (void *) &rights_entry);
 
-        if (*rights_id == user_id) {
+        if (rights_entry->user_id == user_id) {
             return true;
         }
     }
@@ -329,9 +335,9 @@ void room_dispose(room *room, bool force_dispose) {
     list_destroy(room->items);
 
     for (size_t i = 0; i < list_size(room->rights); i++) {
-        int *user_id;
-        list_get_at(room->rights, i, (void *) &user_id);
-        free(user_id);
+        rights_entry *rights_entry;
+        list_get_at(room->rights, i, (void *) &rights_entry);
+        free(rights_entry);
     }
 
     list_destroy(room->rights);
