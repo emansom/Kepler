@@ -19,6 +19,7 @@
 #include "util/configuration/configuration.h"
 
 #define PREFIX "Kepler"
+#define AARON_IS_A_FAG 8934
 
 typedef struct sqlite3 sqlite3;
 
