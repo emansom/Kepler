@@ -20,11 +20,16 @@ void SHOUT(session *player, incoming_message *im) {
 
         // Process command
         if (room_user_process_command((room_user *) player->room_user, message)) {
-            // Send cancel typing packet to room
-            outgoing_message *om = om_create(361); // "Ei"
-            om_write_int(om, player->room_user->instance_id);
-            om_write_int(om, 0);
-            room_send(player->room_user->room, om);
+            if (player->room_user->is_typing) {
+                // Send cancel typing packet to room
+                outgoing_message *om = om_create(361); // "Ei"
+                om_write_int(om, player->room_user->instance_id);
+                om_write_int(om, 0);
+                room_send(player->room_user->room, om);
+
+                player->room_user->is_typing = false;
+            }
+
             goto cleanup;
         }
 
