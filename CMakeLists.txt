@@ -5,10 +5,10 @@ set(EXECUTABLE_NAME Kepler)
 set(CMAKE_C_STANDARD 11)
 set(PROJECT_DIR src)
 
-# Find libsodium on this system
-include(${PROJECT_DIR}/lib/libsodium/contrib/Findsodium.cmake)
-
 INCLUDE_DIRECTORIES(src)
+
+# Find libsodium on this system
+# include(${PROJECT_DIR}/lib/libsodium/contrib/Findsodium.cmake)
 
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/sqlite3/)
