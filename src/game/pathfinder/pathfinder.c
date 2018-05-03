@@ -239,7 +239,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
                         diff += 1;
                     }
 
-                    cost = p->current->cost + diff + distance_squared(tmp, *room_user->goal);
+                    cost = p->current->cost + diff + coord_distance_squared(&tmp, room_user->goal);
 
                     if (cost < p->nodes->cost) {
                         p->nodes->cost = cost;

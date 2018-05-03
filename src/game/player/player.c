@@ -15,6 +15,7 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
+#include "game/room/manager/room_entity_manager.h"
 
 #include "util/stringbuilder.h"
 #include "util/configuration/configuration.h"
@@ -125,15 +126,14 @@ void player_send(session *p, outgoing_message *om) {
         return;
     }
 
-    char *preview = strdup(om->sb->data);
-    replace_vulnerable_characters(&preview, true, '|');
-
-    log_debug("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
-
-    free(preview);
+    if (configuration_get_bool("debug")) {
+        char *preview = strdup(om->sb->data);
+        replace_vulnerable_characters(&preview, true, '|');
+        log_debug("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
+        free(preview);
+    }
 
     om_finalise(om);
-
     uv_write_t *req;
 
     if(!(req = malloc(sizeof(uv_write_t)))){

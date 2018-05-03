@@ -36,7 +36,7 @@ void configuration_new() {
     FILE *fp = fopen(CONFIGURATION_FILE, "wb");
     fprintf(fp, "[Database]\n");
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
-    fprintf(fp, "database.logging=%s\n", "Kepler.db");
+    fprintf(fp, "database.disable.wal=%s\n", "false");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.port=%i\n", 12321);
@@ -46,7 +46,7 @@ void configuration_new() {
     fprintf(fp, "fuck.aaron=true"); // Some fuckings to that guy that got rich of other people's work
     fprintf(fp, "sso.tickets.enabled=%s\n", "false");
     fprintf(fp, "\n");
-    fprintf(fp, "welcome.message.enabled=%s\n", "1");
+    fprintf(fp, "welcome.message.enabled=%s\n", "true");
     fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");
     fprintf(fp, "\n");
     fprintf(fp, "# 1 tick = 500ms, 6 is 3 seconds\n");
@@ -136,7 +136,7 @@ bool configuration_get_bool(char *key) {
  * @param key the key to find the value for
  * @return the value, if successful
  */
-int configuration_get_number(char *key) {
+int configuration_get_int(char *key) {
     if (hashtable_contains_key(global.configuration.entries, key)) {
         char *value;
         hashtable_get(global.configuration.entries, key, (void *) &value);

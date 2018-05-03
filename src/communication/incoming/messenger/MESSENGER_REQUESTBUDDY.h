@@ -15,15 +15,11 @@ void MESSENGER_REQUESTBUDDY(session *player, incoming_message *message) {
     }
 
     if (messenger_is_friends(player->messenger, search_id)) {
-        log_debug("debug 0");
         goto cleanup;
-        return;
     }
 
     if (!messenger_query_new_request(player->player_data->id, search_id)) {
-        log_debug("debug 1");
         goto cleanup;
-        return;
     }
 
     session *requested_player = player_manager_find_by_id(search_id);

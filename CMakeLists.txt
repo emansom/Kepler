@@ -14,14 +14,14 @@ INCLUDE_DIRECTORIES(src)
 include_directories(${PROJECT_DIR}/lib/sqlite3/)
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/cthreadpool/)
-include_directories(${PROJECT_DIR}/lib/)
+include_directories(${PROJECT_DIR}/lib/log/src/)
 link_directories(/usr/local/lib/)
 
 # Load source files for libraries
 file(GLOB sqlite3 ${PROJECT_DIR}/lib/sqlite3/*.c)
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
 file(GLOB cthreadpool ${PROJECT_DIR}/lib/cthreadpool/*.c)
-file(GLOB log ${PROJECT_DIR}/lib/log.c)
+file(GLOB log ${PROJECT_DIR}/lib/log/src/log.c)
 
 # Kepler classes
 file(GLOB src ${PROJECT_DIR}/*.c)
@@ -40,11 +40,12 @@ file(GLOB queries_items ${PROJECT_DIR}/database/queries/items/*.c)
 file(GLOB queries_rooms ${PROJECT_DIR}/database/queries/rooms/*.c)
 
 # Kepler managers
-file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
+file(GLOB game ${PROJECT_DIR}/game/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
 file(GLOB room_pool ${PROJECT_DIR}/game/room/pool/*.c)
 file(GLOB room_manager ${PROJECT_DIR}/game/room/manager/*.c)
+file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
 file(GLOB items ${PROJECT_DIR}/game/items/*.c)
 file(GLOB inventory ${PROJECT_DIR}/game/inventory/*.c)
@@ -79,14 +80,15 @@ add_executable(${EXECUTABLE_NAME}
         ${queries_items}
         ${queries_rooms}
 
+        ${game}
         ${players}
-        ${room}
-        ${room_pool}
         ${navigator}
         ${items}
         ${inventory}
         ${items_definition}
         ${tasks}
+		${room}
+		${room_pool}
         ${room_mapping}
         ${room_manager}
         ${messenger}

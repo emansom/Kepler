@@ -2,6 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "util/encoding/vl64encoding.h"
+#include "game/room/manager/room_entity_manager.h"
 
 void room_directory(session *player, incoming_message *message) {
     char *content = im_get_content(message);
@@ -21,7 +22,6 @@ void room_directory(session *player, incoming_message *message) {
 
         if (room != NULL) {
             room_enter(room, player);
-            room_load(room, player);
         }
     } 
 

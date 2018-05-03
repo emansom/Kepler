@@ -47,6 +47,7 @@
 #include "communication/incoming/navigator/ADD_FAVOURITE_ROOM.h"
 #include "communication/incoming/navigator/REMOVE_FAVOURITE_ROOM.h"
 #include "communication/incoming/navigator/GETFVRF.h"
+#include "communication/incoming/navigator/SRCHF.h"
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
@@ -80,6 +81,8 @@
 #include "communication/incoming/room/user/CARRYDRINK.h"
 #include "communication/incoming/room/user/USER_START_TYPING.h"
 #include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
+#include "communication/incoming/room/user/REMOVERIGHTS.h"
+#include "communication/incoming/room/user/ASSIGNRIGHTS.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -160,6 +163,7 @@ void message_handler_init() {
     message_requests[19] = ADD_FAVOURITE_ROOM;
     message_requests[20] = REMOVE_FAVOURITE_ROOM;
     message_requests[18] = GETFVRF;
+    message_requests[17] = SRCHF;
 
     // Room
     message_requests[182] = GETINTERST;
@@ -193,6 +197,8 @@ void message_handler_init() {
     message_requests[80] = CARRYDRINK;
     message_requests[317] = USER_START_TYPING;
     message_requests[318] = USER_CANCEL_TYPING;
+    message_requests[96] = ASSIGNRIGHTS;
+    message_requests[97] = REMOVERIGHTS;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
@@ -228,12 +234,12 @@ void message_handler_init() {
  * @param player the player struct
  */
 void message_handler_invoke(incoming_message *im, session *player) {
-    char *preview = strdup(im->data);
-    replace_vulnerable_characters(&preview, true, '|');
-
-    log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);
-
-    free(preview);
+    if (configuration_get_bool("debug")) {
+        char *preview = strdup(im->data);
+        replace_vulnerable_characters(&preview, true, '|');
+        log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);
+        free(preview);
+    }
 
     // Stop the server from crashing
     if (im->header_id > 9999 || im->header_id < 0) {

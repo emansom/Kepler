@@ -59,6 +59,7 @@ void BTCKS(session *player, incoming_message *message) {
     player_query_save_currency(player);
     session_send_credits(player);
 
+    room_user_reset_idle_timer(player->room_user);
     player_data_cleanup(data);
 
     cleanup:

@@ -24,35 +24,36 @@ runnable *create_runnable() {
     r->millis = 500;
     return r;
 }
+
 /**
  * Schedule a task for the room at an interval.
  *
  * @param run the runnable task
  */
 void do_room_task(runnable *run){
-    room *room = room_manager_get_by_id(run->room_id);
-
-    if (room == NULL) {
+    if (room_manager_get_by_id(run->room_id) == NULL) {
         return;
     }
+
+    room *room = room_manager_get_by_id(run->room_id);
 
     if (list_size(room->users) == 0) {
         room->room_schedule_job = NULL;
         free(run);
-        return;
+    } else {
+        if (room_manager_get_by_id(run->room_id) != NULL) {
+            run->request(room);
+            usleep((__useconds_t) run->millis*1000);
 
-    }
-
-    run->request(room);
-    usleep((__useconds_t) run->millis*1000);
-
-    room = room_manager_get_by_id(run->room_id);
-
-    if (room != NULL && list_size(room->users) > 0) {
-        thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
+            thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
+        } else {
+            if (room_manager_get_by_id(run->room_id) != NULL) {
+                room->room_schedule_job = NULL;
+            }
+            free(run);
+        }
     }
 }
-
 /**
  * Create a thread pool with 32 threads allocated.
  */

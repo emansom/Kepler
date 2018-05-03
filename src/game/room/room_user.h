@@ -24,9 +24,11 @@ typedef struct room_user_s {
     int is_walking;
     int is_typing;
     int needs_update;
-    int lido_vote;
     HashTable *statuses;
     bool walking_lock;
+    int lido_vote;
+    int room_idle_timer;
+    int room_look_at_timer;
 } room_user;
 
 typedef struct room_user_status_s {
@@ -45,8 +47,9 @@ typedef struct room_user_status_s {
 room_user *room_user_create(session*);
 void walk_to(room_user*, int, int);
 void stop_walking(room_user*, bool silent);
-void room_user_process_gesture(room_user *room_user, char *text);
-bool room_user_process_command(room_user *room_user, char *text);
+void room_user_reset_idle_timer(room_user *room_user);
+void room_user_show_chat(room_user *room_user, char *text, bool is_shout);
+void room_user_look(room_user *room_user, coord *towards);
 void room_user_invoke_item(room_user *room_user);
 void room_user_clear_walk_list(room_user*);
 void append_user_list(outgoing_message*, session*);

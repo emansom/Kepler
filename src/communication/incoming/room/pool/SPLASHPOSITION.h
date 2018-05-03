@@ -33,7 +33,9 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
     walk_destination.x = (int) strtol(content_x, NULL, 10);
     walk_destination.y = (int) strtol(content_y, NULL, 10);
 
-    room_user *room_entity = (room_user *) diver->room_user;
+    room_user *room_entity = diver->room_user;
+    room_user_reset_idle_timer(room_entity);
+
     room_tile *tile = room_entity->room->room_map->map[room_entity->position->x][room_entity->position->y];
 
     room_entity->position->x = walk_destination.x;
@@ -89,7 +91,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
 
     // Show diving score
     if (total > 0) {
-        final = sum / total;
+        final = (double) sum / total;
 
         char score_text[200];
         sprintf(score_text, "showtext %s's score:/%.1f", diver->player_data->username, final);

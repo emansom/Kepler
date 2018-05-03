@@ -13,6 +13,7 @@
 #include "communication/message_handler.h"
 #include "database/db_connection.h"
 
+#include "game/game_thread.h"
 #include "game/player/player.h"
 #include "game/pathfinder/pathfinder.h"
 
@@ -24,7 +25,7 @@
 
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
+    signal(SIGINT, (__sighandler_t) exit_program); // Handle cleanup on Ctrl-C
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
@@ -74,23 +75,26 @@ int main(void) {
 
     log_info("The connection to the database was successful!");
 
-    log_debug("Configuring SQLite to use WAL for journaling");
+    if (!configuration_get_bool("database.disable.wal")) {
+        log_debug("Configuring SQLite to use WAL for journaling");
 
-    sqlite3_stmt *stmt;
+        sqlite3_stmt *stmt;
+        int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
 
-    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+        db_check_prepare(status, con);
+        db_check_step(sqlite3_step(stmt), con, stmt);
 
-    db_check_prepare(status, con);
-    db_check_step(sqlite3_step(stmt), con, stmt);
+        char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
 
-    char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
+        if (strcmp(chosen_journal_mode, "wal") != 0) {
+            log_warn("WAL not supported, now using: %s", chosen_journal_mode);
+        }
 
-    if (strcmp(chosen_journal_mode, "wal") != 0) {
-        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
+        db_check_finalize(sqlite3_finalize(stmt), con);
     }
 
-    db_check_finalize(sqlite3_finalize(stmt), con);
     global.DB = con;
+    global.is_shutdown = false;
 
     log_info("Initialising various server managers...");
 
@@ -104,9 +108,12 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
+    pthread_t game_thread;
+    game_thread_init(&game_thread);
+
     server_settings *settings = malloc(sizeof(server_settings));
     strcpy(settings->ip, configuration_get_string("server.ip.address"));
-    settings->port = configuration_get_number("server.port");
+    settings->port = configuration_get_int("server.port");
 
     pthread_t server_thread;
     start_server(settings, &server_thread);
