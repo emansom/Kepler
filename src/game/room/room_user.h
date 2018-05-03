@@ -2,6 +2,7 @@
 #define ROOM_USER_H
 
 #include <stdbool.h>
+#include <ctype.h>
 
 #include "game/room/room.h"
 
@@ -55,7 +56,7 @@ void room_user_invoke_item(room_user *room_user);
 void room_user_clear_walk_list(room_user*);
 void append_user_list(outgoing_message*, session*);
 void append_user_status(outgoing_message*, session*);
-void room_user_carry_item(room_user *room_user, int carry_id);
+void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name);
 void room_user_reset(room_user*);
 void room_user_cleanup(room_user*);
 void room_user_add_status(room_user*,char*,char*,int,char*,int,int);

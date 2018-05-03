@@ -381,7 +381,7 @@ void room_user_invoke_item(room_user *room_user) {
     room_user->needs_update = needs_update;
 }
 
-void room_user_carry_item(room_user *room_user, int carry_id) {
+void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name) {
     enum drink_type {
         DRINK,
         EAT,
@@ -415,37 +415,53 @@ void room_user_carry_item(room_user *room_user, int carry_id) {
     drinks[24] = DRINK; // Bubble juice from 1999
     drinks[25] = DRINK; // Lovejuice
 
-    if (carry_id >= 0 && carry_id <= 25) {
-        char *carry_status[8];
-        char *use_status[8];
+    // Public rooms send the localised handitem name instead of the drink ID
+    if (carry_name != NULL) {
+        for (int i = 0; i <= 25; i++) {
+            char external_drink_key[10];
+            sprintf(external_drink_key, "handitem%u", i);
+            char *external_drink_name = texts_manager_get_value_by_id(external_drink_key);
 
-        char drink_as_string[11];
-        sprintf(drink_as_string, " %i", carry_id);
-
-        enum drink_type type = drinks[carry_id];
-
-        if (type == DRINK) {
-            strcpy((char *) carry_status, "carryd");
-            strcpy((char *) use_status, "drink");
+            if (external_drink_name != NULL && strcmp(external_drink_name, carry_name) == 0) {
+                carry_id = i;
+            }
         }
-
-        if (type == EAT) {
-            strcpy((char *) carry_status, "carryf");
-            strcpy((char *) use_status, "eat");
-        }
-
-        if (type == ITEM) {
-            strcpy((char *) carry_status, "cri");
-            strcpy((char *) use_status, "usei");
-        }
-
-        room_user_remove_status(room_user, "cri");
-        room_user_remove_status(room_user, "carryf");
-        room_user_remove_status(room_user, "carryd");
-
-        room_user_add_status(room_user, strdup((char*) carry_status), drink_as_string, 120, (char*) use_status, 12, 1);
-        room_user->needs_update = true;
     }
+
+    // Not a valid drink ID
+    if (carry_id == 0 || carry_id > 25) {
+        return;
+    }
+
+    char *carry_status[8];
+    char *use_status[8];
+
+    char drink_as_string[11];
+    sprintf(drink_as_string, " %i", carry_id);
+
+    enum drink_type type = drinks[carry_id];
+
+    if (type == DRINK) {
+        strcpy((char *) carry_status, "carryd");
+        strcpy((char *) use_status, "drink");
+    }
+
+    if (type == EAT) {
+        strcpy((char *) carry_status, "carryf");
+        strcpy((char *) use_status, "eat");
+    }
+
+    if (type == ITEM) {
+        strcpy((char *) carry_status, "cri");
+        strcpy((char *) use_status, "usei");
+    }
+
+    room_user_remove_status(room_user, "cri");
+    room_user_remove_status(room_user, "carryf");
+    room_user_remove_status(room_user, "carryd");
+
+    room_user_add_status(room_user, strdup((char*) carry_status), drink_as_string, 120, (char*) use_status, 12, 1);
+    room_user->needs_update = true;
 }
 
 /**

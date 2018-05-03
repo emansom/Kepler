@@ -16,12 +16,10 @@ void CARRYDRINK(session *player, incoming_message *message) {
     if (is_numeric(content)) {
         int drink_id = (int) strtol(content, NULL, 10);
 
-        if (drink_id >= 0 && drink_id <= 25) {
-            room_user_carry_item(player->room_user, drink_id);
-            room_user_reset_idle_timer(player->room_user);
-        }
+        room_user_carry_item(player->room_user, drink_id, NULL);
     } else {
-        // TODO: Process drinks locale.
-        // Available options should be "water" or "milk" or "juice" but these change depending on external texts
+        room_user_carry_item(player->room_user, 0, content);
     }
+
+    room_user_reset_idle_timer(player->room_user);
 }
