@@ -36,6 +36,7 @@ void configuration_new() {
     FILE *fp = fopen(CONFIGURATION_FILE, "wb");
     fprintf(fp, "[Database]\n");
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
+    fprintf(fp, "database.disable.wal=%s\n", "false");
     fprintf(fp, "database.logging=%s\n", "Kepler.db");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
