@@ -192,8 +192,8 @@ List *room_query_search(char *search_query) {
         strcat(room_query, search_query);
         strcat(room_query, "%");
 
-        sqlite3_bind_text(stmt, 1, room_query, strlen(room_query), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, room_query, strlen(room_query), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 1, room_query, (int) strlen(room_query), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, room_query, (int) strlen(room_query), SQLITE_STATIC);
     }
 
     while (true) {

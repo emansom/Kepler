@@ -91,7 +91,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
 
     // Show diving score
     if (total > 0) {
-        final = sum / total;
+        final = (double) sum / total;
 
         char score_text[200];
         sprintf(score_text, "showtext %s's score:/%.1f", diver->player_data->username, final);

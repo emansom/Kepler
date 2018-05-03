@@ -190,6 +190,23 @@ void room_enter(room *room, session *player) {
 
 
     player->room_user->authenticate_id = -1;
+
+    if (strcmp(player->room_user->room->room_data->model_data->model_name, "park_b") == 0) {
+        om = om_create(79); // "AO"
+        sb_add_string_delimeter(om->sb, "Is Sojobo a faggot?", 13);
+
+        sb_add_int_delimeter(om->sb, 1, ':');
+        sb_add_string_delimeter(om->sb, "Yes", ':');
+        sb_add_char(om->sb, 13);
+
+        sb_add_int_delimeter(om->sb, 2, ':');
+        sb_add_string_delimeter(om->sb, "A massive faggot", ':');
+        sb_add_char(om->sb, 13);
+
+        sb_add_char(om->sb, 2);
+        player_send(player, om);
+        om_cleanup(om);
+    }
 }
 
 /**

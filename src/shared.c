@@ -19,6 +19,11 @@ char *get_time_formatted() {
     return strdup(buff);
 }
 
+/**
+ * Get short time as format, used for trophies.
+ *
+ * @return the short time format
+ */
 char *get_short_time_formatted() {
     char buff[20];
     time_t now = time(NULL);
