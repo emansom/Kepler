@@ -37,6 +37,7 @@ void configuration_new() {
     fprintf(fp, "[Database]\n");
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
     fprintf(fp, "database.logging=%s\n", "Kepler.db");
+    fprintf(fp, "database.disable.wal=%s\n", "false");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.port=%i\n", 12321);

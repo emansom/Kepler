@@ -60,21 +60,24 @@ int main(void) {
     }
 
     log_info("The connection to the database was successful!");
-    log_debug("Telling SQLite to use WAL for journaling");
 
-    sqlite3_stmt *stmt;
-    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+    if (!configuration_get_bool("database.disable.wal")) {
+        log_debug("Telling SQLite to use WAL for journaling");
 
-    db_check_prepare(status, con);
-    db_check_step(sqlite3_step(stmt), con, stmt);
+        sqlite3_stmt *stmt;
+        int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
 
-    char* chosen_journal_mode = (char*)sqlite3_column_text(stmt, 0);
+        db_check_prepare(status, con);
+        db_check_step(sqlite3_step(stmt), con, stmt);
 
-    if (strcmp(chosen_journal_mode, "wal") != 0) {
-        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
+        char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
+
+        if (strcmp(chosen_journal_mode, "wal") != 0) {
+            log_warn("WAL not supported, now using: %s", chosen_journal_mode);
+        }
+
+        db_check_finalize(sqlite3_finalize(stmt), con);
     }
-
-    db_check_finalize(sqlite3_finalize(stmt), con);
 
     global.DB = con;
     global.is_shutdown = false;
