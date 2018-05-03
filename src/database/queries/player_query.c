@@ -84,13 +84,12 @@ int player_query_login(char *username, char *password) {
     sqlite3_stmt *stmt;
 
     int USER_ID = -1;
-    int status = sqlite3_prepare_v2(conn, "SELECT id,password FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT id, password FROM users WHERE username = ? LIMIT 1", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_text(stmt, 1, username, -1, SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, password, -1, SQLITE_STATIC);
 
         status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
@@ -232,6 +231,7 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
     char hashed_password[crypto_pwhash_STRBYTES];
 
     if (crypto_pwhash_str(hashed_password, password, strlen(password), crypto_pwhash_OPSLIMIT_INTERACTIVE, crypto_pwhash_MEMLIMIT_INTERACTIVE) != 0) {
+        // Will only allocate 64MB, but just in case
         log_fatal("Not enough memory to hash passwords");
         exit_program();
         return -1;

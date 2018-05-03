@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 
 #include "uv.h"
 #include "list.h"
@@ -98,6 +99,19 @@ void player_login(session *player) {
     }
 
     player->logged_in = true;
+}
+
+/**
+ * Disconnect user
+ *
+ * @param p the player struct
+ */
+void player_disconnect(session *p) {
+    if (p == NULL || p->disconnected) {
+        return;
+    }
+
+    uv_close((uv_handle_t *) p->stream, server_on_connection_close);
 }
 
 /**
