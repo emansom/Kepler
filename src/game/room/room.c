@@ -19,6 +19,7 @@
 #include "game/items/item.h"
 
 #include "database/queries/player_query.h"
+#include "database/queries/rooms/room_rights_query.h"
 
 /**
  * Create a room instance.
@@ -34,6 +35,7 @@ room *room_create(int room_id) {
     instance->room_schedule_job = NULL;
     list_new(&instance->users);
     list_new(&instance->items);
+    instance->rights = room_query_rights(room_id);
     instance->tick = 0;
     return instance;
 }
@@ -192,6 +194,15 @@ bool room_has_rights(room *room, int user_id) {
         return true;
     }
 
+    for (size_t i = 0; i < list_size(room->rights); i++) {
+        int *rights_id;
+        list_get_at(room->rights, i, (void *) &rights_id);
+
+        if (*rights_id == user_id) {
+            return true;
+        }
+    }
+
     return false;
 }
 
@@ -256,14 +267,14 @@ List *room_nearby_players(room *room, room_user *room_user, coord *position, int
         session *player;
         list_get_at(room->users, i, (void *) &player);
 
-        if (player->room_user->instance_id == room_user->instance_id) {
+        if (room_user != NULL && player->room_user->instance_id == room_user->instance_id) {
             continue;
         }
 
-        coord *current_point = room_user->position;
+        coord *current_point = position;
         coord *player_point = player->room_user->position;
 
-        if (coord_distance_squared(*current_point, *player_point) <= distance) {
+        if (coord_distance_squared(current_point, player_point) <= distance) {
             list_add(players, player);
         }
     }
@@ -317,6 +328,13 @@ void room_dispose(room *room, bool force_dispose) {
     list_destroy(room->users);
     list_destroy(room->items);
 
+    for (size_t i = 0; i < list_size(room->rights); i++) {
+        int *user_id;
+        list_get_at(room->rights, i, (void *) &user_id);
+        free(user_id);
+    }
+
+    list_destroy(room->rights);
     room->users = NULL;
 
     free(room);

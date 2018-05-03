@@ -39,6 +39,7 @@ typedef struct room_s {
     runnable *room_schedule_job;
     List *users;
     List *items;
+    List *rights;
     unsigned long tick;
 } room;
 
