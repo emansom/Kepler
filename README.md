@@ -27,7 +27,7 @@ $ ./Kepler
 
 The CMake command is only necessary if you make changes to CMakeLists.txt, because it will rebuild the cache.
 
-## Installation 
+## Installation
 
 First, run these commands to ensure you have everything required to compile Kepler.
 
@@ -44,7 +44,7 @@ Download the libuv source code.
 
 ```
 $ git clone https://github.com/libuv/libuv.git
-``` 
+```
 
 Enter the libuv directory.
 ```
@@ -66,6 +66,14 @@ Run these commands to install the SQLite library.
 
 ```
 $ sudo apt-get install sqlite3 libsqlite3-dev
+```
+
+##### Installing libsodium
+
+Run these commands to install the libsodium library.
+
+```
+$ sudo apt-get install libsodium-dev
 ```
 
 ## Requirements
