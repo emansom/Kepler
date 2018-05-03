@@ -109,6 +109,19 @@ rights_entry *rights_entry_create(int user_id) {
     return entry;
 }
 
+rights_entry *rights_entry_find(room *room, int user_id) {
+    for (size_t i = 0; i < list_size(room->rights); i++) {
+        rights_entry *rights_entry;
+        list_get_at(room->rights, i, (void *) &rights_entry);
+
+        if (rights_entry->user_id == user_id) {
+            return rights_entry;
+        }
+    }
+
+    return NULL;
+}
+
 void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
     if (list_size(instance->room_data->model_data->public_items) > 0) {
         om_write_int(navigator, instance->room_data->id); // rooms id
@@ -200,13 +213,10 @@ bool room_has_rights(room *room, int user_id) {
         return true;
     }
 
-    for (size_t i = 0; i < list_size(room->rights); i++) {
-        rights_entry *rights_entry;
-        list_get_at(room->rights, i, (void *) &rights_entry);
+    rights_entry *entry = rights_entry_find(room, user_id);
 
-        if (rights_entry->user_id == user_id) {
-            return true;
-        }
+    if (entry != NULL) {
+        return true;
     }
 
     return false;
@@ -219,6 +229,10 @@ bool room_has_rights(room *room, int user_id) {
  * @param player the player to refresh the rights for
  */
 void room_refresh_rights(room *room, session *player) {
+    if (player == NULL) {
+        return;
+    }
+
     char rights_value[15];
     strcpy(rights_value, "");
 

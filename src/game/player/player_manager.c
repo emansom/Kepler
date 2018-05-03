@@ -57,6 +57,10 @@ session *player_manager_find_by_id(int player_id) {
             session *p;
             list_get_at(global.player_manager.players, i, (void *) &p);
 
+            if (!p->logged_in) {
+                continue;
+            }
+
             if (p->player_data->id == player_id) {
                 return p;
             }
@@ -77,6 +81,10 @@ session *player_manager_find_by_name(char *name) {
         for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
             session *p;
             list_get_at(global.player_manager.players, i, (void *) &p);
+
+            if (!p->logged_in) {
+                continue;
+            }
 
             if (strcmp(p->player_data->username, name) == 0) {
                 return p;
