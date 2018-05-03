@@ -326,7 +326,7 @@ bool room_user_process_command(room_user *room_user, char *text) {
 
     // TODO: better way to handle commands
     if (strcmp(text, ":about") == 0) {
-        send_alert(room_user->player, "Kepler server\nMade by Quackster");
+        send_alert(room_user->player, "Kepler server\n\nContributors:\n - Hoshiko\n\nMade by Quackster");
         return true;
     }
 
