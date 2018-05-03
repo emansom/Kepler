@@ -206,7 +206,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
  * @param room_user the room user to animate for
  * @param text the text to read for any gestures and to find animation times
  */
-void room_user_move_mouth(room_user *room_user, char *text) {
+void room_user_process_gesture(room_user *room_user, char *text) {
     int talk_duration = 1;
 
     if (strlen(text) > 1) {
@@ -261,6 +261,30 @@ void room_user_move_mouth(room_user *room_user, char *text) {
 
     room_user_add_status(room_user, "talk", "", talk_duration, "", -1, -1);
     room_user->needs_update = true;
+}
+
+/**
+ * Processes commands, returns true if speech bubble is not to be sent to room
+ *
+ * @param room_user the room user
+ * @param text the text to read for the command
+ */
+bool room_user_process_command(room_user *room_user, char *text) {
+    if (strstr(text, "o/") != NULL) {
+        if (!room_user_has_status(room_user, "wave")) {
+            room_user_add_status(room_user, "wave", "", 2, "", -1, -1);
+            room_user->needs_update = true;
+            return false;
+        }
+    }
+
+    // TODO: better way to handle commands
+    if (strcmp(text, ":about") == 0) {
+        send_alert(room_user->player, "Kepler server\nMade by Quackster");
+        return true;
+    }
+
+    return false;
 }
 
 /**

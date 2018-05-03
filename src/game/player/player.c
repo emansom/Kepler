@@ -168,13 +168,13 @@ void send_localised_error(session *p, char *error) {
  * Send an alert to the player
  *
  * @param p the player
- * @param greeting the alert message
+ * @param text the alert message
  */
-void send_alert(session *p, char *greeting) {
-    outgoing_message *welcome_message = om_create(139); // BK
-    om_write_str(welcome_message, greeting);
-    player_send(p, welcome_message);
-    om_cleanup(welcome_message);
+void send_alert(session *p, char *text) {
+    outgoing_message *alert = om_create(139); // BK
+    om_write_str(alert, text);
+    player_send(p, alert);
+    om_cleanup(alert);
 }
 
 /**
