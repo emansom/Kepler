@@ -1,4 +1,5 @@
 #include <stdbool.h>
+#include <sodium.h>
 
 #include "main.h"
 #include "shared.h"
@@ -40,6 +41,13 @@ int main(void) {
 
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
+    }
+
+    log_debug("Initializing password hashing library");
+
+    if (sodium_init() < 0) {
+        log_fatal("Could not initialize password hashing library");
+        return EXIT_FAILURE;
     }
 
     if (!sqlite3_threadsafe()) {

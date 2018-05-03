@@ -221,15 +221,9 @@ player_data *player_query_data(int id) {
  * @return the inserted player id
  */
 int player_query_create(char *username, char *figure, char *gender, char *password) {
-    // Hash password
-    if (sodium_init() < 0) {
-        log_fatal("Could not initialize password hashing library");
-        exit_program();
-        return -1;
-    }
-
     char hashed_password[crypto_pwhash_STRBYTES];
 
+    // Hash password
     if (crypto_pwhash_str(hashed_password, password, strlen(password), crypto_pwhash_OPSLIMIT_INTERACTIVE, crypto_pwhash_MEMLIMIT_INTERACTIVE) != 0) {
         // Will only allocate 64MB, but just in case
         log_fatal("Not enough memory to hash passwords");
