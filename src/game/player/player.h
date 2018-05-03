@@ -28,12 +28,13 @@ typedef struct session_s {
     struct messenger_s *messenger;
     struct inventory_s *inventory;
     struct room_user_s *room_user;
-    int logged_in;
+    bool logged_in;
 } session;
 
 session *player_create(void*, char*);
 player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *);
 void player_login(session*);
+void player_disconnect(session *p);
 void player_send(session *, outgoing_message *);
 void session_send_credits(session*);
 void session_send_tickets(session*);
