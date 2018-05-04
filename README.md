@@ -4,7 +4,11 @@ Kepler is a small TCP server written in C powered by libuv, an asynchronous netw
 
 ## Requirements
 
-This server is only supported on Linux/POSIX systems. For Windows users, to use Kepler you must use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run and compile the app in a Linux environment.
+This server is only supported on Linux/POSIX systems. For Windows users, to use Kepler you must use the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run and compile the app in a Linux environment.
+
+We will refer to Windows Subsystem for Linux as WSL from this point
+
+There's an step-by-step guide on WSL [here](http://wsl-guide.org/en/latest/).
 
 #### Linux distribution version requirements
 One of these, the choice is yours:
@@ -16,10 +20,10 @@ The commands shown below apply to Ubuntu 18.04+. If you're using Fedora or Arch 
 
 Other distributions have not been tested.
 
-###### Note on using Ubuntu in WSL
-**This only applies if you're using WSL**
+#### Note on using Ubuntu in WSL
+This only applies if you're using [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux)
 
-If your current version of Ubuntu in WSL is 17.10 or lower, it needs to be upgraded to 18.04.
+If your current version of Ubuntu in [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux) is 17.10 or lower, it needs to be upgraded to 18.04.
 Run these commands to upgrade.
 
 First check if an upgrade is needed:
@@ -27,7 +31,7 @@ First check if an upgrade is needed:
 $ lsb_release -a
 ```
 
-**Do not continue further if the version printed equals 18.04**
+Do not continue further if the version printed equals 18.04 or higher
 
 ```
 $ sudo apt update
