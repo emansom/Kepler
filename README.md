@@ -38,7 +38,7 @@ $ sudo apt-get install automake
 $ sudo apt-get install libtool
 ```
 
-##### Installing libuv Library
+##### Installing libuv
 
 Download the libuv source code.
 
@@ -60,7 +60,7 @@ $ make check
 $ make install
 ```
 
-##### Installing the SQLite Library
+##### Installing SQLite
 
 Run these commands to install the SQLite library.
 
