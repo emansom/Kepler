@@ -15,7 +15,7 @@ void ADDSTRIPITEM(session *player, incoming_message *message) {
         return;
     }
 
-    if (!room_has_rights(player->room_user->room, player->player_data->id)) {
+    if (!room_is_owner(player->room_user->room, player->player_data->id)) {
         return;
     }
 
