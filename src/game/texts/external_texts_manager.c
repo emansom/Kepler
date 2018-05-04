@@ -34,20 +34,23 @@ void texts_manager_parse(char *file_name) {
     ssize_t read;
 
     while ((read = getline(&line, &len, file)) != -1) {
-        char *key = get_argument(line, "=", 0);
-        char *value = get_argument(line, "=", 1);
-
-        if (key == NULL || value == NULL) {
+        if (line == NULL) {
             continue;
         }
 
-        key[strcspn(key, "\n")] = 0; // strip character
-        value[strcspn(value, "\n")] = 0; // strip character
+        filter_vulnerable_characters(&line, true);
+        char *found = strstr(line, "=" );
 
-        filter_vulnerable_characters(&key, true);
-        filter_vulnerable_characters(&value, true);
+        if (found != NULL) {
+            int index = (int) (found - line);
 
-        hashtable_add(global.texts_manager.texts, key, value);
+            char *key = strdup(line);
+            key[index] = '\0';
+
+            char *value = strdup(line + index + 1);
+
+            hashtable_add(global.texts_manager.texts, key, value);
+        }
     }
 
     free(line);
