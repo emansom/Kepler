@@ -33,7 +33,7 @@ $ lsb_release -a
 $ sudo apt update
 $ sudo apt upgrade
 $ sudo -S apt-mark hold procps strace sudo
-$ sudo -S env RELEASE_UPGRADER_NO_SCREEN=1 do-release-upgrade
+$ sudo -S env RELEASE_UPGRADER_NO_SCREEN=1 do-release-upgrade -d
 ```
 
 ## Downloading dependencies
@@ -43,8 +43,6 @@ First, run these commands to ensure you have everything required to compile Kepl
 ```
 $ sudo apt install make cmake
 $ sudo apt install git
-$ sudo apt install automake
-$ sudo apt install libtool
 $ sudo apt install libuv1-dev
 $ sudo apt install sqlite3 libsqlite3-dev
 $ sudo apt install libsodium-dev
