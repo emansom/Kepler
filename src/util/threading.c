@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#include "log.h"
 #include "thpool.h"
 #include "hashtable.h"
 #include "list.h"
@@ -30,29 +31,27 @@ runnable *create_runnable() {
  *
  * @param run the runnable task
  */
-void do_room_task(runnable *run){
+void do_room_task(runnable *run) {
     if (room_manager_get_by_id(run->room_id) == NULL) {
         return;
     }
 
     room *room = room_manager_get_by_id(run->room_id);
 
-    if (list_size(room->users) == 0) {
-        room->room_schedule_job = NULL;
-        free(run);
-    } else {
-        if (room_manager_get_by_id(run->room_id) != NULL) {
-            run->request(room);
-            usleep((__useconds_t) run->millis*1000);
-
-            thpool_add_work(global.thread_manager.pool, (void*)do_room_task, run);
-        } else {
-            if (room_manager_get_by_id(run->room_id) != NULL) {
-                room->room_schedule_job = NULL;
-            }
-            free(run);
+    if (room == NULL || list_size(room->users) == 0) {
+        if (room != NULL) {
+            room->room_schedule_job = NULL;
         }
+
+        log_info("Room %i unloaded.", run->room_id);
+
+        free(run);
+        return;
     }
+
+    run->request(room);
+    usleep((__useconds_t) run->millis * 1000);
+    thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
 }
 /**
  * Create a thread pool with 32 threads allocated.

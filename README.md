@@ -1,6 +1,6 @@
 ## About
 
-Kepler is a small TCP server written in C powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 13 client from 2006 era. The aim is to fully replicate this version by writing the back-end server in the C11 language.
+Kepler is a small TCP server written in C powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 18 client from 2007 era. The aim is to fully replicate this version by writing the back-end server in the C11 language.
 
 ## Requirements
 
