@@ -129,7 +129,7 @@ void player_send(session *p, outgoing_message *om) {
     if (configuration_get_bool("debug")) {
         char *preview = strdup(om->sb->data);
         replace_vulnerable_characters(&preview, true, '|');
-        log_debug("Client [%s] outgoing data: %i / %s\n", p->ip_address, om->header_id, preview);
+        log_debug("Client [%s] outgoing data: %i / %s", p->ip_address, om->header_id, preview);
         free(preview);
     }
 
