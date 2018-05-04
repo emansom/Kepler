@@ -1,3 +1,5 @@
+#include "shared.h"
+
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
