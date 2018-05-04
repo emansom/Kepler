@@ -5,6 +5,10 @@
 #include "game/room/pool/pool_handler.h"
 
 void SIGN(session *player, incoming_message *message) {
+    if (player->room_user->room == NULL) {
+        goto cleanup;
+    }
+
     char *vote = im_get_content(message);
 
     if (vote == NULL) {

@@ -9,7 +9,15 @@
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
 
-void SPLASHPOSITION(session *diver, incoming_message *message) {
+void SPLASHPOSITION(session *player, incoming_message *message) {
+    if (player->room_user->room == NULL) {
+        goto cleanup;
+    }
+
+    if (!player->room_user->is_diving) {
+        return;
+    }
+
     char *content = im_get_content(message);
 
     if (content == NULL) {
@@ -33,7 +41,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
     walk_destination.x = (int) strtol(content_x, NULL, 10);
     walk_destination.y = (int) strtol(content_y, NULL, 10);
 
-    room_user *room_entity = diver->room_user;
+    room_user *room_entity = player->room_user;
     room_user_reset_idle_timer(room_entity);
 
     room_tile *tile = room_entity->room->room_map->map[room_entity->position->x][room_entity->position->y];
@@ -42,13 +50,14 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
     room_entity->position->y = walk_destination.y;
     room_entity->position->z = room_entity->room->room_data->model_data->heights[room_entity->position->x][room_entity->position->y];
     room_entity->walking_lock = false;
+    room_entity->is_diving = false;
 
     // Immediately update status
     room_user_add_status(room_entity, "swim", "", -1, "", -1, -1);
 
     outgoing_message *players = om_create(34); // "@b
-    append_user_status(players, diver);
-    room_send(diver->room_user->room, players);
+    append_user_status(players, player);
+    room_send(player->room_user->room, players);
 
     // Walk to ladder exit
     walk_to(room_entity, 20, 19);
@@ -70,7 +79,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
         session * room_player;
         list_get_at(room_entity->room->users, i, (void *) &room_player);
 
-        if (room_player->player_data->id == diver->player_data->id) {
+        if (room_player->player_data->id == player->player_data->id) {
             continue;
         }
 
@@ -81,7 +90,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
     }
 
     char target[200];
-    sprintf(target, "targetcamera %i", diver->room_user->instance_id);
+    sprintf(target, "targetcamera %i", player->room_user->instance_id);
 
     outgoing_message *target_diver = om_create(71); // "AG"
     sb_add_string(target_diver->sb, "cam1");
@@ -94,7 +103,7 @@ void SPLASHPOSITION(session *diver, incoming_message *message) {
         final = (double) sum / total;
 
         char score_text[200];
-        sprintf(score_text, "showtext %s's score:/%.1f", diver->player_data->username, final);
+        sprintf(score_text, "showtext %s's score:/%.1f", player->player_data->username, final);
 
         outgoing_message *score_message = om_create(71); // "AG"
         sb_add_string(score_message->sb, "cam1");

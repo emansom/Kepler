@@ -88,6 +88,7 @@ void pool_item_walk_on(session *p, item *item) {
         room_send((room *) room_entity->room, target_diver);
 
         room_entity->walking_lock = true;
+        room_entity->is_diving = true;
         room_entity->room_idle_timer = (int) (time(NULL) + 60); // Normally we use "room_user_reset_idle_timer" but for diving, we cut the time down.
 
         outgoing_message *om = om_create(125); // "A}"
