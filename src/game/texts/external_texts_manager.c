@@ -1,6 +1,6 @@
 #include "shared.h"
-
 #include "hashtable.h"
+#include "log.h"
 
 #include "external_texts_manager.h"
 
@@ -64,6 +64,11 @@ char *texts_manager_get_value_by_id(char *key) {
 
     if (hashtable_contains_key(global.texts_manager.texts, key)) {
         hashtable_get(global.texts_manager.texts, key, (void *)&value);
+    }
+
+    if (value == NULL) {
+        log_debug("External text %s not found", key);
+        return key;
     }
 
     return value;
