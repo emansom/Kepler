@@ -103,25 +103,26 @@ room_data *room_create_data(room *room, int id, int owner_id, int category, char
     return data;
 }
 
+/**
+ * Create a room rights entry that can be added into the rights list
+ * of a room instance.
+ *
+ * @param user_id the user id who has a right
+ * @return the rights entry struct
+ */
 rights_entry *rights_entry_create(int user_id) {
     rights_entry *entry = malloc(sizeof(rights_entry));
     entry->user_id = user_id;
     return entry;
 }
 
-rights_entry *rights_entry_find(room *room, int user_id) {
-    for (size_t i = 0; i < list_size(room->rights); i++) {
-        rights_entry *rights_entry;
-        list_get_at(room->rights, i, (void *) &rights_entry);
-
-        if (rights_entry->user_id == user_id) {
-            return rights_entry;
-        }
-    }
-
-    return NULL;
-}
-
+/**
+ * Append room information data, useful for various navigator packets.
+ *
+ * @param instance the instance to append
+ * @param navigator the navigator packet instance
+ * @param player_id the player who requests the room
+ */
 void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
     if (list_size(instance->room_data->model_data->public_items) > 0) {
         om_write_int(navigator, instance->room_data->id); // rooms id
@@ -197,6 +198,26 @@ void room_kickall(room *room) {
  */
 bool room_is_owner(room *room, int user_id) {
     return room->room_data->owner_id == user_id;
+}
+
+/**
+ * Find a room rights entry by given room and user id.
+ *
+ * @param room the room to find the rights entry for
+ * @param user_id the user id to search for
+ * @return the room rights entry
+ */
+rights_entry *rights_entry_find(room *room, int user_id) {
+    for (size_t i = 0; i < list_size(room->rights); i++) {
+        rights_entry *rights_entry;
+        list_get_at(room->rights, i, (void *) &rights_entry);
+
+        if (rights_entry->user_id == user_id) {
+            return rights_entry;
+        }
+    }
+
+    return NULL;
 }
 
 /**
@@ -281,6 +302,16 @@ void room_send(room *room, outgoing_message *message) {
     om_cleanup(message);
 }
 
+/**
+ * Find nearby players with a given room, position and distance, will not be inclusive of the
+ * room user in the list if the room_user parameter is not NULL.
+ *
+ * @param room the room to locate the users inside
+ * @param room_user the given room user to exclude (if not NULL)
+ * @param position the position to search within
+ * @param distance the distance from the position to search inside
+ * @return the list of nearby users
+ */
 List *room_nearby_players(room *room, room_user *room_user, coord *position, int distance) {
     List *players;
     list_new(&players);
