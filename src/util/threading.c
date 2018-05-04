@@ -43,7 +43,7 @@ void do_room_task(runnable *run) {
             room->room_schedule_job = NULL;
         }
 
-        log_debug("Room %i unloaded.", run->room_id);
+        log_info("Room %i unloaded.", run->room_id);
 
         free(run);
         return;

@@ -172,6 +172,8 @@ void room_append_data(room *instance, outgoing_message *navigator, int player_id
 void room_load_data(room *room) {
     room_item_manager_load(room);
     room_map_init(room);
+
+    log_info("Room %i loaded.", room->room_id);
 }
 
 /**
