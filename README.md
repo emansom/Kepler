@@ -33,7 +33,7 @@ $ lsb_release -a
 $ sudo apt update
 $ sudo apt upgrade
 $ sudo -S apt-mark hold procps strace sudo
-$ sudo -S env RELEASE_UPGRADER_NO_SCREEN=1 do-release-upgrade
+$ sudo -S env RELEASE_UPGRADER_NO_SCREEN=1 do-release-upgrade -d
 ```
 
 ## Downloading dependencies
