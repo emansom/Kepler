@@ -1,6 +1,6 @@
 ## About
 
-Kepler is a small TCP server written in C powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 13 client from 2006 era. The aim is to fully replicate this version by writing the back-end server in the C11 language.
+Kepler is a small TCP server written in C powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 18 client from 2007 era. The aim is to fully replicate this version by writing the back-end server in the C11 language.
 
 ## Requirements
 
@@ -43,8 +43,6 @@ First, run these commands to ensure you have everything required to compile Kepl
 ```
 $ sudo apt install make cmake
 $ sudo apt install git
-$ sudo apt install automake
-$ sudo apt install libtool
 $ sudo apt install libuv1-dev
 $ sudo apt install sqlite3 libsqlite3-dev
 $ sudo apt install libsodium-dev
