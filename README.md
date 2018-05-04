@@ -2,6 +2,54 @@
 
 Kepler is a small TCP server written in C powered by libuv, an asynchronous networking library. It powers the Habbo Hotel version 13 client from 2006 era. The aim is to fully replicate this version by writing the back-end server in the C11 language.
 
+## Requirements
+
+This server is only supported on Linux/POSIX systems. For Windows users, to use Kepler you must use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run and compile the app in a Linux environment.
+
+#### Linux distribution version requirements
+One of these, the choice is yours:
+- Arch Linux
+- Ubuntu 18.04+
+- Fedora 28+ Workstation
+
+The commands shown below apply to Ubuntu 18.04+. If you're using Fedora or Arch Linux, you should replace `apt` with `dnf` for Fedora or `pacman` for Arch Linux.
+
+Other distributions have not been tested.
+
+###### Note on using Ubuntu in WSL
+**This only applies if you're using WSL**
+
+If your current version of Ubuntu in WSL is 17.10 or lower, it needs to be upgraded to 18.04.
+Run these commands to upgrade.
+
+First check if an upgrade is needed:
+```
+$ lsb_release -a
+```
+
+**Do not continue further if the version printed equals 18.04**
+
+```
+$ sudo apt update
+$ sudo apt upgrade
+$ sudo -S apt-mark hold procps strace sudo
+$ sudo -S env RELEASE_UPGRADER_NO_SCREEN=1 do-release-upgrade
+```
+
+## Downloading dependencies
+
+First, run these commands to ensure you have everything required to compile Kepler.
+
+```
+$ sudo apt install make cmake
+$ sudo apt install git
+$ sudo apt install automake
+$ sudo apt install libtool
+$ sudo apt install libuv1-dev
+$ sudo apt install sqlite3 libsqlite3-dev
+$ sudo apt install libsodium-dev
+```
+
 ## Cloning this repository
 
 ```
@@ -26,56 +74,3 @@ $ ./Kepler
 ```
 
 The CMake command is only necessary if you make changes to CMakeLists.txt, because it will rebuild the cache.
-
-## Installation
-
-First, run these commands to ensure you have everything required to compile Kepler.
-
-```
-$ sudo apt-get install make cmake
-$ sudo apt-get install git
-$ sudo apt-get install automake
-$ sudo apt-get install libtool
-```
-
-##### Installing libuv Library
-
-Download the libuv source code.
-
-```
-$ git clone https://github.com/libuv/libuv.git
-```
-
-Enter the libuv directory.
-```
-$ cd libuv
-```
-
-Configure and compile it.
-```
-$ sh autogen.sh
-$ ./configure
-$ make
-$ make check
-$ make install
-```
-
-##### Installing the SQLite Library
-
-Run these commands to install the SQLite library.
-
-```
-$ sudo apt-get install sqlite3 libsqlite3-dev
-```
-
-##### Installing libsodium
-
-Run these commands to install the libsodium library.
-
-```
-$ sudo apt-get install libsodium-dev
-```
-
-## Requirements
-
-This server is only supported on Linux/POSIX systems. For Windows users, to use Kepler you must use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run and compile the app in a Linux environment.
