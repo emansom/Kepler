@@ -10,13 +10,13 @@ CREATE TABLE IF NOT EXISTS `users_room_favourites` (
 );
 CREATE TABLE IF NOT EXISTS `users` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	`username`	TEXT DEFAULT NULL,
-	`password`	TEXT DEFAULT NULL,
+	`username`	TEXT NOT NULL,
+	`password`	TEXT NOT NULL,
 	`figure`	TEXT NOT NULL,
 	`pool_figure`	TEXT NOT NULL,
 	`sex`	TEXT NOT NULL DEFAULT 'M',
 	`motto`	TEXT NOT NULL DEFAULT 'de kepler whey',
-	`credits`	TEXT NOT NULL DEFAULT 200,
+	`credits`	INTEGER NOT NULL DEFAULT 200,
 	`tickets`	INTEGER NOT NULL DEFAULT 0,
 	`film`	INTEGER NOT NULL DEFAULT 0,
 	`rank`	INTEGER NOT NULL DEFAULT 1,

@@ -98,8 +98,13 @@ int player_query_login(char *username, char *password) {
         USER_ID = sqlite3_column_int(stmt, 0);
         char *hashed_password = (char*)sqlite3_column_text(stmt, 1);
 
-        if (crypto_pwhash_str_verify(hashed_password, password, strlen(password)) != 0) {
-            // Wrong password
+        int valid = crypto_pwhash_str_verify(hashed_password, password, strlen(password));
+
+        // Clear password from memory securely
+        sodium_memzero(password, strlen(password));
+
+        // Wrong password
+        if (valid == -1) {
             return -1;
         }
     }
@@ -230,6 +235,9 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
         exit_program();
         return -1;
     }
+
+    // Clear password from memory securely
+    sodium_memzero(password, strlen(password));
 
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
