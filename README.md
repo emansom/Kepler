@@ -16,10 +16,10 @@ The commands shown below apply to Ubuntu 18.04+. If you're using Fedora or Arch 
 
 Other distributions have not been tested.
 
-###### Note on using Ubuntu in WSL
-**This only applies if you're using WSL**
+#### Note on using Ubuntu in WSL
+This only applies if you're using [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux)
 
-If your current version of Ubuntu in WSL is 17.10 or lower, it needs to be upgraded to 18.04.
+If your current version of Ubuntu in [WSL](https://en.wikipedia.org/wiki/Windows_Subsystem_for_Linux) is 17.10 or lower, it needs to be upgraded to 18.04.
 Run these commands to upgrade.
 
 First check if an upgrade is needed:
@@ -27,7 +27,7 @@ First check if an upgrade is needed:
 $ lsb_release -a
 ```
 
-**Do not continue further if the version printed equals 18.04**
+Do not continue further if the version printed equals 18.04 or higher
 
 ```
 $ sudo apt update
