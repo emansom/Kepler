@@ -16,7 +16,6 @@ void APPROVENAME(session *player, incoming_message *message) {
 
             // Bye bye now!
             player_disconnect(player);
-            player_cleanup(player);
 
             goto cleanup;
         }

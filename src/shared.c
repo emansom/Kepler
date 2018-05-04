@@ -230,7 +230,7 @@ int get_name_check_code(char *username) {
     }
 
     // Some fuckings to that guy that got rich of other people's work
-    if (configuration_get_bool("fuck.aaron") && (strcmp("Aaron", username) || strcmp("Sojobo", username))) {
+    if (configuration_get_bool("fuck.aaron") && (strcmp("Aaron", username) == 0 || strcmp("Sojobo", username) == 0)) {
         return AARON_IS_A_FAG;
     }
 
