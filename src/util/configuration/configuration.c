@@ -43,7 +43,7 @@ void configuration_new() {
     fprintf(fp, "server.ip.address=%s\n", "127.0.0.1");
     fprintf(fp, "\n");
     fprintf(fp, "[Game]\n");
-    fprintf(fp, "fuck.aaron=true"); // Some fuckings to that guy that got rich of other people's work
+    fprintf(fp, "fuck.aaron=%s\n", "true"); // Some fuckings to that guy that got rich of other people's work
     fprintf(fp, "sso.tickets.enabled=%s\n", "false");
     fprintf(fp, "\n");
     fprintf(fp, "welcome.message.enabled=%s\n", "true");

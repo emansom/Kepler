@@ -88,6 +88,7 @@ void pool_item_walk_on(session *p, item *item) {
         room_send((room *) room_entity->room, target_diver);
 
         room_entity->walking_lock = true;
+        room_entity->is_diving = true;
         room_entity->room_idle_timer = (int) (time(NULL) + 60); // Normally we use "room_user_reset_idle_timer" but for diving, we cut the time down.
 
         outgoing_message *om = om_create(125); // "A}"
@@ -122,7 +123,7 @@ void pool_item_walk_on(session *p, item *item) {
         coord warp = { };
 
         if (item->position->x == 20 && item->position->y == 28) {
-            warp.x = 21;
+            warp.x = 22;
             warp.y = 28;
         }
 
@@ -178,9 +179,11 @@ void pool_warp_swim(session *player, item *item, coord warp, bool exit) {
     room_user *room_entity = player->room_user;
     stop_walking(room_entity, true);
 
+    room_tile *to_tile = room_entity->room->room_map->map[warp.x][warp.y];
+
     room_entity->position->x = warp.x;
     room_entity->position->y = warp.y;
-    room_entity->position->z = room_entity->room->room_map->map[warp.x][warp.y]->tile_height;
+    room_entity->position->z = to_tile->tile_height;
 
     if (!exit) {
         room_user_add_status(room_entity, "swim", "", -1, "", -1, -1);

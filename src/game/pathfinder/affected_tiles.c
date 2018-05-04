@@ -16,9 +16,9 @@ List *get_affected_tiles(int item_length, int item_width, int x, int y, int rota
         }
     }
 
-    for (int newX = x; newX < x + item_width; newX++) {
-        for (int newY = y; newY < y + item_length; newY++) {
-            coord *coord = create_coord(newX, newY);
+    for (int new_x = x; new_x < x + item_width; new_x++) {
+        for (int new_y = y; new_y < y + item_length; new_y++) {
+            coord *coord = create_coord(new_x, new_y);
             list_add(tiles, coord);
         }
     }

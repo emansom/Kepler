@@ -65,6 +65,7 @@ void room_user_reset(room_user *room_user) {
     room_user->is_walking = false;
     room_user->needs_update = false;
     room_user->walking_lock = false;
+    room_user->is_diving = false;
     room_user->authenticate_id = -1;
     room_user->room_id = 0;
     room_user->room = NULL;
