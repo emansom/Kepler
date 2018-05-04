@@ -4,7 +4,11 @@ Kepler is a small TCP server written in C powered by libuv, an asynchronous netw
 
 ## Requirements
 
-This server is only supported on Linux/POSIX systems. For Windows users, to use Kepler you must use the [Linux Subsystem for Windows](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run and compile the app in a Linux environment.
+This server is only supported on Linux/POSIX systems. For Windows users, to use Kepler you must use the [Windows Subsystem for Linux](https://docs.microsoft.com/en-us/windows/wsl/install-win10) in order to run and compile the app in a Linux environment.
+
+We will refer to Windows Subsystem for Linux as WSL from this point
+
+There's an step-by-step guide on WSL [here](http://wsl-guide.org/en/latest/).
 
 #### Linux distribution version requirements
 One of these, the choice is yours:
