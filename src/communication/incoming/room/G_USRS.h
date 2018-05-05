@@ -29,14 +29,13 @@ void G_USRS(session *p, incoming_message *message) {
     om_cleanup(players);*/
 
     outgoing_message *players;
-    players = om_create(28); // "@\"
 
+    players = om_create(28); // "@\"
     for (size_t i = 0; i < list_size(room->users); i++) {
         session *room_player;
         list_get_at(room->users, i, (void*)&room_player);
         append_user_list(players, room_player);
     }
-
     player_send(p, players);
     om_cleanup(players);
 
@@ -45,7 +44,6 @@ void G_USRS(session *p, incoming_message *message) {
     room_send(room, players);
 
     room_refresh_rights(room, p);
-
 
     /*char instance_id[11];
     sprintf(instance_id, "%i", session->player_data->id);

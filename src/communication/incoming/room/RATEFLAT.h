@@ -54,7 +54,7 @@ void RATEFLAT(session *player, incoming_message *im) {
             continue;
         }
 
-        outgoing_message *om = om_create(345); // "EY"
+        om = om_create(345); // "EY"
         om_write_int(om, votes);
         player_send(room_player, om);
         om_cleanup(om);
