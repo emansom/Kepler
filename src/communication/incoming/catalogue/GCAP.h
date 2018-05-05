@@ -71,6 +71,10 @@ void GCAP(session *player, incoming_message *message) {
  * @param message the catalogue page outgoing message
  */
 void serialise_catalogue_item(catalogue_item *item, outgoing_message *message) {
+    if (item->definition == NULL) {
+        return;
+    }
+
     char *item_name = catalogue_item_get_name(item);
     char *item_desc = catalogue_item_get_description(item);
     char *item_type = catalogue_item_get_type(item);
