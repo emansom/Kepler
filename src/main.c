@@ -156,7 +156,7 @@ bool handle_command(char *command) {
         return false;
     }
 
-    if (strcmp(command, "q") == 0 || strcmp(command, "quit") == 0) {
+    if (strcmp(command, "quit") == 0) {
         dispose_program();
         return true;
     }
