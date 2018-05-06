@@ -28,7 +28,7 @@ item_behaviour *item_behaviour_create() {
     behaviour->isTeleporter = false;
     behaviour->isDice = false;
     behaviour->is_prize_trophy = false;
-    behaviour->isRedeemable = false;
+    behaviour->is_redeemable = false;
     behaviour->isSoundMachine = false;
     behaviour->isSoundMachineSampleSet = false;
     behaviour->has_extra_parameter = false;
@@ -126,7 +126,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'Q') {
-            behaviour->isRedeemable = true;
+            behaviour->is_redeemable = true;
         }
 
         if (c == 'A') {

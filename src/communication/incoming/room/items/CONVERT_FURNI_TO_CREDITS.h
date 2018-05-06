@@ -26,7 +26,7 @@ void CONVERT_FURNI_TO_CREDITS(session *player, incoming_message *message) {
 
     item *item = room_item_manager_get(player->room_user->room, item_id);
 
-    if (item == NULL || !item->definition->behaviour->isRedeemable) {
+    if (item == NULL || !item->definition->behaviour->is_redeemable) {
         return;
     }
 
