@@ -25,6 +25,7 @@ void *do_register(void *args) {
 
     player_query_create(ctx->username, ctx->figure, ctx->gender, ctx->password);
 
+    free(ctx);
     pthread_exit((void*) 0);
 }
 

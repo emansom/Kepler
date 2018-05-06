@@ -184,7 +184,7 @@ void room_manager_dispose() {
         TableEntry *entry;
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
             room *room = entry->value;
-            room_dispose(room, false);
+            room_dispose(room, true);
         }
     }
 

@@ -83,6 +83,7 @@ char *item_definition_get_name(item_definition *definition, int special_sprite_i
             name = strdup("null");
         }
 
+        free(external_text_key);
         return strdup(name);
     }
 }
@@ -111,6 +112,7 @@ char *item_definition_get_desc(item_definition *definition, int special_sprite_i
             desc = strdup("null");
         }
 
+        free(external_text_key);
         return strdup(desc);
     }
 }
@@ -169,4 +171,10 @@ char *item_definition_get_text_key(item_definition *definition, int special_spri
     sb_cleanup(sb);
 
     return text_key;
+}
+
+void item_definition_dispose(item_definition *def) {
+    free(def->sprite);
+    free(def->behaviour);
+    free(def);
 }

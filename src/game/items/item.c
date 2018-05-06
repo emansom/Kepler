@@ -13,8 +13,10 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
+
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
+#include "game/room/mapping/room_model.h"
 
 #include "communication/messages/outgoing_message.h"
 #include "util/stringbuilder.h"
@@ -349,6 +351,14 @@ void item_dispose(item *item) {
 
     if (item->current_program_state != NULL) {
         free(item->current_program_state);
+    }
+
+    room *room = room_manager_get_by_id(item->room_id);
+
+    if (room != NULL) {
+        if (list_size(room->room_data->model_data->public_items) > 0) {
+            item_definition_dispose(item->definition); // Destroy if public item since every public item has their own definition
+        }
     }
 
     free(item);

@@ -30,7 +30,8 @@ room_model *room_model_create(char *model_id, char *model_name, int door_x, int 
     model->map_size_x = 0;
     model->map_size_y = 0;
     model->heightmap = replace_char(heightmap, '|', "\r");
-    
+    model->public_items = NULL;
+
     List *items = item_parser_get_items(model->model_id);
 
     if (items != NULL) {
@@ -105,13 +106,6 @@ void room_model_dispose(room_model *model) {
     free(model->model_id);
     free(model->model_name);
     free(model->heightmap);
-
-    for (size_t j = 0; j < list_size(model->public_items); j++) {
-        item *item;
-        list_get_at(model->public_items, j, (void *) &item);
-        item_dispose(item);
-    }
-
     list_destroy(model->public_items);
     free(model);
 }

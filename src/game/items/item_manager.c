@@ -52,3 +52,18 @@ item_definition *item_manager_get_definition_by_id(int definition_id) {
 
     return definition;
 }
+
+void item_manager_dispose() {
+    if (hashtable_size(global.item_manager.definitions) > 0) {
+        HashTableIter iter;
+        hashtable_iter_init(&iter, global.item_manager.definitions);
+
+        TableEntry *entry;
+        while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+            item_definition *def = entry->value;
+            item_definition_dispose(def);
+        }
+    }
+
+    hashtable_destroy(global.item_manager.definitions);
+}
