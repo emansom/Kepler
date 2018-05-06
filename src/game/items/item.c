@@ -119,6 +119,15 @@ void item_update_entities(item *item, room *room, coord *old_position) {
     list_destroy(entities_to_update);
 }
 
+void item_set_custom_data(item *item, char *custom_data) {
+    if (item->custom_data != NULL) {
+        free(item->custom_data);
+        item->custom_data = NULL;
+    }
+
+    item->custom_data = custom_data;
+}
+
 /**
  * Gets whether or not the item is walkable.
  *
@@ -162,7 +171,15 @@ char *item_as_string(item *item) {
         sb_add_string_delimeter(sb, item->wall_position, 9);
 
         if (item->custom_data != NULL) {
-            sb_add_string(sb, item->custom_data);
+            if (item->definition->behaviour->is_post_it) {
+                char color[7];
+                memcpy(color, &item->custom_data[0], 6);
+                color[6] = '\0';
+
+                sb_add_string(sb, color);
+            } else {
+                sb_add_string(sb, item->custom_data);
+            }
         }
 
     } else {

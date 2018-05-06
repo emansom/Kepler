@@ -92,6 +92,10 @@ void do_purchase(session *player, item_definition *def, char *extra_data, int sp
             }
         }
 
+        if (def->behaviour->is_post_it) {
+            custom_data = strdup("20");
+        }
+
         if (def->behaviour->is_prize_trophy) {
             filter_vulnerable_characters(&extra_data, true);
 

@@ -61,12 +61,7 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
     }
 
     if (new_data != NULL) {
-        if (item->custom_data != NULL) {
-            free(item->custom_data);
-            item->custom_data = NULL;
-        }
-
-        item->custom_data = new_data;
+        item_set_custom_data(item, new_data);
 
         outgoing_message *om = om_create(88); // "AX"
         sb_add_int_delimeter(om->sb, item->id, 2);

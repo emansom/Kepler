@@ -23,7 +23,7 @@ item_behaviour *item_behaviour_create() {
     behaviour->custom_data_numeric_on_off = false;
     behaviour->customDataNumericState = false;
     behaviour->is_decoration = false;
-    behaviour->isPostIt = false;
+    behaviour->is_post_it = false;
     behaviour->is_door = false;
     behaviour->isTeleporter = false;
     behaviour->isDice = false;
@@ -106,7 +106,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'J') {
-            behaviour->isPostIt = true;
+            behaviour->is_post_it = true;
         }
 
         if (c == 'D') {

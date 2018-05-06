@@ -108,6 +108,12 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
+    char color[7];
+    memcpy(color, "FFFFFFxdddd", 6);
+    color[6] = '\0';
+
+    printf("Test: %sXD\n", color);
+
     pthread_t game_thread;
     game_thread_init(&game_thread);
 
