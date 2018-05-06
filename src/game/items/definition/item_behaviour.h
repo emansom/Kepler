@@ -27,7 +27,7 @@ typedef struct item_behaviour_s {
     bool isTeleporter;
     bool isDice;
     bool is_prize_trophy;
-    bool isRedeemable;
+    bool is_redeemable;
     bool isSoundMachine;
     bool isSoundMachineSampleSet;
     bool has_extra_parameter;
