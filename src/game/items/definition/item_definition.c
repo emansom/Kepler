@@ -36,12 +36,12 @@ item_definition *item_definition_create_blank() {
     def->id = -1;
     def->cast_directory = -1;
     def->sprite = NULL;
-    def->colour = strdup("");
+    def->colour = NULL;
     def->length = 1;
     def->width = 1;
     def->stack_height = 0;
     def->top_height = 1;
-    def->behaviour_data = strdup("");
+    def->behaviour_data = NULL;
     def->behaviour = item_behaviour_parse(def);
 
     if (def->stack_height == 0) {
@@ -176,5 +176,7 @@ char *item_definition_get_text_key(item_definition *definition, int special_spri
 void item_definition_dispose(item_definition *def) {
     free(def->sprite);
     free(def->behaviour);
+    free(def->behaviour_data);
+    free(def->colour);
     free(def);
 }

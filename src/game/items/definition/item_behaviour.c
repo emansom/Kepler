@@ -37,7 +37,11 @@ item_behaviour *item_behaviour_create() {
 
 item_behaviour *item_behaviour_parse(item_definition *def) {
     item_behaviour *behaviour = item_behaviour_create();
-    
+
+    if (def->behaviour_data == NULL) {
+        return behaviour;
+    }
+
     for (int i = 0; i < strlen(def->behaviour_data); i++) {
         char c = def->behaviour_data[i];
 
