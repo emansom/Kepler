@@ -76,3 +76,22 @@ char *texts_manager_get_value_by_id(char *key) {
 
     return value;
 }
+
+/**
+ * Destory external texts manager
+ */
+void texts_manager_dispose() {
+    HashTableIter iter;
+    TableEntry *entry;
+    hashtable_iter_init(&iter, global.texts_manager.texts);
+
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        char *key = entry->key;
+        char *value = entry->value;
+
+        free(key);
+        free(value);
+    }
+
+    hashtable_destroy(global.texts_manager.texts);
+}

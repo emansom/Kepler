@@ -185,6 +185,8 @@ void dispose_program() {
     model_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();
+    configuration_dispose();
+    texts_manager_dispose();
 
     if (sqlite3_close(global.DB) != SQLITE_OK) {
         log_fatal("Could not close SQLite database: %s", sqlite3_errmsg(global.DB));

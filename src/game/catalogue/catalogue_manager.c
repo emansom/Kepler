@@ -137,14 +137,23 @@ List *catalogue_manager_get_pages() {
  * Dispose model manager
  */
 void catalogue_manager_dispose() {
-    /*HashTableIter iter;
-    TableEntry *entry;
-    hashtable_iter_init(&iter, global.catalogue_manager.pages);
-
-    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-        catalogue_page *page = entry->value;
+    for (size_t i = 0; i < list_size(global.catalogue_manager.pages); i++) {
+        catalogue_page *page = NULL;
+        list_get_at(global.catalogue_manager.pages, i, (void *) &page);
         catalogue_page_dispose(page);
     }
 
-    hashtable_destroy(global.catalogue_manager.pages);*/
+    for (size_t i = 0; i < list_size(global.catalogue_manager.items); i++) {
+        catalogue_item *item = NULL;
+        list_get_at(global.catalogue_manager.items, i, (void *) &item);
+        catalogue_item_dispose(item);
+    }
+
+    for (size_t i = 0; i < list_size(global.catalogue_manager.packages); i++) {
+        catalogue_package *package = NULL;
+        list_get_at(global.catalogue_manager.packages, i, (void *) &package);
+        catalogue_package_dispose(package);
+    }
+
+    list_destroy(global.catalogue_manager.pages);
 }

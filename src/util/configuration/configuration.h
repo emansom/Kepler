@@ -13,5 +13,6 @@ void configuration_read(FILE *file);
 char *configuration_get_string(char *key);
 bool configuration_get_bool(char *key);
 int configuration_get_int(char *key);
+void configuration_dispose();
 
 #endif

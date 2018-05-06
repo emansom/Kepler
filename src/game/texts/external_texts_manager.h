@@ -9,5 +9,6 @@ struct texts_manager {
 
 void texts_manager_init();
 char *texts_manager_get_value_by_id(char *key);
+void texts_manager_dispose();
 
 #endif
