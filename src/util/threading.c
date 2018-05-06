@@ -50,7 +50,7 @@ void do_room_task(runnable *run) {
     }
 
     run->request(room);
-    usleep((__useconds_t) run->millis * 1000);
+    usleep(run->millis * 1000);
     thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
 }
 /**
