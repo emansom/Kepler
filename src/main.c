@@ -108,8 +108,6 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
-    printf("Test: %sXD\n", color);
-
     pthread_t game_thread;
     game_thread_init(&game_thread);
 
