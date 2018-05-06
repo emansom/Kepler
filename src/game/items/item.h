@@ -22,6 +22,7 @@ typedef struct item_s {
 item *item_create(int id, int room_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data);
 void item_update_entities(item *item, room *room, coord *old_position);
 void item_set_custom_data(item *item, char *custom_data);
+void item_broadcast_custom_data(item* item, char *custom_data);
 bool item_is_walkable(item *item);
 char *item_as_string(item *item);
 char *item_strip_string(item *item, int strip_slot_id);

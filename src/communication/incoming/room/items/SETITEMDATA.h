@@ -21,6 +21,7 @@ void SETITEMDATA(session *player, incoming_message *message) {
     char *item_id = NULL;
     char *colour = NULL;
     char *postit_content = NULL;
+    stringbuilder *sb = NULL;
 
     char *content = im_get_content(message);
 
@@ -54,15 +55,19 @@ void SETITEMDATA(session *player, incoming_message *message) {
             postit_content = strdup(msg);
         }
 
-        stringbuilder *sb = sb_create();
+        sb = sb_create();
         sb_add_string(sb, colour);
         sb_add_string(sb, postit_content);
 
         item *item = room_item_manager_get(player->room_user->room, (int) strtol(item_id, NULL, 10));
-        item_set_custom_data(item, strdup(sb->data));
-        item_query_save(item);
 
-        sb_cleanup(sb);
+        if (item == NULL) {
+            goto cleanup;
+        }
+
+        item_set_custom_data(item, strdup(sb->data));
+        item_broadcast_custom_data(item, item->custom_data);
+        item_query_save(item);
     } else {
         send_alert(player, "No scripters allowed, bye bye!");
         player_disconnect(player);
@@ -72,4 +77,5 @@ void SETITEMDATA(session *player, incoming_message *message) {
     free(item_id);
     free(colour);
     free(content);
+    sb_cleanup(sb);
 }

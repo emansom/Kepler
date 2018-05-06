@@ -128,6 +128,30 @@ void item_set_custom_data(item *item, char *custom_data) {
     item->custom_data = custom_data;
 }
 
+void item_broadcast_custom_data(item* item, char *custom_data) {
+    outgoing_message *om;
+
+    if (item->definition->behaviour->is_wall_item) {
+        om = om_create(85); // "AU"
+        char *item_string = item_as_string(item);
+        sb_add_string(om->sb, item_string);
+        free(item_string);
+    } else {
+        om = om_create(88); // "AX"
+        sb_add_int_delimeter(om->sb, item->id, 2);
+        sb_add_string_delimeter(om->sb, item->custom_data, 2);
+        sb_add_string_delimeter(om->sb, "", 2);
+    }
+
+    room *room = room_manager_get_by_id(item->room_id);
+
+    if (room != NULL) {
+        room_send(room, om);
+    } else {
+        om_cleanup(om);
+    }
+}
+
 /**
  * Gets whether or not the item is walkable.
  *
