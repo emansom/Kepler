@@ -31,18 +31,45 @@ void *game_thread_loop(void *arguments) {
     return NULL;
 }
 
-void *game_thread_task(unsigned long ticks) {
+void game_thread_task(unsigned long ticks) {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
         session *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
 
-        if (!player->logged_in) {
+        if (player->disconnected) {
             continue;
         }
 
-        if (player->room_user->room != NULL && time(NULL) > player->room_user->room_idle_timer) {
-            room_leave(player->room_user->room, player, true); // Kick and send to hotel view
+        bool disposed = false;
+
+        // Check ping timeout
+        if (ticks % 60 == 0) {
+            if (player->ping_safe) {
+                player->ping_safe = false;
+
+                outgoing_message *om = om_create(50); // "@r"
+                player_send(player, om);
+                om_cleanup(om);
+            } else {
+                if (player->logged_in) {
+                    log_info("Player %s timed out", player->player_data->username);
+                } else {
+                    log_info("Connection %s timed out", player->ip_address);
+                }
+
+                player_cleanup(player);
+                disposed = true;
+            }
         }
 
+        if (disposed) {
+            continue;
+        }
+
+        if (player->logged_in) {
+            if (player->room_user->room != NULL && time(NULL) > player->room_user->room_idle_timer) {
+                room_leave(player->room_user->room, player, true); // Kick and send to hotel view
+            }
+        }
     }
 }
