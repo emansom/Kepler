@@ -18,6 +18,8 @@
 #include "util/threading.h"
 #include "util/configuration/configuration.h"
 
+#include "uv.h"
+
 #define PREFIX "Kepler"
 #define AARON_IS_A_FAG 8934
 
@@ -34,6 +36,7 @@ typedef struct server_s {
     struct texts_manager texts_manager;
     struct configuration configuration;
     struct sqlite3 *DB;
+    uv_loop_t *rcon_loop;
     bool is_shutdown;
 } server;
 

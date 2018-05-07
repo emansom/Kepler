@@ -10,6 +10,8 @@
 #include "log.h"
 
 #include "server/server_listener.h"
+#include "server/rcon/rcon_listener.h"
+
 #include "communication/message_handler.h"
 #include "database/db_connection.h"
 
@@ -112,8 +114,15 @@ int main(void) {
     strcpy(settings.ip, configuration_get_string("server.ip.address"));
     settings.port = configuration_get_int("server.port");
 
+    server_settings rcon_settings;// = malloc(sizeof(server_settings));
+    strcpy(rcon_settings.ip, configuration_get_string("server.ip.address"));
+    rcon_settings.port = 12309;
+
     pthread_t server_thread;
     start_server(&settings, &server_thread);
+
+    pthread_t mus_thread;
+    start_rcon(&rcon_settings, &mus_thread);
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];
