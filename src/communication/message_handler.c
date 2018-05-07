@@ -116,7 +116,7 @@
 #include "communication/incoming/inventory/GETSTRIP.h"
 
 // Only allow these headers to be processed if the session is not logged in.
-int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204 };
+int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
 
 /**
  * Assigns all header handlers to this array
