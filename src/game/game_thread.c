@@ -10,8 +10,6 @@
 #include "game_thread.h"
 #include "shared.h"
 
-pthread_mutex_t lock;
-
 void game_thread_init(pthread_t *thread) {
     if (pthread_create(thread, NULL, &game_thread_loop, NULL) != 0) {
         log_fatal("Uh-oh! Unable to spawn game thread");
@@ -34,10 +32,6 @@ void *game_thread_loop(void *arguments) {
 }
 
 void game_thread_task(unsigned long ticks) {
-    if (pthread_mutex_init(&lock, NULL) != 0) {
-        return;
-    }
-
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
         session *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
@@ -45,6 +39,8 @@ void game_thread_task(unsigned long ticks) {
         if (player->disconnected) {
             continue;
         }
+
+        bool disposed = false;
 
         // Check ping timeout
         if (ticks % 60 == 0) {
@@ -60,8 +56,14 @@ void game_thread_task(unsigned long ticks) {
                 } else {
                     log_info("Connection %s timed out", player->ip_address);
                 }
-                player_disconnect(player);
+
+                player_cleanup(player);
+                disposed = true;
             }
+        }
+
+        if (disposed) {
+            continue;
         }
 
         if (player->logged_in) {
@@ -70,6 +72,4 @@ void game_thread_task(unsigned long ticks) {
             }
         }
     }
-
-    pthread_mutex_destroy(&lock);
 }
