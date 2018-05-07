@@ -111,12 +111,12 @@ int main(void) {
     pthread_t game_thread;
     game_thread_init(&game_thread);
 
-    server_settings *settings = malloc(sizeof(server_settings));
-    strcpy(settings->ip, configuration_get_string("server.ip.address"));
-    settings->port = configuration_get_int("server.port");
+    server_settings settings;// = malloc(sizeof(server_settings));
+    strcpy(settings.ip, configuration_get_string("server.ip.address"));
+    settings.port = configuration_get_int("server.port");
 
     pthread_t server_thread;
-    start_server(settings, &server_thread);
+    start_server(&settings, &server_thread);
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];

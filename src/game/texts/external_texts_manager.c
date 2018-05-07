@@ -54,6 +54,7 @@ void texts_manager_parse(char *file_name) {
     }
 
     free(line);
+    fclose(file);
 }
 
 /**
