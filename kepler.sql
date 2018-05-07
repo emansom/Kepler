@@ -219,7 +219,6 @@ CREATE TABLE IF NOT EXISTS `messenger_messages` (
 	`body`	TEXT NOT NULL,
 	`date`	TEXT NOT NULL
 );
-INSERT INTO `messenger_messages` VALUES (5,1,2,'0','xd','2018-04-23 07:42:53');
 CREATE TABLE IF NOT EXISTS `messenger_friends` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER
