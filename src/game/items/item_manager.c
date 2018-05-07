@@ -66,4 +66,5 @@ void item_manager_dispose() {
     }
 
     hashtable_destroy(global.item_manager.definitions);
+    om_cleanup(global.item_manager.sprite_index);
 }

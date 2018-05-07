@@ -32,10 +32,6 @@ runnable *create_runnable() {
  * @param run the runnable task
  */
 void do_room_task(runnable *run) {
-    if (room_manager_get_by_id(run->room_id) == NULL) {
-        return;
-    }
-
     room *room = room_manager_get_by_id(run->room_id);
 
     if (room == NULL || list_size(room->users) == 0) {
