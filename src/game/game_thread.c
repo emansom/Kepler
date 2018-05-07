@@ -40,8 +40,6 @@ void game_thread_task(unsigned long ticks) {
             continue;
         }
 
-        bool disposed = false;
-
         // Check ping timeout
         if (ticks % 60 == 0) {
             if (player->ping_safe) {
@@ -58,12 +56,8 @@ void game_thread_task(unsigned long ticks) {
                 }
 
                 player_cleanup(player);
-                disposed = true;
+                continue;
             }
-        }
-
-        if (disposed) {
-            continue;
         }
 
         if (player->logged_in) {
