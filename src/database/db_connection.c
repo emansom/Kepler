@@ -89,6 +89,11 @@ sqlite3 *db_create_connection() {
         fclose(file);
     }
 
+    // The CMS might be locking the database file for a small period of legitimate
+    // Therefore we define a timeout of 300ms
+    // 300ms to handle slow mediums like NTFS on a spinning 5400rpm disk
+    sqlite3_busy_timeout(db, 300);
+
     return db;
 }
 
