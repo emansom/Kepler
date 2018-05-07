@@ -127,7 +127,6 @@ void message_handler_init() {
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
     message_requests[49] = GDATE;
-    message_requests[49] = GDATE;
     message_requests[196] = PONG;
 
     if (configuration_get_bool("sso.tickets.enabled")) {
