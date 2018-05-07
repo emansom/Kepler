@@ -98,7 +98,22 @@ int player_query_login(char *username, char *password) {
         USER_ID = sqlite3_column_int(stmt, 0);
         char *hashed_password = (char*)sqlite3_column_text(stmt, 1);
 
+        // 0 is valid, -1 is unvalid
         int valid = crypto_pwhash_str_verify(hashed_password, password, strlen(password));
+
+        if (valid == 0 && crypto_pwhash_str_needs_rehash(hashed_password, crypto_pwhash_OPSLIMIT_INTERACTIVE, crypto_pwhash_MEMLIMIT_INTERACTIVE)) {
+            char hashed_password[crypto_pwhash_STRBYTES];
+
+            // Hash password
+            /*if (crypto_pwhash_str(hashed_password, password, strlen(password), crypto_pwhash_OPSLIMIT_INTERACTIVE, crypto_pwhash_MEMLIMIT_INTERACTIVE) != 0) {
+                // Will only allocate 64MB, but just in case
+                log_fatal("Not enough memory to hash passwords");
+                exit_program();
+                return -1;
+            }*/
+
+            // TODO: update password in database
+        }
 
         // Clear password from memory securely
         sodium_memzero(password, strlen(password));
