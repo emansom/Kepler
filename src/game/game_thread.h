@@ -5,7 +5,7 @@
 
 void game_thread_init(pthread_t *thread);
 void *game_thread_loop(void *arguments);
-void *game_thread_task(unsigned long ticks);
+void game_thread_task(unsigned long ticks);
 
 #endif
 

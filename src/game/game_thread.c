@@ -10,6 +10,8 @@
 #include "game_thread.h"
 #include "shared.h"
 
+pthread_mutex_t lock;
+
 void game_thread_init(pthread_t *thread) {
     if (pthread_create(thread, NULL, &game_thread_loop, NULL) != 0) {
         log_fatal("Uh-oh! Unable to spawn game thread");
@@ -31,18 +33,43 @@ void *game_thread_loop(void *arguments) {
     return NULL;
 }
 
-void *game_thread_task(unsigned long ticks) {
+void game_thread_task(unsigned long ticks) {
+    if (pthread_mutex_init(&lock, NULL) != 0) {
+        return;
+    }
+
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
         session *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
 
-        if (!player->logged_in) {
+        if (player->disconnected) {
             continue;
         }
 
-        if (player->room_user->room != NULL && time(NULL) > player->room_user->room_idle_timer) {
-            room_leave(player->room_user->room, player, true); // Kick and send to hotel view
+        // Check ping timeout
+        if (ticks % 60 == 0) {
+            if (player->ping_safe) {
+                player->ping_safe = false;
+
+                outgoing_message *om = om_create(50); // "@r"
+                player_send(player, om);
+                om_cleanup(om);
+            } else {
+                if (player->logged_in) {
+                    log_info("Player %s timed out", player->player_data->username);
+                } else {
+                    log_info("Connection %s timed out", player->ip_address);
+                }
+                player_disconnect(player);
+            }
         }
 
+        if (player->logged_in) {
+            if (player->room_user->room != NULL && time(NULL) > player->room_user->room_idle_timer) {
+                room_leave(player->room_user->room, player, true); // Kick and send to hotel view
+            }
+        }
     }
+
+    pthread_mutex_destroy(&lock);
 }

@@ -36,6 +36,7 @@ session *player_create(void *socket, char *ip_address) {
     player->ip_address = strdup(ip_address);
     player->player_data = NULL;
     player->logged_in = false;
+    player->ping_safe = false;
     player->room_user = NULL;
     player->messenger = NULL;
     player->inventory = NULL;
@@ -99,6 +100,7 @@ void player_login(session *player) {
         free(welcome_custom);
     }
 
+    player->ping_safe = true;
     player->logged_in = true;
 }
 
