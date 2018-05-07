@@ -34,11 +34,11 @@ int main(void) {
 
     // Always enable debug log level in debug builds
     // Release builds will use info log level
-    #ifndef NDEBUG
-        log_set_level(LOG_DEBUG);
-    #else
-        log_set_level(LOG_INFO);
-    #endif
+#ifndef NDEBUG
+    log_set_level(LOG_DEBUG);
+#else
+    log_set_level(LOG_INFO);
+#endif
 
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
@@ -74,24 +74,21 @@ int main(void) {
     }
 
     log_info("The connection to the database was successful!");
+    log_debug("Configuring SQLite to use WAL for journaling");
 
-    if (!configuration_get_bool("database.disable.wal")) {
-        log_debug("Configuring SQLite to use WAL for journaling");
+    sqlite3_stmt *stmt;
+    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
 
-        sqlite3_stmt *stmt;
-        int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+    db_check_prepare(status, con);
+    db_check_step(sqlite3_step(stmt), con, stmt);
 
-        db_check_prepare(status, con);
-        db_check_step(sqlite3_step(stmt), con, stmt);
+    char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
 
-        char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
-
-        if (strcmp(chosen_journal_mode, "wal") != 0) {
-            log_warn("WAL not supported, now using: %s", chosen_journal_mode);
-        }
-
-        db_check_finalize(sqlite3_finalize(stmt), con);
+    if (strcmp(chosen_journal_mode, "wal") != 0) {
+        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
     }
+
+    db_check_finalize(sqlite3_finalize(stmt), con);
 
     global.DB = con;
     global.is_shutdown = false;
@@ -122,7 +119,7 @@ int main(void) {
         char command[COMMAND_INPUT_LENGTH];
         fgets(command, COMMAND_INPUT_LENGTH, stdin);
 
-        char *filter_command = (char*)command;
+        char *filter_command = (char *) command;
         filter_vulnerable_characters(&filter_command, true); // Strip unneeded characters
 
         if (handle_command(filter_command)) {
@@ -177,9 +174,9 @@ void exit_program() {
  */
 void dispose_program() {
     log_info("Shutting down server!");
+    global.is_shutdown = true;
 
     thpool_destroy(global.thread_manager.pool);
-
     player_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();

@@ -27,6 +27,7 @@ void *game_thread_loop(void *arguments) {
         sleep(1);
     }
 
+    printf("Game thread closed..\n");
     return NULL;
 }
 

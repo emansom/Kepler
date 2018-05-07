@@ -94,8 +94,8 @@ void catalogue_page_dispose(catalogue_page *page) {
         hashtable_iter_init(&iter, page->label_extra);
 
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-            char *value = entry->value;
-            free(value);
+            free(entry->key);
+            free(entry->value);
         }
     }
 
