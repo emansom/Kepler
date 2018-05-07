@@ -10,11 +10,9 @@ RUN apt update && apt install -y \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /usr/src/kepler
 
-COPY config.ini /usr/src/kepler
 COPY src/ /usr/src/kepler/src/
 COPY data/ /usr/src/kepler/data/
 COPY CMakeLists.txt /usr/src/kepler
-COPY CMakeFiles /usr/src/kepler
 COPY kepler.sql /usr/src/kepler
 
 RUN cd /usr/src/kepler && \
