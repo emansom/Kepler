@@ -22,12 +22,12 @@ typedef struct item_behaviour_s {
     bool custom_data_numeric_on_off;
     bool customDataNumericState;
     bool is_decoration;
-    bool isPostIt;
+    bool is_post_it;
     bool is_door;
     bool isTeleporter;
     bool isDice;
     bool is_prize_trophy;
-    bool isRedeemable;
+    bool is_redeemable;
     bool isSoundMachine;
     bool isSoundMachineSampleSet;
     bool has_extra_parameter;

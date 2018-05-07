@@ -101,6 +101,9 @@
 #include "communication/incoming/room/items/SETSTUFFDATA.h"
 #include "communication/incoming/room/items/REMOVESTUFF.h"
 #include "communication/incoming/room/items/REMOVEITEM.h"
+#include "communication/incoming/room/items/CONVERT_FURNI_TO_CREDITS.h"
+#include "communication/incoming/room/items/G_IDATA.h"
+#include "communication/incoming/room/items/SETITEMDATA.h"
 
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
@@ -215,6 +218,9 @@ void message_handler_init() {
     message_requests[99] = REMOVESTUFF;
     message_requests[85] = REMOVEITEM;
     message_requests[74] = SETSTUFFDATA;
+    message_requests[183] = CONVERT_FURNI_TO_CREDITS;
+    message_requests[83] = G_IDATA;
+    message_requests[84] = SETITEMDATA;
 
     // Catalogue
     message_requests[101] = GCIX;

@@ -14,7 +14,7 @@
  * @return the list of room items parsed
  */
 List *item_parser_get_items(char *model) {
-    char file_path[30];
+    char file_path[40];
     sprintf(file_path, "data/public_items/%s.dat", model);
 
     FILE *file = fopen(file_path, "r");

@@ -35,6 +35,7 @@ void *do_login(void *args) {
         player_login(player);
     }
 
+    free(ctx);
     pthread_exit((void*) 0);
 }
 

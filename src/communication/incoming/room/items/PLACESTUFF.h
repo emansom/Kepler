@@ -1,3 +1,4 @@
+#include <database/queries/items/item_query.h>
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
@@ -35,18 +36,50 @@ void PLACESTUFF(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    item *item = inventory_get_item(inv, (int)strtol(str_id, NULL, 10));
+    item *place_item = inventory_get_item(inv, (int)strtol(str_id, NULL, 10));
 
-    if (item == NULL) {
+    if (place_item == NULL) {
         goto cleanup;
     }
 
-    if (item->definition->behaviour->is_wall_item) {
+    if (place_item->definition->behaviour->is_wall_item) {
         char id_as_string[10];
-        sprintf(id_as_string, "%i", item->id);
+        sprintf(id_as_string, "%i", place_item->id);
 
         char *wall_position = strdup(content + strlen(id_as_string) + 1);
-        item->wall_position = wall_position;
+
+        if (place_item->definition->behaviour->is_post_it) {
+            // Create postit in database
+            char *default_colour = strdup("FFFF33");
+            int item_id = item_query_create(player->player_data->id, 0, place_item->definition->id, 0, 0, 0, 0, default_colour);
+
+            // Create postit instance using the id retrived from the database
+            item *sticky = item_create(item_id, 0, place_item->definition->id, 0, 0, 0, wall_position, 0, default_colour);
+            room_map_add_item(player->room_user->room, sticky);
+
+            // Update postit amount for the sticky pad pile in hand
+            if (is_numeric(place_item->custom_data)) {
+                int total_stickies = ((int) strtol(place_item->custom_data, NULL, 10)) - 1;
+
+                // No more postits left, delete.
+                if (total_stickies <= 0) {
+                    list_remove(inv->items, place_item, NULL);
+                    item_query_delete(place_item->id);
+                    item_dispose(place_item);
+                } else {
+                    // Subtract postit count
+                    char custom_data[10];
+                    sprintf(custom_data, "%i", total_stickies);
+
+                    item_set_custom_data(place_item, strdup(custom_data));
+                    item_query_save(place_item);
+                }
+            }
+
+            goto cleanup;
+        }
+
+        place_item->wall_position = wall_position;
 
     } else {
         str_x = get_argument(content, " ", 1);
@@ -56,13 +89,13 @@ void PLACESTUFF(session *player, incoming_message *message) {
             goto cleanup;
         }
 
-        item->position->x = (int) strtol(str_x, NULL, 10);
-        item->position->y = (int) strtol(str_y, NULL, 10);
-        item->position->rotation = 0;
+        place_item->position->x = (int) strtol(str_x, NULL, 10);
+        place_item->position->y = (int) strtol(str_y, NULL, 10);
+        place_item->position->rotation = 0;
     }
 
-    room_map_add_item(player->room_user->room, item);
-    list_remove(inv->items, item, NULL);
+    room_map_add_item(player->room_user->room, place_item);
+    list_remove(inv->items, place_item, NULL);
 
     cleanup:
         free(content);

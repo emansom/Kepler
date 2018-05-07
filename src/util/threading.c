@@ -32,10 +32,6 @@ runnable *create_runnable() {
  * @param run the runnable task
  */
 void do_room_task(runnable *run) {
-    if (room_manager_get_by_id(run->room_id) == NULL) {
-        return;
-    }
-
     room *room = room_manager_get_by_id(run->room_id);
 
     if (room == NULL || list_size(room->users) == 0) {
@@ -50,7 +46,11 @@ void do_room_task(runnable *run) {
     }
 
     run->request(room);
+<<<<<<< HEAD
     usleep((useconds_t) run->millis * 1000);
+=======
+    usleep(run->millis * 1000);
+>>>>>>> upstream/master
     thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
 }
 /**

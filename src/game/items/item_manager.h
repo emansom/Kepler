@@ -15,5 +15,6 @@ struct item_manager {
 void item_manager_init();
 void item_manager_delete(item *item);
 item_definition *item_manager_get_definition_by_id(int definition_id);
+void item_manager_dispose();
 
 #endif

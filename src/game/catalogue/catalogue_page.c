@@ -86,6 +86,7 @@ void catalogue_page_dispose(catalogue_page *page) {
     free(page->label_pick);
     free(page->label_extra_s);
 
+
     if (hashtable_size(page->label_extra) > 0) {
         HashTableIter iter;
         TableEntry *entry;
@@ -93,11 +94,12 @@ void catalogue_page_dispose(catalogue_page *page) {
         hashtable_iter_init(&iter, page->label_extra);
 
         while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-            char *value = entry->value;
-            free(value);
+            free(entry->key);
+            free(entry->value);
         }
     }
 
     hashtable_destroy(page->label_extra);
+    list_destroy(page->items);
     free(page);
 }

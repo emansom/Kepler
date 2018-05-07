@@ -11,7 +11,7 @@
 #include "database/queries/items/item_query.h"
 #include "util/stringbuilder.h"
 
-void inventory_clear(List *items);
+void inventory_clear(inventory *inventory);
 
 /**
  * Get an inventory struct.
@@ -33,7 +33,7 @@ inventory *inventory_create() {
  */
 void inventory_init(session *player) {
     if (player->inventory->items != NULL) {
-        inventory_clear(player->inventory->items);
+        inventory_clear(player->inventory);
     }
 
     player->inventory->hand_strip_page_index = 0;
@@ -148,8 +148,16 @@ char *inventory_get_casts(inventory *inventory) {
  *
  * @param items the list of items to destory
  */
-void inventory_clear(List *items) {
+void inventory_clear(inventory *inventory) {
+    for (size_t i = 0; i < list_size(inventory->items); i++) {
+        item *item;
+        list_get_at(inventory->items, i, (void *) &item);
 
+        item_dispose(item);
+    }
+
+    list_destroy(inventory->items);
+    inventory->items = NULL;
 }
 
 /**
@@ -159,7 +167,7 @@ void inventory_clear(List *items) {
  */
 void inventory_dispose(inventory *inventory) {
     if (inventory->items != NULL) {
-        inventory_clear(inventory->items);
+        inventory_clear(inventory);
     }
 
     free(inventory);

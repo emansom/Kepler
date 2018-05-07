@@ -264,6 +264,7 @@ void player_cleanup(session *player) {
 
     free(player->ip_address);
     free(player->stream);
+    free(player);
 }
 
 void player_data_cleanup(player_data *player_data) {

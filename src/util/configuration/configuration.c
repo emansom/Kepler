@@ -36,7 +36,6 @@ void configuration_new() {
     FILE *fp = fopen(CONFIGURATION_FILE, "wb");
     fprintf(fp, "[Database]\n");
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
-    fprintf(fp, "database.disable.wal=%s\n", "false");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.port=%i\n", 12321);
@@ -147,4 +146,23 @@ int configuration_get_int(char *key) {
     }
 
     return -1;
+}
+
+/**
+ * Destory configuration
+ */
+void configuration_dispose() {
+    HashTableIter iter;
+    TableEntry *entry;
+    hashtable_iter_init(&iter, global.configuration.entries);
+
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        char *key = entry->key;
+        char *value = entry->value;
+
+        free(key);
+        free(value);
+    }
+
+    hashtable_destroy(global.configuration.entries);
 }

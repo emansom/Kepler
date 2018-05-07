@@ -138,18 +138,19 @@ void room_map_add_items(room *room) {
                 list_get_at(affected_tiles, i, (void*)&pos);
 
                 if (pos->x == item->position->x && pos->y == item->position->y) {
-                    continue;
+                    goto remove_tile;
                 }
 
                 room_tile *affected_tile = room->room_map->map[pos->x][pos->y];
 
                 if (affected_tile == NULL) {
-                    continue;
+                    goto remove_tile;
                 }
 
                 affected_tile->tile_height = item_total_height(item);
                 affected_tile->highest_item = item;
 
+                remove_tile:
                 free(pos);
             }
 

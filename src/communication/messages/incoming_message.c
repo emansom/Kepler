@@ -15,6 +15,7 @@ incoming_message *im_create(char *message) {
     im->total_length = (int)strlen(message);
     im->header = im_read_b64(im);
     im->header_id = base64_decode(im->header);
+    return im;
 }
 
 /**

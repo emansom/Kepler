@@ -23,12 +23,12 @@ item_behaviour *item_behaviour_create() {
     behaviour->custom_data_numeric_on_off = false;
     behaviour->customDataNumericState = false;
     behaviour->is_decoration = false;
-    behaviour->isPostIt = false;
+    behaviour->is_post_it = false;
     behaviour->is_door = false;
     behaviour->isTeleporter = false;
     behaviour->isDice = false;
     behaviour->is_prize_trophy = false;
-    behaviour->isRedeemable = false;
+    behaviour->is_redeemable = false;
     behaviour->isSoundMachine = false;
     behaviour->isSoundMachineSampleSet = false;
     behaviour->has_extra_parameter = false;
@@ -37,7 +37,11 @@ item_behaviour *item_behaviour_create() {
 
 item_behaviour *item_behaviour_parse(item_definition *def) {
     item_behaviour *behaviour = item_behaviour_create();
-    
+
+    if (def->behaviour_data == NULL) {
+        return behaviour;
+    }
+
     for (int i = 0; i < strlen(def->behaviour_data); i++) {
         char c = def->behaviour_data[i];
 
@@ -106,7 +110,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'J') {
-            behaviour->isPostIt = true;
+            behaviour->is_post_it = true;
         }
 
         if (c == 'D') {
@@ -126,7 +130,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'Q') {
-            behaviour->isRedeemable = true;
+            behaviour->is_redeemable = true;
         }
 
         if (c == 'A') {

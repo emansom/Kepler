@@ -348,19 +348,33 @@ void room_dispose(room *room, bool force_dispose) {
     room->tick = 0;
     room_map_destroy(room);
 
-    if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public rooms model
+    if (room->room_data->model_data->public_items != NULL && list_size(room->room_data->model_data->public_items) > 0 && !force_dispose) { // model is a public rooms model
         return; // Prevent public rooms
     }
 
+
     room_item_manager_dispose(room);
 
-    if (!force_dispose) {
-        if (player_manager_find_by_id(room->room_data->owner_id) != NULL) {
-            return;
-        }
+    if (!force_dispose &&player_manager_find_by_id(room->room_data->owner_id) != NULL) {
+        return;
     }
 
     room_manager_remove(room->room_id);
+
+    for (size_t i = 0; i < list_size(room->rights); i++) {
+        rights_entry *rights_entry;
+        list_get_at(room->rights, i, (void *) &rights_entry);
+        free(rights_entry);
+    }
+
+    list_destroy(room->rights);
+    list_destroy(room->users);
+    list_destroy(room->items);
+
+    room->users = NULL;
+    room->rights = NULL;
+    room->users = NULL;
+
 
     if (room->room_data != NULL) {
         free(room->room_data->name);
@@ -371,24 +385,6 @@ void room_dispose(room *room, bool force_dispose) {
         free(room->room_data);
         room->room_data = NULL;
     }
-
-    for (size_t i = 0; i < list_size(room->items); i++) {
-        item *item;
-        list_get_at(room->items, i, (void *) &item);
-        item_dispose(item);
-    }
-
-    list_destroy(room->users);
-    list_destroy(room->items);
-
-    for (size_t i = 0; i < list_size(room->rights); i++) {
-        rights_entry *rights_entry;
-        list_get_at(room->rights, i, (void *) &rights_entry);
-        free(rights_entry);
-    }
-
-    list_destroy(room->rights);
-    room->users = NULL;
 
     free(room);
 }

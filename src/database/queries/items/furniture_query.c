@@ -24,7 +24,6 @@ HashTable *furniture_query_definitions() {
     sqlite3_stmt *stmt;
 
     int status = sqlite3_prepare_v2(conn, "SELECT * FROM items_definitions", -1, &stmt, 0);
-
     db_check_prepare(status, conn);
 
     while (true) {
@@ -49,6 +48,5 @@ HashTable *furniture_query_definitions() {
     }
 
     db_check_finalize(sqlite3_finalize(stmt), conn);
-
     return furniture;
 }

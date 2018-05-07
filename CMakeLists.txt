@@ -30,6 +30,7 @@ file(GLOB configuration ${PROJECT_DIR}/util/configuration/*.c)
 file(GLOB communication ${PROJECT_DIR}/communication/*.c)
 file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
+file(GLOB rcon ${PROJECT_DIR}/server/rcon/*.c)
 file(GLOB encoding ${PROJECT_DIR}/util/encoding/*.c)
 file(GLOB database ${PROJECT_DIR}/database/*.c)
 file(GLOB pathfinder ${PROJECT_DIR}/game/pathfinder/*.c)
@@ -72,6 +73,7 @@ add_executable(${EXECUTABLE_NAME}
         ${messages}
         ${communication}
         ${server}
+        ${rcon}
         ${encoding}
         ${database}
         ${pathfinder}

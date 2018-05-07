@@ -12,7 +12,7 @@ typedef struct register_context_s {
     char username[255];
     char password[255];
     char figure[255];
-    char gender[1];
+    char gender[2];
     session *player;
 } register_context;
 
@@ -25,6 +25,7 @@ void *do_register(void *args) {
 
     player_query_create(ctx->username, ctx->figure, ctx->gender, ctx->password);
 
+    free(ctx);
     pthread_exit((void*) 0);
 }
 
