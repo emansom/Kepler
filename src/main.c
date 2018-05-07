@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <sodium.h>
+#include <signal.h>
 
 #include "main.h"
 #include "shared.h"
@@ -25,7 +26,7 @@
 
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    signal(SIGINT, (__sighandler_t) exit_program); // Handle cleanup on Ctrl-C
+    signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
@@ -40,6 +41,7 @@ int main(void) {
         log_set_level(LOG_INFO);
     #endif
 
+    // TODO: set log level from config.ini
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
     }
