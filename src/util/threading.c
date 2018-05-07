@@ -46,11 +46,7 @@ void do_room_task(runnable *run) {
     }
 
     run->request(room);
-<<<<<<< HEAD
-    usleep((useconds_t) run->millis * 1000);
-=======
     usleep(run->millis * 1000);
->>>>>>> upstream/master
     thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
 }
 /**
