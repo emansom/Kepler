@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`username`	TEXT NOT NULL,
 	`password`	TEXT NOT NULL,
 	`figure`	TEXT NOT NULL,
-	`pool_figure`	TEXT,
+	`pool_figure`	TEXT NOT NULL,
 	`sex`	TEXT NOT NULL DEFAULT 'M',
 	`motto`	TEXT NOT NULL DEFAULT 'de kepler whey',
 	`credits`	INTEGER NOT NULL DEFAULT 200,
