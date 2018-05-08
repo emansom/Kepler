@@ -264,7 +264,7 @@ char *item_strip_string(item *item, int strip_slot_id) {
         sb_add_string_delimeter(sb, "S", 30);
     }
 
-    sb_add_int_delimeter(sb, strip_slot_id, 30);
+    sb_add_int_delimeter(sb, item->id, 30);
     sb_add_string_delimeter(sb, item->definition->sprite, 30);
 
     if (item->definition->behaviour->is_wall_item) {
