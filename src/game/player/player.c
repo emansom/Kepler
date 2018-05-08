@@ -53,7 +53,11 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->username = strdup(username);
     data->password = strdup(password);
     data->figure = strdup(figure);
-    data->pool_figure = strdup(pool_figure);
+    if (pool_figure != NULL) {
+        data->pool_figure = strdup(pool_figure);
+    } else {
+        data->pool_figure = "";
+    }
     data->credits = credits;
     data->motto = strdup(motto);
     data->console_motto = strdup(console_motto);
