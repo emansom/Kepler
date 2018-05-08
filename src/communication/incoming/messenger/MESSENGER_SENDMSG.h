@@ -30,7 +30,7 @@ void MESSENGER_SENDMSG(session *player, incoming_message *message) {
 
         if (player_friend != NULL) {
             outgoing_message *response = om_create(134); // "BF"
-            om_write_int(response, 1);
+            //om_write_int(response, 1);
             om_write_int(response, message_id);
             om_write_int(response, player->player_data->id);
             om_write_str(response, date);

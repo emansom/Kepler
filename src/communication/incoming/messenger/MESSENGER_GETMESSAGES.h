@@ -12,7 +12,7 @@ void MESSENGER_GETMESSAGES(session *p, incoming_message *message) {
         list_get_at(p->messenger->messages, i, (void*)&messenger_msg);
 
         outgoing_message *response = om_create(134); // "BF"
-        om_write_int(response, 1);
+        //om_write_int(response, 1);
         om_write_int(response, messenger_msg->id);
         om_write_int(response, messenger_msg->receiver_id);
         om_write_str(response, messenger_msg->date);
