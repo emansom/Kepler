@@ -115,6 +115,10 @@
 // Inventory
 #include "communication/incoming/inventory/GETSTRIP.h"
 
+// Trax
+#include "communication/incoming/room/trax/TURN_SONG_ON.h"
+#include "communication/incoming/room/trax/GET_SONG_INFO.h"
+
 // Only allow these headers to be processed if the session is not logged in.
 int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
 
@@ -217,6 +221,7 @@ void message_handler_init() {
     // Room items
     message_requests[90] = PLACESTUFF;
     message_requests[73] = MOVESTUFF;
+    message_requests[67] = ADDSTRIPITEM;
     message_requests[99] = REMOVESTUFF;
     message_requests[85] = REMOVEITEM;
     message_requests[74] = SETSTUFFDATA;
@@ -232,8 +237,11 @@ void message_handler_init() {
 
     // Inventory
     message_requests[65] = GETSTRIP;
-    message_requests[67] = ADDSTRIPITEM;
     message_requests[66] = FLATPROPBYITEM;
+
+    // Trax
+    message_requests[221] = TURN_SONG_ON;
+    message_requests[217] = GET_SONG_INFO;
 }
 
 /**

@@ -209,10 +209,7 @@ void room_map_move_item(room *room, item *item, bool rotation, coord *old_positi
 
     if (!item->definition->behaviour->is_wall_item) {
         room_map_item_adjustment(room, item, rotation);
-
-        if (!rotation) {
-            room_map_regenerate(room);
-        }
+        room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
         outgoing_message *om = om_create(95); // "A_"
