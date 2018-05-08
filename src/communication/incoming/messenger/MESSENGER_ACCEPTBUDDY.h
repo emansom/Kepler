@@ -14,6 +14,7 @@ void MESSENGER_ACCEPTBUDDY(session *player, incoming_message *message) {
             return;
         }
 
+        messenger_query_new_friend(friend_id, player->player_data->id);
         messenger_query_delete_request(player->player_data->id, friend_id);
         messenger_query_delete_request(friend_id, player->player_data->id);
 
@@ -33,7 +34,6 @@ void MESSENGER_ACCEPTBUDDY(session *player, incoming_message *message) {
             list_add(friend->messenger->friends, messenger_entry_create(player->player_data->id));
         }
 
-        messenger_query_new_friend(friend_id, player->player_data->id);
         list_add(player->messenger->friends, messenger_entry_create(friend_id));
 
         if (friend != NULL) {
