@@ -115,6 +115,13 @@ void do_purchase(session *player, item_definition *def, char *extra_data, int sp
         }
     }
 
+    // False by default, stops the teleporters having that flash effect, etc.
+    if (custom_data == NULL) {
+        if (def->behaviour->custom_data_true_false) {
+            custom_data = strdup("FALSE");
+        }
+    }
+
     int item_id = item_query_create(player->player_data->id, 0, def->id, 0, 0, 0, 0, custom_data);
     item *inventory_item = item_create(item_id, 0, def->id, 0, 0, 0, NULL, 0, custom_data);
 
