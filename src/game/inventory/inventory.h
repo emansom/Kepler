@@ -16,6 +16,7 @@ void inventory_send(inventory *inventory, char *strip_view, session *player);
 item *inventory_get_item(inventory *inventory, int item_id);
 void inventory_change_view(inventory *inventory, char *strip_view);
 char *inventory_get_casts(inventory*);
+char *item_strip_string(item *item, int strip_slot_id);
 void inventory_dispose(inventory *inventory);
 
 #endif
