@@ -30,7 +30,10 @@ void rcon_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
  *
  * @param handle the session that closed
  */
-void rcon_on_connection_close(uv_handle_t *handle) { }
+void rcon_on_connection_close(uv_handle_t *handle) {
+    // TODO: log IP
+    log_debug("RCON connection disconnected");
+}
 
 /**
  * Cleanup buffer after writing data.
@@ -89,6 +92,8 @@ void rcon_on_new_connection(uv_stream_t *server, int status) {
 
     char ip[256];
     uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
+
+    log_debug("RCON [%s] has connected", ip);
 
     int result = uv_accept(server, handle);
 
