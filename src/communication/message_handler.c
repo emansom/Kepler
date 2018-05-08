@@ -217,6 +217,7 @@ void message_handler_init() {
     // Room items
     message_requests[90] = PLACESTUFF;
     message_requests[73] = MOVESTUFF;
+    message_requests[67] = ADDSTRIPITEM;
     message_requests[99] = REMOVESTUFF;
     message_requests[85] = REMOVEITEM;
     message_requests[74] = SETSTUFFDATA;
@@ -232,7 +233,6 @@ void message_handler_init() {
 
     // Inventory
     message_requests[65] = GETSTRIP;
-    message_requests[67] = ADDSTRIPITEM;
     message_requests[66] = FLATPROPBYITEM;
 }
 
