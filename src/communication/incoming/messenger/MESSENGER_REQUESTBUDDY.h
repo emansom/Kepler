@@ -18,6 +18,11 @@ void MESSENGER_REQUESTBUDDY(session *player, incoming_message *message) {
         goto cleanup;
     }
 
+    if (messenger_query_request_exists(player->player_data->id, search_id) ||
+        messenger_query_request_exists(search_id, player->player_data->id)) {
+        goto cleanup;
+    }
+
     if (!messenger_query_new_request(player->player_data->id, search_id)) {
         goto cleanup;
     }
