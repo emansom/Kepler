@@ -60,9 +60,20 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         return;
     }
     if (nread > 0) {
-        int read = 0;
-        int header = buf->base[read++]  - '0';
-        char *message = malloc((nread + 1) * sizeof(char));
+        int header = buf->base[0]  - '0';
+
+        char *message = NULL;
+
+        if (nread > 1) {
+            char *data = strdup(buf->base);
+            message = strdup(data + 1);
+            free(data);
+
+        } else {
+            message = strdup("");
+        }
+        // char data[255] = buf->base + 1;
+        /*char *message = malloc((nread + 1) * sizeof(char));
 
         log_debug("%u", nread);
 
@@ -70,7 +81,7 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
             message[i] = buf->base[read++];
         }
 
-        message[nread] = '\0';
+        message[nread] = '\0';*/
 
         log_debug("RCON Command: %u, data: %s", header, message);
         rcon_handle_command(handle, header, message);
@@ -96,21 +107,19 @@ void rcon_on_new_connection(uv_stream_t *server, int status) {
 
     uv_tcp_t *client = malloc(sizeof(uv_tcp_t));
     uv_tcp_init(global.rcon_loop, client);
-
-    struct sockaddr_in client_addr;
-    int client_addr_length;
-
     uv_stream_t *handle = (uv_stream_t*)client;
-    uv_tcp_getpeername((const uv_tcp_t*) handle, (struct sockaddr*)&client_addr, &client_addr_length);
-
-    char ip[256];
-    uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
-
-    log_debug("RCON [%s] has connected", ip);
-
     int result = uv_accept(server, handle);
 
     if(result == 0) {
+        struct sockaddr_in client_addr;
+        int client_addr_length;
+
+        // uv_stream_t *handle = (uv_stream_t*)client;
+        // char ip[256];
+        // uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
+        //
+        // log_debug("RCON [%s] has connected", ip);
+
         uv_read_start(handle, rcon_alloc_buffer, rcon_on_read);
     } else {
         uv_close((uv_handle_t *) handle, rcon_on_connection_close);

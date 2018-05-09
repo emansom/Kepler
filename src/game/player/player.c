@@ -216,14 +216,15 @@ void session_send_tickets(session *player) {
  * @param player to refresh
  */
 void player_refresh_appearance(session *player) {
-    int id = player->player_data->id;
+    player_data *new_data = player_query_data(player->player_data->id);
 
-    player_data *data = player_query_data(id);
+    // Reload figure, gender and motto
+    log_debug("Figure: %s, sex: %s, motto: %s", new_data->figure, new_data->sex, new_data->motto);
+    player->player_data->figure = strdup(new_data->figure);
+    player->player_data->sex = strdup(new_data->sex);
+    player->player_data->motto = strdup(new_data->motto);
 
-    // Refresh player data
-    player_data_cleanup(player->player_data);
-    player->player_data = NULL;
-    player->player_data = data;
+    player_data_cleanup(new_data);
 
     // Send refresh to user
     outgoing_message *user_info = om_create(5);

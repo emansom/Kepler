@@ -18,7 +18,7 @@ void rcon_handle_command(uv_stream_t *handle, int header, char *message) {
     }
 
     if (header == 2) { // "REFRESH_APPEARANCE"
-        int player_id = atoi(message);
+        int player_id = (int)strtol(message, NULL, 10);
 
         log_debug("RCON: refresh appearance for user id %u", player_id);
 
