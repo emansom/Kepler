@@ -58,6 +58,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
     outgoing_message *players = om_create(34); // "@b
     append_user_status(players, player);
     room_send(player->room_user->room, players);
+    om_cleanup(players);
 
     // Walk to ladder exit
     walk_to(room_entity, 20, 19);
@@ -97,6 +98,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
     sb_add_string(target_diver->sb, " ");
     sb_add_string(target_diver->sb, target);
     room_send((room *) room_entity->room, target_diver);
+    om_cleanup(target_diver);
 
     // Show diving score
     if (total > 0) {
@@ -110,6 +112,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
         sb_add_string(score_message->sb, " ");
         sb_add_string(score_message->sb, score_text);
         room_send((room *) room_entity->room, score_message);
+        om_cleanup(score_message);
     }
 
     // Reset all diving scores

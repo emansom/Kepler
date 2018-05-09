@@ -58,9 +58,9 @@ void walk_task(room *room) {
 
     if (user_updates > 0) {
         room_send(room, status_update);
-    } else {
-        om_cleanup(status_update);
     }
+
+    om_cleanup(status_update);
 
     list_destroy(users);
 }

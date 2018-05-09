@@ -27,6 +27,7 @@ void CHAT(session *player, incoming_message *im) {
                 om_write_int(om, player->room_user->instance_id);
                 om_write_int(om, 0);
                 room_send(player->room_user->room, om);
+                om_cleanup(om);
 
                 player->room_user->is_typing = false;
             }

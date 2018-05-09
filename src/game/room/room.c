@@ -298,8 +298,6 @@ void room_send(room *room, outgoing_message *message) {
         list_get_at(room->users, i, (void*)&player);
         player_send(player, message);
     }
-
-    om_cleanup(message);
 }
 
 /**

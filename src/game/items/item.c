@@ -149,9 +149,9 @@ void item_broadcast_custom_data(item* item, char *custom_data) {
 
     if (room != NULL) {
         room_send(room, om);
-    } else {
-        om_cleanup(om);
     }
+
+    om_cleanup(om);
 }
 
 /**
@@ -271,6 +271,7 @@ void item_assign_program(item *room_item, char *program_state) {
             }
 
             room_send(room, om);
+            om_cleanup(om);
         }
 
     } else {

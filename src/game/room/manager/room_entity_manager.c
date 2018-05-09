@@ -243,6 +243,7 @@ void room_leave(room *room, session *player, bool hotel_view) {
     om = om_create(29); // "@]"
     sb_add_int(om->sb, player->room_user->instance_id);
     room_send(room, om);
+    om_cleanup(om);
 
     // Reset rooms user
     room_user_reset(player->room_user);
