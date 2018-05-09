@@ -33,15 +33,7 @@ int main(void) {
     log_info("Written by Quackster");
 
     configuration_init();
-
-    // Always enable debug log level in debug builds
-    // Release builds will use info log level
-#ifndef NDEBUG
-    log_set_level(LOG_DEBUG);
-#else
-    log_set_level(LOG_INFO);
-#endif
-
+    
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
     }
