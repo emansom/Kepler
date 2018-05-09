@@ -3,14 +3,32 @@
 #include "rcon_handler.h"
 #include "rcon_listener.h"
 
-#include "shared.h"
+#include "game/player/player_manager.h"
+#include "game/player/player.h"
 
-void rcon_handle_command(uv_stream_t *handle, int header) {
+#include "shared.h"
+#include "log.h"
+
+void rcon_handle_command(uv_stream_t *handle, int header, char *message) {
     if (header == 1) { // "GET_USERS"
         char users_online[10];
         sprintf(users_online, "%i", (int) list_size(global.player_manager.players));
 
         rcon_send(handle, users_online);
+    }
+
+    if (header == 2) { // "REFRESH_APPEARANCE"
+        int player_id = atoi(message);
+
+        log_debug("RCON: refresh appearance for user id %u", player_id);
+
+        session *p = player_manager_find_by_id(player_id);
+
+        if (p == NULL) {
+            return;
+        }
+
+        player_refresh_appearance(p);
     }
 }
 

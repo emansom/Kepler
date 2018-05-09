@@ -210,6 +210,46 @@ void session_send_tickets(session *player) {
     om_cleanup(credits);
 }
 
+/*
+ * Refreshes user appearance
+ *
+ * @param player to refresh
+ */
+void player_refresh_appearance(session *player) {
+    int id = player->player_data->id;
+
+    player_data *data = player_query_data(id);
+
+    // Refresh player data
+    player_data_cleanup(player->player_data);
+    player->player_data = NULL;
+    player->player_data = data;
+
+    // Send refresh to user
+    outgoing_message *user_info = om_create(5);
+    om_write_str_int(user_info, player->player_data->id);
+    om_write_str(user_info, player->player_data->username);
+    om_write_str(user_info, player->player_data->figure);
+    om_write_str(user_info, player->player_data->sex);
+    om_write_str(user_info, player->player_data->motto);
+    om_write_int(user_info, player->player_data->tickets);
+    om_write_str(user_info, player->player_data->pool_figure); // pool figure
+    om_write_int(user_info, player->player_data->film);
+    player_send(player, user_info);
+    om_cleanup(user_info);
+
+    // Send refresh to room if inside room
+    if (player->room_user != NULL && player->room_user->room != NULL) {
+        outgoing_message *poof = om_create(266);
+        om_write_int(poof, player->room_user->instance_id);
+        om_write_str(poof, player->player_data->figure);
+        om_write_str(poof, player->player_data->sex);
+        om_write_str(poof, player->player_data->motto);
+        room_send(player->room_user->room, poof);
+        om_cleanup(poof);
+    }
+}
+
 /**
  * Called when a connection is closed
  * @param player the player struct

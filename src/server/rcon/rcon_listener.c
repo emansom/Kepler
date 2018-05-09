@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <ctype.h>
 #include "list.h"
 
 #include "hashtable.h"
@@ -59,10 +60,22 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         return;
     }
     if (nread > 0) {
-        int header = buf->base[0]  - '0';
+        int read = 0;
+        int header = buf->base[read++]  - '0';
+        char *message = malloc((nread + 1) * sizeof(char));
 
-        log_debug("RCON Command: %u", header);
-        rcon_handle_command(handle, header);
+        log_debug("%u", nread);
+
+        for (int i = 0; i < nread; i++) {
+            message[i] = buf->base[read++];
+        }
+
+        message[nread] = '\0';
+
+        log_debug("RCON Command: %u, data: %s", header, message);
+        rcon_handle_command(handle, header, message);
+
+        free(message);
     } else {
         uv_close((uv_handle_t *) handle, rcon_on_connection_close);
     }
