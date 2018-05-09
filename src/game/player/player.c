@@ -247,7 +247,6 @@ void player_refresh_appearance(session *player) {
         om_write_str(poof, player->player_data->sex);
         om_write_str(poof, player->player_data->motto);
         room_send(player->room_user->room, poof);
-        om_cleanup(poof);
     }
 }
 

@@ -86,7 +86,9 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         log_debug("RCON Command: %u, data: %s", header, message);
         rcon_handle_command(handle, header, message);
 
-        free(message);
+        if (message != NULL) {
+            free(message);
+        }
     } else {
         uv_close((uv_handle_t *) handle, rcon_on_connection_close);
     }
