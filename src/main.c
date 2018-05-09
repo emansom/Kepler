@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <sodium.h>
+#include <signal.h>
 
 #include "main.h"
 #include "shared.h"
@@ -39,6 +40,12 @@ int main(void) {
     } else {
         log_set_level(LOG_INFO);
     }
+
+    // Always enable debug log level in debug builds
+    // Release builds will use info log level
+#ifndef NDEBUG
+    log_set_level(LOG_DEBUG);
+#endif
 
     log_debug("Initializing password hashing library");
 

@@ -168,7 +168,7 @@ void item_query_save(item *item) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "UPDATE items SET room_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ?, wall_position = ? WHERE id = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "UPDATE items SET room_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ?, wall_position = ? WHERE id = ?", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 
@@ -203,7 +203,7 @@ void item_query_delete(int item_id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "DELETE FROM items WHERE id = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "DELETE FROM items WHERE id = ?", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 

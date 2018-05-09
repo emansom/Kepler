@@ -41,6 +41,7 @@ void session_send_credits(session*);
 void session_send_tickets(session*);
 void send_localised_error(session*, char*);
 void send_alert(session*, char*);
+void player_refresh_appearance(session *player);
 void player_cleanup(session*);
 void player_data_cleanup(player_data*);
 
