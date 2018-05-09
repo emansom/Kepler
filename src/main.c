@@ -35,19 +35,17 @@ int main(void) {
 
     configuration_init();
 
-    // Always enable debug log level in debug builds
-    // Release builds will use info log level
-#ifndef NDEBUG
-    log_set_level(LOG_DEBUG);
-#else
-    log_set_level(LOG_INFO);
-#endif
-
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
     } else {
         log_set_level(LOG_INFO);
     }
+
+    // Always enable debug log level in debug builds
+    // Release builds will use info log level
+#ifndef NDEBUG
+    log_set_level(LOG_DEBUG);
+#endif
 
     log_debug("Initializing password hashing library");
 
