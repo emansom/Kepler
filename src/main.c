@@ -33,9 +33,11 @@ int main(void) {
     log_info("Written by Quackster");
 
     configuration_init();
-    
+
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
+    } else {
+        log_set_level(LOG_INFO);
     }
 
     log_debug("Initializing password hashing library");
