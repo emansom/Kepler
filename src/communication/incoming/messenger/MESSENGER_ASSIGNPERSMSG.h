@@ -10,6 +10,10 @@ void MESSENGER_ASSIGNPERSMSG(session *player, incoming_message *message) {
 
     char *console_motto = im_read_str(message);
 
+    if (console_motto == NULL) {
+        return;
+    }
+
     free(player->player_data->console_motto);
     player->player_data->console_motto = console_motto;
 

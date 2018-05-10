@@ -8,15 +8,26 @@
 
 void MESSENGER_SENDMSG(session *player, incoming_message *message) {
     int friend_count = im_read_vl64(message);
+
     List *friends;
     list_new(&friends);
 
     for (int i = 0; i < friend_count; i++) {
         int friend_id = im_read_vl64(message);
+
+        if (friend_id == -1) {
+            continue;
+        }
+
         list_add(friends, messenger_entry_create(friend_id));
     }
 
     char *chat_message = im_read_str(message);
+
+    if (chat_message == NULL) {
+        goto cleanup;
+    }
+
     filter_vulnerable_characters(&chat_message, false);
 
     for (size_t i = 0; i < list_size(friends); i++) {
@@ -43,7 +54,7 @@ void MESSENGER_SENDMSG(session *player, incoming_message *message) {
         free(date);
     }
 
+    cleanup:
     free(chat_message);
-    
     list_destroy(friends);
 }

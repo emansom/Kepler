@@ -16,7 +16,7 @@ void DIVE(session *player, incoming_message *message) {
     }
 
     if (!player->room_user->is_diving) {
-        return;
+        goto cleanup;
     }
 
     // Send diving packet to everybody
