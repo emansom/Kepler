@@ -157,11 +157,11 @@ void *listen_rcon(void *arguments)  {
  * @param rcon_thread the thread to initialise
  */
 void start_rcon(server_settings *settings, pthread_t *rcon_thread) {
-    log_info("Starting server on port %i...", settings->port);
+    log_info("Starting RCON on port %i...", settings->port);
 
     if (pthread_create(rcon_thread, NULL, &listen_rcon, (void*) settings) != 0) {
-        log_fatal("Uh-oh! Unable to spawn server thread");
+        log_fatal("Uh-oh! Unable to spawn rcon thread");
     } else {
-        log_info("Server successfully started!", settings->port);
+        log_info("Rcon successfully started!", settings->port);
     }
 }
