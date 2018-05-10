@@ -3,12 +3,7 @@
 #include "game/player/player.h"
 
 void SUBSCRIBE_CLUB(session *player, incoming_message *message) {
-    char *club = im_read_str(message);
-
-    // We don't care about "club"
-    if (club != NULL)
-        free(club);
-
+    free(im_read_str(message));
     int selection = im_read_vl64(message);
     if (selection == 1) {
         if (player->player_data->credits < 25)
