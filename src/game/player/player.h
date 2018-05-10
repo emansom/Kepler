@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <stdbool.h>
+#include <time.h>
 typedef struct outgoing_message_s outgoing_message;
 
 typedef struct player_data_s {
@@ -18,6 +19,8 @@ typedef struct player_data_s {
     int rank;
     char *console_motto;
     unsigned long last_online;
+    time_t club_subscribed;
+    time_t club_expiration;
 } player_data;
 
 typedef struct session_s {
@@ -33,7 +36,7 @@ typedef struct session_s {
 } session;
 
 session *player_create(void*, char*);
-player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *);
+player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *,unsigned long long,unsigned long long);
 void player_login(session*);
 void player_disconnect(session *p);
 void player_send(session *, outgoing_message *);
@@ -42,6 +45,8 @@ void session_send_tickets(session*);
 void send_localised_error(session*, char*);
 void send_alert(session*, char*);
 void player_refresh_appearance(session *player);
+void player_club(session *player, int months);
+void player_refresh_club(session *player);
 void player_cleanup(session*);
 void player_data_cleanup(player_data*);
 

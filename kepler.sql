@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`rank`	INTEGER NOT NULL DEFAULT 1,
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0',
-	`sso_ticket`	TEXT
+	`sso_ticket`	TEXT,
+	`club_subscribed`	INTEGER NOT NULL DEFAULT 0,
+    `club_expiration`	INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS `rooms_rights` (
 	`room_id`	INTEGER,

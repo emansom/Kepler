@@ -26,6 +26,8 @@
 #include "communication/incoming/user/GET_CREDITS.h"
 #include "communication/incoming/user/UPDATE.h"
 #include "communication/incoming/user/UPDATE_ACCOUNT.h"
+#include "communication/incoming/user/GET_CLUB.h"
+#include "communication/incoming/user/SUBSCRIBE_CLUB.h"
 
 // Messenger
 #include "communication/incoming/messenger/MESSENGERINIT.h"
@@ -149,6 +151,10 @@ void message_handler_init() {
     message_requests[8] = GET_CREDITS;
     message_requests[44] = UPDATE;
     message_requests[149] = UPDATE_ACCOUNT;
+
+    // Club
+    message_requests[26] = GET_CLUB;
+    message_requests[190] = SUBSCRIBE_CLUB;
 
     // Messenger
     message_requests[12] = MESSENGERINIT;
