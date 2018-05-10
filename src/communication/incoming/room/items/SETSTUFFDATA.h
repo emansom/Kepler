@@ -61,18 +61,8 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
     }
 
     if (new_data != NULL) {
-        if (item->custom_data != NULL) {
-            free(item->custom_data);
-            item->custom_data = NULL;
-        }
-
-        item->custom_data = new_data;
-
-        outgoing_message *om = om_create(88); // "AX"
-        sb_add_int_delimeter(om->sb, item->id, 2);
-        sb_add_string_delimeter(om->sb, item->custom_data, 2);
-        sb_add_string_delimeter(om->sb, "", 2);
-        room_send(player->room_user->room, om);
+        item_set_custom_data(item, new_data);
+        item_broadcast_custom_data(item, new_data);
 
         if (!item->definition->behaviour->custom_data_true_false) {
             item_query_save(item);

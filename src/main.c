@@ -1,5 +1,6 @@
 #include <stdbool.h>
 #include <sodium.h>
+#include <signal.h>
 
 #include "main.h"
 #include "shared.h"
@@ -10,6 +11,8 @@
 #include "log.h"
 
 #include "server/server_listener.h"
+#include "server/rcon/rcon_listener.h"
+
 #include "communication/message_handler.h"
 #include "database/db_connection.h"
 
@@ -25,24 +28,24 @@
 
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    signal(SIGINT, (__sighandler_t) exit_program); // Handle cleanup on Ctrl-C
+    signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
 
     configuration_init();
 
-    // Always enable debug log level in debug builds
-    // Release builds will use info log level
-    #ifndef NDEBUG
-        log_set_level(LOG_DEBUG);
-    #else
-        log_set_level(LOG_INFO);
-    #endif
-
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
+    } else {
+        log_set_level(LOG_INFO);
     }
+
+    // Always enable debug log level in debug builds
+    // Release builds will use info log level
+#ifndef NDEBUG
+    log_set_level(LOG_DEBUG);
+#endif
 
     log_debug("Initializing password hashing library");
 
@@ -74,24 +77,21 @@ int main(void) {
     }
 
     log_info("The connection to the database was successful!");
+    log_debug("Configuring SQLite to use WAL for journaling");
 
-    if (!configuration_get_bool("database.disable.wal")) {
-        log_debug("Configuring SQLite to use WAL for journaling");
+    sqlite3_stmt *stmt;
+    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
 
-        sqlite3_stmt *stmt;
-        int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+    db_check_prepare(status, con);
+    db_check_step(sqlite3_step(stmt), con, stmt);
 
-        db_check_prepare(status, con);
-        db_check_step(sqlite3_step(stmt), con, stmt);
+    char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
 
-        char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
-
-        if (strcmp(chosen_journal_mode, "wal") != 0) {
-            log_warn("WAL not supported, now using: %s", chosen_journal_mode);
-        }
-
-        db_check_finalize(sqlite3_finalize(stmt), con);
+    if (strcmp(chosen_journal_mode, "wal") != 0) {
+        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
     }
+
+    db_check_finalize(sqlite3_finalize(stmt), con);
 
     global.DB = con;
     global.is_shutdown = false;
@@ -111,18 +111,28 @@ int main(void) {
     pthread_t game_thread;
     game_thread_init(&game_thread);
 
-    server_settings *settings = malloc(sizeof(server_settings));
-    strcpy(settings->ip, configuration_get_string("server.ip.address"));
-    settings->port = configuration_get_int("server.port");
+    server_settings settings;// = malloc(sizeof(server_settings));
+    strcpy(settings.ip, configuration_get_string("server.ip.address"));
+    settings.port = configuration_get_int("server.port");
+
+    server_settings rcon_settings;// = malloc(sizeof(server_settings));
+    strcpy(rcon_settings.ip, configuration_get_string("server.ip.address"));
+    rcon_settings.port = 12309;
 
     pthread_t server_thread;
-    start_server(settings, &server_thread);
+    start_server(&settings, &server_thread);
+
+    pthread_t mus_thread;
+    start_rcon(&rcon_settings, &mus_thread);
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];
-        fgets(command, COMMAND_INPUT_LENGTH, stdin);
 
-        char *filter_command = (char*)command;
+        if (!fgets(command, COMMAND_INPUT_LENGTH, stdin)) {
+            continue;
+        }
+
+        char *filter_command = (char *) command;
         filter_vulnerable_characters(&filter_command, true); // Strip unneeded characters
 
         if (handle_command(filter_command)) {
@@ -151,7 +161,7 @@ bool handle_command(char *command) {
         }
 
         int modified_rows = db_execute_query(query_to_run);
-        log_info("Executed query (%s) with modified rows: %i\n", query_to_run, modified_rows);
+        log_info("Executed query with modified rows: %i\n", modified_rows);
 
         return false;
     }
@@ -177,14 +187,17 @@ void exit_program() {
  */
 void dispose_program() {
     log_info("Shutting down server!");
+    global.is_shutdown = true;
 
     thpool_destroy(global.thread_manager.pool);
-
     player_manager_dispose();
-    room_manager_dispose();
-    model_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();
+    configuration_dispose();
+    texts_manager_dispose();
+    room_manager_dispose();
+    model_manager_dispose();
+    item_manager_dispose();
 
     if (sqlite3_close(global.DB) != SQLITE_OK) {
         log_fatal("Could not close SQLite database: %s", sqlite3_errmsg(global.DB));

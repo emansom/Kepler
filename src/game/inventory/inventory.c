@@ -11,7 +11,7 @@
 #include "database/queries/items/item_query.h"
 #include "util/stringbuilder.h"
 
-void inventory_clear(List *items);
+void inventory_clear(inventory *inventory);
 
 /**
  * Get an inventory struct.
@@ -33,7 +33,7 @@ inventory *inventory_create() {
  */
 void inventory_init(session *player) {
     if (player->inventory->items != NULL) {
-        inventory_clear(player->inventory->items);
+        inventory_clear(player->inventory);
     }
 
     player->inventory->hand_strip_page_index = 0;
@@ -45,8 +45,7 @@ void inventory_send(inventory *inv, char *strip_view, session *player) {
     char *item_casts = inventory_get_casts(inv);
 
     outgoing_message *om = om_create(140); // "BL"
-    sb_add_string(om->sb, item_casts);
-    sb_add_char(om->sb, 13);
+    sb_add_string_delimeter(om->sb, item_casts, 13);
     sb_add_int(om->sb, (int) list_size(inv->items));
     player_send(player, om);
     om_cleanup(om);
@@ -75,6 +74,7 @@ item *inventory_get_item(inventory *inventory, int item_id) {
 
 /**
  * Change the view of the inventory, used for pagination.
+ * Credits to Woodpecker v3 for this, thanks Nillus <3
  *
  * @param inventory the inventory to change
  * @param strip_view the view type to change to
@@ -101,6 +101,7 @@ void inventory_change_view(inventory *inventory, char *strip_view) {
 
 /**
  * Get the inventory casts for opening hand.
+ * Credits to Woodpecker v3 for this, thanks Nillus yet again. <3
  *
  * @param inventory the inventory to get the casts for
  */
@@ -144,12 +145,63 @@ char *inventory_get_casts(inventory *inventory) {
 }
 
 /**
+ * Get the string used for packets to append for the hand.
+ *
+ * @param item the item to append
+ * @param strip_slot_id it's strip slot id
+ * @return the string to append
+ */
+char *item_strip_string(item *item, int strip_slot_id) {
+    stringbuilder *sb = sb_create();
+
+    sb_add_string_delimeter(sb, "SI", 30);
+    sb_add_int_delimeter(sb, item->id, 30);
+    sb_add_int_delimeter(sb, strip_slot_id, 30);
+
+    if (item->definition->behaviour->is_wall_item) {
+        sb_add_string_delimeter(sb, "I", 30);
+    } else {
+        sb_add_string_delimeter(sb, "S", 30);
+    }
+
+    sb_add_int_delimeter(sb, item->id, 30);
+    sb_add_string_delimeter(sb, item->definition->sprite, 30);
+
+    if (item->definition->behaviour->is_wall_item) {
+        sb_add_string_delimeter(sb, item->custom_data, 30);
+        sb_add_string_delimeter(sb, "0", 30);
+    } else {
+        sb_add_int_delimeter(sb, item->definition->length, 30);
+        sb_add_int_delimeter(sb, item->definition->width, 30);
+        sb_add_string_delimeter(sb, item->custom_data, 30);
+        sb_add_string_delimeter(sb, item->definition->colour, 30);
+        sb_add_string_delimeter(sb, "0", 30);
+        sb_add_string_delimeter(sb, item->definition->sprite, 30);
+    }
+
+    sb_add_string(sb, "/");
+
+    char *str = strdup(sb->data);
+    sb_cleanup(sb);
+
+    return str;
+}
+
+/**
  * Clear and destroy inventory list.
  *
  * @param items the list of items to destory
  */
-void inventory_clear(List *items) {
+void inventory_clear(inventory *inventory) {
+    for (size_t i = 0; i < list_size(inventory->items); i++) {
+        item *item;
+        list_get_at(inventory->items, i, (void *) &item);
 
+        item_dispose(item);
+    }
+
+    list_destroy(inventory->items);
+    inventory->items = NULL;
 }
 
 /**
@@ -159,7 +211,7 @@ void inventory_clear(List *items) {
  */
 void inventory_dispose(inventory *inventory) {
     if (inventory->items != NULL) {
-        inventory_clear(inventory->items);
+        inventory_clear(inventory);
     }
 
     free(inventory);

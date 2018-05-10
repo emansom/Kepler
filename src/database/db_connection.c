@@ -27,7 +27,9 @@ char* load_file(char const* path) {
         buffer = (char*)malloc ((length+1)*sizeof(char));
 
         if (buffer) {
-            fread (buffer, sizeof(char), length, f);
+            if (!fread (buffer, sizeof(char), length, f)) {
+                return NULL;
+            }
         }
 
         fclose (f);
@@ -88,6 +90,11 @@ sqlite3 *db_create_connection() {
     if (file != NULL) {
         fclose(file);
     }
+
+    // The CMS might be locking the database file for a small period of legitimate
+    // Therefore we define a timeout of 300ms
+    // 300ms to handle slow mediums like NTFS on a spinning 5400rpm disk
+    sqlite3_busy_timeout(db, 300);
 
     return db;
 }

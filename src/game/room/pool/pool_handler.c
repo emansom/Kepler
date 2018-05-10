@@ -86,6 +86,7 @@ void pool_item_walk_on(session *p, item *item) {
         sb_add_string(target_diver->sb, " ");
         sb_add_string(target_diver->sb, target);
         room_send((room *) room_entity->room, target_diver);
+        om_cleanup(target_diver);
 
         room_entity->walking_lock = true;
         room_entity->is_diving = true;

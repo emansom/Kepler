@@ -16,7 +16,7 @@ void DIVE(session *player, incoming_message *message) {
     }
 
     if (!player->room_user->is_diving) {
-        return;
+        goto cleanup;
     }
 
     // Send diving packet to everybody
@@ -25,6 +25,7 @@ void DIVE(session *player, incoming_message *message) {
     sb_add_char(refresh->sb, 13);
     sb_add_string(refresh->sb, diving_combination);
     room_send(player->room_user->room, refresh);
+    om_cleanup(refresh);
 
     cleanup:
         free(diving_combination);

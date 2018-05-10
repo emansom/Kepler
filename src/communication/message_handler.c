@@ -11,6 +11,7 @@
 #include "communication/incoming/login/TRY_LOGIN.h"
 #include "communication/incoming/login/GDATE.h"
 #include "communication/incoming/login/SSO.h"
+#include "communication/incoming/login/PONG.h"
 
 // Register
 #include "communication/incoming/register/APPROVENAME.h"
@@ -102,6 +103,8 @@
 #include "communication/incoming/room/items/REMOVESTUFF.h"
 #include "communication/incoming/room/items/REMOVEITEM.h"
 #include "communication/incoming/room/items/CONVERT_FURNI_TO_CREDITS.h"
+#include "communication/incoming/room/items/G_IDATA.h"
+#include "communication/incoming/room/items/SETITEMDATA.h"
 
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
@@ -112,8 +115,11 @@
 // Inventory
 #include "communication/incoming/inventory/GETSTRIP.h"
 
+// Trax
+#include "communication/incoming/room/trax/GET_SONG_LIST.h"
+
 // Only allow these headers to be processed if the session is not logged in.
-int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204 };
+int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
 
 /**
  * Assigns all header handlers to this array
@@ -124,6 +130,7 @@ void message_handler_init() {
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
     message_requests[49] = GDATE;
+    message_requests[196] = PONG;
 
     if (configuration_get_bool("sso.tickets.enabled")) {
         message_requests[204] = SSO;
@@ -213,10 +220,13 @@ void message_handler_init() {
     // Room items
     message_requests[90] = PLACESTUFF;
     message_requests[73] = MOVESTUFF;
+    message_requests[67] = ADDSTRIPITEM;
     message_requests[99] = REMOVESTUFF;
     message_requests[85] = REMOVEITEM;
     message_requests[74] = SETSTUFFDATA;
     message_requests[183] = CONVERT_FURNI_TO_CREDITS;
+    message_requests[83] = G_IDATA;
+    message_requests[84] = SETITEMDATA;
 
     // Catalogue
     message_requests[101] = GCIX;
@@ -226,8 +236,10 @@ void message_handler_init() {
 
     // Inventory
     message_requests[65] = GETSTRIP;
-    message_requests[67] = ADDSTRIPITEM;
     message_requests[66] = FLATPROPBYITEM;
+
+    // Trax
+    message_requests[244] = GET_SONG_LIST;
 }
 
 /**
@@ -237,8 +249,7 @@ void message_handler_init() {
  */
 void message_handler_invoke(incoming_message *im, session *player) {
     if (configuration_get_bool("debug")) {
-        char *preview = strdup(im->data);
-        replace_vulnerable_characters(&preview, true, '|');
+        char *preview = replace_unreadable_characters(im->data);
         log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);
         free(preview);
     }

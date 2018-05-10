@@ -36,6 +36,7 @@ session *player_create(void *socket, char *ip_address) {
     player->ip_address = strdup(ip_address);
     player->player_data = NULL;
     player->logged_in = false;
+    player->ping_safe = true;
     player->room_user = NULL;
     player->messenger = NULL;
     player->inventory = NULL;
@@ -99,6 +100,7 @@ void player_login(session *player) {
         free(welcome_custom);
     }
 
+    player->ping_safe = true;
     player->logged_in = true;
 }
 
@@ -127,8 +129,7 @@ void player_send(session *p, outgoing_message *om) {
     }
 
     if (configuration_get_bool("debug")) {
-        char *preview = strdup(om->sb->data);
-        replace_vulnerable_characters(&preview, true, '|');
+        char *preview = replace_unreadable_characters(om->sb->data);
         log_debug("Client [%s] outgoing data: %i / %s", p->ip_address, om->header_id, preview);
         free(preview);
     }
@@ -208,6 +209,47 @@ void session_send_tickets(session *player) {
     om_cleanup(credits);
 }
 
+/*
+ * Refreshes user appearance
+ *
+ * @param player to refresh
+ */
+void player_refresh_appearance(session *player) {
+    player_data *new_data = player_query_data(player->player_data->id);
+
+    // Reload figure, gender and motto
+    log_debug("Figure: %s, sex: %s, motto: %s", new_data->figure, new_data->sex, new_data->motto);
+    player->player_data->figure = strdup(new_data->figure);
+    player->player_data->sex = strdup(new_data->sex);
+    player->player_data->motto = strdup(new_data->motto);
+
+    player_data_cleanup(new_data);
+
+    // Send refresh to user
+    outgoing_message *user_info = om_create(5);
+    om_write_str_int(user_info, player->player_data->id);
+    om_write_str(user_info, player->player_data->username);
+    om_write_str(user_info, player->player_data->figure);
+    om_write_str(user_info, player->player_data->sex);
+    om_write_str(user_info, player->player_data->motto);
+    om_write_int(user_info, player->player_data->tickets);
+    om_write_str(user_info, player->player_data->pool_figure); // pool figure
+    om_write_int(user_info, player->player_data->film);
+    player_send(player, user_info);
+    om_cleanup(user_info);
+
+    // Send refresh to room if inside room
+    if (player->room_user != NULL && player->room_user->room != NULL) {
+        outgoing_message *poof = om_create(266);
+        om_write_int(poof, player->room_user->instance_id);
+        om_write_str(poof, player->player_data->figure);
+        om_write_str(poof, player->player_data->sex);
+        om_write_str(poof, player->player_data->motto);
+        room_send(player->room_user->room, poof);
+        om_cleanup(poof);
+    }
+}
+
 /**
  * Called when a connection is closed
  * @param player the player struct
@@ -264,6 +306,7 @@ void player_cleanup(session *player) {
 
     free(player->ip_address);
     free(player->stream);
+    free(player);
 }
 
 void player_data_cleanup(player_data *player_data) {

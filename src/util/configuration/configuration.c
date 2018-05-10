@@ -36,7 +36,6 @@ void configuration_new() {
     FILE *fp = fopen(CONFIGURATION_FILE, "wb");
     fprintf(fp, "[Database]\n");
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
-    fprintf(fp, "database.disable.wal=%s\n", "false");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.port=%i\n", 12321);
@@ -44,7 +43,7 @@ void configuration_new() {
     fprintf(fp, "\n");
     fprintf(fp, "[Game]\n");
     fprintf(fp, "fuck.aaron=%s\n", "true"); // Some fuckings to that guy that got rich of other people's work
-    fprintf(fp, "sso.tickets.enabled=%s\n", "false");
+    fprintf(fp, "sso.tickets.enabled=%s\n", "true");
     fprintf(fp, "\n");
     fprintf(fp, "welcome.message.enabled=%s\n", "true");
     fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");
@@ -147,4 +146,23 @@ int configuration_get_int(char *key) {
     }
 
     return -1;
+}
+
+/**
+ * Destory configuration
+ */
+void configuration_dispose() {
+    HashTableIter iter;
+    TableEntry *entry;
+    hashtable_iter_init(&iter, global.configuration.entries);
+
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        char *key = entry->key;
+        char *value = entry->value;
+
+        free(key);
+        free(value);
+    }
+
+    hashtable_destroy(global.configuration.entries);
 }

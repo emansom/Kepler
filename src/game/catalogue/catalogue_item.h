@@ -28,5 +28,6 @@ char *catalogue_item_get_type(catalogue_item *item);
 char *catalogue_item_get_icon(catalogue_item *item);
 char *catalogue_item_get_size(catalogue_item *item);
 char *catalogue_item_get_dimensions(catalogue_item *item);
+void catalogue_item_dispose(catalogue_item *item);
 
 #endif

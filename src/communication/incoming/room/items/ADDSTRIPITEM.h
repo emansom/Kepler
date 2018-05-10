@@ -33,7 +33,7 @@ void ADDSTRIPITEM(session *player, incoming_message *message) {
 
     item *item = room_item_manager_get(player->room_user->room, (int)strtol(remove_data_item_id, NULL, 10));
 
-    if (item == NULL) {
+    if (item == NULL || item->definition->behaviour->is_post_it) {
         goto cleanup;
     }
 

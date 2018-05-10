@@ -138,18 +138,19 @@ void room_map_add_items(room *room) {
                 list_get_at(affected_tiles, i, (void*)&pos);
 
                 if (pos->x == item->position->x && pos->y == item->position->y) {
-                    continue;
+                    goto remove_tile;
                 }
 
                 room_tile *affected_tile = room->room_map->map[pos->x][pos->y];
 
                 if (affected_tile == NULL) {
-                    continue;
+                    goto remove_tile;
                 }
 
                 affected_tile->tile_height = item_total_height(item);
                 affected_tile->highest_item = item;
 
+                remove_tile:
                 free(pos);
             }
 
@@ -176,18 +177,24 @@ void room_map_add_item(room *room, item *item) {
 
     if (item->definition->behaviour->is_wall_item) {
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(83); // "AS"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     } else {
         room_map_item_adjustment(room, item, false);
         room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(93); // "A]"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     }
 
@@ -208,15 +215,15 @@ void room_map_move_item(room *room, item *item, bool rotation, coord *old_positi
 
     if (!item->definition->behaviour->is_wall_item) {
         room_map_item_adjustment(room, item, rotation);
-
-        if (!rotation) {
-            room_map_regenerate(room);
-        }
+        room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(95); // "A_"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     }
 
@@ -237,13 +244,17 @@ void room_map_remove_item(room *room, item *item) {
         outgoing_message *om = om_create(84); // "AT"
         sb_add_int(om->sb, item->id);
         room_send(room, om);
+        om_cleanup(om);
     } else {
         room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(94); // "A^"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     }
 

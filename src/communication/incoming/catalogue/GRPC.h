@@ -92,6 +92,10 @@ void do_purchase(session *player, item_definition *def, char *extra_data, int sp
             }
         }
 
+        if (def->behaviour->is_post_it) {
+            custom_data = strdup("20");
+        }
+
         if (def->behaviour->is_prize_trophy) {
             filter_vulnerable_characters(&extra_data, true);
 
@@ -108,6 +112,13 @@ void do_purchase(session *player, item_definition *def, char *extra_data, int sp
 
             sb_cleanup(sb);
             free(short_date);
+        }
+    }
+
+    // False by default, stops the teleporters having that flash effect, etc.
+    if (custom_data == NULL) {
+        if (def->behaviour->custom_data_true_false) {
+            custom_data = strdup("FALSE");
         }
     }
 

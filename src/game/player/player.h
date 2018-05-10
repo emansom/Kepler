@@ -22,13 +22,14 @@ typedef struct player_data_s {
 
 typedef struct session_s {
     void *stream;
-    bool disconnected;
     char *ip_address;
     struct player_data_s *player_data;
     struct messenger_s *messenger;
     struct inventory_s *inventory;
     struct room_user_s *room_user;
     bool logged_in;
+    bool disconnected;
+    bool ping_safe;
 } session;
 
 session *player_create(void*, char*);
@@ -40,6 +41,7 @@ void session_send_credits(session*);
 void session_send_tickets(session*);
 void send_localised_error(session*, char*);
 void send_alert(session*, char*);
+void player_refresh_appearance(session *player);
 void player_cleanup(session*);
 void player_data_cleanup(player_data*);
 

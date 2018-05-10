@@ -419,7 +419,7 @@ void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name) 
     // Public rooms send the localised handitem name instead of the drink ID
     if (carry_name != NULL) {
         for (int i = 0; i <= 25; i++) {
-            char external_drink_key[10];
+            char external_drink_key[11];
             sprintf(external_drink_key, "handitem%u", i);
             char *external_drink_name = texts_manager_get_value_by_id(external_drink_key);
 

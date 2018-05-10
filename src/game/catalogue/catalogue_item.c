@@ -121,3 +121,16 @@ char *catalogue_item_get_dimensions(catalogue_item *item) {
         return dimensions;
     }
 }
+
+void catalogue_item_dispose(catalogue_item *item) {
+    free(item->sale_code);
+
+    if (item->is_package) {
+        free(item->package_name);
+        free(item->package_description);
+    }
+
+    list_destroy(item->packages);
+    free(item);
+
+}

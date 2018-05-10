@@ -52,6 +52,7 @@ void FLATPROPBYITEM(session *player, incoming_message *message) {
     sb_add_string(om->sb, "/");
     sb_add_string(om->sb, item->custom_data);
     room_send(room, om);
+    om_cleanup(om);
 
     list_remove(inv->items, item, NULL);
 
