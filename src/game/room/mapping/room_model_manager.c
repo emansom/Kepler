@@ -12,8 +12,7 @@
  * Initialise the model manager.
  */
 void model_manager_init() {
-    list_new(&global.room_model_manager.models);
-    room_query_get_models();
+    global.room_model_manager.models = room_query_get_models();
 }
 
 /**

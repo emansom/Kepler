@@ -47,7 +47,7 @@ int main(void) {
     log_set_level(LOG_DEBUG);
 #endif
 
-    log_debug("Initializing password hashing library");
+    //log_debug("Initializing password hashing library");
 
     if (sodium_init() < 0) {
         log_fatal("Could not initialize password hashing library");
@@ -58,7 +58,7 @@ int main(void) {
         log_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        log_debug("Configuring SQLite to use serialized mode");
+       // log_debug("Configuring SQLite to use serialized mode");
 
         if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
             log_fatal("Could not configurate SQLite to use serialized mode");
@@ -77,7 +77,7 @@ int main(void) {
     }
 
     log_info("The connection to the database was successful!");
-    log_debug("Configuring SQLite to use WAL for journaling");
+    //log_debug("Configuring SQLite to use WAL for journaling");
 
     sqlite3_stmt *stmt;
     int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
@@ -108,22 +108,28 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
+    /*char **test = malloc(sizeof(char*) * 2);
+    test[0] = strdup("ADM");
+    test[1] = strdup("HC1");
+
+    printf("%s, %s\n", test[0], test[1]);*/
+
     pthread_t game_thread;
     game_thread_init(&game_thread);
+
+    server_settings rcon_settings;// = malloc(sizeof(server_settings));
+    strcpy(rcon_settings.ip, configuration_get_string("rcon.ip.address"));
+    rcon_settings.port = configuration_get_int("rcon.port");
 
     server_settings settings;// = malloc(sizeof(server_settings));
     strcpy(settings.ip, configuration_get_string("server.ip.address"));
     settings.port = configuration_get_int("server.port");
 
-    server_settings rcon_settings;// = malloc(sizeof(server_settings));
-    strcpy(rcon_settings.ip, configuration_get_string("server.ip.address"));
-    rcon_settings.port = 12309;
+    pthread_t mus_thread;
+    start_rcon(&rcon_settings, &mus_thread);
 
     pthread_t server_thread;
     start_server(&settings, &server_thread);
-
-    pthread_t mus_thread;
-    start_rcon(&rcon_settings, &mus_thread);
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];
