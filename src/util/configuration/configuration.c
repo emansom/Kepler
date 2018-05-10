@@ -38,12 +38,16 @@ void configuration_new() {
     fprintf(fp, "database.filename=%s\n", "Kepler.db");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
-    fprintf(fp, "server.port=%i\n", 12321);
     fprintf(fp, "server.ip.address=%s\n", "127.0.0.1");
+    fprintf(fp, "server.port=%i\n", 12321);
+    fprintf(fp, "\n");
+    fprintf(fp, "[Rcon]\n");
+    fprintf(fp, "rcon.ip.address=%s\n", "127.0.0.1");
+    fprintf(fp, "rcon.port=%i\n", 12309);
     fprintf(fp, "\n");
     fprintf(fp, "[Game]\n");
-    fprintf(fp, "fuck.aaron=%s\n", "true"); // Some fuckings to that guy that got rich of other people's work
     fprintf(fp, "sso.tickets.enabled=%s\n", "true");
+    fprintf(fp, "fuck.aaron=%s\n", "true"); // Some fuckings to that guy that got rich of other people's work
     fprintf(fp, "\n");
     fprintf(fp, "welcome.message.enabled=%s\n", "true");
     fprintf(fp, "welcome.message.content=%s\n", "Hello, %username%! And welcome to the Kepler server!");

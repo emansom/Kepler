@@ -108,6 +108,12 @@ int main(void) {
     message_handler_init();
     create_thread_pool();
 
+    /*char **test = malloc(sizeof(char*) * 2);
+    test[0] = strdup("ADM");
+    test[1] = strdup("HC1");
+
+    printf("%s, %s\n", test[0], test[1]);*/
+
     pthread_t game_thread;
     game_thread_init(&game_thread);
 
@@ -116,8 +122,8 @@ int main(void) {
     settings.port = configuration_get_int("server.port");
 
     server_settings rcon_settings;// = malloc(sizeof(server_settings));
-    strcpy(rcon_settings.ip, configuration_get_string("server.ip.address"));
-    rcon_settings.port = 12309;
+    strcpy(rcon_settings.ip, configuration_get_string("rcon.ip.address"));
+    rcon_settings.port = configuration_get_int("rcon.port");
 
     pthread_t server_thread;
     start_server(&settings, &server_thread);
