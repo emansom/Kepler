@@ -82,6 +82,14 @@ bool do_roller_item(room *room, item *roller, item *item) {
         return false;
     }
 
+    if (item->definition->behaviour->is_roller) {
+        return false;
+    }
+
+    if (item->definition->length > 1 || item->definition->width > 1) {
+        return false;
+    }
+
     coord to;
     coord_get_front(roller->position, &to);
 
