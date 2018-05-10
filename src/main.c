@@ -161,7 +161,7 @@ bool handle_command(char *command) {
         }
 
         int modified_rows = db_execute_query(query_to_run);
-        log_info("Executed query (%s) with modified rows: %i\n", query_to_run, modified_rows);
+        log_info("Executed query with modified rows: %i\n", modified_rows);
 
         return false;
     }
