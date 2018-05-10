@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`last_online`	TEXT NOT NULL DEFAULT '0',
 	`sso_ticket`	TEXT,
 	`club_subscribed`	INTEGER NOT NULL DEFAULT 0,
-    `club_expiration`	INTEGER NOT NULL DEFAULT 0
+	`club_expiration`	INTEGER NOT NULL DEFAULT 0
 );
 CREATE TABLE IF NOT EXISTS `rooms_rights` (
 	`room_id`	INTEGER,
