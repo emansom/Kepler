@@ -46,7 +46,7 @@ char *get_time_formatted();
 char *get_short_time_formatted();
 char *get_time_formatted_custom(unsigned long);
 void filter_vulnerable_characters(char**, bool);
-void replace_vulnerable_characters(char**, bool, char);
+char *replace_unreadable_characters(char*);
 char *get_argument(char*, char*, int);
 char* replace(char* str, char* a, char* b);
 char *replace_char(const char *, char, char *);

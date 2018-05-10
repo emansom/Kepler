@@ -12,9 +12,10 @@
 void item_manager_init() {
     global.item_manager.definitions = furniture_query_definitions();
     global.item_manager.sprite_index = om_create(295); // "Dg";
-    om_write_int(global.item_manager.sprite_index, (int)hashtable_size(global.item_manager.definitions));
+    om_write_int(global.item_manager.sprite_index, 0);
+    //om_write_int(global.item_manager.sprite_index, (int)hashtable_size(global.item_manager.definitions));
 
-    HashTableIter iter;
+    /*HashTableIter iter;
     TableEntry *entry;
 
     hashtable_iter_init(&iter, global.item_manager.definitions);
@@ -24,7 +25,7 @@ void item_manager_init() {
 
         om_write_str(global.item_manager.sprite_index, def->sprite);
         om_write_int(global.item_manager.sprite_index, def->cast_directory);
-    }
+    }*/
 }
 
 /**
