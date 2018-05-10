@@ -127,7 +127,10 @@ int main(void) {
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];
-        fgets(command, COMMAND_INPUT_LENGTH, stdin);
+
+        if (!fgets(command, COMMAND_INPUT_LENGTH, stdin)) {
+            continue;
+        }
 
         char *filter_command = (char *) command;
         filter_vulnerable_characters(&filter_command, true); // Strip unneeded characters
