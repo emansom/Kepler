@@ -30,7 +30,7 @@ void GOTOFLAT(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    room_enter(room, player);
+    room_enter(room, player, NULL);
 
     cleanup:
         free(content);

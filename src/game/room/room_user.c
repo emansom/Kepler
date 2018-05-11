@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
+#include <game/room/manager/room_entity_manager.h>
 
 #include "log.h"
 #include "hashtable.h"
@@ -140,7 +141,7 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
-    //log_debug("User requested path %i, %i from path %i, %i in rooms %i.", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
+    log_debug("User requested path %i, %i from path %i, %i in rooms %i.", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
 
     if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
         return;
@@ -195,7 +196,19 @@ void stop_walking(room_user *room_user, bool is_silent) {
     room_user_clear_walk_list(room_user);
     room_user->is_walking = false;
 
+    if (room_user->room == NULL) { // Being inside room beyond this point
+        return;
+    }
+
     if (!is_silent) {
+        walkway_entrance *walkway = walkways_activated(room_user);
+
+        if (walkway != NULL) {
+            room *room = walkways_find_room(walkway->model_to);
+            room_enter(room, room_user->player, walkway->destination);
+            return;
+        }
+
         room_user_invoke_item(room_user);
     }
 }

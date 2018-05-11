@@ -21,7 +21,7 @@ void room_directory(session *player, incoming_message *message) {
         room *room = room_manager_get_by_id(room_id);
 
         if (room != NULL) {
-            room_enter(room, player);
+            room_enter(room, player, NULL);
         }
     } 
 
