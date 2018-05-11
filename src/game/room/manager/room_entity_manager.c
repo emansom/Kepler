@@ -281,6 +281,10 @@ void append_user_list(outgoing_message *players, session *player) {
         om_write_str_kv(players, "c", player->player_data->motto);
     }
 
+    if (strlen(player->player_data->active_badge) > 0) {
+        om_write_str_kv(players, "b", player->player_data->active_badge);
+    }
+
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0
         || strcmp(player->room_user->room->room_data->model_data->model_name, "pool_b") == 0
         || strcmp(player->room_user->room->room_data->model_data->model_name, "md_a") == 0) {

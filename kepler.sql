@@ -2299,4 +2299,9 @@ INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_7',41,7,5,1417,0,NULL,NUL
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_6',41,8,5,1418,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_1',41,9,5,1419,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_3',41,10,5,1420,0,NULL,NULL,0);
+
+CREATE TABLE IF NOT EXISTS `users_badges` (
+  `user_id` INTEGER NOT NULL,
+  `badge` INTEGER NOT NULL
+);
 COMMIT;

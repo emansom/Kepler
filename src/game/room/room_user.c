@@ -334,6 +334,18 @@ bool room_user_process_command(room_user *room_user, char *text) {
     return false;
 }
 
+void room_user_update_badge(room_user *room_user) {
+    outgoing_message *badge_notify = om_create(228); // "Cd"
+
+    om_write_int(badge_notify, room_user->instance_id);
+
+    if (strlen(room_user->player->player_data->active_badge) > 0) {
+        om_write_str(badge_notify, room_user->player->player_data->active_badge);
+    }
+
+    room_send(room_user->room, badge_notify);
+}
+
 /**
  * Triggers the current item that the player on top of.
  *

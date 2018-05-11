@@ -47,7 +47,7 @@ session *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online) {
+player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online, unsigned long club_subscribed, unsigned long club_expiration, char *active_badge) {
     player_data *data = malloc(sizeof(player_data));
     data->id = id;
     data->username = strdup(username);
@@ -62,6 +62,9 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->film = film;
     data->rank = rank;
     data->last_online = strtoul(last_online, NULL, 10);
+    data->club_subscribed = strtoul(last_online, NULL, 10);
+    data->club_expiration = strtoul(last_online, NULL, 10);
+    data->active_badge = strdup(active_badge);
     return data;
 }
 
@@ -248,6 +251,58 @@ void player_refresh_appearance(session *player) {
         om_write_str(poof, player->player_data->motto);
         room_send(player->room_user->room, poof);
     }
+}
+
+
+/*
+ * Refreshes user badges
+ *
+ * @param player to refresh
+ */
+void player_refresh_badges(session *player) {
+    Array *badges = player_query_badges(player->player_data->id);
+
+    // if (player->player_data->club_days_left > 0) {
+    //     if (array_add(badges, "HC1") != CC_OK) {
+    //         log_fatal("Couldn't add HC1 to array in player_refresh_badges");
+    //     }
+    //
+    //     // If the user has been subscribed for more than 11 months, give out the gold HC badge :)
+    //     if (player->player_data->club_months_expired > 11) {
+    //         if (array_add(badges, "HC2") != CC_OK) {
+    //             log_fatal("Couldn't add HC2 to array in player_refresh_badges");
+    //         }
+    //     }
+    // }
+
+    outgoing_message *badge_list = om_create(229); // "Ce"
+    om_write_int(badge_list, (int)array_size(badges));
+
+    ArrayIter ai;
+    array_iter_init(&ai, badges);
+
+    int badge_slot = 0;
+    int slot_counter = 0;
+    void *next;
+
+    while (array_iter_next(&ai, &next) != CC_ITER_END) {
+        char *badge = (char*)next;
+        om_write_str(badge_list, badge);
+
+        if (badge == player->player_data->active_badge) {
+            badge_slot = slot_counter;
+        }
+
+        slot_counter++;
+    }
+
+    om_write_int(badge_list, badge_slot);
+    om_write_int(badge_list, strlen(player->player_data->active_badge) > 0);
+
+    player_send(player, badge_list);
+    om_cleanup(badge_list);
+
+    array_destroy(badges);
 }
 
 /**
