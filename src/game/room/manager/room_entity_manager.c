@@ -167,7 +167,7 @@ void room_enter(room *room, session *player, coord *destination) {
     om_cleanup(om);
 
     // Show new session current state of an item program for pools
-    if (list_size(room->room_data->model_data->public_items) > 0) {
+    if (room->room_data->owner_id == 0) {
         for (size_t i = 0; i < list_size(room->items); i++) {
             item *item;
             list_get_at(room->items, i, (void *) &item);

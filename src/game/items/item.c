@@ -315,7 +315,7 @@ void item_dispose(item *item) {
     room *room = room_manager_get_by_id(item->room_id);
 
     if (room != NULL && item->room_id > 0) {
-        if (list_size(room->room_data->model_data->public_items) > 0) {
+        if (room->room_data->owner_id == 0) {
             item_definition_dispose(item->definition); // Destroy if public item since every public item has their own definition
         }
     }

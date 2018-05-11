@@ -13,33 +13,24 @@ void walkways_init() {
     list_new(&global.walkway_manager.walkways);
     walkways_add("rooftop", "rooftop_2", "9,4 10,3 9,3", NULL, false);
     walkways_add("rooftop_2", "rooftop", "3,10 4,10 5,10 3,11 4,11 5,11", "10,5,4,4", true);
-
     walkways_add("old_skool0", "old_skool1", "16,18", NULL, false);
     walkways_add("old_skool1", "old_skool0", "0,7", "15,18,0,6", true);
-
     walkways_add("malja_bar_a", "malja_bar_b", "14,0 15,0", NULL, false);
     walkways_add("malja_bar_b", "malja_bar_a", "5,25 ", "15,1,4,4", true);
-
     walkways_add("bar_a", "bar_b", "9,32 10,32 11,32 9,33 10,33", NULL, false);
     walkways_add("bar_b", "bar_a", "1,10 1,11 1,12", "10,30,5,0", true);
-
     walkways_add("hallway2", "hallway0", "0,6 0,7 0,8 0,9", "29,3,1,6", false);
     walkways_add("hallway2", "hallway3", "6,23 7,23 8,23 9,23", "7,2,1,4", false);
     walkways_add("hallway2", "hallway4", "27,6 27,7 27,8 27,9", "2,3,0,2", false);
-
     walkways_add("hallway0", "hallway2", "31,5 31,4 31,3 31,2", "2,7,1,2", true);
     walkways_add("hallway0", "hallway1", "14,19 15,19 16,19 17,19", "15,2,0,4", true);
-
     walkways_add("hallway1", "hallway3", "31,9 31,8 31,7 31,6", "2,8,1,2", true);
     walkways_add("hallway1", "hallway0", "17,0 16,0 15,0 14,0", "16,17,1,0", true);
-
     walkways_add("hallway3", "hallway2", "9,0 8,0 7,0 6,0", "8,21,1,0", true);
     walkways_add("hallway3", "hallway1", "0,9 0,8 0,7 0,6", "29,7,0,6", true);
     walkways_add("hallway3", "hallway5", "31,6 31,7 31,8 31,9", "2,15,0,2", true);
-
     walkways_add("hallway5", "hallway3", "0,17 0,16 0,15 0,14", "29,7,0,6", true);
     walkways_add("hallway5", "hallway4", "22,0 23,0 24,0 25,0", "24,17,1,0", true);
-
     walkways_add("hallway4", "hallway2", "0,2 0,3 0,4 0,5", "25,7,0,6", true);
     walkways_add("hallway4", "hallway5", "22,19 23,19 24,19 25,19", "24,2,1,4", true);
 }
@@ -78,6 +69,10 @@ void walkways_add(char *model_from, char *model_to, char *from_coords, char *des
 }
 
 walkway_entrance *walkways_activated(room_user *room_user) {
+    if (room_user->room->room_data->owner_id == 0) {
+        return NULL;
+    }
+
     for (size_t i = 0; i < list_size(global.walkway_manager.walkways); i++) {
         walkway_entrance *entrance;
         list_get_at(global.walkway_manager.walkways, i, (void *) &entrance);

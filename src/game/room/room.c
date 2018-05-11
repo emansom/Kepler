@@ -130,7 +130,7 @@ void room_append_data(room *instance, outgoing_message *navigator, int player_id
         return;
     }
 
-    if (list_size(instance->room_data->model_data->public_items) > 0) {
+    if (instance->room_data->owner_id == 0) {
         om_write_int(navigator, instance->room_data->id); // rooms id
         om_write_int(navigator, 1);
         om_write_str(navigator, instance->room_data->name);
@@ -361,10 +361,9 @@ void room_dispose(room *room, bool force_dispose) {
     room->tick = 0;
     room_map_destroy(room);
 
-    if (room->room_data->model_data->public_items != NULL && list_size(room->room_data->model_data->public_items) > 0 && !force_dispose) { // model is a public rooms model
+    if (room->room_data->owner_id == 0 && !force_dispose) { // model is a public rooms model
         return; // Prevent public rooms
     }
-
 
     room_item_manager_dispose(room);
 
