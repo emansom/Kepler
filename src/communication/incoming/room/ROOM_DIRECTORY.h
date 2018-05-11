@@ -4,7 +4,7 @@
 #include "util/encoding/vl64encoding.h"
 #include "game/room/manager/room_entity_manager.h"
 
-void room_directory(session *player, incoming_message *message) {
+void ROOM_DIRECTORY(session *player, incoming_message *message) {
     char *content = im_get_content(message);
     bool is_public = (content[0] == 'A');
 
@@ -23,7 +23,7 @@ void room_directory(session *player, incoming_message *message) {
         if (room != NULL) {
             room_enter(room, player, NULL);
         }
-    } 
+    }
 
     free(content);
     /*om = om_create(166); // "Bf"

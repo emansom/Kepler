@@ -1,6 +1,8 @@
 #ifndef PLAYER_QUERY_H
 #define PLAYER_QUERY_H
 
+#include "array.h"
+
 typedef struct session_s session;
 typedef struct player_data_s player_data;
 
@@ -16,6 +18,7 @@ void query_session_save_looks(session *player);
 void player_query_save_motto(session *player);
 void player_query_save_currency(session *player);
 void player_query_save_tickets(int id, int tickets);
+Array *player_query_badges(int id);
 void player_query_save_club_informations(session *player);
 
 #endif
