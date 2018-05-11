@@ -207,10 +207,6 @@ void stop_walking(room_user *room_user, bool is_silent) {
     }
 }
 
-void room_user_reset_idle_timer(room_user *room_user) {
-    room_user->room_idle_timer = (int) (time(NULL) + 600); // Give the user 10 minutes to idle or they'll be kicked.
-}
-
 /**
  * Animates the users mouth when speaking and detects any gestures.
  *
@@ -295,6 +291,12 @@ void room_user_show_chat(room_user *room_user, char *text, bool is_shout) {
     }
 }
 
+/**
+ * Look towards a certain point.
+ *
+ * @param room_user the room user that looks at a direction
+ * @param towards the coordinate direction to look towards
+ */
 void room_user_look(room_user *room_user, coord *towards) {
     if (room_user->is_walking) {
         return;
@@ -401,6 +403,13 @@ void room_user_invoke_item(room_user *room_user) {
     room_user->needs_update = needs_update;
 }
 
+/**
+ * Carry a drink item.
+ *
+ * @param room_user the room user that will carry the drink item
+ * @param carry_id the carry id
+ * @param carry_name the carry name, will take precedence over the ID if it's not NULL
+ */
 void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name) {
     enum drink_type {
         DRINK,
@@ -541,4 +550,14 @@ void room_user_remove_status(room_user *room_user, char *key) {
  */
 int room_user_has_status(room_user *room_user, char *key) {
     return hashtable_contains_key(room_user->statuses, key);
+}
+
+/**
+ * Resets the time before a user is kicked back to its
+ * original countdown.
+ *
+ * @param room_user the room user to reset for
+ */
+void room_user_reset_idle_timer(room_user *room_user) {
+    room_user->room_idle_timer = (int) (time(NULL) + 600); // Give the user 10 minutes to idle or they'll be kicked.
 }
