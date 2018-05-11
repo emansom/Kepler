@@ -1,12 +1,12 @@
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS `users_room_votes` (
-	`user_id`	INTEGER,
-	`room_id`	INTEGER,
-	`vote`	INTEGER
+	`user_id`	INTEGER NOT NULL,
+	`room_id`	INTEGER NOT NULL,
+	`vote`	INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `users_room_favourites` (
-	`room_id`	INTEGER,
-	`user_id`	INTEGER
+	`room_id`	INTEGER NOT NULL,
+	`user_id`	INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `users` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -24,11 +24,12 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`last_online`	TEXT NOT NULL DEFAULT '0',
 	`sso_ticket`	TEXT,
 	`club_subscribed`	INTEGER NOT NULL DEFAULT 0,
-	`club_expiration`	INTEGER NOT NULL DEFAULT 0
+	`club_expiration`	INTEGER NOT NULL DEFAULT 0,
+	`active_badge`	TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `rooms_rights` (
-	`room_id`	INTEGER,
-	`user_id`	INTEGER
+	`room_id`	INTEGER NOT NULL,
+	`user_id`	INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
@@ -2312,4 +2313,9 @@ INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_7',41,7,5,1417,0,NULL,NUL
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_6',41,8,5,1418,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_1',41,9,5,1419,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_3',41,10,5,1420,0,NULL,NULL,0);
+
+CREATE TABLE IF NOT EXISTS `users_badges` (
+  `user_id` INTEGER NOT NULL,
+  `badge` INTEGER NOT NULL
+);
 COMMIT;

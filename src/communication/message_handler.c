@@ -54,7 +54,7 @@
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
-#include "communication/incoming/room/room_directory.h"
+#include "communication/incoming/room/ROOM_DIRECTORY.h"
 #include "communication/incoming/room/TRYFLAT.h"
 #include "communication/incoming/room/GOTOFLAT.h"
 #include "communication/incoming/room/GETROOMAD.h"
@@ -86,6 +86,8 @@
 #include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
 #include "communication/incoming/room/user/REMOVERIGHTS.h"
 #include "communication/incoming/room/user/ASSIGNRIGHTS.h"
+#include "communication/incoming/room/user/GETAVAILABLEBADGES.h"
+#include "communication/incoming/room/user/SETBADGE.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -181,7 +183,7 @@ void message_handler_init() {
 
     // Room
     message_requests[182] = GETINTERST;
-    message_requests[2] = room_directory;
+    message_requests[2] = ROOM_DIRECTORY;
     message_requests[57] = TRYFLAT; // @y1052/123
     message_requests[59] = GOTOFLAT;
     message_requests[126] = GETROOMAD;
@@ -213,6 +215,8 @@ void message_handler_init() {
     message_requests[318] = USER_CANCEL_TYPING;
     message_requests[96] = ASSIGNRIGHTS;
     message_requests[97] = REMOVERIGHTS;
+    message_requests[157] = GETAVAILABLEBADGES;
+    message_requests[158] = SETBADGE;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
