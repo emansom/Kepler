@@ -200,7 +200,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
 }
 
 void room_user_reset_idle_timer(room_user *room_user) {
-    room_user->room_idle_timer = (int) (time(NULL) + 300); // Give the user 5 minutes to idle or they'll be kicked.
+    room_user->room_idle_timer = (int) (time(NULL) + 600); // Give the user 10 minutes to idle or they'll be kicked.
 }
 
 /**
