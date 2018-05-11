@@ -17,8 +17,11 @@ void walkways_init() {
     walkways_add("old_skool0", "old_skool1", "16,18", NULL);
     walkways_add("old_skool1", "old_skool0", "0,7", "15,18,0,6");
 
-    walkways_add("malja_bar_a", "malja_bar_b", "14,0 15,0 ", NULL);
+    walkways_add("malja_bar_a", "malja_bar_b", "14,0 15,0", NULL);
     walkways_add("malja_bar_b", "malja_bar_a", "5,25 ", "15,1,4,4");
+
+    walkways_add("bar_a", "bar_b", "9,32 10,32 11,32 9,33 10,33", NULL);
+    walkways_add("bar_b", "bar_a", "1,10 1,11 1,12", "10,30,5,0");
 }
 
 void walkways_add(char *model_from, char *model_to, char *from_coords, char *destination) {
