@@ -101,8 +101,4 @@ target_link_libraries(${EXECUTABLE_NAME} dl)
 target_link_libraries(${EXECUTABLE_NAME} uv)
 target_link_libraries(${EXECUTABLE_NAME} pthread)
 target_link_libraries(${EXECUTABLE_NAME} sodium)
-<<<<<<< HEAD
 target_link_libraries(${EXECUTABLE_NAME} sqlite3)
-=======
-target_link_libraries(${EXECUTABLE_NAME} sqlite3)
->>>>>>> upstream/master
