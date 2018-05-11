@@ -45,9 +45,9 @@ int main(void) {
     // Release builds will use info log level
 #ifndef NDEBUG
     log_set_level(LOG_DEBUG);
-#endif
 
-    log_debug("Initializing password hashing library");
+    log_debug("This is a debug build, meant for testing purposes");
+#endif
 
     if (sodium_init() < 0) {
         log_fatal("Could not initialize password hashing library");
@@ -58,8 +58,6 @@ int main(void) {
         log_info("SQLite not threadsafe");
         return EXIT_FAILURE;
     } else {
-        log_debug("Configuring SQLite to use serialized mode");
-
         if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
             log_fatal("Could not configurate SQLite to use serialized mode");
             return EXIT_FAILURE;
@@ -77,7 +75,6 @@ int main(void) {
     }
 
     log_info("The connection to the database was successful!");
-    log_debug("Configuring SQLite to use WAL for journaling");
 
     sqlite3_stmt *stmt;
     int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
