@@ -1,16 +1,14 @@
 #ifndef WALKWAYS_H
 #define WALKWAYS_H
 
-typedef struct hashtable_s HashTable;
 typedef struct list_s List;
 
 typedef struct coord_s coord;
-
 typedef struct room_s room;
 typedef struct room_user_s room_user;
 
 struct walkway_manager {
-    HashTable *walkways;
+    List *walkways;
 };
 
 typedef struct walkway_entrance_s {

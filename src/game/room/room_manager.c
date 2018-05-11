@@ -133,16 +133,9 @@ void room_manager_remove(int room_id) {
  * of both rooms.
  */
 void room_manager_load_connected_rooms() {
-    if (hashtable_size(global.room_manager.rooms) == 0) {
-        return;
-    }
-
-    HashTableIter iter;
-    hashtable_iter_init(&iter, global.walkway_manager.walkways);
-
-    TableEntry *entry;
-    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
-        walkway_entrance *entrance = entry->value;
+    for (size_t i = 0; i < list_size(global.walkway_manager.walkways); i++) {
+        walkway_entrance *entrance;
+        list_get_at(global.walkway_manager.walkways, i, (void *) &entrance);
 
         HashTableIter roomiter;
         hashtable_iter_init(&roomiter, global.room_manager.rooms);
