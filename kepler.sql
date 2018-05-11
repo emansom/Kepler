@@ -24,12 +24,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`last_online`	TEXT NOT NULL DEFAULT '0',
 	`sso_ticket`	TEXT,
 	`club_subscribed`	INTEGER NOT NULL DEFAULT 0,
-<<<<<<< HEAD
 	`club_expiration`	INTEGER NOT NULL DEFAULT 0,
 	`active_badge`	TEXT NOT NULL
-=======
-	`club_expiration`	INTEGER NOT NULL DEFAULT 0
->>>>>>> upstream/master
 );
 CREATE TABLE IF NOT EXISTS `rooms_rights` (
 	`room_id`	INTEGER NOT NULL,

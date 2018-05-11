@@ -37,11 +37,7 @@ typedef struct session_s {
 } session;
 
 session *player_create(void*, char*);
-<<<<<<< HEAD
 player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*, char*, unsigned long, unsigned long, char*);
-=======
-player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *,unsigned long long,unsigned long long);
->>>>>>> upstream/master
 void player_login(session*);
 void player_disconnect(session *p);
 void player_send(session *, outgoing_message *);
