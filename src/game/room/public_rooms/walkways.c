@@ -13,6 +13,12 @@ void walkways_init() {
     hashtable_new(&global.walkway_manager.walkways);
     walkways_add("rooftop", "rooftop_2", "9,4 10,3 9,3", NULL);
     walkways_add("rooftop_2", "rooftop", "3,10 4,10 5,10 3,11 4,11 5,11", "10,5,4,4");
+
+    walkways_add("old_skool0", "old_skool1", "16,18", NULL);
+    walkways_add("old_skool1", "old_skool0", "0,7", "15,18,0,6");
+
+    walkways_add("malja_bar_a", "malja_bar_b", "14,0 15,0 ", NULL);
+    walkways_add("malja_bar_b", "malja_bar_a", "5,25 ", "15,1,4,4");
 }
 
 void walkways_add(char *model_from, char *model_to, char *from_coords, char *destination) {
