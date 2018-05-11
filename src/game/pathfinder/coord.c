@@ -11,7 +11,7 @@
  * 
  * @return coord ptr
  */
-coord *create_coord(int x, int y) {
+coord *coord_create(int x, int y) {
     coord *pos = malloc(sizeof(coord));
     pos->x = x;
     pos->y = y;

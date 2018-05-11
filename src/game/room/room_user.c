@@ -37,8 +37,8 @@
 room_user *room_user_create(session *player) {
     room_user *user = malloc(sizeof(room_user));
     user->player = player;
-    user->position = create_coord(0, 0);
-    user->goal = create_coord(0, 0);
+    user->position = coord_create(0, 0);
+    user->goal = coord_create(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
     hashtable_new(&user->statuses);

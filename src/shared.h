@@ -11,6 +11,7 @@
 #include "game/player/player_manager.h"
 #include "game/room/mapping/room_model_manager.h"
 #include "game/room/room_manager.h"
+#include "game/room/public_rooms/walkways.h"
 #include "game/catalogue/catalogue_manager.h"
 #include "game/texts/external_texts_manager.h"
 #include "game/navigator/navigator_category_manager.h"
@@ -35,6 +36,7 @@ typedef struct server_s {
     struct item_manager item_manager;
     struct texts_manager texts_manager;
     struct configuration configuration;
+    struct walkway_manager walkway_manager;
     struct sqlite3 *DB;
     uv_loop_t *rcon_loop;
     bool is_shutdown;

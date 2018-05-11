@@ -107,6 +107,7 @@ int main(void) {
     catalogue_manager_init();
     message_handler_init();
     create_thread_pool();
+    walkways_init();
 
     /*char **test = malloc(sizeof(char*) * 2);
     test[0] = strdup("ADM");
