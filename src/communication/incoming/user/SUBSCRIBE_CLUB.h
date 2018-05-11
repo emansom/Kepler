@@ -35,5 +35,5 @@ void SUBSCRIBE_CLUB(session *player, incoming_message *message) {
         player_query_save_currency(player);
     }
 
-    session_send_credits(player);
+    player_refresh_credits(player);
 }

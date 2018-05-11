@@ -11,7 +11,7 @@ void SSO(session *player, incoming_message *message) {
         int player_id = player_query_sso(ticket);
 
         if (player_id == -1) {
-            send_localised_error(player, "Incorrect SSO ticket");
+            player_send_localised_error(player, "Incorrect SSO ticket");
             goto cleanup;
         } else {
             player_data *data = player_query_data(player_id);

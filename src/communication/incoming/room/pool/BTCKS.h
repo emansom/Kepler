@@ -47,16 +47,16 @@ void BTCKS(session *player, incoming_message *message) {
         if (ticket_receiver->player_data->id != player->player_data->id) {
             char alert[80];
             sprintf(alert, "%s has gifted you tickets!", player->player_data->username);
-            send_alert(ticket_receiver, alert);
+            player_send_alert(ticket_receiver, alert);
         }
 
         ticket_receiver->player_data->tickets = data->tickets;
-        session_send_tickets(ticket_receiver);
+        player_refresh_tickets(ticket_receiver);
     }
 
     player->player_data->credits -= cost_credits;
     player_query_save_currency(player);
-    session_send_credits(player);
+    player_refresh_credits(player);
 
     room_user_reset_idle_timer(player->room_user);
     player_data_cleanup(data);

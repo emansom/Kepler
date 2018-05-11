@@ -71,7 +71,7 @@ void SETITEMDATA(session *player, incoming_message *message) {
         item_broadcast_custom_data(item, item->custom_data);
         item_query_save(item);
     } else {
-        send_alert(player, "No scripters allowed, bye bye!");
+        player_send_alert(player, "No scripters allowed, bye bye!");
         player_disconnect(player);
     }
 

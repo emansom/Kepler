@@ -10,6 +10,7 @@
 #include "deque.h"
 
 #include "game/player/player.h"
+#include "game/player/player_refresh.h"
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
@@ -43,7 +44,7 @@ room_user *room_user_create(session *player) {
     user->next = NULL;
     user->walk_list = NULL;
     hashtable_new(&user->statuses);
-    room_user_reset(user);
+    room_user_reset(user, false);
     return user;
 }
 
@@ -52,7 +53,7 @@ room_user *room_user_create(session *player) {
  *
  * @param room_user
  */
-void room_user_reset(room_user *room_user) {
+void room_user_reset(room_user *room_user, bool cleanup) {
     stop_walking(room_user, true);
     room_user_remove_status(room_user, "swim");
     room_user_remove_status(room_user, "sit");
@@ -80,33 +81,26 @@ void room_user_reset(room_user *room_user) {
         free(room_user->next);
         room_user->next = NULL;
     }
-}
 
-/**
- * Called when a player disconnects.
- *
- * @param room_user
- */
-void room_user_cleanup(room_user *room_user) {
-    room_user_reset(room_user);
+    if (cleanup) {
+        if (room_user->position != NULL) {
+            free(room_user->position);
+            room_user->position = NULL;
+        }
 
-    if (room_user->position != NULL) {
-        free(room_user->position);
-        room_user->position = NULL;
+        if (room_user->goal != NULL) {
+            free(room_user->goal);
+            room_user->goal = NULL;
+        }
+
+        if (room_user->statuses != NULL) {
+            hashtable_destroy(room_user->statuses);
+            room_user->statuses = NULL;
+        }
+
+        room_user->room = NULL;
+        free(room_user);
     }
-
-    if (room_user->goal != NULL) {
-        free(room_user->goal);
-        room_user->goal = NULL;
-    }
-
-    if (room_user->statuses != NULL) {
-        hashtable_destroy(room_user->statuses);
-        room_user->statuses = NULL;
-    }
-
-    room_user->room = NULL;
-    free(room_user);
 }
 
 
@@ -341,7 +335,8 @@ bool room_user_process_command(room_user *room_user, char *text) {
 
     // TODO: better way to handle commands
     if (strcmp(text, ":about") == 0) {
-        send_alert(room_user->player, "Kepler server\n\nContributors:\n - Hoshiko:\n - Romuald\n - Glaceon\n\nMade by Quackster");
+        player_send_alert(room_user->player,
+                          "Kepler server\n\nContributors:\n - Hoshiko:\n - Romuald\n - Glaceon\n\nMade by Quackster");
         return true;
     }
 

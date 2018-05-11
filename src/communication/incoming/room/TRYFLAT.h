@@ -58,7 +58,7 @@ void TRYFLAT(session *player, incoming_message *message) {
     // Password checking
     if (room->room_data->accesstype == 2 && room_is_owner(room, player->player_data->id)) { // TODO: Fuseright checks
         if (password == NULL || strcmp(password, room->room_data->password) != 0) {
-            send_localised_error(player, "Incorrect flat password");
+            player_send_localised_error(player, "Incorrect flat password");
             return;
         }
     }

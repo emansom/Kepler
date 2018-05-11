@@ -4,5 +4,5 @@
 #include "game/player/player.h"
 
 void GET_CREDITS(session *player, incoming_message *message) {
-    session_send_credits(player);
+    player_refresh_credits(player);
 }

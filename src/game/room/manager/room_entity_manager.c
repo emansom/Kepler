@@ -253,7 +253,7 @@ void room_leave(room *room, session *player, bool hotel_view) {
     om_cleanup(om);
 
     // Reset rooms user
-    room_user_reset(player->room_user);
+    room_user_reset(player->room_user, false);
     room_dispose(room, false);
 
     // Go to hotel view, if told so.
