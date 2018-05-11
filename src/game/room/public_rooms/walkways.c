@@ -116,11 +116,13 @@ List *walkways_get_coords(char *coords) {
     List *coordinates;
     list_new(&coordinates);
 
-    for (int i = 0; i < 6; i++) {
-        char *coord = get_argument(coords, " ", i);
+    int i = 0;
+
+    while (true) {
+        char *coord = get_argument(coords, " ", i++);
 
         if (coord == NULL) {
-            continue;
+            break;
         }
 
         char *str_x = get_argument(coord, ",", 0);
