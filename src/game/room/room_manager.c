@@ -155,8 +155,6 @@ void room_manager_load_connected_rooms() {
                 room->connected_room = walkways_find_room(entrance->model_to);
 
                 if (entrance->hide_room) {
-                    printf("Room %s is connected to %s\n", room->room_data->name,
-                           room->connected_room->room_data->name);
                     room->connected_room_hide = true;
                 }
             }
