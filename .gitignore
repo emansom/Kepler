@@ -9,3 +9,11 @@ Makefile
 Kepler
 Kepler.cbp
 Kepler.db
+Kepler.db-shm
+Kepler.db-wal
+*.html
+v13/
+v18/
+v21/
+vgcore.*
+config.ini
