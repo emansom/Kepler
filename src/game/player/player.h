@@ -45,7 +45,7 @@ void session_send_tickets(session*);
 void send_localised_error(session*, char*);
 void send_alert(session*, char*);
 void player_refresh_appearance(session *player);
-void player_club(session *player, int months);
+void player_subscribe_club(session *player, int months);
 void player_refresh_club(session *player);
 void player_cleanup(session*);
 void player_data_cleanup(player_data*);
