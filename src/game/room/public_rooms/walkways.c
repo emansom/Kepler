@@ -69,7 +69,7 @@ void walkways_add(char *model_from, char *model_to, char *from_coords, char *des
 }
 
 walkway_entrance *walkways_activated(room_user *room_user) {
-    if (room_user->room->room_data->owner_id == 0) {
+    if (room_user->room->room_data->owner_id > 0) {
         return NULL;
     }
 
