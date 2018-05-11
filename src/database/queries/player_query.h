@@ -16,5 +16,6 @@ void query_session_save_looks(session *player);
 void player_query_save_motto(session *player);
 void player_query_save_currency(session *player);
 void player_query_save_tickets(int id, int tickets);
+void player_query_save_club_informations(session *player);
 
 #endif

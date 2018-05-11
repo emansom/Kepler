@@ -47,7 +47,7 @@ session *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online) {
+player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online, unsigned long long club_subscribed, unsigned long long club_expiration) {
     player_data *data = malloc(sizeof(player_data));
     data->id = id;
     data->username = strdup(username);
@@ -62,6 +62,8 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->film = film;
     data->rank = rank;
     data->last_online = strtoul(last_online, NULL, 10);
+    data->club_subscribed = (time_t)club_subscribed;
+    data->club_expiration = (time_t)club_expiration;
     return data;
 }
 
@@ -248,6 +250,78 @@ void player_refresh_appearance(session *player) {
         room_send(player->room_user->room, poof);
         om_cleanup(poof);
     }
+}
+
+/**
+ * Add club days to user
+ *
+ * @param player: the player to add days to
+ */
+void player_subscribe_club(session *player, int days) {
+    time_t now = time(NULL);
+
+    long day_in_second = 24 * 60 * 60;
+    long seconds_to_add = (days * day_in_second);
+
+    if (player->player_data->club_subscribed == 0)
+        player->player_data->club_subscribed = now;
+
+    if (player->player_data->club_expiration - now <= 0)
+        player->player_data->club_expiration = now + seconds_to_add + (day_in_second - 1);
+    else
+        player->player_data->club_expiration += seconds_to_add;
+
+    player_query_save_club_informations(player);
+
+    // Immediately send club informations to player
+    player_refresh_club(player);
+}
+
+/**
+ * Refresh club informations
+ *
+ * TODO: Give furniture to player
+ * TODO: HC Badge management
+ * @param player: the player to send club informations
+ */
+void player_refresh_club(session *player) {
+    time_t now = time(NULL);
+    int since_months = 0;
+    int total_days = 0;
+    int remaining_days_for_this_month = 0;
+    int prepaid_months = 0;
+
+    if (player->player_data->club_expiration == 0)
+        total_days = 0;
+    else
+        total_days = (int)((player->player_data->club_expiration - now) / 60 / 60 / 24);
+
+    if (total_days < 0)
+        total_days = 0;
+
+    if (total_days < 0 && player->player_data->club_subscribed != 0) {
+        player->player_data->club_subscribed = 0;
+        player_query_save_club_informations(player);
+    }
+
+    remaining_days_for_this_month = ((total_days - 1) % 31) + 1;
+    prepaid_months = (total_days - remaining_days_for_this_month) / 31;
+
+    if (player->player_data->club_subscribed == 0)
+        since_months = 0;
+    else
+        since_months = (int)(now - player->player_data->club_subscribed) / 60 / 60 / 24 / 31;
+
+    outgoing_message *club_habbo = om_create(7);
+    om_write_str(club_habbo, "club_habbo");
+    om_write_int(club_habbo, remaining_days_for_this_month);
+    om_write_int(club_habbo, since_months);
+    om_write_int(club_habbo, prepaid_months);
+
+    // This parameter - when set to 2 - directly opens the Club dialog
+    om_write_int(club_habbo, 1);
+    player_send(player, club_habbo);
+    om_cleanup(club_habbo);
 }
 
 /**
