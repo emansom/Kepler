@@ -41,6 +41,7 @@ file(GLOB queries_rooms ${PROJECT_DIR}/database/queries/rooms/*.c)
 
 # Kepler managers
 file(GLOB game ${PROJECT_DIR}/game/*.c)
+file(GLOB club ${PROJECT_DIR}/game/club/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
 file(GLOB room_pool ${PROJECT_DIR}/game/room/pool/*.c)
@@ -81,6 +82,7 @@ add_executable(${EXECUTABLE_NAME}
         ${queries_rooms}
 
         ${game}
+        ${club}
         ${players}
         ${navigator}
         ${items}
