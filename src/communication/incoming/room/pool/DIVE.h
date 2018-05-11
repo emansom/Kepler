@@ -11,17 +11,13 @@ void DIVE(session *player, incoming_message *message) {
         return;
     }
 
-    // TODO: verify diving combination
-
-    if (player->room_user == NULL || player->room_user->room) {
+    if (player->room_user->room == NULL) {
         goto cleanup;
     }
 
     if (!player->room_user->is_diving) {
         goto cleanup;
     }
-
-    room_user_reset_idle_timer(player->room_user);
 
     // Send diving packet to everybody
     outgoing_message *refresh = om_create(74); // "AJ"
