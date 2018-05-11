@@ -201,7 +201,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
     }
 
     if (!is_silent) {
-        walkway_entrance *walkway = walkways_activated(room_user);
+        walkway_entrance *walkway = walkways_find_current(room_user);
 
         if (walkway != NULL) {
             room *room = walkways_find_room(walkway->model_to);

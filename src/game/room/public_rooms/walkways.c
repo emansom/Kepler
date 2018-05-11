@@ -68,7 +68,7 @@ void walkways_add(char *model_from, char *model_to, char *from_coords, char *des
     list_add(global.walkway_manager.walkways, walkway);
 }
 
-walkway_entrance *walkways_activated(room_user *room_user) {
+walkway_entrance *walkways_find_current(room_user *room_user) {
     if (room_user->room->room_data->owner_id > 0) {
         return NULL;
     }

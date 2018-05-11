@@ -21,7 +21,7 @@ typedef struct walkway_entrance_s {
 
 void walkways_init();
 void walkways_add(char *model_from, char *model_to, char *from_coords, char *destination, bool hide_room);
-walkway_entrance *walkways_activated(room_user *room_user);
+walkway_entrance *walkways_find_current(room_user *room_user);
 room *walkways_find_room(char *model);
 List *walkways_get_coords(char *coords);
 
