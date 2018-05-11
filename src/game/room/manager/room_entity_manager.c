@@ -70,7 +70,7 @@ room_user *get_room_user_by_instance_id(room *room, int instance_id) {
  * @param om the outgoing message
  * @param player the player
  */
-void room_enter(room *room, session *player) {
+void room_enter(room *room, session *player, coord *destination) {
     // Leave other room
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player, false);
@@ -92,13 +92,20 @@ void room_enter(room *room, session *player) {
     room_entity->instance_id = create_instance_id(room_entity);
     room_user_reset_idle_timer(player->room_user);
 
-    room_entity->position->x = room->room_data->model_data->door_x;
-    room_entity->position->y = room->room_data->model_data->door_y;
-    room_entity->position->z = room->room_data->model_data->door_z;
+    if (destination == NULL) {
+        room_entity->position->x = room->room_data->model_data->door_x;
+        room_entity->position->y = room->room_data->model_data->door_y;
+        room_entity->position->z = room->room_data->model_data->door_z;
 
-    coord_set_rotation(room_entity->position,
-                       room->room_data->model_data->door_dir,
-                       room->room_data->model_data->door_dir);
+        coord_set_rotation(room_entity->position,
+                           room->room_data->model_data->door_dir,
+                           room->room_data->model_data->door_dir);
+    } else {
+        room_entity->position->x = destination->x;
+        room_entity->position->y = destination->y;
+        room_entity->position->z = destination->z;
+        coord_set_rotation(room_entity->position, destination->body_rotation, destination->head_rotation);
+    }
 
     list_add(room->users, player);
     room->room_data->visitors_now = (int) list_size(room->users);
@@ -243,6 +250,7 @@ void room_leave(room *room, session *player, bool hotel_view) {
     om = om_create(29); // "@]"
     sb_add_int(om->sb, player->room_user->instance_id);
     room_send(room, om);
+    om_cleanup(om);
 
     // Reset rooms user
     room_user_reset(player->room_user);

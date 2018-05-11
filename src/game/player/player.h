@@ -2,6 +2,7 @@
 #define PLAYER_H
 
 #include <stdbool.h>
+#include <time.h>
 typedef struct outgoing_message_s outgoing_message;
 
 typedef struct player_data_s {
@@ -18,8 +19,8 @@ typedef struct player_data_s {
     int rank;
     char *console_motto;
     unsigned long last_online;
-    unsigned long club_subscribed;
-    unsigned long club_expiration;
+    time_t club_subscribed;
+    time_t club_expiration;
     char *active_badge;
 } player_data;
 
@@ -36,7 +37,11 @@ typedef struct session_s {
 } session;
 
 session *player_create(void*, char*);
+<<<<<<< HEAD
 player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*, char*, unsigned long, unsigned long, char*);
+=======
+player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*,char *,unsigned long long,unsigned long long);
+>>>>>>> upstream/master
 void player_login(session*);
 void player_disconnect(session *p);
 void player_send(session *, outgoing_message *);

@@ -2,7 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
-#include "game/room/pool/pool_handler.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 void SWIMSUIT(session *player, incoming_message *message) {
     char *content = im_get_content(message);
@@ -23,6 +23,7 @@ void SWIMSUIT(session *player, incoming_message *message) {
     outgoing_message *refresh = om_create(28); // "@\"
     append_user_list(refresh, player);
     room_send(player->room_user->room, refresh);
+    om_cleanup(refresh);
 
     // Call handler to exit booth
     pool_booth_exit(player);

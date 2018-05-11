@@ -41,9 +41,10 @@ file(GLOB queries_rooms ${PROJECT_DIR}/database/queries/rooms/*.c)
 
 # Kepler managers
 file(GLOB game ${PROJECT_DIR}/game/*.c)
+file(GLOB club ${PROJECT_DIR}/game/club/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
-file(GLOB room_pool ${PROJECT_DIR}/game/room/pool/*.c)
+file(GLOB room_public ${PROJECT_DIR}/game/room/public_rooms/*.c)
 file(GLOB room_manager ${PROJECT_DIR}/game/room/manager/*.c)
 file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
@@ -61,7 +62,6 @@ file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 add_definitions(-DLOG_USE_COLOR)
 
 add_executable(${EXECUTABLE_NAME}
-        ${sqlite3}
         ${collections}
         ${cthreadpool}
         ${log}
@@ -82,6 +82,7 @@ add_executable(${EXECUTABLE_NAME}
         ${queries_rooms}
 
         ${game}
+        ${club}
         ${players}
         ${navigator}
         ${items}
@@ -89,7 +90,7 @@ add_executable(${EXECUTABLE_NAME}
         ${items_definition}
         ${tasks}
         ${room}
-        ${room_pool}
+        ${room_public}
         ${room_mapping}
         ${room_manager}
         ${messenger}
@@ -100,4 +101,8 @@ target_link_libraries(${EXECUTABLE_NAME} dl)
 target_link_libraries(${EXECUTABLE_NAME} uv)
 target_link_libraries(${EXECUTABLE_NAME} pthread)
 target_link_libraries(${EXECUTABLE_NAME} sodium)
+<<<<<<< HEAD
 target_link_libraries(${EXECUTABLE_NAME} sqlite3)
+=======
+target_link_libraries(${EXECUTABLE_NAME} sqlite3)
+>>>>>>> upstream/master

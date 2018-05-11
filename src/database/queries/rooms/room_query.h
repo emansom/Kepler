@@ -13,7 +13,7 @@ List *room_query_search(char *search_query);
 List *room_query_recent_rooms(int limit, int category_id);
 List *room_query_random_rooms(int limit);
 
-void room_query_get_models();
+List *room_query_get_models();
 room_data *room_create_data_sqlite(room *room, sqlite3_stmt *stmt);
 void room_query_get_categories();
 void query_room_save(room*);

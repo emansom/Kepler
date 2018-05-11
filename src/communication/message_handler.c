@@ -26,6 +26,8 @@
 #include "communication/incoming/user/GET_CREDITS.h"
 #include "communication/incoming/user/UPDATE.h"
 #include "communication/incoming/user/UPDATE_ACCOUNT.h"
+#include "communication/incoming/user/GET_CLUB.h"
+#include "communication/incoming/user/SUBSCRIBE_CLUB.h"
 
 // Messenger
 #include "communication/incoming/messenger/MESSENGERINIT.h"
@@ -118,8 +120,7 @@
 #include "communication/incoming/inventory/GETSTRIP.h"
 
 // Trax
-#include "communication/incoming/room/trax/TURN_SONG_ON.h"
-#include "communication/incoming/room/trax/GET_SONG_INFO.h"
+#include "communication/incoming/room/trax/GET_SONG_LIST.h"
 
 // Only allow these headers to be processed if the session is not logged in.
 int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
@@ -152,6 +153,10 @@ void message_handler_init() {
     message_requests[8] = GET_CREDITS;
     message_requests[44] = UPDATE;
     message_requests[149] = UPDATE_ACCOUNT;
+
+    // Club
+    message_requests[26] = GET_CLUB;
+    message_requests[190] = SUBSCRIBE_CLUB;
 
     // Messenger
     message_requests[12] = MESSENGERINIT;
@@ -244,8 +249,7 @@ void message_handler_init() {
     message_requests[66] = FLATPROPBYITEM;
 
     // Trax
-    message_requests[221] = TURN_SONG_ON;
-    message_requests[217] = GET_SONG_INFO;
+    message_requests[244] = GET_SONG_LIST;
 }
 
 /**
@@ -255,8 +259,7 @@ void message_handler_init() {
  */
 void message_handler_invoke(incoming_message *im, session *player) {
     if (configuration_get_bool("debug")) {
-        char *preview = strdup(im->data);
-        replace_vulnerable_characters(&preview, true, '|');
+        char *preview = replace_unreadable_characters(im->data);
         log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);
         free(preview);
     }

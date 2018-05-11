@@ -2,8 +2,9 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <game/pathfinder/rotation.h>
+#include <game/room/manager/room_entity_manager.h>
 
+#include "log.h"
 #include "hashtable.h"
 #include "list.h"
 #include "deque.h"
@@ -16,13 +17,14 @@
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
-#include "game/room/pool/pool_handler.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 #include "game/items/item.h"
 #include "game/items/definition/item_definition.h"
 
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
+#include "game/pathfinder/rotation.h"
 
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
@@ -36,8 +38,8 @@
 room_user *room_user_create(session *player) {
     room_user *user = malloc(sizeof(room_user));
     user->player = player;
-    user->position = create_coord(0, 0);
-    user->goal = create_coord(0, 0);
+    user->position = coord_create(0, 0);
+    user->goal = coord_create(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
     hashtable_new(&user->statuses);
@@ -139,7 +141,7 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
-    //log_debug("User requested path %i, %i from path %i, %i in rooms %i.", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
+    log_debug("User requested path %i, %i from path %i, %i in rooms %i.", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
 
     if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
         return;
@@ -194,7 +196,19 @@ void stop_walking(room_user *room_user, bool is_silent) {
     room_user_clear_walk_list(room_user);
     room_user->is_walking = false;
 
+    if (room_user->room == NULL) { // Being inside room beyond this point
+        return;
+    }
+
     if (!is_silent) {
+        walkway_entrance *walkway = walkways_activated(room_user);
+
+        if (walkway != NULL) {
+            room *room = walkways_find_room(walkway->model_to);
+            room_enter(room, room_user->player, walkway->destination);
+            return;
+        }
+
         room_user_invoke_item(room_user);
     }
 }
@@ -327,7 +341,7 @@ bool room_user_process_command(room_user *room_user, char *text) {
 
     // TODO: better way to handle commands
     if (strcmp(text, ":about") == 0) {
-        send_alert(room_user->player, "Kepler server\n\nContributors:\n - Hoshiko\n\nMade by Quackster");
+        send_alert(room_user->player, "Kepler server\n\nContributors:\n - Hoshiko:\n - Romuald\n - Glaceon\n\nMade by Quackster");
         return true;
     }
 
@@ -388,6 +402,16 @@ void room_user_invoke_item(room_user *room_user) {
             needs_update = true;
         }
 
+        if (item->definition->behaviour->can_lay_on_top) {
+            char sit_height[11];
+            sprintf(sit_height, " %1.f", item->definition->top_height);
+
+            room_user_add_status(room_user, "lay", sit_height, -1, "", -1, -1);
+            coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
+            needs_update = true;
+        }
+
+
         pool_item_walk_on(room_user->player, item);
     }
 
@@ -431,7 +455,7 @@ void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name) 
     // Public rooms send the localised handitem name instead of the drink ID
     if (carry_name != NULL) {
         for (int i = 0; i <= 25; i++) {
-            char external_drink_key[10];
+            char external_drink_key[11];
             sprintf(external_drink_key, "handitem%u", i);
             char *external_drink_name = texts_manager_get_value_by_id(external_drink_key);
 

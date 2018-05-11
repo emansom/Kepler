@@ -19,10 +19,9 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 #include "game/room/mapping/room_model.h"
-#include "game/room/pool/pool_handler.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 #include "communication/messages/outgoing_message.h"
-
 #include "util/stringbuilder.h"
 
 void room_map_add_items(room *room);
@@ -177,18 +176,24 @@ void room_map_add_item(room *room, item *item) {
 
     if (item->definition->behaviour->is_wall_item) {
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(83); // "AS"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     } else {
         room_map_item_adjustment(room, item, false);
         room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(93); // "A]"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     }
 
@@ -212,9 +217,12 @@ void room_map_move_item(room *room, item *item, bool rotation, coord *old_positi
         room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(95); // "A_"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     }
 
@@ -235,13 +243,17 @@ void room_map_remove_item(room *room, item *item) {
         outgoing_message *om = om_create(84); // "AT"
         sb_add_int(om->sb, item->id);
         room_send(room, om);
+        om_cleanup(om);
     } else {
         room_map_regenerate(room);
 
         char *item_str = item_as_string(item);
+
         outgoing_message *om = om_create(94); // "A^"
         sb_add_string(om->sb, item_str);
         room_send(room, om);
+        om_cleanup(om);
+
         free(item_str);
     }
 

@@ -36,8 +36,12 @@ typedef struct room_data_s {
     int visitors_max;
 } room_data;
 
+typedef struct room_s room;
+
 typedef struct room_s {
     int room_id;
+    room *connected_room;
+    bool connected_room_hide;
     struct room_data_s *room_data;
     room_map *room_map;
     runnable *room_schedule_job;

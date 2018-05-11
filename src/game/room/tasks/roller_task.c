@@ -82,6 +82,14 @@ bool do_roller_item(room *room, item *roller, item *item) {
         return false;
     }
 
+    if (item->definition->behaviour->is_roller) {
+        return false;
+    }
+
+    if (item->definition->length > 1 || item->definition->width > 1) {
+        return false;
+    }
+
     coord to;
     coord_get_front(roller->position, &to);
 
@@ -142,6 +150,7 @@ bool do_roller_item(room *room, item *roller, item *item) {
     sb_add_float_delimeter(om->sb, to.z, 2);
     om_write_int(om, roller->id);
     room_send(room, om);
+    om_cleanup(om);
 
     item_query_save(item);
     return true;
@@ -201,6 +210,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     sb_add_float_delimeter(om->sb, from.z, 2);
     sb_add_float_delimeter(om->sb, to.z, 2);
     room_send(room, om);
+    om_cleanup(om);
 
     previous_tile->entity = NULL;
     next_tile->entity = room_entity;

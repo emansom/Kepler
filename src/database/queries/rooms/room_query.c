@@ -22,7 +22,10 @@
 /**
  * Loads all room models and adds them into the room model manager.
  */
-void room_query_get_models() {
+List *room_query_get_models() {
+    List *models;
+    list_new(&models);
+
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
@@ -30,7 +33,7 @@ void room_query_get_models() {
 
     if (db_check_prepare(status, conn) != SQLITE_OK) {
         log_fatal("Could not load models, invalid query.");
-        return;
+        return NULL;
     }
 
     while (true) {
@@ -50,10 +53,12 @@ void room_query_get_models() {
             (char*)sqlite3_column_text(stmt, 4)
         );
 
-        model_manager_add(model);
+        list_add(models, model);
     }
 
     db_check_finalize(sqlite3_finalize(stmt), conn);
+
+    return models;
 }
 
 /**

@@ -2,7 +2,6 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
-#include "game/room/pool/pool_handler.h"
 
 void BTCKS(session *player, incoming_message *message) {
     int mode = im_read_vl64(message);

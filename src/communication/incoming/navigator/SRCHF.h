@@ -2,14 +2,11 @@
 #include "communication/messages/outgoing_message.h"
 
 void SRCHF(session *player, incoming_message *message) {
-    char *content = im_get_content(message);
+    char *search_query = im_get_content(message);
 
-    if (content == NULL || !starts_with(content, "%")) {
-        goto cleanup;
+    if (search_query == NULL) {
+        return;
     }
-
-    char *search_query = (content + 1);
-    search_query[strlen(search_query) - 1] = '\0';
 
     outgoing_message *om;
     List *searched_rooms = room_query_search(search_query);
@@ -64,5 +61,5 @@ void SRCHF(session *player, incoming_message *message) {
     }
 
     cleanup:
-    free(content);
+    free(search_query);
 }

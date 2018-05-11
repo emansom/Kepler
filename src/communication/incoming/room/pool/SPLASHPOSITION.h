@@ -1,10 +1,10 @@
-#include <game/pathfinder/coord.h>
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
 
-#include "game/room/pool/pool_handler.h"
+#include "game/pathfinder/coord.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
@@ -58,6 +58,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
     outgoing_message *players = om_create(34); // "@b
     append_user_status(players, player);
     room_send(player->room_user->room, players);
+    om_cleanup(players);
 
     // Walk to ladder exit
     walk_to(room_entity, 20, 19);
@@ -97,6 +98,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
     sb_add_string(target_diver->sb, " ");
     sb_add_string(target_diver->sb, target);
     room_send((room *) room_entity->room, target_diver);
+    om_cleanup(target_diver);
 
     // Show diving score
     if (total > 0) {
@@ -110,6 +112,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
         sb_add_string(score_message->sb, " ");
         sb_add_string(score_message->sb, score_text);
         room_send((room *) room_entity->room, score_message);
+        om_cleanup(score_message);
     }
 
     // Reset all diving scores

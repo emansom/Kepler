@@ -62,8 +62,8 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->film = film;
     data->rank = rank;
     data->last_online = strtoul(last_online, NULL, 10);
-    data->club_subscribed = strtoul(last_online, NULL, 10);
-    data->club_expiration = strtoul(last_online, NULL, 10);
+    data->club_subscribed = (time_t)club_subscribed;
+    data->club_expiration = (time_t)club_expiration;
     data->active_badge = strdup(active_badge);
     return data;
 }
@@ -132,8 +132,7 @@ void player_send(session *p, outgoing_message *om) {
     }
 
     if (configuration_get_bool("debug")) {
-        char *preview = strdup(om->sb->data);
-        replace_vulnerable_characters(&preview, true, '|');
+        char *preview = replace_unreadable_characters(om->sb->data);
         log_debug("Client [%s] outgoing data: %i / %s", p->ip_address, om->header_id, preview);
         free(preview);
     }
@@ -250,6 +249,7 @@ void player_refresh_appearance(session *player) {
         om_write_str(poof, player->player_data->sex);
         om_write_str(poof, player->player_data->motto);
         room_send(player->room_user->room, poof);
+        om_cleanup(poof);
     }
 }
 

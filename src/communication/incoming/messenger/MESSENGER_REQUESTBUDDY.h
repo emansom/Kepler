@@ -11,7 +11,6 @@ void MESSENGER_REQUESTBUDDY(session *player, incoming_message *message) {
 
     if (search_id == -1) {
         goto cleanup;
-        return;
     }
 
     if (messenger_is_friends(player->messenger, search_id)) {

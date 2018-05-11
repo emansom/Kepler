@@ -58,7 +58,7 @@ Deque *create_path(room_user *room_user) {
             int y = pathfinder->nodes->y;
 
             if (!pathfinder->failed) {
-                deque_add_first(path, create_coord(x, y));
+                deque_add_first(path, coord_create(x, y));
             }
             
             pathfinder->nodes = (void *)pathfinder->nodes->node;

@@ -29,7 +29,7 @@ room_model *room_model_create(char *model_id, char *model_name, int door_x, int 
     model->door_dir = door_dir;
     model->map_size_x = 0;
     model->map_size_y = 0;
-    model->heightmap = replace_char(heightmap, '|', "\r");
+    model->heightmap = replace(heightmap, "|", "\r");
     model->public_items = NULL;
 
     List *items = item_parser_get_items(model->model_id);

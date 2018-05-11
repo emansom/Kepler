@@ -56,11 +56,11 @@ void rcon_on_write(uv_write_t* req, int status) {
  */
 void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     if (nread == UV_EOF) {
-        uv_close((uv_handle_t*) handle, rcon_on_connection_close);
+        uv_close((uv_handle_t *) handle, rcon_on_connection_close);
         return;
     }
     if (nread > 0) {
-        int header = buf->base[0]  - '0';
+        int header = buf->base[0] - '0';
 
         char *message = NULL;
 
@@ -86,9 +86,7 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         log_debug("RCON Command: %u, data: %s", header, message);
         rcon_handle_command(handle, header, message);
 
-        if (message != NULL) {
-            free(message);
-        }
+        free(message);
     } else {
         uv_close((uv_handle_t *) handle, rcon_on_connection_close);
     }
@@ -159,11 +157,11 @@ void *listen_rcon(void *arguments)  {
  * @param rcon_thread the thread to initialise
  */
 void start_rcon(server_settings *settings, pthread_t *rcon_thread) {
-    log_info("Starting server on port %i...", settings->port);
+    log_info("Starting RCON on port %i...", settings->port);
 
     if (pthread_create(rcon_thread, NULL, &listen_rcon, (void*) settings) != 0) {
-        log_fatal("Uh-oh! Unable to spawn server thread");
+        log_fatal("Uh-oh! Unable to spawn rcon thread");
     } else {
-        log_info("Server successfully started!", settings->port);
+        log_info("Rcon successfully started!", settings->port);
     }
 }

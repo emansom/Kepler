@@ -27,7 +27,9 @@ char* load_file(char const* path) {
         buffer = (char*)malloc ((length+1)*sizeof(char));
 
         if (buffer) {
-            fread (buffer, sizeof(char), length, f);
+            if (!fread (buffer, sizeof(char), length, f)) {
+                return NULL;
+            }
         }
 
         fclose (f);

@@ -422,3 +422,22 @@ Array *player_query_badges(int id) {
 
     return badges;
 }
+
+void player_query_save_club_informations(session *player) {
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare_v2(conn, "UPDATE users SET club_subscribed = ?,club_expiration = ? WHERE id = ?", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_int64(stmt, 1, (sqlite3_int64)player->player_data->club_subscribed);
+        sqlite3_bind_int64(stmt, 2, (sqlite3_int64)player->player_data->club_expiration);
+        sqlite3_bind_int(stmt, 3, player->player_data->id);
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+}
