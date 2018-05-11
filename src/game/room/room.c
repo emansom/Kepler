@@ -30,6 +30,8 @@
 room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
     instance->room_id = room_id;
+    instance->connected_room = NULL;
+    instance->connected_room_hide = false;
     instance->room_data = NULL;
     instance->room_map = NULL;
     instance->room_schedule_job = NULL;
@@ -124,12 +126,25 @@ rights_entry *rights_entry_create(int user_id) {
  * @param player_id the player who requests the room
  */
 void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
+    if (instance->connected_room_hide) {
+        return;
+    }
+
     if (list_size(instance->room_data->model_data->public_items) > 0) {
         om_write_int(navigator, instance->room_data->id); // rooms id
         om_write_int(navigator, 1);
         om_write_str(navigator, instance->room_data->name);
-        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
-        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+
+        int visitors_now = instance->room_data->visitors_now;
+        int visitors_max = instance->room_data->visitors_max;
+
+        if (instance->connected_room != NULL) {
+            visitors_now += instance->connected_room->room_data->visitors_now;
+            visitors_max += instance->connected_room->room_data->visitors_max;
+        }
+
+        om_write_int(navigator, visitors_now); // current visitors
+        om_write_int(navigator, visitors_max); // max vistors
         om_write_int(navigator, instance->room_data->category); // category id
         om_write_str(navigator, instance->room_data->description); // description
         om_write_int(navigator, instance->room_data->id); // rooms id

@@ -11,24 +11,25 @@
 
 void walkways_init() {
     hashtable_new(&global.walkway_manager.walkways);
-    walkways_add("rooftop", "rooftop_2", "9,4 10,3 9,3", NULL);
-    walkways_add("rooftop_2", "rooftop", "3,10 4,10 5,10 3,11 4,11 5,11", "10,5,4,4");
+    walkways_add("rooftop", "rooftop_2", "9,4 10,3 9,3", NULL, false);
+    walkways_add("rooftop_2", "rooftop", "3,10 4,10 5,10 3,11 4,11 5,11", "10,5,4,4", true);
 
-    walkways_add("old_skool0", "old_skool1", "16,18", NULL);
-    walkways_add("old_skool1", "old_skool0", "0,7", "15,18,0,6");
+    walkways_add("old_skool0", "old_skool1", "16,18", NULL, false);
+    walkways_add("old_skool1", "old_skool0", "0,7", "15,18,0,6", true);
 
-    walkways_add("malja_bar_a", "malja_bar_b", "14,0 15,0", NULL);
-    walkways_add("malja_bar_b", "malja_bar_a", "5,25 ", "15,1,4,4");
+    walkways_add("malja_bar_a", "malja_bar_b", "14,0 15,0", NULL, false);
+    walkways_add("malja_bar_b", "malja_bar_a", "5,25 ", "15,1,4,4", true);
 
-    walkways_add("bar_a", "bar_b", "9,32 10,32 11,32 9,33 10,33", NULL);
-    walkways_add("bar_b", "bar_a", "1,10 1,11 1,12", "10,30,5,0");
+    walkways_add("bar_a", "bar_b", "9,32 10,32 11,32 9,33 10,33", NULL, false);
+    walkways_add("bar_b", "bar_a", "1,10 1,11 1,12", "10,30,5,0", true);
 }
 
-void walkways_add(char *model_from, char *model_to, char *from_coords, char *destination) {
+void walkways_add(char *model_from, char *model_to, char *from_coords, char *destination, bool hide_room) {
     walkway_entrance *walkway = malloc(sizeof(walkway_entrance));
     walkway->model_from = strdup(model_from);
     walkway->model_to = strdup(model_to);
     walkway->from_coords = walkways_get_coords(from_coords);
+    walkway->hide_room = hide_room;
 
     if (destination != NULL) {
         walkway->destination = coord_create(0, 0);

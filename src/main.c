@@ -98,6 +98,7 @@ int main(void) {
 
     log_info("Initialising various server managers...");
 
+    walkways_init();
     texts_manager_init();
     player_manager_init();
     model_manager_init();
@@ -107,7 +108,7 @@ int main(void) {
     catalogue_manager_init();
     message_handler_init();
     create_thread_pool();
-    walkways_init();
+    room_manager_load_connected_rooms();
 
     /*char **test = malloc(sizeof(char*) * 2);
     test[0] = strdup("ADM");

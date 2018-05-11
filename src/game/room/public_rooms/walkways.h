@@ -18,10 +18,11 @@ typedef struct walkway_entrance_s {
     char *model_to;
     List *from_coords;
     coord *destination;
+    bool hide_room;
 } walkway_entrance;
 
 void walkways_init();
-void walkways_add(char *model_from, char *model_to, char *from_coords, char *destination);
+void walkways_add(char *model_from, char *model_to, char *from_coords, char *destination, bool hide_room);
 walkway_entrance *walkways_activated(room_user *room_user);
 room *walkways_find_room(char *model);
 List *walkways_get_coords(char *coords);

@@ -128,6 +128,43 @@ void room_manager_remove(int room_id) {
 }
 
 /**
+ * Automatically finds the rooms attached to the main room, in order
+ * for the navigator listing to not show them but to show the total room population
+ * of both rooms.
+ */
+void room_manager_load_connected_rooms() {
+    if (hashtable_size(global.room_manager.rooms) == 0) {
+        return;
+    }
+
+    HashTableIter iter;
+    hashtable_iter_init(&iter, global.walkway_manager.walkways);
+
+    TableEntry *entry;
+    while (hashtable_iter_next(&iter, &entry) != CC_ITER_END) {
+        walkway_entrance *entrance = entry->value;
+
+        HashTableIter roomiter;
+        hashtable_iter_init(&roomiter, global.room_manager.rooms);
+
+        TableEntry *roomentry;
+        while (hashtable_iter_next(&roomiter, &roomentry) != CC_ITER_END) {
+            room *room = roomentry->value;
+
+            if (strcmp(room->room_data->model, entrance->model_from) == 0) {
+                room->connected_room = walkways_find_room(entrance->model_to);
+
+                if (entrance->hide_room) {
+                    printf("Room %s is connected to %s\n", room->room_data->name,
+                           room->connected_room->room_data->name);
+                    room->connected_room_hide = true;
+                }
+            }
+        }
+    }
+}
+
+/**
  * Sort list by room population. Highest populated rooms appear first.
  *
  * @param e1 the first room
