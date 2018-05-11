@@ -1,12 +1,12 @@
 BEGIN TRANSACTION;
 CREATE TABLE IF NOT EXISTS `users_room_votes` (
-	`user_id`	INTEGER,
-	`room_id`	INTEGER,
-	`vote`	INTEGER
+	`user_id`	INTEGER NOT NULL,
+	`room_id`	INTEGER NOT NULL,
+	`vote`	INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `users_room_favourites` (
-	`room_id`	INTEGER,
-	`user_id`	INTEGER
+	`room_id`	INTEGER NOT NULL,
+	`user_id`	INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `users` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -22,11 +22,14 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`rank`	INTEGER NOT NULL DEFAULT 1,
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
 	`last_online`	TEXT NOT NULL DEFAULT '0',
-	`sso_ticket`	TEXT
+	`sso_ticket`	TEXT,
+	`club_subscribed`	INTEGER NOT NULL DEFAULT 0,
+	`club_expiration`	INTEGER NOT NULL DEFAULT 0,
+	`active_badge`	TEXT NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `rooms_rights` (
-	`room_id`	INTEGER,
-	`user_id`	INTEGER
+	`room_id`	INTEGER NOT NULL,
+	`user_id`	INTEGER NOT NULL
 );
 CREATE TABLE IF NOT EXISTS `rooms_models` (
 	`model_id`	TEXT NOT NULL,
