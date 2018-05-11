@@ -11,7 +11,6 @@ INCLUDE_DIRECTORIES(src)
 # include(${PROJECT_DIR}/lib/libsodium/contrib/Findsodium.cmake)
 
 # Incldude library directories
-include_directories(${PROJECT_DIR}/lib/sqlite3/)
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/cthreadpool/)
 include_directories(${PROJECT_DIR}/lib/log/src/)
@@ -97,7 +96,8 @@ add_executable(${EXECUTABLE_NAME}
         ${catalogue}
         ${texts})
 
-find_package (Threads)
-
-target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(${EXECUTABLE_NAME} dl uv pthread sodium)
+target_link_libraries(${EXECUTABLE_NAME} dl)
+target_link_libraries(${EXECUTABLE_NAME} uv)
+target_link_libraries(${EXECUTABLE_NAME} pthread)
+target_link_libraries(${EXECUTABLE_NAME} sodium)
+target_link_libraries(${EXECUTABLE_NAME} sqlite3)
