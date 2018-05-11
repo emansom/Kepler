@@ -7,24 +7,22 @@
 #include "communication/messages/outgoing_message.h"
 #include "database/queries/player_query.h"
 
-#include "pool_handler.h"
-
 #include "game/items/item.h"
 #include "game/items/definition/item_definition.h"
 
 #include "game/player/player.h"
 
-#include "game/room/room.h"
-#include "game/room/room_user.h"
-
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
 
+#include "game/room/room.h"
+#include "game/room/room_user.h"
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_map.h"
 #include "game/room/mapping/room_tile.h"
 
 #include "util/stringbuilder.h"
+#include "pool_handler.h"
 
 void pool_warp_swim(session*, item*, coord warp, bool exit);
 
@@ -46,7 +44,7 @@ void pool_booth_exit(session *player) {
         }
     }
 
-    // Handle walking out of pool
+    // Handle walking out of public_rooms
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0) {
         // Walk out of the booth
         if (player->room_user->position->y == 11) {

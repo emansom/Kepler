@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <game/pathfinder/rotation.h>
 
+#include "log.h"
 #include "hashtable.h"
 #include "list.h"
 #include "deque.h"
@@ -16,13 +16,14 @@
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
-#include "game/room/pool/pool_handler.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 #include "game/items/item.h"
 #include "game/items/definition/item_definition.h"
 
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
+#include "game/pathfinder/rotation.h"
 
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
@@ -327,7 +328,7 @@ bool room_user_process_command(room_user *room_user, char *text) {
 
     // TODO: better way to handle commands
     if (strcmp(text, ":about") == 0) {
-        send_alert(room_user->player, "Kepler server\n\nContributors:\n - Hoshiko\n\nMade by Quackster");
+        send_alert(room_user->player, "Kepler server\n\nContributors:\n - Hoshiko:\n - Romuald\n - Glaceon\n\nMade by Quackster");
         return true;
     }
 
@@ -375,6 +376,16 @@ void room_user_invoke_item(room_user *room_user) {
             coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }
+
+        if (item->definition->behaviour->can_lay_on_top) {
+            char sit_height[11];
+            sprintf(sit_height, " %1.f", item->definition->top_height);
+
+            room_user_add_status(room_user, "lay", sit_height, -1, "", -1, -1);
+            coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
+            needs_update = true;
+        }
+
 
         pool_item_walk_on(room_user->player, item);
     }

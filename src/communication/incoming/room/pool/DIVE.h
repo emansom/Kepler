@@ -2,7 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
-#include "game/room/pool/pool_handler.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 void DIVE(session *player, incoming_message *message) {
     char *diving_combination = im_get_content(message);

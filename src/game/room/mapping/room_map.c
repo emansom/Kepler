@@ -19,10 +19,9 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 #include "game/room/mapping/room_model.h"
-#include "game/room/pool/pool_handler.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 #include "communication/messages/outgoing_message.h"
-
 #include "util/stringbuilder.h"
 
 void room_map_add_items(room *room);

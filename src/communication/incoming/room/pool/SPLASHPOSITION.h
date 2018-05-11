@@ -1,10 +1,10 @@
-#include <game/pathfinder/coord.h>
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
 
-#include "game/room/pool/pool_handler.h"
+#include "game/pathfinder/coord.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"

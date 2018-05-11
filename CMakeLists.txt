@@ -44,7 +44,7 @@ file(GLOB game ${PROJECT_DIR}/game/*.c)
 file(GLOB club ${PROJECT_DIR}/game/club/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
-file(GLOB room_pool ${PROJECT_DIR}/game/room/pool/*.c)
+file(GLOB room_public ${PROJECT_DIR}/game/room/public_rooms/*.c)
 file(GLOB room_manager ${PROJECT_DIR}/game/room/manager/*.c)
 file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
@@ -90,7 +90,7 @@ add_executable(${EXECUTABLE_NAME}
         ${items_definition}
         ${tasks}
         ${room}
-        ${room_pool}
+        ${room_public}
         ${room_mapping}
         ${room_manager}
         ${messenger}
