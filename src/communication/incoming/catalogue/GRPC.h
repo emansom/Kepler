@@ -63,7 +63,7 @@ void GRPC(session *player, incoming_message *message) {
     }
 
     player->player_data->credits -= store_item->price;
-    session_send_credits(player);
+    player_refresh_credits(player);
 
     player_query_save_currency(player);
 

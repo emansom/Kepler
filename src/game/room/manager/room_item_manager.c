@@ -77,6 +77,10 @@ item *room_item_manager_get(room *room, int item_id) {
 }
 
 void room_item_manager_load(room *room) {
+    if (room->room_data->owner_id == 0) {
+        return;
+    }
+
     List *items = item_query_get_room_items(room->room_id);
 
     for (size_t i = 0; i < list_size(items); i++) {

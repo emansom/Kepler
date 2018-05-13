@@ -44,7 +44,7 @@ void CONVERT_FURNI_TO_CREDITS(session *player, incoming_message *message) {
     item_dispose(item);
 
     player->player_data->credits += amount;
-    session_send_credits(player);
+    player_refresh_credits(player);
 
     player_query_save_currency(player);
 

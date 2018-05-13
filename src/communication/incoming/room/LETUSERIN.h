@@ -42,6 +42,6 @@ void LETUSERIN(session *user, incoming_message *message) {
     om_cleanup(om);
 
     cleanup:
-        free(content);
-        free(ringing_username);
+    free(content);
+    free(ringing_username);
 }

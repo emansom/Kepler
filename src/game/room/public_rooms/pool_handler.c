@@ -11,6 +11,7 @@
 #include "game/items/definition/item_definition.h"
 
 #include "game/player/player.h"
+#include "game/player/player_refresh.h"
 
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
@@ -95,7 +96,7 @@ void pool_item_walk_on(session *p, item *item) {
         om_cleanup(om);
 
         room_entity->player->player_data->tickets--;
-        session_send_tickets(room_entity->player);
+        player_refresh_tickets(room_entity->player);
         player_query_save_currency(room_entity->player);
 
     }

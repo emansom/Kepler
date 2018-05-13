@@ -23,23 +23,21 @@ void walkways_init() {
     walkways_add("bar_a", "bar_b", "9,32 10,32 11,32 9,33 10,33", NULL, false);
     walkways_add("bar_b", "bar_a", "1,10 1,11 1,12", "10,30,5,0", true);
 
+    walkways_add("pool_a", "pool_b", "19,3 20,4 21,5 22,6 23,7 24,8 25,9 26,10 27,11 28,12", NULL, false);
+    walkways_add("pool_b", "pool_a", "0,13 1,14 2,15 3,16 4,17 5,18 6,19 7,20 8,21 9,22 10,23 11,24 12,25", "23,7,7,5", true);
+
     walkways_add("hallway2", "hallway0", "0,6 0,7 0,8 0,9", "29,3,1,6", false);
     walkways_add("hallway2", "hallway3", "6,23 7,23 8,23 9,23", "7,2,1,4", false);
     walkways_add("hallway2", "hallway4", "27,6 27,7 27,8 27,9", "2,3,0,2", false);
-
     walkways_add("hallway0", "hallway2", "31,5 31,4 31,3 31,2", "2,7,1,2", true);
     walkways_add("hallway0", "hallway1", "14,19 15,19 16,19 17,19", "15,2,0,4", true);
-
     walkways_add("hallway1", "hallway3", "31,9 31,8 31,7 31,6", "2,8,1,2", true);
     walkways_add("hallway1", "hallway0", "17,0 16,0 15,0 14,0", "16,17,1,0", true);
-
     walkways_add("hallway3", "hallway2", "9,0 8,0 7,0 6,0", "8,21,1,0", true);
     walkways_add("hallway3", "hallway1", "0,9 0,8 0,7 0,6", "29,7,0,6", true);
     walkways_add("hallway3", "hallway5", "31,6 31,7 31,8 31,9", "2,15,0,2", true);
-
     walkways_add("hallway5", "hallway3", "0,17 0,16 0,15 0,14", "29,7,0,6", true);
     walkways_add("hallway5", "hallway4", "22,0 23,0 24,0 25,0", "24,17,1,0", true);
-
     walkways_add("hallway4", "hallway2", "0,2 0,3 0,4 0,5", "25,7,0,6", true);
     walkways_add("hallway4", "hallway5", "22,19 23,19 24,19 25,19", "24,2,1,4", true);
 }
@@ -77,7 +75,11 @@ void walkways_add(char *model_from, char *model_to, char *from_coords, char *des
     list_add(global.walkway_manager.walkways, walkway);
 }
 
-walkway_entrance *walkways_activated(room_user *room_user) {
+walkway_entrance *walkways_find_current(room_user *room_user) {
+    if (room_user->room->room_data->owner_id > 0) {
+        return NULL;
+    }
+
     for (size_t i = 0; i < list_size(global.walkway_manager.walkways); i++) {
         walkway_entrance *entrance;
         list_get_at(global.walkway_manager.walkways, i, (void *) &entrance);
@@ -121,11 +123,13 @@ List *walkways_get_coords(char *coords) {
     List *coordinates;
     list_new(&coordinates);
 
-    for (int i = 0; i < 6; i++) {
-        char *coord = get_argument(coords, " ", i);
+    int i = 0;
+
+    while (true) {
+        char *coord = get_argument(coords, " ", i++);
 
         if (coord == NULL) {
-            continue;
+            break;
         }
 
         char *str_x = get_argument(coord, ",", 0);

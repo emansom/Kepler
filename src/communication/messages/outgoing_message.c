@@ -31,7 +31,7 @@ outgoing_message *om_create(int header) {
  */
 void om_write_str(outgoing_message *om, char *str) {
     if (str == NULL) {
-        om_write_str_delimeter(om, "[null]", 2);
+        om_write_str_delimeter(om, "null", 2);
         return;
     }
 
@@ -110,7 +110,7 @@ void om_finalise(outgoing_message *om) {
     }
 
     sb_add_string(om->sb, "\1");
-    om->finalised = 1;
+    om->finalised = true;
 }
 
 /**

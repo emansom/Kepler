@@ -5,6 +5,8 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
+#include "game/player/player_refresh.h"
+
 #include "database/queries/player_query.h"
 
 /*
@@ -26,7 +28,7 @@ void *do_login(void *args) {
     int player_id = player_query_login(ctx->username, ctx->password);
 
     if (player_id == -1) {
-        send_localised_error(player, "login incorrect");
+        player_send_localised_error(player, "login incorrect");
     } else {
         player_data *data = player_query_data(player_id);
         player->player_data = data;

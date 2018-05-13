@@ -5,6 +5,7 @@
 
 #include "game/player/player_manager.h"
 #include "game/player/player.h"
+#include "game/player/player_refresh.h"
 
 #include "shared.h"
 #include "log.h"

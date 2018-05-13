@@ -9,13 +9,11 @@
 #include "game/room/room_user.h"
 
 void USER_CANCEL_TYPING(session *player, incoming_message *im) {
-    if (player->room_user || !player->room_user->is_typing) {
+    if (player->room_user->room == NULL || !player->room_user->is_typing) {
         return;
     }
 
     player->room_user->is_typing = false;
-
-    room_user_reset_idle_timer(player->room_user);
 
     // TODO: don't forget to send this after a processed command like :ban
     // TODO: /\ This is what causes the weird speech bubble glitch on most Retro's

@@ -41,12 +41,6 @@ player_data *player_create_data(int, char*, char*, char*, char*, int, char*, cha
 void player_login(session*);
 void player_disconnect(session *p);
 void player_send(session *, outgoing_message *);
-void session_send_credits(session*);
-void session_send_tickets(session*);
-void send_localised_error(session*, char*);
-void send_alert(session*, char*);
-void player_refresh_appearance(session *player);
-void player_refresh_badges(session *player);
 void player_cleanup(session*);
 void player_data_cleanup(player_data*);
 

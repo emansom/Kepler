@@ -150,7 +150,7 @@ void room_enter(room *room, session *player, coord *destination) {
         om_cleanup(om);
     }
 
-    bool is_public = list_size(room->room_data->model_data->public_items) > 0;
+    bool is_public = room->room_data->owner_id == 0;
 
     if (!is_public) {
         // TODO: move votes to rooms object and load on initialization to reduce query load
@@ -257,7 +257,7 @@ void room_leave(room *room, session *player, bool hotel_view) {
     om_cleanup(om);
 
     // Reset rooms user
-    room_user_reset(player->room_user);
+    room_user_reset(player->room_user, false);
     room_dispose(room, false);
 
     // Go to hotel view, if told so.
