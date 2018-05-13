@@ -107,12 +107,6 @@ int main(void) {
     create_thread_pool();
     room_manager_load_connected_rooms();
 
-    /*char **test = malloc(sizeof(char*) * 2);
-    test[0] = strdup("ADM");
-    test[1] = strdup("HC1");
-
-    printf("%s, %s\n", test[0], test[1]);*/
-
     pthread_t game_thread;
     game_thread_init(&game_thread);
 

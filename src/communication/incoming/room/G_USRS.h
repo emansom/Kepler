@@ -28,14 +28,14 @@ void G_USRS(session *p, incoming_message *message) {
     player_send(p, players);
     om_cleanup(players);*/
 
-    outgoing_message *players;
+    outgoing_message *players = om_create(28); // "@\"
 
-    players = om_create(28); // "@\"
     for (size_t i = 0; i < list_size(room->users); i++) {
         session *room_player;
         list_get_at(room->users, i, (void*)&room_player);
         append_user_list(players, room_player);
     }
+
     player_send(p, players);
     om_cleanup(players);
 
