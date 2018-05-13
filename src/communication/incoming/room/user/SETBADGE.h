@@ -14,6 +14,7 @@ void update_badge(room_user *room_user) {
     }
 
     room_send(room_user->room, badge_notify);
+    om_cleanup(badge_notify);
 }
 
 void SETBADGE(session *player, incoming_message *im) {
