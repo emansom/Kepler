@@ -88,7 +88,7 @@ void player_refresh_appearance(session *player) {
     player_data_cleanup(new_data);
 
     // Send refresh to user
-    outgoing_message *user_info = om_create(5);
+    outgoing_message *user_info = om_create(5); // "@E
     om_write_str_int(user_info, player->player_data->id);
     om_write_str(user_info, player->player_data->username);
     om_write_str(user_info, player->player_data->figure);
@@ -102,7 +102,7 @@ void player_refresh_appearance(session *player) {
 
     // Send refresh to room if inside room
     if (player->room_user != NULL && player->room_user->room != NULL) {
-        outgoing_message *poof = om_create(266);
+        outgoing_message *poof = om_create(266); // DJ"
         om_write_int(poof, player->room_user->instance_id);
         om_write_str(poof, player->player_data->figure);
         om_write_str(poof, player->player_data->sex);
