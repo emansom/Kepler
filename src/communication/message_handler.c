@@ -41,6 +41,7 @@
 #include "communication/incoming/messenger/MESSENGER_SENDMSG.h"
 #include "communication/incoming/messenger/MESSENGER_GETMESSAGES.h"
 #include "communication/incoming/messenger/MESSENGER_MARKREAD.h"
+#include "communication/incoming/messenger/FOLLOW_FRIEND.h"
 
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
@@ -170,6 +171,7 @@ void message_handler_init() {
     message_requests[33] = MESSENGER_SENDMSG;
     message_requests[191] = MESSENGER_GETMESSAGES;
     message_requests[32] = MESSENGER_MARKREAD;
+    message_requests[262] = FOLLOW_FRIEND;
 
     // Navigator
     message_requests[150] = NAVIGATE;
