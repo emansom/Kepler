@@ -62,6 +62,6 @@ void BTCKS(session *player, incoming_message *message) {
     player_data_cleanup(data);
 
     cleanup:
-        free(tickets_for);
+    free(tickets_for);
 
 }

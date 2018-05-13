@@ -28,5 +28,5 @@ void DIVE(session *player, incoming_message *message) {
     om_cleanup(refresh);
 
     cleanup:
-        free(diving_combination);
+    free(diving_combination);
 }

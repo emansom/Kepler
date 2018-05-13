@@ -129,5 +129,5 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
     free(content_y);
 
     cleanup:
-        free(content);
+    free(content);
 }

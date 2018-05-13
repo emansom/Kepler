@@ -60,7 +60,7 @@ void FLATPROPBYITEM(session *player, incoming_message *message) {
     item_query_delete(item->id);
 
     cleanup:
-        free(content);
-		free(str_mode);
-		free(str_id);
+    free(content);
+    free(str_mode);
+    free(str_id);
 }

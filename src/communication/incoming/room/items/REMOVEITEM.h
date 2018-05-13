@@ -38,6 +38,5 @@ void REMOVEITEM(session *player, incoming_message *message) {
     item_dispose(item);
 
     cleanup:
-        free(content);
-        
+    free(content);
 }

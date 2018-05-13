@@ -98,9 +98,8 @@ void PLACESTUFF(session *player, incoming_message *message) {
     list_remove(inv->items, place_item, NULL);
 
     cleanup:
-        free(content);
-		free(str_id);
-		free(str_x);
-		free(str_y);
-        
+    free(content);
+    free(str_id);
+    free(str_x);
+    free(str_y);
 }

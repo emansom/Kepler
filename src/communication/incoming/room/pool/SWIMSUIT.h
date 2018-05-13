@@ -32,5 +32,5 @@ void SWIMSUIT(session *player, incoming_message *message) {
     query_session_save_looks(player);
 
     cleanup:
-        free(content);
+    free(content);
 }

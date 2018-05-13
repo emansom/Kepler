@@ -44,6 +44,6 @@ void ADDSTRIPITEM(session *player, incoming_message *message) {
     inventory_send(inv, "update", player);
 
     cleanup:
-        free(content);
-        free(remove_data_item_id);
+    free(content);
+    free(remove_data_item_id);
 }

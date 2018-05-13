@@ -43,5 +43,5 @@ void SIGN(session *player, incoming_message *message) {
     room_entity->needs_update = true;
 
     cleanup:
-        free(vote);
+    free(vote);
 }
