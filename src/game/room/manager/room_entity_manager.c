@@ -150,24 +150,28 @@ void room_enter(room *room, session *player, coord *destination) {
         om_cleanup(om);
     }
 
-    // TODO: move votes to rooms object and load on initialization to reduce query load
-    // Check if already voted, return if voted
-    int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
-    int vote_count = -1;
+    bool is_public = room->room_data->owner_id == 0;
 
-    // If user already has voted, we sent total vote count
-    // else we sent -1, making the vote selector pop up
-    if (voted != -1) {
-        vote_count = room_query_count_votes(room->room_data->id);
+    if (!is_public) {
+        // TODO: move votes to rooms object and load on initialization to reduce query load
+        // Check if already voted, return if voted
+        int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
+        int vote_count = -1;
+
+        // If user already has voted, we sent total vote count
+        // else we sent -1, making the vote selector pop up
+        if (voted != -1) {
+            vote_count = room_query_count_votes(room->room_data->id);
+        }
+
+        om = om_create(345); // "EY"
+        om_write_int(om, vote_count);
+        player_send(player, om);
+        om_cleanup(om);
     }
 
-    om = om_create(345); // "EY"
-    om_write_int(om, vote_count);
-    player_send(player, om);
-    om_cleanup(om);
-
     // Show new session current state of an item program for pools
-    if (room->room_data->owner_id == 0) {
+    if (is_public) {
         for (size_t i = 0; i < list_size(room->items); i++) {
             item *item;
             list_get_at(room->items, i, (void *) &item);
