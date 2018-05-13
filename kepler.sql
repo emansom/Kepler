@@ -8,6 +8,10 @@ CREATE TABLE IF NOT EXISTS `users_room_favourites` (
 	`room_id`	INTEGER NOT NULL,
 	`user_id`	INTEGER NOT NULL
 );
+CREATE TABLE IF NOT EXISTS `users_badges` (
+	`user_id`	INTEGER NOT NULL,
+	`badge`	INTEGER NOT NULL
+);
 CREATE TABLE IF NOT EXISTS `users` (
 	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	`username`	TEXT NOT NULL,
@@ -139,10 +143,6 @@ INSERT INTO `rooms_categories` VALUES (9,0,3,0,'Parks and Gardens',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (10,0,3,0,'Swimming Pools',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (11,0,3,0,'The Lobbies',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (12,-1,3,0,'The Hallways',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (16,0,7,0,'Hotel Rooftop',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (17,0,7,0,'Oldskool Disco',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (18,0,7,0,'Chromide Club',1,0,1,6);
-INSERT INTO `rooms_categories` VALUES (19,0,7,0,'Club Massiva',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (20,0,9,0,'The Laughing Lions Park',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (21,0,9,0,'The Green Heart',1,0,1,6);
 INSERT INTO `rooms_categories` VALUES (101,0,4,0,'Staff HQ',0,1,4,5);
@@ -183,18 +183,18 @@ INSERT INTO `rooms` VALUES (1010,0,6,'The Dirty Duck Pub','the_dirty_duck_pub','
 INSERT INTO `rooms` VALUES (1011,0,6,'Cafe Ole','cafe_ole','cafe_ole','hh_room_cafe',0,0,0,'false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1012,0,6,'Gallery Cafe','eric''s_eaterie','cr_cafe','hh_room_erics',0,0,0,'false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1013,0,6,'Space Cafe','space_cafe','space_cafe','hh_room_space_cafe',0,0,0,'false',0,'',0,35);
-INSERT INTO `rooms` VALUES (1014,0,16,'Rooftop Terrace','rooftop','rooftop','hh_room_rooftop',0,0,0,'false',0,'',0,30);
-INSERT INTO `rooms` VALUES (1015,0,16,'Rooftop Cafe','rooftop','rooftop_2','hh_room_rooftop',0,0,0,'false',0,'',0,20);
+INSERT INTO `rooms` VALUES (1014,0,7,'Rooftop Terrace','rooftop','rooftop','hh_room_rooftop',0,0,0,'false',0,'',0,30);
+INSERT INTO `rooms` VALUES (1015,0,7,'Rooftop Cafe','rooftop','rooftop_2','hh_room_rooftop',0,0,0,'false',0,'',0,20);
 INSERT INTO `rooms` VALUES (1016,0,6,'Palazzo Pizza','pizza','pizza','hh_room_pizza',0,0,0,'false',0,'',0,40);
 INSERT INTO `rooms` VALUES (1017,0,6,'Habburgers','habburger''s','habburger','hh_room_habburger',0,0,0,'false',0,'',0,40);
 INSERT INTO `rooms` VALUES (1018,0,8,'Grandfathers Lounge','dusty_lounge','dusty_lounge','hh_room_dustylounge',0,0,0,'false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1019,0,7,'Oriental Tearoom','tearoom','tearoom','hh_room_tearoom',0,0,0,'false',0,'',0,40);
-INSERT INTO `rooms` VALUES (1020,0,17,'Oldskool Lounge','old_skool','old_skool0','hh_room_old_skool',0,0,0,'false',0,'',0,45);
-INSERT INTO `rooms` VALUES (1022,0,17,'Oldskool Dancefloor','old_skool','old_skool1','hh_room_old_skool',0,0,0,'false',0,'',0,45);
-INSERT INTO `rooms` VALUES (1023,0,18,'The Chromide Club I','the_chromide_club','malja_bar_a','hh_room_disco',0,0,0,'false',0,'',0,45);
-INSERT INTO `rooms` VALUES (1024,0,18,'The Chromide Club II','the_chromide_club','malja_bar_b','hh_room_disco',0,0,0,'false',0,'',0,50);
-INSERT INTO `rooms` VALUES (1025,0,19,'Club Massiva I','club_massiva','bar_a','hh_room_bar',0,0,0,'false',0,'',0,45);
-INSERT INTO `rooms` VALUES (1026,0,19,'Club Massiva II','club_massiva2','bar_b','hh_room_bar',0,0,0,'false',0,'',0,70);
+INSERT INTO `rooms` VALUES (1020,0,7,'Oldskool Lounge','old_skool','old_skool0','hh_room_old_skool',0,0,0,'false',0,'',0,45);
+INSERT INTO `rooms` VALUES (1022,0,7,'Oldskool Dancefloor','old_skool','old_skool1','hh_room_old_skool',0,0,0,'false',0,'',0,45);
+INSERT INTO `rooms` VALUES (1023,0,7,'The Chromide Club','the_chromide_club','malja_bar_a','hh_room_disco',0,0,0,'false',0,'',0,45);
+INSERT INTO `rooms` VALUES (1024,0,7,'The Chromide Club II','the_chromide_club','malja_bar_b','hh_room_disco',0,0,0,'false',0,'',0,50);
+INSERT INTO `rooms` VALUES (1025,0,7,'Club Massiva','club_massiva','bar_a','hh_room_bar',0,0,0,'false',0,'',0,45);
+INSERT INTO `rooms` VALUES (1026,0,7,'Club Massiva II','club_massiva2','bar_b','hh_room_bar',0,0,0,'false',0,'',0,70);
 INSERT INTO `rooms` VALUES (1027,0,6,'Sunset Cafe','sunset_cafe','sunset_cafe','hh_room_sunsetcafe',0,0,0,'false',0,'',0,35);
 INSERT INTO `rooms` VALUES (1028,0,7,'Oasis Spa','cafe_gold','cafe_gold0','hh_room_gold',0,0,0,'false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1029,0,9,'Treehugger Garden','chill','chill','hh_room_chill',0,0,0,'false',0,'',0,30);
@@ -206,7 +206,7 @@ INSERT INTO `rooms` VALUES (1034,0,20,'The Laughing Lions - Gate','gate_park','g
 INSERT INTO `rooms` VALUES (1035,0,20,'The Laughing Lions - Picnic','gate_park','gate_park_2','hh_room_gate_park',0,0,0,'false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1036,0,21,'The Park','park','park_a','hh_room_park_general,hh_room_park',0,0,0,'false',0,'',0,45);
 INSERT INTO `rooms` VALUES (1037,0,21,'The Infobus','park','park_b','hh_room_park_general,hh_room_park',0,0,0,'false',0,'',0,20);
-INSERT INTO `rooms` VALUES (1038,0,10,'Lido A','habbo_lido','pool_a','hh_room_pool,hh_people_pool',0,0,0,'false',0,'',0,60);
+INSERT INTO `rooms` VALUES (1038,0,10,'Habbo Lido','habbo_lido','pool_a','hh_room_pool,hh_people_pool',0,0,0,'false',0,'',0,60);
 INSERT INTO `rooms` VALUES (1039,0,10,'Lido B','habbo_lido_ii','pool_b','hh_room_pool,hh_people_pool',0,0,0,'false',0,'',0,60);
 INSERT INTO `rooms` VALUES (1040,0,10,'Rooftop Rumble','rooftop_rumble','md_a','hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu',0,0,0,'false',0,'',0,50);
 INSERT INTO `rooms` VALUES (1041,0,11,'Main Lobby','main_lobby','lobby_a','hh_room_lobby',0,0,0,'false',0,'',0,100);
@@ -2313,9 +2313,4 @@ INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_7',41,7,5,1417,0,NULL,NUL
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_6',41,8,5,1418,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_1',41,9,5,1419,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_3',41,10,5,1420,0,NULL,NULL,0);
-
-CREATE TABLE IF NOT EXISTS `users_badges` (
-  `user_id` INTEGER NOT NULL,
-  `badge` INTEGER NOT NULL
-);
 COMMIT;

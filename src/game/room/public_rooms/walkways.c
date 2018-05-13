@@ -13,12 +13,19 @@ void walkways_init() {
     list_new(&global.walkway_manager.walkways);
     walkways_add("rooftop", "rooftop_2", "9,4 10,3 9,3", NULL, false);
     walkways_add("rooftop_2", "rooftop", "3,10 4,10 5,10 3,11 4,11 5,11", "10,5,4,4", true);
+
     walkways_add("old_skool0", "old_skool1", "16,18", NULL, false);
     walkways_add("old_skool1", "old_skool0", "0,7", "15,18,0,6", true);
+
     walkways_add("malja_bar_a", "malja_bar_b", "14,0 15,0", NULL, false);
     walkways_add("malja_bar_b", "malja_bar_a", "5,25 ", "15,1,4,4", true);
+
     walkways_add("bar_a", "bar_b", "9,32 10,32 11,32 9,33 10,33", NULL, false);
     walkways_add("bar_b", "bar_a", "1,10 1,11 1,12", "10,30,5,0", true);
+
+    walkways_add("pool_a", "pool_b", "19,3 20,4 21,5 22,6 23,7 24,8 25,9 26,10 27,11 28,12", NULL, false);
+    walkways_add("pool_b", "pool_a", "0,13 1,14 2,15 3,16 4,17 5,18 6,19 7,20 8,21 9,22 10,23 11,24 12,25", "23,7,7,5", true);
+
     walkways_add("hallway2", "hallway0", "0,6 0,7 0,8 0,9", "29,3,1,6", false);
     walkways_add("hallway2", "hallway3", "6,23 7,23 8,23 9,23", "7,2,1,4", false);
     walkways_add("hallway2", "hallway4", "27,6 27,7 27,8 27,9", "2,3,0,2", false);
