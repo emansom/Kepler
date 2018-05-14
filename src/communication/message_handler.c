@@ -85,13 +85,8 @@
 #include "communication/incoming/room/user/CARRYDRINK.h"
 #include "communication/incoming/room/user/USER_START_TYPING.h"
 #include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
-#include "communication/incoming/room/user/REMOVERIGHTS.h"
-#include "communication/incoming/room/user/ASSIGNRIGHTS.h"
 #include "communication/incoming/room/user/DANCE.h"
-
-// Badges
-#include "communication/incoming/room/badges/GETAVAILABLEBADGES.h"
-#include "communication/incoming/room/badges/SETBADGE.h"
+#include "communication/incoming/room/user/STOP.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -113,6 +108,14 @@
 #include "communication/incoming/room/items/CONVERT_FURNI_TO_CREDITS.h"
 #include "communication/incoming/room/items/G_IDATA.h"
 #include "communication/incoming/room/items/SETITEMDATA.h"
+
+// Moderation
+#include "communication/incoming/room/moderation/REMOVERIGHTS.h"
+#include "communication/incoming/room/moderation/ASSIGNRIGHTS.h"
+
+// Badges
+#include "communication/incoming/room/badges/GETAVAILABLEBADGES.h"
+#include "communication/incoming/room/badges/SETBADGE.h"
 
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
@@ -218,13 +221,8 @@ void message_handler_init() {
     message_requests[80] = CARRYDRINK;
     message_requests[317] = USER_START_TYPING;
     message_requests[318] = USER_CANCEL_TYPING;
-    message_requests[96] = ASSIGNRIGHTS;
-    message_requests[97] = REMOVERIGHTS;
     message_requests[93] = DANCE;
-
-    // Badges
-    message_requests[157] = GETAVAILABLEBADGES;
-    message_requests[158] = SETBADGE;
+    message_requests[88] = STOP;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
@@ -245,6 +243,14 @@ void message_handler_init() {
     message_requests[183] = CONVERT_FURNI_TO_CREDITS;
     message_requests[83] = G_IDATA;
     message_requests[84] = SETITEMDATA;
+
+    // Moderation
+    message_requests[96] = ASSIGNRIGHTS;
+    message_requests[97] = REMOVERIGHTS;
+
+    // Badges
+    message_requests[157] = GETAVAILABLEBADGES;
+    message_requests[158] = SETBADGE;
 
     // Catalogue
     message_requests[101] = GCIX;

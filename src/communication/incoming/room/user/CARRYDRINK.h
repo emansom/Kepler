@@ -3,7 +3,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-
 void CARRYDRINK(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
@@ -24,4 +23,5 @@ void CARRYDRINK(session *player, incoming_message *message) {
     }
 
     room_user_reset_idle_timer(player->room_user);
+    free(content);
 }

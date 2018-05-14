@@ -33,6 +33,7 @@ void DANCE(session *player, incoming_message *im) {
     room_user_remove_status(player->room_user, "carryd");
     room_user_remove_status(player->room_user, "carryf");
 
+    room_user_reset_idle_timer(player->room_user);
     player->room_user->needs_update = true;
 
     free(content);
