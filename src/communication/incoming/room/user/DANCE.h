@@ -34,4 +34,6 @@ void DANCE(session *player, incoming_message *im) {
     room_user_remove_status(player->room_user, "carryf");
 
     player->room_user->needs_update = true;
+
+    free(content);
 }
