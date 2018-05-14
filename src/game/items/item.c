@@ -121,6 +121,12 @@ void item_update_entities(item *item, room *room, coord *old_position) {
     list_destroy(entities_to_update);
 }
 
+/**
+ * Override the old custom data on the item with new custom data.
+ *
+ * @param item the item to set the custom data for
+ * @param custom_data the new custom data
+ */
 void item_set_custom_data(item *item, char *custom_data) {
     if (item->custom_data != NULL) {
         free(item->custom_data);
@@ -130,6 +136,12 @@ void item_set_custom_data(item *item, char *custom_data) {
     item->custom_data = custom_data;
 }
 
+/**
+ * Broadcast custom data to the room, doesn't apply it to the item.
+ *
+ * @param item the item
+ * @param custom_data the custom data
+ */
 void item_broadcast_custom_data(item* item, char *custom_data) {
     outgoing_message *om;
 
