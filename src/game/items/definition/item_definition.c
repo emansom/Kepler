@@ -16,7 +16,7 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
     def->length = length;
     def->width = width;
     def->stack_height = top_height;
-    def->top_height = def->stack_height;
+    def->top_height = top_height;
     def->behaviour_data = strdup(behaviour);
     def->behaviour = item_behaviour_parse(def);
 

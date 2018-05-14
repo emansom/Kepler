@@ -380,8 +380,8 @@ void room_user_invoke_item(room_user *room_user) {
 
     if (item != NULL) {
         if (item->definition->behaviour->can_sit_on_top) {
-            char sit_height[11];
-            sprintf(sit_height, " %1.f", item->definition->top_height);
+            char sit_height[13];
+            sprintf(sit_height, " %.2f", item->definition->top_height);
 
             room_user_add_status(room_user, "sit", sit_height, -1, "", -1, -1);
             room_user_remove_status(room_user, "dance");
@@ -391,8 +391,8 @@ void room_user_invoke_item(room_user *room_user) {
         }
 
         if (item->definition->behaviour->can_lay_on_top) {
-            char sit_height[11];
-            sprintf(sit_height, " %1.f", item->definition->top_height);
+            char sit_height[18];
+            sprintf(sit_height, " %.2f null", (double)item->definition->top_height + 0.7);
 
             room_user_add_status(room_user, "lay", sit_height, -1, "", -1, -1);
             room_user_remove_status(room_user, "dance");
