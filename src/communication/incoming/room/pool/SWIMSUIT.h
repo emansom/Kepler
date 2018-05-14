@@ -29,7 +29,7 @@ void SWIMSUIT(session *player, incoming_message *message) {
     pool_booth_exit(player);
 
     // Save looks to database
-    query_session_save_looks(player);
+    player_query_save_details(player);
 
     cleanup:
     free(content);

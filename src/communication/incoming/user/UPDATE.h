@@ -47,7 +47,7 @@ void UPDATE(session *player, incoming_message *message) {
         }
     }
 
-    query_session_save_looks(player);
+    player_query_save_details(player);
     player_query_save_motto(player);
     GET_INFO(player, message);
 

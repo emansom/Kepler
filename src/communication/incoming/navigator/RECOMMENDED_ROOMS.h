@@ -18,7 +18,7 @@ void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
         room *instance;
         list_get_at(rooms, i, (void *) &instance);
 
-        room_append_data(instance, navigator, player->player_data->id);
+        room_append_data(instance, navigator, player);
     }
 
     player_send(player, navigator);

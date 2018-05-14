@@ -1,5 +1,7 @@
 #include "club_manager.h"
 
+#include "game/moderation/fuserights_manager.h"
+
 #include "communication/messages/outgoing_message.h"
 #include "database/queries/player_query.h"
 
@@ -22,7 +24,7 @@ void club_subscribe(session *player, int days) {
     else
         player->player_data->club_expiration += seconds_to_add;
 
-    player_query_save_club_informations(player);
+    player_query_save_club_information(player);
 
     // Immediately send club informations to player
     club_refresh(player);
@@ -52,16 +54,28 @@ void club_refresh(session *player) {
 
     if (total_days < 0 && player->player_data->club_subscribed != 0) {
         player->player_data->club_subscribed = 0;
-        player_query_save_club_informations(player);
+        player_query_save_club_information(player);
     }
 
     remaining_days_for_this_month = ((total_days - 1) % 31) + 1;
     prepaid_months = (total_days - remaining_days_for_this_month) / 31;
 
-    if (player->player_data->club_subscribed == 0)
+    bool needs_update = false;
+
+    if (player->player_data->club_subscribed == 0) {
+        if (player->player_data->rank == 2) {
+            player->player_data->rank = 1;
+            needs_update = true;
+        }
         since_months = 0;
-    else
-        since_months = (int)(now - player->player_data->club_subscribed) / 60 / 60 / 24 / 31;
+    } else {
+        since_months = (int) (now - player->player_data->club_subscribed) / 60 / 60 / 24 / 31;
+
+        if (player->player_data->rank == 1) {
+            player->player_data->rank = 2;
+            needs_update = true;
+        }
+    }
 
     outgoing_message *club_habbo = om_create(7);
     om_write_str(club_habbo, "club_habbo");
@@ -73,4 +87,15 @@ void club_refresh(session *player) {
     om_write_int(club_habbo, 1);
     player_send(player, club_habbo);
     om_cleanup(club_habbo);
+
+    // Set rank to 2 or 1 if their club expired or so and
+    // refresh their fuserights
+    if (needs_update) {
+        outgoing_message *om = om_create(2); // @B
+        fuserights_append(player->player_data->rank, om);
+        player_send(player, om);
+        om_cleanup(om);
+
+        player_query_save_details(player);
+    }
 }

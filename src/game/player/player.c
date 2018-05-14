@@ -48,7 +48,7 @@ session *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online, unsigned long club_subscribed, unsigned long club_expiration, char *active_badge) {
+player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, unsigned long last_online, unsigned long club_subscribed, unsigned long club_expiration, char *active_badge) {
     player_data *data = malloc(sizeof(player_data));
     data->id = id;
     data->username = strdup(username);
@@ -62,7 +62,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->tickets = tickets;
     data->film = film;
     data->rank = rank;
-    data->last_online = strtoul(last_online, NULL, 10);
+    data->last_online = last_online;
     data->club_subscribed = (time_t)club_subscribed;
     data->club_expiration = (time_t)club_expiration;
     data->active_badge = strdup(active_badge);
@@ -88,7 +88,7 @@ void player_login(session *player) {
     room_manager_add_by_user_id(player->player_data->id);
 
     om = om_create(2); // @B
-    om_write_str(om, "default\2fuse_login\2fuse_buy_credits\2fuse_trade\2fuse_room_queue_default\2fuse_performance_panel");
+    fuserights_append(player->player_data->rank, om);
     player_send(player, om);
     om_cleanup(om);
 
@@ -106,6 +106,17 @@ void player_login(session *player) {
 
     player->ping_safe = true;
     player->logged_in = true;
+}
+
+/**
+ * Get if player has a fuse right or not.
+ *
+ * @param player the player to check for
+ * @param fuse_right the fuse right to check
+ * @return true, if successful
+ */
+bool player_has_fuse(session *player, char *fuse_right) {
+    return fuserights_has_permission(player->player_data->rank, fuse_right);
 }
 
 /**

@@ -16,7 +16,7 @@ void GETFVRF(session *player, incoming_message *message) {
     for (size_t i = 0; i < list_size(favourite_rooms); i++) {
         room *room;
         list_get_at(favourite_rooms, i, (void *) &room);
-        room_append_data(room, om, player->player_data->id);
+        room_append_data(room, om, player);
     }
 
     player_send(player, om);

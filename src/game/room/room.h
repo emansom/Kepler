@@ -55,7 +55,7 @@ room *room_create(int);
 room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, bool, int, char*, int, int);
 rights_entry *rights_entry_create(int user_id);
 rights_entry *rights_entry_find(room *room, int user_id);
-void room_append_data(room *instance, outgoing_message *navigator, int player_id);
+void room_append_data(room *instance, outgoing_message *navigator, session *player);
 void room_load_data(room *room);
 void room_kickall(room*);
 bool room_is_owner(room *room, int user_id);

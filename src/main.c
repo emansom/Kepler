@@ -5,7 +5,6 @@
 #include "main.h"
 #include "shared.h"
 
-#include "sqlite3.h"
 #include "list.h"
 #include "thpool.h"
 #include "log.h"
@@ -17,14 +16,9 @@
 #include "database/db_connection.h"
 
 #include "game/game_thread.h"
-#include "game/player/player.h"
-#include "game/pathfinder/pathfinder.h"
 
 #include "util/threading.h"
 #include "util/configuration/configuration.h"
-
-#include "util/encoding/base64encoding.h"
-#include "util/encoding/vl64encoding.h"
 
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
@@ -60,6 +54,7 @@ int main(void) {
 
     log_info("Initialising various game managers...");
 
+    fuserights_init();
     walkways_init();
     texts_manager_init();
     player_manager_init();
@@ -72,19 +67,19 @@ int main(void) {
     create_thread_pool();
     room_manager_load_connected_rooms();
 
-    pthread_t game_thread;
-    game_thread_init(&game_thread);
-
     server_settings rcon_settings, server_settings;
+    pthread_t mus_thread, server_thread, game_thread;
+
     strcpy(rcon_settings.ip, configuration_get_string("rcon.ip.address"));
     rcon_settings.port = configuration_get_int("rcon.port");
 
     strcpy(server_settings.ip, configuration_get_string("server.ip.address"));
     server_settings.port = configuration_get_int("server.port");
 
-    pthread_t mus_thread, server_thread;
+    game_thread_init(&game_thread);
     start_rcon(&rcon_settings, &mus_thread);
     start_server(&server_settings, &server_thread);
+
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];

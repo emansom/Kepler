@@ -125,7 +125,7 @@ rights_entry *rights_entry_create(int user_id) {
  * @param navigator the navigator packet instance
  * @param player_id the player who requests the room
  */
-void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
+void room_append_data(room *instance, outgoing_message *navigator, session *player) {
     if (instance->connected_room_hide) {
         return;
     }
@@ -156,7 +156,7 @@ void room_append_data(room *instance, outgoing_message *navigator, int player_id
         om_write_int(navigator, instance->room_data->id); // rooms id
         om_write_str(navigator, instance->room_data->name);
 
-        if (player_id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
+        if (player->player_data->id == instance->room_data->owner_id || instance->room_data->show_name == true || player_has_fuse(player, "fuse_see_all_roomowners")) {
             om_write_str(navigator, instance->room_data->owner_name); // rooms owner
         } else {
             om_write_str(navigator, "-"); // rooms owner

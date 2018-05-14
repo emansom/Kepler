@@ -58,7 +58,7 @@ void NAVIGATE(session *player, incoming_message *message) {
         for (size_t i = 0; i < list_size(rooms); i++) {
             room *instance;
             list_get_at(rooms, i, (void *) &instance);
-            room_append_data(instance, navigator, player->player_data->id);
+            room_append_data(instance, navigator, player);
         }
 
         List *child_categories = category_manager_get_by_parent_id(parent_category->id);

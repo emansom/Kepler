@@ -41,25 +41,31 @@ void TRYFLAT(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    // Doorbell checking
-    if (room->room_data->accesstype == 1 && room_is_owner(room, player->player_data->id)) { // TODO: Fuseright checks
-        int message_id = 131; // "BC" - tell user there's no answer
+    // Staff can bypass this
+    if (!player_has_fuse(player, "fuse_enter_locked_rooms")) {
 
-        if (list_size(room->users) > 0 && ring_doorbell_alerted(room, player)) {
-            message_id = 91; // "A[" - tell user that you're waiting for doorbell
+        // Doorbell checking
+        if (room->room_data->accesstype == 1 &&
+            room_is_owner(room, player->player_data->id)) {
+            int message_id = 131; // "BC" - tell user there's no answer
+
+            if (list_size(room->users) > 0 && ring_doorbell_alerted(room, player)) {
+                message_id = 91; // "A[" - tell user that you're waiting for doorbell
+            }
+
+            outgoing_message *om = om_create(message_id);
+            player_send(player, om);
+            om_cleanup(om);
+            return;
         }
 
-        outgoing_message *om = om_create(message_id);
-        player_send(player, om);
-        om_cleanup(om);
-        return;
-    }
-
-    // Password checking
-    if (room->room_data->accesstype == 2 && room_is_owner(room, player->player_data->id)) { // TODO: Fuseright checks
-        if (password == NULL || strcmp(password, room->room_data->password) != 0) {
-            player_send_localised_error(player, "Incorrect flat password");
-            return;
+        // Password checking
+        if (room->room_data->accesstype == 2 &&
+            room_is_owner(room, player->player_data->id)) {
+            if (password == NULL || strcmp(password, room->room_data->password) != 0) {
+                player_send_localised_error(player, "Incorrect flat password");
+                return;
+            }
         }
     }
 

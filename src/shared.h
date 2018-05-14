@@ -15,6 +15,7 @@
 #include "game/catalogue/catalogue_manager.h"
 #include "game/texts/external_texts_manager.h"
 #include "game/navigator/navigator_category_manager.h"
+#include "game/moderation/fuserights_manager.h"
 
 #include "util/threading.h"
 #include "util/configuration/configuration.h"
@@ -37,6 +38,7 @@ typedef struct server_s {
     struct texts_manager texts_manager;
     struct configuration configuration;
     struct walkway_manager walkway_manager;
+    struct fuserights_manager fuserights_manager;
     struct sqlite3 *DB;
     uv_loop_t *rcon_loop;
     bool is_shutdown;

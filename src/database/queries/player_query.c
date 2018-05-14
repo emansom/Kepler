@@ -221,7 +221,7 @@ player_data *player_query_data(int id) {
             sqlite3_column_int(stmt, 9),          // film
             sqlite3_column_int(stmt, 10),         // rank
             (char*)sqlite3_column_text(stmt, 11), // console_motto
-            (char*)sqlite3_column_text(stmt, 12), // last_online
+            (unsigned long long)sqlite3_column_int64(stmt, 12), // last_online
             (unsigned long long)sqlite3_column_int64(stmt, 13), // club_subscribed
             (unsigned long long)sqlite3_column_int64(stmt, 14), // club_expiration
             (char*)sqlite3_column_text(stmt, 15)
@@ -289,11 +289,16 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
     return user_id;
 }
 
-void query_session_save_looks(session *player) {
+/**
+ * Save looks for player.
+ *
+ * @param player the player to save the looks for
+ */
+void player_query_save_details(session *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", -1, &stmt, 0);\
+    int status = sqlite3_prepare_v2(conn, "UPDATE users SET figure = ?, pool_figure = ?, sex = ?, rank = ? WHERE id = ?", -1, &stmt, 0);\
 
     db_check_prepare(status, conn);
 
@@ -301,7 +306,8 @@ void query_session_save_looks(session *player) {
         sqlite3_bind_text(stmt, 1, player->player_data->figure, strlen(player->player_data->figure), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 2, player->player_data->pool_figure, strlen(player->player_data->pool_figure), SQLITE_STATIC);
         sqlite3_bind_text(stmt, 3, player->player_data->sex, strlen(player->player_data->sex), SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 4, player->player_data->id);
+        sqlite3_bind_int(stmt, 4, player->player_data->rank);
+        sqlite3_bind_int(stmt, 5, player->player_data->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }
@@ -309,6 +315,11 @@ void query_session_save_looks(session *player) {
     db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
+/**
+ * Save last online for player
+ *
+ * @param player the player to save the last online for
+ */
 void player_query_save_last_online(session *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
@@ -318,10 +329,7 @@ void player_query_save_last_online(session *player) {
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        char last_online[100];
-        sprintf(last_online, "%lu", (unsigned long)time(NULL));
-
-        sqlite3_bind_text(stmt, 1, last_online, strlen(last_online), SQLITE_STATIC);
+        sqlite3_bind_int64(stmt, 1, (sqlite3_int64)time(NULL));
         sqlite3_bind_int(stmt, 2, player->player_data->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
@@ -330,6 +338,11 @@ void player_query_save_last_online(session *player) {
     db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
+/**
+ * Save motto for player
+ *
+ * @param player the player to save the mottos for
+ */
 void player_query_save_motto(session *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
@@ -349,6 +362,11 @@ void player_query_save_motto(session *player) {
     db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
+/**
+ * Save currency for player
+ *
+ * @param player the player to save the currency amount for
+ */
 void player_query_save_currency(session *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
@@ -369,6 +387,12 @@ void player_query_save_currency(session *player) {
     db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
+/**
+ * Player tickets for player
+ *
+ * @param id the player id to save the tickets for
+ * @param tickets the ticket amount to save
+ */
 void player_query_save_tickets(int id, int tickets) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
@@ -387,6 +411,11 @@ void player_query_save_tickets(int id, int tickets) {
     db_check_finalize(sqlite3_finalize(stmt), conn);
 }
 
+/**
+ * Get badges for player
+ *
+ * @param player the player to get the badges for
+ */
 Array *player_query_badges(int id) {
     Array *badges;
     if (array_new(&badges) != CC_OK) {
@@ -423,7 +452,12 @@ Array *player_query_badges(int id) {
     return badges;
 }
 
-void player_query_save_club_informations(session *player) {
+/**
+ * Save club information for player
+ *
+ * @param player the player to save the club information for
+ */
+void player_query_save_club_information(session *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 

@@ -37,9 +37,10 @@ typedef struct session_s {
 } session;
 
 session *player_create(void*, char*);
-player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*, char*, unsigned long, unsigned long, char*);
-void player_login(session*);
-void player_disconnect(session *p);
+player_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*, unsigned long, unsigned long, unsigned long, char*);
+void player_login(session *player);
+bool player_has_fuse(session *player, char *fuse_right);
+void player_disconnect(session *player);
 void player_send(session *, outgoing_message *);
 void player_cleanup(session*);
 void player_data_cleanup(player_data*);
