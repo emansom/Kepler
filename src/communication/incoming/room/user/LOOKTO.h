@@ -12,16 +12,17 @@ void LOOKTO(session *player, incoming_message *message) {
         return;
     }
 
+    char *content = NULL;
+    char *str_x = NULL;
+    char *str_y = NULL;
+
     room_user *room_entity = player->room_user;
 
     if (room_user_has_status(room_entity, "sit") || room_user_has_status(room_entity, "lay")) {
         goto cleanup;
     }
 
-    char *content = im_get_content(message);
-    char *str_x = NULL;
-    char *str_y = NULL;
-
+    content = im_get_content(message);
     str_x = get_argument(content, " ", 0);
     str_y = get_argument(content, " ", 1);
 
