@@ -1,8 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-
 void delete_room_items(List *items);
 
 void DELETEFLAT(session *player, incoming_message *message) {

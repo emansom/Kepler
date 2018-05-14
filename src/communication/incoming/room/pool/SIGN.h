@@ -1,8 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "database/queries/player_query.h"
-
 void SIGN(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         goto cleanup;

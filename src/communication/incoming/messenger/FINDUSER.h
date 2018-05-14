@@ -1,10 +1,5 @@
-#include "list.h"
-
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
-
-#include "game/player/player.h"
-#include "game/player/player_manager.h"
 
 #include "database/queries/player_query.h"
 

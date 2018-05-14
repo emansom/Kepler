@@ -1,15 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/inventory/inventory.h"
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/items/item.h"
-
-#include "database/queries/rooms/room_query.h"
-#include "database/queries/items/item_query.h"
-
 void FLATPROPBYITEM(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;

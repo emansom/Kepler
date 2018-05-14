@@ -6,6 +6,8 @@
 #include "game/pathfinder/coord.h"
 #include "game/room/public_rooms/pool_handler.h"
 
+#include "game/room/room_user.h"
+
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
 

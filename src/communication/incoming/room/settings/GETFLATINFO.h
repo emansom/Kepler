@@ -1,8 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-
 void GETFLATINFO(session *player, incoming_message *message) {
     char *content = im_get_content(message);
     bool dispose_after = false;

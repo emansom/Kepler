@@ -1,9 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "game/room/room.h"
-
 #include "database/queries/rooms/room_query.h"
 
 void SETFLATINFO(session *player, incoming_message *message) {

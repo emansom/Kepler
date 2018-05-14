@@ -1,12 +1,9 @@
-#include <pthread.h>
-
 #include "log.h"
 
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
 #include "game/player/player_refresh.h"
-
 #include "database/queries/player_query.h"
 
 /*

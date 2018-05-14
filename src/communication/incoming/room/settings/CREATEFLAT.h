@@ -1,9 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "game/room/room.h"
-
 #include "database/queries/rooms/room_user_query.h"
 
 void CREATEFLAT(session *player, incoming_message *message) {

@@ -1,10 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "list.h"
-
-#include "game/room/manager/room_item_manager.h"
-
 void G_ITEMS(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;

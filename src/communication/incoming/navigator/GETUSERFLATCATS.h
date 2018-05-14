@@ -1,10 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/navigator/navigator_category_manager.h"
-
-#include "list.h"
-
 void GETUSERFLATCATS(session *player, incoming_message *message) {
     outgoing_message *navigator = om_create(221); // "C]"
 

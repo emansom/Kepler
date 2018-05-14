@@ -2,7 +2,6 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "util/encoding/vl64encoding.h"
-#include "game/room/manager/room_entity_manager.h"
 
 void ROOM_DIRECTORY(session *player, incoming_message *message) {
     char *content = im_get_content(message);

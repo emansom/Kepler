@@ -1,14 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "game/items/item.h"
-
-#include "game/room/room_user.h"
-#include "game/room/manager/room_item_manager.h"
-
-#include "util/stringbuilder.h"
-
 void G_IDATA(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;

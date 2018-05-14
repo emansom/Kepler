@@ -1,13 +1,5 @@
-#include "game/player/player.h"
-
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
-
-#include "game/room/room.h"
-#include "game/room/mapping/room_model.h"
-
-#include "list.h"
-#include "log.h"
 
 void G_STAT(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {

@@ -1,8 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-
 void G_USRS(session *p, incoming_message *message) {
     if (p->room_user->room == NULL) {
         return;

@@ -3,8 +3,6 @@
 
 #include "database/queries/player_query.h"
 
-#include "shared.h"
-
 /*
  * Arguments we will send the to the login thread
  */

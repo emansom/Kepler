@@ -2,15 +2,6 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "game/inventory/inventory.h"
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/room/manager/room_item_manager.h"
-#include "game/room/mapping/room_map.h"
-
-#include "game/items/item.h"
-
-#include "game/pathfinder/coord.h"
 
 void MOVESTUFF(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {

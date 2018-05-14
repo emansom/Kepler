@@ -1,9 +1,5 @@
-#include "game/room/mapping/room_model.h"
-
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
-
-#include "log.h"
 
 void G_HMAP(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {

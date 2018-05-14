@@ -1,14 +1,8 @@
-#include <database/queries/items/item_query.h>
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
 #include "game/inventory/inventory.h"
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/room/mapping/room_map.h"
-
-#include "game/items/item.h"
+#include "database/queries/items/item_query.h"
 
 void PLACESTUFF(session *player, incoming_message *message) {
     if (player->room_user->room == NULL) {

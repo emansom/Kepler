@@ -1,9 +1,6 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "game/room/room_user.h"
-
 void update_badge(room_user *room_user) {
     outgoing_message *badge_notify = om_create(228); // "Cd"
 
