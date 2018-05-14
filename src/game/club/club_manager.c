@@ -1,5 +1,6 @@
 #include "club_manager.h"
 
+#include "log.h"
 #include "game/moderation/fuserights_manager.h"
 
 #include "communication/messages/outgoing_message.h"
@@ -63,10 +64,6 @@ void club_refresh(session *player) {
     bool needs_update = false;
 
     if (player->player_data->club_subscribed == 0) {
-        if (player->player_data->rank == 2) {
-            player->player_data->rank = 1;
-            needs_update = true;
-        }
         since_months = 0;
     } else {
         since_months = (int) (now - player->player_data->club_subscribed) / 60 / 60 / 24 / 31;
@@ -87,6 +84,19 @@ void club_refresh(session *player) {
     om_write_int(club_habbo, 1);
     player_send(player, club_habbo);
     om_cleanup(club_habbo);
+
+    // Reset tables and ranks if their club expired
+    if (remaining_days_for_this_month == 0 && since_months == 0 && prepaid_months == 0 && player->player_data->club_subscribed > 0) {
+        if (player->player_data->rank == 2) {
+            player->player_data->rank = 1;
+        }
+
+        player->player_data->club_subscribed = 0;
+        player->player_data->club_expiration = 0;
+        player_query_save_club_information(player);
+
+        needs_update = true;
+    }
 
     // Set rank to 2 or 1 if their club expired or so and
     // refresh their fuserights
