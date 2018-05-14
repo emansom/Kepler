@@ -12,6 +12,12 @@ void LOOKTO(session *player, incoming_message *message) {
         return;
     }
 
+    room_user *room_entity = player->room_user;
+
+    if (room_user_has_status(room_entity, "sit") || room_user_has_status(room_entity, "lay")) {
+        goto cleanup;
+    }
+
     char *content = im_get_content(message);
     char *str_x = NULL;
     char *str_y = NULL;
@@ -26,10 +32,8 @@ void LOOKTO(session *player, incoming_message *message) {
     int towards_x = (int) strtol(str_x, NULL, 10);
     int towards_y = (int) strtol(str_y, NULL, 10);
 
-    room_user *room_entity = player->room_user;
-
-    if (room_user_has_status(room_entity, "sit") || room_user_has_status(room_entity, "lay")) {
-        goto cleanup;
+    if (towards_x == room_entity->position->x && towards_y == room_entity->position->y) {
+        goto cleanup; // Don't process LOOKTO on your own coordinate
     }
 
     int rotation = calculate_human_direction(room_entity->position->x, room_entity->position->y, towards_x, towards_y);
