@@ -50,50 +50,15 @@ int main(void) {
 #endif
 
     if (sodium_init() < 0) {
-        log_fatal("Could not initialize password hashing library");
+        log_fatal("Could not initialise password hashing library");
         return EXIT_FAILURE;
     }
 
-    if (!sqlite3_threadsafe()) {
-        log_info("SQLite not threadsafe");
-        return EXIT_FAILURE;
-    } else {
-        if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
-            log_fatal("Could not configurate SQLite to use serialized mode");
-            return EXIT_FAILURE;
-        }
-    }
-
-    log_info("Testing SQLite connection...");
-
-    sqlite3 *con = db_create_connection();
-
-    if (con == NULL) {
-        log_info("The connection to the database was unsuccessful, program aborted!");
-        sqlite3_close(con);
+    if (!db_initialise()) {
         return EXIT_FAILURE;
     }
 
-    log_info("The connection to the database was successful!");
-
-    sqlite3_stmt *stmt;
-    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
-
-    db_check_prepare(status, con);
-    db_check_step(sqlite3_step(stmt), con, stmt);
-
-    char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
-
-    if (strcmp(chosen_journal_mode, "wal") != 0) {
-        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
-    }
-
-    db_check_finalize(sqlite3_finalize(stmt), con);
-
-    global.DB = con;
-    global.is_shutdown = false;
-
-    log_info("Initialising various server managers...");
+    log_info("Initialising various game managers...");
 
     walkways_init();
     texts_manager_init();
@@ -110,19 +75,16 @@ int main(void) {
     pthread_t game_thread;
     game_thread_init(&game_thread);
 
-    server_settings rcon_settings;// = malloc(sizeof(server_settings));
+    server_settings rcon_settings, server_settings;
     strcpy(rcon_settings.ip, configuration_get_string("rcon.ip.address"));
     rcon_settings.port = configuration_get_int("rcon.port");
 
-    server_settings settings;// = malloc(sizeof(server_settings));
-    strcpy(settings.ip, configuration_get_string("server.ip.address"));
-    settings.port = configuration_get_int("server.port");
+    strcpy(server_settings.ip, configuration_get_string("server.ip.address"));
+    server_settings.port = configuration_get_int("server.port");
 
-    pthread_t mus_thread;
+    pthread_t mus_thread, server_thread;
     start_rcon(&rcon_settings, &mus_thread);
-
-    pthread_t server_thread;
-    start_server(&settings, &server_thread);
+    start_server(&server_settings, &server_thread);
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];

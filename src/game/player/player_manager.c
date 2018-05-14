@@ -36,16 +36,6 @@ void player_manager_remove(session *p) {
 }
 
 /**
- * Finds a player by a given stream
- *
- * @param stream the stream
- * @return the player
- */
-session *player_manager_find(void *stream) {
-    return NULL;
-}
-
-/**
  * Find a player by user id
  *
  * @param player_id the player id
