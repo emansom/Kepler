@@ -59,6 +59,7 @@ void room_user_reset(room_user *room_user, bool cleanup) {
     room_user_remove_status(room_user, "sit");
     room_user_remove_status(room_user, "lay");
     room_user_remove_status(room_user, "flatctrl");
+    room_user_remove_status(room_user, "dance");
 
     // Carry items
     room_user_remove_status(room_user, "carryf");
@@ -383,6 +384,8 @@ void room_user_invoke_item(room_user *room_user) {
             sprintf(sit_height, " %1.f", item->definition->top_height);
 
             room_user_add_status(room_user, "sit", sit_height, -1, "", -1, -1);
+            room_user_remove_status(room_user, "dance");
+
             coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }
@@ -392,6 +395,8 @@ void room_user_invoke_item(room_user *room_user) {
             sprintf(sit_height, " %1.f", item->definition->top_height);
 
             room_user_add_status(room_user, "lay", sit_height, -1, "", -1, -1);
+            room_user_remove_status(room_user, "dance");
+
             coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }

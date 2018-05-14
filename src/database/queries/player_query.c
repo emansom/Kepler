@@ -268,12 +268,12 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
     sprintf(last_online, "%lu", (unsigned long)time(NULL));
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, username, strlen(username), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, hashed_password, strlen(hashed_password), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 3, gender, strlen(gender), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 4, figure, strlen(figure), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 5, "", strlen(""), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 6, last_online, strlen(last_online), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 1, username, (int) strlen(username), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, hashed_password, (int) strlen(hashed_password), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, gender, (int) strlen(gender), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 4, figure, (int) strlen(figure), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 5, "", (int) strlen(""), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 6, last_online, (int) strlen(last_online), SQLITE_STATIC);
 
         status = db_check_step(sqlite3_step(stmt), conn, stmt);
     }
@@ -303,9 +303,9 @@ void player_query_save_details(session *player) {
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, player->player_data->figure, strlen(player->player_data->figure), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, player->player_data->pool_figure, strlen(player->player_data->pool_figure), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 3, player->player_data->sex, strlen(player->player_data->sex), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 1, player->player_data->figure, (int) strlen(player->player_data->figure), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, player->player_data->pool_figure, (int) strlen(player->player_data->pool_figure), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, player->player_data->sex, (int) strlen(player->player_data->sex), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 4, player->player_data->rank);
         sqlite3_bind_int(stmt, 5, player->player_data->id);
 
@@ -352,8 +352,8 @@ void player_query_save_motto(session *player) {
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, player->player_data->motto, strlen(player->player_data->motto), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, player->player_data->console_motto, strlen(player->player_data->console_motto), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 1, player->player_data->motto, (int) strlen(player->player_data->motto), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, player->player_data->console_motto, (int) strlen(player->player_data->console_motto), SQLITE_STATIC);
         sqlite3_bind_int(stmt, 3, player->player_data->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
