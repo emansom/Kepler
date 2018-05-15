@@ -60,7 +60,7 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         return;
     }
     if (nread > 0) {
-        int header = buf->base[0] - '0';
+        char header = buf->base[0];
 
         char *message = NULL;
 
