@@ -20,10 +20,10 @@ void fuserights_init() {
  * @return the new fuseright struct
  */
 fuseright *fuserights_create(int rank, char *fuse_right) {
-    fuseright *fuseright_entry = malloc(sizeof(fuseright));
-    fuseright_entry->min_rank = rank;
-    fuseright_entry->fuse_right = strdup(fuse_right);
-    return fuseright_entry;
+    fuseright *entry = malloc(sizeof(fuseright));
+    entry->min_rank = rank;
+    entry->fuse_right = strdup(fuse_right);
+    return entry;
 }
 
 /**
@@ -49,6 +49,10 @@ void fuserights_append(int rank, outgoing_message *om) {
  * @return true, if successful
  */
 bool fuserights_has_permission(int rank, char *fuse) {
+    if (fuse == NULL) {
+        return false;
+    }
+
     for (size_t i = 0; i < list_size(global.fuserights_manager.fuserights); i++) {
         fuseright *right;
         list_get_at(global.fuserights_manager.fuserights, i, (void *) &right);
