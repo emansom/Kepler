@@ -139,7 +139,7 @@ bool do_roller_item(room *room, item *roller, item *item) {
     item->position->y = to.y;
     item->position->z = to.z;
 
-    outgoing_message *om = om_create(230);
+    outgoing_message *om = om_create(230); // "Cf"
     om_write_int(om, from.x);
     om_write_int(om, from.y);
     om_write_int(om, to.x);
@@ -198,7 +198,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     room_entity->position->z = to.z;
     room_entity->needs_update = true;
 
-    outgoing_message *om = om_create(230);
+    outgoing_message *om = om_create(230); // "Cf"
     om_write_int(om, from.x);
     om_write_int(om, from.y);
     om_write_int(om, to.x);

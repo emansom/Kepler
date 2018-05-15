@@ -367,7 +367,7 @@ void room_dispose(room *room, bool force_dispose) {
 
     room_item_manager_dispose(room);
 
-    if (!force_dispose &&player_manager_find_by_id(room->room_data->owner_id) != NULL) {
+    if (!force_dispose && player_manager_find_by_id(room->room_data->owner_id) != NULL) {
         return;
     }
 
