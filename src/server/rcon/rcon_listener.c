@@ -65,10 +65,7 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         char *message = NULL;
 
         if (nread > 1) {
-            char *data = strdup(buf->base);
-            message = strdup(data + 1);
-            free(data);
-
+            message = strdup(buf->base + 1);
         } else {
             message = strdup("");
         }
