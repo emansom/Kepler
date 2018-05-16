@@ -97,6 +97,10 @@ player_data *player_manager_get_data_by_id(int player_id) {
             session *p;
             list_get_at(global.player_manager.players, i, (void *) &p);
 
+            if (!p->logged_in) {
+                continue;
+            }
+
             if (p->player_data->id == player_id) {
                 return (player_data *) p->player_data;
             }
