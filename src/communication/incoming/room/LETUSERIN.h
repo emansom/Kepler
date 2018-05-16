@@ -22,9 +22,9 @@ void LETUSERIN(session *user, incoming_message *message) {
     ringing_username = im_read_str(message);
     bool can_enter = content[strlen(content) - 1] == 'A';
 
-    session *to_enter = player_manager_find_by_name(ringing_username);
+    session *ringer = player_manager_find_by_name(ringing_username);
 
-    if (to_enter == NULL) {
+    if (ringer == NULL) {
         goto cleanup;
     }
 
@@ -32,13 +32,13 @@ void LETUSERIN(session *user, incoming_message *message) {
 
     if (can_enter) {
         message_id = 41; // "@i"
-        user->room_user->authenticate_id = room->room_id;
+        ringer->room_user->authenticate_id = room->room_id;
     } else {
         message_id = 131; // "BC"
     }
 
     outgoing_message *om = om_create(message_id);
-    player_send(to_enter, om);
+    player_send(ringer, om);
     om_cleanup(om);
 
     cleanup:
