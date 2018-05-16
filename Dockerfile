@@ -25,4 +25,6 @@ RUN cd /usr/src/kepler && \
 WORKDIR /usr/src/kepler
 
 EXPOSE 12321
+EXPOSE 12309
+
 ENTRYPOINT ["kepler"]
