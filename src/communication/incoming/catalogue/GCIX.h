@@ -8,7 +8,7 @@
 
 #include "game/player/player.h"
 
-void GCIX(session *player, incoming_message *message) {
+void GCIX(entity *player, incoming_message *message) {
     List *pages = catalogue_manager_get_pages();
 
     outgoing_message *catalogue_pages = om_create(126); // "A~"
@@ -17,7 +17,7 @@ void GCIX(session *player, incoming_message *message) {
         catalogue_page *page = NULL;
         list_get_at(pages, i, (void *) &page);
 
-        if (player->player_data->rank >= page->min_role) {
+        if (player->details->rank >= page->min_role) {
             om_write_str_delimeter(catalogue_pages, page->name_index, 9);
             om_write_str_delimeter(catalogue_pages, page->name, 13);
         }

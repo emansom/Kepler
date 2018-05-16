@@ -190,11 +190,11 @@ int player_query_exists_username(char *username) {
  * @param id the user id
  * @return the player data struct
  */
-player_data *player_query_data(int id) {
+entity_data *player_query_data(int id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    player_data *player_data = NULL;
+    entity_data *player_data = NULL;
     int status = sqlite3_prepare_v2(conn, "SELECT id,username,password,figure,pool_figure,credits,motto,sex,tickets,film,rank,console_motto,last_online,club_subscribed,club_expiration,active_badge FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
@@ -294,7 +294,7 @@ int player_query_create(char *username, char *figure, char *gender, char *passwo
  *
  * @param player the player to save the looks for
  */
-void player_query_save_details(session *player) {
+void player_query_save_details(entity *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
@@ -303,11 +303,11 @@ void player_query_save_details(session *player) {
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, player->player_data->figure, (int) strlen(player->player_data->figure), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, player->player_data->pool_figure, (int) strlen(player->player_data->pool_figure), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 3, player->player_data->sex, (int) strlen(player->player_data->sex), SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 4, player->player_data->rank);
-        sqlite3_bind_int(stmt, 5, player->player_data->id);
+        sqlite3_bind_text(stmt, 1, player->details->figure, (int) strlen(player->details->figure), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, player->details->pool_figure, (int) strlen(player->details->pool_figure), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, player->details->sex, (int) strlen(player->details->sex), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 4, player->details->rank);
+        sqlite3_bind_int(stmt, 5, player->details->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }
@@ -320,7 +320,7 @@ void player_query_save_details(session *player) {
  *
  * @param player the player to save the last online for
  */
-void player_query_save_last_online(session *player) {
+void player_query_save_last_online(entity *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
@@ -330,7 +330,7 @@ void player_query_save_last_online(session *player) {
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int64(stmt, 1, (sqlite3_int64)time(NULL));
-        sqlite3_bind_int(stmt, 2, player->player_data->id);
+        sqlite3_bind_int(stmt, 2, player->details->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }
@@ -343,7 +343,7 @@ void player_query_save_last_online(session *player) {
  *
  * @param player the player to save the mottos for
  */
-void player_query_save_motto(session *player) {
+void player_query_save_motto(entity *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
@@ -352,9 +352,9 @@ void player_query_save_motto(session *player) {
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, player->player_data->motto, (int) strlen(player->player_data->motto), SQLITE_STATIC);
-        sqlite3_bind_text(stmt, 2, player->player_data->console_motto, (int) strlen(player->player_data->console_motto), SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 3, player->player_data->id);
+        sqlite3_bind_text(stmt, 1, player->details->motto, (int) strlen(player->details->motto), SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 2, player->details->console_motto, (int) strlen(player->details->console_motto), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 3, player->details->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }
@@ -367,7 +367,7 @@ void player_query_save_motto(session *player) {
  *
  * @param player the player to save the currency amount for
  */
-void player_query_save_currency(session *player) {
+void player_query_save_currency(entity *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
@@ -376,10 +376,10 @@ void player_query_save_currency(session *player) {
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_int(stmt, 1, player->player_data->credits);
-        sqlite3_bind_int(stmt, 2, player->player_data->tickets);
-        sqlite3_bind_int(stmt, 3, player->player_data->film);
-        sqlite3_bind_int(stmt, 4, player->player_data->id);
+        sqlite3_bind_int(stmt, 1, player->details->credits);
+        sqlite3_bind_int(stmt, 2, player->details->tickets);
+        sqlite3_bind_int(stmt, 3, player->details->film);
+        sqlite3_bind_int(stmt, 4, player->details->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }
@@ -457,7 +457,7 @@ Array *player_query_badges(int id) {
  *
  * @param player the player to save the club information for
  */
-void player_query_save_club_information(session *player) {
+void player_query_save_club_information(entity *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
@@ -466,9 +466,9 @@ void player_query_save_club_information(session *player) {
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_int64(stmt, 1, (sqlite3_int64)player->player_data->club_subscribed);
-        sqlite3_bind_int64(stmt, 2, (sqlite3_int64)player->player_data->club_expiration);
-        sqlite3_bind_int(stmt, 3, player->player_data->id);
+        sqlite3_bind_int64(stmt, 1, (sqlite3_int64)player->details->club_subscribed);
+        sqlite3_bind_int64(stmt, 2, (sqlite3_int64)player->details->club_expiration);
+        sqlite3_bind_int(stmt, 3, player->details->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }

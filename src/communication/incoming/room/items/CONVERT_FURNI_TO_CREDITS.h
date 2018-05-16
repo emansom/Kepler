@@ -1,8 +1,8 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void CONVERT_FURNI_TO_CREDITS(session *player, incoming_message *message) {
-    if (player->room_user->room == NULL || !room_is_owner(player->room_user->room, player->player_data->id)) {
+void CONVERT_FURNI_TO_CREDITS(entity *player, incoming_message *message) {
+    if (player->room_user->room == NULL || !room_is_owner(player->room_user->room, player->details->id)) {
         return;
     }
 
@@ -31,7 +31,7 @@ void CONVERT_FURNI_TO_CREDITS(session *player, incoming_message *message) {
     item_query_delete(item_id);
     item_dispose(item);
 
-    player->player_data->credits += amount;
+    player->details->credits += amount;
     player_refresh_credits(player);
 
     player_query_save_currency(player);

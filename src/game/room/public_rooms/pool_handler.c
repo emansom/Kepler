@@ -25,14 +25,14 @@
 #include "util/stringbuilder.h"
 #include "pool_handler.h"
 
-void pool_warp_swim(session*, item*, coord warp, bool exit);
+void pool_warp_swim(entity*, item*, coord warp, bool exit);
 
 /**
  * Handle walking out of booth
  *
  * @param player the player to handle
  */
-void pool_booth_exit(session *player) {
+void pool_booth_exit(entity *player) {
     // Open up booth
     room_tile *tile = player->room_user->room->room_map->map[player->room_user->position->x][player->room_user->position->y];
 
@@ -71,7 +71,7 @@ void pool_booth_exit(session *player) {
  *
  * @param player the player to handle
  */
-void pool_item_walk_on(session *p, item *item) {
+void pool_item_walk_on(entity *p, item *item) {
     room_user *room_entity = p->room_user;
 
     if (strcmp(item->definition->sprite, "poolLift") == 0) {
@@ -92,12 +92,12 @@ void pool_item_walk_on(session *p, item *item) {
         room_entity->room_idle_timer = (int) (time(NULL) + 60); // Normally we use "room_user_reset_idle_timer" but for diving, we cut the time down.
 
         outgoing_message *om = om_create(125); // "A}"
-        player_send(room_entity->player, om);
+        player_send(room_entity->entity, om);
         om_cleanup(om);
 
-        room_entity->player->player_data->tickets--;
-        player_refresh_tickets(room_entity->player);
-        player_query_save_currency(room_entity->player);
+        room_entity->entity->details->tickets--;
+        player_refresh_tickets(room_entity->entity);
+        player_query_save_currency(room_entity->entity);
 
     }
 
@@ -106,7 +106,7 @@ void pool_item_walk_on(session *p, item *item) {
         room_entity->walking_lock = true;
 
         outgoing_message *om = om_create(96); // "A`"
-        player_send(room_entity->player, om);
+        player_send(room_entity->entity, om);
         om_cleanup(om);
     }
 
@@ -175,7 +175,7 @@ void pool_item_walk_on(session *p, item *item) {
  * @param warp the coordinates to warp to
  * @param exit true or false whether they're exiting or entering
  */
-void pool_warp_swim(session *player, item *item, coord warp, bool exit) {
+void pool_warp_swim(entity *player, item *item, coord warp, bool exit) {
     room_user *room_entity = player->room_user;
     stop_walking(room_entity, true);
 

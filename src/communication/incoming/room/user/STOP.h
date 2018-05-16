@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void STOP(session *player, incoming_message *message) {
+void STOP(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

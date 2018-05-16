@@ -79,7 +79,7 @@ void room_map_regenerate(room *room) {
 
     // Add players to tiles
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
         room_tile *tile = room->room_map->map[room_player->room_user->position->x][room_player->room_user->position->y];

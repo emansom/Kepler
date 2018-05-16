@@ -3,14 +3,14 @@
 
 #include "database/queries/rooms/room_rights_query.h"
 
-void ASSIGNRIGHTS(session *player, incoming_message *im) {
+void ASSIGNRIGHTS(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }
 
     room *room = player->room_user->room;
 
-    if (!room_is_owner(room, player->player_data->id)) {
+    if (!room_is_owner(room, player->details->id)) {
         return;
     }
 

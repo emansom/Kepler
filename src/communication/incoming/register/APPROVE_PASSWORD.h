@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void APPROVE_PASSWORD(session *player, incoming_message *message) {
+void APPROVE_PASSWORD(entity *player, incoming_message *message) {
     char *username = im_read_str(message);
     char *password = im_read_str(message);
 

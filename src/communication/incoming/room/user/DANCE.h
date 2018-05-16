@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void DANCE(session *player, incoming_message *im) {
+void DANCE(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }

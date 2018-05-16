@@ -36,9 +36,9 @@
  * @param player the entity for the room user
  * @return the room user struct to return
  */
-room_user *room_user_create(session *player) {
+room_user *room_user_create(entity *player) {
     room_user *user = malloc(sizeof(room_user));
-    user->player = player;
+    user->entity = player;
     user->position = coord_create(0, 0);
     user->goal = coord_create(0, 0);
     user->next = NULL;
@@ -147,9 +147,9 @@ void walk_to(room_user *room_user, int x, int y) {
     if (tile != NULL && tile->highest_item != NULL) {
         item *item = tile->highest_item;
 
-        if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
+        if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->entity->details->tickets == 0) {
             outgoing_message *om = om_create(73); // "AI"
-            player_send(room_user->player, om);
+            player_send(room_user->entity, om);
             om_cleanup(om);
             return;
         }
@@ -200,7 +200,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
 
         if (walkway != NULL) {
             room *room = walkways_find_room(walkway->model_to);
-            room_enter(room, room_user->player, walkway->destination);
+            room_enter(room, room_user->entity, walkway->destination);
             return;
         }
 
@@ -278,7 +278,7 @@ void room_user_show_chat(room_user *room_user, char *text, bool is_shout) {
     }
 
     for (size_t i = 0; i < list_size(players); i++) {
-        session *player;
+        entity *player;
         list_get_at(players, i, (void *) &player);
 
         // Look at player talking
@@ -338,7 +338,7 @@ bool room_user_process_command(room_user *room_user, char *text) {
 
     // TODO: better way to handle commands
     if (strcmp(text, ":about") == 0) {
-        player_send_alert(room_user->player,
+        player_send_alert(room_user->entity,
                           "Kepler server\n\nContributors:\n - Hoshiko:\n - Romuald\n - Glaceon\n\nMade by Quackster");
         return true;
     }
@@ -402,7 +402,7 @@ void room_user_invoke_item(room_user *room_user) {
         }
 
 
-        pool_item_walk_on(room_user->player, item);
+        pool_item_walk_on(room_user->entity, item);
     }
 
     room_user->needs_update = needs_update;

@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void CHAT(session *player, incoming_message *im) {
+void CHAT(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }
@@ -36,7 +36,7 @@ void CHAT(session *player, incoming_message *im) {
         int source_y = player->room_user->position->y;
 
         for (size_t i = 0; i < list_size(room->users); i++) {
-            session *room_player;
+            entity *room_player;
             list_get_at(room->users, i, (void *) &room_player);
 
             int dist_x = abs(source_x - room_player->room_user->position->x) - 1;

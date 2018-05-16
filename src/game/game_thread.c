@@ -33,7 +33,7 @@ void *game_thread_loop(void *arguments) {
 
 void game_thread_task(unsigned long ticks) {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-        session *player;
+        entity *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
 
         if (player->disconnected) {
@@ -50,7 +50,7 @@ void game_thread_task(unsigned long ticks) {
                 om_cleanup(om);
             } else {
                 if (player->logged_in) {
-                    log_info("Player %s timed out", player->player_data->username);
+                    log_info("Player %s timed out", player->details->username);
                 } else {
                     log_info("Connection %s timed out", player->ip_address);
                 }

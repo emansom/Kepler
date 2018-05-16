@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void SRCHF(session *player, incoming_message *message) {
+void SRCHF(entity *player, incoming_message *message) {
     char *search_query = im_get_content(message);
 
     if (search_query == NULL) {

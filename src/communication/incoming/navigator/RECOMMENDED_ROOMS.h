@@ -7,7 +7,7 @@
 
 #include "database/queries/rooms/room_query.h"
 
-void RECOMMENDED_ROOMS(session *player, incoming_message *message) {
+void RECOMMENDED_ROOMS(entity *player, incoming_message *message) {
     List *rooms = room_query_random_rooms(3);
     list_sort_in_place(rooms, room_manager_sort);
 

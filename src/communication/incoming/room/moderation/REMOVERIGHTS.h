@@ -3,14 +3,14 @@
 
 #include "database/queries/rooms/room_rights_query.h"
 
-void REMOVERIGHTS(session *player, incoming_message *im) {
+void REMOVERIGHTS(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }
 
     room *room = player->room_user->room;
 
-    if (!room_is_owner(room, player->player_data->id)) {
+    if (!room_is_owner(room, player->details->id)) {
         return;
     }
 
@@ -32,7 +32,7 @@ void REMOVERIGHTS(session *player, incoming_message *im) {
     if (entry != NULL) {
         list_remove(room->rights, entry, NULL);
 
-        session *to_remove = player_manager_find_by_id(user_id);
+        entity *to_remove = player_manager_find_by_id(user_id);
 
         if (to_remove->room_user->room_id == room->room_id) {
             room_user_remove_status(to_remove->room_user, "flatctrl");

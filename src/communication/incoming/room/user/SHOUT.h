@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void SHOUT(session *player, incoming_message *im) {
+void SHOUT(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }

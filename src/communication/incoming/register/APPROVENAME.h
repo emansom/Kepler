@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void APPROVENAME(session *player, incoming_message *message) {
+void APPROVENAME(entity *player, incoming_message *message) {
     char *username = im_read_str(message);
     int name_check_code = get_name_check_code(username);
 

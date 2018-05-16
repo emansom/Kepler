@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void SETFLATCAT(session *player, incoming_message *message) {
+void SETFLATCAT(entity *player, incoming_message *message) {
     int room_id = im_read_vl64(message);
     int category_id = im_read_vl64(message);
 
@@ -21,11 +21,11 @@ void SETFLATCAT(session *player, incoming_message *message) {
         return;
     }
 
-    if (!room_is_owner(room, player->player_data->id)) {
+    if (!room_is_owner(room, player->details->id)) {
         return;
     }
 
-    if (player->player_data->rank >= category->minrole_setflatcat) {
+    if (player->details->rank >= category->minrole_setflatcat) {
         room->room_data->category = category_id;
         query_room_save(room);
     }

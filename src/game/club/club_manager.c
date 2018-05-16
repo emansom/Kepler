@@ -11,19 +11,19 @@
  * @param player the player to add club to
  * @param days the amount of days to add
  */
-void club_subscribe(session *player, int days) {
+void club_subscribe(entity *player, int days) {
     time_t now = time(NULL);
 
     long day_in_second = 24 * 60 * 60;
     long seconds_to_add = (days * day_in_second);
 
-    if (player->player_data->club_subscribed == 0)
-        player->player_data->club_subscribed = now;
+    if (player->details->club_subscribed == 0)
+        player->details->club_subscribed = now;
 
-    if (player->player_data->club_expiration - now <= 0)
-        player->player_data->club_expiration = now + seconds_to_add + (day_in_second - 1);
+    if (player->details->club_expiration - now <= 0)
+        player->details->club_expiration = now + seconds_to_add + (day_in_second - 1);
     else
-        player->player_data->club_expiration += seconds_to_add;
+        player->details->club_expiration += seconds_to_add;
 
     player_query_save_club_information(player);
 
@@ -38,23 +38,23 @@ void club_subscribe(session *player, int days) {
  * TODO: HC Badge management
  * @param player: the player to send club informations
  */
-void club_refresh(session *player) {
+void club_refresh(entity *player) {
     time_t now = time(NULL);
     int since_months = 0;
     int total_days = 0;
     int remaining_days_for_this_month = 0;
     int prepaid_months = 0;
 
-    if (player->player_data->club_expiration == 0)
+    if (player->details->club_expiration == 0)
         total_days = 0;
     else
-        total_days = (int)((player->player_data->club_expiration - now) / 60 / 60 / 24);
+        total_days = (int)((player->details->club_expiration - now) / 60 / 60 / 24);
 
     if (total_days < 0)
         total_days = 0;
 
-    if (total_days < 0 && player->player_data->club_subscribed != 0) {
-        player->player_data->club_subscribed = 0;
+    if (total_days < 0 && player->details->club_subscribed != 0) {
+        player->details->club_subscribed = 0;
         player_query_save_club_information(player);
     }
 
@@ -63,13 +63,13 @@ void club_refresh(session *player) {
 
     bool needs_update = false;
 
-    if (player->player_data->club_subscribed == 0) {
+    if (player->details->club_subscribed == 0) {
         since_months = 0;
     } else {
-        since_months = (int) (now - player->player_data->club_subscribed) / 60 / 60 / 24 / 31;
+        since_months = (int) (now - player->details->club_subscribed) / 60 / 60 / 24 / 31;
 
-        if (player->player_data->rank == 1) {
-            player->player_data->rank = 2;
+        if (player->details->rank == 1) {
+            player->details->rank = 2;
             needs_update = true;
         }
     }
@@ -86,13 +86,13 @@ void club_refresh(session *player) {
     om_cleanup(club_habbo);
 
     // Reset tables and ranks if their club expired
-    if (remaining_days_for_this_month == 0 && since_months == 0 && prepaid_months == 0 && player->player_data->club_subscribed > 0) {
-        if (player->player_data->rank == 2) {
-            player->player_data->rank = 1;
+    if (remaining_days_for_this_month == 0 && since_months == 0 && prepaid_months == 0 && player->details->club_subscribed > 0) {
+        if (player->details->rank == 2) {
+            player->details->rank = 1;
         }
 
-        player->player_data->club_subscribed = 0;
-        player->player_data->club_expiration = 0;
+        player->details->club_subscribed = 0;
+        player->details->club_expiration = 0;
         player_query_save_club_information(player);
 
         needs_update = true;
@@ -102,7 +102,7 @@ void club_refresh(session *player) {
     // refresh their fuserights
     if (needs_update) {
         outgoing_message *om = om_create(2); // @B
-        fuserights_append(player->player_data->rank, om);
+        fuserights_append(player->details->rank, om);
         player_send(player, om);
         om_cleanup(om);
 

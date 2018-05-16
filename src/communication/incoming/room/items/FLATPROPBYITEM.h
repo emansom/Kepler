@@ -1,14 +1,14 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void FLATPROPBYITEM(session *player, incoming_message *message) {
+void FLATPROPBYITEM(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
 
     room *room = player->room_user->room;
 
-    if (!room_has_rights(room, player->player_data->id)) {
+    if (!room_has_rights(room, player->details->id)) {
         return;
     }
 

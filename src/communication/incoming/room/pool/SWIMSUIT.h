@@ -4,7 +4,7 @@
 #include "database/queries/player_query.h"
 #include "game/room/public_rooms/pool_handler.h"
 
-void SWIMSUIT(session *player, incoming_message *message) {
+void SWIMSUIT(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     if (content == NULL) {
@@ -16,8 +16,8 @@ void SWIMSUIT(session *player, incoming_message *message) {
     }
 
     // Update pool figure
-    free(player->player_data->pool_figure);
-    player->player_data->pool_figure = strdup(content);
+    free(player->details->pool_figure);
+    player->details->pool_figure = strdup(content);
 
     // Refresh pool figure
     outgoing_message *refresh = om_create(28); // "@\"

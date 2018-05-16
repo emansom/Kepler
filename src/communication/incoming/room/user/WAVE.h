@@ -7,7 +7,7 @@
 
 #include "thpool.h"
 
-void WAVE(session *player, incoming_message *im) {
+void WAVE(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }

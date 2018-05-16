@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void GOTOFLAT(session *player, incoming_message *message) {
+void GOTOFLAT(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     if (!is_numeric(content)) {

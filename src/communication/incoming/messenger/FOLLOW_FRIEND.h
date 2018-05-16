@@ -8,10 +8,10 @@
 #include "game/player/player_manager.h"
 #include "game/player/player.h"
 
-void FOLLOW_FRIEND(session *player, incoming_message *message) {
+void FOLLOW_FRIEND(entity *player, incoming_message *message) {
     int target_id = im_read_vl64(message);
 
-    session *player_friend = player_manager_find_by_id(target_id);
+    entity *player_friend = player_manager_find_by_id(target_id);
 
     if (player_friend != NULL && player_friend->room_user->room != NULL) {
         bool is_public = list_size(player_friend->room_user->room->room_data->model_data->public_items) > 0;

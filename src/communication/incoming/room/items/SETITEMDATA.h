@@ -1,12 +1,12 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void SETITEMDATA(session *player, incoming_message *message) {
+void SETITEMDATA(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
 
-    if (!room_has_rights(player->room_user->room, player->player_data->id)) {
+    if (!room_has_rights(player->room_user->room, player->details->id)) {
         return;
     }
 

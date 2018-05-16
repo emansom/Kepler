@@ -2,7 +2,7 @@
 #define MESSENGER_H
 
 typedef struct list_s List;
-typedef struct session_s session;
+typedef struct entity_s entity;
 
 typedef struct messenger_s {
     List *friends;
@@ -20,7 +20,7 @@ typedef struct messenger_message_s {
 
 messenger *messenger_create();
 messenger_message *messenger_message_create(int, int, int, char*, char*);
-void messenger_init(session*);
+void messenger_init(entity*);
 int messenger_is_friends(messenger*, int);
 int messenger_has_request(messenger*, int);
 void messenger_remove_request(messenger*, int);

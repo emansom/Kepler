@@ -11,7 +11,7 @@ typedef struct register_context_s {
     char password[255];
     char figure[255];
     char gender[2];
-    session *player;
+    entity *player;
 } register_context;
 
 /*
@@ -19,7 +19,7 @@ typedef struct register_context_s {
  */
 void *do_register(void *args) {
     register_context *ctx = (register_context *)args;
-    session *player = ctx->player;
+    entity *player = ctx->player;
 
     player_query_create(ctx->username, ctx->figure, ctx->gender, ctx->password);
 
@@ -33,7 +33,7 @@ void *do_register(void *args) {
  * @param username Login username
  * @param password Login password
  */
-void async_register(char *username, char *figure, char* gender, char *password, session *player) {
+void async_register(char *username, char *figure, char* gender, char *password, entity *player) {
     register_context *ctx = malloc(sizeof(register_context));
     strcpy(ctx->username, username);
     strcpy(ctx->password, password);
@@ -52,7 +52,7 @@ void async_register(char *username, char *figure, char* gender, char *password, 
     }
 }
 
-void REGISTER(session *player, incoming_message *message) {
+void REGISTER(entity *player, incoming_message *message) {
     im_read_b64_int(message);
     char *name = im_read_str(message);
 

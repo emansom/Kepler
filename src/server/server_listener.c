@@ -34,7 +34,7 @@ void server_alloc_buffer(uv_handle_t* handle, size_t size, uv_buf_t* buf) {
  * @param handle the session that closed
  */
 void server_on_connection_close(uv_handle_t *handle) {
-    session *player = handle->data;
+    entity *player = handle->data;
     player->disconnected = true;
 
     log_info("Client [%s] has disconnected", player->ip_address);
@@ -71,7 +71,7 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
     }
 
     if (nread > 0) {
-        session *player = handle->data;
+        entity *player = handle->data;
 
         if (buf->base == NULL) {
             player->disconnected = true;
@@ -140,7 +140,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
     char ip[256];
     uv_inet_ntop(AF_INET, &client_addr.sin_addr, ip, sizeof(ip));
 
-    session *p = player_manager_add(handle, ip);
+    entity *p = player_manager_add(handle, ip);
     client->data = p;
 
     log_info("Client [%s] has connected", p->ip_address);

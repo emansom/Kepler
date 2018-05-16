@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void GETUSERFLATCATS(session *player, incoming_message *message) {
+void GETUSERFLATCATS(entity *player, incoming_message *message) {
     outgoing_message *navigator = om_create(221); // "C]"
 
     // Count categories that this user can actually access
@@ -12,7 +12,7 @@ void GETUSERFLATCATS(session *player, incoming_message *message) {
         room_category *category;
         list_get_at(categories, i, (void*)&category);
 
-        if (player->player_data->rank >= category->minrole_setflatcat) {
+        if (player->details->rank >= category->minrole_setflatcat) {
             accessible_categories++;
         }
     }
@@ -24,7 +24,7 @@ void GETUSERFLATCATS(session *player, incoming_message *message) {
         room_category *category;
         list_get_at(categories, i, (void*)&category);
 
-        if (player->player_data->rank >= category->minrole_setflatcat) {
+        if (player->details->rank >= category->minrole_setflatcat) {
             om_write_int(navigator, category->id); // category id
             om_write_str(navigator, category->name); // category name
         }

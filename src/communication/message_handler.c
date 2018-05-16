@@ -129,7 +129,7 @@
 // Trax
 #include "communication/incoming/room/trax/GET_SONG_LIST.h"
 
-// Only allow these headers to be processed if the session is not logged in.
+// Only allow these headers to be processed if the entity is not logged in.
 int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
 
 /**
@@ -271,7 +271,7 @@ void message_handler_init() {
  * @param im the incoming message struct
  * @param player the player struct
  */
-void message_handler_invoke(incoming_message *im, session *player) {
+void message_handler_invoke(incoming_message *im, entity *player) {
     if (configuration_get_bool("debug")) {
         char *preview = replace_unreadable_characters(im->data);
         log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);

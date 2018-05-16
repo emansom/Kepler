@@ -53,7 +53,7 @@ int create_instance_id(room_user *room_user) {
  */
 room_user *get_room_user_by_instance_id(room *room, int instance_id) {
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
         if (room_player->room_user->instance_id == instance_id) {
@@ -70,7 +70,7 @@ room_user *get_room_user_by_instance_id(room *room, int instance_id) {
  * @param om the outgoing message
  * @param player the player
  */
-void room_enter(room *room, session *player, coord *destination) {
+void room_enter(room *room, entity *player, coord *destination) {
     // Leave other room
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player, false);
@@ -119,7 +119,7 @@ void room_enter(room *room, session *player, coord *destination) {
     }
 
     /*outgoing_message *om = om_create(73); // "AI"
-    player_send(session, om);
+    player_send(entity, om);
     om_cleanup(om);*/
 
     outgoing_message *om = om_create(166); // "Bf"
@@ -155,7 +155,7 @@ void room_enter(room *room, session *player, coord *destination) {
     if (!is_public) {
         // TODO: move votes to rooms object and load on initialization to reduce query load
         // Check if already voted, return if voted
-        int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
+        int voted = room_query_check_voted(room->room_data->id, player->details->id);
         int vote_count = -1;
 
         // If user already has voted, we sent total vote count
@@ -170,7 +170,7 @@ void room_enter(room *room, session *player, coord *destination) {
         om_cleanup(om);
     }
 
-    // Show new session current state of an item program for pools
+    // Show new entity current state of an item program for pools
     if (is_public) {
         for (size_t i = 0; i < list_size(room->items); i++) {
             item *item;
@@ -224,7 +224,7 @@ void room_enter(room *room, session *player, coord *destination) {
  * Leave room handler, will make room and id for the room user reset back to NULL and 0.
  * And remove the character from the room.
  */
-void room_leave(room *room, session *player, bool hotel_view) {
+void room_leave(room *room, entity *player, bool hotel_view) {
     if (!list_contains(room->users, player)) {
         return;
     }
@@ -274,35 +274,35 @@ void room_leave(room *room, session *player, bool hotel_view) {
  * @param om the outgoing message
  * @param player the player
  */
-void append_user_list(outgoing_message *players, session *player) {
+void append_user_list(outgoing_message *players, entity *player) {
     char user_id[11], instance_id[11];
-    sprintf(user_id, "%i", player->player_data->id);
+    sprintf(user_id, "%i", player->details->id);
     sprintf(instance_id, "%i", player->room_user->instance_id);
 
     om_write_str_kv(players, "i", instance_id);
     om_write_str_kv(players, "a", user_id);
-    om_write_str_kv(players, "n", player->player_data->username);
-    om_write_str_kv(players, "f", player->player_data->figure);
-    om_write_str_kv(players, "s", player->player_data->sex);
+    om_write_str_kv(players, "n", player->details->username);
+    om_write_str_kv(players, "f", player->details->figure);
+    om_write_str_kv(players, "s", player->details->sex);
     sb_add_string(players->sb, "l:");
     sb_add_int_delimeter(players->sb, player->room_user->position->x, ' ');
     sb_add_int_delimeter(players->sb, player->room_user->position->y, ' ');
     sb_add_float_delimeter(players->sb, player->room_user->position->z, (char)13);
 
-    if (strlen(player->player_data->motto) > 0) {
-        om_write_str_kv(players, "c", player->player_data->motto);
+    if (strlen(player->details->motto) > 0) {
+        om_write_str_kv(players, "c", player->details->motto);
     }
 
-    if (strlen(player->player_data->active_badge) > 0) {
-        om_write_str_kv(players, "b", player->player_data->active_badge);
+    if (strlen(player->details->active_badge) > 0) {
+        om_write_str_kv(players, "b", player->details->active_badge);
     }
 
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0
         || strcmp(player->room_user->room->room_data->model_data->model_name, "pool_b") == 0
         || strcmp(player->room_user->room->room_data->model_data->model_name, "md_a") == 0) {
 
-        if (strlen(player->player_data->pool_figure) > 0) {
-            om_write_str_kv(players, "p", player->player_data->pool_figure);
+        if (strlen(player->details->pool_figure) > 0) {
+            om_write_str_kv(players, "p", player->details->pool_figure);
         }
     }
 }
@@ -313,7 +313,7 @@ void append_user_list(outgoing_message *players, session *player) {
  * @param om the outgoing message
  * @param player the player
  */
-void append_user_status(outgoing_message *om, session *player) {
+void append_user_status(outgoing_message *om, entity *player) {
     sb_add_int_delimeter(om->sb, player->room_user->instance_id, ' ');
     sb_add_int_delimeter(om->sb, player->room_user->position->x, ',');
     sb_add_int_delimeter(om->sb, player->room_user->position->y, ',');

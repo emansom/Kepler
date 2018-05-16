@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void LETUSERIN(session *user, incoming_message *message) {
+void LETUSERIN(entity *user, incoming_message *message) {
     char *content = im_get_content(message);
     char *ringing_username = NULL;
 
@@ -15,14 +15,14 @@ void LETUSERIN(session *user, incoming_message *message) {
 
     room *room = user->room_user->room;
 
-    if (!room_has_rights(room, user->player_data->id)) {
+    if (!room_has_rights(room, user->details->id)) {
         goto cleanup;
     }
 
     ringing_username = im_read_str(message);
     bool can_enter = content[strlen(content) - 1] == 'A';
 
-    session *ringer = player_manager_find_by_name(ringing_username);
+    entity *ringer = player_manager_find_by_name(ringing_username);
 
     if (ringer == NULL) {
         goto cleanup;

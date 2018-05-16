@@ -3,8 +3,8 @@
 
 #include "database/queries/player_query.h"
 
-void FINDUSER(session *user, incoming_message *message) {
-    if (user->player_data == NULL) {
+void FINDUSER(entity *user, incoming_message *message) {
+    if (user->details == NULL) {
         return;
     }
 

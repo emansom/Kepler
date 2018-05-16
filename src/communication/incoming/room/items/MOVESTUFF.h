@@ -3,12 +3,12 @@
 
 #include "game/inventory/inventory.h"
 
-void MOVESTUFF(session *player, incoming_message *message) {
+void MOVESTUFF(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
 
-    if (!room_has_rights(player->room_user->room, player->player_data->id)) {
+    if (!room_has_rights(player->room_user->room, player->details->id)) {
         return;
     }
 

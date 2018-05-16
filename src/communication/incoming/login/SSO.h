@@ -4,7 +4,7 @@
 #include "database/queries/player_query.h"
 #include "game/player/player_manager.h"
 
-void SSO(session *player, incoming_message *message) {
+void SSO(entity *player, incoming_message *message) {
     char *ticket = im_read_str(message);
 
     if (ticket == NULL) {
@@ -16,8 +16,8 @@ void SSO(session *player, incoming_message *message) {
     if (player_id == -1) {
         player_send_localised_error(player, "Incorrect SSO ticket");
     } else {
-        player_data *data = player_query_data(player_id);
-        player->player_data = data;
+        entity_data *data = player_query_data(player_id);
+        player->details = data;
 
         player_manager_destroy_session_by_id(player_id);
         player_login(player);

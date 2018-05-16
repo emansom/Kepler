@@ -3,7 +3,7 @@
 
 #include "game/player/player.h"
 
-void club_subscribe(session *player, int days);
-void club_refresh(session *player);
+void club_subscribe(entity *player, int days);
+void club_refresh(entity *player);
 
 #endif

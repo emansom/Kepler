@@ -50,10 +50,12 @@ void do_roller_task(room *room) {
         room_user *room_entity = item_tile->entity;
 
         if (room_entity != NULL) {
-            if (!hashtable_contains_key(blacklist, &room_entity->player->player_data->id)) {
-                hashtable_add(blacklist, &room_entity->player->player_data->id, room_entity);
+            if (room_entity->entity->entity_type == PLAYER_TYPE) {
+                if (!hashtable_contains_key(blacklist, &room_entity->entity->details->id)) {
+                    hashtable_add(blacklist, &room_entity->entity->details->id, room_entity);
 
-                do_roller_player(room, roller, room_entity);
+                    do_roller_player(room, roller, room_entity);
+                }
             }
         }
     }

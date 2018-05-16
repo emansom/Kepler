@@ -20,7 +20,7 @@
  * @param p the player
  * @param error the error message
  */
-void player_send_localised_error(session *p, char *error) {
+void player_send_localised_error(entity *p, char *error) {
     outgoing_message *om = om_create(33); // @a
     sb_add_string(om->sb, error);
     player_send(p, om);
@@ -33,7 +33,7 @@ void player_send_localised_error(session *p, char *error) {
  * @param p the player
  * @param text the alert message
  */
-void player_send_alert(session *p, char *text) {
+void player_send_alert(entity *p, char *text) {
     outgoing_message *alert = om_create(139); // BK
     om_write_str(alert, text);
     player_send(p, alert);
@@ -45,9 +45,9 @@ void player_send_alert(session *p, char *text) {
  *
  * @param player the player to send to
  */
-void player_refresh_credits(session *player) {
+void player_refresh_credits(entity *player) {
     char credits_string[10 + 1]; ///"num + /0";
-    sprintf(credits_string, "%i", player->player_data->credits);
+    sprintf(credits_string, "%i", player->details->credits);
 
     outgoing_message *credits = om_create(6); // "@F"
     om_write_str(credits, credits_string);
@@ -61,9 +61,9 @@ void player_refresh_credits(session *player) {
  *
  * @param player the player to send to
  */
-void player_refresh_tickets(session *player) {
+void player_refresh_tickets(entity *player) {
     char credits_string[10 + 1]; ///"num + /0";
-    sprintf(credits_string, "%i", player->player_data->tickets);
+    sprintf(credits_string, "%i", player->details->tickets);
 
     outgoing_message *credits = om_create(124); // "A|"
     sb_add_string(credits->sb, credits_string);
@@ -76,27 +76,27 @@ void player_refresh_tickets(session *player) {
  *
  * @param player to refresh
  */
-void player_refresh_appearance(session *player) {
-    player_data *new_data = player_query_data(player->player_data->id);
+void player_refresh_appearance(entity *player) {
+    entity_data *new_data = player_query_data(player->details->id);
 
     // Reload figure, gender and motto
     log_debug("Figure: %s, sex: %s, motto: %s", new_data->figure, new_data->sex, new_data->motto);
-    player->player_data->figure = strdup(new_data->figure);
-    player->player_data->sex = strdup(new_data->sex);
-    player->player_data->motto = strdup(new_data->motto);
+    player->details->figure = strdup(new_data->figure);
+    player->details->sex = strdup(new_data->sex);
+    player->details->motto = strdup(new_data->motto);
 
     player_data_cleanup(new_data);
 
     // Send refresh to user
     outgoing_message *user_info = om_create(5); // "@E
-    om_write_str_int(user_info, player->player_data->id);
-    om_write_str(user_info, player->player_data->username);
-    om_write_str(user_info, player->player_data->figure);
-    om_write_str(user_info, player->player_data->sex);
-    om_write_str(user_info, player->player_data->motto);
-    om_write_int(user_info, player->player_data->tickets);
-    om_write_str(user_info, player->player_data->pool_figure); // pool figure
-    om_write_int(user_info, player->player_data->film);
+    om_write_str_int(user_info, player->details->id);
+    om_write_str(user_info, player->details->username);
+    om_write_str(user_info, player->details->figure);
+    om_write_str(user_info, player->details->sex);
+    om_write_str(user_info, player->details->motto);
+    om_write_int(user_info, player->details->tickets);
+    om_write_str(user_info, player->details->pool_figure); // pool figure
+    om_write_int(user_info, player->details->film);
     player_send(player, user_info);
     om_cleanup(user_info);
 
@@ -104,9 +104,9 @@ void player_refresh_appearance(session *player) {
     if (player->room_user != NULL && player->room_user->room != NULL) {
         outgoing_message *poof = om_create(266); // DJ"
         om_write_int(poof, player->room_user->instance_id);
-        om_write_str(poof, player->player_data->figure);
-        om_write_str(poof, player->player_data->sex);
-        om_write_str(poof, player->player_data->motto);
+        om_write_str(poof, player->details->figure);
+        om_write_str(poof, player->details->sex);
+        om_write_str(poof, player->details->motto);
         room_send(player->room_user->room, poof);
         om_cleanup(poof);
     }
@@ -118,16 +118,16 @@ void player_refresh_appearance(session *player) {
  *
  * @param player to refresh
  */
-void player_refresh_badges(session *player) {
-    Array *badges = player_query_badges(player->player_data->id);
+void player_refresh_badges(entity *player) {
+    Array *badges = player_query_badges(player->details->id);
 
-    // if (player->player_data->club_days_left > 0) {
+    // if (player->details->club_days_left > 0) {
     //     if (array_add(badges, "HC1") != CC_OK) {
     //         log_fatal("Couldn't add HC1 to array in player_refresh_badges");
     //     }
     //
     //     // If the user has been subscribed for more than 11 months, give out the gold HC badge :)
-    //     if (player->player_data->club_months_expired > 11) {
+    //     if (player->details->club_months_expired > 11) {
     //         if (array_add(badges, "HC2") != CC_OK) {
     //             log_fatal("Couldn't add HC2 to array in player_refresh_badges");
     //         }
@@ -148,7 +148,7 @@ void player_refresh_badges(session *player) {
         char *badge = (char*)next;
         om_write_str(badge_list, badge);
 
-        if (badge == player->player_data->active_badge) {
+        if (badge == player->details->active_badge) {
             badge_slot = slot_counter;
         }
 
@@ -156,7 +156,7 @@ void player_refresh_badges(session *player) {
     }
 
     om_write_int(badge_list, badge_slot);
-    om_write_int(badge_list, strlen(player->player_data->active_badge) > 0);
+    om_write_int(badge_list, strlen(player->details->active_badge) > 0);
 
     player_send(player, badge_list);
     om_cleanup(badge_list);

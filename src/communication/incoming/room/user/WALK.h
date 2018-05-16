@@ -6,7 +6,7 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
-void WALK(session *player, incoming_message *im) {
+void WALK(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }

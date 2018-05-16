@@ -23,7 +23,7 @@ void rcon_handle_command(uv_stream_t *handle, char header, char *message) {
 
         log_debug("RCON: refresh appearance for user id %u", player_id);
 
-        session *p = player_manager_find_by_id(player_id);
+        entity *p = player_manager_find_by_id(player_id);
 
         if (p == NULL) {
             return;
@@ -36,7 +36,7 @@ void rcon_handle_command(uv_stream_t *handle, char header, char *message) {
         log_debug("RCON: Mass hotel alert message: %s", message);
 
         for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-            session *player;
+            entity *player;
             list_get_at(global.player_manager.players, i, (void *) &player);
 
             if (player->disconnected || !player->logged_in) {

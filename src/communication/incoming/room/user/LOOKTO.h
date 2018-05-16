@@ -7,7 +7,7 @@
 #include "game/pathfinder/rotation.h"
 #include "game/pathfinder/coord.h"
 
-void LOOKTO(session *player, incoming_message *message) {
+void LOOKTO(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

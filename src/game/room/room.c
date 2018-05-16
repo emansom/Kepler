@@ -125,7 +125,7 @@ rights_entry *rights_entry_create(int user_id) {
  * @param navigator the navigator packet instance
  * @param player_id the player who requests the room
  */
-void room_append_data(room *instance, outgoing_message *navigator, session *player) {
+void room_append_data(room *instance, outgoing_message *navigator, entity *player) {
     if (instance->connected_room_hide) {
         return;
     }
@@ -156,7 +156,7 @@ void room_append_data(room *instance, outgoing_message *navigator, session *play
         om_write_int(navigator, instance->room_data->id); // rooms id
         om_write_str(navigator, instance->room_data->name);
 
-        if (player->player_data->id == instance->room_data->owner_id || instance->room_data->show_name == true || player_has_fuse(player, "fuse_see_all_roomowners")) {
+        if (player->details->id == instance->room_data->owner_id || instance->room_data->show_name == true || player_has_fuse(player, "fuse_see_all_roomowners")) {
             om_write_str(navigator, instance->room_data->owner_name); // rooms owner
         } else {
             om_write_str(navigator, "-"); // rooms owner
@@ -198,7 +198,7 @@ void room_load_data(room *room) {
  */
 void room_kickall(room *room) {
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *user;
+        entity *user;
         list_get_at(room->users, i, (void *) &user);
         room_leave(room, user, true);
     }
@@ -266,7 +266,7 @@ bool room_has_rights(room *room, int user_id) {
  * @param room the room to refresh inside for
  * @param player the player to refresh the rights for
  */
-void room_refresh_rights(room *room, session *player) {
+void room_refresh_rights(room *room, entity *player) {
     if (player == NULL) {
         return;
     }
@@ -276,13 +276,13 @@ void room_refresh_rights(room *room, session *player) {
 
     outgoing_message *om;
 
-    if (room_has_rights(room, player->player_data->id)) {
+    if (room_has_rights(room, player->details->id)) {
         om = om_create(42); // "@j"
         player_send(player, om);
         om_cleanup(om);
     }
 
-    if (room_is_owner(room, player->player_data->id)) {
+    if (room_is_owner(room, player->details->id)) {
         om = om_create(47); // "@o"
         player_send(player, om);
         om_cleanup(om);
@@ -293,7 +293,7 @@ void room_refresh_rights(room *room, session *player) {
     room_user *room_entity = (room_user*) player->room_user;
     room_user_remove_status(room_entity, "flatctrl");
 
-    if (room_has_rights(room, player->player_data->id) || room_is_owner(room, player->player_data->id)) {
+    if (room_has_rights(room, player->details->id) || room_is_owner(room, player->details->id)) {
         room_user_add_status(room_entity, "flatctrl", rights_value, -1, "", -1, -1);
         room_entity->needs_update = true;
     }
@@ -309,8 +309,13 @@ void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *player;
+        entity *player;
         list_get_at(room->users, i, (void*)&player);
+
+        if (player->entity_type != PLAYER_TYPE) {
+            continue;
+        }
+
         player_send(player, message);
     }
 }
@@ -321,17 +326,26 @@ void room_send(room *room, outgoing_message *message) {
  * @param room the room
  * @param message the outgoing message to send
  */
-void room_send_with_rights(room *room, outgoing_message *message) {
+bool room_send_with_rights(room *room, outgoing_message *message) {
+    bool sent_message_to_users = false;
+
     om_finalise(message);
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *player;
+        entity *player;
         list_get_at(room->users, i, (void*)&player);
 
-        if (room_has_rights(room, player->player_data->id)) {
+        if (player->entity_type != PLAYER_TYPE) {
+            continue;
+        }
+
+        if (room_has_rights(room, player->details->id)) {
             player_send(player, message);
+            sent_message_to_users = true;
         }
     }
+
+    return sent_message_to_users;
 }
 
 /**
@@ -349,7 +363,7 @@ List *room_nearby_players(room *room, room_user *room_user, coord *position, int
     list_new(&players);
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *player;
+        entity *player;
         list_get_at(room->users, i, (void *) &player);
 
         if (room_user != NULL && player->room_user->instance_id == room_user->instance_id) {

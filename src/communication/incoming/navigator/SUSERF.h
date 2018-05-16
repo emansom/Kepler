@@ -7,8 +7,8 @@
 #include "game/room/room_manager.h"
 #include "list.h"
 
-void SUSERF(session *player, incoming_message *message) {
-    List *rooms = room_manager_get_by_user_id(player->player_data->id);
+void SUSERF(entity *player, incoming_message *message) {
+    List *rooms = room_manager_get_by_user_id(player->details->id);
 
     if (list_size(rooms) > 0) {
         list_sort_in_place(rooms, room_manager_sort_id);
@@ -49,7 +49,7 @@ void SUSERF(session *player, incoming_message *message) {
         om_cleanup(om);
     } else {
         outgoing_message *om = om_create(57); // "@y"
-        om_write_str(om, player->player_data->username);
+        om_write_str(om, player->details->username);
         player_send(player, om);
         om_cleanup(om);
     }
