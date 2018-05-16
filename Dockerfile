@@ -2,6 +2,7 @@ FROM ubuntu:18.04
 LABEL maintainer="ewout@freedom.nl"
 
 RUN apt update && apt install -y \
+    gosu \
     crudini \
     make \
     cmake \
@@ -41,10 +42,12 @@ RUN touch /usr/src/kepler/config.ini && \
     cat /usr/src/kepler/tmp.ini | tr -d "[:blank:]" > /usr/src/kepler/config.ini && \
     cat /usr/src/kepler/config.ini
 
-USER kepler
 WORKDIR /usr/src/kepler
 
 VOLUME /usr/src/kepler/db
+
+COPY docker/docker-entrypoint.sh /usr/local/bin/
+ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 12321
 EXPOSE 12309
