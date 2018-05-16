@@ -22,7 +22,8 @@ RUN cd /usr/src/kepler && \
     mv Kepler /usr/bin/kepler && \
     cd
 
-RUN useradd -r -u 1000 -U kepler
+RUN useradd -r -u 1000 -U kepler && \
+    chown -R kepler:kepler /usr/src/kepler
 
 USER kepler
 WORKDIR /usr/src/kepler
