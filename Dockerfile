@@ -24,7 +24,8 @@ RUN cd /usr/src/kepler && \
     mv Kepler /usr/bin/kepler && \
     cd
 
-RUN useradd -r -u 1000 -U kepler && \
+RUN groupadd -g 1000 kepler && \
+    useradd -r -u 1000 -g kepler kepler && \
     chown -R kepler:kepler /usr/src/kepler
 
 USER kepler
