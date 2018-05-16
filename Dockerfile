@@ -34,9 +34,10 @@ RUN touch /usr/src/kepler/config.ini && \
     crudini --set /usr/src/kepler/config.ini Server server.port 12321 && \
     crudini --set /usr/src/kepler/config.ini Rcon rcon.ip.address 0.0.0.0 && \
     crudini --set /usr/src/kepler/config.ini Rcon rcon.port 12309 && \
-    crudini --set /usr/src/kepler/config.ini Database database.filename Kepler.db && \
+    crudini --set /usr/src/kepler/config.ini Database database.filename db/Kepler.db && \
     crudini --set /usr/src/kepler/config.ini Game sso.tickets.enabled true && \
-    crudini --set /usr/src/kepler/config.ini Game roller.tick.default 6
+    crudini --set /usr/src/kepler/config.ini Game roller.tick.default 6 && \
+    cat /usr/src/kepler/config.ini
 
 USER kepler
 WORKDIR /usr/src/kepler
