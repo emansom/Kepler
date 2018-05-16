@@ -18,6 +18,7 @@ COPY kepler.sql /usr/src/kepler
 
 RUN cd /usr/src/kepler && \
     rm -f CMakeCache.txt && \
+    rm -f data/Kepler.db && \
     cmake . && \
     make && \
     mv Kepler /usr/bin/kepler && \
