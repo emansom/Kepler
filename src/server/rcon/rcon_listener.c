@@ -104,6 +104,7 @@ void rcon_on_new_connection(uv_stream_t *server, int status) {
 
     uv_tcp_t *client = malloc(sizeof(uv_tcp_t));
     uv_tcp_init(global.rcon_loop, client);
+
     uv_stream_t *handle = (uv_stream_t*)client;
     int result = uv_accept(server, handle);
 
