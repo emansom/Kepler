@@ -1,4 +1,5 @@
 FROM ubuntu:18.04
+LABEL maintainer="ewout@freedom.nl"
 
 RUN apt update && apt install -y \
     make \
