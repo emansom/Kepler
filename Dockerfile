@@ -22,6 +22,9 @@ RUN cd /usr/src/kepler && \
     mv Kepler /usr/bin/kepler && \
     cd
 
+RUN useradd -r -u 1000 -g kepler kepler
+
+USER kepler
 WORKDIR /usr/src/kepler
 
 EXPOSE 12321
