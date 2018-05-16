@@ -53,6 +53,16 @@ void MOVESTUFF(session *player, incoming_message *message) {
     if (old_position.x == (int) strtol(str_x, NULL, 10) &&
         old_position.y == (int) strtol(str_y, NULL, 10) &&
         old_position.rotation == (int) strtol(str_rot, NULL, 10)) {
+
+        // Send item update even though we cancelled, otherwise the client will be confused.
+        char *item_str = item_as_string(item);
+
+        outgoing_message *om = om_create(95); // "A_"
+        sb_add_string(om->sb, item_str);
+        room_send(player->room_user->room, om);
+        om_cleanup(om);
+
+        free(item_str);
         goto cleanup; // Do absolutely nothing because the item technically didn't move at all
     }
 
