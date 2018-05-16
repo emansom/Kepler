@@ -47,7 +47,7 @@ void SETITEMDATA(session *player, incoming_message *message) {
             postit_content = strdup(msg);
         }
 
-        filter_vulnerable_characters(&postit_content, true);
+        filter_vulnerable_characters(&postit_content, false);
 
         sb = sb_create();
         sb_add_string(sb, colour);
