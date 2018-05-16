@@ -30,7 +30,7 @@ RUN useradd -r -u 1000 -U kepler && \
 USER kepler
 WORKDIR /usr/src/kepler
 
-VOLUME /usr/src/Kepler/data
+VOLUME /usr/src/Kepler/db
 
 EXPOSE 12321
 EXPOSE 12309
