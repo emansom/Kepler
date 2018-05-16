@@ -45,8 +45,23 @@ void SETSTUFFDATA(session *player, incoming_message *message) {
         if (item->definition->behaviour->custom_data_on_off && (strcmp(str_data, "ON") == 0 || strcmp(str_data, "OFF") == 0)) {
             new_data = strdup(str_data);
         }
-    } else {
 
+        if (item->definition->behaviour->custom_data_numeric_state) {
+            if (str_data[0] != 'x') { // EXCEPTION: 00-99 for hockey light = 'x'
+                if (is_numeric(str_data)) {
+                    int state_id = (int)strtol(str_data, NULL, 10);
+
+                    if (state_id >= 0 && state_id <= 99) {
+                        char num[10];
+                        sprintf(num, "%i", state_id);
+
+                        new_data = strdup(num);
+                    }
+                }
+            }
+        }
+
+    } else {
         if (strcmp(str_data, "O") == 0 || strcmp(str_data, "C") == 0) {
             new_data = strdup(str_data);
         }

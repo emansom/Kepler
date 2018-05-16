@@ -20,7 +20,7 @@ typedef struct item_behaviour_s {
     bool custom_data_true_false;
     bool custom_data_on_off;
     bool custom_data_numeric_on_off;
-    bool customDataNumericState;
+    bool custom_data_numeric_state;
     bool is_decoration;
     bool is_post_it;
     bool is_door;

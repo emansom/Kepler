@@ -21,7 +21,7 @@ item_behaviour *item_behaviour_create() {
     behaviour->custom_data_true_false = false;
     behaviour->custom_data_on_off = false;
     behaviour->custom_data_numeric_on_off = false;
-    behaviour->customDataNumericState = false;
+    behaviour->custom_data_numeric_state = false;
     behaviour->is_decoration = false;
     behaviour->is_post_it = false;
     behaviour->is_door = false;
@@ -98,7 +98,7 @@ item_behaviour *item_behaviour_parse(item_definition *def) {
         }
 
         if (c == 'Z') {
-            behaviour->customDataNumericState = true;
+            behaviour->custom_data_numeric_state = true;
         }
 
         if (c == 'H') {
