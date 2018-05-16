@@ -46,7 +46,7 @@ WORKDIR /usr/src/kepler
 
 VOLUME /usr/src/kepler/db
 
-COPY docker/docker-entrypoint.sh /usr/local/bin/
+COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 12321
