@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`film`	INTEGER NOT NULL DEFAULT 0,
 	`rank`	INTEGER NOT NULL DEFAULT 1,
 	`console_motto`	TEXT NOT NULL DEFAULT 'I''m a new user!',
-	`last_online`	TEXT NOT NULL DEFAULT '0',
+	`last_online`	INTEGER NOT NULL DEFAULT 0,
 	`sso_ticket`	TEXT,
 	`club_subscribed`	INTEGER NOT NULL DEFAULT 0,
 	`club_expiration`	INTEGER NOT NULL DEFAULT 0,
@@ -224,6 +224,41 @@ INSERT INTO `rooms` VALUES (1052,0,12,'Lower Hallways III','hallway','hallway3',
 INSERT INTO `rooms` VALUES (1053,0,12,'Lower Hallways IV','hallway','hallway5','hh_room_hallway',0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1054,0,12,'Lower Hallways V','hallway','hallway4','hh_room_hallway',0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1055,0,12,'Upper Hallways','hallway_ii','hallway9','hh_room_hallway',0,0,1,0,0,'',0,25);
+CREATE TABLE IF NOT EXISTS `rank_fuserights` (
+	`min_rank`	INTEGER NOT NULL,
+	`fuseright`	TEXT NOT NULL
+);
+INSERT INTO `rank_fuserights` VALUES (1,'default');
+INSERT INTO `rank_fuserights` VALUES (1,'fuse_login');
+INSERT INTO `rank_fuserights` VALUES (1,'fuse_buy_credits');
+INSERT INTO `rank_fuserights` VALUES (1,'fuse_trade');
+INSERT INTO `rank_fuserights` VALUES (1,'fuse_room_queue_default');
+INSERT INTO `rank_fuserights` VALUES (2,'fuse_extended_buddylist');
+INSERT INTO `rank_fuserights` VALUES (2,'fuse_habbo_chooser');
+INSERT INTO `rank_fuserights` VALUES (2,'fuse_furni_chooser');
+INSERT INTO `rank_fuserights` VALUES (2,'fuse_room_queue_club');
+INSERT INTO `rank_fuserights` VALUES (2,'fuse_priority_access');
+INSERT INTO `rank_fuserights` VALUES (2,'fuse_use_special_room_layouts');
+INSERT INTO `rank_fuserights` VALUES (2,'fuse_use_club_dance');
+INSERT INTO `rank_fuserights` VALUES (3,'fuse_enter_full_rooms');
+INSERT INTO `rank_fuserights` VALUES (4,'fuse_enter_locked_rooms');
+INSERT INTO `rank_fuserights` VALUES (4,'fuse_kick');
+INSERT INTO `rank_fuserights` VALUES (4,'fuse_mute');
+INSERT INTO `rank_fuserights` VALUES (5,'fuse_ban');
+INSERT INTO `rank_fuserights` VALUES (5,'fuse_room_mute');
+INSERT INTO `rank_fuserights` VALUES (5,'fuse_room_kick');
+INSERT INTO `rank_fuserights` VALUES (5,'fuse_receive_calls_for_help');
+INSERT INTO `rank_fuserights` VALUES (5,'fuse_remove_stickies');
+INSERT INTO `rank_fuserights` VALUES (6,'fuse_mod');
+INSERT INTO `rank_fuserights` VALUES (6,'fuse_superban');
+INSERT INTO `rank_fuserights` VALUES (6,'fuse_pick_up_any_furni');
+INSERT INTO `rank_fuserights` VALUES (6,'fuse_ignore_room_owner');
+INSERT INTO `rank_fuserights` VALUES (6,'fuse_any_room_controller');
+INSERT INTO `rank_fuserights` VALUES (3,'fuse_room_alert');
+INSERT INTO `rank_fuserights` VALUES (6,'fuse_moderator_access');
+INSERT INTO `rank_fuserights` VALUES (7,'fuse_administrator_access');
+INSERT INTO `rank_fuserights` VALUES (7,'fuse_see_flat_ids');
+INSERT INTO `rank_fuserights` VALUES (6,'fuse_credits');
 CREATE TABLE IF NOT EXISTS `messenger_requests` (
 	`from_id`	INTEGER,
 	`to_id`	INTEGER

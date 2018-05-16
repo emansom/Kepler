@@ -1,4 +1,5 @@
 typedef struct node_s node;
+
 typedef struct node_s {
     node *node;
     int cost;

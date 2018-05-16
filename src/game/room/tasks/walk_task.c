@@ -21,7 +21,7 @@
 
 #include "shared.h"
 
-void process_user(session *player);
+void process_user(entity *player);
 
 /**
  * Walk task cyle that is called every 500ms
@@ -36,7 +36,7 @@ void walk_task(room *room) {
     outgoing_message *status_update = om_create(34); // "@b"
 
     for (size_t i = 0; i < list_size(users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(users, i, (void*)&room_player);
 
         if (room_player == NULL) {
@@ -70,7 +70,7 @@ void walk_task(room *room) {
  *
  * @param player the player struct to process
  */
-void process_user(session *player) {
+void process_user(entity *player) {
     room_user *room_entity = (room_user*)player->room_user;
 
     if (room_entity->is_walking) {

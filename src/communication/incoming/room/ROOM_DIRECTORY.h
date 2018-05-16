@@ -2,9 +2,8 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "util/encoding/vl64encoding.h"
-#include "game/room/manager/room_entity_manager.h"
 
-void ROOM_DIRECTORY(session *player, incoming_message *message) {
+void ROOM_DIRECTORY(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
     bool is_public = (content[0] == 'A');
 
@@ -28,6 +27,6 @@ void ROOM_DIRECTORY(session *player, incoming_message *message) {
     free(content);
     /*om = om_create(166); // "Bf"
     om_write_raw_str(om, "/client/");
-    player_send(session, om);
+    player_send(entity, om);
     om_cleanup(om);*/
 }

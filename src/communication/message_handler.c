@@ -85,10 +85,8 @@
 #include "communication/incoming/room/user/CARRYDRINK.h"
 #include "communication/incoming/room/user/USER_START_TYPING.h"
 #include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
-#include "communication/incoming/room/user/REMOVERIGHTS.h"
-#include "communication/incoming/room/user/ASSIGNRIGHTS.h"
-#include "communication/incoming/room/user/GETAVAILABLEBADGES.h"
-#include "communication/incoming/room/user/SETBADGE.h"
+#include "communication/incoming/room/user/DANCE.h"
+#include "communication/incoming/room/user/STOP.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -111,6 +109,14 @@
 #include "communication/incoming/room/items/G_IDATA.h"
 #include "communication/incoming/room/items/SETITEMDATA.h"
 
+// Moderation
+#include "communication/incoming/room/moderation/REMOVERIGHTS.h"
+#include "communication/incoming/room/moderation/ASSIGNRIGHTS.h"
+
+// Badges
+#include "communication/incoming/room/badges/GETAVAILABLEBADGES.h"
+#include "communication/incoming/room/badges/SETBADGE.h"
+
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
 #include "communication/incoming/catalogue/GCAP.h"
@@ -123,7 +129,7 @@
 // Trax
 #include "communication/incoming/room/trax/GET_SONG_LIST.h"
 
-// Only allow these headers to be processed if the session is not logged in.
+// Only allow these headers to be processed if the entity is not logged in.
 int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
 
 /**
@@ -215,10 +221,8 @@ void message_handler_init() {
     message_requests[80] = CARRYDRINK;
     message_requests[317] = USER_START_TYPING;
     message_requests[318] = USER_CANCEL_TYPING;
-    message_requests[96] = ASSIGNRIGHTS;
-    message_requests[97] = REMOVERIGHTS;
-    message_requests[157] = GETAVAILABLEBADGES;
-    message_requests[158] = SETBADGE;
+    message_requests[93] = DANCE;
+    message_requests[88] = STOP;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
@@ -240,6 +244,14 @@ void message_handler_init() {
     message_requests[83] = G_IDATA;
     message_requests[84] = SETITEMDATA;
 
+    // Moderation
+    message_requests[96] = ASSIGNRIGHTS;
+    message_requests[97] = REMOVERIGHTS;
+
+    // Badges
+    message_requests[157] = GETAVAILABLEBADGES;
+    message_requests[158] = SETBADGE;
+
     // Catalogue
     message_requests[101] = GCIX;
     message_requests[102] = GCAP;
@@ -259,7 +271,7 @@ void message_handler_init() {
  * @param im the incoming message struct
  * @param player the player struct
  */
-void message_handler_invoke(incoming_message *im, session *player) {
+void message_handler_invoke(incoming_message *im, entity *player) {
     if (configuration_get_bool("debug")) {
         char *preview = replace_unreadable_characters(im->data);
         log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);

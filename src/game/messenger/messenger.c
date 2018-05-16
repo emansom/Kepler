@@ -49,17 +49,17 @@ messenger_message *messenger_message_create(int id, int sender_id, int receiver_
  *
  * @param player the player instance
  */
-void messenger_init(session *player) {
+void messenger_init(entity *player) {
     if (player->messenger->friends == NULL) {
-        player->messenger->friends = messenger_query_get_friends(player->player_data->id);
+        player->messenger->friends = messenger_query_get_friends(player->details->id);
     }
 
     if (player->messenger->requests == NULL) {
-        player->messenger->requests = messenger_query_get_requests(player->player_data->id);
+        player->messenger->requests = messenger_query_get_requests(player->details->id);
     }
 
     if (player->messenger->messages == NULL) {
-        player->messenger->messages = messenger_query_unread_messages(player->player_data->id);
+        player->messenger->messages = messenger_query_unread_messages(player->details->id);
     }
 }
 

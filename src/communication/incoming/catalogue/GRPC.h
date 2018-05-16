@@ -6,9 +6,9 @@
 #include "game/items/item.h"
 #include "game/inventory/inventory.h"
 
-void do_purchase(session *player, item_definition *def, char *extra_data, int special_sprite_id);
+void do_purchase(entity *player, item_definition *def, char *extra_data, int special_sprite_id);
 
-void GRPC(session *player, incoming_message *message) {
+void GRPC(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
 
     char *page = get_argument(content, "\r", 1);
@@ -29,7 +29,7 @@ void GRPC(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    if (player->player_data->rank < store_page->min_role) {
+    if (player->details->rank < store_page->min_role) {
         goto cleanup;
     }
 
@@ -39,7 +39,7 @@ void GRPC(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    if (store_item->price > player->player_data->credits) {
+    if (store_item->price > player->details->credits) {
         outgoing_message *om = om_create(68); // "AD"
         player_send(player, om);
         om_cleanup(om);
@@ -62,7 +62,7 @@ void GRPC(session *player, incoming_message *message) {
         }
     }
 
-    player->player_data->credits -= store_item->price;
+    player->details->credits -= store_item->price;
     player_refresh_credits(player);
 
     player_query_save_currency(player);
@@ -76,7 +76,7 @@ void GRPC(session *player, incoming_message *message) {
     free(sale_code);
 }
 
-void do_purchase(session *player, item_definition *def, char *extra_data, int special_sprite_id) {
+void do_purchase(entity *player, item_definition *def, char *extra_data, int special_sprite_id) {
     char *custom_data = NULL;
 
     if (extra_data != NULL) {
@@ -102,7 +102,7 @@ void do_purchase(session *player, item_definition *def, char *extra_data, int sp
             char *short_date = get_short_time_formatted();
 
             stringbuilder *sb = sb_create();
-            sb_add_string(sb, player->player_data->username);
+            sb_add_string(sb, player->details->username);
             sb_add_char(sb, 9);
             sb_add_string(sb, short_date);
             sb_add_char(sb, 9);
@@ -122,7 +122,7 @@ void do_purchase(session *player, item_definition *def, char *extra_data, int sp
         }
     }
 
-    int item_id = item_query_create(player->player_data->id, 0, def->id, 0, 0, 0, 0, custom_data);
+    int item_id = item_query_create(player->details->id, 0, def->id, 0, 0, 0, 0, custom_data);
     item *inventory_item = item_create(item_id, 0, def->id, 0, 0, 0, NULL, 0, custom_data);
 
     list_add(player->inventory->items, inventory_item);

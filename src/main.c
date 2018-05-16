@@ -5,7 +5,6 @@
 #include "main.h"
 #include "shared.h"
 
-#include "sqlite3.h"
 #include "list.h"
 #include "thpool.h"
 #include "log.h"
@@ -17,14 +16,9 @@
 #include "database/db_connection.h"
 
 #include "game/game_thread.h"
-#include "game/player/player.h"
-#include "game/pathfinder/pathfinder.h"
 
 #include "util/threading.h"
 #include "util/configuration/configuration.h"
-
-#include "util/encoding/base64encoding.h"
-#include "util/encoding/vl64encoding.h"
 
 int main(void) {
     signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
@@ -50,51 +44,17 @@ int main(void) {
 #endif
 
     if (sodium_init() < 0) {
-        log_fatal("Could not initialize password hashing library");
+        log_fatal("Could not initialise password hashing library");
         return EXIT_FAILURE;
     }
 
-    if (!sqlite3_threadsafe()) {
-        log_info("SQLite not threadsafe");
-        return EXIT_FAILURE;
-    } else {
-        if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
-            log_fatal("Could not configurate SQLite to use serialized mode");
-            return EXIT_FAILURE;
-        }
-    }
-
-    log_info("Testing SQLite connection...");
-
-    sqlite3 *con = db_create_connection();
-
-    if (con == NULL) {
-        log_info("The connection to the database was unsuccessful, program aborted!");
-        sqlite3_close(con);
+    if (!db_initialise()) {
         return EXIT_FAILURE;
     }
 
-    log_info("The connection to the database was successful!");
+    log_info("Initialising various game managers...");
 
-    sqlite3_stmt *stmt;
-    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
-
-    db_check_prepare(status, con);
-    db_check_step(sqlite3_step(stmt), con, stmt);
-
-    char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
-
-    if (strcmp(chosen_journal_mode, "wal") != 0) {
-        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
-    }
-
-    db_check_finalize(sqlite3_finalize(stmt), con);
-
-    global.DB = con;
-    global.is_shutdown = false;
-
-    log_info("Initialising various server managers...");
-
+    fuserights_init();
     walkways_init();
     texts_manager_init();
     player_manager_init();
@@ -107,22 +67,19 @@ int main(void) {
     create_thread_pool();
     room_manager_load_connected_rooms();
 
-    pthread_t game_thread;
-    game_thread_init(&game_thread);
+    server_settings rcon_settings, server_settings;
+    pthread_t mus_thread, server_thread, game_thread;
 
-    server_settings rcon_settings;// = malloc(sizeof(server_settings));
     strcpy(rcon_settings.ip, configuration_get_string("rcon.ip.address"));
     rcon_settings.port = configuration_get_int("rcon.port");
 
-    server_settings settings;// = malloc(sizeof(server_settings));
-    strcpy(settings.ip, configuration_get_string("server.ip.address"));
-    settings.port = configuration_get_int("server.port");
+    strcpy(server_settings.ip, configuration_get_string("server.ip.address"));
+    server_settings.port = configuration_get_int("server.port");
 
-    pthread_t mus_thread;
+    game_thread_init(&game_thread);
     start_rcon(&rcon_settings, &mus_thread);
+    start_server(&server_settings, &server_thread);
 
-    pthread_t server_thread;
-    start_server(&settings, &server_thread);
 
     while (true) {
         char command[COMMAND_INPUT_LENGTH];

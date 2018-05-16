@@ -30,12 +30,13 @@
  * Creates a new player
  * @return player struct
  */
-session *player_create(void *socket, char *ip_address) {
-    session *player = malloc(sizeof(session));
+entity *player_create(void *socket, char *ip_address) {
+    entity *player = malloc(sizeof(entity));
+    player->entity_type = PLAYER_TYPE;
     player->stream = socket;
     player->disconnected = false;
     player->ip_address = strdup(ip_address);
-    player->player_data = NULL;
+    player->details = NULL;
     player->logged_in = false;
     player->ping_safe = true;
     player->room_user = NULL;
@@ -48,8 +49,8 @@ session *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online, unsigned long club_subscribed, unsigned long club_expiration, char *active_badge) {
-    player_data *data = malloc(sizeof(player_data));
+entity_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, unsigned long last_online, unsigned long club_subscribed, unsigned long club_expiration, char *active_badge) {
+    entity_data *data = malloc(sizeof(entity_data));
     data->id = id;
     data->username = strdup(username);
     data->password = strdup(password);
@@ -62,7 +63,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->tickets = tickets;
     data->film = film;
     data->rank = rank;
-    data->last_online = strtoul(last_online, NULL, 10);
+    data->last_online = last_online;
     data->club_subscribed = (time_t)club_subscribed;
     data->club_expiration = (time_t)club_expiration;
     data->active_badge = strdup(active_badge);
@@ -74,7 +75,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
  *
  * @param p the player struct
  */
-void player_login(session *player) {
+void player_login(entity *player) {
     outgoing_message *om;
 
     player->room_user = room_user_create(player);
@@ -85,10 +86,10 @@ void player_login(session *player) {
     inventory_init(player);
 
     player_query_save_last_online(player);
-    room_manager_add_by_user_id(player->player_data->id);
+    room_manager_add_by_user_id(player->details->id);
 
     om = om_create(2); // @B
-    om_write_str(om, "default\2fuse_login\2fuse_buy_credits\2fuse_trade\2fuse_room_queue_default\2fuse_performance_panel");
+    fuserights_append(player->details->rank, om);
     player_send(player, om);
     om_cleanup(om);
 
@@ -98,7 +99,7 @@ void player_login(session *player) {
 
     if (configuration_get_bool("welcome.message.enabled")) {
         char *welcome_template = configuration_get_string("welcome.message.content");
-        char *welcome_custom = replace(welcome_template, "%username%", player->player_data->username);
+        char *welcome_custom = replace(welcome_template, "%username%", player->details->username);
 
         player_send_alert(player, welcome_custom);
         free(welcome_custom);
@@ -109,11 +110,22 @@ void player_login(session *player) {
 }
 
 /**
+ * Get if player has a fuse right or not.
+ *
+ * @param player the player to check for
+ * @param fuse_right the fuse right to check
+ * @return true, if successful
+ */
+bool player_has_fuse(entity *player, char *fuse_right) {
+    return fuserights_has_permission(player->details->rank, fuse_right);
+}
+
+/**
  * Disconnect user
  *
  * @param p the player struct
  */
-void player_disconnect(session *p) {
+void player_disconnect(entity *p) {
     if (p == NULL || p->disconnected) {
         return;
     }
@@ -127,7 +139,7 @@ void player_disconnect(session *p) {
  * @param p the player struct
  * @param om the outgoing message
  */
-void player_send(session *p, outgoing_message *om) {
+void player_send(entity *p, outgoing_message *om) {
     if (om == NULL || p == NULL || p->disconnected) {
         return;
     }
@@ -160,7 +172,7 @@ void player_send(session *p, outgoing_message *om) {
  * Called when a connection is closed
  * @param player the player struct
  */
-void player_cleanup(session *player) {
+void player_cleanup(entity *player) {
     if (player == NULL) {
         return;
     }
@@ -173,10 +185,10 @@ void player_cleanup(session *player) {
         }
     }
 
-    if (player->player_data != NULL) {
+    if (player->details != NULL) {
         player_query_save_last_online(player);
 
-        List *rooms = room_manager_get_by_user_id(player->player_data->id);
+        List *rooms = room_manager_get_by_user_id(player->details->id);
 
         for (size_t i = 0; i < list_size(rooms); i++) {
             room *room;
@@ -205,9 +217,9 @@ void player_cleanup(session *player) {
         player->inventory = NULL;
     }
 
-    if (player->player_data != NULL) {
-        player_data_cleanup(player->player_data);
-        player->player_data = NULL;
+    if (player->details != NULL) {
+        player_data_cleanup(player->details);
+        player->details = NULL;
     }
 
     free(player->ip_address);
@@ -215,7 +227,7 @@ void player_cleanup(session *player) {
     free(player);
 }
 
-void player_data_cleanup(player_data *player_data) {
+void player_data_cleanup(entity_data *player_data) {
     free(player_data->username);
     free(player_data->password);
     free(player_data->figure);

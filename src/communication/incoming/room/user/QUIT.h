@@ -4,7 +4,7 @@
 #include "game/player/player.h"
 #include "game/room/room.h"
 
-void QUIT(session *player, incoming_message *message) {
+void QUIT(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

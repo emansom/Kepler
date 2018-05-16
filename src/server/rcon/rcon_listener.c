@@ -60,15 +60,12 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
         return;
     }
     if (nread > 0) {
-        int header = buf->base[0] - '0';
+        char header = buf->base[0];
 
         char *message = NULL;
 
         if (nread > 1) {
-            char *data = strdup(buf->base);
-            message = strdup(data + 1);
-            free(data);
-
+            message = strdup(buf->base + 1);
         } else {
             message = strdup("");
         }
@@ -83,7 +80,7 @@ void rcon_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 
         message[nread] = '\0';*/
 
-        log_debug("RCON Command: %u, data: %s", header, message);
+        log_debug("RCON Command: %c, data: %s", header, message);
         rcon_handle_command(handle, header, message);
 
         free(message);
@@ -107,6 +104,7 @@ void rcon_on_new_connection(uv_stream_t *server, int status) {
 
     uv_tcp_t *client = malloc(sizeof(uv_tcp_t));
     uv_tcp_init(global.rcon_loop, client);
+
     uv_stream_t *handle = (uv_stream_t*)client;
     int result = uv_accept(server, handle);
 

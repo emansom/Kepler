@@ -9,7 +9,7 @@
 
 #include "game/player/player.h"
 
-void GET_ALIAS_LIST(session *player, incoming_message *message) {
+void GET_ALIAS_LIST(entity *player, incoming_message *message) {
     player_send(player, global.item_manager.sprite_index);
 
     outgoing_message *om = om_create(297); // "Di"

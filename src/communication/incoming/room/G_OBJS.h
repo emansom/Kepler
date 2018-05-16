@@ -11,7 +11,7 @@
 
 #include "util/stringbuilder.h"
 
-void G_OBJS(session *player, incoming_message *message) {
+void G_OBJS(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }

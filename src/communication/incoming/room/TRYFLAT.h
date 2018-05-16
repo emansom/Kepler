@@ -5,9 +5,9 @@
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
 
-bool ring_doorbell_alerted(room *room, session *ringing);
+bool ring_doorbell_alerted(room *room, entity *ringing);
 
-void TRYFLAT(session *player, incoming_message *message) {
+void TRYFLAT(entity *player, incoming_message *message) {
     int room_id = 0;
 
     char *content = im_get_content(message);
@@ -41,25 +41,31 @@ void TRYFLAT(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    // Doorbell checking
-    if (room->room_data->accesstype == 1 && room_is_owner(room, player->player_data->id)) { // TODO: Fuseright checks
-        int message_id = 131; // "BC" - tell user there's no answer
+    // Staff can bypass this
+    if (!player_has_fuse(player, "fuse_enter_locked_rooms")) {
 
-        if (list_size(room->users) > 0 && ring_doorbell_alerted(room, player)) {
-            message_id = 91; // "A[" - tell user that you're waiting for doorbell
+        // Doorbell checking
+        if (room->room_data->accesstype == 1 &&
+            !room_is_owner(room, player->details->id)) {
+            int message_id = 131; // "BC" - tell user there's no answer
+
+            if (list_size(room->users) > 0 && ring_doorbell_alerted(room, player)) {
+                message_id = 91; // "A[" - tell user that you're waiting for doorbell
+            }
+
+            outgoing_message *om = om_create(message_id);
+            player_send(player, om);
+            om_cleanup(om);
+            return;
         }
 
-        outgoing_message *om = om_create(message_id);
-        player_send(player, om);
-        om_cleanup(om);
-        return;
-    }
-
-    // Password checking
-    if (room->room_data->accesstype == 2 && room_is_owner(room, player->player_data->id)) { // TODO: Fuseright checks
-        if (password == NULL || strcmp(password, room->room_data->password) != 0) {
-            player_send_localised_error(player, "Incorrect flat password");
-            return;
+        // Password checking
+        if (room->room_data->accesstype == 2 &&
+            !room_is_owner(room, player->details->id)) {
+            if (password == NULL || strcmp(password, room->room_data->password) != 0) {
+                player_send_localised_error(player, "Incorrect flat password");
+                return;
+            }
         }
     }
 
@@ -79,20 +85,20 @@ void TRYFLAT(session *player, incoming_message *message) {
     }
 
     cleanup:
-        free(content);
-        free(password);
+    free(content);
+    free(password);
 }
 
-bool ring_doorbell_alerted(room *room, session *ringing) {
+bool ring_doorbell_alerted(room *room, entity *ringing) {
     bool sent_ring_alert = false;
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
-        if (room_has_rights(room, room_player->player_data->id)) {
+        if (room_has_rights(room, room_player->details->id)) {
             outgoing_message *om = om_create(91); // "A["
-            sb_add_string(om->sb, ringing->player_data->username);
+            sb_add_string(om->sb, ringing->details->username);
             player_send(room_player, om);
             om_cleanup(om);
 

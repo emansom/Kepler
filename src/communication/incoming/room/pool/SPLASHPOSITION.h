@@ -6,10 +6,12 @@
 #include "game/pathfinder/coord.h"
 #include "game/room/public_rooms/pool_handler.h"
 
+#include "game/room/room_user.h"
+
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
 
-void SPLASHPOSITION(session *player, incoming_message *message) {
+void SPLASHPOSITION(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         goto cleanup;
     }
@@ -77,10 +79,10 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
 
     // Count votes
     for (size_t i = 0; i < list_size(room_entity->room->users); i++) {
-        session * room_player;
+        entity * room_player;
         list_get_at(room_entity->room->users, i, (void *) &room_player);
 
-        if (room_player->player_data->id == player->player_data->id) {
+        if (room_player->details->id == player->details->id) {
             continue;
         }
 
@@ -105,7 +107,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
         final = (double) sum / total;
 
         char score_text[200];
-        sprintf(score_text, "showtext %s's score:/%.1f", player->player_data->username, final);
+        sprintf(score_text, "showtext %s's score:/%.1f", player->details->username, final);
 
         outgoing_message *score_message = om_create(71); // "AG"
         sb_add_string(score_message->sb, "cam1");
@@ -117,7 +119,7 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
 
     // Reset all diving scores
     for (size_t i = 0; i < list_size(room_entity->room->users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(room_entity->room->users, i, (void *) &room_player);
 
         if (room_player->room_user->lido_vote > 0) {
@@ -129,5 +131,5 @@ void SPLASHPOSITION(session *player, incoming_message *message) {
     free(content_y);
 
     cleanup:
-        free(content);
+    free(content);
 }

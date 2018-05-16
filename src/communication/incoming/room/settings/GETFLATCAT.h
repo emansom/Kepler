@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void GETFLATCAT(session *player, incoming_message *message) {
+void GETFLATCAT(entity *player, incoming_message *message) {
     int room_id = im_read_vl64(message);
     room *room = room_manager_get_by_id(room_id);
 

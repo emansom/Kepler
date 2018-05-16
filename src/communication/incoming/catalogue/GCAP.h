@@ -1,18 +1,14 @@
-#include <game/catalogue/catalogue_package.h>
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
-
-#include "hashtable.h"
 
 #include "game/catalogue/catalogue_manager.h"
 #include "game/catalogue/catalogue_page.h"
 #include "game/catalogue/catalogue_item.h"
-
-#include "game/player/player.h"
+#include "game/catalogue/catalogue_package.h"
 
 void serialise_catalogue_item(catalogue_item *item, outgoing_message *message);
 
-void GCAP(session *player, incoming_message *message) {
+void GCAP(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
     char *page_name = get_argument(content, "/", 1);
 

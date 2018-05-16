@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void UPDATE_ACCOUNT(session *player, incoming_message *message) {
+void UPDATE_ACCOUNT(entity *player, incoming_message *message) {
     im_read_b64_int(message);
     char *password = im_read_str(message);
 

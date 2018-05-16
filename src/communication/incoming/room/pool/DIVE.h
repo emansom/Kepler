@@ -4,7 +4,7 @@
 #include "database/queries/player_query.h"
 #include "game/room/public_rooms/pool_handler.h"
 
-void DIVE(session *player, incoming_message *message) {
+void DIVE(entity *player, incoming_message *message) {
     char *diving_combination = im_get_content(message);
 
     if (diving_combination == NULL) {
@@ -28,5 +28,5 @@ void DIVE(session *player, incoming_message *message) {
     om_cleanup(refresh);
 
     cleanup:
-        free(diving_combination);
+    free(diving_combination);
 }

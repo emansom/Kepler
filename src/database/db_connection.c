@@ -9,37 +9,47 @@
 #include "util/configuration/configuration.h"
 
 
-/**
- * Loads the .sql file from disk to create a new db, must be manually freed.
- *
- * @param path the file to load
- * @return the file contents
- */
-char* load_file(char const* path) {
-    char* buffer = NULL;
-    size_t length;
-    FILE * f = fopen (path, "rb"); //was "rb"
-
-    if (f) {
-        fseek (f, 0, SEEK_END);
-        length = (size_t )ftell (f);
-        fseek (f, 0, SEEK_SET);
-        buffer = (char*)malloc ((length+1)*sizeof(char));
-
-        if (buffer) {
-            if (!fread (buffer, sizeof(char), length, f)) {
-                return NULL;
-            }
-        }
-
-        fclose (f);
-
-        if (buffer != NULL) {
-            buffer[length] = '\0';
+bool db_initialise() {
+    if (!sqlite3_threadsafe()) {
+        log_info("SQLite not threadsafe");
+        return false;
+    } else {
+        if (sqlite3_config(SQLITE_CONFIG_SERIALIZED) != SQLITE_OK) {
+            log_fatal("Could not configure SQLite to use serialized mode");
+            return false;
         }
     }
 
-    return buffer;
+    log_info("Testing SQLite connection...");
+
+    sqlite3 *con = db_create_connection();
+
+    if (con == NULL) {
+        log_info("The connection to the database was unsuccessful, program aborted!");
+        sqlite3_close(con);
+        return false;
+    }
+
+    log_info("The connection to the database was successful!");
+
+    sqlite3_stmt *stmt;
+    int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);
+
+    db_check_prepare(status, con);
+    db_check_step(sqlite3_step(stmt), con, stmt);
+
+    char *chosen_journal_mode = (char *) sqlite3_column_text(stmt, 0);
+
+    if (strcmp(chosen_journal_mode, "wal") != 0) {
+        log_warn("WAL not supported, now using: %s", chosen_journal_mode);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), con);
+
+    global.DB = con;
+    global.is_shutdown = false;
+
+    return true;
 }
 
 /**
@@ -74,7 +84,7 @@ sqlite3 *db_create_connection() {
         if (run_query) {
             log_info("Executing queries...");
 
-            char *buffer = load_file("kepler.sql");
+            char *buffer = db_load_sql_file();
             rc = sqlite3_exec(db, buffer, 0, 0, &err_msg);
 
             if (rc != SQLITE_OK ) {
@@ -97,6 +107,40 @@ sqlite3 *db_create_connection() {
     sqlite3_busy_timeout(db, 300);
 
     return db;
+}
+
+/**
+ * Loads the .sql file from disk to create a new db, must be manually freed.
+ *
+ * @param path the file to load
+ * @return the file contents
+ */
+char* db_load_sql_file() {
+    char path[] = "kepler.sql";
+    char* buffer = NULL;
+    size_t length;
+    FILE * f = fopen (path, "rb"); //was "rb"
+
+    if (f) {
+        fseek (f, 0, SEEK_END);
+        length = (size_t )ftell (f);
+        fseek (f, 0, SEEK_SET);
+        buffer = (char*)malloc ((length+1)*sizeof(char));
+
+        if (buffer) {
+            if (!fread (buffer, sizeof(char), length, f)) {
+                return NULL;
+            }
+        }
+
+        fclose (f);
+
+        if (buffer != NULL) {
+            buffer[length] = '\0';
+        }
+    }
+
+    return buffer;
 }
 
 /**

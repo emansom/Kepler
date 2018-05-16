@@ -31,16 +31,16 @@ inventory *inventory_create() {
  *
  * @param player the player to load
  */
-void inventory_init(session *player) {
+void inventory_init(entity *player) {
     if (player->inventory->items != NULL) {
         inventory_clear(player->inventory);
     }
 
     player->inventory->hand_strip_page_index = 0;
-    player->inventory->items = item_query_get_inventory(player->player_data->id);
+    player->inventory->items = item_query_get_inventory(player->details->id);
 }
 
-void inventory_send(inventory *inv, char *strip_view, session *player) {
+void inventory_send(inventory *inv, char *strip_view, entity *player) {
     inventory_change_view(inv, strip_view);
     char *item_casts = inventory_get_casts(inv);
 

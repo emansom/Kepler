@@ -19,8 +19,8 @@ void player_manager_init() {
  * @param stream the dyad stream
  * @return the player
  */
-session *player_manager_add(void *stream, char *ip) {
-    session *p = player_create(stream, ip);
+entity *player_manager_add(void *stream, char *ip) {
+    entity *p = player_create(stream, ip);
     list_add(global.player_manager.players, p);
     return p;
 }
@@ -29,39 +29,29 @@ session *player_manager_add(void *stream, char *ip) {
  * Removes a player by the given stream
  * @param stream the dyad stream
  */
-void player_manager_remove(session *p) {
+void player_manager_remove(entity *p) {
     if (list_contains(global.player_manager.players, p)) {
         list_remove(global.player_manager.players, p, NULL);
     }
 }
 
 /**
- * Finds a player by a given stream
- *
- * @param stream the stream
- * @return the player
- */
-session *player_manager_find(void *stream) {
-    return NULL;
-}
-
-/**
  * Find a player by user id
  *
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
-session *player_manager_find_by_id(int player_id) {
+entity *player_manager_find_by_id(int player_id) {
     if (list_size(global.player_manager.players) > 0) {
         for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-            session *p;
+            entity *p;
             list_get_at(global.player_manager.players, i, (void *) &p);
 
             if (!p->logged_in) {
                 continue;
             }
 
-            if (p->player_data->id == player_id) {
+            if (p->details->id == player_id) {
                 return p;
             }
         }
@@ -76,17 +66,17 @@ session *player_manager_find_by_id(int player_id) {
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
-session *player_manager_find_by_name(char *name) {
+entity *player_manager_find_by_name(char *name) {
     if (list_size(global.player_manager.players) > 0) {
         for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-            session *p;
+            entity *p;
             list_get_at(global.player_manager.players, i, (void *) &p);
 
             if (!p->logged_in) {
                 continue;
             }
 
-            if (strcmp(p->player_data->username, name) == 0) {
+            if (strcmp(p->details->username, name) == 0) {
                 return p;
             }
         }
@@ -101,14 +91,18 @@ session *player_manager_find_by_name(char *name) {
  * @param player_id the player id
  * @return the player, if sound, otherwise returns NULL
  */
-player_data *player_manager_get_data_by_id(int player_id) {
+entity_data *player_manager_get_data_by_id(int player_id) {
     if (list_size(global.player_manager.players) > 0) {
         for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-            session *p;
+            entity *p;
             list_get_at(global.player_manager.players, i, (void *) &p);
 
-            if (p->player_data->id == player_id) {
-                return (player_data *) p->player_data;
+            if (!p->logged_in) {
+                continue;
+            }
+
+            if (p->details->id == player_id) {
+                return (entity_data *) p->details;
             }
         }
     }
@@ -123,10 +117,10 @@ player_data *player_manager_get_data_by_id(int player_id) {
 */
 void player_manager_destroy_session_by_id(int player_id) {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-        session *p;
+        entity *p;
         list_get_at(global.player_manager.players, i, (void*)&p);
 
-        if (!p->logged_in || p->player_data->id != player_id) {
+        if (!p->logged_in || p->details->id != player_id) {
             continue;
         }
 
@@ -139,7 +133,7 @@ void player_manager_destroy_session_by_id(int player_id) {
  */
 void player_manager_dispose() {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
-        session *player;
+        entity *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
         player_disconnect(player);
     }

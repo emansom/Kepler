@@ -1,9 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-
-void G_USRS(session *p, incoming_message *message) {
+void G_USRS(entity *p, incoming_message *message) {
     if (p->room_user->room == NULL) {
         return;
     }
@@ -20,7 +18,7 @@ void G_USRS(session *p, incoming_message *message) {
 
     outgoing_message *players = om_create(28); // "@\"
 
-    session *user;
+    entity *user;
     while (list_iter_next(&iter, (void*) &user) != CC_ITER_END) {
         append_user_list(players, user);
     }
@@ -31,7 +29,7 @@ void G_USRS(session *p, incoming_message *message) {
     outgoing_message *players = om_create(28); // "@\"
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(room->users, i, (void*)&room_player);
         append_user_list(players, room_player);
     }
@@ -47,21 +45,21 @@ void G_USRS(session *p, incoming_message *message) {
     room_refresh_rights(room, p);
 
     /*char instance_id[11];
-    sprintf(instance_id, "%i", session->player_data->id);
+    sprintf(instance_id, "%i", entity->details->id);
     instance_id[10] = '\0';
 
     outgoing_message *players = om_create(28); // "@\"
     om_write_str_kv(players, "i", "0");
     om_write_str_kv(players, "a", instance_id);
-    om_write_str_kv(players, "n", session->player_data->username);
-    om_write_str_kv(players, "f", session->player_data->figure);
+    om_write_str_kv(players, "n", entity->details->username);
+    om_write_str_kv(players, "f", entity->details->figure);
     sb_add_string(players->sb, "l");
     sb_add_string(players->sb, ":");
-    sb_add_int(players->sb, session->room_user->rooms->room_data->model_data->door_x);
-    sb_add_int(players->sb, session->room_user->rooms->room_data->model_data->door_y);
-    sb_add_float(players->sb, session->room_user->rooms->room_data->model_data->door_z);
+    sb_add_int(players->sb, entity->room_user->rooms->room_data->model_data->door_x);
+    sb_add_int(players->sb, entity->room_user->rooms->room_data->model_data->door_y);
+    sb_add_float(players->sb, entity->room_user->rooms->room_data->model_data->door_z);
     sb_add_char(players->sb, 13);
-    om_write_str_kv(players, "c", session->player_data->motto);
-    player_send(session, players);
+    om_write_str_kv(players, "c", entity->details->motto);
+    player_send(entity, players);
     om_cleanup(players);*/
 }

@@ -6,7 +6,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void MESSENGER_GETMESSAGES(session *p, incoming_message *message) {
+void MESSENGER_GETMESSAGES(entity *p, incoming_message *message) {
     for (size_t i = 0; i < list_size(p->messenger->messages); i++) {
         messenger_message *messenger_msg;
         list_get_at(p->messenger->messages, i, (void*)&messenger_msg);

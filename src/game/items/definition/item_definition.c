@@ -16,7 +16,7 @@ item_definition *item_definition_create(int id, int cast_directory, char *sprite
     def->length = length;
     def->width = width;
     def->stack_height = top_height;
-    def->top_height = def->stack_height;
+    def->top_height = top_height;
     def->behaviour_data = strdup(behaviour);
     def->behaviour = item_behaviour_parse(def);
 
@@ -54,7 +54,7 @@ item_definition *item_definition_create_blank() {
 bool item_contains_custom_data(item_definition *definition) {
     return definition->behaviour->custom_data_numeric_on_off
             || definition->behaviour->custom_data_true_false
-            || definition->behaviour->customDataNumericState
+            || definition->behaviour->custom_data_numeric_state
             || definition->behaviour->custom_data_on_off
             || definition->behaviour->is_door;
 }

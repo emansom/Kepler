@@ -8,7 +8,7 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
-void USER_CANCEL_TYPING(session *player, incoming_message *im) {
+void USER_CANCEL_TYPING(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL || !player->room_user->is_typing) {
         return;
     }

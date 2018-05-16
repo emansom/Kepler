@@ -1,12 +1,9 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "game/room/room.h"
-
 #include "database/queries/rooms/room_query.h"
 
-void UPDATEFLAT(session *player, incoming_message *message) {
+void UPDATEFLAT(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
     char *str_id = get_argument(content, "/", 0);
 
@@ -20,7 +17,7 @@ void UPDATEFLAT(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    if (!room_is_owner(room, player->player_data->id)) {
+    if (!room_is_owner(room, player->details->id)) {
         goto cleanup;
     }
 

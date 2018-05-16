@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void GET_SONG_LIST(session *player, incoming_message *message) {
+void GET_SONG_LIST(entity *player, incoming_message *message) {
     outgoing_message *om;
 
     om = om_create(322); // "EB"
