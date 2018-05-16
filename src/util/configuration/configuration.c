@@ -35,7 +35,7 @@ void configuration_init() {
 void configuration_new() {
     FILE *fp = fopen(CONFIGURATION_FILE, "wb");
     fprintf(fp, "[Database]\n");
-    fprintf(fp, "database.filename=%s\n", "data/Kepler.db");
+    fprintf(fp, "database.filename=%s\n", "db/Kepler.db");
     fprintf(fp, "\n");
     fprintf(fp, "[Server]\n");
     fprintf(fp, "server.ip.address=%s\n", "127.0.0.1");
