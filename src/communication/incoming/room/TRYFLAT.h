@@ -43,9 +43,10 @@ void TRYFLAT(session *player, incoming_message *message) {
 
     // Staff can bypass this
     if (!player_has_fuse(player, "fuse_enter_locked_rooms")) {
+
         // Doorbell checking
         if (room->room_data->accesstype == 1 &&
-            !room_is_owner(room, player->player_data->id)) {
+            room_is_owner(room, player->player_data->id)) {
             int message_id = 131; // "BC" - tell user there's no answer
 
             if (list_size(room->users) > 0 && ring_doorbell_alerted(room, player)) {
@@ -60,7 +61,7 @@ void TRYFLAT(session *player, incoming_message *message) {
 
         // Password checking
         if (room->room_data->accesstype == 2 &&
-            !room_is_owner(room, player->player_data->id)) {
+            room_is_owner(room, player->player_data->id)) {
             if (password == NULL || strcmp(password, room->room_data->password) != 0) {
                 player_send_localised_error(player, "Incorrect flat password");
                 return;

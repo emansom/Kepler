@@ -13,7 +13,7 @@ void FOLLOW_FRIEND(session *player, incoming_message *message) {
 
     session *player_friend = player_manager_find_by_id(target_id);
 
-    if (player_friend != NULL && player_friend->room_user->room != NULL) {
+    if (player_friend != NULL && player_friend->room_user != NULL) {
         bool is_public = list_size(player_friend->room_user->room->room_data->model_data->public_items) > 0;
 
         outgoing_message *stalk_ok = om_create(286); // "D^"

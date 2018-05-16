@@ -13,7 +13,6 @@ void G_ITEMS(session *player, incoming_message *message) {
     for (size_t i = 0; i < list_size(wall_items); i++) {
         item *room_item;
         list_get_at(wall_items, i, (void*)&room_item);
-
         char *item_string = item_as_string(room_item);
 
         sb_add_string(om->sb, item_string);
@@ -24,7 +23,6 @@ void G_ITEMS(session *player, incoming_message *message) {
 
     player_send(player, om);
     om_cleanup(om);
-
 
     list_destroy(wall_items);
 }

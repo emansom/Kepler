@@ -316,25 +316,6 @@ void room_send(room *room, outgoing_message *message) {
 }
 
 /**
- * Send an outgoing message to room users with rights.
- *
- * @param room the room
- * @param message the outgoing message to send
- */
-void room_send_with_rights(room *room, outgoing_message *message) {
-    om_finalise(message);
-
-    for (size_t i = 0; i < list_size(room->users); i++) {
-        session *player;
-        list_get_at(room->users, i, (void*)&player);
-
-        if (room_has_rights(room, player->player_data->id)) {
-            player_send(player, message);
-        }
-    }
-}
-
-/**
  * Find nearby players with a given room, position and distance, will not be inclusive of the
  * room user in the list if the room_user parameter is not NULL.
  *

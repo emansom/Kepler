@@ -12,7 +12,6 @@ void GOTOFLAT(session *player, incoming_message *message) {
     room *room = room_manager_get_by_id(room_id);
 
     if (player->room_user->authenticate_id != room_id) {
-        printf("test123\n");
         goto cleanup;
     }
 

@@ -61,8 +61,7 @@ void room_kickall(room*);
 bool room_is_owner(room *room, int user_id);
 bool room_has_rights(room *room, int user_id);
 void room_refresh_rights(room *room, session *player);
-void room_send(room *room, outgoing_message *message);
-void room_send_with_rights(room *room, outgoing_message *message);
+void room_send(room*, outgoing_message*);
 void room_dispose(room*, bool force_dispose);
 List *room_nearby_players(room *room, room_user *room_user, coord *position, int distance);
 

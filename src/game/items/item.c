@@ -232,8 +232,8 @@ char *item_as_string(item *item) {
             sb_add_float_delimeter(sb, item->position->z, 2);
             sb_add_string_delimeter(sb, item->definition->colour, 2);
             sb_add_string_delimeter(sb, "", 2);
-            sb_add_wired(sb, 0);
-            sb_add_string_delimeter(sb, item->custom_data, 2);
+                sb_add_wired(sb, 0);
+                sb_add_string_delimeter(sb, item->custom_data, 2);
         } else {
             sb_add_string_delimeter(sb, item->custom_data, ' ');
             sb_add_string_delimeter(sb, item->definition->sprite, ' ');
