@@ -30,6 +30,8 @@
 room *room_create(int room_id) {
     room *instance = malloc(sizeof(room));
     instance->room_id = room_id;
+    instance->connected_room = NULL;
+    instance->connected_room_hide = false;
     instance->room_data = NULL;
     instance->room_map = NULL;
     instance->process_timer = NULL;
@@ -123,13 +125,26 @@ rights_entry *rights_entry_create(int user_id) {
  * @param navigator the navigator packet instance
  * @param player_id the player who requests the room
  */
-void room_append_data(room *instance, outgoing_message *navigator, int player_id) {
-    if (list_size(instance->room_data->model_data->public_items) > 0) {
+void room_append_data(room *instance, outgoing_message *navigator, entity *player) {
+    if (instance->connected_room_hide) {
+        return;
+    }
+
+    if (instance->room_data->owner_id == 0) {
         om_write_int(navigator, instance->room_data->id); // rooms id
         om_write_int(navigator, 1);
         om_write_str(navigator, instance->room_data->name);
-        om_write_int(navigator, instance->room_data->visitors_now); // current visitors
-        om_write_int(navigator, instance->room_data->visitors_max); // max vistors
+
+        int visitors_now = instance->room_data->visitors_now;
+        int visitors_max = instance->room_data->visitors_max;
+
+        if (instance->connected_room != NULL) {
+            visitors_now += instance->connected_room->room_data->visitors_now;
+            visitors_max += instance->connected_room->room_data->visitors_max;
+        }
+
+        om_write_int(navigator, visitors_now); // current visitors
+        om_write_int(navigator, visitors_max); // max vistors
         om_write_int(navigator, instance->room_data->category); // category id
         om_write_str(navigator, instance->room_data->description); // description
         om_write_int(navigator, instance->room_data->id); // rooms id
@@ -141,7 +156,7 @@ void room_append_data(room *instance, outgoing_message *navigator, int player_id
         om_write_int(navigator, instance->room_data->id); // rooms id
         om_write_str(navigator, instance->room_data->name);
 
-        if (player_id == instance->room_data->owner_id || instance->room_data->show_name == 1) {
+        if (player->details->id == instance->room_data->owner_id || instance->room_data->show_name == true || player_has_fuse(player, "fuse_see_all_roomowners")) {
             om_write_str(navigator, instance->room_data->owner_name); // rooms owner
         } else {
             om_write_str(navigator, "-"); // rooms owner
@@ -183,7 +198,7 @@ void room_load_data(room *room) {
  */
 void room_kickall(room *room) {
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *user;
+        entity *user;
         list_get_at(room->users, i, (void *) &user);
         room_leave(room, user, true);
     }
@@ -251,7 +266,7 @@ bool room_has_rights(room *room, int user_id) {
  * @param room the room to refresh inside for
  * @param player the player to refresh the rights for
  */
-void room_refresh_rights(room *room, session *player) {
+void room_refresh_rights(room *room, entity *player) {
     if (player == NULL) {
         return;
     }
@@ -261,13 +276,13 @@ void room_refresh_rights(room *room, session *player) {
 
     outgoing_message *om;
 
-    if (room_has_rights(room, player->player_data->id)) {
+    if (room_has_rights(room, player->details->id)) {
         om = om_create(42); // "@j"
         player_send(player, om);
         om_cleanup(om);
     }
 
-    if (room_is_owner(room, player->player_data->id)) {
+    if (room_is_owner(room, player->details->id)) {
         om = om_create(47); // "@o"
         player_send(player, om);
         om_cleanup(om);
@@ -278,7 +293,7 @@ void room_refresh_rights(room *room, session *player) {
     room_user *room_entity = (room_user*) player->room_user;
     room_user_remove_status(room_entity, "flatctrl");
 
-    if (room_has_rights(room, player->player_data->id) || room_is_owner(room, player->player_data->id)) {
+    if (room_has_rights(room, player->details->id) || room_is_owner(room, player->details->id)) {
         room_user_add_status(room_entity, "flatctrl", rights_value, -1, "", -1, -1);
         room_entity->needs_update = true;
     }
@@ -294,12 +309,43 @@ void room_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *player;
+        entity *player;
         list_get_at(room->users, i, (void*)&player);
+
+        if (player->entity_type != PLAYER_TYPE) {
+            continue;
+        }
+
         player_send(player, message);
     }
+}
 
-    om_cleanup(message);
+/**
+ * Send an outgoing message to room users with rights.
+ *
+ * @param room the room
+ * @param message the outgoing message to send
+ */
+bool room_send_with_rights(room *room, outgoing_message *message) {
+    bool sent_message_to_users = false;
+
+    om_finalise(message);
+
+    for (size_t i = 0; i < list_size(room->users); i++) {
+        entity *player;
+        list_get_at(room->users, i, (void*)&player);
+
+        if (player->entity_type != PLAYER_TYPE) {
+            continue;
+        }
+
+        if (room_has_rights(room, player->details->id)) {
+            player_send(player, message);
+            sent_message_to_users = true;
+        }
+    }
+
+    return sent_message_to_users;
 }
 
 /**
@@ -317,7 +363,7 @@ List *room_nearby_players(room *room, room_user *room_user, coord *position, int
     list_new(&players);
 
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *player;
+        entity *player;
         list_get_at(room->users, i, (void *) &player);
 
         if (room_user != NULL && player->room_user->instance_id == room_user->instance_id) {
@@ -350,19 +396,32 @@ void room_dispose(room *room, bool force_dispose) {
     room->tick = 0;
     room_map_destroy(room);
 
-    if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public rooms model
+    if (room->room_data->owner_id == 0 && !force_dispose) { // model is a public rooms model
         return; // Prevent public rooms
     }
 
     room_item_manager_dispose(room);
 
-    if (!force_dispose) {
-        if (player_manager_find_by_id(room->room_data->owner_id) != NULL) {
-            return;
-        }
+    if (!force_dispose && player_manager_find_by_id(room->room_data->owner_id) != NULL) {
+        return;
     }
 
     room_manager_remove(room->room_id);
+
+    for (size_t i = 0; i < list_size(room->rights); i++) {
+        rights_entry *rights_entry;
+        list_get_at(room->rights, i, (void *) &rights_entry);
+        free(rights_entry);
+    }
+
+    list_destroy(room->rights);
+    list_destroy(room->users);
+    list_destroy(room->items);
+
+    room->users = NULL;
+    room->rights = NULL;
+    room->users = NULL;
+
 
     if (room->room_data != NULL) {
         free(room->room_data->name);
@@ -373,24 +432,6 @@ void room_dispose(room *room, bool force_dispose) {
         free(room->room_data);
         room->room_data = NULL;
     }
-
-    for (size_t i = 0; i < list_size(room->items); i++) {
-        item *item;
-        list_get_at(room->items, i, (void *) &item);
-        item_dispose(item);
-    }
-
-    list_destroy(room->users);
-    list_destroy(room->items);
-
-    for (size_t i = 0; i < list_size(room->rights); i++) {
-        rights_entry *rights_entry;
-        list_get_at(room->rights, i, (void *) &rights_entry);
-        free(rights_entry);
-    }
-
-    list_destroy(room->rights);
-    room->users = NULL;
 
     free(room);
 }

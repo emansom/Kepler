@@ -1,11 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
+
 #include "log.h"
 
 #include "list.h"
 #include "hashtable.h"
-#include "thpool.h"
-#include "lib/dispatch/dispatch.h"
+#include "dispatch.h"
 
 #include "database/queries/rooms/room_vote_query.h"
 
@@ -37,7 +37,7 @@
 int create_instance_id(room_user *room_user) {
     int instance_id = 0;
 
-    while (get_room_user_by_instance_id((room *) room_user->room, instance_id) != NULL) {
+    while (room_user_get_by_instance_id((room *) room_user->room, instance_id) != NULL) {
         instance_id++;
     }
 
@@ -51,9 +51,9 @@ int create_instance_id(room_user *room_user) {
  * @param instance_id the instance id to search for
  * @return the room user struct
  */
-room_user *get_room_user_by_instance_id(room *room, int instance_id) {
+room_user *room_user_get_by_instance_id(room *room, int instance_id) {
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
         if (room_player->room_user->instance_id == instance_id) {
@@ -70,7 +70,7 @@ room_user *get_room_user_by_instance_id(room *room, int instance_id) {
  * @param om the outgoing message
  * @param player the player
  */
-void room_enter(room *room, session *player) {
+void room_enter(room *room, entity *player, coord *destination) {
     // Leave other room
     if (player->room_user->room != NULL) {
         room_leave(player->room_user->room, player, false);
@@ -92,25 +92,33 @@ void room_enter(room *room, session *player) {
     room_entity->instance_id = create_instance_id(room_entity);
     room_user_reset_idle_timer(player->room_user);
 
-    room_entity->position->x = room->room_data->model_data->door_x;
-    room_entity->position->y = room->room_data->model_data->door_y;
-    room_entity->position->z = room->room_data->model_data->door_z;
+    if (destination == NULL) {
+        room_entity->position->x = room->room_data->model_data->door_x;
+        room_entity->position->y = room->room_data->model_data->door_y;
+        room_entity->position->z = room->room_data->model_data->door_z;
 
-    coord_set_rotation(room_entity->position,
-                       room->room_data->model_data->door_dir,
-                       room->room_data->model_data->door_dir);
+        coord_set_rotation(room_entity->position,
+                           room->room_data->model_data->door_dir,
+                           room->room_data->model_data->door_dir);
+    } else {
+        room_entity->position->x = destination->x;
+        room_entity->position->y = destination->y;
+        room_entity->position->z = destination->z;
+        coord_set_rotation(room_entity->position, destination->body_rotation, destination->head_rotation);
+    }
 
     list_add(room->users, player);
     room->room_data->visitors_now = (int) list_size(room->users);
 
     if (room->process_timer == NULL) {
+        printf("Yo?\n");
         room->process_timer = hh_dispatch_timer_create(RoomDispatch, (hh_dispatch_cb_t) &room_task,
                                                        (void *) room);
         hh_dispatch_timer_start(room->process_timer, 500);
     }
 
     /*outgoing_message *om = om_create(73); // "AI"
-    player_send(session, om);
+    player_send(entity, om);
     om_cleanup(om);*/
 
     outgoing_message *om = om_create(166); // "Bf"
@@ -141,24 +149,28 @@ void room_enter(room *room, session *player) {
         om_cleanup(om);
     }
 
-    // TODO: move votes to rooms object and load on initialization to reduce query load
-    // Check if already voted, return if voted
-    int voted = room_query_check_voted(room->room_data->id, player->player_data->id);
-    int vote_count = -1;
+    bool is_public = room->room_data->owner_id == 0;
 
-    // If user already has voted, we sent total vote count
-    // else we sent -1, making the vote selector pop up
-    if (voted != -1) {
-        vote_count = room_query_count_votes(room->room_data->id);
+    if (!is_public) {
+        // TODO: move votes to rooms object and load on initialization to reduce query load
+        // Check if already voted, return if voted
+        int voted = room_query_check_voted(room->room_data->id, player->details->id);
+        int vote_count = -1;
+
+        // If user already has voted, we sent total vote count
+        // else we sent -1, making the vote selector pop up
+        if (voted != -1) {
+            vote_count = room_query_count_votes(room->room_data->id);
+        }
+
+        om = om_create(345); // "EY"
+        om_write_int(om, vote_count);
+        player_send(player, om);
+        om_cleanup(om);
     }
 
-    om = om_create(345); // "EY"
-    om_write_int(om, vote_count);
-    player_send(player, om);
-    om_cleanup(om);
-
-    // Show new session current state of an item program for pools
-    if (list_size(room->room_data->model_data->public_items) > 0) {
+    // Show new entity current state of an item program for pools
+    if (is_public) {
         for (size_t i = 0; i < list_size(room->items); i++) {
             item *item;
             list_get_at(room->items, i, (void *) &item);
@@ -211,7 +223,7 @@ void room_enter(room *room, session *player) {
  * Leave room handler, will make room and id for the room user reset back to NULL and 0.
  * And remove the character from the room.
  */
-void room_leave(room *room, session *player, bool hotel_view) {
+void room_leave(room *room, entity *player, bool hotel_view) {
     if (!list_contains(room->users, player)) {
         return;
     }
@@ -241,9 +253,10 @@ void room_leave(room *room, session *player, bool hotel_view) {
     om = om_create(29); // "@]"
     sb_add_int(om->sb, player->room_user->instance_id);
     room_send(room, om);
+    om_cleanup(om);
 
     // Reset rooms user
-    room_user_reset(player->room_user);
+    room_user_reset(player->room_user, false);
     room_dispose(room, false);
 
     // Go to hotel view, if told so.
@@ -260,31 +273,35 @@ void room_leave(room *room, session *player, bool hotel_view) {
  * @param om the outgoing message
  * @param player the player
  */
-void append_user_list(outgoing_message *players, session *player) {
+void append_user_list(outgoing_message *players, entity *player) {
     char user_id[11], instance_id[11];
-    sprintf(user_id, "%i", player->player_data->id);
+    sprintf(user_id, "%i", player->details->id);
     sprintf(instance_id, "%i", player->room_user->instance_id);
 
     om_write_str_kv(players, "i", instance_id);
     om_write_str_kv(players, "a", user_id);
-    om_write_str_kv(players, "n", player->player_data->username);
-    om_write_str_kv(players, "f", player->player_data->figure);
-    om_write_str_kv(players, "s", player->player_data->sex);
+    om_write_str_kv(players, "n", player->details->username);
+    om_write_str_kv(players, "f", player->details->figure);
+    om_write_str_kv(players, "s", player->details->sex);
     sb_add_string(players->sb, "l:");
     sb_add_int_delimeter(players->sb, player->room_user->position->x, ' ');
     sb_add_int_delimeter(players->sb, player->room_user->position->y, ' ');
     sb_add_float_delimeter(players->sb, player->room_user->position->z, (char) 13);
 
-    if (strlen(player->player_data->motto) > 0) {
-        om_write_str_kv(players, "c", player->player_data->motto);
+    if (strlen(player->details->motto) > 0) {
+        om_write_str_kv(players, "c", player->details->motto);
+    }
+
+    if (strlen(player->details->active_badge) > 0) {
+        om_write_str_kv(players, "b", player->details->active_badge);
     }
 
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0
         || strcmp(player->room_user->room->room_data->model_data->model_name, "pool_b") == 0
         || strcmp(player->room_user->room->room_data->model_data->model_name, "md_a") == 0) {
 
-        if (strlen(player->player_data->pool_figure) > 0) {
-            om_write_str_kv(players, "p", player->player_data->pool_figure);
+        if (strlen(player->details->pool_figure) > 0) {
+            om_write_str_kv(players, "p", player->details->pool_figure);
         }
     }
 }
@@ -295,7 +312,7 @@ void append_user_list(outgoing_message *players, session *player) {
  * @param om the outgoing message
  * @param player the player
  */
-void append_user_status(outgoing_message *om, session *player) {
+void append_user_status(outgoing_message *om, entity *player) {
     sb_add_int_delimeter(om->sb, player->room_user->instance_id, ' ');
     sb_add_int_delimeter(om->sb, player->room_user->position->x, ',');
     sb_add_int_delimeter(om->sb, player->room_user->position->y, ',');

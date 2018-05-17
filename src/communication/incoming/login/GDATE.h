@@ -4,7 +4,7 @@
 #include "game/player/player.h"
 #include "time.h"
 
-void GDATE(session *player, incoming_message *message) {
+void GDATE(entity *player, incoming_message *message) {
     time_t t = time(NULL);
     struct tm tm = *localtime(&t);
 

@@ -1,11 +1,9 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-
 void delete_room_items(List *items);
 
-void DELETEFLAT(session *player, incoming_message *message) {
+void DELETEFLAT(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
     bool dispose_after = false;
 
@@ -25,7 +23,7 @@ void DELETEFLAT(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    if (room_is_owner(room, player->player_data->id)) {
+    if (room_is_owner(room, player->details->id)) {
         room_kickall(room);
 
         if (list_size(room->items) <= 0) {

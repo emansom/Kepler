@@ -1,21 +1,12 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/inventory/inventory.h"
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/room/mapping/room_map.h"
-#include "game/room/manager/room_item_manager.h"
-
-#include "game/items/item.h"
-
-void ADDSTRIPITEM(session *player, incoming_message *message) {
+void ADDSTRIPITEM(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
 
-    if (!room_is_owner(player->room_user->room, player->player_data->id)) {
+    if (!room_is_owner(player->room_user->room, player->details->id)) {
         return;
     }
 
@@ -33,7 +24,7 @@ void ADDSTRIPITEM(session *player, incoming_message *message) {
 
     item *item = room_item_manager_get(player->room_user->room, (int)strtol(remove_data_item_id, NULL, 10));
 
-    if (item == NULL) {
+    if (item == NULL || item->definition->behaviour->is_post_it) {
         goto cleanup;
     }
 
@@ -44,6 +35,6 @@ void ADDSTRIPITEM(session *player, incoming_message *message) {
     inventory_send(inv, "update", player);
 
     cleanup:
-        free(content);
-        free(remove_data_item_id);
+    free(content);
+    free(remove_data_item_id);
 }

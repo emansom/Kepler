@@ -11,11 +11,15 @@
 #include "game/player/player_manager.h"
 #include "game/room/mapping/room_model_manager.h"
 #include "game/room/room_manager.h"
+#include "game/room/public_rooms/walkways.h"
 #include "game/catalogue/catalogue_manager.h"
 #include "game/texts/external_texts_manager.h"
 #include "game/navigator/navigator_category_manager.h"
+#include "game/moderation/fuserights_manager.h"
 
 #include "util/configuration/configuration.h"
+
+#include "uv.h"
 
 #define PREFIX "Kepler"
 #define AARON_IS_A_FAG 8934
@@ -31,7 +35,10 @@ typedef struct server_s {
     struct item_manager item_manager;
     struct texts_manager texts_manager;
     struct configuration configuration;
+    struct walkway_manager walkway_manager;
+    struct fuserights_manager fuserights_manager;
     struct sqlite3 *DB;
+    uv_loop_t *rcon_loop;
     bool is_shutdown;
 } server;
 
@@ -41,7 +48,7 @@ char *get_time_formatted();
 char *get_short_time_formatted();
 char *get_time_formatted_custom(unsigned long);
 void filter_vulnerable_characters(char**, bool);
-void replace_vulnerable_characters(char**, bool, char);
+char *replace_unreadable_characters(char*);
 char *get_argument(char*, char*, int);
 char* replace(char* str, char* a, char* b);
 char *replace_char(const char *, char, char *);

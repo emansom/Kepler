@@ -1,16 +1,9 @@
-#include <stdbool.h>
-
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/room/room_user.h"
-
 #include "database/queries/rooms/room_vote_query.h"
 
-void RATEFLAT(session *player, incoming_message *im) {
+void RATEFLAT(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }
@@ -22,7 +15,7 @@ void RATEFLAT(session *player, incoming_message *im) {
     }
 
     int room_id = player->room_user->room->room_data->id;
-    int player_id = player->player_data->id;
+    int player_id = player->details->id;
 
     // Check if already voted, return if voted
     int NOT_VOTED = -1;
@@ -45,10 +38,10 @@ void RATEFLAT(session *player, incoming_message *im) {
     // Send new vote count only to users who have voted
     // because else their vote selector UI disappears
     for (size_t i = 0; i < list_size(room->users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(room->users, i, (void*)&room_player);
 
-        player_id = room_player->player_data->id;
+        player_id = room_player->details->id;
 
         if (room_query_check_voted(room_id, player_id) == NOT_VOTED) {
             continue;

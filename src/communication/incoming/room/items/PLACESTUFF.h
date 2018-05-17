@@ -1,21 +1,15 @@
-#include <database/queries/items/item_query.h>
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
 #include "game/inventory/inventory.h"
-#include "game/player/player.h"
+#include "database/queries/items/item_query.h"
 
-#include "game/room/room.h"
-#include "game/room/mapping/room_map.h"
-
-#include "game/items/item.h"
-
-void PLACESTUFF(session *player, incoming_message *message) {
+void PLACESTUFF(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
 
-    if (!room_has_rights(player->room_user->room, player->player_data->id)) {
+    if (!room_has_rights(player->room_user->room, player->details->id)) {
         return;
     }
 
@@ -51,7 +45,7 @@ void PLACESTUFF(session *player, incoming_message *message) {
         if (place_item->definition->behaviour->is_post_it) {
             // Create postit in database
             char *default_colour = strdup("FFFF33");
-            int item_id = item_query_create(player->player_data->id, 0, place_item->definition->id, 0, 0, 0, 0, default_colour);
+            int item_id = item_query_create(player->details->id, 0, place_item->definition->id, 0, 0, 0, 0, default_colour);
 
             // Create postit instance using the id retrived from the database
             item *sticky = item_create(item_id, 0, place_item->definition->id, 0, 0, 0, wall_position, 0, default_colour);
@@ -98,9 +92,8 @@ void PLACESTUFF(session *player, incoming_message *message) {
     list_remove(inv->items, place_item, NULL);
 
     cleanup:
-        free(content);
-		free(str_id);
-		free(str_x);
-		free(str_y);
-        
+    free(content);
+    free(str_id);
+    free(str_x);
+    free(str_y);
 }

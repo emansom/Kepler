@@ -1,10 +1,7 @@
-#include "util/stringbuilder.h"
-
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
-#include "shared.h"
 
-void APPROVENAME(session *player, incoming_message *message) {
+void APPROVENAME(entity *player, incoming_message *message) {
     char *username = im_read_str(message);
     int name_check_code = get_name_check_code(username);
 
@@ -12,7 +9,7 @@ void APPROVENAME(session *player, incoming_message *message) {
         // Some fuckings to that guy that got rich of other people's work
         if (name_check_code == AARON_IS_A_FAG) {
             // TODO: get correct message ID for wrong name in register
-            send_alert(player, "No faggots allowed");
+            player_send_alert(player, "No faggots allowed");
 
             // Bye bye now!
             player_disconnect(player);

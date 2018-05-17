@@ -3,18 +3,22 @@
 
 #include "database/queries/player_query.h"
 
-void MESSENGER_ASSIGNPERSMSG(session *player, incoming_message *message) {
-    if (player->player_data == NULL) {
+void MESSENGER_ASSIGNPERSMSG(entity *player, incoming_message *message) {
+    if (player->details == NULL) {
         return;
     }
 
     char *console_motto = im_read_str(message);
 
-    free(player->player_data->console_motto);
-    player->player_data->console_motto = console_motto;
+    if (console_motto == NULL) {
+        return;
+    }
+
+    free(player->details->console_motto);
+    player->details->console_motto = console_motto;
 
     outgoing_message *response = om_create(147); // "BS"
-    om_write_str(response, player->player_data->console_motto);
+    om_write_str(response, player->details->console_motto);
     player_send(player, response);
     om_cleanup(response);
 

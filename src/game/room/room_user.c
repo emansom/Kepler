@@ -2,13 +2,15 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <time.h>
-#include <game/pathfinder/rotation.h>
+#include <game/room/manager/room_entity_manager.h>
 
+#include "log.h"
 #include "hashtable.h"
 #include "list.h"
 #include "deque.h"
 
 #include "game/player/player.h"
+#include "game/player/player_refresh.h"
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
@@ -16,13 +18,15 @@
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
-#include "game/room/pool/pool_handler.h"
+#include "game/room/manager/room_trade_manager.h"
+#include "game/room/public_rooms/pool_handler.h"
 
 #include "game/items/item.h"
 #include "game/items/definition/item_definition.h"
 
 #include "game/pathfinder/pathfinder.h"
 #include "game/pathfinder/coord.h"
+#include "game/pathfinder/rotation.h"
 
 #include "util/stringbuilder.h"
 #include "communication/messages/outgoing_message.h"
@@ -33,15 +37,15 @@
  * @param player the entity for the room user
  * @return the room user struct to return
  */
-room_user *room_user_create(session *player) {
+room_user *room_user_create(entity *player) {
     room_user *user = malloc(sizeof(room_user));
-    user->player = player;
-    user->position = create_coord(0, 0);
-    user->goal = create_coord(0, 0);
+    user->entity = player;
+    user->position = coord_create(0, 0);
+    user->goal = coord_create(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
     hashtable_new(&user->statuses);
-    room_user_reset(user);
+    room_user_reset(user, false);
     return user;
 }
 
@@ -50,12 +54,13 @@ room_user *room_user_create(session *player) {
  *
  * @param room_user
  */
-void room_user_reset(room_user *room_user) {
+void room_user_reset(room_user *room_user, bool cleanup) {
     stop_walking(room_user, true);
     room_user_remove_status(room_user, "swim");
     room_user_remove_status(room_user, "sit");
     room_user_remove_status(room_user, "lay");
     room_user_remove_status(room_user, "flatctrl");
+    room_user_remove_status(room_user, "dance");
 
     // Carry items
     room_user_remove_status(room_user, "carryf");
@@ -72,39 +77,34 @@ void room_user_reset(room_user *room_user) {
 
     room_user->room_look_at_timer = -1;
     room_user->lido_vote = -1;
+
     room_user_reset_idle_timer(room_user);
+    trade_manager_reset(room_user);
 
     if (room_user->next != NULL) {
         free(room_user->next);
         room_user->next = NULL;
     }
-}
 
-/**
- * Called when a player disconnects.
- *
- * @param room_user
- */
-void room_user_cleanup(room_user *room_user) {
-    room_user_reset(room_user);
+    if (cleanup) {
+        if (room_user->position != NULL) {
+            free(room_user->position);
+            room_user->position = NULL;
+        }
 
-    if (room_user->position != NULL) {
-        free(room_user->position);
-        room_user->position = NULL;
+        if (room_user->goal != NULL) {
+            free(room_user->goal);
+            room_user->goal = NULL;
+        }
+
+        if (room_user->statuses != NULL) {
+            hashtable_destroy(room_user->statuses);
+            room_user->statuses = NULL;
+        }
+
+        room_user->room = NULL;
+        free(room_user);
     }
-
-    if (room_user->goal != NULL) {
-        free(room_user->goal);
-        room_user->goal = NULL;
-    }
-
-    if (room_user->statuses != NULL) {
-        hashtable_destroy(room_user->statuses);
-        room_user->statuses = NULL;
-    }
-
-    room_user->room = NULL;
-    free(room_user);
 }
 
 
@@ -139,7 +139,7 @@ void walk_to(room_user *room_user, int x, int y) {
         return;
     }
 
-    //log_debug("User requested path %i, %i from path %i, %i in rooms %i.", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
+    log_debug("User requested path %i, %i from path %i, %i in rooms %i.", x, y, room_user->position->x, room_user->position->y, room_user->room_id);
 
     if (!room_tile_is_walkable((room *) room_user->room, room_user, x, y)) {
         return;
@@ -150,9 +150,9 @@ void walk_to(room_user *room_user, int x, int y) {
     if (tile != NULL && tile->highest_item != NULL) {
         item *item = tile->highest_item;
 
-        if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->player->player_data->tickets == 0) {
+        if (strcmp(item->definition->sprite, "queue_tile2") == 0 && room_user->entity->details->tickets == 0) {
             outgoing_message *om = om_create(73); // "AI"
-            player_send(room_user->player, om);
+            player_send(room_user->entity, om);
             om_cleanup(om);
             return;
         }
@@ -194,13 +194,21 @@ void stop_walking(room_user *room_user, bool is_silent) {
     room_user_clear_walk_list(room_user);
     room_user->is_walking = false;
 
+    if (room_user->room == NULL) { // Being inside room beyond this point
+        return;
+    }
+
     if (!is_silent) {
+        walkway_entrance *walkway = walkways_find_current(room_user);
+
+        if (walkway != NULL) {
+            room *room = walkways_find_room(walkway->model_to);
+            room_enter(room, room_user->entity, walkway->destination);
+            return;
+        }
+
         room_user_invoke_item(room_user);
     }
-}
-
-void room_user_reset_idle_timer(room_user *room_user) {
-    room_user->room_idle_timer = (int) (time(NULL) + 300); // Give the user 5 minutes to idle or they'll be kicked.
 }
 
 /**
@@ -273,7 +281,7 @@ void room_user_show_chat(room_user *room_user, char *text, bool is_shout) {
     }
 
     for (size_t i = 0; i < list_size(players); i++) {
-        session *player;
+        entity *player;
         list_get_at(players, i, (void *) &player);
 
         // Look at player talking
@@ -287,6 +295,12 @@ void room_user_show_chat(room_user *room_user, char *text, bool is_shout) {
     }
 }
 
+/**
+ * Look towards a certain point.
+ *
+ * @param room_user the room user that looks at a direction
+ * @param towards the coordinate direction to look towards
+ */
 void room_user_look(room_user *room_user, coord *towards) {
     if (room_user->is_walking) {
         return;
@@ -327,7 +341,8 @@ bool room_user_process_command(room_user *room_user, char *text) {
 
     // TODO: better way to handle commands
     if (strcmp(text, ":about") == 0) {
-        send_alert(room_user->player, "Kepler server\n\nContributors:\n - Hoshiko\n\nMade by Quackster");
+        player_send_alert(room_user->entity,
+                          "Kepler server\n\nContributors:\n - Hoshiko:\n - Romuald\n - Glaceon\n\nMade by Quackster");
         return true;
     }
 
@@ -368,20 +383,41 @@ void room_user_invoke_item(room_user *room_user) {
 
     if (item != NULL) {
         if (item->definition->behaviour->can_sit_on_top) {
-            char sit_height[11];
-            sprintf(sit_height, " %1.f", item->definition->top_height);
+            char sit_height[13];
+            sprintf(sit_height, " %.2f", item->definition->top_height);
 
             room_user_add_status(room_user, "sit", sit_height, -1, "", -1, -1);
+            room_user_remove_status(room_user, "dance");
+
             coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
             needs_update = true;
         }
 
-        pool_item_walk_on(room_user->player, item);
+        if (item->definition->behaviour->can_lay_on_top) {
+            char sit_height[18];
+            sprintf(sit_height, " %.2f null", (double)item->definition->top_height + 0.7);
+
+            room_user_add_status(room_user, "lay", sit_height, -1, "", -1, -1);
+            room_user_remove_status(room_user, "dance");
+
+            coord_set_rotation(room_user->position, item->position->rotation ,item->position->rotation);
+            needs_update = true;
+        }
+
+
+        pool_item_walk_on(room_user->entity, item);
     }
 
     room_user->needs_update = needs_update;
 }
 
+/**
+ * Carry a drink item.
+ *
+ * @param room_user the room user that will carry the drink item
+ * @param carry_id the carry id
+ * @param carry_name the carry name, will take precedence over the ID if it's not NULL
+ */
 void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name) {
     enum drink_type {
         DRINK,
@@ -419,7 +455,7 @@ void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name) 
     // Public rooms send the localised handitem name instead of the drink ID
     if (carry_name != NULL) {
         for (int i = 0; i <= 25; i++) {
-            char external_drink_key[10];
+            char external_drink_key[11];
             sprintf(external_drink_key, "handitem%u", i);
             char *external_drink_name = texts_manager_get_value_by_id(external_drink_key);
 
@@ -522,4 +558,14 @@ void room_user_remove_status(room_user *room_user, char *key) {
  */
 int room_user_has_status(room_user *room_user, char *key) {
     return hashtable_contains_key(room_user->statuses, key);
+}
+
+/**
+ * Resets the time before a user is kicked back to its
+ * original countdown.
+ *
+ * @param room_user the room user to reset for
+ */
+void room_user_reset_idle_timer(room_user *room_user) {
+    room_user->room_idle_timer = (int) (time(NULL) + 600); // Give the user 10 minutes to idle or they'll be kicked.
 }

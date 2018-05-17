@@ -2,8 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
-
-#include "shared.h"
+#include "dispatch.h"
 
 /*
  * Arguments we will send the to the login thread
@@ -13,7 +12,7 @@ typedef struct register_context_s {
     char password[255];
     char figure[255];
     char gender[2];
-    session *player;
+    entity *player;
 } register_context;
 
 /*
@@ -21,11 +20,11 @@ typedef struct register_context_s {
  */
 void *do_register(void *args) {
     register_context *ctx = (register_context *)args;
-    session *player = ctx->player;
+    entity *player = ctx->player;
 
     player_query_create(ctx->username, ctx->figure, ctx->gender, ctx->password);
 
-    pthread_exit((void*) 0);
+    free(ctx);
 }
 
 /*
@@ -34,7 +33,7 @@ void *do_register(void *args) {
  * @param username Login username
  * @param password Login password
  */
-void async_register(char *username, char *figure, char* gender, char *password, session *player) {
+void async_register(char *username, char *figure, char* gender, char *password, entity *player) {
     register_context *ctx = malloc(sizeof(register_context));
     strcpy(ctx->username, username);
     strcpy(ctx->password, password);
@@ -42,18 +41,10 @@ void async_register(char *username, char *figure, char* gender, char *password, 
     strcpy(ctx->gender, gender);
     ctx->player = player;
 
-    pthread_t register_thread;
-    pthread_attr_t attr;
-
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-
-    if (pthread_create(&register_thread, &attr, &do_register, (void*) ctx)) {
-        log_fatal("Uh-oh! Could not create thread for async register");
-    }
+    hh_dispatch(StorageDispatch, (hh_dispatch_cb_t) &do_register, (void *)ctx);
 }
 
-void REGISTER(session *player, incoming_message *message) {
+void REGISTER(entity *player, incoming_message *message) {
     im_read_b64_int(message);
     char *name = im_read_str(message);
 

@@ -50,10 +50,12 @@ void do_roller_task(room *room) {
         room_user *room_entity = item_tile->entity;
 
         if (room_entity != NULL) {
-            if (!hashtable_contains_key(blacklist, &room_entity->player->player_data->id)) {
-                hashtable_add(blacklist, &room_entity->player->player_data->id, room_entity);
+            if (room_entity->entity->entity_type == PLAYER_TYPE) {
+                if (!hashtable_contains_key(blacklist, &room_entity->entity->details->id)) {
+                    hashtable_add(blacklist, &room_entity->entity->details->id, room_entity);
 
-                do_roller_player(room, roller, room_entity);
+                    do_roller_player(room, roller, room_entity);
+                }
             }
         }
     }
@@ -79,6 +81,14 @@ bool do_roller_item(room *room, item *roller, item *item) {
     }
 
     if (item->position->z < roller->position->z) {
+        return false;
+    }
+
+    if (item->definition->behaviour->is_roller) {
+        return false;
+    }
+
+    if (item->definition->length > 1 || item->definition->width > 1) {
         return false;
     }
 
@@ -131,7 +141,7 @@ bool do_roller_item(room *room, item *roller, item *item) {
     item->position->y = to.y;
     item->position->z = to.z;
 
-    outgoing_message *om = om_create(230);
+    outgoing_message *om = om_create(230); // "Cf"
     om_write_int(om, from.x);
     om_write_int(om, from.y);
     om_write_int(om, to.x);
@@ -142,6 +152,7 @@ bool do_roller_item(room *room, item *roller, item *item) {
     sb_add_float_delimeter(om->sb, to.z, 2);
     om_write_int(om, roller->id);
     room_send(room, om);
+    om_cleanup(om);
 
     item_query_save(item);
     return true;
@@ -189,7 +200,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     room_entity->position->z = to.z;
     room_entity->needs_update = true;
 
-    outgoing_message *om = om_create(230);
+    outgoing_message *om = om_create(230); // "Cf"
     om_write_int(om, from.x);
     om_write_int(om, from.y);
     om_write_int(om, to.x);
@@ -201,6 +212,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     sb_add_float_delimeter(om->sb, from.z, 2);
     sb_add_float_delimeter(om->sb, to.z, 2);
     room_send(room, om);
+    om_cleanup(om);
 
     previous_tile->entity = NULL;
     next_tile->entity = room_entity;

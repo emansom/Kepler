@@ -23,5 +23,6 @@ char *item_definition_get_name(item_definition *definition, int special_sprite_i
 char *item_definition_get_desc(item_definition *definition, int special_sprite_id);
 char *item_definition_get_icon(item_definition *definition, int special_sprite_id);
 char *item_definition_get_text_key(item_definition *definition, int special_sprite_id);
+void item_definition_dispose(item_definition *def);
 
 #endif

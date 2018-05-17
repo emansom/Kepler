@@ -10,14 +10,14 @@
 
 #include "database/queries/rooms/room_query.h"
 
-void NAVIGATE(session *player, incoming_message *message) {
+void NAVIGATE(entity *player, incoming_message *message) {
     int hide_full = im_read_vl64(message);
     int category_id = im_read_vl64(message);
 
     room_category *parent_category = category_manager_get_by_id(category_id);
     outgoing_message *navigator = om_create(220); // "C\"
 
-    if (parent_category != NULL && category_has_access(parent_category, player->player_data->rank)) {
+    if (parent_category != NULL && category_has_access(parent_category, player->details->rank)) {
         om_write_int(navigator, hide_full);
         om_write_int(navigator, category_id);
 
@@ -58,7 +58,7 @@ void NAVIGATE(session *player, incoming_message *message) {
         for (size_t i = 0; i < list_size(rooms); i++) {
             room *instance;
             list_get_at(rooms, i, (void *) &instance);
-            room_append_data(instance, navigator, player->player_data->id);
+            room_append_data(instance, navigator, player);
         }
 
         List *child_categories = category_manager_get_by_parent_id(parent_category->id);
@@ -70,7 +70,7 @@ void NAVIGATE(session *player, incoming_message *message) {
             int current_visitors = category_manager_get_current_vistors(category->id);
             int max_visitors = category_manager_get_max_vistors(category->id);
 
-            if (category_has_access(category, player->player_data->rank)) {
+            if (category_has_access(category, player->details->rank)) {
                 om_write_int(navigator, category->id);
                 om_write_int(navigator, 0);
                 om_write_str(navigator, category->name);

@@ -13,8 +13,10 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 #include "game/room/room_manager.h"
+
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
+#include "game/room/mapping/room_model.h"
 
 #include "communication/messages/outgoing_message.h"
 #include "util/stringbuilder.h"
@@ -119,6 +121,12 @@ void item_update_entities(item *item, room *room, coord *old_position) {
     list_destroy(entities_to_update);
 }
 
+/**
+ * Override the old custom data on the item with new custom data.
+ *
+ * @param item the item to set the custom data for
+ * @param custom_data the new custom data
+ */
 void item_set_custom_data(item *item, char *custom_data) {
     if (item->custom_data != NULL) {
         free(item->custom_data);
@@ -128,6 +136,12 @@ void item_set_custom_data(item *item, char *custom_data) {
     item->custom_data = custom_data;
 }
 
+/**
+ * Broadcast custom data to the room, doesn't apply it to the item.
+ *
+ * @param item the item
+ * @param custom_data the custom data
+ */
 void item_broadcast_custom_data(item* item, char *custom_data) {
     outgoing_message *om;
 
@@ -147,9 +161,9 @@ void item_broadcast_custom_data(item* item, char *custom_data) {
 
     if (room != NULL) {
         room_send(room, om);
-    } else {
-        om_cleanup(om);
     }
+
+    om_cleanup(om);
 }
 
 /**
@@ -242,48 +256,6 @@ char *item_as_string(item *item) {
     return str;
 }
 
-/**
- * Get the string used for packets to append for the hand.
- *
- * @param item the item to append
- * @param strip_slot_id it's strip slot id
- * @return the string to append
- */
-char *item_strip_string(item *item, int strip_slot_id) {
-    stringbuilder *sb = sb_create();
-
-    sb_add_string_delimeter(sb, "SI", 30);
-    sb_add_int_delimeter(sb, item->id, 30);
-    sb_add_int_delimeter(sb, strip_slot_id, 30);
-
-    if (item->definition->behaviour->is_wall_item) {
-        sb_add_string_delimeter(sb, "I", 30);
-    } else {
-        sb_add_string_delimeter(sb, "S", 30);
-    }
-
-    sb_add_int_delimeter(sb, strip_slot_id, 30);
-    sb_add_string_delimeter(sb, item->definition->sprite, 30);
-
-    if (item->definition->behaviour->is_wall_item) {
-        sb_add_string_delimeter(sb, item->custom_data, 30);
-        sb_add_string_delimeter(sb, "0", 30);
-    } else {
-        sb_add_int_delimeter(sb, item->definition->length, 30);
-        sb_add_int_delimeter(sb, item->definition->width, 30);
-        sb_add_string_delimeter(sb, item->custom_data, 30);
-        sb_add_string_delimeter(sb, item->definition->colour, 30);
-        sb_add_string_delimeter(sb, "0", 30);
-        sb_add_string_delimeter(sb, item->definition->sprite, 30);
-    }
-
-    sb_add_string(sb, "/");
-
-    char *str = strdup(sb->data);
-    sb_cleanup(sb);
-
-    return str;
-}
 
 /**
  * Assign program, used for many public rooms.
@@ -311,6 +283,7 @@ void item_assign_program(item *room_item, char *program_state) {
             }
 
             room_send(room, om);
+            om_cleanup(om);
         }
 
     } else {
@@ -349,6 +322,14 @@ void item_dispose(item *item) {
 
     if (item->current_program_state != NULL) {
         free(item->current_program_state);
+    }
+
+    room *room = room_manager_get_by_id(item->room_id);
+
+    if (room != NULL && item->room_id > 0) {
+        if (room->room_data->owner_id == 0) {
+            item_definition_dispose(item->definition); // Destroy if public item since every public item has their own definition
+        }
     }
 
     free(item);

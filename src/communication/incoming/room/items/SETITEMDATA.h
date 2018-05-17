@@ -1,20 +1,12 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/inventory/inventory.h"
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/room/manager/room_item_manager.h"
-
-#include "game/items/item.h"
-
-void SETITEMDATA(session *player, incoming_message *message) {
+void SETITEMDATA(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
 
-    if (!room_has_rights(player->room_user->room, player->player_data->id)) {
+    if (!room_has_rights(player->room_user->room, player->details->id)) {
         return;
     }
 
@@ -55,7 +47,7 @@ void SETITEMDATA(session *player, incoming_message *message) {
             postit_content = strdup(msg);
         }
 
-        filter_vulnerable_characters(&postit_content, true);
+        filter_vulnerable_characters(&postit_content, false);
 
         sb = sb_create();
         sb_add_string(sb, colour);
@@ -71,7 +63,7 @@ void SETITEMDATA(session *player, incoming_message *message) {
         item_broadcast_custom_data(item, item->custom_data);
         item_query_save(item);
     } else {
-        send_alert(player, "No scripters allowed, bye bye!");
+        player_send_alert(player, "No scripters allowed, bye bye!");
         player_disconnect(player);
     }
 

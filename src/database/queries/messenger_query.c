@@ -88,8 +88,7 @@ List *messenger_query_get_requests(int user_id) {
             break;
         }
 
-        int friend_id = sqlite3_column_int(stmt, 0);
-        messenger_entry *friend = messenger_entry_create(friend_id);
+        messenger_entry *friend = messenger_entry_create(sqlite3_column_int(stmt, 0));
         list_add(requests, (void*)friend);
     }
 

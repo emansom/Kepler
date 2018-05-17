@@ -10,6 +10,7 @@
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
+#include "game/room/manager/room_entity_manager.h"
 
 #include "game/items/item.h"
 
@@ -21,7 +22,7 @@
 
 #include "shared.h"
 
-void process_user(session *player);
+void process_user(entity *player);
 
 /**
  * Walk task cyle that is called every 500ms
@@ -36,7 +37,7 @@ void walk_task(room *room) {
     outgoing_message *status_update = om_create(34); // "@b"
 
     for (size_t i = 0; i < list_size(users); i++) {
-        session *room_player;
+        entity *room_player;
         list_get_at(users, i, (void*)&room_player);
 
         if (room_player == NULL) {
@@ -58,9 +59,9 @@ void walk_task(room *room) {
 
     if (user_updates > 0) {
         room_send(room, status_update);
-    } else {
-        om_cleanup(status_update);
     }
+
+    om_cleanup(status_update);
 
     list_destroy(users);
 }
@@ -70,7 +71,7 @@ void walk_task(room *room) {
  *
  * @param player the player struct to process
  */
-void process_user(session *player) {
+void process_user(entity *player) {
     room_user *room_entity = (room_user*)player->room_user;
 
     if (room_entity->is_walking) {

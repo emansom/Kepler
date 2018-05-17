@@ -1,7 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-void GENERATEKEY(session *player, incoming_message *message) {
+void GENERATEKEY(entity *player, incoming_message *message) {
     outgoing_message *key_data = om_create(257);
     om_write_int(key_data, 6);
     om_write_int(key_data, 0);

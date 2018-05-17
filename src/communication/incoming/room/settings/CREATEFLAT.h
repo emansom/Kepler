@@ -1,12 +1,9 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "game/room/room.h"
-
 #include "database/queries/rooms/room_user_query.h"
 
-void CREATEFLAT(session *player, incoming_message *message) {
+void CREATEFLAT(entity *player, incoming_message *message) {
     // Client [0.0.0.0] incoming data: 29 / @]/first floor/xddd/model_a/open/1
     char *content = im_get_content(message);
     char *floor_setting = get_argument(content, "/", 0);
@@ -37,7 +34,7 @@ void CREATEFLAT(session *player, incoming_message *message) {
         return;
     }
 
-    int room_id = room_query_create(player->player_data->id, room_name, room_select_model, room_show_name);
+    int room_id = room_query_create(player->details->id, room_name, room_select_model, room_show_name);
     room_manager_add(room_id);
 
     outgoing_message *om = om_create(59); // "@{"

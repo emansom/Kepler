@@ -11,6 +11,7 @@
 #include "communication/incoming/login/TRY_LOGIN.h"
 #include "communication/incoming/login/GDATE.h"
 #include "communication/incoming/login/SSO.h"
+#include "communication/incoming/login/PONG.h"
 
 // Register
 #include "communication/incoming/register/APPROVENAME.h"
@@ -25,6 +26,8 @@
 #include "communication/incoming/user/GET_CREDITS.h"
 #include "communication/incoming/user/UPDATE.h"
 #include "communication/incoming/user/UPDATE_ACCOUNT.h"
+#include "communication/incoming/user/GET_CLUB.h"
+#include "communication/incoming/user/SUBSCRIBE_CLUB.h"
 
 // Messenger
 #include "communication/incoming/messenger/MESSENGERINIT.h"
@@ -38,6 +41,7 @@
 #include "communication/incoming/messenger/MESSENGER_SENDMSG.h"
 #include "communication/incoming/messenger/MESSENGER_GETMESSAGES.h"
 #include "communication/incoming/messenger/MESSENGER_MARKREAD.h"
+#include "communication/incoming/messenger/FOLLOW_FRIEND.h"
 
 // Navigator
 #include "communication/incoming/navigator/NAVIGATE.h"
@@ -51,7 +55,7 @@
 
 // Room
 #include "communication/incoming/room/GETINTERST.h"
-#include "communication/incoming/room/room_directory.h"
+#include "communication/incoming/room/ROOM_DIRECTORY.h"
 #include "communication/incoming/room/TRYFLAT.h"
 #include "communication/incoming/room/GOTOFLAT.h"
 #include "communication/incoming/room/GETROOMAD.h"
@@ -81,8 +85,8 @@
 #include "communication/incoming/room/user/CARRYDRINK.h"
 #include "communication/incoming/room/user/USER_START_TYPING.h"
 #include "communication/incoming/room/user/USER_CANCEL_TYPING.h"
-#include "communication/incoming/room/user/REMOVERIGHTS.h"
-#include "communication/incoming/room/user/ASSIGNRIGHTS.h"
+#include "communication/incoming/room/user/DANCE.h"
+#include "communication/incoming/room/user/STOP.h"
 
 // Room settings
 #include "communication/incoming/room/settings/CREATEFLAT.h"
@@ -105,6 +109,14 @@
 #include "communication/incoming/room/items/G_IDATA.h"
 #include "communication/incoming/room/items/SETITEMDATA.h"
 
+// Moderation
+#include "communication/incoming/room/moderation/REMOVERIGHTS.h"
+#include "communication/incoming/room/moderation/ASSIGNRIGHTS.h"
+
+// Badges
+#include "communication/incoming/room/badges/GETAVAILABLEBADGES.h"
+#include "communication/incoming/room/badges/SETBADGE.h"
+
 // Catalogue
 #include "communication/incoming/catalogue/GCIX.h"
 #include "communication/incoming/catalogue/GCAP.h"
@@ -114,8 +126,16 @@
 // Inventory
 #include "communication/incoming/inventory/GETSTRIP.h"
 
-// Only allow these headers to be processed if the session is not logged in.
-int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204 };
+// Trax
+#include "communication/incoming/room/trax/GET_SONG_LIST.h"
+
+// Trade
+#include "communication/incoming/room/trade/TRADE_OPEN.h"
+#include "communication/incoming/room/trade/TRADE_CLOSE.h"
+#include "communication/incoming/room/trade/TRADE_ADDITEM.h"
+
+// Only allow these headers to be processed if the entity is not logged in.
+int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
 
 /**
  * Assigns all header handlers to this array
@@ -126,6 +146,7 @@ void message_handler_init() {
     message_requests[202] = GENERATEKEY;
     message_requests[4] = TRY_LOGIN;
     message_requests[49] = GDATE;
+    message_requests[196] = PONG;
 
     if (configuration_get_bool("sso.tickets.enabled")) {
         message_requests[204] = SSO;
@@ -145,6 +166,10 @@ void message_handler_init() {
     message_requests[44] = UPDATE;
     message_requests[149] = UPDATE_ACCOUNT;
 
+    // Club
+    message_requests[26] = GET_CLUB;
+    message_requests[190] = SUBSCRIBE_CLUB;
+
     // Messenger
     message_requests[12] = MESSENGERINIT;
     message_requests[41] = FINDUSER;
@@ -157,6 +182,7 @@ void message_handler_init() {
     message_requests[33] = MESSENGER_SENDMSG;
     message_requests[191] = MESSENGER_GETMESSAGES;
     message_requests[32] = MESSENGER_MARKREAD;
+    message_requests[262] = FOLLOW_FRIEND;
 
     // Navigator
     message_requests[150] = NAVIGATE;
@@ -170,7 +196,7 @@ void message_handler_init() {
 
     // Room
     message_requests[182] = GETINTERST;
-    message_requests[2] = room_directory;
+    message_requests[2] = ROOM_DIRECTORY;
     message_requests[57] = TRYFLAT; // @y1052/123
     message_requests[59] = GOTOFLAT;
     message_requests[126] = GETROOMAD;
@@ -200,8 +226,8 @@ void message_handler_init() {
     message_requests[80] = CARRYDRINK;
     message_requests[317] = USER_START_TYPING;
     message_requests[318] = USER_CANCEL_TYPING;
-    message_requests[96] = ASSIGNRIGHTS;
-    message_requests[97] = REMOVERIGHTS;
+    message_requests[93] = DANCE;
+    message_requests[88] = STOP;
 
     // Room settings
     message_requests[21] = GETFLATINFO;
@@ -215,12 +241,21 @@ void message_handler_init() {
     // Room items
     message_requests[90] = PLACESTUFF;
     message_requests[73] = MOVESTUFF;
+    message_requests[67] = ADDSTRIPITEM;
     message_requests[99] = REMOVESTUFF;
     message_requests[85] = REMOVEITEM;
     message_requests[74] = SETSTUFFDATA;
     message_requests[183] = CONVERT_FURNI_TO_CREDITS;
     message_requests[83] = G_IDATA;
     message_requests[84] = SETITEMDATA;
+
+    // Moderation
+    message_requests[96] = ASSIGNRIGHTS;
+    message_requests[97] = REMOVERIGHTS;
+
+    // Badges
+    message_requests[157] = GETAVAILABLEBADGES;
+    message_requests[158] = SETBADGE;
 
     // Catalogue
     message_requests[101] = GCIX;
@@ -230,8 +265,15 @@ void message_handler_init() {
 
     // Inventory
     message_requests[65] = GETSTRIP;
-    message_requests[67] = ADDSTRIPITEM;
     message_requests[66] = FLATPROPBYITEM;
+
+    // Trax
+    message_requests[244] = GET_SONG_LIST;
+
+    // Trade
+    message_requests[71] = TRADE_OPEN;
+    message_requests[72] = TRADE_ADDITEM;
+    message_requests[70] = TRADE_CLOSE;
 }
 
 /**
@@ -239,10 +281,9 @@ void message_handler_init() {
  * @param im the incoming message struct
  * @param player the player struct
  */
-void message_handler_invoke(incoming_message *im, session *player) {
+void message_handler_invoke(incoming_message *im, entity *player) {
     if (configuration_get_bool("debug")) {
-        char *preview = strdup(im->data);
-        replace_vulnerable_characters(&preview, true, '|');
+        char *preview = replace_unreadable_characters(im->data);
         log_debug("Client [%s] incoming data: %i / %s", player->ip_address, im->header_id, preview);
         free(preview);
     }

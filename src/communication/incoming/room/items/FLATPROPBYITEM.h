@@ -1,23 +1,14 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/inventory/inventory.h"
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/items/item.h"
-
-#include "database/queries/rooms/room_query.h"
-#include "database/queries/items/item_query.h"
-
-void FLATPROPBYITEM(session *player, incoming_message *message) {
+void FLATPROPBYITEM(entity *player, incoming_message *message) {
     if (player->room_user->room == NULL) {
         return;
     }
 
     room *room = player->room_user->room;
 
-    if (!room_has_rights(room, player->player_data->id)) {
+    if (!room_has_rights(room, player->details->id)) {
         return;
     }
 
@@ -52,6 +43,7 @@ void FLATPROPBYITEM(session *player, incoming_message *message) {
     sb_add_string(om->sb, "/");
     sb_add_string(om->sb, item->custom_data);
     room_send(room, om);
+    om_cleanup(om);
 
     list_remove(inv->items, item, NULL);
 
@@ -59,7 +51,7 @@ void FLATPROPBYITEM(session *player, incoming_message *message) {
     item_query_delete(item->id);
 
     cleanup:
-        free(content);
-		free(str_mode);
-		free(str_id);
+    free(content);
+    free(str_mode);
+    free(str_id);
 }

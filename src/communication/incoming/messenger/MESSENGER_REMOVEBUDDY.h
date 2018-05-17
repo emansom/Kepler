@@ -8,7 +8,7 @@
 
 #include "database/queries/messenger_query.h"
 
-void MESSENGER_REMOVEBUDDY(session *player, incoming_message *message) {
+void MESSENGER_REMOVEBUDDY(entity *player, incoming_message *message) {
     im_read(message, 1); // garbage data
 
     int friend_id = im_read_vl64(message);
@@ -23,12 +23,12 @@ void MESSENGER_REMOVEBUDDY(session *player, incoming_message *message) {
     player_send(player, response);
     om_cleanup(response);
 
-    session *friend = player_manager_find_by_id(friend_id);
+    entity *friend = player_manager_find_by_id(friend_id);
 
     if (friend != NULL) {    
         response = om_create(138); // "BJ"
         om_write_int(response, 1);
-        om_write_int(response, player->player_data->id);
+        om_write_int(response, player->details->id);
         player_send(friend, response);
         om_cleanup(response);
 
@@ -37,6 +37,6 @@ void MESSENGER_REMOVEBUDDY(session *player, incoming_message *message) {
 
     messenger_remove_friend(player->messenger, friend_id);
     
-    messenger_query_delete_friend(player->player_data->id, friend_id);
-    messenger_query_delete_friend(friend_id, player->player_data->id);
+    messenger_query_delete_friend(player->details->id, friend_id);
+    messenger_query_delete_friend(friend_id, player->details->id);
 }

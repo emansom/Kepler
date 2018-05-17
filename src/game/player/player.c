@@ -11,6 +11,7 @@
 
 #include "game/player/player.h"
 #include "game/player/player_manager.h"
+#include "game/player/player_refresh.h"
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
@@ -29,13 +30,15 @@
  * Creates a new player
  * @return player struct
  */
-session *player_create(void *socket, char *ip_address) {
-    session *player = malloc(sizeof(session));
+entity *player_create(void *socket, char *ip_address) {
+    entity *player = malloc(sizeof(entity));
+    player->entity_type = PLAYER_TYPE;
     player->stream = socket;
     player->disconnected = false;
     player->ip_address = strdup(ip_address);
-    player->player_data = NULL;
+    player->details = NULL;
     player->logged_in = false;
+    player->ping_safe = true;
     player->room_user = NULL;
     player->messenger = NULL;
     player->inventory = NULL;
@@ -46,8 +49,8 @@ session *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-player_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, char *last_online) {
-    player_data *data = malloc(sizeof(player_data));
+entity_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, unsigned long last_online, unsigned long club_subscribed, unsigned long club_expiration, char *active_badge) {
+    entity_data *data = malloc(sizeof(entity_data));
     data->id = id;
     data->username = strdup(username);
     data->password = strdup(password);
@@ -60,7 +63,10 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
     data->tickets = tickets;
     data->film = film;
     data->rank = rank;
-    data->last_online = strtoul(last_online, NULL, 10);
+    data->last_online = last_online;
+    data->club_subscribed = (time_t)club_subscribed;
+    data->club_expiration = (time_t)club_expiration;
+    data->active_badge = strdup(active_badge);
     return data;
 }
 
@@ -69,7 +75,7 @@ player_data *player_create_data(int id, char *username, char *password, char *fi
  *
  * @param p the player struct
  */
-void player_login(session *player) {
+void player_login(entity *player) {
     outgoing_message *om;
 
     player->room_user = room_user_create(player);
@@ -80,10 +86,10 @@ void player_login(session *player) {
     inventory_init(player);
 
     player_query_save_last_online(player);
-    room_manager_add_by_user_id(player->player_data->id);
+    room_manager_add_by_user_id(player->details->id);
 
     om = om_create(2); // @B
-    om_write_str(om, "default\2fuse_login\2fuse_buy_credits\2fuse_trade\2fuse_room_queue_default\2fuse_performance_panel");
+    fuserights_append(player->details->rank, om);
     player_send(player, om);
     om_cleanup(om);
 
@@ -93,13 +99,25 @@ void player_login(session *player) {
 
     if (configuration_get_bool("welcome.message.enabled")) {
         char *welcome_template = configuration_get_string("welcome.message.content");
-        char *welcome_custom = replace(welcome_template, "%username%", player->player_data->username);
+        char *welcome_custom = replace(welcome_template, "%username%", player->details->username);
 
-        send_alert(player, welcome_custom);
+        player_send_alert(player, welcome_custom);
         free(welcome_custom);
     }
 
+    player->ping_safe = true;
     player->logged_in = true;
+}
+
+/**
+ * Get if player has a fuse right or not.
+ *
+ * @param player the player to check for
+ * @param fuse_right the fuse right to check
+ * @return true, if successful
+ */
+bool player_has_fuse(entity *player, char *fuse_right) {
+    return fuserights_has_permission(player->details->rank, fuse_right);
 }
 
 /**
@@ -107,7 +125,7 @@ void player_login(session *player) {
  *
  * @param p the player struct
  */
-void player_disconnect(session *p) {
+void player_disconnect(entity *p) {
     if (p == NULL || p->disconnected) {
         return;
     }
@@ -121,14 +139,13 @@ void player_disconnect(session *p) {
  * @param p the player struct
  * @param om the outgoing message
  */
-void player_send(session *p, outgoing_message *om) {
+void player_send(entity *p, outgoing_message *om) {
     if (om == NULL || p == NULL || p->disconnected) {
         return;
     }
 
     if (configuration_get_bool("debug")) {
-        char *preview = strdup(om->sb->data);
-        replace_vulnerable_characters(&preview, true, '|');
+        char *preview = replace_unreadable_characters(om->sb->data);
         log_debug("Client [%s] outgoing data: %i / %s", p->ip_address, om->header_id, preview);
         free(preview);
     }
@@ -152,67 +169,10 @@ void player_send(session *p, outgoing_message *om) {
 }
 
 /**
- * Sends the key of an error, whose description value is inside the external_texts of the client.
- *
- * @param p the player
- * @param error the error message
- */
-void send_localised_error(session *p, char *error) {
-    outgoing_message *om = om_create(33); // @a
-    sb_add_string(om->sb, error);
-    player_send(p, om);
-    om_cleanup(om);
-}
-
-/**
- * Send an alert to the player
- *
- * @param p the player
- * @param text the alert message
- */
-void send_alert(session *p, char *text) {
-    outgoing_message *alert = om_create(139); // BK
-    om_write_str(alert, text);
-    player_send(p, alert);
-    om_cleanup(alert);
-}
-
-/**
- * Send credit amount to player.
- *
- * @param player the player to send to
- */
-void session_send_credits(session *player) {
-    char credits_string[10 + 1]; ///"num + /0";
-    sprintf(credits_string, "%i", player->player_data->credits);
-
-    outgoing_message *credits = om_create(6); // "@F"
-    om_write_str(credits, credits_string);
-    sb_add_string(credits->sb, ".0");
-    player_send(player, credits);
-    om_cleanup(credits);
-}
-
-/**
- * Send ticket amount to player.
- *
- * @param player the player to send to
- */
-void session_send_tickets(session *player) {
-    char credits_string[10 + 1]; ///"num + /0";
-    sprintf(credits_string, "%i", player->player_data->tickets);
-
-    outgoing_message *credits = om_create(124); // "A|"
-    sb_add_string(credits->sb, credits_string);
-    player_send(player, credits);
-    om_cleanup(credits);
-}
-
-/**
  * Called when a connection is closed
  * @param player the player struct
  */
-void player_cleanup(session *player) {
+void player_cleanup(entity *player) {
     if (player == NULL) {
         return;
     }
@@ -225,10 +185,10 @@ void player_cleanup(session *player) {
         }
     }
 
-    if (player->player_data != NULL) {
+    if (player->details != NULL) {
         player_query_save_last_online(player);
 
-        List *rooms = room_manager_get_by_user_id(player->player_data->id);
+        List *rooms = room_manager_get_by_user_id(player->details->id);
 
         for (size_t i = 0; i < list_size(rooms); i++) {
             room *room;
@@ -243,7 +203,7 @@ void player_cleanup(session *player) {
     }
 
     if (player->room_user != NULL) {
-        room_user_cleanup(player->room_user);
+        room_user_reset(player->room_user, true);
         player->room_user = NULL;
     }
 
@@ -257,16 +217,17 @@ void player_cleanup(session *player) {
         player->inventory = NULL;
     }
 
-    if (player->player_data != NULL) {
-        player_data_cleanup(player->player_data);
-        player->player_data = NULL;
+    if (player->details != NULL) {
+        player_data_cleanup(player->details);
+        player->details = NULL;
     }
 
     free(player->ip_address);
     free(player->stream);
+    free(player);
 }
 
-void player_data_cleanup(player_data *player_data) {
+void player_data_cleanup(entity_data *player_data) {
     free(player_data->username);
     free(player_data->password);
     free(player_data->figure);

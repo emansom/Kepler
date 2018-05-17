@@ -2,11 +2,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
-
-/*
- * HH_DISPATCH
- * @Author Leon Hartley
- */
+#include <main.h>
 
 int runner_count = 0;
 hh_dispatch_loop_group_t game_dispatch;
@@ -43,8 +39,13 @@ void dispatch_initialise_loop_thread(void *data) {
             .data = NULL
     };
 
+    uv_timer_t timer;
+
     uv_async_init(loop->loop, &async, &dispatch_exec_callback);
     uv_async_send(&async);
+
+    uv_timer_init(loop->loop, &timer);
+    uv_timer_start(&timer, (uv_timer_cb) &dispatch_wake, 5000, 5000);
 
     int r = uv_run(loop->loop, UV_RUN_DEFAULT);
 }

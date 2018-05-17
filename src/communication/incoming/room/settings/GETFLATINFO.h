@@ -1,9 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-
-void GETFLATINFO(session *player, incoming_message *message) {
+void GETFLATINFO(entity *player, incoming_message *message) {
     char *content = im_get_content(message);
     bool dispose_after = false;
 
@@ -28,7 +26,7 @@ void GETFLATINFO(session *player, incoming_message *message) {
     om_write_int(flat_info, room->room_data->accesstype);
     om_write_int(flat_info, room->room_data->id);
 
-    if (player->player_data->id == room->room_data->owner_id || room->room_data->show_name == 1) {
+    if (player->details->id == room->room_data->owner_id || room->room_data->show_name == 1) {
         om_write_str(flat_info, room->room_data->owner_name);
     } else {
         om_write_str(flat_info, "-");

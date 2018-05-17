@@ -6,7 +6,7 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
-void WALK(session *player, incoming_message *im) {
+void WALK(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }
@@ -18,6 +18,6 @@ void WALK(session *player, incoming_message *im) {
     int x = im_read_b64_int(im);
     int y = im_read_b64_int(im);
     
-    walk_to((room_user*) player->room_user, x, y);
+    walk_to(player->room_user, x, y);
     room_user_reset_idle_timer(player->room_user);
 }

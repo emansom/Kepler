@@ -6,8 +6,8 @@
 #include "util/stringbuilder.h"
 #include "database/queries/rooms/room_favourites_query.h"
 
-void GETFVRF(session *player, incoming_message *message) {
-    List *favourite_rooms = room_query_favourites(player->player_data->id);
+void GETFVRF(entity *player, incoming_message *message) {
+    List *favourite_rooms = room_query_favourites(player->details->id);
 
     outgoing_message *om = om_create(61); // "@}"
     sb_add_string(om->sb, "HHJ\2HHH");
@@ -16,7 +16,7 @@ void GETFVRF(session *player, incoming_message *message) {
     for (size_t i = 0; i < list_size(favourite_rooms); i++) {
         room *room;
         list_get_at(favourite_rooms, i, (void *) &room);
-        room_append_data(room, om, player->player_data->id);
+        room_append_data(room, om, player);
     }
 
     player_send(player, om);

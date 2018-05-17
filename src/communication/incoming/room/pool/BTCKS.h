@@ -2,9 +2,8 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
-#include "game/room/pool/pool_handler.h"
 
-void BTCKS(session *player, incoming_message *message) {
+void BTCKS(entity *player, incoming_message *message) {
     int mode = im_read_vl64(message);
     char *tickets_for = im_read_str(message);
 
@@ -23,7 +22,7 @@ void BTCKS(session *player, incoming_message *message) {
         cost_credits = 6;
     }
 
-    if (player->player_data->credits < cost_credits) {
+    if (player->details->credits < cost_credits) {
         outgoing_message *om = om_create(68); // "AD"
         player_send(player, om);
         om_cleanup(om);
@@ -38,31 +37,31 @@ void BTCKS(session *player, incoming_message *message) {
         goto cleanup;
     }
 
-    player_data *data = player_query_data(player_query_id(tickets_for));
+    entity_data *data = player_query_data(player_query_id(tickets_for));
     data->tickets += tickets_amount;
     player_query_save_tickets(data->id, data->tickets);
 
-    session *ticket_receiver = player_manager_find_by_name(tickets_for);
+    entity *ticket_receiver = player_manager_find_by_name(tickets_for);
 
     if (ticket_receiver != NULL) {
-        if (ticket_receiver->player_data->id != player->player_data->id) {
+        if (ticket_receiver->details->id != player->details->id) {
             char alert[80];
-            sprintf(alert, "%s has gifted you tickets!", player->player_data->username);
-            send_alert(ticket_receiver, alert);
+            sprintf(alert, "%s has gifted you tickets!", player->details->username);
+            player_send_alert(ticket_receiver, alert);
         }
 
-        ticket_receiver->player_data->tickets = data->tickets;
-        session_send_tickets(ticket_receiver);
+        ticket_receiver->details->tickets = data->tickets;
+        player_refresh_tickets(ticket_receiver);
     }
 
-    player->player_data->credits -= cost_credits;
+    player->details->credits -= cost_credits;
     player_query_save_currency(player);
-    session_send_credits(player);
+    player_refresh_credits(player);
 
     room_user_reset_idle_timer(player->room_user);
     player_data_cleanup(data);
 
     cleanup:
-        free(tickets_for);
+    free(tickets_for);
 
 }

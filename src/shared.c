@@ -62,20 +62,24 @@ void filter_vulnerable_characters(char **str, bool remove_newline) {
     }
 }
 
-void replace_vulnerable_characters(char **str, bool remove_newline, char new_char) {
-    char *body = *str;
-
+char *replace_unreadable_characters(char *body) {
     if (body == NULL) {
-        return;
+        return NULL;
     }
 
-    for (int i = 0; i < strlen(body); i++) {
-        char ch = body[i];
+    char *to_return = strdup(body);
 
-        if (ch == 1 || ch == 2 || ch == 9 || ch == 10 || ch == 12 || (remove_newline && ch == 13)) {
-            body[i] = new_char; //remove char completely
-        }
+    for (int i = 0; i < 14; i++) {
+        char char_represent[5];
+        sprintf(char_represent, "{%i}", i);
+
+        char *temp = replace_char(to_return, (char) i, char_represent);
+
+        free(to_return);
+        to_return = temp;
     }
+
+    return to_return;
 }
 
 char *get_argument(char *str, char *delim, int index) {

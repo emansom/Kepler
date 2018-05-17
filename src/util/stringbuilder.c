@@ -152,6 +152,10 @@ void sb_add_wired_delimeter(stringbuilder *sb, int integer, char delim) {
  * @param sb the stringbuilder
  */
 void sb_cleanup(stringbuilder *sb) {
+    if (sb == NULL) {
+        return;
+    }
+
     free(sb->data);
     free(sb);
 }

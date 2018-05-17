@@ -36,8 +36,8 @@ messenger_entry *messenger_entry_create(int user_id) {
  * @param response the packet to append the data to
  */
 void messenger_entry_serialise(int user_id, outgoing_message *response) {
-    player_data *data = player_manager_get_data_by_id(user_id);
-    session *search_player = player_manager_find_by_id(user_id);
+    entity_data *data = player_manager_get_data_by_id(user_id);
+    entity *search_player = player_manager_find_by_id(user_id);
 
     if (data != NULL) {
         om_write_int(response, data->id);
@@ -52,7 +52,7 @@ void messenger_entry_serialise(int user_id, outgoing_message *response) {
             if (search_player->room_user->room != NULL) {
                 room *room = room_manager_get_by_id(search_player->room_user->room_id);
 
-                if (list_size(room->room_data->model_data->public_items) > 0) { // model is a public rooms model
+                if (room->room_data->owner_id == 0) { // model is a public rooms model
                     om_write_str(response, room->room_data->name);
                 } else {
                     om_write_str(response, "Floor1a");

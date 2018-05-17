@@ -156,4 +156,6 @@ void catalogue_manager_dispose() {
     }
 
     list_destroy(global.catalogue_manager.pages);
+    list_destroy(global.catalogue_manager.packages);
+    list_destroy(global.catalogue_manager.items);
 }

@@ -1,11 +1,11 @@
-#include <pthread.h>
-
 #include "log.h"
 
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
+#include "game/player/player_refresh.h"
 #include "database/queries/player_query.h"
+#include "dispatch.h"
 
 /*
  * Arguments we will send the to the login thread
@@ -13,7 +13,7 @@
 typedef struct login_context_s {
     char username[255];
     char password[255];
-    session *player;
+    entity *player;
 } login_context;
 
 /*
@@ -21,21 +21,21 @@ typedef struct login_context_s {
  */
 void *do_login(void *args) {
     login_context *ctx = (login_context *)args;
-    session *player = ctx->player;
+    entity *player = ctx->player;
 
     int player_id = player_query_login(ctx->username, ctx->password);
 
     if (player_id == -1) {
-        send_localised_error(player, "login incorrect");
+        player_send_localised_error(player, "login incorrect");
     } else {
-        player_data *data = player_query_data(player_id);
-        player->player_data = data;
+        entity_data *data = player_query_data(player_id);
+        player->details = data;
 
         player_manager_destroy_session_by_id(player_id);
         player_login(player);
     }
 
-    pthread_exit((void*) 0);
+    free(ctx);
 }
 
 /*
@@ -44,24 +44,16 @@ void *do_login(void *args) {
  * @param username Login username
  * @param password Login password
  */
-void async_login(char *username, char *password, session *player) {
+void async_login(char *username, char *password, entity *player) {
     login_context *ctx = malloc(sizeof(login_context));
     strcpy(ctx->username, username);
     strcpy(ctx->password, password);
     ctx->player = player;
 
-    pthread_t login_thread;
-    pthread_attr_t attr;
-
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-
-    if (pthread_create(&login_thread, &attr, &do_login, (void*) ctx)) {
-        log_fatal("Uh-oh! Could not create thread for async login");
-    }
+    hh_dispatch(StorageDispatch, &do_login, (void*) ctx);
 }
 
-void TRY_LOGIN(session *player, incoming_message *message) {
+void TRY_LOGIN(entity *player, incoming_message *message) {
     char *username = im_read_str(message);
     char *password = im_read_str(message);
 

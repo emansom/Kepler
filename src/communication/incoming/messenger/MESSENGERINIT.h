@@ -9,17 +9,17 @@
 
 #include "list.h"
 
-void MESSENGERINIT(session *p, incoming_message *message) {
-    if (p->player_data == NULL) {
+void MESSENGERINIT(entity *p, incoming_message *message) {
+    if (p->details == NULL) {
         return;
     }
     
     outgoing_message *friends_list = om_create(12); // "@L"
-    om_write_str(friends_list, p->player_data->console_motto);
+    om_write_str(friends_list, p->details->console_motto);
     om_write_int(friends_list, 600);
     om_write_int(friends_list, 200);
     om_write_int(friends_list, 600);
-    om_write_int(friends_list, list_size(p->messenger->friends)); // Buddy list count
+    om_write_int(friends_list, (int) list_size(p->messenger->friends)); // Buddy list count
 
     for (int i = 0; i < list_size(p->messenger->friends); i++) {
         messenger_entry *friend;

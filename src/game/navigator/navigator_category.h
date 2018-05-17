@@ -19,6 +19,6 @@ typedef struct room_category_s {
 
 room_category *category_create(int, int, char*, int, int, int, int);
 int category_has_access(room_category *category, int rank);
-void category_serialise(outgoing_message*, room*, room_category_type, session*);
+void category_serialise(outgoing_message*, room*, room_category_type, entity*);
 
 #endif

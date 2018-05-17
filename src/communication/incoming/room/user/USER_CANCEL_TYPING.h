@@ -8,7 +8,7 @@
 #include "game/room/room.h"
 #include "game/room/room_user.h"
 
-void USER_CANCEL_TYPING(session *player, incoming_message *im) {
+void USER_CANCEL_TYPING(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL || !player->room_user->is_typing) {
         return;
     }
@@ -23,4 +23,5 @@ void USER_CANCEL_TYPING(session *player, incoming_message *im) {
     om_write_int(om, player->room_user->instance_id);
     om_write_int(om, 0);
     room_send(player->room_user->room, om);
+    om_cleanup(om);
 }

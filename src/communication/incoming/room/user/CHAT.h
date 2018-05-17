@@ -1,15 +1,7 @@
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/pathfinder/coord.h"
-#include "game/player/player.h"
-
-#include "game/room/room.h"
-#include "game/room/room_user.h"
-
-#include "list.h"
-
-void CHAT(session *player, incoming_message *im) {
+void CHAT(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;
     }
@@ -20,13 +12,14 @@ void CHAT(session *player, incoming_message *im) {
         filter_vulnerable_characters(&message, true);
 
         // Process command
-        if (room_user_process_command((room_user *) player->room_user, message)) {
+        if (room_user_process_command(player->room_user, message)) {
             if (player->room_user->is_typing) {
                 // Send cancel typing packet to room
                 outgoing_message *om = om_create(361); // "Ei"
                 om_write_int(om, player->room_user->instance_id);
                 om_write_int(om, 0);
                 room_send(player->room_user->room, om);
+                om_cleanup(om);
 
                 player->room_user->is_typing = false;
             }
@@ -35,7 +28,7 @@ void CHAT(session *player, incoming_message *im) {
         }
 
         room_user_reset_idle_timer(player->room_user);
-        room_user_show_chat((room_user *) player->room_user, message, false);
+        room_user_show_chat(player->room_user, message, false);
 
         room *room = player->room_user->room;
 
@@ -43,7 +36,7 @@ void CHAT(session *player, incoming_message *im) {
         int source_y = player->room_user->position->y;
 
         for (size_t i = 0; i < list_size(room->users); i++) {
-            session *room_player;
+            entity *room_player;
             list_get_at(room->users, i, (void *) &room_player);
 
             int dist_x = abs(source_x - room_player->room_user->position->x) - 1;
@@ -88,5 +81,5 @@ void CHAT(session *player, incoming_message *im) {
     }
 
     cleanup:
-        free(message);
+    free(message);
 }

@@ -8,13 +8,10 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake" CAC
 
 INCLUDE_DIRECTORIES(src)
 
-find_library(Libuv REQUIRED)
-
 # Find libsodium on this system
 #include(${PROJECT_DIR}/lib/libsodium/contrib/Findsodium.cmake)
 
 # Incldude library directories
-include_directories(${PROJECT_DIR}/lib/sqlite3/)
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/cthreadpool/)
 include_directories(${PROJECT_DIR}/lib/log/src/)
@@ -34,6 +31,7 @@ file(GLOB configuration ${PROJECT_DIR}/util/configuration/*.c)
 file(GLOB communication ${PROJECT_DIR}/communication/*.c)
 file(GLOB messages ${PROJECT_DIR}/communication/messages/*.c)
 file(GLOB server ${PROJECT_DIR}/server/*.c)
+file(GLOB rcon ${PROJECT_DIR}/server/rcon/*.c)
 file(GLOB encoding ${PROJECT_DIR}/util/encoding/*.c)
 file(GLOB database ${PROJECT_DIR}/database/*.c)
 file(GLOB pathfinder ${PROJECT_DIR}/game/pathfinder/*.c)
@@ -45,9 +43,11 @@ file(GLOB queries_rooms ${PROJECT_DIR}/database/queries/rooms/*.c)
 
 # Kepler managers
 file(GLOB game ${PROJECT_DIR}/game/*.c)
+file(GLOB club ${PROJECT_DIR}/game/club/*.c)
+file(GLOB moderation ${PROJECT_DIR}/game/moderation/*.c)
 file(GLOB players ${PROJECT_DIR}/game/player/*.c)
 file(GLOB room ${PROJECT_DIR}/game/room/*.c)
-file(GLOB room_pool ${PROJECT_DIR}/game/room/pool/*.c)
+file(GLOB room_public ${PROJECT_DIR}/game/room/public_rooms/*.c)
 file(GLOB room_manager ${PROJECT_DIR}/game/room/manager/*.c)
 file(GLOB room_mapping ${PROJECT_DIR}/game/room/mapping/*.c)
 file(GLOB navigator ${PROJECT_DIR}/game/navigator/*.c)
@@ -66,7 +66,6 @@ file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 
 add_executable(${EXECUTABLE_NAME}
         ${hh_dispatch}
-        ${sqlite3}
         ${collections}
         ${log}
 
@@ -76,6 +75,7 @@ add_executable(${EXECUTABLE_NAME}
         ${messages}
         ${communication}
         ${server}
+        ${rcon}
         ${encoding}
         ${database}
         ${pathfinder}
@@ -85,6 +85,8 @@ add_executable(${EXECUTABLE_NAME}
         ${queries_rooms}
 
         ${game}
+        ${moderation}
+        ${club}
         ${players}
         ${navigator}
         ${items}
@@ -92,16 +94,16 @@ add_executable(${EXECUTABLE_NAME}
         ${items_definition}
         ${tasks}
         ${room}
-        ${room_pool}
+        ${room_public}
         ${room_mapping}
         ${room_manager}
         ${messenger}
         ${catalogue}
         ${texts})
 
-find_package (Threads)
 find_package (Libuv)
 find_package (Libsodium)
 
-target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(${EXECUTABLE_NAME} uv pthread sodium)
+target_link_libraries(${EXECUTABLE_NAME} uv)
+target_link_libraries(${EXECUTABLE_NAME} sodium)
+target_link_libraries(${EXECUTABLE_NAME} sqlite3)

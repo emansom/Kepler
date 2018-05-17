@@ -1,15 +1,10 @@
-#include "list.h"
-
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
-#include "game/player/player.h"
-#include "game/player/player_manager.h"
-
 #include "database/queries/player_query.h"
 
-void FINDUSER(session *user, incoming_message *message) {
-    if (user->player_data == NULL) {
+void FINDUSER(entity *user, incoming_message *message) {
+    if (user->details == NULL) {
         return;
     }
 
