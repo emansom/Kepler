@@ -27,7 +27,6 @@ void SETBADGE(entity *player, incoming_message *im) {
 
         // Return if player doesn't own this badge
         if (array_contains_value(badges, new_badge, CC_CMP_STRING) == 0) {
-            log_debug("User doesn't have badge %s", new_badge);
             return;
         }
 
@@ -40,6 +39,4 @@ void SETBADGE(entity *player, incoming_message *im) {
 
     update_badge(player->room_user);
     player_query_save_active_badge(player);
-
-    log_debug("Player has badge and saved to database %s", player->details->active_badge);
 }
