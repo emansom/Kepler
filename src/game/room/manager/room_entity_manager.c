@@ -1,10 +1,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "thpool.h"
 #include "log.h"
 #include "list.h"
 #include "hashtable.h"
-#include "thpool.h"
 
 #include "database/queries/rooms/room_vote_query.h"
 

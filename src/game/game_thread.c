@@ -10,15 +10,15 @@
 #include "game_thread.h"
 #include "shared.h"
 
-void game_thread_init(pthread_t *thread) {
-    if (pthread_create(thread, NULL, &game_thread_loop, NULL) != 0) {
+void game_thread_init(uv_thread_t *thread) {
+    if (uv_thread_create(thread, game_thread_loop, NULL) != 0) {
         log_fatal("Uh-oh! Unable to spawn game thread");
     } else {
         log_info("Game thread successfully started!");
     }
 }
 
-void *game_thread_loop(void *arguments) {
+void game_thread_loop(void *arguments) {
     unsigned long tick = 0;
 
     while (!global.is_shutdown) {
@@ -28,7 +28,6 @@ void *game_thread_loop(void *arguments) {
     }
 
     printf("Game thread closed..\n");
-    return NULL;
 }
 
 void game_thread_task(unsigned long ticks) {
