@@ -10,6 +10,7 @@
 
 #include "game/room/room.h"
 #include "game/room/room_user.h"
+#include "game/room/manager/room_entity_manager.h"
 
 #include "game/items/item.h"
 

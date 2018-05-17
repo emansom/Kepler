@@ -8,7 +8,7 @@ typedef struct coord_s coord;
 typedef struct outgoing_message_s outgoing_message;
 
 int create_instance_id(room_user*);
-room_user *get_room_user_by_instance_id(room*, int);
+room_user *room_user_get_by_instance_id(room *, int);
 
 void room_enter(room*, entity*, coord *destination);
 void room_leave(room*, entity*, bool hotel_view);

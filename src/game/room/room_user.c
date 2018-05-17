@@ -18,6 +18,7 @@
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_tile.h"
 #include "game/room/mapping/room_map.h"
+#include "game/room/manager/room_trade_manager.h"
 #include "game/room/public_rooms/pool_handler.h"
 
 #include "game/items/item.h"
@@ -60,7 +61,6 @@ void room_user_reset(room_user *room_user, bool cleanup) {
     room_user_remove_status(room_user, "lay");
     room_user_remove_status(room_user, "flatctrl");
     room_user_remove_status(room_user, "dance");
-    room_user_remove_status(room_user, "trd");
 
     // Carry items
     room_user_remove_status(room_user, "carryf");
@@ -77,7 +77,9 @@ void room_user_reset(room_user *room_user, bool cleanup) {
 
     room_user->room_look_at_timer = -1;
     room_user->lido_vote = -1;
+
     room_user_reset_idle_timer(room_user);
+    trade_manager_reset(room_user);
 
     if (room_user->next != NULL) {
         free(room_user->next);

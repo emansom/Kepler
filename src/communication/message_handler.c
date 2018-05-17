@@ -129,6 +129,11 @@
 // Trax
 #include "communication/incoming/room/trax/GET_SONG_LIST.h"
 
+// Trade
+#include "communication/incoming/room/trade/TRADE_OPEN.h"
+#include "communication/incoming/room/trade/TRADE_CLOSE.h"
+#include "communication/incoming/room/trade/TRADE_ADDITEM.h"
+
 // Only allow these headers to be processed if the entity is not logged in.
 int packet_whitelist[] = { 206, 202, 4, 49, 42, 203, 197, 146, 46, 43, 204, 196 };
 
@@ -264,6 +269,11 @@ void message_handler_init() {
 
     // Trax
     message_requests[244] = GET_SONG_LIST;
+
+    // Trade
+    message_requests[71] = TRADE_OPEN;
+    message_requests[72] = TRADE_ADDITEM;
+    message_requests[70] = TRADE_CLOSE;
 }
 
 /**

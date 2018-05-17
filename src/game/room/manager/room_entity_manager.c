@@ -37,7 +37,7 @@
 int create_instance_id(room_user *room_user) {
     int instance_id = 0;
 
-    while (get_room_user_by_instance_id((room*) room_user->room, instance_id) != NULL) {
+    while (room_user_get_by_instance_id((room *) room_user->room, instance_id) != NULL) {
         instance_id++;
     }
 
@@ -51,7 +51,7 @@ int create_instance_id(room_user *room_user) {
  * @param instance_id the instance id to search for
  * @return the room user struct
  */
-room_user *get_room_user_by_instance_id(room *room, int instance_id) {
+room_user *room_user_get_by_instance_id(room *room, int instance_id) {
     for (size_t i = 0; i < list_size(room->users); i++) {
         entity *room_player;
         list_get_at(room->users, i, (void *) &room_player);

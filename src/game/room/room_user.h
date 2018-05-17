@@ -1,6 +1,8 @@
 #ifndef ROOM_USER_H
 #define ROOM_USER_H
 
+#define MAX_TRADE_ITEMS 65
+
 #include <stdbool.h>
 #include <ctype.h>
 
@@ -27,10 +29,18 @@ typedef struct room_user_s {
     int needs_update;
     HashTable *statuses;
     bool walking_lock;
+
+    // Pool
     bool is_diving;
     int lido_vote;
     int room_idle_timer;
     int room_look_at_timer;
+
+    // Trading
+    room_user *trade_partner;
+    int trade_items[MAX_TRADE_ITEMS];
+    int trade_item_count;
+    bool trade_accept;
 } room_user;
 
 typedef struct room_user_status_s {
@@ -55,8 +65,6 @@ void room_user_look(room_user *room_user, coord *towards);
 bool room_user_process_command(room_user *room_user, char *text);
 void room_user_invoke_item(room_user *room_user);
 void room_user_clear_walk_list(room_user*);
-void append_user_list(outgoing_message*, entity*);
-void append_user_status(outgoing_message*, entity*);
 void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name);
 void room_user_reset(room_user*, bool cleanup);
 void room_user_add_status(room_user*,char*,char*,int,char*,int,int);
