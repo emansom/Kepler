@@ -4,7 +4,6 @@
 #include "log.h"
 #include "list.h"
 #include "hashtable.h"
-#include "thpool.h"
 
 #include "database/queries/rooms/room_vote_query.h"
 
@@ -115,7 +114,7 @@ void room_enter(room *room, entity *player, coord *destination) {
         room->room_schedule_job->request = room_task;
         room->room_schedule_job->room_id = room->room_id;
         room->room_schedule_job->millis = 500;
-        thpool_add_work(global.thread_manager.pool, (void *) do_room_task, room->room_schedule_job);
+        //thpool_add_work(global.thread_manager.pool, (void *) do_room_task, room->room_schedule_job);
     }
 
     /*outgoing_message *om = om_create(73); // "AI"

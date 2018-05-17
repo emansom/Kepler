@@ -11,6 +11,6 @@ void rcon_alloc_buffer(uv_handle_t* handle, size_t  size, uv_buf_t* buf);
 void rcon_on_connection_close(uv_handle_t *handle);
 void rcon_send(uv_stream_t *handle, char *data);
 void rcon_on_write(uv_write_t* req, int status);
-void start_rcon(server_settings *settings, pthread_t *rcon_thread);
+void start_rcon(server_settings *settings, uv_thread_t *rcon_thread);
 
 #endif

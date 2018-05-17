@@ -6,7 +6,6 @@
 #include "shared.h"
 
 #include "list.h"
-#include "thpool.h"
 #include "log.h"
 
 #include "server/server_listener.h"
@@ -21,8 +20,8 @@
 #include "util/configuration/configuration.h"
 
 int main(void) {
-    signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
+    //signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
+    //signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
@@ -68,7 +67,7 @@ int main(void) {
     room_manager_load_connected_rooms();
 
     server_settings rcon_settings, server_settings;
-    pthread_t mus_thread, server_thread, game_thread;
+    uv_thread_t mus_thread, server_thread, game_thread;
 
     strcpy(rcon_settings.ip, configuration_get_string("rcon.ip.address"));
     rcon_settings.port = configuration_get_int("rcon.port");
@@ -145,7 +144,7 @@ void dispose_program() {
     log_info("Shutting down server!");
     global.is_shutdown = true;
 
-    thpool_destroy(global.thread_manager.pool);
+    //thpool_destroy(global.thread_manager.pool);
     player_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();

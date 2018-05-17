@@ -5,8 +5,6 @@
 
 #include "game/room/room.h"
 
-#include "thpool.h"
-
 void WAVE(entity *player, incoming_message *im) {
     if (player->room_user->room == NULL) {
         return;

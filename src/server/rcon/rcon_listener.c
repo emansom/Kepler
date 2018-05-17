@@ -129,7 +129,7 @@ void rcon_on_new_connection(uv_stream_t *server, int status) {
  *
  * @param arguments the server settings argument
  */
-void *listen_rcon(void *arguments)  {
+void listen_rcon(void *arguments)  {
     server_settings *args = (server_settings *)arguments;
     global.rcon_loop = uv_loop_new();
     uv_loop_t *loop = global.rcon_loop;
@@ -144,8 +144,6 @@ void *listen_rcon(void *arguments)  {
 
     uv_run(loop, UV_RUN_DEFAULT);
     uv_loop_close(loop);
-
-    return NULL;
 }
 
 /**
@@ -154,10 +152,10 @@ void *listen_rcon(void *arguments)  {
  * @param settings the server settings
  * @param rcon_thread the thread to initialise
  */
-void start_rcon(server_settings *settings, pthread_t *rcon_thread) {
+void start_rcon(server_settings *settings, uv_thread_t *rcon_thread) {
     log_info("Starting RCON on port %i...", settings->port);
 
-    if (pthread_create(rcon_thread, NULL, &listen_rcon, (void*) settings) != 0) {
+    if (uv_thread_create(rcon_thread, listen_rcon, (void*) settings) != 0) {
         log_fatal("Uh-oh! Unable to spawn rcon thread");
     } else {
         log_info("Rcon successfully started!", settings->port);
