@@ -1,3 +1,5 @@
+#include "log.h"
+
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
@@ -24,6 +26,7 @@ void SETBADGE(entity *player, incoming_message *im) {
 
         // Return if player doesn't own this badge
         if (array_contains(badges, new_badge) == 0) {
+            log_debug("User doesn't have badge %s", new_badge);
             return;
         }
 
@@ -36,4 +39,6 @@ void SETBADGE(entity *player, incoming_message *im) {
 
     update_badge(player->room_user);
     player_query_save_active_badge(player);
+
+    log_debug("Player has badge and saved to database %s", player->details->active_badge);
 }
