@@ -15,7 +15,6 @@
 #include "game/texts/external_texts_manager.h"
 #include "game/navigator/navigator_category_manager.h"
 
-#include "util/threading.h"
 #include "util/configuration/configuration.h"
 
 #define PREFIX "Kepler"
@@ -24,7 +23,6 @@
 typedef struct sqlite3 sqlite3;
 
 typedef struct server_s {
-    struct thread_manager thread_manager;
     struct player_manager player_manager;
     struct room_manager room_manager;
     struct room_model_manager room_model_manager;
@@ -53,5 +51,6 @@ bool is_numeric(const char*);
 bool has_numbers(const char*);
 bool has_allowed_characters(char *, char *);
 bool starts_with(const char *pre, const char *str);
+size_t getline(char **lineptr, size_t *n, FILE *stream);
 
 #endif

@@ -90,6 +90,7 @@ void server_on_read(uv_stream_t *handle, ssize_t nread, const uv_buf_t *buf) {
 
             int message_length = base64_decode(recv_length) + 1;
 
+
             if (message_length < 0 || message_length > 5120) {
                 continue;
             }
@@ -162,7 +163,7 @@ void server_on_new_connection(uv_stream_t *server, int status) {
  *
  * @param arguments the server settings argument
  */
-void *listen_server(void *arguments)  {
+void listen_server(void *arguments)  {
     server_settings *args = (server_settings *)arguments;
     uv_loop_t *loop = uv_default_loop();
 
@@ -176,8 +177,6 @@ void *listen_server(void *arguments)  {
 
     uv_run(loop, UV_RUN_DEFAULT);
     uv_loop_close(loop);
-
-    return NULL;
 }
 
 /**
@@ -186,10 +185,10 @@ void *listen_server(void *arguments)  {
  * @param settings the server settings
  * @param server_thread the thread to initialise
  */
-void start_server(server_settings *settings, pthread_t *server_thread) {
+void start_server(server_settings *settings, uv_thread_t *server_thread) {
     log_info("Starting server on port %i...", settings->port);
 
-    if (pthread_create(server_thread, NULL, &listen_server, (void*) settings) != 0) {
+    if (uv_thread_create(server_thread, &listen_server, (void*) settings) != 0) {
         log_fatal("Uh-oh! Unable to spawn server thread");
     } else {
         log_info("Server successfully started!", settings->port);

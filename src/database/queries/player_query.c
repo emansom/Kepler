@@ -275,7 +275,7 @@ void query_session_save_looks(session *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", -1, &stmt, 0);\
+    int status = sqlite3_prepare_v2(conn, "UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 

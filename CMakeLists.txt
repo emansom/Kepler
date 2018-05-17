@@ -4,24 +4,28 @@ project(Kepler C)
 set(EXECUTABLE_NAME Kepler)
 set(CMAKE_C_STANDARD 11)
 set(PROJECT_DIR src)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_LIST_DIR}/cmake" CACHE STRING "Modules for CMake" FORCE)
 
 INCLUDE_DIRECTORIES(src)
 
+find_library(Libuv REQUIRED)
+
 # Find libsodium on this system
-# include(${PROJECT_DIR}/lib/libsodium/contrib/Findsodium.cmake)
+#include(${PROJECT_DIR}/lib/libsodium/contrib/Findsodium.cmake)
 
 # Incldude library directories
 include_directories(${PROJECT_DIR}/lib/sqlite3/)
 include_directories(${PROJECT_DIR}/lib/collections/)
 include_directories(${PROJECT_DIR}/lib/cthreadpool/)
 include_directories(${PROJECT_DIR}/lib/log/src/)
-link_directories(/usr/local/lib/)
+include_directories(${PROJECT_DIR}/lib/dispatch)
 
 # Load source files for libraries
 file(GLOB sqlite3 ${PROJECT_DIR}/lib/sqlite3/*.c)
 file(GLOB collections ${PROJECT_DIR}/lib/collections/*.c)
 file(GLOB cthreadpool ${PROJECT_DIR}/lib/cthreadpool/*.c)
 file(GLOB log ${PROJECT_DIR}/lib/log/src/log.c)
+file(GLOB hh_dispatch ${PROJECT_DIR}/lib/dispatch/*.c)
 
 # Kepler classes
 file(GLOB src ${PROJECT_DIR}/*.c)
@@ -58,12 +62,12 @@ file(GLOB texts ${PROJECT_DIR}/game/texts/*.c)
 file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 
 # Enable color in log.c library
-add_definitions(-DLOG_USE_COLOR)
+#add_definitions(-DLOG_USE_COLOR)
 
 add_executable(${EXECUTABLE_NAME}
+        ${hh_dispatch}
         ${sqlite3}
         ${collections}
-        ${cthreadpool}
         ${log}
 
         ${src}
@@ -96,6 +100,8 @@ add_executable(${EXECUTABLE_NAME}
         ${texts})
 
 find_package (Threads)
+find_package (Libuv)
+find_package (Libsodium)
 
 target_link_libraries(${EXECUTABLE_NAME} ${CMAKE_THREAD_LIBS_INIT})
-target_link_libraries(${EXECUTABLE_NAME} dl uv pthread sodium)
+target_link_libraries(${EXECUTABLE_NAME} uv pthread sodium)

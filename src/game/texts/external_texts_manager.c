@@ -3,6 +3,7 @@
 #include "log.h"
 
 #include "external_texts_manager.h"
+#include <stdio.h>
 
 void texts_manager_parse(char*);
 

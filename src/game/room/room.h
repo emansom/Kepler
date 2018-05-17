@@ -2,6 +2,7 @@
 #define ROOM_H
 
 #include <stdbool.h>
+#include "lib/dispatch/dispatch.h"
 
 typedef struct room_user_s room_user;
 typedef struct coord_s coord;
@@ -40,7 +41,7 @@ typedef struct room_s {
     int room_id;
     struct room_data_s *room_data;
     room_map *room_map;
-    runnable *room_schedule_job;
+    hh_dispatch_timer_t *process_timer;
     List *users;
     List *items;
     List *rights;

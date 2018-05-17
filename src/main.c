@@ -17,16 +17,12 @@
 #include "game/player/player.h"
 #include "game/pathfinder/pathfinder.h"
 
-#include "util/threading.h"
 #include "util/configuration/configuration.h"
 
 #include "util/encoding/base64encoding.h"
 #include "util/encoding/vl64encoding.h"
 
 int main(void) {
-    signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    signal(SIGINT, (__sighandler_t) exit_program); // Handle cleanup on Ctrl-C
-
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
 
@@ -39,6 +35,8 @@ int main(void) {
     #else
         log_set_level(LOG_INFO);
     #endif
+
+    hh_dispatch_initialise(2, 3, 2);
 
     if (configuration_get_bool("debug")) {
         log_set_level(LOG_DEBUG);
@@ -106,7 +104,6 @@ int main(void) {
     item_manager_init();
     catalogue_manager_init();
     message_handler_init();
-    create_thread_pool();
 
     pthread_t game_thread;
     game_thread_init(&game_thread);
@@ -115,7 +112,7 @@ int main(void) {
     strcpy(settings->ip, configuration_get_string("server.ip.address"));
     settings->port = configuration_get_int("server.port");
 
-    pthread_t server_thread;
+    uv_thread_t server_thread;
     start_server(settings, &server_thread);
 
     while (true) {
@@ -178,7 +175,7 @@ void exit_program() {
 void dispose_program() {
     log_info("Shutting down server!");
 
-    thpool_destroy(global.thread_manager.pool);
+//    thpool_destroy(global.thread_manager.pool);
 
     player_manager_dispose();
     room_manager_dispose();
