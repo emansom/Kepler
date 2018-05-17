@@ -10,17 +10,11 @@ void TRADE_OPEN(entity *player, incoming_message *message) {
 
     char *content = im_get_content(message);
 
-    if (content == NULL) {
-        return;
-    }
-
-    char *str_instance_id = get_argument(content, " ", 0);
-
-    if (str_instance_id == NULL || !is_numeric(str_instance_id)) {
+    if (content == NULL || !is_numeric(content)) {
         goto cleanup;
     }
 
-    int instance_id = (int)strtol(str_instance_id, NULL, 10);
+    int instance_id = (int)strtol(content, NULL, 10);
 
     room_user *trade_user = room_user_get_by_instance_id(player->room_user->room, instance_id);
 
@@ -39,7 +33,9 @@ void TRADE_OPEN(entity *player, incoming_message *message) {
     trade_user->needs_update = true;
     trade_user->trade_partner = player->room_user;
 
+    trade_manager_refresh_boxes(player->room_user);
+    trade_manager_refresh_boxes(trade_user);
+
     cleanup:
     free(content);
-    free(str_instance_id);
 }
