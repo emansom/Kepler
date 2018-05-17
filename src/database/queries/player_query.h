@@ -19,6 +19,7 @@ void player_query_save_motto(entity *player);
 void player_query_save_currency(entity *player);
 void player_query_save_tickets(int id, int tickets);
 Array *player_query_badges(int id);
+void player_query_save_active_badge(entity *player);
 void player_query_save_club_information(entity *player);
 
 #endif
