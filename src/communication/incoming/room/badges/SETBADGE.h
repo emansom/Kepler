@@ -15,10 +15,18 @@ void update_badge(room_user *room_user) {
 }
 
 void SETBADGE(entity *player, incoming_message *im) {
-    char *new_badge = im_read_str(im); // TODO: check if user owns badge
+    char *new_badge = im_read_str(im);
     int show_badge = im_read_vl64(im);
 
     if (show_badge == 1) {
+        // TODO: validate if user actually has badge
+        Array *badges = player_query_badges(player->details->id);
+
+        // Return if player doesn't own this badge
+        if (array_contains(badges, new_badge) == 0) {
+            return;
+        }
+
         player->details->active_badge = strdup(new_badge);
     } else {
         player->details->active_badge = "";
@@ -27,6 +35,5 @@ void SETBADGE(entity *player, incoming_message *im) {
     free(new_badge);
 
     update_badge(player->room_user);
-
-    // TODO: save to database
+    player_query_save_active_badge(player);
 }

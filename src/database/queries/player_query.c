@@ -453,6 +453,29 @@ Array *player_query_badges(int id) {
 }
 
 /**
+ * Save active badge to database
+ *
+ * @param player the player to save the active badge for
+ */
+void player_query_save_active_badge(entity *player) {
+    sqlite3 *conn = global.DB;
+    sqlite3_stmt *stmt;
+
+    int status = sqlite3_prepare_v2(conn, "UPDATE users SET active_badge = ? WHERE id = ?", -1, &stmt, 0);
+
+    db_check_prepare(status, conn);
+
+    if (status == SQLITE_OK) {
+        sqlite3_bind_text(stmt, 1, player->details->active_badge, (int) strlen(player->details->active_badge), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 2, player->details->id);
+
+        db_check_step(sqlite3_step(stmt), conn, stmt);
+    }
+
+    db_check_finalize(sqlite3_finalize(stmt), conn);
+}
+
+/**
  * Save club information for player
  *
  * @param player the player to save the club information for
