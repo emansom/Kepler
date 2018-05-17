@@ -60,6 +60,7 @@ void room_user_reset(room_user *room_user, bool cleanup) {
     room_user_remove_status(room_user, "lay");
     room_user_remove_status(room_user, "flatctrl");
     room_user_remove_status(room_user, "dance");
+    room_user_remove_status(room_user, "trd");
 
     // Carry items
     room_user_remove_status(room_user, "carryf");
