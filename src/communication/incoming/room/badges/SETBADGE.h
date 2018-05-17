@@ -1,4 +1,5 @@
 #include "log.h"
+#include "array.h"
 
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
@@ -25,7 +26,7 @@ void SETBADGE(entity *player, incoming_message *im) {
         Array *badges = player_query_badges(player->details->id);
 
         // Return if player doesn't own this badge
-        if (array_contains(badges, &new_badge) == 0) {
+        if (array_contains_value(badges, new_badge, CC_CMP_STRING) == 0) {
             log_debug("User doesn't have badge %s", new_badge);
             return;
         }
