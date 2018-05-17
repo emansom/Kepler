@@ -3,7 +3,7 @@
 #include <unistd.h>
 
 #include "log.h"
-//#include "thpool.h"
+#include "thpool.h"
 #include "hashtable.h"
 #include "list.h"
 
@@ -47,11 +47,11 @@ void do_room_task(runnable *run) {
 
     run->request(room);
     usleep(run->millis * 1000);
-    //thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
+    thpool_add_work(global.thread_manager.pool, (void *) do_room_task, run);
 }
 /**
  * Create a thread pool with 32 threads allocated.
  */
 void create_thread_pool() {
-    //global.thread_manager.pool = thpool_init(32);
+    global.thread_manager.pool = thpool_init(32);
 }
