@@ -92,3 +92,28 @@ void coord_get_front(coord *start_coord, coord *new_coord) {
         new_coord->x--;
     }
 }
+
+
+/**
+ * Get the square left of the square specified parameter, and set the
+ * variables in the second parameter.
+ *
+ * @param start_coord the first square
+ * @param new_coord the new square
+ */
+void coord_get_left(coord *start_coord, coord *new_coord) {
+    new_coord->x = start_coord->x;
+    new_coord->y = start_coord->y;
+    new_coord->z = start_coord->z;
+    new_coord->rotation = start_coord->rotation;
+
+    if (new_coord->rotation == 0) {
+        new_coord->x++;
+    } else if (new_coord->rotation == 2) {
+        new_coord->y--;
+    } else if (new_coord->rotation == 4) {
+        new_coord->x--;
+    } else if (new_coord->rotation == 6) {
+        new_coord->y--;
+    }
+}
