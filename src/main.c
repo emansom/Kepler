@@ -21,7 +21,7 @@
 
 int main(void) {
     //signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    //signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
+    signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
@@ -79,54 +79,11 @@ int main(void) {
     start_rcon(&rcon_settings, &mus_thread);
     start_server(&server_settings, &server_thread);
 
-
-    while (true) {
-        char command[COMMAND_INPUT_LENGTH];
-
-        if (!fgets(command, COMMAND_INPUT_LENGTH, stdin)) {
-            continue;
-        }
-
-        char *filter_command = (char *) command;
-        filter_vulnerable_characters(&filter_command, true); // Strip unneeded characters
-
-        if (handle_command(filter_command)) {
-            break;
-        }
-    }
+    uv_thread_join(&mus_thread);
+    uv_thread_join(&server_thread);
+    uv_thread_join(&game_thread);
 
     return EXIT_SUCCESS;
-}
-
-bool handle_command(char *command) {
-    if (starts_with(command, "query") || starts_with(command, "sql")) {
-        int amount_to_strip = -1;
-
-        if (starts_with(command, "sql")) {
-            amount_to_strip = 4; // "sql " to remove
-        } else {
-            amount_to_strip = 6; // "query "  to remove
-        }
-
-        char *query_to_run = (command + amount_to_strip);
-
-        if (strlen(query_to_run) <= 0) {
-            log_error("The query was empty!\n");
-            return false;
-        }
-
-        int modified_rows = db_execute_query(query_to_run);
-        log_info("Executed query with modified rows: %i\n", modified_rows);
-
-        return false;
-    }
-
-    if (strcmp(command, "quit") == 0) {
-        dispose_program();
-        return true;
-    }
-
-    return false;
 }
 
 /**
