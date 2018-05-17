@@ -13,7 +13,7 @@ typedef struct outgoing_message_s outgoing_message;
 typedef struct hashtable_s HashTable;
 
 typedef struct room_user_s {
-    entity *entity;
+    struct entity_s *entity;
     int authenticate_id;
     int instance_id;
     int room_id;
