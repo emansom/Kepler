@@ -14,7 +14,6 @@
  * @param room the room for the task to run inside
  */
 void room_task(room *room) {
-    printf("Hmm\n");
     if(room == NULL) {
         // Room disposed, we assume the task has been stopped on dispose
         return;
