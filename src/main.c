@@ -22,6 +22,8 @@
 int main(void) {
     //signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
     signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
+    signal(SIGTERM, exit_program); // Handle graceful shutdown (sent by Docker)
+    signal(SIGKILL, exit_program); // Handle forceful shutdown (sent by Docker)
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
