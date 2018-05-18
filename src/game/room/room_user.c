@@ -342,7 +342,7 @@ bool room_user_process_command(room_user *room_user, char *text) {
     // TODO: better way to handle commands
     if (strcmp(text, ":about") == 0) {
         player_send_alert(room_user->entity,
-                          "Kepler server\n\nContributors:\n - Hoshiko:\n - Romuald\n - Glaceon\n\nMade by Quackster");
+                          "Kepler server\n\nContributors:\n - Hoshiko\n - Leon\n - Romuald\n - Glaceon\n\nMade by Quackster");
         return true;
     }
 
