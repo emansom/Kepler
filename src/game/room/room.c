@@ -21,6 +21,8 @@
 #include "database/queries/player_query.h"
 #include "database/queries/rooms/room_rights_query.h"
 
+#include "util/stringbuilder.h"
+
 /**
  * Create a room instance.
  *
@@ -435,4 +437,19 @@ void room_dispose(room *room, bool force_dispose) {
     }
 
     free(room);
+}
+
+outgoing_message *room_lingo_command(char *command) {
+    // A]2147483647{2}spotlight{2}SSIIH-1.00{2}{2}{2}HvoiceSpeak("test"){2}{1}
+    outgoing_message *om = om_create(93); // "Bf"
+    om_write_str(om, "2147483647");
+    om_write_str(om, "spotlight");
+    om_write_str(om, "SSIIH-1.00");
+    om_write_str(om, "");
+    om_write_str(om, "");
+    sb_add_string(om->sb, "H");
+    om_write_str(om, command);
+    om_finalise(om);
+
+    return om;
 }

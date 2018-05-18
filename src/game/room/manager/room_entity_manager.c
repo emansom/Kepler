@@ -217,6 +217,11 @@ void room_enter(room *room, entity *player, coord *destination) {
         player_send(player, om);
         om_cleanup(om);
     }
+
+   /* om = room_lingo_command("voiceSpeak(\"HELLO NOOB\")");
+    player_send(player, om);
+    om_cleanup(om);*/
+
 }
 
 /**
