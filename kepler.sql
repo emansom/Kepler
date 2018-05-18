@@ -225,8 +225,6 @@ INSERT INTO `rooms` VALUES (1052,0,12,'Lower Hallways III','hallway','hallway3',
 INSERT INTO `rooms` VALUES (1053,0,12,'Lower Hallways IV','hallway','hallway5','hh_room_hallway',0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1054,0,12,'Lower Hallways V','hallway','hallway4','hh_room_hallway',0,0,1,0,0,'',0,25);
 INSERT INTO `rooms` VALUES (1055,0,12,'Upper Hallways','hallway_ii','hallway9','hh_room_hallway',0,0,1,0,0,'',0,25);
-INSERT INTO `rooms` VALUES (1057,1,112,'Awesome Room','','model_g',NULL,801,601,1,0,0,'123',0,25);
-INSERT INTO `rooms` VALUES (1058,2,2,'Lol amirite??','','model_a',NULL,0,0,1,0,0,'',0,25);
 CREATE TABLE IF NOT EXISTS `rank_fuserights` (
 	`min_rank`	INTEGER NOT NULL,
 	`fuseright`	TEXT NOT NULL
@@ -1909,27 +1907,6 @@ CREATE TABLE IF NOT EXISTS `items` (
 	`rotation`	INTEGER,
 	`custom_data`	TEXT
 );
-INSERT INTO `items` VALUES (5,1,1057,1110,'7','12',0,'',2,'FALSE');
-INSERT INTO `items` VALUES (6,1,1057,1019,'5','9',1,'',6,'');
-INSERT INTO `items` VALUES (7,1,1057,1135,'10','10',0,'',0,'');
-INSERT INTO `items` VALUES (8,1,1057,1002,'2','5',1,'',0,'');
-INSERT INTO `items` VALUES (10,1,1057,1005,'10','12',0,'',0,'');
-INSERT INTO `items` VALUES (11,1,1057,1005,'10','8',0,'',4,'');
-INSERT INTO `items` VALUES (12,1,1057,1030,'9','2',0,'',0,'');
-INSERT INTO `items` VALUES (13,1,1057,2409,'0','0',0,':w=6,4 l=50,66 l',0,'9');
-INSERT INTO `items` VALUES (14,1,1057,2409,'0','0',0,':w=8,1 l=61,109 r',0,'10');
-INSERT INTO `items` VALUES (15,1,1057,1103,'7','6',0,'',0,'');
-INSERT INTO `items` VALUES (16,1,1057,1017,'2','7',1,'',0,'');
-INSERT INTO `items` VALUES (17,1,1057,1011,'7','2',0,'',0,'');
-INSERT INTO `items` VALUES (18,1,1057,1106,'7','2',0.5,'',0,'');
-INSERT INTO `items` VALUES (20,1,1057,2360,'0','0',0,':w=1,6 l=29,60 l',0,'FFFF33 Alex''s RoomCome ''ere for some keks and stuff and things- Quackster');
-INSERT INTO `items` VALUES (22,1,1057,1189,'11','11',1,'',0,'');
-INSERT INTO `items` VALUES (23,1,1057,1127,'2','8',1,'',0,'2');
-INSERT INTO `items` VALUES (43,2,0,1618,'0','0',0,'',0,'');
-INSERT INTO `items` VALUES (44,2,0,1618,'0','0',0,'',0,'');
-INSERT INTO `items` VALUES (45,2,0,1138,'0','0',0,'',0,'');
-INSERT INTO `items` VALUES (46,2,0,1224,'0','0',0,'',0,'');
-INSERT INTO `items` VALUES (47,1,0,2409,'0','0',0,'',0,'2');
 CREATE TABLE IF NOT EXISTS `catalogue_pages` (
 	`id`	INTEGER,
 	`order_id`	INTEGER,
