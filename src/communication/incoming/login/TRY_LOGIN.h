@@ -5,6 +5,7 @@
 
 #include "game/player/player_refresh.h"
 #include "database/queries/player_query.h"
+#include "dispatch.h"
 
 /*
  * Arguments we will send the to the login thread
@@ -35,7 +36,6 @@ void *do_login(void *args) {
     }
 
     free(ctx);
-    pthread_exit((void*) 0);
 }
 
 /*
@@ -50,15 +50,7 @@ void async_login(char *username, char *password, entity *player) {
     strcpy(ctx->password, password);
     ctx->player = player;
 
-    pthread_t login_thread;
-    pthread_attr_t attr;
-
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-
-    if (pthread_create(&login_thread, &attr, &do_login, (void*) ctx)) {
-        log_fatal("Uh-oh! Could not create thread for async login");
-    }
+    hh_dispatch(StorageDispatch, &do_login, (void*) ctx);
 }
 
 void TRY_LOGIN(entity *player, incoming_message *message) {

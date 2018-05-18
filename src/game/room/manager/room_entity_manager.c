@@ -1,10 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "thpool.h"
 #include "log.h"
+
 #include "list.h"
 #include "hashtable.h"
+#include "dispatch.h"
 
 #include "database/queries/rooms/room_vote_query.h"
 
@@ -24,7 +25,6 @@
 #include "game/room/manager/room_entity_manager.h"
 
 #include "util/stringbuilder.h"
-#include "util/threading.h"
 
 #include "communication/messages/outgoing_message.h"
 
@@ -57,7 +57,7 @@ room_user *room_user_get_by_instance_id(room *room, int instance_id) {
         list_get_at(room->users, i, (void *) &room_player);
 
         if (room_player->room_user->instance_id == instance_id) {
-            return (room_user*) room_player->room_user;
+            return (room_user *) room_player->room_user;
         }
     }
 
@@ -110,12 +110,11 @@ void room_enter(room *room, entity *player, coord *destination) {
     list_add(room->users, player);
     room->room_data->visitors_now = (int) list_size(room->users);
 
-    if (room->room_schedule_job == NULL) {
-        room->room_schedule_job = create_runnable();
-        room->room_schedule_job->request = room_task;
-        room->room_schedule_job->room_id = room->room_id;
-        room->room_schedule_job->millis = 500;
-        thpool_add_work(global.thread_manager.pool, (void *) do_room_task, room->room_schedule_job);
+    if (room->process_timer == NULL) {
+        printf("Yo?\n");
+        room->process_timer = hh_dispatch_timer_create(RoomDispatch, (hh_dispatch_cb_t) &room_task,
+                                                       (void *) room);
+        hh_dispatch_timer_start(room->process_timer, 500);
     }
 
     /*outgoing_message *om = om_create(73); // "AI"
@@ -287,7 +286,7 @@ void append_user_list(outgoing_message *players, entity *player) {
     sb_add_string(players->sb, "l:");
     sb_add_int_delimeter(players->sb, player->room_user->position->x, ' ');
     sb_add_int_delimeter(players->sb, player->room_user->position->y, ' ');
-    sb_add_float_delimeter(players->sb, player->room_user->position->z, (char)13);
+    sb_add_float_delimeter(players->sb, player->room_user->position->z, (char) 13);
 
     if (strlen(player->details->motto) > 0) {
         om_write_str_kv(players, "c", player->details->motto);

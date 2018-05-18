@@ -34,7 +34,7 @@ room *room_create(int room_id) {
     instance->connected_room_hide = false;
     instance->room_data = NULL;
     instance->room_map = NULL;
-    instance->room_schedule_job = NULL;
+    instance->process_timer = NULL;
     list_new(&instance->users);
     list_new(&instance->items);
     instance->rights = room_query_rights(room_id);
@@ -390,6 +390,8 @@ void room_dispose(room *room, bool force_dispose) {
     if (list_size(room->users) > 0) {
         return;
     }
+
+    hh_dispatch_timer_dispose(room->process_timer);
 
     room->tick = 0;
     room_map_destroy(room);

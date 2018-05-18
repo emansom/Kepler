@@ -1,8 +1,9 @@
-#include "list.h"
-#include "sqlite3.h"
-
-#include "room_query.h"
 #include "room_rights_query.h"
+#include "list.h"
+
+#include "sqlite3.h"
+#include "room_query.h"
+#include "game/room/room.h"
 
 #include "database/db_connection.h"
 #include "shared.h"

@@ -2,6 +2,7 @@
 #include "communication/messages/outgoing_message.h"
 
 #include "database/queries/player_query.h"
+#include "dispatch.h"
 
 /*
  * Arguments we will send the to the login thread
@@ -24,7 +25,6 @@ void *do_register(void *args) {
     player_query_create(ctx->username, ctx->figure, ctx->gender, ctx->password);
 
     free(ctx);
-    pthread_exit((void*) 0);
 }
 
 /*
@@ -41,15 +41,7 @@ void async_register(char *username, char *figure, char* gender, char *password, 
     strcpy(ctx->gender, gender);
     ctx->player = player;
 
-    pthread_t register_thread;
-    pthread_attr_t attr;
-
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-
-    if (pthread_create(&register_thread, &attr, &do_register, (void*) ctx)) {
-        log_fatal("Uh-oh! Could not create thread for async register");
-    }
+    hh_dispatch(StorageDispatch, (hh_dispatch_cb_t) &do_register, (void *)ctx);
 }
 
 void REGISTER(entity *player, incoming_message *message) {
