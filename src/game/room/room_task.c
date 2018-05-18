@@ -14,16 +14,14 @@
  * @param room the room for the task to run inside
  */
 void room_task(room *room) {
-    if (room == NULL) {
+    if(room == NULL) {
         // Room disposed, we assume the task has been stopped on dispose
         return;
     }
 
-    room->tick += 500;
-
-    //if ((room->tick % 500) == 0) {
+    if ((room->tick % 500) == 0) {
         walk_task(room);
-    //}
+    }
 
     if ((room->tick % 1000) == 0) {
         status_task(room);
@@ -32,4 +30,6 @@ void room_task(room *room) {
     if ((room->tick % (configuration_get_int("roller.tick.default") * 500)) == 0) {
         do_roller_task(room);
     }
+
+    room->tick += 500;
 }
