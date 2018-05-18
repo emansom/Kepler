@@ -16,7 +16,7 @@
 void room_start_tasks(room *room) {
     if (room->walk_process_timer == NULL) {
         room->walk_process_timer = hh_dispatch_timer_create(RoomDispatch, (hh_dispatch_cb_t) &walk_task, (void *) room);
-        hh_dispatch_timer_start(room->walk_process_timer, 350, 500);
+        hh_dispatch_timer_start(room->walk_process_timer, 0, 500);
     }
 
     if (room->roller_process_timer == NULL) {
