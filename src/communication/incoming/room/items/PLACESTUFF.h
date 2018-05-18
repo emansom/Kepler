@@ -48,7 +48,7 @@ void PLACESTUFF(entity *player, incoming_message *message) {
             int item_id = item_query_create(player->details->id, 0, place_item->definition->id, 0, 0, 0, 0, default_colour);
 
             // Create postit instance using the id retrived from the database
-            item *sticky = item_create(item_id, 0, place_item->definition->id, 0, 0, 0, wall_position, 0, default_colour);
+            item *sticky = item_create(item_id, 0, player->details->id, place_item->definition->id, 0, 0, 0, wall_position, 0, default_colour);
             room_map_add_item(player->room_user->room, sticky);
 
             // Update postit amount for the sticky pad pile in hand

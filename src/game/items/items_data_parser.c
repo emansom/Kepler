@@ -43,6 +43,7 @@ List *item_parser_get_items(char *model) {
                 id++,
                 -1,
                 -1,
+                -1,
                 (int) strtol(str_x, NULL, 10),
                 (int) strtol(str_y, NULL, 10),
                 (int) strtol(str_z, NULL, 10),

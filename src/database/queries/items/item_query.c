@@ -45,6 +45,7 @@ List *item_query_get_inventory(int user_id) {
         item *item = item_create(
             sqlite3_column_int(stmt, 0),
             sqlite3_column_int(stmt, 1),
+            user_id,
             sqlite3_column_int(stmt, 2),
             sqlite3_column_int(stmt, 3),
             sqlite3_column_int(stmt, 4),
@@ -75,7 +76,7 @@ List *item_query_get_room_items(int room_id) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "SELECT id,room_id,definition_id,x,y,z,wall_position,rotation,custom_data FROM items WHERE room_id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT id,room_id,user_id,definition_id,x,y,z,wall_position,rotation,custom_data FROM items WHERE room_id = ?", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 
@@ -96,10 +97,11 @@ List *item_query_get_room_items(int room_id) {
                 sqlite3_column_int(stmt, 2),
                 sqlite3_column_int(stmt, 3),
                 sqlite3_column_int(stmt, 4),
-                sqlite3_column_double(stmt, 5),
-                strdup((char *) sqlite3_column_text(stmt, 6)),
-                sqlite3_column_int(stmt, 7),
-                strdup((char *) sqlite3_column_text(stmt, 8))
+                sqlite3_column_int(stmt, 5),
+                sqlite3_column_double(stmt, 6),
+                strdup((char *) sqlite3_column_text(stmt, 7)),
+                sqlite3_column_int(stmt, 8),
+                strdup((char *) sqlite3_column_text(stmt, 9))
         );
 
         list_add(items, item);
@@ -168,25 +170,26 @@ void item_query_save(item *item) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "UPDATE items SET room_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ?, wall_position = ? WHERE id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "UPDATE items SET room_id = ?, user_id = ?, x = ?, y = ?, z = ?, rotation = ?, custom_data = ?, wall_position = ? WHERE id = ?", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
         sqlite3_bind_int(stmt, 1, item->room_id);
-        sqlite3_bind_int(stmt, 2, item->position->x);
-        sqlite3_bind_int(stmt, 3, item->position->y);
-        sqlite3_bind_double(stmt, 4, item->position->z);
-        sqlite3_bind_int(stmt, 5, item->position->rotation);
-        sqlite3_bind_text(stmt, 6, item->custom_data, (int) strlen(item->custom_data), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 2, item->owner_id);
+        sqlite3_bind_int(stmt, 3, item->position->x);
+        sqlite3_bind_int(stmt, 4, item->position->y);
+        sqlite3_bind_double(stmt, 5, item->position->z);
+        sqlite3_bind_int(stmt, 6, item->position->rotation);
+        sqlite3_bind_text(stmt, 7, item->custom_data, (int) strlen(item->custom_data), SQLITE_STATIC);
 
         if (item->wall_position != NULL) {
-            sqlite3_bind_text(stmt, 7, item->wall_position, (int) strlen(item->wall_position), SQLITE_STATIC);
+            sqlite3_bind_text(stmt, 8, item->wall_position, (int) strlen(item->wall_position), SQLITE_STATIC);
         } else {
-            sqlite3_bind_text(stmt, 7, "", (int) strlen(""), SQLITE_STATIC);
+            sqlite3_bind_text(stmt, 8, "", (int) strlen(""), SQLITE_STATIC);
         }
 
-        sqlite3_bind_int(stmt, 8, item->id);
+        sqlite3_bind_int(stmt, 9, item->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }

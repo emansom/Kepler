@@ -123,7 +123,7 @@ void do_purchase(entity *player, item_definition *def, char *extra_data, int spe
     }
 
     int item_id = item_query_create(player->details->id, 0, def->id, 0, 0, 0, 0, custom_data);
-    item *inventory_item = item_create(item_id, 0, def->id, 0, 0, 0, NULL, 0, custom_data);
+    item *inventory_item = item_create(item_id, 0, player->details->id, def->id, 0, 0, 0, NULL, 0, custom_data);
 
     list_add(player->inventory->items, inventory_item);
 }

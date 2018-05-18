@@ -10,6 +10,7 @@ typedef struct item_definition_s item_definition;
 typedef struct item_s {
     int id;
     int room_id;
+    int owner_id;
     coord *position;
     item *item_below;
     char *wall_position;
@@ -19,7 +20,7 @@ typedef struct item_s {
     item_definition *definition;
 } item;
 
-item *item_create(int id, int room_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data);
+item *item_create(int id, int room_id, int owner_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data);
 void item_update_entities(item *item, room *room, coord *old_position);
 void item_set_custom_data(item *item, char *custom_data);
 void item_broadcast_custom_data(item* item, char *custom_data);
