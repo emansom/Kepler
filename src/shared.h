@@ -58,6 +58,6 @@ bool is_numeric(const char*);
 bool has_numbers(const char*);
 bool has_allowed_characters(char *, char *);
 bool starts_with(const char *pre, const char *str);
-size_t getline(char **lineptr, size_t *n, FILE *stream);
+size_t get_file_line(char **lineptr, size_t *n, FILE *stream);
 
 #endif

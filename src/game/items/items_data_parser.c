@@ -32,7 +32,7 @@ List *item_parser_get_items(char *model) {
 
     int id = 0;
 
-    while ((read = getline(&line, &len, file)) != -1) {
+    while ((read = get_file_line(&line, &len, file)) != -1) {
         char *str_x = get_argument(line, " ", 2);
         char *str_y = get_argument(line, " ", 3);
         char *str_z = get_argument(line, " ", 4);

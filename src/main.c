@@ -20,9 +20,9 @@
 #include "util/configuration/configuration.h"
 
 int main(void) {
-    signal(SIGINT, (__p_sig_fn_t) &exit_program); // Handle cleanup on Ctrl-C
-    signal(SIGTERM, (__p_sig_fn_t) &exit_program); // Handle graceful shutdown (sent by Docker)
-    signal(SIGKILL, (__p_sig_fn_t) &exit_program); // Handle forceful shutdown (sent by Docker)
+    signal(SIGINT,  &exit_program); // Handle cleanup on Ctrl-C
+    signal(SIGTERM,  &exit_program); // Handle graceful shutdown (sent by Docker)
+    signal(SIGKILL,  &exit_program); // Handle forceful shutdown (sent by Docker)
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
