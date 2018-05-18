@@ -167,6 +167,10 @@ int hh_dispatch_timer_start(hh_dispatch_timer_t *handle, int delay) {
 }
 
 int hh_dispatch_timer_dispose(hh_dispatch_timer_t *handle) {
+    if (handle == NULL) {
+        return -1;
+    }
+
     uv_timer_stop(handle->handle);
 
     free(handle->work);

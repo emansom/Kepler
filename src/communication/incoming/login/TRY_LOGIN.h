@@ -50,7 +50,7 @@ void async_login(char *username, char *password, entity *player) {
     strcpy(ctx->password, password);
     ctx->player = player;
 
-    hh_dispatch(StorageDispatch, &do_login, (void*) ctx);
+    hh_dispatch(StorageDispatch, (void*)do_login, (void*) ctx);
 }
 
 void TRY_LOGIN(entity *player, incoming_message *message) {
