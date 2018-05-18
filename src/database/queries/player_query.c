@@ -449,6 +449,26 @@ Array *player_query_badges(int id) {
 
     db_check_finalize(sqlite3_finalize(stmt), conn);
 
+    entity_data *player_data = player_query_data(id);
+
+    if (player_data->rank >= 5) {
+        if (array_add(badges, "ADM") != CC_OK) {
+            log_fatal("Couldn't add ADM badge to badges in player_query_badges");
+            return NULL;
+        }
+    }
+
+    if (player_data->rank >= 2) {
+        if (array_add(badges, "HC1") != CC_OK) {
+            log_fatal("Couldn't add HC1 badge to badges in player_query_badges");
+            return NULL;
+        }
+    }
+
+    // TODO: HC2 badge
+
+    player_data_cleanup(player_data);
+
     return badges;
 }
 
