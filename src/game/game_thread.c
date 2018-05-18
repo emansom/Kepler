@@ -43,7 +43,7 @@ void game_thread_task(unsigned long ticks) {
         }
 
         // Check ping timeout
-        if (ticks % 10 == 0) {
+        if (ticks % 60 == 0) {
             if (player->ping_safe) {
                 player->ping_safe = false;
 
