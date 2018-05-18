@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <sodium.h>
 #include <signal.h>
+#include "dispatch.h"
 
 #include "main.h"
 #include "shared.h"
@@ -16,14 +17,20 @@
 
 #include "game/game_thread.h"
 
-#include "util/threading.h"
 #include "util/configuration/configuration.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 int main(void) {
-    //signal(SIGPIPE, SIG_IGN); // Stops the server crashing when the connection is closed immediately. Ignores signal 13.
-    signal(SIGINT, exit_program); // Handle cleanup on Ctrl-C
-    signal(SIGTERM, exit_program); // Handle graceful shutdown (sent by Docker)
-    signal(SIGKILL, exit_program); // Handle forceful shutdown (sent by Docker)
+    signal(SIGINT,  &exit_program); // Handle cleanup on Ctrl-C
+    signal(SIGTERM,  &exit_program); // Handle graceful shutdown (sent by Docker)
+    signal(SIGKILL,  &exit_program); // Handle forceful shutdown (sent by Docker)
+
+#ifdef WIN32
+    SetConsoleTitle("Kepler - Habbo Hotel V21 Emulation");
+#endif
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
@@ -65,8 +72,9 @@ int main(void) {
     item_manager_init();
     catalogue_manager_init();
     message_handler_init();
-    create_thread_pool();
+
     room_manager_load_connected_rooms();
+    hh_dispatch_initialise(1, 8, 1);
 
     server_settings rcon_settings, server_settings;
     uv_thread_t mus_thread, server_thread, game_thread;
@@ -103,7 +111,6 @@ void dispose_program() {
     log_info("Shutting down server!");
     global.is_shutdown = true;
 
-    //thpool_destroy(global.thread_manager.pool);
     player_manager_dispose();
     catalogue_manager_dispose();
     category_manager_dispose();

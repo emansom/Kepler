@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <time.h>
 
+
 /**
  * Get the current time formatted, must be free'd at the end.
  *
@@ -40,7 +41,7 @@ char *get_short_time_formatted() {
  */
 char *get_time_formatted_custom(unsigned long time_seconds) {
     char buff[20];
-    time_t now = (time_t)time_seconds;
+    time_t now = (time_t) time_seconds;
     strftime(buff, 20, "%Y-%m-%d %H:%M:%S", localtime(&now));
     return strdup(buff);
 }
@@ -110,10 +111,10 @@ char *strlwr(char *str) {
         return NULL;
     }
 
-    unsigned char *p = (unsigned char *)str;
+    unsigned char *p = (unsigned char *) str;
 
     while (*p) {
-        *p = (unsigned char)tolower((unsigned char)*p);
+        *p = (unsigned char) tolower((unsigned char) *p);
         p++;
     }
 
@@ -127,7 +128,7 @@ char *strlwr(char *str) {
  * @param replace
  * @return
  */
-char* replace(char *str, char *sub, char *replace) {
+char *replace(char *str, char *sub, char *replace) {
     char *pos = str;
 
     int count = 0;
@@ -253,8 +254,8 @@ bool is_numeric(const char *s) {
     if (s == NULL || *s == '\0' || isspace(*s))
         return false;
 
-    char * p;
-    strtod (s, &p);
+    char *p;
+    strtod(s, &p);
     return *p == '\0';
 }
 
@@ -300,4 +301,57 @@ bool starts_with(const char *restrict string, const char *restrict prefix) {
     }
 
     return 1;
+}
+
+/* This code is public domain -- Will Hartung 4/9/09 */
+size_t get_file_line(char **lineptr, size_t *n, FILE *stream) {
+    char *bufptr = NULL;
+    char *p = bufptr;
+    size_t size;
+    int c;
+
+    if (lineptr == NULL) {
+        return (size_t) -1;
+    }
+    if (stream == NULL) {
+        return (size_t) -1;
+    }
+    if (n == NULL) {
+        return (size_t) -1;
+    }
+    bufptr = *lineptr;
+    size = *n;
+
+    c = fgetc(stream);
+    if (c == EOF) {
+        return (size_t) -1;
+    }
+    if (bufptr == NULL) {
+        bufptr = malloc(128);
+        if (bufptr == NULL) {
+            return (size_t) -1;
+        }
+        size = 128;
+    }
+    p = bufptr;
+    while (c != EOF) {
+        if ((p - bufptr) > (size - 1)) {
+            size = size + 128;
+            bufptr = realloc(bufptr, size);
+            if (bufptr == NULL) {
+                return (size_t) -1;
+            }
+        }
+        *p++ = (char) c;
+        if (c == '\n') {
+            break;
+        }
+        c = fgetc(stream);
+    }
+
+    *p++ = '\0';
+    *lineptr = bufptr;
+    *n = size;
+
+    return (p - bufptr - 1);
 }

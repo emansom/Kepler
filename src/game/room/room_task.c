@@ -1,8 +1,9 @@
 #include "room_task.h"
+#include "log.h"
+#include "list.h"
+
 #include "shared.h"
-
 #include "game/room/room.h"
-
 #include "game/room/tasks/roller_task.h"
 #include "game/room/tasks/status_task.h"
 #include "game/room/tasks/walk_task.h"
@@ -13,6 +14,11 @@
  * @param room the room for the task to run inside
  */
 void room_task(room *room) {
+    if(room == NULL) {
+        // Room disposed, we assume the task has been stopped on dispose
+        return;
+    }
+
     if ((room->tick % 500) == 0) {
         walk_task(room);
     }

@@ -209,22 +209,22 @@ entity_data *player_query_data(int id) {
         }
 
         player_data = player_create_data(
-            sqlite3_column_int(stmt, 0), // id
-            (char*)sqlite3_column_text(stmt, 1),  // username
-            (char*)sqlite3_column_text(stmt, 2),  // password
-            (char*)sqlite3_column_text(stmt, 3),  // figure
-            (char*)sqlite3_column_text(stmt, 4),  // pool_figure
-            sqlite3_column_int(stmt, 5),          // credits
-            (char*)sqlite3_column_text(stmt, 6),  // motto
-            (char*)sqlite3_column_text(stmt, 7),  // sex
-            sqlite3_column_int(stmt, 8),          // tickets
-            sqlite3_column_int(stmt, 9),          // film
-            sqlite3_column_int(stmt, 10),         // rank
-            (char*)sqlite3_column_text(stmt, 11), // console_motto
-            (unsigned long long)sqlite3_column_int64(stmt, 12), // last_online
-            (unsigned long long)sqlite3_column_int64(stmt, 13), // club_subscribed
-            (unsigned long long)sqlite3_column_int64(stmt, 14), // club_expiration
-            (char*)sqlite3_column_text(stmt, 15)
+                sqlite3_column_int(stmt, 0), // id
+                (char*)sqlite3_column_text(stmt, 1),  // username
+                (char*)sqlite3_column_text(stmt, 2),  // password
+                (char*)sqlite3_column_text(stmt, 3),  // figure
+                (char*)sqlite3_column_text(stmt, 4),  // pool_figure
+                sqlite3_column_int(stmt, 5),          // credits
+                (char*)sqlite3_column_text(stmt, 6),  // motto
+                (char*)sqlite3_column_text(stmt, 7),  // sex
+                sqlite3_column_int(stmt, 8),          // tickets
+                sqlite3_column_int(stmt, 9),          // film
+                sqlite3_column_int(stmt, 10),         // rank
+                (char*)sqlite3_column_text(stmt, 11), // console_motto
+                (unsigned long long)sqlite3_column_int64(stmt, 12), // last_online
+                (unsigned long long)sqlite3_column_int64(stmt, 13), // club_subscribed
+                (unsigned long long)sqlite3_column_int64(stmt, 14), // club_expiration
+                (char*)sqlite3_column_text(stmt, 15)
         );
     }
 

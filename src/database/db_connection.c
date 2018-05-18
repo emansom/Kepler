@@ -25,12 +25,12 @@ bool db_initialise() {
     sqlite3 *con = db_create_connection();
 
     if (con == NULL) {
-        log_info("The connection to the database was unsuccessful, program aborted!");
+        log_info("The database connection was unsuccessful, program aborted!");
         sqlite3_close(con);
         return false;
     }
 
-    log_info("The connection to the database was successful!");
+    log_info("The database connection was successful!");
 
     sqlite3_stmt *stmt;
     int status = sqlite3_prepare_v2(con, "PRAGMA journal_mode=WAL;", -1, &stmt, 0);

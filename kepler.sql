@@ -31,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`club_expiration`	INTEGER NOT NULL DEFAULT 0,
 	`active_badge`	TEXT NOT NULL
 );
+INSERT INTO `users` VALUES (1,'alex','$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA','hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61','ch=s02/182,243,255','M','de kepler whey',99887,19,0,2,'I''m a new user!',1526567261,'123',1526277229,1626277229,'');
 CREATE TABLE IF NOT EXISTS `rooms_rights` (
 	`room_id`	INTEGER NOT NULL,
 	`user_id`	INTEGER NOT NULL
@@ -1956,6 +1957,7 @@ INSERT INTO `catalogue_pages` VALUES (20,20,1,'Bathroom','Bathroom','ctlg_layout
 INSERT INTO `catalogue_pages` VALUES (21,21,1,'Plants','Plants','ctlg_layout2','catalog_plants_headline1','catalog_plants_teaser1,','Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!','Click on the item you want for more information',NULL,NULL);
 INSERT INTO `catalogue_pages` VALUES (40,40,5,'staffHC','Club Shop','ctlg_layout2','catalog_club_headline1','catalog_hc_teaser,','Welcome to the Club Shop! All ''Habbo Club membership gifts'' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.','Click on the item you want for more information',NULL,NULL);
 INSERT INTO `catalogue_pages` VALUES (41,41,5,'Dragons','Dragons','ctlg_layout2','catalog_rares_headline1','','The Dragon page contains all of the Dragon Lamps.','Click on the item you want for more information',NULL,NULL);
+INSERT INTO `catalogue_pages` VALUES (42,42,1,'Club Furni','Club Furni','ctlg_layout2','catalog_club_headline1','catalog_hc_teaser','Welcome to the Brand New Habbo Club Shop, where Habbo Club members can purchase exclusive items!<br>The Furni in this section can only be purchased by Habbos who have joined Habbo Club.','Click on an item to see more details','s:For Habbo Club members only',NULL);
 CREATE TABLE IF NOT EXISTS `catalogue_packages` (
 	`salecode`	TEXT,
 	`definition_id`	INTEGER,
@@ -2348,31 +2350,4 @@ INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_7',41,7,5,1417,0,NULL,NUL
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_6',41,8,5,1418,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_1',41,9,5,1419,0,NULL,NULL,0);
 INSERT INTO `catalogue_items` VALUES ('rare_dragonlamp_3',41,10,5,1420,0,NULL,NULL,0);
-CREATE TABLE `site_menu` (
-  `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-  `parent_id` INTEGER NOT NULL DEFAULT 0,
-  `order_id` INTEGER NOT NULL,
-  `caption` TEXT NOT NULL,
-  `link` TEXT NOT NULL,
-  `controller` TEXT NOT NULL,
-  `action` TEXT NOT NULL,
-  `icon` TEXT NOT NULL,
-  `visibility` INTEGER NOT NULL DEFAULT 0 /* '0 = Never, 1 = Always, 2 = Logged in only, 3 = Guests only, 4 = Staff only' */
-);
-INSERT INTO site_menu VALUES(1,0,1,'Home','/','index','index','tab_icon_01_home.gif',1);
-INSERT INTO site_menu VALUES(2,0,1,'New?','/hotel','hotel','index','tab_icon_02_hotel.gif',1);
-INSERT INTO site_menu VALUES(3,2,1,'New here?','/hotel','hotel','index','',1);
-INSERT INTO site_menu VALUES(4,2,1,'Guides','/hotel/welcome','hotel','welcome','',1);
-INSERT INTO site_menu VALUES(5,2,1,'Getting Started','/hotel/tour','hotel','tour','',1);
-INSERT INTO site_menu VALUES(6,2,1,'Furniture','/hotel/furniture','hotel','furniture','',1);
-INSERT INTO site_menu VALUES(7,2,1,'Pets','/hotel/pets','hotel','pets','',1);
-INSERT INTO site_menu VALUES(8,2,1,'Homepages','/hotel/homes','hotel','homes','',1);
-INSERT INTO site_menu VALUES(9,2,1,'Games','/hotel/games','hotel','games','',1);
-INSERT INTO site_menu VALUES(10,2,1,'Badges','/hotel/badges','hotel','badges','',1);
-INSERT INTO site_menu VALUES(11,2,1,'Groups','/groups','groups','index','',1);
-INSERT INTO site_menu VALUES(13,2,1,'Staff','/hotel/team','hotel','team','',1);
-INSERT INTO site_menu VALUES(14,0,1,'Club','/club','club','index','tab_icon_09_hc.gif',1);
-INSERT INTO site_menu VALUES(15,14,1,'Benefits','/club','club','index','',1);
-INSERT INTO site_menu VALUES(16,14,1,'Join or Extend Membership','/club/join','club','join','',1);
-INSERT INTO site_menu VALUES(17,14,1,'Shop','/club/shop','club','shop','',1);
 COMMIT;

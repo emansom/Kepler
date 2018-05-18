@@ -3,6 +3,7 @@
 #include "log.h"
 
 #include "external_texts_manager.h"
+#include <stdio.h>
 
 void texts_manager_parse(char*);
 
@@ -29,14 +30,16 @@ void texts_manager_parse(char *file_name) {
         return;
     }
 
-    char *line = NULL;
+    char old_line[200];
     size_t len = 0;
     ssize_t read;
 
-    while ((read = getline(&line, &len, file)) != -1) {
-        if (line == NULL) {
+    while (fgets(old_line, 200, file)) {
+        if (old_line == NULL) {
             continue;
         }
+
+        char *line = (char*)old_line;
 
         filter_vulnerable_characters(&line, true);
         char *found = strstr(line, "=" );
@@ -48,12 +51,10 @@ void texts_manager_parse(char *file_name) {
             key[index] = '\0';
 
             char *value = strdup(line + index + 1);
-
             hashtable_add(global.texts_manager.texts, key, value);
         }
     }
 
-    free(line);
     fclose(file);
 }
 
