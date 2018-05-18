@@ -45,7 +45,7 @@ void dispatch_initialise_loop_thread(void *data) {
     uv_async_send(&async);
 
     uv_timer_init(loop->loop, &timer);
-    uv_timer_start(&timer, (uv_timer_cb) &dispatch_wake, 5000, 5000);
+    uv_timer_start(&timer, (uv_timer_cb) &dispatch_wake, 500, 500);
 
     int r = uv_run(loop->loop, UV_RUN_DEFAULT);
 }
