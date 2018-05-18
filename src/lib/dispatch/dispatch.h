@@ -56,7 +56,7 @@ int hh_dispatch(char group, hh_dispatch_cb_t cb, void *data);
 
 hh_dispatch_timer_t *hh_dispatch_timer_create(char group, hh_dispatch_cb_t cb, void *data);
 
-int hh_dispatch_timer_start(hh_dispatch_timer_t  *handle, int delay);
+int hh_dispatch_timer_start(hh_dispatch_timer_t *handle, int initial_delay, int delay);
 
 int hh_dispatch_timer_dispose(hh_dispatch_timer_t *handle);
 

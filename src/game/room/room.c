@@ -14,6 +14,7 @@
 
 #include "game/room/manager/room_item_manager.h"
 #include "game/room/manager/room_entity_manager.h"
+#include "game/room/room_task.h"
 
 #include "game/player/player.h"
 #include "game/items/item.h"
@@ -36,7 +37,9 @@ room *room_create(int room_id) {
     instance->connected_room_hide = false;
     instance->room_data = NULL;
     instance->room_map = NULL;
-    instance->process_timer = NULL;
+    instance->walk_process_timer = NULL;
+    instance->status_process_timer = NULL;
+    instance->roller_process_timer = NULL;
     list_new(&instance->users);
     list_new(&instance->items);
     instance->rights = room_query_rights(room_id);
@@ -393,11 +396,9 @@ void room_dispose(room *room, bool force_dispose) {
         return;
     }
 
-    hh_dispatch_timer_dispose(room->process_timer);
-    room->process_timer = NULL;
-
-    room->tick = 0;
     room_map_destroy(room);
+    room_stop_tasks(room);
+    room->tick = 0;
 
     if (room->room_data->owner_id == 0 && !force_dispose) { // model is a public rooms model
         return; // Prevent public rooms
@@ -424,7 +425,6 @@ void room_dispose(room *room, bool force_dispose) {
     room->users = NULL;
     room->rights = NULL;
     room->users = NULL;
-
 
     if (room->room_data != NULL) {
         free(room->room_data->name);

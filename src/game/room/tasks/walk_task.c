@@ -30,6 +30,8 @@ void process_user(entity *player);
  * @param room the room handled
  */
 void walk_task(room *room) {
+    printf("Walk task\n");
+
     List *users;
     list_copy_shallow(room->users, &users);
 
@@ -50,8 +52,13 @@ void walk_task(room *room) {
 
         process_user(room_player);
 
-        if (room_player->room_user->needs_update) {
+        if (room_player->room_user->needs_update_from_secs > 0) {
+            room_player->room_user->needs_update_from_secs--;
+        }
+
+        if (room_player->room_user->needs_update || room_player->room_user->needs_update_from_secs == 0) {
             room_player->room_user->needs_update = 0;
+            room_player->room_user->needs_update_from_secs = -1;
             user_updates++;
             append_user_status(status_update, room_player);
         }

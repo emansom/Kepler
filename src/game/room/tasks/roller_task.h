@@ -8,7 +8,7 @@
 
 #include "game/pathfinder/coord.h"
 
-void do_roller_task(room *room);
+void roller_task(room *room);
 bool do_roller_item(room *room, item *roller, item *item);
 void do_roller_player(room *room, item *roller, room_user *room_entity);
 
