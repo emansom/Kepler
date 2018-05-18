@@ -149,7 +149,7 @@ void player_refresh_badges(entity *player) {
         om_write_str(badge_list, badge);
 
         if (strcmp(player->details->active_badge, badge)) {
-            badge_slot = slot_counter;
+            badge_slot = slot_counter - 1;
         }
 
         slot_counter++;
