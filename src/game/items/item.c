@@ -48,8 +48,6 @@ item *item_create(int id, int room_id, int owner_id, int definition_id, int x, i
         custom_data = strdup("");
     }
 
-    printf("USER ID: %i\n", room_item->owner_id);
-
     room_item->position = create_coord_height(x, y, z);
     room_item->item_below = NULL;
     room_item->custom_data = custom_data;

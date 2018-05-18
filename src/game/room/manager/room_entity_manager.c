@@ -111,7 +111,6 @@ void room_enter(room *room, entity *player, coord *destination) {
     room->room_data->visitors_now = (int) list_size(room->users);
 
     if (room->process_timer == NULL) {
-        printf("Yo?\n");
         room->process_timer = hh_dispatch_timer_create(RoomDispatch, (hh_dispatch_cb_t) &room_task,
                                                        (void *) room);
         hh_dispatch_timer_start(room->process_timer, 500);
