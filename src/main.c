@@ -19,10 +19,18 @@
 
 #include "util/configuration/configuration.h"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 int main(void) {
     signal(SIGINT,  &exit_program); // Handle cleanup on Ctrl-C
     signal(SIGTERM,  &exit_program); // Handle graceful shutdown (sent by Docker)
     signal(SIGKILL,  &exit_program); // Handle forceful shutdown (sent by Docker)
+
+#ifdef WIN32
+    SetConsoleTitle("Kepler - Habbo Hotel V21 Emulation");
+#endif
 
     log_info("Kepler Habbo server...");
     log_info("Written by Quackster");
