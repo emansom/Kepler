@@ -18,6 +18,8 @@
 #include "game/room/room_user.h"
 #include "game/room/room_task.h"
 
+#include "game/room/tasks/walk_task.h"
+
 #include "game/room/mapping/room_map.h"
 #include "game/room/mapping/room_model.h"
 #include "game/room/mapping/room_tile.h"
@@ -25,7 +27,6 @@
 #include "game/room/manager/room_entity_manager.h"
 
 #include "util/stringbuilder.h"
-
 #include "communication/messages/outgoing_message.h"
 
 /**
@@ -110,16 +111,6 @@ void room_enter(room *room, entity *player, coord *destination) {
     list_add(room->users, player);
     room->room_data->visitors_now = (int) list_size(room->users);
 
-    if (room->process_timer == NULL) {
-        room->process_timer = hh_dispatch_timer_create(RoomDispatch, (hh_dispatch_cb_t) &room_task,
-                                                       (void *) room);
-        hh_dispatch_timer_start(room->process_timer, 500);
-    }
-
-    /*outgoing_message *om = om_create(73); // "AI"
-    player_send(entity, om);
-    om_cleanup(om);*/
-
     outgoing_message *om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
     player_send(player, om);
@@ -197,7 +188,6 @@ void room_enter(room *room, entity *player, coord *destination) {
         }
     }
 
-
     player->room_user->authenticate_id = -1;
 
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "park_b") == 0) {
@@ -216,6 +206,8 @@ void room_enter(room *room, entity *player, coord *destination) {
         player_send(player, om);
         om_cleanup(om);
     }
+
+    room_start_tasks(room);
 
    /* om = room_lingo_command("voiceSpeak(\"HELLO NOOB\")");
     player_send(player, om);

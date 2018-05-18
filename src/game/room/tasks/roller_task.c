@@ -1,4 +1,3 @@
-
 #include "list.h"
 #include "roller_task.h"
 
@@ -18,7 +17,7 @@
  *
  * @param room the room to call the task for
  */
-void do_roller_task(room *room) {
+void roller_task(room *room) {
     HashTable *blacklist;
     hashtable_new(&blacklist);
 
@@ -198,7 +197,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
     room_entity->position->x = to.x;
     room_entity->position->y = to.y;
     room_entity->position->z = to.z;
-    room_entity->needs_update = true;
+    room_entity->needs_update_from_secs = 3;
 
     outgoing_message *om = om_create(230); // "Cf"
     om_write_int(om, from.x);

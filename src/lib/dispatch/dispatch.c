@@ -45,7 +45,7 @@ void dispatch_initialise_loop_thread(void *data) {
     uv_async_send(&async);
 
     uv_timer_init(loop->loop, &timer);
-    uv_timer_start(&timer, (uv_timer_cb) &dispatch_wake, 5000, 5000);
+    uv_timer_start(&timer, (uv_timer_cb) &dispatch_wake, 500, 500);
 
     int r = uv_run(loop->loop, UV_RUN_DEFAULT);
 }
@@ -162,8 +162,8 @@ hh_dispatch_timer_t *hh_dispatch_timer_create(char group_id, hh_dispatch_cb_t cb
     return NULL;
 }
 
-int hh_dispatch_timer_start(hh_dispatch_timer_t *handle, int delay) {
-    return uv_timer_start(handle->handle, &dispatch_exec_scheduled_callback, (uint64_t) delay, (uint64_t) delay);
+int hh_dispatch_timer_start(hh_dispatch_timer_t *handle, int initial_delay, int delay) {
+    return uv_timer_start(handle->handle, &dispatch_exec_scheduled_callback, (uint64_t) initial_delay, (uint64_t) delay);
 }
 
 int hh_dispatch_timer_dispose(hh_dispatch_timer_t *handle) {

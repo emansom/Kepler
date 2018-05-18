@@ -50,8 +50,13 @@ void walk_task(room *room) {
 
         process_user(room_player);
 
-        if (room_player->room_user->needs_update) {
+        if (room_player->room_user->needs_update_from_secs > 0) {
+            room_player->room_user->needs_update_from_secs--;
+        }
+
+        if (room_player->room_user->needs_update || room_player->room_user->needs_update_from_secs == 0) {
             room_player->room_user->needs_update = 0;
+            room_player->room_user->needs_update_from_secs = -1;
             user_updates++;
             append_user_status(status_update, room_player);
         }

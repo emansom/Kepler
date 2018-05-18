@@ -45,7 +45,9 @@ typedef struct room_s {
     bool connected_room_hide;
     struct room_data_s *room_data;
     room_map *room_map;
-    hh_dispatch_timer_t *process_timer;
+    hh_dispatch_timer_t *walk_process_timer;
+    hh_dispatch_timer_t *status_process_timer;
+    hh_dispatch_timer_t *roller_process_timer;
     List *users;
     List *items;
     List *rights;
