@@ -18,8 +18,6 @@
  * @param room the room to call the task for
  */
 void roller_task(room *room) {
-    printf("Roller task\n");
-
     HashTable *blacklist;
     hashtable_new(&blacklist);
 

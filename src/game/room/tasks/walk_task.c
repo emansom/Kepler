@@ -30,8 +30,6 @@ void process_user(entity *player);
  * @param room the room handled
  */
 void walk_task(room *room) {
-    printf("Walk task\n");
-
     List *users;
     list_copy_shallow(room->users, &users);
 
