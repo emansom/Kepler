@@ -44,6 +44,7 @@ room_user *room_user_create(entity *player) {
     user->goal = coord_create(0, 0);
     user->next = NULL;
     user->walk_list = NULL;
+    user->trade_partner = NULL;
     hashtable_new(&user->statuses);
     room_user_reset(user, false);
     return user;
@@ -54,7 +55,7 @@ room_user *room_user_create(entity *player) {
  *
  * @param room_user
  */
-void room_user_reset(room_user *room_user, bool cleanup) {
+void room_user_reset(room_user *room_user, bool disconnect) {
     stop_walking(room_user, true);
     room_user_remove_status(room_user, "swim");
     room_user_remove_status(room_user, "sit");
@@ -79,14 +80,14 @@ void room_user_reset(room_user *room_user, bool cleanup) {
     room_user->lido_vote = -1;
 
     room_user_reset_idle_timer(room_user);
-    trade_manager_reset(room_user);
+    trade_manager_close(room_user);
 
     if (room_user->next != NULL) {
         free(room_user->next);
         room_user->next = NULL;
     }
 
-    if (cleanup) {
+    if (disconnect) {
         if (room_user->position != NULL) {
             free(room_user->position);
             room_user->position = NULL;

@@ -8,6 +8,10 @@ void TRADE_OPEN(entity *player, incoming_message *message) {
         return;
     }
 
+    if (player->room_user->trade_partner != NULL) {
+        return;
+    }
+
     char *content = im_get_content(message);
 
     if (content == NULL || !is_numeric(content)) {
@@ -22,8 +26,8 @@ void TRADE_OPEN(entity *player, incoming_message *message) {
         goto cleanup;
     }
 
-    trade_manager_reset(player->room_user);
-    trade_manager_reset(trade_user);
+    trade_manager_close(player->room_user);
+    trade_manager_close(trade_user);
 
     room_user_add_status(player->room_user, "trd", "", -1, "", -1, -1);
     player->room_user->needs_update = true;

@@ -11,6 +11,27 @@
 #include "communication/messages/outgoing_message.h"
 #include "util/stringbuilder.h"
 
+void trade_manager_reset(room_user *room_user);
+
+void trade_manager_close(room_user *room_user) {
+    if (room_user->trade_partner != NULL) {
+        outgoing_message *om = om_create(110);
+
+        player_send(room_user->entity, om);
+        player_send(room_user->trade_partner->entity, om);
+
+        om_cleanup(om);
+
+        inventory_send(room_user->entity->inventory, "update", room_user->entity);
+        inventory_send(room_user->trade_partner->entity->inventory, "update", room_user->trade_partner->entity);
+
+        // Reset trade partner
+        trade_manager_reset(room_user->trade_partner);
+    }
+
+    trade_manager_reset(room_user);
+}
+
 void trade_manager_reset(room_user *room_user) {
     memset(room_user->trade_items, -1, sizeof(room_user->trade_items));
 
