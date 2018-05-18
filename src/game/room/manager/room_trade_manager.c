@@ -23,8 +23,8 @@ void trade_manager_reset(room_user *room_user) {
 
 void trade_manager_refresh_boxes(room_user *room_user) {
     outgoing_message *om = om_create(108); // "Al"
-    om_write_str(om, room_user->entity->details->username);
-    om_write_int(om, room_user->trade_accept);
+    om_write_str_delimeter(om, room_user->entity->details->username, 9);
+    om_write_str_delimeter(om, room_user->trade_accept ? "true" : "false", 9);
 
     if (room_user->trade_item_count > 0) {
         for (int i = 0; i < room_user->trade_item_count; ++i) {
@@ -38,8 +38,8 @@ void trade_manager_refresh_boxes(room_user *room_user) {
 
     om_write_char(om, 13);
 
-    om_write_str(om, room_user->trade_partner->entity->details->username);
-    om_write_int(om, room_user->trade_partner->trade_accept);
+    om_write_str_delimeter(om, room_user->trade_partner->entity->details->username, 9);
+    om_write_str_delimeter(om, room_user->trade_partner->trade_accept ? "true" : "false", 9);
 
     if (room_user->trade_partner->trade_item_count > 0) {
         for (int i = 0; i < room_user->trade_partner->trade_item_count; ++i) {
