@@ -62,7 +62,7 @@ file(GLOB texts ${PROJECT_DIR}/game/texts/*.c)
 file(GLOB tasks ${PROJECT_DIR}/game/room/tasks/*.c)
 
 # Enable color in log.c library
-#add_definitions(-DLOG_USE_COLOR)
+add_definitions(-DLOG_USE_COLOR)
 
 add_executable(${EXECUTABLE_NAME}
         ${hh_dispatch}

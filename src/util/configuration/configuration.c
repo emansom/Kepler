@@ -70,7 +70,9 @@ void configuration_read(FILE *file) {
     size_t len = 0;
     ssize_t read;
 
-    while ((read = getline(&line, &len, file)) != -1) {
+    int id = 0;
+
+    while ((read = get_file_line(&line, &len, file)) != -1) {
         if (line == NULL) {
             continue;
         }

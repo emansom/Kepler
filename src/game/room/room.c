@@ -392,6 +392,7 @@ void room_dispose(room *room, bool force_dispose) {
     }
 
     hh_dispatch_timer_dispose(room->process_timer);
+    room->process_timer = NULL;
 
     room->tick = 0;
     room_map_destroy(room);

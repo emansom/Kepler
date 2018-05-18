@@ -156,8 +156,8 @@ void start_rcon(server_settings *settings, uv_thread_t *rcon_thread) {
     log_info("Starting RCON on port %i...", settings->port);
 
     if (uv_thread_create(rcon_thread, listen_rcon, (void*) settings) != 0) {
-        log_fatal("Uh-oh! Unable to spawn rcon thread");
+        log_fatal("Uh-oh! Unable to spawn RCON thread");
     } else {
-        log_info("Rcon successfully started!", settings->port);
+        log_info("RCON successfully started!", settings->port);
     }
 }
