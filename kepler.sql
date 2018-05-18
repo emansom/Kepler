@@ -8,7 +8,6 @@ CREATE TABLE IF NOT EXISTS `users_room_favourites` (
 	`room_id`	INTEGER NOT NULL,
 	`user_id`	INTEGER NOT NULL
 );
-INSERT INTO `users_room_favourites` VALUES (1001,1);
 CREATE TABLE IF NOT EXISTS `users_badges` (
 	`user_id`	INTEGER NOT NULL,
 	`badge`	INTEGER NOT NULL
@@ -32,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`club_expiration`	INTEGER NOT NULL DEFAULT 0,
 	`active_badge`	TEXT NOT NULL
 );
+INSERT INTO `users` VALUES (1,'alex','$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA','hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61','ch=s02/182,243,255','M','de kepler whey',99887,19,0,2,'I''m a new user!',1526567261,'123',1526277229,1626277229,'');
 CREATE TABLE IF NOT EXISTS `rooms_rights` (
 	`room_id`	INTEGER NOT NULL,
 	`user_id`	INTEGER NOT NULL
