@@ -34,10 +34,11 @@
  * @param custom_data the item custom data
  * @return
  */
-item *item_create(int id, int room_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data) {
+item *item_create(int id, int room_id, int owner_id, int definition_id, int x, int y, double z, char *wall_position, int rotation, char *custom_data) {
     item *room_item = malloc(sizeof(item));
     room_item->id = id;
     room_item->room_id = room_id;
+    room_item->owner_id = owner_id;
 
     if (definition_id > 0) {
         room_item->definition = item_manager_get_definition_by_id(definition_id);

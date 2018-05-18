@@ -111,7 +111,6 @@ void room_enter(room *room, entity *player, coord *destination) {
     room->room_data->visitors_now = (int) list_size(room->users);
 
     if (room->process_timer == NULL) {
-        printf("Yo?\n");
         room->process_timer = hh_dispatch_timer_create(RoomDispatch, (hh_dispatch_cb_t) &room_task,
                                                        (void *) room);
         hh_dispatch_timer_start(room->process_timer, 500);
@@ -217,6 +216,11 @@ void room_enter(room *room, entity *player, coord *destination) {
         player_send(player, om);
         om_cleanup(om);
     }
+
+   /* om = room_lingo_command("voiceSpeak(\"HELLO NOOB\")");
+    player_send(player, om);
+    om_cleanup(om);*/
+
 }
 
 /**

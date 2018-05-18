@@ -8,6 +8,8 @@
 #include "game/room/room_user.h"
 #include "game/room/manager/room_entity_manager.h"
 
+#include "server/server_listener.h"
+
 #include "game_thread.h"
 #include "shared.h"
 
@@ -55,7 +57,8 @@ void game_thread_task(unsigned long ticks) {
                     log_info("Connection %s timed out", player->ip_address);
                 }
 
-                player_cleanup(player);
+                uv_close((uv_handle_t*) player->stream, server_on_connection_close);
+                //player_cleanup(player);
                 continue;
             }
         }

@@ -66,6 +66,7 @@ void room_send(room *room, outgoing_message *message);
 bool room_send_with_rights(room *room, outgoing_message *message);
 void room_dispose(room*, bool force_dispose);
 List *room_nearby_players(room *room, room_user *room_user, coord *position, int distance);
+outgoing_message *room_lingo_command(char *command);
 
 
 #endif
