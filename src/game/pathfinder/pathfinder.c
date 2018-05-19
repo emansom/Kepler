@@ -181,7 +181,7 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
     pathfinder *p = malloc(sizeof(pathfinder));
     p->nodes = NULL;
     p->current = NULL;
-    p->failed = 0;
+    p->failed = false;
     deque_new(&p->open_list);
 
     coord c;
@@ -260,6 +260,6 @@ pathfinder *make_path_reversed(room_user *room_user, int map_size_x, int map_siz
         }
     }
 
-    p->failed = 1;
+    p->failed = true;
     return p;
 }
