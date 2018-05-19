@@ -18,6 +18,10 @@
  * @param room the room to call the task for
  */
 void roller_task(room *room) {
+    if (room == NULL) {
+        return;
+    }
+
     HashTable *blacklist;
     hashtable_new(&blacklist);
 
