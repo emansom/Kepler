@@ -288,8 +288,8 @@ void append_user_list(outgoing_message *players, entity *player) {
         om_write_str_kv(players, "c", player->details->motto);
     }
 
-    if (strlen(player->details->active_badge) > 0) {
-        om_write_str_kv(players, "b", player->details->active_badge);
+    if (player->details->badge_active) {
+        om_write_str_kv(players, "b", player->details->badge);
     }
 
     if (strcmp(player->room_user->room->room_data->model_data->model_name, "pool_a") == 0

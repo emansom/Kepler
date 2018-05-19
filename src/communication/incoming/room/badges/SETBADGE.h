@@ -1,3 +1,5 @@
+#include <stdbool.h>
+
 #include "log.h"
 #include "array.h"
 
@@ -9,8 +11,8 @@ void update_badge(room_user *room_user) {
 
     om_write_int(badge_notify, room_user->instance_id);
 
-    if (strlen(room_user->entity->details->active_badge) > 0) {
-        om_write_str(badge_notify, room_user->entity->details->active_badge);
+    if (room_user->entity->details->badge_active) {
+        om_write_str(badge_notify, room_user->entity->details->badge);
     }
 
     room_send(room_user->room, badge_notify);
@@ -30,13 +32,15 @@ void SETBADGE(entity *player, incoming_message *im) {
             return;
         }
 
-        player->details->active_badge = strdup(new_badge);
+        player->details->badge = strdup(new_badge);
+        player->details->badge_active = true;
     } else {
-        player->details->active_badge = "";
+        player->details->badge = "";
+        player->details->badge_active = false;
     }
 
     free(new_badge);
 
     update_badge(player->room_user);
-    player_query_save_active_badge(player);
+    player_query_save_badge(player);
 }
