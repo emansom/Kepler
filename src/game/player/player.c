@@ -235,5 +235,6 @@ void player_data_cleanup(entity_data *player_data) {
     free(player_data->motto);
     free(player_data->console_motto);
     free(player_data->sex);
+    free(player_data->active_badge);
     free(player_data);
 }

@@ -21,9 +21,10 @@ void MESSENGERINIT(entity *p, incoming_message *message) {
     om_write_int(friends_list, 600);
     om_write_int(friends_list, (int) list_size(p->messenger->friends)); // Buddy list count
 
-    for (int i = 0; i < list_size(p->messenger->friends); i++) {
+    for (size_t i = 0; i < list_size(p->messenger->friends); i++) {
         messenger_entry *friend;
         list_get_at(p->messenger->friends, i, (void*)&friend);
+
         messenger_entry_serialise(friend->user_id, friends_list);
     }
 
