@@ -24,5 +24,6 @@ void G_STAT(entity *player, incoming_message *message) {
 
     player_send(player, players);
     om_cleanup(players);
-    player->room_user->needs_update = 1;
+
+    player->room_user->needs_update = true;
 }
