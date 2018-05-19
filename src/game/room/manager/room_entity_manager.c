@@ -90,7 +90,6 @@ void room_enter(room *room, entity *player, coord *destination) {
 
     room_entity->room = room;
     room_entity->room_id = room->room_id;
-    room_entity->instance_id = create_instance_id(room_entity);
     room_user_reset_idle_timer(player->room_user);
 
     if (destination == NULL) {
@@ -110,6 +109,7 @@ void room_enter(room *room, entity *player, coord *destination) {
 
     list_add(room->users, player);
     room->room_data->visitors_now = (int) list_size(room->users);
+    room_entity->instance_id = create_instance_id(room_entity);
 
     outgoing_message *om = om_create(166); // "Bf"
     om_write_str(om, "/client/");
