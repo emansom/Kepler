@@ -1,3 +1,5 @@
+#include <time.h>
+
 #include "communication/messages/incoming_message.h"
 #include "communication/messages/outgoing_message.h"
 
@@ -9,6 +11,13 @@
 #include "game/player/player.h"
 
 void FOLLOW_FRIEND(entity *player, incoming_message *message) {
+    if (difftime(time(0), player->last_stalk) < 10) {
+        // This is because the client has an timeout of 10s, but doesn't show an alert.
+        // To not confuse the users, we send an alert :)
+        player_send_alert(player, "You are stalking too fast. Try again in a while");
+        return;
+    }
+
     int target_id = im_read_vl64(message);
 
     int error_id = -1;
@@ -25,6 +34,8 @@ void FOLLOW_FRIEND(entity *player, incoming_message *message) {
                 om_write_int(stalk_ok, player_friend->room_user->room_id);
                 player_send(player, stalk_ok);
                 om_cleanup(stalk_ok);
+
+                time(&player->last_stalk);
             } else {
                 error_id = 2; // User isn't in a room
             }
