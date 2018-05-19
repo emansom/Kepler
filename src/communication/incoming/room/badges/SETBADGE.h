@@ -31,13 +31,10 @@ void SETBADGE(entity *player, incoming_message *im) {
         if (array_contains_value(badges, new_badge, CC_CMP_STRING) == 0) {
             return;
         }
-
-        player->details->badge = strdup(new_badge);
-        player->details->badge_active = true;
-    } else {
-        player->details->badge = "";
-        player->details->badge_active = false;
     }
+
+    player->details->badge = strdup(new_badge);
+    player->details->badge_active = (bool)show_badge;
 
     free(new_badge);
 
