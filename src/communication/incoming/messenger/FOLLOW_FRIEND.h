@@ -14,11 +14,10 @@ void FOLLOW_FRIEND(entity *player, incoming_message *message) {
     entity *player_friend = player_manager_find_by_id(target_id);
 
     if (player_friend != NULL && player_friend->room_user->room != NULL) {
-        bool is_public = list_size(player_friend->room_user->room->room_data->model_data->public_items) > 0;
+        bool is_flat = player_friend->room_user->room->room_data->owner_id == 0;
 
         outgoing_message *stalk_ok = om_create(286); // "D^"
-        //om_write_int(stalk_ok, 0); // TODO: figure out what this is
-        om_write_int(stalk_ok, is_public);
+        om_write_int(stalk_ok, is_flat);
         om_write_int(stalk_ok, player_friend->room_user->room_id);
         player_send(player, stalk_ok);
         om_cleanup(stalk_ok);
