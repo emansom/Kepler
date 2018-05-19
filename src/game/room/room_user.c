@@ -206,7 +206,7 @@ void stop_walking(room_user *room_user, bool is_silent) {
             return;
         }
 
-        room_user_invoke_item(room_user);
+        room_user_invoke_item(room_user, true);
     }
 }
 
@@ -353,7 +353,7 @@ bool room_user_process_command(room_user *room_user, char *text) {
  *
  * @param room_user the room user to trigger for
  */
-void room_user_invoke_item(room_user *room_user) {
+void room_user_invoke_item(room_user *room_user, bool set_needs_update) {
     bool needs_update = false;
 
     double height = room_user->room->room_map->map[room_user->position->x][room_user->position->y]->tile_height;
@@ -407,7 +407,10 @@ void room_user_invoke_item(room_user *room_user) {
         pool_item_walk_on(room_user->entity, item);
     }
 
-    room_user->needs_update = needs_update;
+    // Sometimes we don't want an instant/as soon as possible update
+    if (set_needs_update) {
+        room_user->needs_update = needs_update;
+    }
 }
 
 /**

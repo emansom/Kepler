@@ -30,15 +30,19 @@ void process_user(entity *player);
  * @param room the room handled
  */
 void walk_task(room *room) {
-    List *users;
-    list_copy_shallow(room->users, &users);
+    if (room == NULL) {
+        return;
+    }
+
+    //List *users;
+    //list_copy_shallow(room->users, &users);
 
     int user_updates = 0;
     outgoing_message *status_update = om_create(34); // "@b"
 
-    for (size_t i = 0; i < list_size(users); i++) {
+    for (size_t i = 0; i < list_size(room->users); i++) {
         entity *room_player;
-        list_get_at(users, i, (void*)&room_player);
+        list_get_at(room->users, i, (void*)&room_player);
 
         if (room_player == NULL) {
             continue;
@@ -68,7 +72,7 @@ void walk_task(room *room) {
 
     om_cleanup(status_update);
 
-    list_destroy(users);
+    //list_destroy(users);
 }
 
 /**
