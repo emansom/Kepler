@@ -148,7 +148,7 @@ void player_refresh_badges(entity *player) {
         char *badge = (char*)next;
         om_write_str(badge_list, badge);
 
-        if (strcmp(badge, player->details->active_badge) == 0) {
+        if (strcmp(badge, player->details->badge) == 0) {
             badge_slot = slot_counter;
         }
 
@@ -156,7 +156,7 @@ void player_refresh_badges(entity *player) {
     }
 
     om_write_int(badge_list, badge_slot);
-    om_write_int(badge_list, strlen(player->details->active_badge) > 0);
+    om_write_int(badge_list, player->details->badge_active);
 
     player_send(player, badge_list);
     om_cleanup(badge_list);

@@ -29,7 +29,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`sso_ticket`	TEXT,
 	`club_subscribed`	INTEGER NOT NULL DEFAULT 0,
 	`club_expiration`	INTEGER NOT NULL DEFAULT 0,
-	`active_badge`	TEXT NOT NULL
+	`badge`	TEXT NOT NULL,
+	`badge_active`	INTEGER NOT NULL DEFAULT 0
 );
 INSERT INTO `users` VALUES (1,'Alex','$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA','hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61','ch=s02/182,243,255','M','de kepler whey',99887,19,0,2,'I''m a new user!',1526567261,'123',1526277229,1626277229,'');
 INSERT INTO `users` VALUES (2,'test','$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA','hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91','ch=s02/182,243,255','M','de kepler whey',99887,19,0,2,'I''m a new user!',1526567261,'keplerTicket',1526277229,1626277229,'');

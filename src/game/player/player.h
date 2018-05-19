@@ -28,7 +28,8 @@ typedef struct entity_details_s {
     unsigned long last_online;
     time_t club_subscribed;
     time_t club_expiration;
-    char *active_badge;
+    char *badge;
+    bool badge_active;
 } entity_data;
 
 typedef struct entity_s {
@@ -45,7 +46,7 @@ typedef struct entity_s {
 } entity;
 
 entity *player_create(void*, char*);
-entity_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*, unsigned long, unsigned long, unsigned long, char*);
+entity_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*, unsigned long, unsigned long, unsigned long, char*, bool);
 void player_login(entity *player);
 bool player_has_fuse(entity *player, char *fuse_right);
 void player_disconnect(entity *player);

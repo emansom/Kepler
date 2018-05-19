@@ -195,7 +195,7 @@ entity_data *player_query_data(int id) {
     sqlite3_stmt *stmt;
 
     entity_data *player_data = NULL;
-    int status = sqlite3_prepare_v2(conn, "SELECT id,username,password,figure,pool_figure,credits,motto,sex,tickets,film,rank,console_motto,last_online,club_subscribed,club_expiration,active_badge FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "SELECT id,username,password,figure,pool_figure,credits,motto,sex,tickets,film,rank,console_motto,last_online,club_subscribed,club_expiration,badge,badge_active FROM users WHERE id = ? LIMIT 1", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 
@@ -224,7 +224,8 @@ entity_data *player_query_data(int id) {
                 (unsigned long)sqlite3_column_int64(stmt, 12), // last_online
                 (unsigned long)sqlite3_column_int64(stmt, 13), // club_subscribed
                 (unsigned long)sqlite3_column_int64(stmt, 14), // club_expiration
-                (char*)sqlite3_column_text(stmt, 15)
+                (char*)sqlite3_column_text(stmt, 15), // badge
+                (bool)sqlite3_column_int(stmt, 16) == 1
         );
     }
 
@@ -477,17 +478,18 @@ Array *player_query_badges(int id) {
  *
  * @param player the player to save the active badge for
  */
-void player_query_save_active_badge(entity *player) {
+void player_query_save_badge(entity *player) {
     sqlite3 *conn = global.DB;
     sqlite3_stmt *stmt;
 
-    int status = sqlite3_prepare_v2(conn, "UPDATE users SET active_badge = ? WHERE id = ?", -1, &stmt, 0);
+    int status = sqlite3_prepare_v2(conn, "UPDATE users SET badge = ?, badge_active = ? WHERE id = ?", -1, &stmt, 0);
 
     db_check_prepare(status, conn);
 
     if (status == SQLITE_OK) {
-        sqlite3_bind_text(stmt, 1, player->details->active_badge, (int) strlen(player->details->active_badge), SQLITE_STATIC);
-        sqlite3_bind_int(stmt, 2, player->details->id);
+        sqlite3_bind_text(stmt, 1, player->details->badge, (int) strlen(player->details->badge), SQLITE_STATIC);
+        sqlite3_bind_int(stmt, 2, (int)player->details->badge_active);
+        sqlite3_bind_int(stmt, 3, player->details->id);
 
         db_check_step(sqlite3_step(stmt), conn, stmt);
     }

@@ -49,7 +49,7 @@ entity *player_create(void *socket, char *ip_address) {
  * Creates a new player data instance
  * @return player data struct
  */
-entity_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, unsigned long last_online, unsigned long club_subscribed, unsigned long club_expiration, char *active_badge) {
+entity_data *player_create_data(int id, char *username, char *password, char *figure, char *pool_figure, int credits, char *motto, char *sex, int tickets, int film, int rank, char *console_motto, unsigned long last_online, unsigned long club_subscribed, unsigned long club_expiration, char *badge, bool badge_active) {
     entity_data *data = malloc(sizeof(entity_data));
     data->id = id;
     data->username = strdup(username);
@@ -66,7 +66,8 @@ entity_data *player_create_data(int id, char *username, char *password, char *fi
     data->last_online = last_online;
     data->club_subscribed = (time_t)club_subscribed;
     data->club_expiration = (time_t)club_expiration;
-    data->active_badge = strdup(active_badge);
+    data->badge = strdup(badge);
+    data->badge_active = badge_active;
     return data;
 }
 
@@ -236,6 +237,6 @@ void player_data_cleanup(entity_data *player_data) {
     free(player_data->motto);
     free(player_data->console_motto);
     free(player_data->sex);
-    free(player_data->active_badge);
+    free(player_data->badge);
     free(player_data);
 }
