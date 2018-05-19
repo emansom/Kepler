@@ -221,9 +221,9 @@ entity_data *player_query_data(int id) {
                 sqlite3_column_int(stmt, 9),          // film
                 sqlite3_column_int(stmt, 10),         // rank
                 (char*)sqlite3_column_text(stmt, 11), // console_motto
-                (unsigned long long)sqlite3_column_int64(stmt, 12), // last_online
-                (unsigned long long)sqlite3_column_int64(stmt, 13), // club_subscribed
-                (unsigned long long)sqlite3_column_int64(stmt, 14), // club_expiration
+                (unsigned long)sqlite3_column_int64(stmt, 12), // last_online
+                (unsigned long)sqlite3_column_int64(stmt, 13), // club_subscribed
+                (unsigned long)sqlite3_column_int64(stmt, 14), // club_expiration
                 (char*)sqlite3_column_text(stmt, 15)
         );
     }

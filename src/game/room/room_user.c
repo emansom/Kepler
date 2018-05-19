@@ -62,23 +62,20 @@ void room_user_reset(room_user *room_user, bool disconnect) {
     room_user_remove_status(room_user, "lay");
     room_user_remove_status(room_user, "flatctrl");
     room_user_remove_status(room_user, "dance");
-
-    // Carry items
     room_user_remove_status(room_user, "carryf");
     room_user_remove_status(room_user, "carryd");
     room_user_remove_status(room_user, "cri");
 
     room_user->is_walking = false;
     room_user->needs_update = false;
-    room_user->needs_update_from_secs = -1;
     room_user->walking_lock = false;
     room_user->is_diving = false;
+    room_user->needs_update_from_secs = -1;
     room_user->authenticate_id = -1;
-    room_user->room_id = 0;
-    room_user->room = NULL;
-
     room_user->room_look_at_timer = -1;
     room_user->lido_vote = -1;
+    room_user->room_id = 0;
+    room_user->room = NULL;
 
     room_user_reset_idle_timer(room_user);
     trade_manager_close(room_user);

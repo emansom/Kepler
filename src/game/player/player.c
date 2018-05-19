@@ -144,13 +144,14 @@ void player_send(entity *p, outgoing_message *om) {
         return;
     }
 
+    om_finalise(om);
+
     if (configuration_get_bool("debug")) {
         char *preview = replace_unreadable_characters(om->sb->data);
         log_debug("Client [%s] outgoing data: %i / %s", p->ip_address, om->header_id, preview);
         free(preview);
     }
 
-    om_finalise(om);
     uv_write_t *req;
 
     if(!(req = malloc(sizeof(uv_write_t)))){
@@ -235,5 +236,6 @@ void player_data_cleanup(entity_data *player_data) {
     free(player_data->motto);
     free(player_data->console_motto);
     free(player_data->sex);
+    free(player_data->active_badge);
     free(player_data);
 }
