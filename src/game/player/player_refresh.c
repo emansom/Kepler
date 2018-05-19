@@ -141,7 +141,7 @@ void player_refresh_badges(entity *player) {
     array_iter_init(&ai, badges);
 
     int badge_slot = 0;
-    int slot_counter = 1;
+    int slot_counter = 0;
     void *next;
 
     while (array_iter_next(&ai, &next) != CC_ITER_END) {
