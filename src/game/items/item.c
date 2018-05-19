@@ -116,7 +116,7 @@ void item_update_entities(item *item, room *room, coord *old_position) {
         room_user *room_user;
         list_get_at(entities_to_update, i, (void*)&room_user);
 
-        room_user_invoke_item(room_user);
+        room_user_invoke_item(room_user, true);
     }
 
     list_destroy(entities_to_update);

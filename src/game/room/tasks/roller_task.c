@@ -193,7 +193,7 @@ void do_roller_player(room *room, item *roller, room_user *room_entity) {
 
     to.z = next_tile->tile_height;
 
-    room_user_invoke_item(room_entity);
+    room_user_invoke_item(room_entity, false);
     room_entity->position->x = to.x;
     room_entity->position->y = to.y;
     room_entity->position->z = to.z;
