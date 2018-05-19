@@ -396,9 +396,10 @@ void room_dispose(room *room, bool force_dispose) {
         return;
     }
 
-    room_map_destroy(room);
     room_stop_tasks(room);
     room->tick = 0;
+
+    room_map_destroy(room);
 
     if (room->room_data->owner_id == 0 && !force_dispose) { // model is a public rooms model
         return; // Prevent public rooms
