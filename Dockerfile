@@ -38,6 +38,7 @@ RUN touch /usr/src/kepler/config.ini && \
     crudini --set /usr/src/kepler/config.ini Database database.filename db/Kepler.db && \
     crudini --set /usr/src/kepler/config.ini Game sso.tickets.enabled true && \
     crudini --set /usr/src/kepler/config.ini Game roller.tick.default 6 && \
+    crudini --set /usr/src/kepler/config.ini Console debug true && \
     mv /usr/src/kepler/config.ini /usr/src/kepler/tmp.ini && \
     cat /usr/src/kepler/tmp.ini | tr -d "[:blank:]" > /usr/src/kepler/config.ini && \
     cat /usr/src/kepler/config.ini
