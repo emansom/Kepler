@@ -14,7 +14,6 @@ void G_STAT(entity *player, incoming_message *message) {
     }
 
     outgoing_message *players = om_create(34); // "@b
-
     for (size_t i = 0; i < list_size(room->users); i++) {
         entity *room_player;
         list_get_at(room->users, i, (void*)&room_player);
@@ -25,5 +24,6 @@ void G_STAT(entity *player, incoming_message *message) {
     player_send(player, players);
     om_cleanup(players);
 
+    room_refresh_rights(room, player);
     player->room_user->needs_update = true;
 }

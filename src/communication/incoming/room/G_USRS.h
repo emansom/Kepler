@@ -42,8 +42,6 @@ void G_USRS(entity *p, incoming_message *message) {
     room_send(room, players);
     om_cleanup(players);
 
-    room_refresh_rights(room, p);
-
     /*char instance_id[11];
     sprintf(instance_id, "%i", entity->details->id);
     instance_id[10] = '\0';
