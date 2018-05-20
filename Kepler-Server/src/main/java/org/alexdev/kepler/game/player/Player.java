@@ -3,9 +3,11 @@ package org.alexdev.kepler.game.player;
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.MessageHandler;
+import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
@@ -14,10 +16,9 @@ import org.slf4j.LoggerFactory;
 
 public class Player extends Entity {
     public static final AttributeKey<Player> PLAYER_KEY = AttributeKey.valueOf("Player");
-
     private final NettyPlayerNetwork network;
-    private final Logger log;
 
+    private Logger log;
     private PlayerDetails details;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
@@ -31,8 +32,10 @@ public class Player extends Entity {
      */
     public void login() {
         PlayerManager.getInstance().addPlayer(this);
+        this.log = LoggerFactory.getLogger("Player " + this.details.getName());
 
         this.send(new LOGIN());
+        this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
 
         log.info("Users: " + PlayerManager.getInstance().getPlayers().size());
     }
@@ -77,11 +80,11 @@ public class Player extends Entity {
     }
 
     public Logger getLogger() {
-        return log;
+        return this.log;
     }
 
     public NettyPlayerNetwork getNetwork() {
-        return network;
+        return this.network;
     }
 
     public MessageHandler getMessageHandler() {

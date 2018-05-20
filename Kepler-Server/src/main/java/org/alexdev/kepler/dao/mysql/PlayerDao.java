@@ -1,4 +1,4 @@
-package org.alexdev.kepler.dao.mysql.player;
+package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.mysql.Storage;
 import org.alexdev.kepler.game.player.Player;

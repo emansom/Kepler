@@ -1,8 +1,7 @@
 package org.alexdev.kepler.messages.incoming.handshake;
 
-import org.alexdev.kepler.dao.mysql.player.PlayerDao;
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.outgoing.user.LOCALISED_ERROR;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
