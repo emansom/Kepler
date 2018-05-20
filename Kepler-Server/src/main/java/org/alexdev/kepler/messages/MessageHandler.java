@@ -94,9 +94,9 @@ public class MessageHandler {
         if (Configuration.getInstance().getServerConfig().get("Logging", "log.received.packets", Boolean.class)) {
             if (this.messages.containsKey(message.getHeaderId())) {
                 MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
-                this.player.getLogger().info("Received ({}): {} / {}{} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
+                this.player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
             } else {
-                this.player.getLogger().info("Received ({}): {} / {}{} ", "Unknown", message.getHeaderId(), message.getMessageBody());
+                this.player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
             }
         }
 
