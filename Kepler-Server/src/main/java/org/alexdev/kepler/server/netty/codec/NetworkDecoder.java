@@ -1,12 +1,10 @@
 package org.alexdev.kepler.server.netty.codec;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.Kepler;
+import org.alexdev.kepler.util.encoding.Base64Encoding;
 
 import java.util.List;
 
@@ -16,12 +14,17 @@ public class NetworkDecoder extends ByteToMessageDecoder {
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
         buffer.markReaderIndex();
 
-        if (buffer.readableBytes() < 6) {
-            // If the incoming data is less than 6 bytes, it's junk.
+        if (buffer.readableBytes() < 5) {
+            // If the incoming data is less than 5 bytes, it's junk.
             return;
         }
 
-        byte delimiter = buffer.readByte();
+        byte[] messageLength = new byte[] { buffer.readByte(), buffer.readByte(), buffer.readByte() };
+        byte[] messageHeader = new byte[] { buffer.readByte(), buffer.readByte() };
+
+        System.out.println("Hello dude " + Base64Encoding.decodeB64(messageHeader));
+
+        /*byte delimiter = buffer.readByte();
         buffer.resetReaderIndex();
 
         if (delimiter == 60) {
@@ -48,6 +51,6 @@ public class NetworkDecoder extends ByteToMessageDecoder {
             }
 
             out.add(new NettyRequest(length, buffer.readBytes(length)));
-        }
+        }*/
     }
 }

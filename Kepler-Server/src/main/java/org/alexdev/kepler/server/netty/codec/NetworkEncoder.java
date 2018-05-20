@@ -23,8 +23,9 @@ public class NetworkEncoder extends MessageToMessageEncoder<MessageComposer> {
         NettyResponse response = new NettyResponse(msg.getHeader(), buffer);
         msg.compose(response);
 
-        if (!response.hasLength()) {
-            buffer.setInt(0, buffer.writerIndex() - 4);
+        if (!response.isFinalised()) {
+            buffer.writeByte(1);
+            response.setFinalised(true);
         }
 
         if (Configuration.getInstance().getServerConfig().get("Logging", "log.sent.packets", Boolean.class)) {

@@ -11,13 +11,6 @@ public abstract class MessageComposer {
     public abstract void compose(NettyResponse response);
 
     /**
-     * Write to buffer
-     */
-    public NettyResponse writeToBuffer(ByteBuf buf) {
-        return null;
-    }
-
-    /**
      * Get the header
      */
     public abstract short getHeader();

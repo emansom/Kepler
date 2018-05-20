@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.outgoing.handshake.HELLO;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -29,6 +30,8 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
             ctx.disconnect();
             return;
         }
+
+        player.send(new HELLO());
 
         if (Configuration.getInstance().getServerConfig().get("Logging", "log.connections", Boolean.class)) {
             log.info("[{}] Connection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);

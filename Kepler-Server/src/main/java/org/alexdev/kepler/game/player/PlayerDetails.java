@@ -8,4 +8,8 @@ public class PlayerDetails {
     public int getId() {
         return -1;
     }
+
+    public String getName() {
+        return "Alex";
+    }
 }

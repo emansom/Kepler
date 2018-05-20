@@ -1,23 +1,24 @@
 package org.alexdev.kepler.server.netty.streams;
 
 import io.netty.buffer.ByteBuf;
+import org.alexdev.kepler.util.encoding.Base64Encoding;
+
 import java.nio.charset.Charset;
 
 public class NettyResponse  {
-
     private short id;
     private ByteBuf buffer;
+    private boolean finalised;
 
     public NettyResponse(short header, ByteBuf buffer) {
         this.id = header;
         this.buffer = buffer;
-        this.buffer.writeInt(-1);
-        this.buffer.writeShort(id);
+        this.buffer.writeBytes(Base64Encoding.encodeB64(header, 2));
     }
 
     public void writeString(Object obj) {
-        buffer.writeShort(obj.toString().length());
         buffer.writeBytes(obj.toString().getBytes());
+        buffer.writeByte(2);
     }
 
     public void writeInt(Integer obj) {
@@ -36,10 +37,6 @@ public class NettyResponse  {
         buffer.writeBoolean(obj);
     }
 
-
-    /* (non-Javadoc)
-     * @see org.alexdev.icarus.server.api.messages.Response#getBodyString()
-     */
     public String getBodyString() {
         String str = new String(this.buffer.toString(Charset.defaultCharset()));
         
@@ -51,13 +48,17 @@ public class NettyResponse  {
     }
 
     /**
-     * Gets has the length been set
+     * If this packet has been finalised before sending
      *
-     * @return true, if the length was set
+     * @return true, if it was
      */
-    public boolean hasLength() {
-        return (this.buffer.getInt(0) > -1);
+    public boolean isFinalised() {
+        return finalised;
 
+    }
+
+    public void setFinalised(boolean finalised) {
+        this.finalised = finalised;
     }
 
     /* (non-Javadoc)
