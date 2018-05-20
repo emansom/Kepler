@@ -2,12 +2,11 @@ package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.headers.Incoming;
-import org.alexdev.kepler.messages.incoming.rooms.GETINTEREST;
+import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.GENERATEKEY;
 import org.alexdev.kepler.messages.incoming.handshake.INIT_CRYPTO;
 import org.alexdev.kepler.messages.incoming.handshake.SSO;
 import org.alexdev.kepler.messages.incoming.navigator.NAVIGATE;
-import org.alexdev.kepler.messages.incoming.rooms.ROOM_DIRECTORY;
 import org.alexdev.kepler.messages.incoming.user.GET_CREDITS;
 import org.alexdev.kepler.messages.incoming.user.GET_INFO;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -80,6 +79,10 @@ public class MessageHandler {
     private void registerRoomPackets() {
         registerEvent(Incoming.GETINTEREST, new GETINTEREST());
         registerEvent(Incoming.ROOM_DIRECTORY, new ROOM_DIRECTORY());
+        registerEvent(Incoming.GETROOMAD, new GETROOMAD());
+        registerEvent(Incoming.G_HMAP, new G_HMAP());
+        registerEvent(Incoming.G_OBJS, new G_OBJS());
+        registerEvent(Incoming.G_USRS,  new G_USRS());
     }
 
     /**

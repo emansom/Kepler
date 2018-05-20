@@ -44,6 +44,8 @@ public class RoomEntityManager {
         this.room.getEntities().remove(entity);
         this.room.getData().setVisitorsNow(this.room.getEntities().size());
 
+        entity.getRoomUser().setRoom(this.room);
+
         // From this point onwards we send packets for the user to enter
         if (entity.getType() !=  EntityType.PLAYER) {
             return;

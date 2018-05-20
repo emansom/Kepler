@@ -4,15 +4,14 @@ import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class ROOM_URL extends MessageComposer {
-
+public class OBJECTS_WORLD extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
-        response.writeString("/client/");
+
     }
 
     @Override
     public short getHeader() {
-        return Outgoing.ROOM_URL;
+        return Outgoing.OBJECTS_WORLD;
     }
 }
