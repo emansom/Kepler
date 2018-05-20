@@ -57,8 +57,10 @@ room_user *room_user_get_by_instance_id(room *room, int instance_id) {
         entity *room_player;
         list_get_at(room->users, i, (void *) &room_player);
 
-        if (room_player->room_user->instance_id == instance_id) {
-            return (room_user *) room_player->room_user;
+        if (room_player != NULL && room_player->room_user != NULL) {
+            if (room_player->room_user->instance_id == instance_id) {
+                return room_player->room_user;
+            }
         }
     }
 
