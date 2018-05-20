@@ -20,10 +20,12 @@ public class Player extends Entity {
 
     private Logger log;
     private PlayerDetails details;
+    private MessageHandler messageHandler;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
+        this.messageHandler = new MessageHandler(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
     }
 
@@ -32,6 +34,9 @@ public class Player extends Entity {
      */
     public void login() {
         PlayerManager.getInstance().addPlayer(this);
+        this.messageHandler.unregisterHandshakePackets();
+
+        // Update logger to show name
         this.log = LoggerFactory.getLogger("Player " + this.details.getName());
 
         this.send(new LOGIN());
@@ -88,7 +93,7 @@ public class Player extends Entity {
     }
 
     public MessageHandler getMessageHandler() {
-        return new MessageHandler(this);
+        return this.messageHandler;
     }
 
     @Override

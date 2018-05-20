@@ -5,6 +5,7 @@ import org.alexdev.kepler.messages.headers.Incoming;
 import org.alexdev.kepler.messages.incoming.handshake.GENERATEKEY;
 import org.alexdev.kepler.messages.incoming.handshake.INIT_CRYPTO;
 import org.alexdev.kepler.messages.incoming.handshake.SSO;
+import org.alexdev.kepler.messages.incoming.user.GET_INFO;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.Configuration;
@@ -27,6 +28,7 @@ public class MessageHandler {
         this.messages = new ConcurrentHashMap<>();
 
         registerHandshakePackets();
+        registerUserPackets();
 
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
@@ -50,6 +52,11 @@ public class MessageHandler {
         unregisterEvent(Incoming.GENERATEKEY);
         unregisterEvent(Incoming.SSO);
     }
+
+    private void registerUserPackets() {
+        registerEvent(Incoming.GET_INFO, new GET_INFO());
+    }
+
 
     /**
      * Register event.
@@ -85,15 +92,15 @@ public class MessageHandler {
      */
     public void handleRequest(NettyRequest message) {
         if (Configuration.getInstance().getServerConfig().get("Logging", "log.received.packets", Boolean.class)) {
-            if (this.messages.containsKey(message.getMessageId())) {
-                MessageEvent event = this.messages.get(message.getMessageId()).get(0);
-                this.player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getMessageId(), message.getMessageBody());
+            if (this.messages.containsKey(message.getHeaderId())) {
+                MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
+                this.player.getLogger().info("Received ({}): {} / {}{} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
             } else {
-                this.player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getMessageId(), message.getMessageBody());
+                this.player.getLogger().info("Received ({}): {} / {}{} ", "Unknown", message.getHeaderId(), message.getMessageBody());
             }
         }
 
-        invoke(message.getMessageId(), message);
+        invoke(message.getHeaderId(), message);
     }
 
     /**

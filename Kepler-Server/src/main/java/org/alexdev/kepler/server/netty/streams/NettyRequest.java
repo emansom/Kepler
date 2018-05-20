@@ -6,14 +6,16 @@ import io.netty.buffer.ByteBuf;
 import org.alexdev.kepler.util.encoding.Base64Encoding;
 
 public class NettyRequest {
-    final private int header;
+    final private int headerId;
+    final private String header;
     final private int length;
     final private ByteBuf buffer;
 
     public NettyRequest(int length, ByteBuf buffer) {
         this.buffer = buffer;
         this.length = length;
-        this.header = Base64Encoding.decodeB64(new byte[] { buffer.readByte(), buffer.readByte() });
+        this.header = new String(new byte[] { buffer.readByte(), buffer.readByte() });
+        this.headerId = Base64Encoding.decodeB64(header.getBytes());
     }
 
     public Integer readInt() {
@@ -83,11 +85,15 @@ public class NettyRequest {
             consoleText = consoleText.replace(Character.toString((char)i), "[" + i + "]");
         }
 
-        return consoleText;
+        return this.header + consoleText;
     }
 
-    public int getMessageId() {
+    public String getHeader() {
         return header;
+    }
+
+    public int getHeaderId() {
+        return headerId;
     }
 
     public void dispose() {
