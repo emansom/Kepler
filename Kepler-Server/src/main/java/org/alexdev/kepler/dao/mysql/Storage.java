@@ -66,6 +66,11 @@ public class Storage {
         return false;
     }
 
+    /**
+     * Logger handler for the MySQL processing.
+     *
+     * @param ex the exception to log
+     */
     public static void logError(Exception ex) {
     	Log.getErrorLogger().error("Error when executing MySQL query: ", ex);
 	}
