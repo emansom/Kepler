@@ -1,7 +1,7 @@
 apply plugin: 'idea'
 apply plugin: 'application'
 
-mainClassName = 'org.alexdev.icarus.Icarus'
+mainClassName = 'org.alexdev.kepler.Kepler'
 
 repositories {
     mavenCentral()

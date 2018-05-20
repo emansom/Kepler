@@ -2,13 +2,55 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a1937664-e7c1-4149-9079-d775723103f6" name="Default" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/Player.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/PlayerDetails.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/PlayerManager.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/Room.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/RoomUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/4.4/taskHistory/taskHistory.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Kepler-Server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/Icarus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/console/ConsoleOperator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/console/ConsoleReader.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/Dao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/Storage.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/player/PlayerDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/encryption/DiffieHellman.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/encryption/RC4.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/encryption/RSA.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/GameScheduler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/commands/Command.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/commands/CommandManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/entity/Entity.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/entity/EntityStatus.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/entity/EntityType.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/AffectedTile.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/Pathfinder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/PathfinderNode.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/Position.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/Player.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/PlayerDetails.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/PlayerManager.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/Room.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/RoomUser.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/log/Log.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/MessageHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/headers/Incoming.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/headers/Outgoing.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/types/MessageComposer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/types/MessageEvent.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/NettyChannelInitializer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/NettyPlayerNetwork.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/NettyServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/codec/EncryptionDecoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/codec/NetworkDecoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/codec/NetworkEncoder.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/connections/ConnectionHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/streams/NettyRequest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/streams/NettyResponse.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/RandomInteger.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/Util.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/config/Configuration.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/date/DateUtil.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/locale/Locale.java" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -28,125 +70,21 @@
     </projectState>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file leaf-file-name="MessageComposer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/types/MessageComposer.java">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="Kepler.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/kepler/Kepler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="34">
-              <caret line="2" column="31" selection-start-line="2" selection-start-column="31" selection-end-line="2" selection-end-column="31" />
-              <folding>
-                <element signature="e#455#456#0" expanded="true" />
-                <element signature="e#482#483#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="306">
+              <caret line="43" column="57" selection-start-line="43" selection-start-column="57" selection-end-line="43" selection-end-column="57" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NettyResponse.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/streams/NettyResponse.java">
+      <file leaf-file-name="build.gradle" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Kepler-Server/build.gradle">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NettyPlayerNetwork.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/NettyPlayerNetwork.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="17" column="5" lean-forward="true" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#824#825#0" expanded="true" />
-                <element signature="e#859#860#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlayerDao.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/player/PlayerDao.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="831">
-              <caret line="217" column="44" selection-start-line="217" selection-start-column="44" selection-end-line="217" selection-end-column="44" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Entity.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/entity/Entity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="390">
-              <caret line="32" column="35" lean-forward="true" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#729#730#0" expanded="true" />
-                <element signature="e#777#778#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="PlayerDetails.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/PlayerDetails.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="136">
-              <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-              <folding>
-                <element signature="e#138#139#0" expanded="true" />
-                <element signature="e#159#160#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ConnectionHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/connections/ConnectionHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="492">
-              <caret line="59" column="36" lean-forward="true" selection-start-line="59" selection-start-column="36" selection-end-line="59" selection-end-column="36" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Player.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/Player.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="680">
-              <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#1311#1312#0" expanded="true" />
-                <element signature="e#1354#1355#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Pathfinder.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/Pathfinder.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="583">
-              <caret line="117" column="28" selection-start-line="117" selection-start-column="28" selection-end-line="117" selection-end-column="28" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="MessageHandler.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/MessageHandler.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="340">
-              <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+            <state relative-caret-position="170">
+              <caret line="10" selection-start-line="10" selection-end-line="10" />
             </state>
           </provider>
         </entry>
@@ -544,9 +482,9 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4580386651189" />
+        <entry key="$PROJECT_DIR$" value="4580389655901" />
         <entry key="$PROJECT_DIR$/.gradle" value="0" />
-        <entry key="$PROJECT_DIR$/Kepler-Server/build.gradle" value="3305434554" />
+        <entry key="$PROJECT_DIR$/Kepler-Server/build.gradle" value="892547989" />
         <entry key="$PROJECT_DIR$/settings.gradle" value="2309107122" />
       </map>
     </option>
@@ -695,6 +633,8 @@
         <option value="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/connections/ConnectionHandler.java" />
         <option value="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/Player.java" />
         <option value="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/Pathfinder.java" />
+        <option value="$PROJECT_DIR$/Kepler-Server/build.gradle" />
+        <option value="$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/kepler/Kepler.java" />
       </list>
     </option>
   </component>
@@ -720,6 +660,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -760,124 +701,7 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="icarus" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="console" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="mysql" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="player" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="game" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="commands" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="entity" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="player" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="messages" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="netty" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="util" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="config" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="date" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Kepler" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Kepler" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="Kepler-Server" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="java" type="462c0819:PsiDirectoryNode" />
-              <item name="locale" type="462c0819:PsiDirectoryNode" />
+              <item name="kepler" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -885,7 +709,6 @@
       </pane>
       <pane id="Scope" />
       <pane id="PackagesPane" />
-      <pane id="AndroidView" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -910,13 +733,13 @@
     </option>
   </component>
   <component name="RunManager">
-    <configuration name="Icarus" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="org.alexdev.icarus.Icarus" />
+    <configuration name="Kepler" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.alexdev.kepler.Kepler" />
       <module name="Kepler-Server_main" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="org.alexdev.icarus.*" />
+          <option name="PATTERN" value="org.alexdev.kepler.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -964,7 +787,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Icarus" />
+        <item itemvalue="Application.Kepler" />
       </list>
     </recent_temporary>
   </component>
@@ -978,47 +801,48 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1526795912907</updated>
-      <workItem from="1526795915046" duration="1740000" />
+      <workItem from="1526795915046" duration="1851000" />
+      <workItem from="1526797796139" duration="96000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1740000" />
+    <option name="totallyTimeSpent" value="1947000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1416" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info anchor="right" id="Palette" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="right" id="Maven Projects" />
-      <window_info anchor="bottom" id="Database Changes" show_stripe_button="false" />
-      <window_info id="Capture Tool" />
-      <window_info id="Designer" />
-      <window_info anchor="bottom" id="Build" weight="0.32996634" />
-      <window_info anchor="right" id="Database" />
+      <window_info anchor="right" id="Palette" order="3" />
+      <window_info anchor="bottom" id="Event Log" order="7" side_tool="true" />
+      <window_info anchor="right" id="Maven Projects" order="3" />
+      <window_info anchor="bottom" id="Database Changes" order="7" show_stripe_button="false" />
+      <window_info id="Capture Tool" order="2" />
+      <window_info id="Designer" order="2" />
+      <window_info anchor="bottom" id="Build" order="7" weight="0.32996634" />
+      <window_info anchor="right" id="Database" order="3" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info id="UI Designer" />
+      <window_info id="UI Designer" order="2" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info active="true" anchor="bottom" id="Messages" visible="true" weight="0.1254782" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info id="Image Layers" />
-      <window_info anchor="right" id="Capture Analysis" />
-      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Messages" order="7" weight="0.1254782" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info id="Image Layers" order="2" />
+      <window_info anchor="right" id="Capture Analysis" order="3" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
       <window_info anchor="bottom" id="Run" order="2" weight="0.22494261" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24648437" />
+      <window_info anchor="bottom" id="Terminal" order="7" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24648437" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32976282" />
-      <window_info anchor="right" id="Gradle" />
-      <window_info anchor="right" id="Theme Preview" />
-      <window_info id="Favorites" side_tool="true" />
+      <window_info anchor="right" id="Gradle" order="3" />
+      <window_info anchor="right" id="Theme Preview" order="3" />
+      <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -1028,10 +852,73 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/build.gradle">
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/player/PlayerDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="32" column="51" selection-start-line="32" selection-start-column="51" selection-end-line="32" selection-end-column="51" />
+        <state relative-caret-position="3587">
+          <caret line="217" column="44" selection-start-line="217" selection-start-column="44" selection-end-line="217" selection-end-column="44" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/entity/Entity.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="31" column="35" lean-forward="true" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/PlayerDetails.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
+          <folding>
+            <element signature="e#138#139#0" expanded="true" />
+            <element signature="e#163#164#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/connections/ConnectionHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="816">
+          <caret line="59" column="36" lean-forward="true" selection-start-line="59" selection-start-column="36" selection-end-line="59" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1307#1308#0" expanded="true" />
+            <element signature="e#1354#1355#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/MessageHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/Pathfinder.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="187">
+          <caret line="14" column="35" lean-forward="true" selection-start-line="14" selection-start-column="35" selection-end-line="14" selection-end-column="35" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1063,13 +950,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/metadata/Metadata.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-901">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/metadata/Metadata.java" />
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/util/locale/Locale.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-223">
@@ -1077,16 +958,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/RoomData.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="102">
-          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/RoomData.java" />
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/console/ConsoleReader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-25">
@@ -1094,72 +966,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/tasks/MovementTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="666">
-          <caret line="93" column="110" selection-start-line="93" selection-start-column="110" selection-end-line="93" selection-end-column="110" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/commands/types/MoonWalkCommand.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="17" selection-start-line="17" selection-end-line="26" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/incoming/camera/PurchasePhotoMessageEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="33" selection-start-line="33" selection-end-line="43" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/incoming/catalogue/CataloguePageMessageEvent.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="17" lean-forward="true" selection-start-line="17" selection-end-line="27" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/item/Item.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-187">
-          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/user/RoomUser.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="651">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="51" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/groups/GroupMemberDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="11" column="43" selection-start-line="11" selection-start-column="43" selection-end-line="12" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/item/InventoryDao.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="614">
-          <caret line="174" column="22" lean-forward="true" selection-start-line="174" selection-start-column="22" selection-end-line="174" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/inventory/Inventory.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="64" column="35" lean-forward="true" selection-start-line="64" selection-start-column="35" selection-end-line="66" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/tasks/MovementTask.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/commands/types/MoonWalkCommand.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/incoming/camera/PurchasePhotoMessageEvent.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/incoming/catalogue/CataloguePageMessageEvent.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/item/Item.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/room/user/RoomUser.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/groups/GroupMemberDao.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/item/InventoryDao.java" />
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/inventory/Inventory.java" />
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/commands/Command.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-86">
@@ -1185,9 +1000,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="112" column="35" selection-start-line="112" selection-start-column="35" selection-end-line="112" selection-end-column="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1202,31 +1014,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
           <caret line="5" column="45" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#546#547#0" expanded="true" />
-            <element signature="e#573#574#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/GameSettings.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/GameSettings.java" />
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/GameScheduler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="323">
           <caret line="19" column="60" selection-start-line="19" selection-start-column="60" selection-end-line="19" selection-end-column="60" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1234,13 +1029,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="627">
           <caret line="53" column="36" selection-start-line="53" selection-start-column="36" selection-end-line="53" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#3074#3075#0" expanded="true" />
-            <element signature="e#3099#3100#0" expanded="true" />
-            <element signature="e#3131#3132#0" expanded="true" />
-            <element signature="e#3158#3159#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1248,9 +1036,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="543">
           <caret line="82" column="62" lean-forward="true" selection-start-line="82" selection-start-column="62" selection-end-line="82" selection-end-column="62" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1279,9 +1064,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state>
           <caret column="43" selection-start-column="43" selection-end-column="43" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1289,17 +1071,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="31" selection-start-line="2" selection-start-column="31" selection-end-line="2" selection-end-column="31" />
-          <folding>
-            <element signature="e#455#456#0" expanded="true" />
-            <element signature="e#482#483#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/streams/NettyResponse.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="32" lean-forward="true" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
+        <state relative-caret-position="34">
+          <caret line="3" column="32" selection-start-line="3" selection-start-column="32" selection-end-line="3" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1308,30 +1086,28 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/entity/Entity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="390">
-          <caret line="32" column="35" lean-forward="true" selection-start-line="32" selection-start-column="35" selection-end-line="32" selection-end-column="35" />
+        <state relative-caret-position="476">
+          <caret line="31" column="35" selection-start-line="31" selection-start-column="35" selection-end-line="31" selection-end-column="35" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#729#730#0" expanded="true" />
-            <element signature="e#777#778#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/player/PlayerDetails.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
+        <state relative-caret-position="119">
           <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
           <folding>
             <element signature="e#138#139#0" expanded="true" />
-            <element signature="e#159#160#0" expanded="true" />
+            <element signature="e#163#164#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/dao/mysql/player/PlayerDao.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="831">
+        <state relative-caret-position="3587">
           <caret line="217" column="44" selection-start-line="217" selection-start-column="44" selection-end-line="217" selection-end-column="44" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1341,26 +1117,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/NettyPlayerNetwork.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="17" column="5" lean-forward="true" selection-start-line="17" selection-start-column="5" selection-end-line="17" selection-end-column="5" />
+        <state relative-caret-position="255">
+          <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#824#825#0" expanded="true" />
-            <element signature="e#859#860#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/server/netty/connections/ConnectionHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="492">
-          <caret line="59" column="36" lean-forward="true" selection-start-line="59" selection-start-column="36" selection-end-line="59" selection-end-column="36" />
+        <state relative-caret-position="816">
+          <caret line="59" column="36" selection-start-line="59" selection-start-column="36" selection-end-line="59" selection-end-column="36" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/messages/MessageHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
+        <state relative-caret-position="187">
           <caret line="20" column="11" selection-start-line="20" selection-start-column="11" selection-end-line="20" selection-end-column="11" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -1374,7 +1148,7 @@
           <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1311#1312#0" expanded="true" />
+            <element signature="e#1307#1308#0" expanded="true" />
             <element signature="e#1354#1355#0" expanded="true" />
           </folding>
         </state>
@@ -1382,8 +1156,32 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/Pathfinder.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="583">
-          <caret line="117" column="28" selection-start-line="117" selection-start-column="28" selection-end-line="117" selection-end-column="28" />
+        <state relative-caret-position="220">
+          <caret line="13" column="24" selection-start-line="13" selection-start-column="24" selection-end-line="13" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/icarus/game/pathfinder/Position.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="35" selection-start-column="35" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" selection-start-line="10" selection-end-line="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Kepler-Server/src/main/java/org/alexdev/kepler/Kepler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="43" column="57" selection-start-line="43" selection-start-column="57" selection-end-line="43" selection-end-column="57" />
         </state>
       </provider>
     </entry>

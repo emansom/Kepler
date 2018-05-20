@@ -1,4 +1,4 @@
-2018-05-20T16:27:55.682 - [ErrorLogger] - Error when executing MySQL query: 
+2018-05-20T16:32:10.967 - [ErrorLogger] - Error when executing MySQL query: 
 com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
 
 The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
@@ -6,9 +6,9 @@ The last packet sent successfully to the server was 0 milliseconds ago. The driv
 	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:540)
 	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:113)
 	at com.zaxxer.hikari.HikariDataSource.<init>(HikariDataSource.java:72)
-	at org.alexdev.icarus.dao.mysql.Storage.<init>(Storage.java:38)
-	at org.alexdev.icarus.dao.mysql.Dao.connect(Dao.java:21)
-	at org.alexdev.icarus.Icarus.main(Icarus.java:55)
+	at org.alexdev.kepler.dao.mysql.Storage.<init>(Storage.java:38)
+	at org.alexdev.kepler.dao.mysql.Dao.connect(Dao.java:21)
+	at org.alexdev.kepler.Kepler.main(Kepler.java:48)
 Caused by: com.mysql.cj.jdbc.exceptions.CommunicationsException: Communications link failure
 
 The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
