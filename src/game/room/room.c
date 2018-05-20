@@ -326,6 +326,7 @@ void room_send(room *room, outgoing_message *message) {
 }
 
 /**
+<<<<<<< HEAD
  * Send an asynchronous outgoing message to all the room users.
  * Used for sending packets to sockets from different threads.
  *
@@ -363,6 +364,8 @@ void room_async_send_cb(uv_async_t *handle) {
 
 
 /**
+=======
+>>>>>>> parent of 28c7cec... Add asynchronous room send
  * Send an outgoing message to room users with rights.
  *
  * @param room the room
