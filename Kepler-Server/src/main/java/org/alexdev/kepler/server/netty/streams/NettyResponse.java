@@ -17,25 +17,25 @@ public class NettyResponse  {
         this.buffer.writeBytes(Base64Encoding.encodeB64(header, 2));
     }
 
+    public void write(Object obj) {
+        this.buffer.writeBytes(obj.toString().getBytes());
+    }
+
     public void writeString(Object obj) {
-        buffer.writeBytes(obj.toString().getBytes());
-        buffer.writeByte(2);
+        this.buffer.writeBytes(obj.toString().getBytes());
+        this.buffer.writeByte(2);
     }
 
     public void writeInt(Integer obj) {
-        buffer.writeBytes(VL64Encoding.encodeVL64(obj));
-    }
-
-    public void writeInt(Boolean obj) {
-        buffer.writeInt(obj ? 1 : 0);
+        this.buffer.writeBytes(VL64Encoding.encodeVL64(obj));
     }
 
     public void writeShort(int obj) {
-        buffer.writeShort((short)obj);
+        this.buffer.writeShort((short)obj);
     }
 
     public void writeBool(Boolean obj) {
-        buffer.writeBoolean(obj);
+        this.writeInt(obj ? 1 : 0);
     }
 
     public String getBodyString() {

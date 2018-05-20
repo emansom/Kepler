@@ -21,17 +21,23 @@ public class Player extends Entity {
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
-        this.details = new PlayerDetails(null);
+        this.details = new PlayerDetails();
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
     }
 
+    /**
+     * Check if the player has a permission for a rank.
+     *
+     * @param permission the permission
+     * @return true, if successful
+     */
     @Override
     public boolean hasPermission(String permission) {
         return false;
     }
 
     /**
-     * Send.
+     * Send a response to the player
      *
      * @param response the response
      */

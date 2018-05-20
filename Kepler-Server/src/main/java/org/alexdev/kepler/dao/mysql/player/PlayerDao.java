@@ -29,7 +29,7 @@ public class PlayerDao {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                details = new PlayerDetails(null);
+                details = new PlayerDetails();
                 fill(details, resultSet);
             }
 
@@ -224,12 +224,20 @@ public class PlayerDao {
      *
      * @param details the details
      * @param row the row
-     * @return the player details
      * @throws SQLException the SQL exception
      */
-    public static PlayerDetails fill(PlayerDetails details, ResultSet row) throws SQLException {
-        return details;
+    private static void fill(PlayerDetails details, ResultSet row) throws SQLException {
+        // public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex,
+        // int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String badge, String badgeActive) {
+        if (details == null) {
+            return;
+        }
+
+        details.fill(row.getInt("id"), row.getString("username"), row.getString("password"),
+                row.getString("figure"), row.getString("pool_figure"), row.getInt("credits"),
+                row.getString("motto"), row.getString("console_motto"), row.getString("sex"),
+                row.getInt("tickets"), row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
+                row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
+                row.getString("badge_active"));
     }
-
-
 }
