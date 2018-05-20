@@ -1,8 +1,10 @@
 package org.alexdev.kepler.messages.headers;
 
 public class Incoming {
-    public static final int INIT_CRYPTO = 206;
-    public static int GENERATEKEY = 202;
-    public static int SSO = 204;
-    public static int GET_INFO = 7; // "@G"
+    public static final int INIT_CRYPTO = 206; // "CN"
+    public static final int GENERATEKEY = 202; // "CJ"
+    public static final int SSO = 204; // "CL"
+    public static final int GET_INFO = 7; // "@G"
+    public static final int GET_CREDITS = 8; // "@H"
+    public static final int NAVIGATE = 150; // "BV"
 }

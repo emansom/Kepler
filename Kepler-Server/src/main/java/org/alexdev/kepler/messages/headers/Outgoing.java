@@ -7,4 +7,6 @@ public class Outgoing {
     public static final short LOCALISED_ERROR = 33; // "@a"
     public static final short FUSERIGHTS = 2; // "@B"
     public static final short USER_OBJECT = 5; // "@E"
+    public static final short CREDIT_BALANCE = 6; // "@F
+    public static final short NAVIGATE_LIST = 220; // "C\"
 }

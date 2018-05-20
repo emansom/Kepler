@@ -28,7 +28,7 @@ public class NavigatorDao {
             //public NavigatorCategory(int id, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat) {
             while (resultSet.next()) {
                 NavigatorCategory category = new NavigatorCategory(
-                        resultSet.getInt("id"), resultSet.getString("name"),
+                        resultSet.getInt("id"), resultSet.getInt("parent_id"), resultSet.getString("name"),
                         resultSet.getBoolean("public_spaces"), resultSet.getBoolean("allow_trading"),
                         resultSet.getInt("minrole_access"), resultSet.getInt("minrole_setflatcat")
                 );

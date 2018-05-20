@@ -1,9 +1,11 @@
 package org.alexdev.kepler.server.netty.streams;
 
 import java.nio.charset.Charset;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import io.netty.buffer.ByteBuf;
 import org.alexdev.kepler.util.encoding.Base64Encoding;
+import org.alexdev.kepler.util.encoding.VL64Encoding;
 
 public class NettyRequest {
     final private int headerId;
@@ -20,7 +22,11 @@ public class NettyRequest {
 
     public Integer readInt() {
         try {
-            return this.buffer.readInt();
+            AtomicInteger length = new AtomicInteger(0);
+            int value = VL64Encoding.decodeVL64(remainingBytes(), length);
+
+            readBytes(length.get());
+            return value;
         } catch (Exception e) {
             return 0;
         }

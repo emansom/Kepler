@@ -3,7 +3,7 @@ package org.alexdev.kepler.game.room;
 public class RoomData {
     private int id;
     private int ownerId;
-    private int category;
+    private int categoryId;
     private String name;
     private String description;
     private String model;
@@ -20,7 +20,7 @@ public class RoomData {
     public void fill(int id, int ownerId, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax) {
         this.id = id;
         this.ownerId = ownerId;
-        this.category = category;
+        this.categoryId = category;
         this.name = name;
         this.description = description;
         this.model = model;
@@ -43,12 +43,12 @@ public class RoomData {
         return ownerId;
     }
 
-    public int getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(int category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
     public String getName() {

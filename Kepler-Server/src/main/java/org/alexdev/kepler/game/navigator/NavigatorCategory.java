@@ -1,15 +1,20 @@
 package org.alexdev.kepler.game.navigator;
 
+import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
+
 public class NavigatorCategory {
     private int id;
+    private int parentId;
     private String name;
     private boolean publicSpaces;
     private boolean allowTrading;
     private int minimumRoleAccess;
     private int minimumRoleSetFlat;
 
-    public NavigatorCategory(int id, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat) {
+    public NavigatorCategory(int id, int parentId, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat) {
         this.id = id;
+        this.parentId = parentId;
         this.name = name;
         this.publicSpaces = publicSpaces;
         this.allowTrading = allowTrading;
@@ -17,8 +22,36 @@ public class NavigatorCategory {
         this.minimumRoleSetFlat = minimumRoleSetFlat;
     }
 
+    public int getCurrentVisitors() {
+        int currentVisitors = 0;
+
+            for (Room room : RoomManager.getInstance().getRooms()) {
+                if (room.getData().getCategoryId() == this.id) {
+                    currentVisitors += room.getData().getVisitorsNow();
+                }
+            }
+
+        return currentVisitors;
+    }
+
+    public int getMaxVisitors() {
+        int maxVisitors = 0;
+
+        for (Room room : RoomManager.getInstance().getRooms()) {
+            if (room.getData().getCategoryId() == this.id) {
+                maxVisitors += room.getData().getVisitorsMax();
+            }
+        }
+
+        return maxVisitors;
+    }
+
     public int getId() {
         return id;
+    }
+
+    public int getParentId() {
+        return parentId;
     }
 
     public String getName() {

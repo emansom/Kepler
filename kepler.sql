@@ -2243,7 +2243,7 @@ INSERT INTO `rank_fuserights` (`min_rank`, `fuseright`) VALUES
 CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `owner_id` varchar(11) NOT NULL,
-  `category` int(11) DEFAULT '0',
+  `categoryId` int(11) DEFAULT '0',
   `name` text NOT NULL,
   `description` text NOT NULL,
   `model` text NOT NULL,
@@ -2262,7 +2262,7 @@ CREATE TABLE `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `owner_id`, `category`, `name`, `description`, `model`, `ccts`, `wallpaper`, `floor`, `showname`, `superusers`, `accesstype`, `password`, `visitors_now`, `visitors_max`) VALUES
+INSERT INTO `rooms` (`id`, `owner_id`, `categoryId`, `name`, `description`, `model`, `ccts`, `wallpaper`, `floor`, `showname`, `superusers`, `accesstype`, `password`, `visitors_now`, `visitors_max`) VALUES
 (1001, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, '0', 0, 0, 0, '', 0, 40),
 (1003, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, '0', 0, 0, 0, '', 0, 100),
 (1004, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, '0', 0, 0, 0, '', 0, 30),
@@ -2340,7 +2340,7 @@ CREATE TABLE `rooms_categories` (
 --
 
 INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`, `public_spaces`, `allow_trading`, `minrole_access`, `minrole_setflatcat`) VALUES
-(2, 0, 0, 0, 'No category', 0, 0, 1, 1),
+(2, 0, 0, 0, 'No categoryId', 0, 0, 1, 1),
 (3, 0, 0, 1, 'Public Rooms', 1, 0, 1, 6),
 (4, 0, 0, 1, 'Guest Rooms', 0, 0, 1, 6),
 (5, 0, 3, 0, 'Entertainment', 1, 0, 1, 6),

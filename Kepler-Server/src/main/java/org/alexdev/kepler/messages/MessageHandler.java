@@ -5,6 +5,8 @@ import org.alexdev.kepler.messages.headers.Incoming;
 import org.alexdev.kepler.messages.incoming.handshake.GENERATEKEY;
 import org.alexdev.kepler.messages.incoming.handshake.INIT_CRYPTO;
 import org.alexdev.kepler.messages.incoming.handshake.SSO;
+import org.alexdev.kepler.messages.incoming.navigator.NAVIGATE;
+import org.alexdev.kepler.messages.incoming.user.GET_CREDITS;
 import org.alexdev.kepler.messages.incoming.user.GET_INFO;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -29,6 +31,7 @@ public class MessageHandler {
 
         registerHandshakePackets();
         registerUserPackets();
+        registerNavigatorPackets();
 
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
@@ -53,10 +56,20 @@ public class MessageHandler {
         unregisterEvent(Incoming.SSO);
     }
 
+    /**
+     * Register general purpose user packets.
+     */
     private void registerUserPackets() {
         registerEvent(Incoming.GET_INFO, new GET_INFO());
+        registerEvent(Incoming.GET_CREDITS, new GET_CREDITS());
     }
 
+    /**
+     * Register navigator packets.
+     */
+    private void registerNavigatorPackets() {
+        registerEvent(Incoming.NAVIGATE, new NAVIGATE());
+    }
 
     /**
      * Register event.
