@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
 import org.alexdev.kepler.Kepler;
+import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.encoding.Base64Encoding;
 
 import java.util.List;
@@ -19,10 +20,25 @@ public class NetworkDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        byte[] messageLength = new byte[] { buffer.readByte(), buffer.readByte(), buffer.readByte() };
-        byte[] messageHeader = new byte[] { buffer.readByte(), buffer.readByte() };
+        buffer.markReaderIndex();
+        int length = Base64Encoding.decodeB64(new byte[] { buffer.readByte(), buffer.readByte(), buffer.readByte() });
 
-        System.out.println("Hello dude " + Base64Encoding.decodeB64(messageHeader));
+        if (buffer.readableBytes() < length) {
+            buffer.resetReaderIndex();
+            return;
+        }
+
+        if (length < 0) {
+            return;
+        }
+
+        out.add(new NettyRequest(length, buffer.readBytes(length)));
+
+        //int messageHeader = Base64Encoding.decodeB64(new byte[] { buffer.readByte(), buffer.readByte() });
+
+
+
+        //System.out.println("Header: " + messageHeader) + " with length " + messageLength));
 
         /*byte delimiter = buffer.readByte();
         buffer.resetReaderIndex();

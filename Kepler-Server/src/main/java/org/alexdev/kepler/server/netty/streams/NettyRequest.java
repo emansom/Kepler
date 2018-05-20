@@ -3,18 +3,17 @@ package org.alexdev.kepler.server.netty.streams;
 import java.nio.charset.Charset;
 
 import io.netty.buffer.ByteBuf;
+import org.alexdev.kepler.util.encoding.Base64Encoding;
 
 public class NettyRequest {
-
-    final private short header;
+    final private int header;
     final private int length;
-
-    final public ByteBuf buffer;
+    final private ByteBuf buffer;
 
     public NettyRequest(int length, ByteBuf buffer) {
         this.buffer = buffer;
-        this.header = buffer.readShort();
         this.length = length;
+        this.header = Base64Encoding.decodeB64(new byte[] { buffer.readByte(), buffer.readByte() });
     }
 
     public Integer readInt() {
@@ -25,16 +24,14 @@ public class NettyRequest {
         }
     }
 
-    public boolean readIntAsBool() {
-        try {
-            return this.buffer.readInt() == 1;
-        } catch (Exception e) {
-            return false;
-        }
+    public int readBase64() {
+        return Base64Encoding.decodeB64(new byte[] {
+                this.buffer.readByte(),
+                this.buffer.readByte()
+        });
     }
 
     public boolean readBoolean()  {
-        
         try {
             return this.buffer.readByte() == 1;
         } catch (Exception e)    {
@@ -44,7 +41,7 @@ public class NettyRequest {
 
     public String readString() {
         try {
-            int length = this.buffer.readShort();
+            int length = this.readBase64();
             byte[] data = this.readBytes(length);
 
             return new String(data);
@@ -53,12 +50,12 @@ public class NettyRequest {
         }
     }
 
-    public byte[] readBytes(int len) {
+    private byte[] readBytes(int len) {
         try {
             byte[] payload = new byte[len];
             this.buffer.readBytes(payload);
-            return payload;
 
+            return payload;
         } catch (Exception e) {
             return null;
         }
@@ -89,12 +86,8 @@ public class NettyRequest {
         return consoleText;
     }
 
-    public short getMessageId() {
+    public int getMessageId() {
         return header;
-    }
-
-    public int getLength() {
-        return length;
     }
 
     public void dispose() {

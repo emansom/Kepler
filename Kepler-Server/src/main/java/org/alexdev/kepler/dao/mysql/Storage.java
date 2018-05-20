@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.util.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +15,13 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 public class Storage {
-    
     private HikariDataSource ds;
     private boolean isConnected;
+
+    private static Storage storage;
+    private static Logger log = LoggerFactory.getLogger(Storage.class);
     
-    final private static Logger log = LoggerFactory.getLogger(Storage.class);
-    
-    public Storage(String host, String username, String password, String db) {
+    private Storage(String host, String username, String password, String db) {
         try {
             HikariConfig config = new HikariConfig();
             config.setJdbcUrl("jdbc:mysql://" + host + ":3306/" + db + "?useSSL=false");
@@ -41,6 +42,28 @@ public class Storage {
         } catch (Exception ex) {
         	Storage.logError(ex);
         }
+    }
+
+    /**
+     * Tries to connect to its data access object service
+     * @return boolean - if connection was successful or not
+     */
+    public static boolean connect() {
+        Storage.getLogger().info("Connecting to MySQL server");
+
+        storage = new Storage(Configuration.getInstance().getServerConfig().get("Database", "mysql.hostname", String.class),
+                Configuration.getInstance().getServerConfig().get("Database", "mysql.username", String.class),
+                Configuration.getInstance().getServerConfig().get("Database", "mysql.password", String.class),
+                Configuration.getInstance().getServerConfig().get("Database", "mysql.database", String.class));
+
+        if (!storage.isConnected()) {
+            Storage.getLogger().error("Could not connect");
+        } else {
+            Storage.getLogger().info("Connection to MySQL was a success");
+            return true;
+        }
+
+        return false;
     }
 
     public static void logError(Exception ex) {
@@ -73,7 +96,6 @@ public class Storage {
     public void execute(String query) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
 
         try {
 
@@ -84,7 +106,6 @@ public class Storage {
         } catch (Exception e) {
             Storage.logError(e);
         } finally {
-            Storage.closeSilently(resultSet);
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }
@@ -200,6 +221,14 @@ public class Storage {
             sqlConnection.close();
         } catch (Exception e) { }
         
+    }
+
+    /**
+     * Returns the raw access to the data access object functions
+     * @return {@link Storage} class
+     */
+    public static Storage getStorage() {
+        return storage;
     }
 
 	public static Logger getLogger() {

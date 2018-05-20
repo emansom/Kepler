@@ -2,6 +2,7 @@ package org.alexdev.kepler.server.netty.streams;
 
 import io.netty.buffer.ByteBuf;
 import org.alexdev.kepler.util.encoding.Base64Encoding;
+import org.alexdev.kepler.util.encoding.VL64Encoding;
 
 import java.nio.charset.Charset;
 
@@ -22,7 +23,7 @@ public class NettyResponse  {
     }
 
     public void writeInt(Integer obj) {
-       buffer.writeInt(obj);
+        buffer.writeBytes(VL64Encoding.encodeVL64(obj));
     }
 
     public void writeInt(Boolean obj) {
@@ -38,7 +39,7 @@ public class NettyResponse  {
     }
 
     public String getBodyString() {
-        String str = new String(this.buffer.toString(Charset.defaultCharset()));
+        String str = this.buffer.toString(Charset.defaultCharset());
         
         for (int i = 0; i < 14; i++) { 
             str = str.replace(Character.toString((char)i), "[" + i + "]");

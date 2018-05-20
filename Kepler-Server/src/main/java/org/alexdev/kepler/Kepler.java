@@ -2,7 +2,7 @@ package org.alexdev.kepler;
 
 import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.console.ConsoleReader;
-import org.alexdev.kepler.dao.mysql.Dao;
+import org.alexdev.kepler.dao.mysql.Storage;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.server.netty.NettyServer;
@@ -10,12 +10,10 @@ import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.Configuration;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.Locale;
-import org.alexdev.kepler.util.encoding.VL64Encoding;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class Kepler {
 
@@ -47,7 +45,7 @@ public class Kepler {
             log.info("Loading server...");
             log.info("");
 
-            if (!Dao.connect()) {
+            if (!Storage.connect()) {
                 return;
             }
 

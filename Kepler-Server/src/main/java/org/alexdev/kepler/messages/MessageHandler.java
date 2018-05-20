@@ -1,6 +1,10 @@
 package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.messages.headers.Incoming;
+import org.alexdev.kepler.messages.incoming.handshake.GENERATEKEY;
+import org.alexdev.kepler.messages.incoming.handshake.INIT_CRYPTO;
+import org.alexdev.kepler.messages.incoming.handshake.SSO;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.Configuration;
@@ -14,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MessageHandler {
 
     private Player player;
-    private ConcurrentHashMap<Short, List<MessageEvent>> messages;
+    private ConcurrentHashMap<Integer, List<MessageEvent>> messages;
 
     private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
 
@@ -33,22 +37,18 @@ public class MessageHandler {
      * Register handshake packets.
      */
     private void registerHandshakePackets() {
-        /*registerEvent(Incoming.VersionCheckMessageEvent, new VersionCheckMessageEvent());
-        registerEvent(Incoming.InitCryptoMessageEvent, new InitCryptoMessageEvent());
-        registerEvent(Incoming.GenerateSecretKeyMessageEvent, new GenerateSecretKeyMessageEvent());
-        registerEvent(Incoming.UniqueIDMessageEvent, new UniqueIDMessageEvent());
-        registerEvent(Incoming.AuthenticateMessageEvent, new AuthenticateMessageEvent());*/
+        registerEvent(Incoming.INIT_CRYPTO, new INIT_CRYPTO());
+        registerEvent(Incoming.GENERATEKEY, new GENERATEKEY());
+        registerEvent(Incoming.SSO, new SSO());
     }
 
     /**
      * Unregister handshake packets.
      */
     public void unregisterHandshakePackets() {
-        /*unregisterEvent(Incoming.VersionCheckMessageEvent);
-        unregisterEvent(Incoming.InitCryptoMessageEvent);
-        unregisterEvent(Incoming.GenerateSecretKeyMessageEvent);
-        unregisterEvent(Incoming.UniqueIDMessageEvent);
-        unregisterEvent(Incoming.AuthenticateMessageEvent);*/
+        unregisterEvent(Incoming.INIT_CRYPTO);
+        unregisterEvent(Incoming.GENERATEKEY);
+        unregisterEvent(Incoming.SSO);
     }
 
     /**
@@ -57,7 +57,7 @@ public class MessageHandler {
      * @param header the header
      * @param messageEvent the message event
      */
-    private void registerEvent(Short header, MessageEvent messageEvent) {
+    private void registerEvent(int header, MessageEvent messageEvent) {
         if (!this.messages.containsKey(header)) {
             this.messages.put(header, new ArrayList<>());
         }
@@ -70,7 +70,7 @@ public class MessageHandler {
      *
      * @param header the header
      */
-    private void unregisterEvent(Short header) {
+    private void unregisterEvent(int header) {
         List<MessageEvent> events = this.messages.get(header);
 
         if (events != null) {
@@ -102,7 +102,7 @@ public class MessageHandler {
      * @param messageId the message id
      * @param message the message
      */
-    private void invoke(short messageId, NettyRequest message) {
+    private void invoke(int messageId, NettyRequest message) {
         if (this.messages.containsKey(messageId)) {
             for (MessageEvent event : this.messages.get(messageId)) {
                 event.handle(this.player, message);
@@ -117,7 +117,7 @@ public class MessageHandler {
      *
      * @return the messages
      */
-    public ConcurrentHashMap<Short, List<MessageEvent>> getMessages() {
+    public ConcurrentHashMap<Integer, List<MessageEvent>> getMessages() {
         return messages;
     }
 }

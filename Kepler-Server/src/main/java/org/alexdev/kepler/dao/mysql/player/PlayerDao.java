@@ -1,6 +1,5 @@
 package org.alexdev.kepler.dao.mysql.player;
 
-import org.alexdev.kepler.dao.mysql.Dao;
 import org.alexdev.kepler.dao.mysql.Storage;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
@@ -24,8 +23,8 @@ public class PlayerDao {
         PlayerDetails details = null;
 
         try {
-            sqlConnection = Dao.getStorage().getConnection();
-            preparedStatement = Dao.getStorage().prepare("SELECT * FROM users WHERE id = ? LIMIT 1", sqlConnection);
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE id = ? LIMIT 1", sqlConnection);
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
 
@@ -61,8 +60,8 @@ public class PlayerDao {
 
         try {
 
-            sqlConnection = Dao.getStorage().getConnection();
-            preparedStatement = Dao.getStorage().prepare("SELECT * FROM users WHERE sso_ticket = ? LIMIT 1", sqlConnection);
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE sso_ticket = ? LIMIT 1", sqlConnection);
             preparedStatement.setString(1, ssoTicket);
             resultSet = preparedStatement.executeQuery();
 
@@ -96,8 +95,8 @@ public class PlayerDao {
         ResultSet resultSet = null;
 
         try {
-            sqlConnection = Dao.getStorage().getConnection();
-            preparedStatement = Dao.getStorage().prepare("SELECT id FROM users WHERE username = ? LIMIT 1", sqlConnection);
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT id FROM users WHERE username = ? LIMIT 1", sqlConnection);
             preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
             
@@ -130,8 +129,8 @@ public class PlayerDao {
         ResultSet resultSet = null;
 
         try {
-            sqlConnection = Dao.getStorage().getConnection();
-            preparedStatement = Dao.getStorage().prepare("SELECT username FROM users WHERE id = ? LIMIT 1", sqlConnection);
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT username FROM users WHERE id = ? LIMIT 1", sqlConnection);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             
@@ -160,8 +159,8 @@ public class PlayerDao {
         PreparedStatement preparedStatement = null;
 
         try {
-            sqlConnection = Dao.getStorage().getConnection();
-            preparedStatement = Dao.getStorage().prepare("UPDATE users SET mission = ?, figure = ?, gender = ?, rank = ?, credits = ?, duckets = ?, home_room = ? WHERE id = ?", sqlConnection);
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET mission = ?, figure = ?, gender = ?, rank = ?, credits = ?, duckets = ?, home_room = ? WHERE id = ?", sqlConnection);
 
             preparedStatement.execute();
         } catch (Exception e) {
@@ -182,8 +181,8 @@ public class PlayerDao {
         PreparedStatement preparedStatement = null;
 
         try {
-            sqlConnection = Dao.getStorage().getConnection();
-            preparedStatement = Dao.getStorage().prepare("UPDATE users SET sso_ticket = ? WHERE id = ?", sqlConnection);
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET sso_ticket = ? WHERE id = ?", sqlConnection);
             preparedStatement.setNull(1, Types.VARCHAR);
             preparedStatement.setInt(2, userId);
             preparedStatement.execute();
@@ -206,8 +205,8 @@ public class PlayerDao {
         PreparedStatement preparedStatement = null;
 
         try {
-            sqlConnection = Dao.getStorage().getConnection();
-            preparedStatement = Dao.getStorage().prepare("UPDATE users SET last_online = ? WHERE id = ?", sqlConnection);
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET last_online = ? WHERE id = ?", sqlConnection);
             preparedStatement.setLong(1, DateUtil.getCurrentTimeSeconds());
             preparedStatement.setInt(2, userId);
             preparedStatement.execute();
