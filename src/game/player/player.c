@@ -125,14 +125,32 @@ bool player_has_fuse(entity *player, char *fuse_right) {
 /**
  * Disconnect user
  *
- * @param p the player struct
+ * @param player the player struct
+ * @param async_disconnect true if this is being called from another thread
  */
-void player_disconnect(entity *p) {
-    if (p == NULL || p->disconnected) {
+void player_disconnect(entity *player, bool async_disconnect) {
+    if (player == NULL || player->disconnected) {
         return;
     }
 
-    uv_close((uv_handle_t *) p->stream, server_on_connection_close);
+    if (async_disconnect) {
+        uv_async_t *async = malloc(sizeof(uv_async_t));
+        async->data = player;
+
+        uv_async_init(uv_default_loop(), async, &player_disconnect_async_cb);
+        uv_async_send(async);
+    } else {
+        uv_close((uv_handle_t *) player->stream, server_on_connection_close);
+    }
+}
+
+void player_disconnect_async_cb(uv_async_t *handle) {
+    if (handle->data == NULL) {
+        return;
+    }
+
+    entity *player = handle->data;
+    uv_close((uv_handle_t *) player->stream, server_on_connection_close);
 }
 
 /**
@@ -169,6 +187,42 @@ void player_send(entity *p, outgoing_message *om) {
     req->data = buffer.base;
 
     int response = uv_write(req, (uv_stream_t *) p->stream, &buffer, 1, &server_on_write);
+}
+
+/**
+ * Asynchronous send, used for sending data to players from a different thread.
+ * Such as the room tasks or the RCON thread.
+ *
+ * @param entity
+ * @param message
+ */
+void player_async_send(entity *entity, outgoing_message *message) {
+    om_finalise(message);
+
+    async_send_cb *send_async = malloc(sizeof(async_send_cb));
+    send_async->data = entity;
+    send_async->om = message;
+
+    uv_async_t *async = malloc(sizeof(uv_async_t));
+    async->data = send_async;
+
+    uv_async_init(uv_default_loop(), async, &room_async_send_cb);
+    uv_async_send(async);
+}
+
+
+void player_async_send_cb(uv_async_t *handle) {
+    if (handle->data == NULL) {
+        return;
+    }
+
+    async_send_cb *send_async = handle->data;
+    player_send(send_async->data, send_async->om);
+
+    om_cleanup(send_async->om);
+
+    free(send_async);
+    free(handle);
 }
 
 /**

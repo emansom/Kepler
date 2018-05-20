@@ -56,8 +56,8 @@ typedef struct room_s {
 
 typedef struct room_send_async_s {
     outgoing_message *om;
-    struct room_s *room;
-} room_send_async;
+    void* data;
+} async_send_cb;
 
 room *room_create(int);
 room_data *room_create_data(room*, int, int, int, char*, char*, char*, char*, int, int, int, bool, int, char*, int, int);

@@ -335,8 +335,8 @@ void room_send(room *room, outgoing_message *message) {
 void room_async_send(room *room, outgoing_message *message) {
     om_finalise(message);
 
-    room_send_async *send_async = malloc(sizeof(room_send_async));
-    send_async->room = room;
+    async_send_cb *send_async = malloc(sizeof(async_send_cb));
+    send_async->data = room;
     send_async->om = message;
 
     uv_async_t *async = malloc(sizeof(uv_async_t));
@@ -352,8 +352,8 @@ void room_async_send_cb(uv_async_t *handle) {
         return;
     }
 
-    room_send_async *send_async = handle->data;
-    room_send(send_async->room, send_async->om);
+    async_send_cb *send_async = handle->data;
+    room_send(send_async->data, send_async->om);
 
     om_cleanup(send_async->om);
 

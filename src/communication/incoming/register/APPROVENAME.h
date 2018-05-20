@@ -12,7 +12,7 @@ void APPROVENAME(entity *player, incoming_message *message) {
             player_send_alert(player, "No faggots allowed");
 
             // Bye bye now!
-            player_disconnect(player);
+            player_disconnect(player, false);
 
             goto cleanup;
         }

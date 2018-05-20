@@ -23,8 +23,8 @@
 void player_send_localised_error(entity *p, char *error) {
     outgoing_message *om = om_create(33); // @a
     sb_add_string(om->sb, error);
-    player_send(p, om);
-    om_cleanup(om);
+    player_async_send(p, om);
+    //om_cleanup(om);
 }
 
 /**
@@ -36,8 +36,8 @@ void player_send_localised_error(entity *p, char *error) {
 void player_send_alert(entity *p, char *text) {
     outgoing_message *alert = om_create(139); // BK
     om_write_str(alert, text);
-    player_send(p, alert);
-    om_cleanup(alert);
+    player_async_send(p, alert);
+    //om_cleanup(alert);
 }
 
 /**
@@ -52,8 +52,8 @@ void player_refresh_credits(entity *player) {
     outgoing_message *credits = om_create(6); // "@F"
     om_write_str(credits, credits_string);
     sb_add_string(credits->sb, ".0");
-    player_send(player, credits);
-    om_cleanup(credits);
+    player_async_send(player, credits);
+    //om_cleanup(credits);
 }
 
 /**
@@ -67,8 +67,8 @@ void player_refresh_tickets(entity *player) {
 
     outgoing_message *credits = om_create(124); // "A|"
     sb_add_string(credits->sb, credits_string);
-    player_send(player, credits);
-    om_cleanup(credits);
+    player_async_send(player, credits);
+    //om_cleanup(credits);
 }
 
 /*
@@ -97,8 +97,8 @@ void player_refresh_appearance(entity *player) {
     om_write_int(user_info, player->details->tickets);
     om_write_str(user_info, player->details->pool_figure); // pool figure
     om_write_int(user_info, player->details->film);
-    player_send(player, user_info);
-    om_cleanup(user_info);
+    player_async_send(player, user_info);
+    //om_cleanup(user_info);
 
     // Send refresh to room if inside room
     if (player->room_user != NULL && player->room_user->room != NULL) {
@@ -107,8 +107,8 @@ void player_refresh_appearance(entity *player) {
         om_write_str(poof, player->details->figure);
         om_write_str(poof, player->details->sex);
         om_write_str(poof, player->details->motto);
-        room_send(player->room_user->room, poof);
-        om_cleanup(poof);
+        room_async_send(player->room_user->room, poof);
+        //om_cleanup(poof);
     }
 }
 
@@ -158,8 +158,8 @@ void player_refresh_badges(entity *player) {
     om_write_int(badge_list, badge_slot);
     om_write_int(badge_list, player->details->badge_active);
 
-    player_send(player, badge_list);
-    om_cleanup(badge_list);
+    player_async_send(player, badge_list);
+    //om_cleanup(badge_list);
 
     array_destroy(badges);
 }

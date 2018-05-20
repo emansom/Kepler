@@ -4,6 +4,8 @@
 #include <stdbool.h>
 #include <time.h>
 
+#include "uv.h"
+
 typedef struct outgoing_message_s outgoing_message;
 
 typedef enum {
@@ -50,8 +52,11 @@ entity *player_create(void*, char*);
 entity_data *player_create_data(int, char*, char*, char*, char*, int, char*, char*, int, int, int, char*, unsigned long, unsigned long, unsigned long, char*, bool);
 void player_login(entity *player);
 bool player_has_fuse(entity *player, char *fuse_right);
-void player_disconnect(entity *player);
-void player_send(entity *, outgoing_message *);
+void player_disconnect(entity *player, bool async_disconnect);
+void player_disconnect_async_cb(uv_async_t *handle);
+void player_send(entity *entity, outgoing_message *message);
+void player_async_send(entity *entity, outgoing_message *message);
+void player_async_send_cb(uv_async_t *handle);
 void player_cleanup(entity*);
 void player_data_cleanup(entity_data*);
 

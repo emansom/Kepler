@@ -135,7 +135,7 @@ void player_manager_dispose() {
     for (size_t i = 0; i < list_size(global.player_manager.players); i++) {
         entity *player;
         list_get_at(global.player_manager.players, i, (void *) &player);
-        player_disconnect(player);
+        player_disconnect(player, false);
     }
 
     list_destroy(global.player_manager.players);

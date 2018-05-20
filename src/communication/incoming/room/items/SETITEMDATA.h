@@ -64,7 +64,7 @@ void SETITEMDATA(entity *player, incoming_message *message) {
         item_query_save(item);
     } else {
         player_send_alert(player, "No scripters allowed, bye bye!");
-        player_disconnect(player);
+        player_disconnect(player, false);
     }
 
     cleanup:

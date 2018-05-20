@@ -57,8 +57,9 @@ void game_thread_task(unsigned long ticks) {
                     log_info("Connection %s timed out", player->ip_address);
                 }
 
-                uv_close((uv_handle_t*) player->stream, server_on_connection_close);
+                //uv_close((uv_handle_t*) player->stream, server_on_connection_close);
                 //player_cleanup(player);
+                player_disconnect(player, true);
                 continue;
             }
         }
