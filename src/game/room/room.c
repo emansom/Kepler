@@ -326,6 +326,43 @@ void room_send(room *room, outgoing_message *message) {
 }
 
 /**
+ * Send an asynchronous outgoing message to all the room users.
+ * Used for sending packets to sockets from different threads.
+ *
+ * @param room the room
+ * @param message the outgoing message to send
+ */
+void room_async_send(room *room, outgoing_message *message) {
+    om_finalise(message);
+
+    room_send_async *send_async = malloc(sizeof(room_send_async));
+    send_async->room = room;
+    send_async->om = message;
+
+    uv_async_t *async = malloc(sizeof(uv_async_t));
+    async->data = send_async;
+
+    uv_async_init(uv_default_loop(), async, &room_async_send_cb);
+    uv_async_send(async);
+}
+
+
+void room_async_send_cb(uv_async_t *handle) {
+    if (handle->data == NULL) {
+        return;
+    }
+
+    room_send_async *send_async = handle->data;
+    room_send(send_async->room, send_async->om);
+
+    om_cleanup(send_async->om);
+
+    free(send_async);
+    free(handle);
+}
+
+
+/**
  * Send an outgoing message to room users with rights.
  *
  * @param room the room
