@@ -35,6 +35,10 @@ public class NAVIGATE_LIST extends MessageComposer {
         response.writeInt(this.categoryMaxVisitors);
         response.writeInt(this.parentCategory.getParentId());
 
+        if (!this.parentCategory.isPublicSpaces()) {
+            response.writeInt(this.rooms.size());
+        }
+
         for (Room room : this.rooms) {
             if (room.isPublicRoom()) {
                 response.writeInt(room.getData().getId());
