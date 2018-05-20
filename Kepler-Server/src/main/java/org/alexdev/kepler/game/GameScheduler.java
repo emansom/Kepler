@@ -15,7 +15,7 @@ public class GameScheduler implements Runnable {
 
     private static GameScheduler instance;
 
-    public GameScheduler() {
+    private GameScheduler() {
         scheduler = createNewScheduler();
         gameScheduler = scheduler.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
     }
@@ -58,7 +58,6 @@ public class GameScheduler implements Runnable {
      * @return the instance
      */
     public static GameScheduler getInstance() {
-
         if (instance == null) {
             instance = new GameScheduler();
         }

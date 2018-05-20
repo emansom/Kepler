@@ -1,4 +1,4 @@
-2018-05-20T16:32:10.967 - [ErrorLogger] - Error when executing MySQL query: 
+2018-05-20T17:05:05.199 - [ErrorLogger] - Error when executing MySQL query: 
 com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Communications link failure
 
 The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.

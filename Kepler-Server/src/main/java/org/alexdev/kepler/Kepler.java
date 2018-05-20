@@ -6,10 +6,10 @@ import org.alexdev.kepler.dao.mysql.Dao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.server.netty.NettyServer;
-import org.alexdev.kepler.util.Util;
+import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.Configuration;
-import org.alexdev.kepler.util.date.DateUtil;
-import org.alexdev.kepler.util.locale.Locale;
+import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.util.config.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -92,7 +92,7 @@ public class Kepler {
         }
 
         for (String part : numbers) {
-            if (!Util.isNumber(part)) {
+            if (!StringUtil.isNumber(part)) {
                 return false;
             }
 

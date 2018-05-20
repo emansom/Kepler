@@ -4,7 +4,7 @@ import org.alexdev.kepler.dao.mysql.Dao;
 import org.alexdev.kepler.dao.mysql.Storage;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
-import org.alexdev.kepler.util.date.DateUtil;
+import org.alexdev.kepler.util.DateUtil;
 
 import java.sql.*;
 

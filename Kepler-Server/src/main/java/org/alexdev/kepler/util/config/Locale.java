@@ -1,4 +1,4 @@
-package org.alexdev.kepler.util.locale;
+package org.alexdev.kepler.util.config;
 
 import org.alexdev.kepler.log.Log;
 import org.ini4j.Wini;
@@ -64,7 +64,6 @@ public class Locale {
         writer.println();
         writer.println("player.commands.no.args=You did not supply enough arguments for this command!");
     }
-
 
     /**
      * Gets the locale.

@@ -1,4 +1,4 @@
-package org.alexdev.kepler.util.date;
+package org.alexdev.kepler.util;
 
 import org.alexdev.kepler.log.Log;
 

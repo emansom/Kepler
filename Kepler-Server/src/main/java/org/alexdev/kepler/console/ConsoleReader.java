@@ -35,6 +35,8 @@ public class ConsoleReader implements Runnable {
             } else {
                 System.out.println("That command does not exist.");
             }
+
+            scanner.close();
         }
     }
 
