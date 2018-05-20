@@ -1,4 +1,4 @@
-package org.alexdev.kepler.dao.mysql;
+package org.alexdev.kepler.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

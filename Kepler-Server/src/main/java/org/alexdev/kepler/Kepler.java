@@ -2,11 +2,13 @@ package org.alexdev.kepler;
 
 import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.console.ConsoleReader;
-import org.alexdev.kepler.dao.mysql.Storage;
+import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
+import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.Configuration;
@@ -53,10 +55,12 @@ public class Kepler {
 
             log.info("Setting up game");
 
-            GameScheduler.getInstance();
-            CommandManager.getInstance();
+            RoomManager.getInstance();
             PlayerManager.getInstance();
             FuserightsManager.getInstance();
+            NavigatorManager.getInstance();
+            GameScheduler.getInstance();
+            CommandManager.getInstance();
 
             log.info("Setting up server");
 

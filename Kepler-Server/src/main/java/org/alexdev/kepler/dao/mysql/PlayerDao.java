@@ -1,6 +1,6 @@
 package org.alexdev.kepler.dao.mysql;
 
-import org.alexdev.kepler.dao.mysql.Storage;
+import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.util.DateUtil;
@@ -220,7 +220,7 @@ public class PlayerDao {
     }
         
     /**
-     * Fill.
+     * Fill player data
      *
      * @param details the details
      * @param row the row

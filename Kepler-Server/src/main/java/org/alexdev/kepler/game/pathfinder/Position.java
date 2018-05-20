@@ -296,14 +296,10 @@ public class Position {
      * @return true, if is match
      */
     @Override
-    public boolean equals(Object obj) { 
-        
+    public boolean equals(Object obj) {
         if (obj instanceof Position) {
             Position position = (Position) obj;
-            
-            if (position.getX() == this.X && position.getY() == this.Y) {
-                return true;
-            }
+            return position.getX() == this.X && position.getY() == this.Y;
         }
         
         return false;

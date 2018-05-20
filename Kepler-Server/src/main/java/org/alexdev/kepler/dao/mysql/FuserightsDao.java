@@ -1,8 +1,6 @@
 package org.alexdev.kepler.dao.mysql;
 
-import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.player.PlayerDetails;
-import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.dao.Storage;
 
 import java.sql.*;
 import java.util.HashMap;
