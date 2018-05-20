@@ -5,9 +5,6 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 
 public class NettyPlayerNetwork {
     private Channel channel;
-
-
-
     private int connectionId;
 
     public NettyPlayerNetwork(Channel channel, int connectionId) {
