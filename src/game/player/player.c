@@ -42,6 +42,7 @@ entity *player_create(void *socket, char *ip_address) {
     player->room_user = NULL;
     player->messenger = NULL;
     player->inventory = NULL;
+    player->last_stalk = time(0);
     return player;
 }
 

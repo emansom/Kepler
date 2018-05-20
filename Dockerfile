@@ -10,6 +10,7 @@ RUN apt update && apt install -y \
     sqlite3 \
     libsqlite3-dev \
     libsodium-dev \
+    valgrind \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir /usr/src/kepler
 
@@ -53,4 +54,4 @@ ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 12321
 EXPOSE 12309
 
-ENTRYPOINT ["kepler"]
+CMD ["kepler"]

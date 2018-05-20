@@ -43,6 +43,7 @@ typedef struct entity_s {
     bool logged_in;
     bool disconnected;
     bool ping_safe;
+    time_t last_stalk;
 } entity;
 
 entity *player_create(void*, char*);

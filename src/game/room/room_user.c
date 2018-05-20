@@ -498,6 +498,7 @@ void room_user_carry_item(room_user *room_user, int carry_id, char *carry_name) 
     room_user_remove_status(room_user, "cri");
     room_user_remove_status(room_user, "carryf");
     room_user_remove_status(room_user, "carryd");
+    room_user_remove_status(room_user, "dance");
 
     room_user_add_status(room_user, strdup((char*) carry_status), drink_as_string, 120, (char*) use_status, 12, 1);
     room_user->needs_update = true;
