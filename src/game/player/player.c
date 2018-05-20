@@ -206,7 +206,7 @@ void player_async_send(entity *entity, outgoing_message *message) {
     uv_async_t *async = malloc(sizeof(uv_async_t));
     async->data = send_async;
 
-    uv_async_init(uv_default_loop(), async, &room_async_send_cb);
+    uv_async_init(uv_default_loop(), async, &player_async_send_cb);
     uv_async_send(async);
 }
 
