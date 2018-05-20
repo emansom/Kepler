@@ -16,7 +16,7 @@ public class SSO implements MessageEvent {
         if (!PlayerDao.login(player, ticket)) {
             player.send(new LOCALISED_ERROR("Incorrect SSO ticket"));
         } else {
-            player.send(new LOGIN());
+            player.login();
         }
     }
 }

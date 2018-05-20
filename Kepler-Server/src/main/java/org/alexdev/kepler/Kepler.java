@@ -5,6 +5,7 @@ import org.alexdev.kepler.console.ConsoleReader;
 import org.alexdev.kepler.dao.mysql.Storage;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.CommandManager;
+import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.Configuration;
@@ -53,6 +54,7 @@ public class Kepler {
 
             GameScheduler.getInstance();
             CommandManager.getInstance();
+            PlayerManager.getInstance();
 
             log.info("Setting up server");
 

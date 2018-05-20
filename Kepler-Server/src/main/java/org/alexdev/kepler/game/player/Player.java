@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.MessageHandler;
+import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.slf4j.Logger;
@@ -23,6 +24,17 @@ public class Player extends Entity {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
+    }
+
+    /**
+     * Login handler for player
+     */
+    public void login() {
+        PlayerManager.getInstance().addPlayer(this);
+
+        this.send(new LOGIN());
+
+        log.info("Users: " + PlayerManager.getInstance().getPlayers().size());
     }
 
     /**
@@ -51,7 +63,7 @@ public class Player extends Entity {
 
     @Override
     public PlayerDetails getDetails() {
-        return null;
+        return this.details;
     }
 
     @Override
@@ -78,7 +90,9 @@ public class Player extends Entity {
 
     @Override
     public void dispose() {
+        PlayerManager.getInstance().removePlayer(this);
 
+        log.info("Users: " + PlayerManager.getInstance().getPlayers().size());
     }
 
     public void sendMessage(String entry) {
