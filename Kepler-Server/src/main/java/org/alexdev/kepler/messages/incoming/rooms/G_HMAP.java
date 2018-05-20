@@ -15,6 +15,6 @@ public class G_HMAP implements MessageEvent {
 
         player.send(new HEIGHTMAP(
                 RoomManager.getInstance().getModelMap().get(
-                        player.getRoomUser().getRoom().getData().getModel())));
+                        player.getRoomUser().getRoom().getData().getModelName())));
     }
 }

@@ -16,4 +16,5 @@ public class Outgoing {
     public static final short HEIGHTMAP = 31; // "@_"
     public static final short OBJECTS_WORLD = 30; // "@^"
     public static final short ACTIVE_OBJECTS = 32; // "@`"
+    public static final short USER_OBJECTS = 28; // "@\"
 }

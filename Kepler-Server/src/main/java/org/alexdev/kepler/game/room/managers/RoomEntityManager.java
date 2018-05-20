@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.managers;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
@@ -36,15 +37,28 @@ public class RoomEntityManager {
         return entities;
     }
 
+    /**
+     * Adds a generic entity to the room.
+     * Will send packets if the entity is a player.
+     *
+     * @param entity the entity to add
+     */
     public void enterRoom(Entity entity) {
         if (entity.getRoomUser().getRoom() != null) {
             entity.getRoomUser().getRoom().getEntityManager().leaveRoom(entity);
         }
 
-        this.room.getEntities().remove(entity);
+        this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntities().size());
 
         entity.getRoomUser().setRoom(this.room);
+        entity.getRoomUser().setPosition(new Position(
+                this.room.getData().getModel().getDoorX(),
+                this.room.getData().getModel().getDoorY(),
+                this.room.getData().getModel().getDoorZ(),
+                this.room.getData().getModel().getDoorRotation(),
+                this.room.getData().getModel().getDoorRotation()
+        ));
 
         // From this point onwards we send packets for the user to enter
         if (entity.getType() !=  EntityType.PLAYER) {
@@ -54,7 +68,7 @@ public class RoomEntityManager {
         Player player = (Player) entity;
 
         player.send(new ROOM_URL());
-        player.send(new ROOM_READY(this.room.getData().getId(), this.room.getData().getModel()));
+        player.send(new ROOM_READY(this.room.getData().getId(), this.room.getData().getModelName()));
     }
 
     public void leaveRoom(Entity entity) {

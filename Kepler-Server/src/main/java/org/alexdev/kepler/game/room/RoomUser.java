@@ -70,4 +70,8 @@ public class RoomUser {
     public void setInstanceId(int instanceId) {
         this.instanceId = instanceId;
     }
+
+    public HashMap<String, String> getStatuses() {
+        return this.statuses;
+    }
 }

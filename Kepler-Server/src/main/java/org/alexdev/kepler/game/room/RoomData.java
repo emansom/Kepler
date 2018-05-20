@@ -1,5 +1,7 @@
 package org.alexdev.kepler.game.room;
 
+import org.alexdev.kepler.game.room.mapping.RoomModel;
+
 public class RoomData {
     private int id;
     private int ownerId;
@@ -67,8 +69,12 @@ public class RoomData {
         this.description = description;
     }
 
-    public String getModel() {
+    public String getModelName() {
         return model;
+    }
+
+    public RoomModel getModel() {
+        return RoomManager.getInstance().getModelMap().get(this.model);
     }
 
     public void setModel(String model) {

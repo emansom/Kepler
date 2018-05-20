@@ -30,9 +30,13 @@ public class NettyResponse  {
         this.buffer.writeBytes(VL64Encoding.encodeVL64(obj));
     }
 
-    public void writeShort(int obj) {
-        this.buffer.writeShort((short)obj);
+    public void writeKeyValue(Object key, Object value) {
+        this.buffer.writeBytes(key.toString().getBytes());
+        this.buffer.writeBytes(":".getBytes());
+        this.buffer.writeBytes(value.toString().getBytes());
+        this.buffer.writeByte(13);
     }
+
 
     public void writeBool(Boolean obj) {
         this.writeInt(obj ? 1 : 0);

@@ -47,11 +47,11 @@ public class Pathfinder {
      * @return the linked list
      */
     public static LinkedList<Position> makePath(Entity entity, int X, int Y) {
-        /* (entity.getRoom().getModel().isOutsideBounds(X, Y)) {
+        /* (entity.getRoom().getModelName().isOutsideBounds(X, Y)) {
             return new LinkedList<>();
         }
 
-        if (entity.getRoom().getModel().isBlocked(X, Y)) {
+        if (entity.getRoom().getModelName().isBlocked(X, Y)) {
             return new LinkedList<>();
         }
 
@@ -88,7 +88,7 @@ public class Pathfinder {
     private static PathfinderNode makePathReversed(Entity entity, int X, int Y) {
         LinkedList<PathfinderNode> openList = new LinkedList<>();
 
-        PathfinderNode[][] map = null;//new PathfinderNode[entity.getRoom().getModel().getMapSizeX()][entity.getRoom().getModel().getMapSizeY()];
+        PathfinderNode[][] map = null;//new PathfinderNode[entity.getRoom().getModelName().getMapSizeX()][entity.getRoom().getModelName().getMapSizeY()];
         PathfinderNode node;
         Position tmp;
 
