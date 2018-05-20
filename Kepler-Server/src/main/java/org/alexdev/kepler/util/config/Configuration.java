@@ -18,7 +18,7 @@ public class Configuration {
             checkLog4j();
 
             writeFileIfNotExist();
-            configuration = new Wini(new File("icarus.properties"));
+            configuration = new Wini(new File("kepler.properties"));
         } catch (Exception e) {
             Log.getErrorLogger().error("Unhandled exception while loading the configurion: ", e);
         }
@@ -75,7 +75,7 @@ public class Configuration {
 	}
 
 	private void writeFileIfNotExist() throws IOException {
-        File file = new File("icarus.properties");
+        File file = new File("kepler.properties");
         
         if (!file.isFile()) { 
             file.createNewFile();
