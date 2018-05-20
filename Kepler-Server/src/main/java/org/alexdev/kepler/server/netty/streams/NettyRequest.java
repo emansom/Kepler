@@ -58,7 +58,7 @@ public class NettyRequest {
         }
     }
 
-    private byte[] readBytes(int len) {
+    public byte[] readBytes(int len) {
         try {
             byte[] payload = new byte[len];
             this.buffer.readBytes(payload);

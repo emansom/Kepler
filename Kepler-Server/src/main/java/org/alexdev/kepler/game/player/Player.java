@@ -21,11 +21,13 @@ public class Player extends Entity {
     private Logger log;
     private PlayerDetails details;
     private MessageHandler messageHandler;
+    private RoomUser roomUser;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
         this.messageHandler = new MessageHandler(this);
+        this.roomUser = new RoomUser(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
     }
 
@@ -76,12 +78,12 @@ public class Player extends Entity {
 
     @Override
     public RoomUser getRoomUser() {
-        return null;
+        return this.roomUser;
     }
 
     @Override
     public EntityType getType() {
-        return null;
+        return EntityType.PLAYER;
     }
 
     public Logger getLogger() {

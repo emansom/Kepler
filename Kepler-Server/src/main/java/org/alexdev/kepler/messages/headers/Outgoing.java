@@ -9,4 +9,7 @@ public class Outgoing {
     public static final short USER_OBJECT = 5; // "@E"
     public static final short CREDIT_BALANCE = 6; // "@F
     public static final short NAVIGATE_LIST = 220; // "C\"
+    public static final short ROOM_INTEREST = 258; // "DB"
+    public static final short ROOM_AD = 166; // "Bf"
+    public static final short ROOM_READY = 69; // "AE"
 }
