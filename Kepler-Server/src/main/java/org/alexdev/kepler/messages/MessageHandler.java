@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
@@ -20,17 +21,21 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageHandler {
-
-    private Player player;
     private ConcurrentHashMap<Integer, List<MessageEvent>> messages;
 
     private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
+    private static MessageHandler instance;
 
-    public MessageHandler(Player player) {
-        this.player = player;
+    public MessageHandler() {
         this.messages = new ConcurrentHashMap<>();
 
         registerHandshakePackets();
+        registerUserPackets();
+        registerNavigatorPackets();
+        registerRoomPackets();
+        registerRoomUserPackets();
+        registerRoomSettingsPackets();
+        registerMessengerPackets();
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
@@ -43,15 +48,6 @@ public class MessageHandler {
         registerEvent(206, new INIT_CRYPTO());
         registerEvent(202, new GENERATEKEY());
         registerEvent(204, new SSO());
-    }
-
-    /**
-     * Unregister handshake packets.
-     */
-    public void unregisterHandshakePackets() {
-        unregisterEvent(206);
-        unregisterEvent(202);
-        unregisterEvent(204);
     }
 
     /**
@@ -153,21 +149,21 @@ public class MessageHandler {
      *
      * @param message the message
      */
-    public void handleRequest(NettyRequest message) {
+    public void handleRequest(Player player, NettyRequest message) {
         try {
             if (Configuration.getInstance().getServerConfig().get("Logging", "log.received.packets", Boolean.class)) {
                 if (this.messages.containsKey(message.getHeaderId())) {
                     MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
-                    this.player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
+                    player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
                 } else {
-                    this.player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
+                    player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
                 }
             }
         } catch (Exception e) {
             Log.getErrorLogger().error("Exception occurred when handling (" + message.getHeaderId() + "): ", e);
         }
 
-        invoke(message.getHeaderId(), message);
+        invoke(player, message.getHeaderId(), message);
     }
 
     /**
@@ -176,10 +172,10 @@ public class MessageHandler {
      * @param messageId the message id
      * @param message the message
      */
-    private void invoke(int messageId, NettyRequest message) {
+    private void invoke(Player player, int messageId, NettyRequest message) {
         if (this.messages.containsKey(messageId)) {
             for (MessageEvent event : this.messages.get(messageId)) {
-                event.handle(this.player, message);
+                event.handle(player, message);
             }
         }
 
@@ -193,5 +189,18 @@ public class MessageHandler {
      */
     public ConcurrentHashMap<Integer, List<MessageEvent>> getMessages() {
         return messages;
+    }
+
+    /**
+     * Get the instance of {@link RoomManager}
+     *
+     * @return the instance
+     */
+    public static MessageHandler getInstance() {
+        if (instance == null) {
+            instance = new MessageHandler();
+        }
+
+        return instance;
     }
 }

@@ -26,15 +26,13 @@ public class MESSENGER_REMOVEBUDDY implements MessageEvent {
         Player friend = PlayerManager.getInstance().getPlayerById(userId);
 
         // Remove request instance
-        MessengerUser entry = player.getMessenger().getFriend(userId);
-        player.getMessenger().getRequests().remove(entry);
+        player.getMessenger().getRequests().remove( player.getMessenger().getFriend(userId));
 
         if (friend != null) {
             friend.send(new REMOVE_FRIEND(player.getDetails().getId()));
 
             // Remove request instance
-            entry = friend.getMessenger().getFriend(userId);
-            friend.getMessenger().getRequests().remove(entry);
+            friend.getMessenger().getRequests().remove(friend.getMessenger().getFriend(userId));
         }
     }
 }

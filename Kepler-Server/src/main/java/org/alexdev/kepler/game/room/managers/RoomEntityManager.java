@@ -1,19 +1,15 @@
 package org.alexdev.kepler.game.room.managers;
 
-import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.mapping.RoomMapping;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 public class RoomEntityManager {
     private Room room;
@@ -128,13 +124,14 @@ public class RoomEntityManager {
      */
     private void initialiseRoom() {
         this.room.getMapping().regenerateCollisionMap();
-
-        ScheduledFuture<?> processEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
-                this.room.getProcessEntity(), 0, 500, TimeUnit.MILLISECONDS);
-
-        this.room.setProcessEntityTask(processEntity);
+        this.room.getTaskManager().startTasks();
     }
 
+    /**
+     * Setup handler for the entity to leave room.
+     *
+     * @param entity the entity to leave
+     */
     public void leaveRoom(Entity entity) {
         if (!this.room.getEntities().contains(entity)) {
             return;

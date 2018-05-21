@@ -4,6 +4,7 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.messages.outgoing.handshake.HELLO;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.server.netty.NettyServer;
@@ -60,7 +61,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
             }
 
             if (player != null){
-                player.getMessageHandler().handleRequest(message);
+                MessageHandler.getInstance().handleRequest(player, message);
             }
 
         } catch (Exception ex) {

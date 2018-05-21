@@ -25,14 +25,12 @@ public class Player extends Entity {
 
     private Logger log;
     private PlayerDetails details;
-    private MessageHandler messageHandler;
     private RoomUser roomUser;
     private Messenger messenger;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
-        this.messageHandler = new MessageHandler(this);
         this.roomUser = new RoomUser(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
     }
@@ -44,13 +42,6 @@ public class Player extends Entity {
         PlayerManager.getInstance().addPlayer(this);
         RoomManager.getInstance().addRoomsByUser(this.details.getId());
 
-        this.messageHandler.unregisterHandshakePackets();
-        this.messageHandler.registerUserPackets();
-        this.messageHandler.registerNavigatorPackets();
-        this.messageHandler.registerRoomPackets();
-        this.messageHandler.registerRoomUserPackets();
-        this.messageHandler.registerRoomSettingsPackets();
-        this.messageHandler.registerMessengerPackets();;
         this.messenger = new Messenger(this);
 
         // Update logger to show name
@@ -119,15 +110,6 @@ public class Player extends Entity {
      */
     public NettyPlayerNetwork getNetwork() {
         return this.network;
-    }
-
-    /**
-     * Get the message handler for the player
-     *
-     * @return the message handler
-     */
-    public MessageHandler getMessageHandler() {
-        return this.messageHandler;
     }
 
     /**

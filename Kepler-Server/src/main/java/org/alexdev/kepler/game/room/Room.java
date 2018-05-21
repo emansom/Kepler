@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.managers.RoomEntityManager;
 import org.alexdev.kepler.game.room.managers.RoomItemManager;
+import org.alexdev.kepler.game.room.managers.RoomTaskManager;
 import org.alexdev.kepler.game.room.mapping.RoomMapping;
 import org.alexdev.kepler.game.room.tasks.ProcessEntityTask;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -19,9 +20,7 @@ public class Room {
     private RoomMapping roomMapping;
     private RoomEntityManager roomEntityManager;
     private RoomItemManager roomItemManager;
-
-    private ProcessEntityTask processEntity;
-    private ScheduledFuture<?> processEntityTask;
+    private RoomTaskManager roomTaskManager;
 
     private List<Entity> entities;
     private List<Item> items;
@@ -30,8 +29,8 @@ public class Room {
         this.roomData = new RoomData(this);
         this.roomEntityManager = new RoomEntityManager(this);
         this.roomItemManager = new RoomItemManager(this);
+        this.roomTaskManager = new RoomTaskManager(this);
         this.roomMapping = new RoomMapping(this);
-        this.processEntity = new ProcessEntityTask(this);
         this.entities = new ArrayList<>();
         this.items = new ArrayList<>();
     }
@@ -48,7 +47,8 @@ public class Room {
     }
 
     /**
-     * Checks if the user id is the owner of the room
+     * Checks if the user id is the owner of the room.
+     *
      * @param ownerId the owner id to check for
      * @return true, if successful
      */
@@ -58,19 +58,14 @@ public class Room {
 
     /**
      * Dispose room, or at least try to when
-     * the stars align allowing it to be removed from the manager
+     * the stars align allowing it to be removed from the manager.
      */
     public void dispose() {
         if (this.roomEntityManager.getEntitiesByClass(Player.class).size() > 0) {
             return;
         }
 
-        this.roomMapping = null;
-
-        if (this.processEntityTask != null) {
-            this.processEntityTask.cancel(false);
-            this.processEntityTask = null;
-        }
+        this.roomTaskManager.stopTasks();
 
         if (this.isPublicRoom()) {
             return;
@@ -86,39 +81,75 @@ public class Room {
         this.roomData = null;
     }
 
+    /**
+     * Get the entity manager for this room.
+     *
+     * @return the entity manager
+     */
     public RoomEntityManager getEntityManager() {
         return this.roomEntityManager;
     }
 
+    /**
+     * Get the item manager for this room.
+     *
+     * @return the item manager
+     */
     public RoomItemManager getItemManager() {
         return roomItemManager;
     }
 
-    public boolean isPublicRoom() {
-        return this.roomData.getOwnerId() == 0;
+    /**
+     * Get the task manager for this room.
+     *
+     * @return the task manager
+     */
+    public RoomTaskManager getTaskManager() {
+        return roomTaskManager;
     }
 
-    public ProcessEntityTask getProcessEntity() {
-        return processEntity;
-    }
-
+    /**
+     * Get the mapping manager for this room.
+     *
+     * @return the room mapping manager
+     */
     public RoomMapping getMapping() {
         return roomMapping;
     }
 
+    /**
+     * Get the room data for this room.
+     *
+     * @return the room data
+     */
     public RoomData getData() {
         return roomData;
     }
 
+    /**
+     * Get the entire list of entities in the room.
+     *
+     * @return the list of entities
+     */
     public List<Entity> getEntities() {
         return entities;
     }
 
+    /**
+     * Get the entire list of items in the room.
+     *
+     * @return the list of items
+     */
     public List<Item> getItems() {
         return items;
     }
 
-    public void setProcessEntityTask(ScheduledFuture<?> processEntityTask) {
-        this.processEntityTask = processEntityTask;
+    /**
+     * Get whether the room is a public room or not.
+     *
+     * @return true, if successful
+     */
+    public boolean isPublicRoom() {
+        return this.roomData.getOwnerId() == 0;
     }
 }
