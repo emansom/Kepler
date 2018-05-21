@@ -46,7 +46,7 @@ public class Pathfinder {
      * @return the linked list
      */
     public static LinkedList<Position> makePath(Entity entity, int x, int y) {
-        if (entity.getRoom().getMapping().isValidTile(entity, new Position(x, y))) {
+        if (!entity.getRoom().getMapping().isValidTile(entity, new Position(x, y))) {
             return new LinkedList<>();
         }
 
