@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room;
 
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
 
@@ -8,6 +9,7 @@ public class RoomData {
 
     private int id;
     private int ownerId;
+    private String ownerName;
     private int categoryId;
     private String name;
     private String description;
@@ -29,6 +31,11 @@ public class RoomData {
     public void fill(int id, int ownerId, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax) {
         this.id = id;
         this.ownerId = ownerId;
+        if (this.ownerId > 0) {
+            this.ownerName = PlayerDao.getName(this.ownerId);
+        } else {
+            this.ownerName = "";
+        }
         this.categoryId = category;
         this.name = name;
         this.description = description;
@@ -51,6 +58,10 @@ public class RoomData {
 
     public int getOwnerId() {
         return ownerId;
+    }
+
+    public String getOwnerName() {
+        return ownerName;
     }
 
     public int getCategoryId() {
@@ -113,7 +124,7 @@ public class RoomData {
         this.floor = floor;
     }
 
-    public boolean isShowName() {
+    public boolean showName() {
         return showName;
     }
 
@@ -129,7 +140,19 @@ public class RoomData {
         this.superUsers = superUsers;
     }
 
-    public int getAccessType() {
+    public String getAccessType() {
+        if (this.accessType == 2) {
+            return "password";
+        }
+
+        if (this.accessType == 1) {
+            return "closed";
+        }
+
+        return "open";
+    }
+
+    public int getAccessTypeId() {
         return accessType;
     }
 

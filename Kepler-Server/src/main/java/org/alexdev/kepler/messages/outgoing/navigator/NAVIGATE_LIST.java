@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.outgoing.navigator;
 
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -9,6 +10,7 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import java.util.List;
 
 public class NAVIGATE_LIST extends MessageComposer {
+    private Player viewer;
     private NavigatorCategory parentCategory;
     private List<Room> rooms;
     private boolean hideFull;
@@ -17,7 +19,8 @@ public class NAVIGATE_LIST extends MessageComposer {
     private int categoryMaxVisitors;
     private int rank;
 
-    public NAVIGATE_LIST(NavigatorCategory parentCategory, List<Room> rooms, boolean hideFull, List<NavigatorCategory> subCategories, int categoryCurrentVisitors, int categoryMaxVisitors, int rank) {
+    public NAVIGATE_LIST(Player viewer, NavigatorCategory parentCategory, List<Room> rooms, boolean hideFull, List<NavigatorCategory> subCategories, int categoryCurrentVisitors, int categoryMaxVisitors, int rank) {
+        this.viewer = viewer;
         this.parentCategory = parentCategory;
         this.rooms = rooms;
         this.hideFull = hideFull;
@@ -55,6 +58,21 @@ public class NAVIGATE_LIST extends MessageComposer {
                 response.writeString(room.getData().getCcts());
                 response.writeInt(0);
                 response.writeInt(1);
+            } else {
+                response.writeInt(room.getData().getId());
+                response.writeString(room.getData().getName());
+
+                if (room.getData().getOwnerId() == viewer.getDetails().getId() ||
+                        room.getData().showName() ||
+                        viewer.hasPermission("fuse_see_all_roomowners")) {
+                    response.writeString(room.getData().getOwnerName());
+                } else {
+                    response.writeString("-");
+                }
+
+                response.writeString(room.getData().getAccessType());
+                response.writeInt(room.getData().getVisitorsNow());
+                response.writeInt(room.getData().getVisitorsMax());
             }
         }
 

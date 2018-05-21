@@ -1,10 +1,11 @@
 package org.alexdev.kepler.game.room;
 
+import org.alexdev.kepler.dao.mysql.NavigatorDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
-import org.alexdev.kepler.dao.mysql.RoomModelDao;
-import org.alexdev.kepler.game.room.models.RoomModel;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomManager {
@@ -78,6 +79,38 @@ public class RoomManager {
     }
 
     /**
+     * Find a list of recent rooms, will add any active
+     * or loaded rooms it finds from the list of active rooms.
+     *  @param limit the limit per category
+     * @param categoryId the category id to search under
+     */
+    public List<Room> getRecentRooms(int limit, int categoryId) {
+        List<Room> recentRooms = NavigatorDao.getRecentRooms(limit, categoryId);
+        List<Room> roomList = new ArrayList<>();
+
+        for (Room room : recentRooms) {
+            Room loadedRoom = this.getRoomById(room.getData().getId());
+
+            if (loadedRoom != null) {
+                roomList.add(loadedRoom);
+            } else {
+                roomList.add(room);
+            }
+        }
+
+        return roomList;
+    }
+
+    /**
+     * Get the entire list of rooms.
+     *
+     * @return the collection of rooms
+     */
+    public Collection<Room> getRooms() {
+        return this.roomMap.values();
+    }
+
+    /**
      * Get the instance of {@link RoomManager}
      *
      * @return the instance
@@ -88,14 +121,5 @@ public class RoomManager {
         }
 
         return instance;
-    }
-
-    /**
-     * Get the entire list of rooms.
-     *
-     * @return the collection of rooms
-     */
-    public Collection<Room> getRooms() {
-        return this.roomMap.values();
     }
 }

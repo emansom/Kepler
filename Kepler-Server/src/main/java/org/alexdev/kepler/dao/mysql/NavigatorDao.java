@@ -46,4 +46,36 @@ public class NavigatorDao {
 
         return categories;
     }
+
+    public static List<Room> getRecentRooms(int limit, int categoryId) {
+        List<Room> rooms = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE category = ? AND owner_id > 0 ORDER BY id DESC LIMIT ? ", sqlConnection);
+            preparedStatement.setInt(1, categoryId);
+            preparedStatement.setInt(2, limit);
+            resultSet = preparedStatement.executeQuery();
+
+            //public NavigatorCategory(int id, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat) {
+            while (resultSet.next()) {
+                Room room = new Room();
+                RoomDao.fill(room.getData(), resultSet);
+                rooms.add(room);
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return rooms;
+    }
 }

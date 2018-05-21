@@ -31,19 +31,33 @@ public class NAVIGATE implements MessageEvent {
         int categoryCurrentVisitors = category.getCurrentVisitors();
         int categoryMaxVisitors = category.getMaxVisitors();
 
-        for (Room room : RoomManager.getInstance().getRooms()) {
-            if (hideFull && room.getData().getVisitorsNow() >= room.getData().getVisitorsMax()) {
-                continue;
-            }
+        if (category.isPublicSpaces()) {
+            for (Room room : RoomManager.getInstance().getRooms()) {
+                if (room.getData().getCategoryId() != category.getId()) {
+                    continue;
+                }
 
-            if (room.getData().getCategoryId() != category.getId()) {
-                continue;
-            }
+                if (hideFull && room.getData().getVisitorsNow() >= room.getData().getVisitorsMax()) {
+                    continue;
+                }
 
-            rooms.add(room);
+                rooms.add(room);
+            }
+        } else {
+            for (Room room : RoomManager.getInstance().getRecentRooms(30, category.getId())) {
+                if (room.getData().getCategoryId() != category.getId()) {
+                    continue;
+                }
+
+                if (hideFull && room.getData().getVisitorsNow() >= room.getData().getVisitorsMax()) {
+                    continue;
+                }
+
+                rooms.add(room);
+            }
         }
 
-        player.send(new NAVIGATE_LIST(category, rooms, hideFull, subCategories, categoryCurrentVisitors, categoryMaxVisitors, player.getDetails().getRank()));
+        player.send(new NAVIGATE_LIST(player, category, rooms, hideFull, subCategories, categoryCurrentVisitors, categoryMaxVisitors, player.getDetails().getRank()));
 
     }
 }

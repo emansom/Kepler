@@ -80,7 +80,7 @@ public class RoomDao {
      * @param row the row
      * @throws SQLException the SQL exception
      */
-    private static void fill(RoomData data, ResultSet row) throws SQLException {
+    public static void fill(RoomData data, ResultSet row) throws SQLException {
         if (data == null) {
             return;
         }
