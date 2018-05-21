@@ -32,40 +32,26 @@ public class Pathfinder {
      * @return the linked list
      */
     public static LinkedList<Position> makePath(Entity entity) {
-        /*int X = entity.getRoomUser().getGoal().getX();
+        int X = entity.getRoomUser().getGoal().getX();
         int Y = entity.getRoomUser().getGoal().getY();
-        return makePath(entity, X, Y);*/
-        return null;
+        return makePath(entity, X, Y);
     }
 
     /**
      * Make path with specified last coordinates
      *
      * @param entity the entity to move
-     * @param X the xcoord to move from
-     * @param Y the y coord to move from
+     * @param x the xcoord to move from
+     * @param y the y coord to move from
      * @return the linked list
      */
-    public static LinkedList<Position> makePath(Entity entity, int X, int Y) {
-        /* (entity.getRoom().getModelName().isOutsideBounds(X, Y)) {
+    public static LinkedList<Position> makePath(Entity entity, int x, int y) {
+        if (entity.getRoom().getMapping().isValidTile(entity, new Position(x, y))) {
             return new LinkedList<>();
         }
-
-        if (entity.getRoom().getModelName().isBlocked(X, Y)) {
-            return new LinkedList<>();
-        }
-
-        if (!entity.getRoom().getMapping().isTileWalkable(X, Y, entity)) {
-            return new LinkedList<>();
-        }
-
-        if (entity.getRoomUser().getPosition().equals(new Position(X, Y))) {
-            return new LinkedList<>();
-        }*/
 
         LinkedList<Position> squares = new LinkedList<>();
-
-        PathfinderNode nodes = makePathReversed(entity, X, Y);
+        PathfinderNode nodes = makePathReversed(entity, x, y);
 
         if (nodes != null) {
             while (nodes.getNextNode() != null) {
@@ -88,14 +74,14 @@ public class Pathfinder {
     private static PathfinderNode makePathReversed(Entity entity, int X, int Y) {
         LinkedList<PathfinderNode> openList = new LinkedList<>();
 
-        PathfinderNode[][] map = null;//new PathfinderNode[entity.getRoom().getModelName().getMapSizeX()][entity.getRoom().getModelName().getMapSizeY()];
+        PathfinderNode[][] map = new PathfinderNode[entity.getRoom().getData().getModel().getMapSizeX()][entity.getRoom().getData().getModel().getMapSizeY()];
         PathfinderNode node;
         Position tmp;
 
         int cost;
         int diff;
 
-        PathfinderNode current = new PathfinderNode(null);//entity.getRoomUser().getPosition());
+        PathfinderNode current = new PathfinderNode(entity.getRoomUser().getPosition());
         current.setCost(0);
 
         Position end = new Position(X, Y);
@@ -104,18 +90,16 @@ public class Pathfinder {
         map[current.getPosition().getX()][current.getPosition().getY()] = current;
         openList.add(current);
 
-        Position[] POINTS = DIAGONAL_MOVE_POINTS;
-
         while (openList.size() > 0) {
             current = openList.pollFirst();
             current.setInClosed(true);
 
-            for (int i = 0; i < POINTS.length; i++) {
-                tmp = current.getPosition().add(POINTS[i]);
+            for (Position POINT : DIAGONAL_MOVE_POINTS) {
+                tmp = current.getPosition().add(POINT);
 
                 boolean isFinalMove = (tmp.getX() == end.getX() && tmp.getY() == end.getY());
 
-                if (false) {//if (entity.getRoomUser().getRoom().getMapping().isValidStep(entity, new Position(current.getPosition().getX(), current.getPosition().getY(), current.getPosition().getZ()), tmp, isFinalMove)) {
+                if (entity.getRoomUser().getRoom().getMapping().isValidStep(entity, new Position(current.getPosition().getX(), current.getPosition().getY(), current.getPosition().getZ()), tmp, isFinalMove)) {
                     if (map[tmp.getX()][tmp.getY()] == null) {
                         node = new PathfinderNode(tmp);
                         map[tmp.getX()][tmp.getY()] = node;

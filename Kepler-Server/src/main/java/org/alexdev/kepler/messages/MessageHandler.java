@@ -7,6 +7,8 @@ import org.alexdev.kepler.messages.incoming.handshake.GENERATEKEY;
 import org.alexdev.kepler.messages.incoming.handshake.INIT_CRYPTO;
 import org.alexdev.kepler.messages.incoming.handshake.SSO;
 import org.alexdev.kepler.messages.incoming.navigator.NAVIGATE;
+import org.alexdev.kepler.messages.incoming.rooms.user.QUIT;
+import org.alexdev.kepler.messages.incoming.rooms.user.WALK;
 import org.alexdev.kepler.messages.incoming.user.GET_CREDITS;
 import org.alexdev.kepler.messages.incoming.user.GET_INFO;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -34,6 +36,7 @@ public class MessageHandler {
         registerUserPackets();
         registerNavigatorPackets();
         registerRoomPackets();
+        registerRoomUserPackets();
 
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
@@ -83,6 +86,15 @@ public class MessageHandler {
         registerEvent(Incoming.G_HMAP, new G_HMAP());
         registerEvent(Incoming.G_OBJS, new G_OBJS());
         registerEvent(Incoming.G_USRS,  new G_USRS());
+        registerEvent(Incoming.G_STAT, new G_STAT());
+    }
+
+    /**
+     * Register room user packets.
+     */
+    private void registerRoomUserPackets() {
+        registerEvent(Incoming.QUIT, new QUIT());
+        registerEvent(Incoming.WALK, new WALK());
     }
 
     /**

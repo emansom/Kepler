@@ -63,28 +63,28 @@ public class RoomModel {
         }
     }
 
-    public RoomTileState[][] getTileState(int x, int y) {
+    public RoomTileState getTileState(int x, int y) {
         if (x < 0 || y < 0) {
-            return null;
+            return RoomTileState.CLOSED;
         }
 
         if (x >= this.mapSizeX || y >= this.mapSizeY) {
-            return null;
+            return RoomTileState.CLOSED;
         }
 
-        return tileStates;
+        return tileStates[x][y];
     }
 
-    public double[][] getTileHeights(int x, int y) {
+    public double getTileHeight(int x, int y) {
         if (x < 0 || y < 0) {
-            return null;
+            return 0;
         }
 
         if (x >= this.mapSizeX || y >= this.mapSizeY) {
-            return null;
+            return 0;
         }
 
-        return tileHeights;
+        return tileHeights[x][y];
     }
 
 

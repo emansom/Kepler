@@ -10,9 +10,9 @@ public class EntityState {
     private int instanceId;
     private PlayerDetails details;
     private Position position;
-    private HashMap<String,String> statuses;
+    private HashMap<EntityStatus, String> statuses;
 
-    public EntityState(int entityId, int instanceId, PlayerDetails details, Position position, HashMap<String, String> statuses) {
+    public EntityState(int entityId, int instanceId, PlayerDetails details, Position position, HashMap<EntityStatus, String> statuses) {
         this.entityId = entityId;
         this.instanceId = instanceId;
         this.details = details;
@@ -28,7 +28,7 @@ public class EntityState {
         return position;
     }
 
-    public HashMap<String, String> getStatuses() {
+    public HashMap<EntityStatus, String> getStatuses() {
         return statuses;
     }
 

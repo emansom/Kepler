@@ -37,6 +37,11 @@ public class NettyResponse  {
         this.buffer.writeByte(13);
     }
 
+    public void writeDelimeter(Object key, char value) {
+        this.buffer.writeBytes(key.toString().getBytes());
+        this.buffer.writeBytes(Character.toString(value).getBytes());
+    }
+
 
     public void writeBool(Boolean obj) {
         this.writeInt(obj ? 1 : 0);

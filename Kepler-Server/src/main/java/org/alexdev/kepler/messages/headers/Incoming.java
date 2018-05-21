@@ -13,6 +13,7 @@ public class Incoming {
     public static final int G_HMAP = 60; // "@|"
     public static final int G_USRS = 61; // "@}"
     public static final int G_OBJS = 62; // "@~"
-
-
+    public static final int G_STAT = 64; // "@A"
+    public static final int QUIT = 53; // "@u"
+    public static final int WALK = 75; // "AK
 }
