@@ -115,6 +115,10 @@ public class MessageHandler {
         registerEvent(191, new MESSENGER_GETREQUESTS());
         registerEvent(36, new MESSENGER_ASSIGNPERSMSG());
         registerEvent(40, new MESSENGER_REMOVEBUDDY());
+        registerEvent(33, new MESSENGER_SENDMSG());
+        registerEvent(32, new MESSENGER_MARKREAD());
+        registerEvent(262, new FOLLOW_FRIEND());
+        registerEvent(15, new FRIENDLIST_UPDATE());
     }
 
     /**

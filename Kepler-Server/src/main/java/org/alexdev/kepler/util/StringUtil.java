@@ -27,14 +27,18 @@ public class StringUtil {
      * Filter input.
      *
      * @param input the input
+     * @param filerNewline if new lines (ENTER) should be filtered
      * @return the string
      */
-    public static String filterInput(String input) {
+    public static String filterInput(String input, boolean filerNewline) {
+        input = input.replace((char)2, ' ');
+        input = input.replace((char)9, ' ');
         input = input.replace((char)10, ' ');
-        input = input.replace((char)11, ' ');
         input = input.replace((char)12, ' ');
-        input = input.replace((char)13, ' ');
-        input = input.replace((char)14, ' ');
+
+        if (filerNewline) {
+            input = input.replace((char)13, ' ');
+        }
 
         return input;
     }

@@ -23,6 +23,10 @@ public class NAVIGATE implements MessageEvent {
 
         NavigatorCategory category = NavigatorManager.getInstance().getCategoryById(categoryId);
 
+        if (category == null) {
+            return;
+        }
+
         if (category.getMinimumRoleAccess() > player.getDetails().getRank()) {
             return;
         }
@@ -45,6 +49,8 @@ public class NAVIGATE implements MessageEvent {
 
                 rooms.add(room);
             }
+
+            player.setSendFullNavigator(false);
         } else {
             for (Room room : RoomManager.getInstance().replaceQueryRooms(NavigatorDao.getRecentRooms(30, category.getId()))) {
                 if (room.getData().getCategoryId() != category.getId()) {

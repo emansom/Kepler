@@ -9,11 +9,13 @@ public class Messenger {
     private Player player;
     private List<MessengerUser> friends;
     private List<MessengerUser> requests;
+    private List<MessengerMessage> offlineMessages;
 
     public Messenger(Player player) {
         this.player = player;
         this.friends = MessengerDao.getFriends(player.getDetails().getId());
         this.requests = MessengerDao.getRequests(player.getDetails().getId());
+        this.offlineMessages = MessengerDao.getUnreadMessages(player.getDetails().getId());
     }
 
     public boolean isFriend(int userId) {
@@ -42,6 +44,10 @@ public class Messenger {
         }
 
         return null;
+    }
+
+    public List<MessengerMessage> getOfflineMessages() {
+        return offlineMessages;
     }
 
     public List<MessengerUser> getFriends() {

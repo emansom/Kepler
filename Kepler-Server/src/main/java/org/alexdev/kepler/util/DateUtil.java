@@ -14,7 +14,7 @@ public class DateUtil {
      * @return the date formatter
      */
     private static DateFormat getDateFormatter() {
-        return new SimpleDateFormat("dd-MM-yyyy");
+        return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
     }
 
     /**

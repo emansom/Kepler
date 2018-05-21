@@ -40,9 +40,9 @@ public class MessengerUser {
                 } else {
                     response.writeString(room.getData().getName());
                 }
+            } else {
+                response.writeString("On hotel view");
             }
-
-            response.writeString("On hotel view");
         } else {
             response.writeString("");
         }

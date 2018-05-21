@@ -1,13 +1,17 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
+import org.alexdev.kepler.game.messenger.MessengerMessage;
 import org.alexdev.kepler.game.messenger.MessengerUser;
+import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.util.DateUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MessengerDao {
@@ -214,7 +218,6 @@ public class MessengerDao {
      *
      * @param fromId the sender
      * @param toId the receiver
-     * @return true, if successful
      */
     public static void newFriend(int fromId, int toId) {
         Connection sqlConnection = null;
@@ -233,5 +236,92 @@ public class MessengerDao {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }
+    }
+
+    /**
+     * Create a message for other people to read them later, if they're offline.
+     *
+     * @param fromId the id the user sending the message
+     * @param toId the id of the user to receive it
+     * @param message the body of the message
+     * @return the id of the message
+     */
+    public static int newMessage(int fromId, int toId, String message) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        int messageID = 0;
+
+        try {
+
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO messenger_messages (receiver_id, sender_id, unread, body, date) VALUES (?, ?, ?, ?, ?)", sqlConnection);
+            preparedStatement.setInt(1, toId);
+            preparedStatement.setInt(2, fromId);
+            preparedStatement.setInt(3, 1);
+            preparedStatement.setString(4, message);
+            preparedStatement.setLong(5, DateUtil.getCurrentTimeSeconds());
+            preparedStatement.executeUpdate();
+
+            ResultSet row = preparedStatement.getGeneratedKeys();
+
+            if (row != null && row.next()) {
+                messageID = row.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return messageID;
+    }
+
+    /**
+     * Get unread messages for the user.
+     *
+     * @param userId the id of the user to get the offline messages for
+     * @return the list of messages
+     */
+    public static List<MessengerMessage> getUnreadMessages(int userId) {
+        List<MessengerMessage> messages = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM messenger_messages WHERE receiver_id = " + userId + " AND unread = 1", sqlConnection);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                messages.add(new MessengerMessage(
+                        resultSet.getInt("id"), resultSet.getInt("receiver_id"), resultSet.getInt("sender_id"),
+                        resultSet.getLong("date"), resultSet.getString("body")));
+
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return messages;
+    }
+
+    /**
+     * Mark a message as read.
+     *
+     * @param messageId the message id to reset
+     */
+    public static void markMessageRead(int messageId) {
+        Storage.getStorage().execute("UPDATE messenger_messages SET unread = 0 WHERE id = " + messageId);
     }
 }
