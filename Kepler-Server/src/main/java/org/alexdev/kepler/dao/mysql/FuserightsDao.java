@@ -8,7 +8,7 @@ import java.util.HashMap;
 public class FuserightsDao {
     
     /**
-     * Gets the fuserights.
+     * Get the fuserights.
      */
     public static HashMap<String, Integer> getFuserights() {
         HashMap<String, Integer> fuserights = new HashMap<>();

@@ -18,14 +18,32 @@ public class Messenger {
         this.offlineMessages = MessengerDao.getUnreadMessages(player.getDetails().getId());
     }
 
-    public boolean isFriend(int userId) {
-        return this.getFriend(userId) != null;
-    }
-
+    /**
+     * Get if the user already has a request from this user id.
+     *
+     * @param userId the user id to check for
+     * @return true, if successful
+     */
     public boolean hasRequest(int userId) {
         return this.getRequest(userId) != null;
     }
 
+    /**
+     * Get if the user already has a friend with this user id.
+     *
+     * @param userId the user id to check for
+     * @return true, if successful
+     */
+    public boolean isFriend(int userId) {
+        return this.getFriend(userId) != null;
+    }
+
+    /**
+     * Get the messenger user instance with this user id.
+     *
+     * @param userId the user id to check for
+     * @return the messenger user instance
+     */
     public MessengerUser getRequest(int userId) {
         for (MessengerUser requester : this.requests) {
             if (requester.getUserId() == userId) {
@@ -36,6 +54,12 @@ public class Messenger {
         return null;
     }
 
+    /**
+     * Get the messenger user instance with this user id.
+     *
+     * @param userId the user id to check for
+     * @return the messenger user instance
+     */
     public MessengerUser getFriend(int userId) {
         for (MessengerUser friend : this.friends) {
             if (friend.getUserId() == userId) {
@@ -46,14 +70,29 @@ public class Messenger {
         return null;
     }
 
+    /**
+     * Get the list of offline messages.
+     *
+     * @return the list of offline messages
+     */
     public List<MessengerMessage> getOfflineMessages() {
         return offlineMessages;
     }
 
+    /**
+     * Get the list of friends.
+     *
+     * @return the list of friends
+     */
     public List<MessengerUser> getFriends() {
         return friends;
     }
 
+    /**
+     * Get the list of friends.
+     *
+     * @return the list of friends
+     */
     public List<MessengerUser> getRequests() {
         return requests;
     }

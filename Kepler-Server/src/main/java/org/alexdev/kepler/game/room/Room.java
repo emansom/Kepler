@@ -78,7 +78,11 @@ public class Room {
         }
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
+
         this.roomData = null;
+        this.roomTaskManager = null;
+        this.roomEntityManager = null;
+        this.roomItemManager = null;
     }
 
     /**

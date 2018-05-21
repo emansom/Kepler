@@ -13,6 +13,11 @@ import java.util.List;
 
 public class NavigatorDao {
 
+    /**
+     * Get all categories from the database.
+     *
+     * @return map of categories
+     */
     public static HashMap<Integer, NavigatorCategory> getCategories() {
         HashMap<Integer, NavigatorCategory> categories = new HashMap<>();
 
@@ -47,6 +52,13 @@ public class NavigatorDao {
         return categories;
     }
 
+    /**
+     * Get the list of recent rooms from database set by limit and category id.
+     *
+     * @param limit the maximum amount of usrs
+     * @param categoryId the rooms to find under this category id
+     * @return the list of recent rooms
+     */
     public static List<Room> getRecentRooms(int limit, int categoryId) {
         List<Room> rooms = new ArrayList<>();
 
