@@ -38,7 +38,7 @@ public class Item {
             response.writeString(this.definition.getSprite());
             response.writeDelimeter(this.position.getX(), ' ');
             response.writeDelimeter(this.position.getY(), ' ');
-            response.writeDelimeter(StringUtil.format(this.position.getZ()), ' ');
+            response.writeDelimeter((int) this.position.getZ(), ' ');
             response.write(this.position.getRotation());
 
             if (this.hasExtraParameter) {

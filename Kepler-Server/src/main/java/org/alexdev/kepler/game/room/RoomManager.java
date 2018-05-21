@@ -84,7 +84,6 @@ public class RoomManager {
      */
     public static RoomManager getInstance() {
         if (instance == null) {
-            System.out.println("test");
             instance = new RoomManager();
         }
 

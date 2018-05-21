@@ -42,10 +42,7 @@ public class RoomData {
         this.password = password;
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
-
-        this.getModel().getPublicItems();
-
-        //this.room.getItems().addAll(this.getModel().getPublicItems());
+        this.room.getItems().addAll(this.getModel().getPublicItems());
     }
 
     public int getId() {
