@@ -40,7 +40,16 @@ public class RoomMapping {
             return false;
         }
 
-        System.out.println("xdddd");
+        double oldHeight = this.getTile(current.getX(), current.getY()).getTileHeight();
+        double newHeight = this.getTile(tmp.getX(), tmp.getY()).getTileHeight();
+
+        if (oldHeight - 4 >= newHeight) {
+            return false;
+        }
+
+        if (oldHeight + 1.5 <= newHeight) {
+            return false;
+        }
 
         return true;
     }

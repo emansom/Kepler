@@ -60,6 +60,8 @@ public class USER_STATUSES extends MessageComposer {
                 response.write(set.getValue());
                 response.write("/");
             }
+
+            response.write(Character.toString((char) 13));
         }
     }
 

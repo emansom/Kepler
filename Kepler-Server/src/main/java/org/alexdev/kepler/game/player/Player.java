@@ -43,8 +43,6 @@ public class Player extends Entity {
 
         this.send(new LOGIN());
         this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
-
-        log.info("Users: " + PlayerManager.getInstance().getPlayers().size());
     }
 
     /**
@@ -100,9 +98,11 @@ public class Player extends Entity {
 
     @Override
     public void dispose() {
-        PlayerManager.getInstance().removePlayer(this);
+        if (this.roomUser.getRoom() != null) {
+            this.roomUser.getRoom().getEntityManager().leaveRoom(this);
+        }
 
-        log.info("Users: " + PlayerManager.getInstance().getPlayers().size());
+        PlayerManager.getInstance().removePlayer(this);
     }
 
     public void sendMessage(String entry) {

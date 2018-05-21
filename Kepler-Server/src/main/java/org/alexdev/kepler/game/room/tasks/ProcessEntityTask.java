@@ -88,7 +88,7 @@ public class ProcessEntityTask implements Runnable {
                 roomUser.removeStatus(EntityStatus.LAY);
                 roomUser.removeStatus(EntityStatus.SIT);
 
-                int rotation = Rotation.calculate(position.getX(), position.getY(), next.getX(), next.getY());
+                int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
                 double height = this.room.getMapping().getTile(next.getX(), next.getY()).getTileHeight();
 
                 roomUser.getPosition().setRotation(rotation);
