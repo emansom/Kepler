@@ -16,6 +16,34 @@ public class Messenger {
         this.requests = MessengerDao.getRequests(player.getDetails().getId());
     }
 
+    public boolean isFriend(int userId) {
+        return this.getFriend(userId) != null;
+    }
+
+    public boolean hasRequest(int userId) {
+        return this.getRequest(userId) != null;
+    }
+
+    public MessengerUser getRequest(int userId) {
+        for (MessengerUser requester : this.requests) {
+            if (requester.getUserId() == userId) {
+                return requester;
+            }
+        }
+
+        return null;
+    }
+
+    public MessengerUser getFriend(int userId) {
+        for (MessengerUser friend : this.friends) {
+            if (friend.getUserId() == userId) {
+                return friend;
+            }
+        }
+
+        return null;
+    }
+
     public List<MessengerUser> getFriends() {
         return friends;
     }

@@ -94,8 +94,8 @@ public class MessengerDao {
      * @param query the query
      * @return the list
      */
-    public static List<Integer> search(String query) {
-        List<Integer> users = new ArrayList<>();
+    public static Integer search(String query) {
+        int userId = -1;
 
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
@@ -108,8 +108,8 @@ public class MessengerDao {
 
             resultSet = preparedStatement.executeQuery();
 
-            while (resultSet.next()) {
-                users.add(resultSet.getInt("id"));
+            if (resultSet.next()) {
+                userId = resultSet.getInt("id");
             }
 
         } catch (Exception e) {
@@ -120,7 +120,7 @@ public class MessengerDao {
             Storage.closeSilently(sqlConnection);
         }
 
-        return users;
+        return userId;
     }
 
     /**

@@ -50,4 +50,8 @@ public class MessengerUser {
         response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
         response.writeString(details.getFigure());
     }
+
+    public int getUserId() {
+        return this.userId;
+    }
 }

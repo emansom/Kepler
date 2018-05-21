@@ -2,20 +2,13 @@ package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.incoming.messenger.MESSENGERINIT;
-import org.alexdev.kepler.messages.incoming.navigator.GETUSERFLATCATS;
-import org.alexdev.kepler.messages.incoming.navigator.RECOMMENDED_ROOMS;
-import org.alexdev.kepler.messages.incoming.navigator.SUSERF;
+import org.alexdev.kepler.messages.incoming.messenger.*;
+import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
-import org.alexdev.kepler.messages.incoming.handshake.GENERATEKEY;
-import org.alexdev.kepler.messages.incoming.handshake.INIT_CRYPTO;
-import org.alexdev.kepler.messages.incoming.handshake.SSO;
-import org.alexdev.kepler.messages.incoming.navigator.NAVIGATE;
-import org.alexdev.kepler.messages.incoming.rooms.settings.GETFLATINFO;
-import org.alexdev.kepler.messages.incoming.rooms.user.QUIT;
-import org.alexdev.kepler.messages.incoming.rooms.user.WALK;
-import org.alexdev.kepler.messages.incoming.user.GET_CREDITS;
-import org.alexdev.kepler.messages.incoming.user.GET_INFO;
+import org.alexdev.kepler.messages.incoming.handshake.*;
+import org.alexdev.kepler.messages.incoming.rooms.settings.*;
+import org.alexdev.kepler.messages.incoming.rooms.user.*;
+import org.alexdev.kepler.messages.incoming.user.*;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.Configuration;
@@ -115,6 +108,13 @@ public class MessageHandler {
      */
     public void registerMessengerPackets() {
         registerEvent(12, new MESSENGERINIT());
+        registerEvent(41, new FINDUSER());
+        registerEvent(39, new MESSENGER_REQUESTBUDDY());
+        registerEvent(38, new MESSENGER_DECLINEBUDDY());
+        registerEvent(37, new MESSENGER_ACCEPTBUDDY());
+        registerEvent(191, new MESSENGER_GETREQUESTS());
+        registerEvent(36, new MESSENGER_ASSIGNPERSMSG());
+        registerEvent(40, new MESSENGER_REMOVEBUDDY());
     }
 
     /**
