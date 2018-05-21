@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2018 at 05:27 PM
+-- Generation Time: May 21, 2018 at 05:16 PM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 5.6.31
 
@@ -2156,8 +2156,8 @@ INSERT INTO `items_definitions` (`id`, `cast_directory`, `sprite`, `colour`, `le
 --
 
 CREATE TABLE `messenger_friends` (
-  `from_id` int(11) DEFAULT NULL,
-  `to_id` int(11) DEFAULT NULL
+  `from_id` int(11) NOT NULL,
+  `to_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2167,12 +2167,12 @@ CREATE TABLE `messenger_friends` (
 --
 
 CREATE TABLE `messenger_messages` (
-  `id` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL,
   `receiver_id` int(11) DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
   `unread` text,
   `body` text,
-  `date` text
+  `date` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -2243,7 +2243,7 @@ INSERT INTO `rank_fuserights` (`min_rank`, `fuseright`) VALUES
 CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `owner_id` varchar(11) NOT NULL,
-  `categoryId` int(11) DEFAULT '0',
+  `category` int(11) DEFAULT '0',
   `name` text NOT NULL,
   `description` text NOT NULL,
   `model` text NOT NULL,
@@ -2262,7 +2262,8 @@ CREATE TABLE `rooms` (
 -- Dumping data for table `rooms`
 --
 
-INSERT INTO `rooms` (`id`, `owner_id`, `categoryId`, `name`, `description`, `model`, `ccts`, `wallpaper`, `floor`, `showname`, `superusers`, `accesstype`, `password`, `visitors_now`, `visitors_max`) VALUES
+INSERT INTO `rooms` (`id`, `owner_id`, `category`, `name`, `description`, `model`, `ccts`, `wallpaper`, `floor`, `showname`, `superusers`, `accesstype`, `password`, `visitors_now`, `visitors_max`) VALUES
+(1, '1', 112, 'Hello', '', 'model_a', NULL, 0, '0', 1, 0, 0, NULL, 0, 25),
 (1001, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, '0', 0, 0, 0, '', 0, 40),
 (1003, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, '0', 0, 0, 0, '', 0, 100),
 (1004, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, '0', 0, 0, 0, '', 0, 30),
@@ -2340,7 +2341,7 @@ CREATE TABLE `rooms_categories` (
 --
 
 INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`, `public_spaces`, `allow_trading`, `minrole_access`, `minrole_setflatcat`) VALUES
-(2, 0, 0, 0, 'No categoryId', 0, 0, 1, 1),
+(2, 0, 0, 0, 'No category', 0, 0, 1, 1),
 (3, 0, 0, 1, 'Public Rooms', 1, 0, 1, 6),
 (4, 0, 0, 1, 'Guest Rooms', 0, 0, 1, 6),
 (5, 0, 3, 0, 'Entertainment', 1, 0, 1, 6),
@@ -2496,8 +2497,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `figure`, `pool_figure`, `sex`, `motto`, `credits`, `tickets`, `film`, `rank`, `console_motto`, `last_online`, `sso_ticket`, `club_subscribed`, `club_expiration`, `badge`, `badge_active`) VALUES
-(1, 'Alex', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61', 'ch=s02/182,243,255', 'M', 'de kepler whey', 99887, 19, 0, 2, 'I\'m a new user!', 1526567261, '123', 1526277229, 1626277229, '', 0),
-(2, 'test', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', 'ch=s02/182,243,255', 'M', 'de kepler whey', 99887, 19, 0, 2, 'I\'m a new user!', 1526567261, 'keplerTicket', 1526277229, 1626277229, '', 0);
+(1, 'Alex', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61', 'ch=s02/182,243,255', 'M', 'de kepler whey', 99887, 19, 0, 7, 'I\'m a new user!', 1526567261, '123', 1526277229, 1626277229, '', 0),
+(2, 'test', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', 'ch=s02/182,243,255', 'M', 'de kepler whey', 99887, 19, 0, 2, 'I\'m a new user!', 1526567261, 'keplerTicket', 1526277229, 1626277229, '', 0),
+(3, 'alex2', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', 'ch=s02/182,243,255', 'M', 'de kepler whey', 99887, 19, 0, 2, 'I\'m a new user!', 1526567261, 'keplerTicket', 1526277229, 1626277229, '', 0);
 
 -- --------------------------------------------------------
 
@@ -2559,6 +2561,13 @@ ALTER TABLE `items_definitions`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id` (`id`);
+
+--
 -- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
@@ -2606,6 +2615,11 @@ ALTER TABLE `items`
 ALTER TABLE `items_definitions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3155;
 --
+-- AUTO_INCREMENT for table `messenger_messages`
+--
+ALTER TABLE `messenger_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
@@ -2624,7 +2638,7 @@ ALTER TABLE `rooms_models`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
