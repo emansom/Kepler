@@ -1,8 +1,11 @@
 package org.alexdev.kepler.game.room;
 
-import org.alexdev.kepler.game.room.mapping.RoomModel;
+import org.alexdev.kepler.game.room.models.RoomModel;
+import org.alexdev.kepler.game.room.models.RoomModelManager;
 
 public class RoomData {
+    private Room room;
+
     private int id;
     private int ownerId;
     private int categoryId;
@@ -18,6 +21,10 @@ public class RoomData {
     private String password;
     private int visitorsNow;
     private int visitorsMax;
+
+    public RoomData(Room room) {
+        this.room = room;
+    }
 
     public void fill(int id, int ownerId, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax) {
         this.id = id;
@@ -35,6 +42,10 @@ public class RoomData {
         this.password = password;
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
+
+        this.getModel().getPublicItems();
+
+        //this.room.getItems().addAll(this.getModel().getPublicItems());
     }
 
     public int getId() {
@@ -74,7 +85,7 @@ public class RoomData {
     }
 
     public RoomModel getModel() {
-        return RoomManager.getInstance().getModelMap().get(this.model);
+        return RoomModelManager.getInstance().getModel(this.model);
     }
 
     public void setModel(String model) {

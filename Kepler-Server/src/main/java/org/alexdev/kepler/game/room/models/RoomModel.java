@@ -1,6 +1,8 @@
-package org.alexdev.kepler.game.room.mapping;
+package org.alexdev.kepler.game.room.models;
 
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.ItemPublicParser;
+import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
@@ -29,7 +31,7 @@ public class RoomModel {
         this.doorZ = doorZ;
         this.doorRotation = doorRotation;
         this.heightmap = heightmap.replace("|", "\r");
-        this.publicItems = new ArrayList<>();
+        this.publicItems = ItemPublicParser.getPublicItems(this.modelId);
     }
 
     public void parse() {

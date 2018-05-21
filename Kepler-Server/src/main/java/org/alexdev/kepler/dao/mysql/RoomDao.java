@@ -90,5 +90,6 @@ public class RoomDao {
                 row.getString("ccts"), row.getInt("wallpaper"), row.getInt("floor"), row.getBoolean("showname"),
                 row.getBoolean("superusers"), row.getInt("accesstype"), row.getString("password"),
                 row.getInt("visitors_now"), row.getInt("visitors_max"));
+
     }
 }

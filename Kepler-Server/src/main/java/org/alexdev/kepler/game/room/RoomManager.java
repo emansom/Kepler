@@ -2,22 +2,18 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.RoomModelDao;
-import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.mapping.RoomModel;
+import org.alexdev.kepler.game.room.models.RoomModel;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomManager {
-    private static RoomManager instance;
+    private static RoomManager instance = null;
 
-    private ConcurrentHashMap<String, RoomModel> modelMap;
     private ConcurrentHashMap<Integer, Room> roomMap;
 
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
-        this.modelMap = RoomModelDao.getModels();
         this.addPublicRooms();
     }
 
@@ -88,6 +84,7 @@ public class RoomManager {
      */
     public static RoomManager getInstance() {
         if (instance == null) {
+            System.out.println("test");
             instance = new RoomManager();
         }
 
@@ -101,14 +98,5 @@ public class RoomManager {
      */
     public Collection<Room> getRooms() {
         return this.roomMap.values();
-    }
-
-    /**
-     * Get the map of models.
-     *
-     * @return the model map
-     */
-    public ConcurrentHashMap<String, RoomModel> getModelMap() {
-        return modelMap;
     }
 }

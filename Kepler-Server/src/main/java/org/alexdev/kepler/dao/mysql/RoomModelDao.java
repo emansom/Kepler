@@ -1,7 +1,7 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.game.room.mapping.RoomModel;
+import org.alexdev.kepler.game.room.models.RoomModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -26,8 +26,8 @@ public class RoomModelDao {
                         resultSet.getInt("door_x"), resultSet.getInt("door_y"), resultSet.getDouble("door_z"),
                         resultSet.getInt("door_dir"), resultSet.getString("heightmap"));
 
-                roomModel.parse();
                 roomModels.put(roomModel.getModelId(), roomModel);
+                roomModel.parse();
                 //fuserights.put(resultSet.getString("fuseright"), resultSet.getInt("min_rank"));
             }
 

@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.managers.RoomEntityManager;
@@ -18,13 +19,16 @@ public class Room {
     private RoomEntityManager roomEntityManager;
     private ProcessEntityTask processEntity;
     private ScheduledFuture<?> processEntityTask;
+
     private List<Entity> entities;
+    private List<Item> items;
 
     public Room() {
-        this.roomData = new RoomData();
+        this.roomData = new RoomData(this);
         this.roomEntityManager = new RoomEntityManager(this);
         this.processEntity = new ProcessEntityTask(this);
         this.entities = new ArrayList<>();
+        this.items = new ArrayList<>();
     }
 
     public void send(MessageComposer composer) {
@@ -84,6 +88,10 @@ public class Room {
 
     public List<Entity> getEntities() {
         return entities;
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 
     public void setProcessEntityTask(ScheduledFuture<?> processEntityTask) {
