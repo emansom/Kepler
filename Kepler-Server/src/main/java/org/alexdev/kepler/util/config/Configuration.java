@@ -99,8 +99,8 @@ public class Configuration {
         writer.println("[Database]");
         writer.println("mysql.hostname=127.0.0.1");
         writer.println("mysql.username=user");
-        writer.println("mysql.password=");
-        writer.println("mysql.database=icarusdb");
+        writer.println("mysql.password=123");
+        writer.println("mysql.database=kepler");
         writer.println();
         writer.println("[Logging]");
         writer.println("log.connections=true");
