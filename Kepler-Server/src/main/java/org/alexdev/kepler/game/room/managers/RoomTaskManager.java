@@ -26,6 +26,10 @@ public class RoomTaskManager {
         this.processEntity = new ProcessEntityTask(room);
     }
 
+    /**
+     * Start all needed room tasks, called when there's at least 1 player
+     * in the room.
+     */
     public void startTasks() {
         if (this.scheduledProcessEntity == null) {
             this.scheduledProcessEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
@@ -33,6 +37,9 @@ public class RoomTaskManager {
         }
     }
 
+    /**
+     * Stop tasks, called when there's no players in the room.
+     */
     public void stopTasks() {
         if (this.scheduledProcessEntity != null) {
             this.scheduledProcessEntity.cancel(false);
