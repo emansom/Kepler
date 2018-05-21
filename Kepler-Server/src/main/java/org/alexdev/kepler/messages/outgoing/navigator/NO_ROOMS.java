@@ -1,6 +1,5 @@
 package org.alexdev.kepler.messages.outgoing.navigator;
 
-import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -18,6 +17,6 @@ public class NO_ROOMS extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return Outgoing.NO_ROOMS;
+        return 57; // "@y"
     }
 }
