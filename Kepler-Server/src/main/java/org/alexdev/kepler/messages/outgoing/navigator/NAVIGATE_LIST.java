@@ -15,14 +15,16 @@ public class NAVIGATE_LIST extends MessageComposer {
     private List<NavigatorCategory> subCategories;
     private int categoryCurrentVisitors;
     private int categoryMaxVisitors;
+    private int rank;
 
-    public NAVIGATE_LIST(NavigatorCategory parentCategory, List<Room> rooms, boolean hideFull, List<NavigatorCategory> subCategories, int categoryCurrentVisitors, int categoryMaxVisitors) {
+    public NAVIGATE_LIST(NavigatorCategory parentCategory, List<Room> rooms, boolean hideFull, List<NavigatorCategory> subCategories, int categoryCurrentVisitors, int categoryMaxVisitors, int rank) {
         this.parentCategory = parentCategory;
         this.rooms = rooms;
         this.hideFull = hideFull;
         this.subCategories = subCategories;
         this.categoryCurrentVisitors = categoryCurrentVisitors;
         this.categoryMaxVisitors = categoryMaxVisitors;
+        this.rank = rank;
     }
 
     @Override
@@ -57,6 +59,9 @@ public class NAVIGATE_LIST extends MessageComposer {
         }
 
         for (NavigatorCategory subCategory : this.subCategories) {
+            if (subCategory.getMinimumRoleAccess() > this.rank) {
+                continue;
+            }
             response.writeInt(subCategory.getId());
             response.writeInt(0);
             response.writeString(subCategory.getName());

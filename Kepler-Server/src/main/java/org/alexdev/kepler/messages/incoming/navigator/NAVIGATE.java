@@ -20,6 +20,11 @@ public class NAVIGATE implements MessageEvent {
         int categoryId = reader.readInt();
 
         NavigatorCategory category = NavigatorManager.getInstance().getCategoryById(categoryId);
+
+        if (category.getMinimumRoleAccess() > player.getDetails().getRank()) {
+            return;
+        }
+
         List<NavigatorCategory> subCategories = NavigatorManager.getInstance().getCategoriesByParentId(category.getId());
         List<Room> rooms = new ArrayList<>();
 
@@ -38,7 +43,7 @@ public class NAVIGATE implements MessageEvent {
             rooms.add(room);
         }
 
-        player.send(new NAVIGATE_LIST(category, rooms, hideFull, subCategories, categoryCurrentVisitors, categoryMaxVisitors));
+        player.send(new NAVIGATE_LIST(category, rooms, hideFull, subCategories, categoryCurrentVisitors, categoryMaxVisitors, player.getDetails().getRank()));
 
     }
 }
