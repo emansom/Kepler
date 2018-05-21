@@ -21,3 +21,4 @@ site-config.ini
 Icarus-Web-all.jar
 
 .idea/workspace.xml
+*.jar
