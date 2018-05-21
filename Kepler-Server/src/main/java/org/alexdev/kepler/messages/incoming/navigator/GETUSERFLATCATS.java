@@ -6,7 +6,6 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.navigator.FLATCATS;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
-import sun.plugin.javascript.navig.Navigator;
 
 import java.util.ArrayList;
 import java.util.List;

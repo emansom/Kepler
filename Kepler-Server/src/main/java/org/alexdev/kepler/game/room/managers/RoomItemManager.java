@@ -58,4 +58,24 @@ public class RoomItemManager {
 
         return items;
     }
+
+    public List<Item> getWallItems() {
+        List<Item> items = new ArrayList<>();
+
+        synchronized (this.room.getItems()) {
+            for (Item item : this.room.getItems()) {
+                if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                    continue;
+                }
+
+                if (!item.getDefinition().getBehaviour().isWallItem()) {
+                    continue;
+                }
+
+                items.add(item);
+            }
+        }
+
+        return items;
+    }
 }

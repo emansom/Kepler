@@ -41,6 +41,10 @@ public class Room {
         }
     }
 
+    public boolean isOwner(int ownerId) {
+        return this.roomData.getOwnerId() == ownerId;
+    }
+
     public void dispose() {
         if (this.roomEntityManager.getEntitiesByClass(Player.class).size() > 0) {
             return;

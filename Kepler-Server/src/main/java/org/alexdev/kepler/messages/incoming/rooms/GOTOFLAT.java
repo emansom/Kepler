@@ -1,31 +1,27 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
+import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.messages.outgoing.rooms.OPEN_CONNECTION;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class ROOM_DIRECTORY implements MessageEvent {
-
+public class GOTOFLAT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        char is_public = reader.contents().charAt(0);
+        int roomId = Integer.parseInt(reader.contents());
 
-        player.send(new OPEN_CONNECTION());
+        Room room = RoomManager.getInstance().getRoomById(roomId);
 
-        if (is_public != 'A') {
-            return;
+        if (room == null) {
+            room = RoomDao.getRoomById(roomId);
         }
-
-        reader.readBytes(1); // strip 'A'
-        Room room = RoomManager.getInstance().getRoomById(reader.readInt());
 
         if (room == null) {
             return;
         }
 
         room.getEntityManager().enterRoom(player);
-     }
+    }
 }

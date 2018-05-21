@@ -89,6 +89,7 @@ public class MessageHandler {
      */
     private void registerRoomPackets() {
         registerEvent(57, new TRYFLAT());
+        registerEvent(59, new GOTOFLAT());
         registerEvent(182, new GETINTEREST());
         registerEvent(2, new ROOM_DIRECTORY());
         registerEvent(126, new GETROOMAD());
@@ -96,6 +97,7 @@ public class MessageHandler {
         registerEvent(62, new G_OBJS());
         registerEvent(61,  new G_USRS());
         registerEvent(64, new G_STAT());
+        registerEvent(63, new G_ITEMS());
     }
 
     /**
