@@ -24,17 +24,21 @@ public class Storage {
     private Storage(String host, String username, String password, String db) {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:mysql://" + host + ":3306/" + db + "?useSSL=false");
+            config.setJdbcUrl("jdbc:mysql://" + host + ":3306/" + db);
             config.setUsername(username);
             config.setPassword(password);
             
             config.setPoolName("processing");
-            config.setMaximumPoolSize(25);
-            config.setMinimumIdle(5);
+            config.setMaximumPoolSize(5);
+            config.setMinimumIdle(1);
             
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");
             config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+            config.addDataSourceProperty("characterEncoding","utf8");
+            config.addDataSourceProperty("useUnicode","true");
+            config.addDataSourceProperty("useSSL","false");
+            config.addDataSourceProperty("serverTimezone","UTC");
 
             this.ds = new HikariDataSource(config);
             this.isConnected = true;
