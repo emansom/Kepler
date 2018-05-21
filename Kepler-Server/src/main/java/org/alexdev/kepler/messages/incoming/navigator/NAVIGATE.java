@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.navigator;
 
+import org.alexdev.kepler.dao.mysql.NavigatorDao;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.Player;
@@ -8,6 +9,7 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.messages.outgoing.navigator.NAVIGATE_LIST;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import sun.plugin.javascript.navig.Navigator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +46,7 @@ public class NAVIGATE implements MessageEvent {
                 rooms.add(room);
             }
         } else {
-            for (Room room : RoomManager.getInstance().getRecentRooms(30, category.getId())) {
+            for (Room room : RoomManager.getInstance().replaceQueryRooms(NavigatorDao.getRecentRooms(30, category.getId()))) {
                 if (room.getData().getCategoryId() != category.getId()) {
                     continue;
                 }

@@ -79,16 +79,16 @@ public class RoomManager {
     }
 
     /**
-     * Find a list of recent rooms, will add any active
-     * or loaded rooms it finds from the list of active rooms.
-     *  @param limit the limit per category
-     * @param categoryId the category id to search under
+     * Will sort a list of rooms returned by MySQL query and
+     * replace any with loaded rooms that it finds.
+     *
+     * @param queryRooms the list of rooms returned by query
+     * @return a possible list of actual loaded rooms
      */
-    public List<Room> getRecentRooms(int limit, int categoryId) {
-        List<Room> recentRooms = NavigatorDao.getRecentRooms(limit, categoryId);
+    public List<Room> replaceQueryRooms(List<Room> queryRooms) {
         List<Room> roomList = new ArrayList<>();
 
-        for (Room room : recentRooms) {
+        for (Room room : queryRooms) {
             Room loadedRoom = this.getRoomById(room.getData().getId());
 
             if (loadedRoom != null) {
