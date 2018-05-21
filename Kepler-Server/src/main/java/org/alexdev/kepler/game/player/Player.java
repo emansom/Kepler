@@ -84,6 +84,11 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Get the messenger instance for the player
+     *
+     * @return the messenger instance
+     */
     public Messenger getMessenger() {
         return messenger;
     }
@@ -107,14 +112,27 @@ public class Player extends Entity {
         return this.log;
     }
 
+    /**
+     * Get the network handler for the player
+     *
+     * @return the network handler
+     */
     public NettyPlayerNetwork getNetwork() {
         return this.network;
     }
 
+    /**
+     * Get the message handler for the player
+     *
+     * @return the message handler
+     */
     public MessageHandler getMessageHandler() {
         return this.messageHandler;
     }
 
+    /**
+     * Dispose player when disconnect happens/
+     */
     @Override
     public void dispose() {
         PlayerManager.getInstance().removePlayer(this);

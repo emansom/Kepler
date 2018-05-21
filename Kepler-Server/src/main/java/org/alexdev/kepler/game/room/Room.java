@@ -30,21 +30,36 @@ public class Room {
         this.roomData = new RoomData(this);
         this.roomEntityManager = new RoomEntityManager(this);
         this.roomItemManager = new RoomItemManager(this);
+        this.roomMapping = new RoomMapping(this);
         this.processEntity = new ProcessEntityTask(this);
         this.entities = new ArrayList<>();
         this.items = new ArrayList<>();
     }
 
+    /**
+     * Send a packet to all players.
+     *
+     * @param composer the message composer packet
+     */
     public void send(MessageComposer composer) {
         for (Player player : this.roomEntityManager.getPlayers()) {
             player.send(composer);
         }
     }
 
+    /**
+     * Checks if the user id is the owner of the room
+     * @param ownerId the owner id to check for
+     * @return true, if successful
+     */
     public boolean isOwner(int ownerId) {
         return this.roomData.getOwnerId() == ownerId;
     }
 
+    /**
+     * Dispose room, or at least try to when
+     * the stars align allowing it to be removed from the manager
+     */
     public void dispose() {
         if (this.roomEntityManager.getEntitiesByClass(Player.class).size() > 0) {
             return;
@@ -89,10 +104,6 @@ public class Room {
 
     public RoomMapping getMapping() {
         return roomMapping;
-    }
-
-    public void setRoomMapping(RoomMapping roomMapping) {
-        this.roomMapping = roomMapping;
     }
 
     public RoomData getData() {

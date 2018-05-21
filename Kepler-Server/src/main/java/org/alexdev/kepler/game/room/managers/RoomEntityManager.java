@@ -127,7 +127,6 @@ public class RoomEntityManager {
      * Setup the room initially for room entry.
      */
     private void initialiseRoom() {
-        this.room.setRoomMapping(new RoomMapping(this.room));
         this.room.getMapping().regenerateCollisionMap();
 
         ScheduledFuture<?> processEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(

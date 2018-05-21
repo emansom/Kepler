@@ -49,8 +49,6 @@ public class NAVIGATE implements MessageEvent {
 
                 rooms.add(room);
             }
-
-            player.setSendFullNavigator(false);
         } else {
             for (Room room : RoomManager.getInstance().replaceQueryRooms(NavigatorDao.getRecentRooms(30, category.getId()))) {
                 if (room.getData().getCategoryId() != category.getId()) {

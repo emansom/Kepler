@@ -12,11 +12,12 @@ public class RoomMapping {
 
     public RoomMapping(Room room) {
         this.room = room;
-        this.roomModel = this.room.getData().getModel();
-        this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
     }
 
     public void regenerateCollisionMap() {
+        this.roomModel = this.room.getData().getModel();
+        this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
+
         for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
             for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
                 this.roomMap[x][y] = new RoomTile(new Position(x, y));
