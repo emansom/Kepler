@@ -1,12 +1,16 @@
 package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.messages.headers.Incoming;
+import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.navigator.GETUSERFLATCATS;
+import org.alexdev.kepler.messages.incoming.navigator.RECOMMENDED_ROOMS;
+import org.alexdev.kepler.messages.incoming.navigator.SUSERF;
 import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.GENERATEKEY;
 import org.alexdev.kepler.messages.incoming.handshake.INIT_CRYPTO;
 import org.alexdev.kepler.messages.incoming.handshake.SSO;
 import org.alexdev.kepler.messages.incoming.navigator.NAVIGATE;
+import org.alexdev.kepler.messages.incoming.rooms.settings.GETFLATINFO;
 import org.alexdev.kepler.messages.incoming.rooms.user.QUIT;
 import org.alexdev.kepler.messages.incoming.rooms.user.WALK;
 import org.alexdev.kepler.messages.incoming.user.GET_CREDITS;
@@ -37,6 +41,7 @@ public class MessageHandler {
         registerNavigatorPackets();
         registerRoomPackets();
         registerRoomUserPackets();
+        registerRoomSettingsPackets();
 
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
@@ -47,54 +52,65 @@ public class MessageHandler {
      * Register handshake packets.
      */
     private void registerHandshakePackets() {
-        registerEvent(Incoming.INIT_CRYPTO, new INIT_CRYPTO());
-        registerEvent(Incoming.GENERATEKEY, new GENERATEKEY());
-        registerEvent(Incoming.SSO, new SSO());
+        registerEvent(206, new INIT_CRYPTO());
+        registerEvent(202, new GENERATEKEY());
+        registerEvent(204, new SSO());
     }
 
     /**
      * Unregister handshake packets.
      */
     public void unregisterHandshakePackets() {
-        unregisterEvent(Incoming.INIT_CRYPTO);
-        unregisterEvent(Incoming.GENERATEKEY);
-        unregisterEvent(Incoming.SSO);
+        unregisterEvent(206);
+        unregisterEvent(202);
+        unregisterEvent(204);
     }
 
     /**
      * Register general purpose user packets.
      */
     private void registerUserPackets() {
-        registerEvent(Incoming.GET_INFO, new GET_INFO());
-        registerEvent(Incoming.GET_CREDITS, new GET_CREDITS());
+        registerEvent(7, new GET_INFO());
+        registerEvent(8, new GET_CREDITS());
     }
 
     /**
      * Register navigator packets.
      */
     private void registerNavigatorPackets() {
-        registerEvent(Incoming.NAVIGATE, new NAVIGATE());
+        registerEvent(150, new NAVIGATE());
+        registerEvent(16, new SUSERF());
+        registerEvent(151, new GETUSERFLATCATS());
+        registerEvent(264, new RECOMMENDED_ROOMS());
     }
 
     /**
-     * Register navigator packets.
+     * Register room packets.
      */
     private void registerRoomPackets() {
-        registerEvent(Incoming.GETINTEREST, new GETINTEREST());
-        registerEvent(Incoming.ROOM_DIRECTORY, new ROOM_DIRECTORY());
-        registerEvent(Incoming.GETROOMAD, new GETROOMAD());
-        registerEvent(Incoming.G_HMAP, new G_HMAP());
-        registerEvent(Incoming.G_OBJS, new G_OBJS());
-        registerEvent(Incoming.G_USRS,  new G_USRS());
-        registerEvent(Incoming.G_STAT, new G_STAT());
+        registerEvent(57, new TRYFLAT());
+        registerEvent(182, new GETINTEREST());
+        registerEvent(2, new ROOM_DIRECTORY());
+        registerEvent(126, new GETROOMAD());
+        registerEvent(60, new G_HMAP());
+        registerEvent(62, new G_OBJS());
+        registerEvent(61,  new G_USRS());
+        registerEvent(64, new G_STAT());
     }
 
     /**
      * Register room user packets.
      */
     private void registerRoomUserPackets() {
-        registerEvent(Incoming.QUIT, new QUIT());
-        registerEvent(Incoming.WALK, new WALK());
+        registerEvent(53, new QUIT());
+        registerEvent(75, new WALK());
+    }
+
+    /**
+     * Register room settings packets.
+     */
+    private void registerRoomSettingsPackets() {
+        registerEvent(21, new GETFLATINFO());
     }
 
     /**
@@ -130,13 +146,17 @@ public class MessageHandler {
      * @param message the message
      */
     public void handleRequest(NettyRequest message) {
-        if (Configuration.getInstance().getServerConfig().get("Logging", "log.received.packets", Boolean.class)) {
-            if (this.messages.containsKey(message.getHeaderId())) {
-                MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
-                this.player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
-            } else {
-                this.player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
+        try {
+            if (Configuration.getInstance().getServerConfig().get("Logging", "log.received.packets", Boolean.class)) {
+                if (this.messages.containsKey(message.getHeaderId())) {
+                    MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
+                    this.player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
+                } else {
+                    this.player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
+                }
             }
+        } catch (Exception e) {
+            Log.getErrorLogger().error("Exception occurred when handling (" + message.getHeaderId() + "): ", e);
         }
 
         invoke(message.getHeaderId(), message);

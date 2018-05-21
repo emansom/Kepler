@@ -3,7 +3,6 @@ package org.alexdev.kepler.messages.outgoing.rooms.user;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityState;
 import org.alexdev.kepler.game.entity.EntityStatus;
-import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
@@ -67,6 +66,6 @@ public class USER_STATUSES extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return Outgoing.G_STAT;
+        return 34; // "@b"
     }
 }

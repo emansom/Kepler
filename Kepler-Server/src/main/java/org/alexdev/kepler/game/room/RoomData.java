@@ -132,7 +132,7 @@ public class RoomData {
         this.showName = showName;
     }
 
-    public boolean isSuperUsers() {
+    public boolean allowSuperUsers() {
         return superUsers;
     }
 

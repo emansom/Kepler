@@ -48,8 +48,10 @@ public class Room {
 
         this.roomMapping = null;
 
-        this.processEntityTask.cancel(false);
-        this.processEntityTask = null;
+        if (this.processEntityTask != null) {
+            this.processEntityTask.cancel(false);
+            this.processEntityTask = null;
+        }
 
         if (this.isPublicRoom()) {
             return;

@@ -12,6 +12,6 @@ public class HELLO extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 0;
+        return 0; // "@@"
     }
 }

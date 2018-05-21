@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.room;
 
-import org.alexdev.kepler.dao.mysql.NavigatorDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 
 import java.util.ArrayList;
@@ -15,15 +14,17 @@ public class RoomManager {
 
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
-        this.addPublicRooms();
+        this.addRoomsByUser(0);
     }
 
     /**
-     * Load all public rooms from database, these
-     * rooms have an owner id of 0.
+     * Adds all rooms to the map if they dont already exist, by
+     * the owner id
+     *
+     * @param ownerId the owner of the room
      */
-    private void addPublicRooms() {
-        for (Room publicRoom : RoomDao.getRoomsByUserId(0)) {
+    public void addRoomsByUser(int ownerId) {
+        for (Room publicRoom : RoomDao.getRoomsByUserId(ownerId)) {
             this.addRoom(publicRoom);
         }
     }

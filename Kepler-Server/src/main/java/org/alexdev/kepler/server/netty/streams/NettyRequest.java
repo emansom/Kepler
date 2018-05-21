@@ -84,6 +84,14 @@ public class NettyRequest {
         }
     }
 
+    public String contents() {
+        try {
+            return new String(this.remainingBytes());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     public String getMessageBody() {
         String consoleText = this.buffer.toString(Charset.defaultCharset());
 

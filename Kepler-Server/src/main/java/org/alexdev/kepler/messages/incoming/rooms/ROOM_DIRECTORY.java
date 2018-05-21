@@ -10,7 +10,7 @@ public class ROOM_DIRECTORY implements MessageEvent {
 
     @Override
     public void handle(Player player, NettyRequest reader) {
-        char is_public = (char) reader.remainingBytes()[0];
+        char is_public = reader.contents().charAt(0);
 
         if (is_public != 'A') {
             System.out.println("w0w dude");

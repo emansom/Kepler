@@ -1,7 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.user;
 
 import org.alexdev.kepler.game.player.PlayerDetails;
-import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -20,6 +19,6 @@ public class CREDIT_BALANCE extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return Outgoing.CREDIT_BALANCE;
+        return 6; // "@F
     }
 }

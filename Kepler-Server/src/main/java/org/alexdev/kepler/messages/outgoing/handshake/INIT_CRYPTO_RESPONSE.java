@@ -1,6 +1,5 @@
 package org.alexdev.kepler.messages.outgoing.handshake;
 
-import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -25,6 +24,6 @@ public class INIT_CRYPTO_RESPONSE extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return Outgoing.INIT_CRYPTO_RESPONSE;
+        return 277;
     }
 }

@@ -1,9 +1,12 @@
 package org.alexdev.kepler.game.player;
 
 import io.netty.util.AttributeKey;
+import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
+import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.MessageHandler;
@@ -36,6 +39,7 @@ public class Player extends Entity {
      */
     public void login() {
         PlayerManager.getInstance().addPlayer(this);
+        RoomManager.getInstance().addRoomsByUser(this.details.getId());
         this.messageHandler.unregisterHandshakePackets();
 
         // Update logger to show name
@@ -98,11 +102,15 @@ public class Player extends Entity {
 
     @Override
     public void dispose() {
+        PlayerManager.getInstance().removePlayer(this);
+
         if (this.roomUser.getRoom() != null) {
             this.roomUser.getRoom().getEntityManager().leaveRoom(this);
         }
 
-        PlayerManager.getInstance().removePlayer(this);
+        for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(this.details.getId()))) {
+            room.dispose();
+        }
     }
 
     public void sendMessage(String entry) {

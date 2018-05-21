@@ -3,7 +3,6 @@ package org.alexdev.kepler.messages.outgoing.navigator;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -92,6 +91,6 @@ public class NAVIGATE_LIST extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return Outgoing.NAVIGATE_LIST;
+        return 220; // "C\"
     }
 }
