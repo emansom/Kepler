@@ -58,7 +58,7 @@ public class NAVIGATE_LIST extends MessageComposer {
 
         for (NavigatorCategory subCategory : this.subCategories) {
             response.writeInt(subCategory.getId());
-            response.writeInt(subCategory.isPublicSpaces() ? 0 : 2);
+            response.writeInt(0);
             response.writeString(subCategory.getName());
             response.writeInt(subCategory.getCurrentVisitors());
             response.writeInt(subCategory.getMaxVisitors());
