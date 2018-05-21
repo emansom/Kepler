@@ -2378,7 +2378,7 @@ CREATE TABLE `rooms_models` (
   `door_y` int(11) NOT NULL DEFAULT '0',
   `door_z` double NOT NULL,
   `door_dir` int(11) DEFAULT '2',
-  `heightmap` varchar(255) NOT NULL,
+  `heightmap` text NOT NULL,
   `usertype` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
