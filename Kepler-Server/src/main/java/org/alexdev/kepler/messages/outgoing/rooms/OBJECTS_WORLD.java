@@ -6,16 +6,20 @@ import org.alexdev.kepler.messages.headers.Outgoing;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
+import java.util.List;
+
 public class OBJECTS_WORLD extends MessageComposer {
-    private final Room room;
+    private final List<Item> items;
 
     public OBJECTS_WORLD(Room room) {
-        this.room = room;
+        this.items = room.getItemManager().getPublicItems();
     }
 
     @Override
     public void compose(NettyResponse response) {
-        for (Item item : room.getItemManager().getPublicItems()) {
+        response.writeInt(this.items.size());
+
+        for (Item item : this.items) {
             item.serialise(response);
         }
     }

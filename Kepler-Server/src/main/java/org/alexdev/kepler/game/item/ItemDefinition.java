@@ -15,6 +15,8 @@ public class ItemDefinition {
         this.behaviourData = "";
         this.colour = "";
         this.topHeight = 0;
+        this.length = 1;
+        this.width = 1;
     }
 
     public String getSprite() {

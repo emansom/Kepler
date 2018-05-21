@@ -69,7 +69,6 @@ public class ItemPublicParser {
                 }
 
                 if (item.getDefinition().getSprite().equals("queue_tile2")) {
-                    item.setCustomData("2");
                     item.getDefinition().getBehaviour().setPublicSpaceObject(false);
                 }
 
