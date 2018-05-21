@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GameScheduler implements Runnable {
-
     private AtomicLong tickRate = new AtomicLong();
 
     private ScheduledExecutorService scheduler;
@@ -25,7 +24,6 @@ public class GameScheduler implements Runnable {
      */
     @Override
     public void run() {
-
         tickRate.incrementAndGet();
 
         // If this task has ticked for an entire minute...
@@ -49,7 +47,7 @@ public class GameScheduler implements Runnable {
      * @return the scheduled executor service
      */
     public static ScheduledExecutorService createNewScheduler() {
-        return Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors() * 2);
+        return Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
     /**

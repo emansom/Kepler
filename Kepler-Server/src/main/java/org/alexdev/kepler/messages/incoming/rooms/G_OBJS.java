@@ -17,6 +17,6 @@ public class G_OBJS implements MessageEvent {
         Room room = player.getRoomUser().getRoom();
 
         player.send(new OBJECTS_WORLD(room));
-        player.send(new ACTIVE_OBJECTS());
+        player.send(new ACTIVE_OBJECTS(room));
     }
 }

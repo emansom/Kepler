@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.managers.RoomEntityManager;
+import org.alexdev.kepler.game.room.managers.RoomItemManager;
 import org.alexdev.kepler.game.room.mapping.RoomMapping;
 import org.alexdev.kepler.game.room.tasks.ProcessEntityTask;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -17,6 +18,8 @@ public class Room {
     private RoomData roomData;
     private RoomMapping roomMapping;
     private RoomEntityManager roomEntityManager;
+    private RoomItemManager roomItemManager;
+
     private ProcessEntityTask processEntity;
     private ScheduledFuture<?> processEntityTask;
 
@@ -26,6 +29,7 @@ public class Room {
     public Room() {
         this.roomData = new RoomData(this);
         this.roomEntityManager = new RoomEntityManager(this);
+        this.roomItemManager = new RoomItemManager(this);
         this.processEntity = new ProcessEntityTask(this);
         this.entities = new ArrayList<>();
         this.items = new ArrayList<>();
@@ -58,12 +62,15 @@ public class Room {
         }
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
-
         this.roomData = null;
     }
 
     public RoomEntityManager getEntityManager() {
         return this.roomEntityManager;
+    }
+
+    public RoomItemManager getItemManager() {
+        return roomItemManager;
     }
 
     public boolean isPublicRoom() {

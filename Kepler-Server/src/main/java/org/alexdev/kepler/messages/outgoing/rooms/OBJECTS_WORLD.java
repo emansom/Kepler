@@ -15,7 +15,7 @@ public class OBJECTS_WORLD extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        for (Item item : room.getItems()) {
+        for (Item item : room.getItemManager().getPublicItems()) {
             item.serialise(response);
         }
     }

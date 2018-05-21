@@ -30,6 +30,7 @@ public class Item {
             response.writeInt(this.definition.getWidth());
             response.writeInt(this.position.getRotation());
             response.writeString(StringUtil.format(this.position.getZ()));
+            response.writeString(this.definition.getColour());
             response.writeString("");
             response.writeInt(0);
             response.writeString(this.customData);
