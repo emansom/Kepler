@@ -38,7 +38,7 @@ CREATE TABLE `catalogue_items` (
   `package_name` text,
   `package_description` text,
   `is_package` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `catalogue_items`
@@ -414,7 +414,7 @@ CREATE TABLE `catalogue_packages` (
   `definition_id` int(11) DEFAULT NULL,
   `special_sprite_id` int(11) DEFAULT NULL,
   `amount` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `catalogue_packages`
@@ -459,7 +459,7 @@ CREATE TABLE `catalogue_pages` (
   `label_pick` text,
   `label_extra_s` text,
   `label_extra_t` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `catalogue_pages`
@@ -513,7 +513,7 @@ CREATE TABLE `items` (
   `wall_position` text,
   `rotation` int(11) DEFAULT NULL,
   `custom_data` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -530,7 +530,7 @@ CREATE TABLE `items_definitions` (
   `width` int(11) DEFAULT NULL,
   `top_height` decimal(10,0) DEFAULT NULL,
   `behaviour` text
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `items_definitions`
@@ -2158,7 +2158,7 @@ INSERT INTO `items_definitions` (`id`, `cast_directory`, `sprite`, `colour`, `le
 CREATE TABLE `messenger_friends` (
   `from_id` int(11) NOT NULL,
   `to_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -2173,7 +2173,7 @@ CREATE TABLE `messenger_messages` (
   `unread` text,
   `body` text,
   `date` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -2184,7 +2184,7 @@ CREATE TABLE `messenger_messages` (
 CREATE TABLE `messenger_requests` (
   `from_id` int(11) DEFAULT NULL,
   `to_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -2195,7 +2195,7 @@ CREATE TABLE `messenger_requests` (
 CREATE TABLE `rank_fuserights` (
   `min_rank` int(11) NOT NULL,
   `fuseright` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rank_fuserights`
@@ -2256,7 +2256,7 @@ CREATE TABLE `rooms` (
   `password` text,
   `visitors_now` int(11) DEFAULT '0',
   `visitors_max` int(11) DEFAULT '25'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rooms`
@@ -2334,7 +2334,7 @@ CREATE TABLE `rooms_categories` (
   `allow_trading` int(11) DEFAULT '0',
   `minrole_access` int(11) DEFAULT '1',
   `minrole_setflatcat` int(11) DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rooms_categories`
@@ -2380,7 +2380,7 @@ CREATE TABLE `rooms_models` (
   `door_dir` int(11) DEFAULT '2',
   `heightmap` text NOT NULL,
   `usertype` int(11) NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rooms_models`
@@ -2490,7 +2490,7 @@ CREATE TABLE `users` (
   `club_expiration` bigint(11) DEFAULT '0',
   `badge` text NOT NULL,
   `badge_active` int(11) DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `users`
@@ -2510,7 +2510,7 @@ INSERT INTO `users` (`id`, `username`, `password`, `figure`, `pool_figure`, `sex
 CREATE TABLE `users_badges` (
   `user_id` int(11) NOT NULL,
   `badge` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -2521,7 +2521,7 @@ CREATE TABLE `users_badges` (
 CREATE TABLE `users_room_favourites` (
   `room_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -2533,7 +2533,7 @@ CREATE TABLE `users_room_votes` (
   `user_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
   `vote` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Indexes for dumped tables
