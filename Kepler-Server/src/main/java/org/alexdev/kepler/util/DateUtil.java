@@ -13,9 +13,8 @@ public class DateUtil {
      *
      * @return the date formatter
      */
-    public static DateFormat getDateFormatter() {
-        SimpleDateFormat format = new SimpleDateFormat("EEEE, dd MMM, yyyy");
-        return format;
+    private static DateFormat getDateFormatter() {
+        return new SimpleDateFormat("dd-MM-yyyy");
     }
 
     /**

@@ -39,7 +39,7 @@ public class NettyServer  {
     }
 
     public void createSocket() {
-        int threads = Runtime.getRuntime().availableProcessors() * 2;
+        int threads = Runtime.getRuntime().availableProcessors();
         EventLoopGroup bossGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup(threads) : new NioEventLoopGroup(threads);
         EventLoopGroup workerGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup() : new NioEventLoopGroup();
 

@@ -1,5 +1,7 @@
 package org.alexdev.kepler.game.player;
 
+import org.alexdev.kepler.dao.mysql.PlayerDao;
+
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,6 +22,14 @@ public class PlayerManager {
         }
 
         return null;
+    }
+
+    public PlayerDetails getPlayerData(int userId) {
+        if (this.playerIdMap.containsKey(userId)) {
+            return this.playerIdMap.get(userId).getDetails();
+        }
+
+        return PlayerDao.getDetails(userId);
     }
 
     public Player getPlayerByName(String username) {

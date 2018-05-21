@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.messenger.MESSENGERINIT;
 import org.alexdev.kepler.messages.incoming.navigator.GETUSERFLATCATS;
 import org.alexdev.kepler.messages.incoming.navigator.RECOMMENDED_ROOMS;
 import org.alexdev.kepler.messages.incoming.navigator.SUSERF;
@@ -37,12 +38,6 @@ public class MessageHandler {
         this.messages = new ConcurrentHashMap<>();
 
         registerHandshakePackets();
-        registerUserPackets();
-        registerNavigatorPackets();
-        registerRoomPackets();
-        registerRoomUserPackets();
-        registerRoomSettingsPackets();
-
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
@@ -69,7 +64,7 @@ public class MessageHandler {
     /**
      * Register general purpose user packets.
      */
-    private void registerUserPackets() {
+    public void registerUserPackets() {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
     }
@@ -77,7 +72,7 @@ public class MessageHandler {
     /**
      * Register navigator packets.
      */
-    private void registerNavigatorPackets() {
+    public void registerNavigatorPackets() {
         registerEvent(150, new NAVIGATE());
         registerEvent(16, new SUSERF());
         registerEvent(151, new GETUSERFLATCATS());
@@ -87,7 +82,7 @@ public class MessageHandler {
     /**
      * Register room packets.
      */
-    private void registerRoomPackets() {
+    public void registerRoomPackets() {
         registerEvent(57, new TRYFLAT());
         registerEvent(59, new GOTOFLAT());
         registerEvent(182, new GETINTEREST());
@@ -103,7 +98,7 @@ public class MessageHandler {
     /**
      * Register room user packets.
      */
-    private void registerRoomUserPackets() {
+    public void registerRoomUserPackets() {
         registerEvent(53, new QUIT());
         registerEvent(75, new WALK());
     }
@@ -111,8 +106,15 @@ public class MessageHandler {
     /**
      * Register room settings packets.
      */
-    private void registerRoomSettingsPackets() {
+    public void registerRoomSettingsPackets() {
         registerEvent(21, new GETFLATINFO());
+    }
+
+    /**
+     * Register messenger packets.
+     */
+    public void registerMessengerPackets() {
+        registerEvent(12, new MESSENGERINIT());
     }
 
     /**
