@@ -29,14 +29,14 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `catalogue_items` (
-  `sale_code` text,
+  `sale_code` varchar(255),
   `page_id` int(11) DEFAULT NULL,
   `order_id` int(11) DEFAULT NULL,
   `price` int(11) DEFAULT NULL,
   `definition_id` int(11) DEFAULT NULL,
   `item_specialspriteid` int(11) DEFAULT NULL,
-  `package_name` text,
-  `package_description` text,
+  `package_name` varchar(255),
+  `package_description` varchar(255),
   `is_package` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -410,7 +410,7 @@ INSERT INTO `catalogue_items` (`sale_code`, `page_id`, `order_id`, `price`, `def
 --
 
 CREATE TABLE `catalogue_packages` (
-  `salecode` text,
+  `salecode` varchar(255),
   `definition_id` int(11) DEFAULT NULL,
   `special_sprite_id` int(11) DEFAULT NULL,
   `amount` int(11) DEFAULT NULL
@@ -450,15 +450,15 @@ CREATE TABLE `catalogue_pages` (
   `id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
   `min_role` int(11) DEFAULT NULL,
-  `name_index` text,
-  `name` text,
-  `layout` text,
-  `image_headline` text,
-  `image_teasers` text,
-  `body` text,
-  `label_pick` text,
-  `label_extra_s` text,
-  `label_extra_t` text
+  `name_index` varchar(255),
+  `name` varchar(255),
+  `layout` varchar(255),
+  `image_headline` varchar(255),
+  `image_teasers` varchar(255),
+  `body` varchar(255),
+  `label_pick` varchar(255),
+  `label_extra_s` varchar(255),
+  `label_extra_t` varchar(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -507,12 +507,12 @@ CREATE TABLE `items` (
   `user_id` int(11) DEFAULT NULL,
   `room_id` int(11) DEFAULT NULL,
   `definition_id` int(11) DEFAULT NULL,
-  `x` text,
-  `y` text,
-  `z` text,
-  `wall_position` text,
+  `x` varchar(255),
+  `y` varchar(255),
+  `z` varchar(255),
+  `wall_position` varchar(255),
   `rotation` int(11) DEFAULT NULL,
-  `custom_data` text
+  `custom_data` varchar(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -523,13 +523,13 @@ CREATE TABLE `items` (
 
 CREATE TABLE `items_definitions` (
   `id` int(11) NOT NULL,
-  `cast_directory` text,
-  `sprite` text,
-  `colour` text,
+  `cast_directory` varchar(255),
+  `sprite` varchar(255),
+  `colour` varchar(255),
   `length` int(11) DEFAULT NULL,
   `width` int(11) DEFAULT NULL,
   `top_height` decimal(10,0) DEFAULT NULL,
-  `behaviour` text
+  `behaviour` varchar(255)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -2170,8 +2170,8 @@ CREATE TABLE `messenger_messages` (
   `id` int(11) NOT NULL,
   `receiver_id` int(11) DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
-  `unread` text,
-  `body` text,
+  `unread` varchar(255),
+  `body` varchar(255),
   `date` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2194,7 +2194,7 @@ CREATE TABLE `messenger_requests` (
 
 CREATE TABLE `rank_fuserights` (
   `min_rank` int(11) NOT NULL,
-  `fuseright` text NOT NULL
+  `fuseright` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -2244,16 +2244,16 @@ CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
   `owner_id` varchar(11) NOT NULL,
   `category` int(11) DEFAULT '0',
-  `name` text NOT NULL,
-  `description` text NOT NULL,
-  `model` text NOT NULL,
-  `ccts` text,
+  `name` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `model` varchar(255) NOT NULL,
+  `ccts` varchar(255),
   `wallpaper` int(4) DEFAULT '0',
   `floor` varchar(4) DEFAULT '0',
   `showname` tinyint(1) DEFAULT '1',
   `superusers` tinyint(1) DEFAULT '0',
   `accesstype` tinyint(3) DEFAULT '0',
-  `password` text,
+  `password` varchar(255),
   `visitors_now` int(11) DEFAULT '0',
   `visitors_max` int(11) DEFAULT '25'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -2329,7 +2329,7 @@ CREATE TABLE `rooms_categories` (
   `order_id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `isnode` int(11) DEFAULT '0',
-  `name` text NOT NULL,
+  `name` varchar(255) NOT NULL,
   `public_spaces` int(11) DEFAULT '0',
   `allow_trading` int(11) DEFAULT '0',
   `minrole_access` int(11) DEFAULT '1',
@@ -2372,13 +2372,13 @@ INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`,
 
 CREATE TABLE `rooms_models` (
   `id` int(11) NOT NULL,
-  `model_id` text NOT NULL,
-  `model_name` text,
+  `model_id` varchar(255) NOT NULL,
+  `model_name` varchar(255),
   `door_x` int(11) NOT NULL DEFAULT '0',
   `door_y` int(11) NOT NULL DEFAULT '0',
   `door_z` double NOT NULL,
   `door_dir` int(11) DEFAULT '2',
-  `heightmap` text NOT NULL,
+  `heightmap` varchar(255) NOT NULL,
   `usertype` int(11) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2473,10 +2473,10 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` text NOT NULL,
-  `password` text NOT NULL,
-  `figure` text NOT NULL,
-  `pool_figure` text NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `figure` varchar(255) NOT NULL,
+  `pool_figure` varchar(255) NOT NULL,
   `sex` varchar(1) DEFAULT 'M',
   `motto` varchar(100) DEFAULT 'de kepler whey',
   `credits` int(11) DEFAULT '200',
@@ -2485,10 +2485,10 @@ CREATE TABLE `users` (
   `rank` int(11) DEFAULT '1',
   `console_motto` varchar(100) DEFAULT 'I''m a new user!',
   `last_online` int(11) DEFAULT '0',
-  `sso_ticket` text,
+  `sso_ticket` varchar(255),
   `club_subscribed` bigint(11) DEFAULT '0',
   `club_expiration` bigint(11) DEFAULT '0',
-  `badge` text NOT NULL,
+  `badge` varchar(255) NOT NULL,
   `badge_active` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
