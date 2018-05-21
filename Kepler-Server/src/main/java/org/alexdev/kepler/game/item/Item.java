@@ -21,6 +21,45 @@ public class Item {
         this.wallPosition = "";
     }
 
+    /**
+     * Get the total height, which is the height of the item plus stack size.
+     *
+     * @return the total height
+     */
+    public double getTotalHeight() {
+        return this.position.getZ() + this.definition.getStackHeight();
+    }
+
+    /**
+     * Get whether or not the item is walkable.
+     *
+     * @return true, if successful.
+     */
+    public boolean isWalkable() {
+        if (this.definition.getBehaviour().isCanSitOnTop()) {
+            return true;
+        }
+
+        if (this.definition.getBehaviour().isCanLayOnTop()) {
+            return true;
+        }
+
+        if (this.definition.getBehaviour().isCanStandOnTop()) {
+            return true;
+        }
+
+        if (this.definition.getBehaviour().isDoor()) {
+            return this.customData.equals("O");
+        }
+
+        return false;
+    }
+
+    /**
+     * Serialise item function for item handling packets.
+     *
+     * @param response the response to serialise to
+     */
     public void serialise(NettyResponse response) {
         if (!this.definition.getBehaviour().isPublicSpaceObject()) {
             response.writeString(this.id);

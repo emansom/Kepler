@@ -5,6 +5,7 @@ public class ItemDefinition {
     private ItemBehaviour behaviour;
     private String behaviourData;
     private double topHeight;
+    private double stackHeight;
     private int length;
     private int width;
     private String colour;
@@ -14,7 +15,8 @@ public class ItemDefinition {
         this.sprite = "";
         this.behaviourData = "";
         this.colour = "";
-        this.topHeight = 0;
+        this.topHeight = 0.01;
+        this.stackHeight = 0.01;
         this.length = 1;
         this.width = 1;
     }
@@ -52,5 +54,9 @@ public class ItemDefinition {
     }
     public String getBehaviourData() {
         return behaviourData;
+    }
+
+    public double getStackHeight() {
+        return stackHeight;
     }
 }
