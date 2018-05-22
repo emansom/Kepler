@@ -41,7 +41,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
     @Override
     public void channelUnregistered(ChannelHandlerContext ctx) throws Exception {
-        this.server.getConnectionIds().decrementAndGet();
+        this.server.getConnectionIds().decrementAndGet(); // Decrement because we don't want it to reach Integer.MAX_VALUE
         this.server.getChannels().remove(ctx.channel());
 
         Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
