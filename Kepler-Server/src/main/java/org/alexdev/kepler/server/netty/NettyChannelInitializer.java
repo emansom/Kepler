@@ -22,7 +22,7 @@ public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("gameEncoder", new NetworkEncoder());
         pipeline.addLast("gameDecoder", new NetworkDecoder());
         pipeline.addLast("handler", new ConnectionHandler(this.nettyServer));
-        pipeline.addLast("idleStateHandler", new IdleStateHandler(10, 0, 0));
+        pipeline.addLast("idleStateHandler", new IdleStateHandler(60, 0, 0));
         pipeline.addLast("idleHandler", new IdleConnectionHandler());
     }
 }
