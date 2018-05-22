@@ -128,7 +128,7 @@ public class Player extends Entity {
         PlayerManager.getInstance().removePlayer(this);
 
         if (this.roomUser.getRoom() != null) {
-            this.roomUser.getRoom().getEntityManager().leaveRoom(this);
+            this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
         }
 
         for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(this.details.getId()))) {

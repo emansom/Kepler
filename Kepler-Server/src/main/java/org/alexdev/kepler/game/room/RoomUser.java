@@ -25,6 +25,7 @@ public class RoomUser {
     private boolean isWalkingAllowed;
     private boolean isWalking;
     private boolean needsUpdate;
+    private boolean isGoingAway;
 
     public RoomUser(Entity entity) {
         this.entity = entity;
@@ -37,6 +38,7 @@ public class RoomUser {
         this.room = null;
         this.isWalkingAllowed = true;
         this.isWalking = false;
+        this.isGoingAway = false;
         this.instanceId = -1;
         this.statuses = new HashMap<>();
         this.path = new LinkedList<>();
@@ -71,11 +73,27 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
+
         LinkedList<Position> path = Pathfinder.makePath(this.entity);
 
         if (path.size() > 0) {
             this.path = path;
             this.isWalking = true;
+        }
+    }
+
+    /**
+     * Called to make a user stop walking.
+     */
+    public void stopWalking() {
+        this.path.clear();
+        this.isWalking = false;
+        this.needsUpdate = true;
+        this.nextPosition = null;
+        this.removeStatus(EntityStatus.MOVE);
+
+        if (this.isGoingAway) {
+            this.room.getEntityManager().leaveRoom(this.entity, true);
         }
     }
 
@@ -176,7 +194,6 @@ public class RoomUser {
      * @param value the value
      */
     public void setStatus(EntityStatus status, String value) {
-
         if (this.containsStatus(status)) {
             this.removeStatus(status);
         }
@@ -262,5 +279,13 @@ public class RoomUser {
 
     public void setNeedsUpdate(boolean needsUpdate) {
         this.needsUpdate = needsUpdate;
+    }
+
+    public boolean isGoingAway() {
+        return isGoingAway;
+    }
+
+    public void setGoingAway(boolean goingAway) {
+        isGoingAway = goingAway;
     }
 }

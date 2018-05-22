@@ -95,10 +95,7 @@ public class ProcessEntityTask implements Runnable {
                 roomUser.setStatus(EntityStatus.MOVE, " " + next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomUser.setNextPosition(next);
             } else {
-                // No more tiles left, so lets stop walking and interact with any furniture nearby
-                roomUser.setNextPosition(null);
-                roomUser.setWalking(false);
-                roomUser.removeStatus(EntityStatus.MOVE);
+                roomUser.stopWalking();
                 roomUser.invokeItem();
             }
 

@@ -90,6 +90,7 @@ public class MessageHandler {
     public void registerRoomUserPackets() {
         registerEvent(53, new QUIT());
         registerEvent(75, new WALK());
+        registerEvent(115, new GOAWAY());
     }
 
     /**
