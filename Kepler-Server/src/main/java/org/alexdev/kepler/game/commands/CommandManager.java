@@ -22,9 +22,7 @@ public class CommandManager {
         commands = new HashMap<>();
         //commands.put(new String[] { "about", "info" }, new AboutCommand());
 
-        if (Configuration.getInstance().getServerConfig().get("Logging", "log.items.loaded", Boolean.class)) {
-            log.info("Loaded {} commands", commands.size());
-        }
+        log.info("Loaded {} commands", commands.size());
     }
 
     /**

@@ -18,7 +18,9 @@ import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.log4j.PropertyConfigurator;
 
+import java.io.File;
 import java.net.InetAddress;
 
 public class Kepler {
@@ -38,9 +40,11 @@ public class Kepler {
     public static void main(String[] args) {
         startupTime = DateUtil.getCurrentTimeSeconds();
 
+        File loggingConfig = new File("log4j.properties");
+        PropertyConfigurator.configure(loggingConfig.getAbsolutePath());
+
         try {
-            Configuration.getInstance();
-            Locale.getInstance();
+            Configuration.load("config.ini");
 
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
@@ -51,14 +55,10 @@ public class Kepler {
             // ASCII logo on the left side, contributors and other credits/info on the right side
             // TODO: also a way to disable the fancy headers, as in production it would only fill the logs
             log.info("Kepler - Habbo Hotel V21 Emulation");
-            log.info("Loading server...");
-            log.info("");
 
             if (!Storage.connect()) {
                 return;
             }
-
-            log.info("Setting up game");
 
             RoomModelManager.getInstance();
             RoomManager.getInstance();
@@ -69,11 +69,9 @@ public class Kepler {
             CommandManager.getInstance();
             MessageHandler.getInstance();
 
-            log.info("Setting up server");
-
             // Get the server variables for the socket to listen on
-            serverIP = Configuration.getInstance().getServerConfig().get("Server", "server.ip", String.class);
-            serverPort = Configuration.getInstance().getServerConfig().get("Server", "server.port", int.class);
+            serverIP = Configuration.getString("server.bind");
+            serverPort = Configuration.getInteger("server.port");
 
             // Override with valid IP that we have resolved
             // TODO: check IPv6 too. And rely on stdlib functions instead of reinventing the wheel
@@ -85,9 +83,6 @@ public class Kepler {
             server = new NettyServer(serverIP, serverPort);
             server.createSocket();
             server.bind();
-
-            // Create console reader
-            ConsoleReader.getInstance();
 
         } catch (Exception e) {
             e.printStackTrace();

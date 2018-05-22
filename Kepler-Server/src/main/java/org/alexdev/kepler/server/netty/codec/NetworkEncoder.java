@@ -28,7 +28,7 @@ public class NetworkEncoder extends MessageToMessageEncoder<MessageComposer> {
             response.setFinalised(true);
         }
 
-        if (Configuration.getInstance().getServerConfig().get("Logging", "log.sent.packets", Boolean.class)) {
+        if (Configuration.getBoolean("log.sent.packets")) {
             log.info("SENT: {} / {}", msg.getHeader(), response.getBodyString());
         }
 
