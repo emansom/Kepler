@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.player;
 
 import io.netty.util.AttributeKey;
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -16,6 +17,7 @@ import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
+import org.alexdev.kepler.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,6 +55,9 @@ public class Player extends Entity {
 
         this.send(new LOGIN());
         this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+
+        PlayerDao.updateLastOnline(this.getDetails().getId());
+        this.details.setLastOnline(DateUtil.getCurrentTimeSeconds());
     }
 
     /**
@@ -125,6 +130,7 @@ public class Player extends Entity {
             return;
         }
 
+        PlayerDao.updateLastOnline(this.getDetails().getId());
         PlayerManager.getInstance().removePlayer(this);
 
         if (this.roomUser.getRoom() != null) {

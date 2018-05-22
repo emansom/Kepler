@@ -195,7 +195,7 @@ public class PlayerDao {
     }
 
     /**
-     * Update last online
+     * Update last online.
      *
      * @param userId the user id
      */
@@ -217,7 +217,85 @@ public class PlayerDao {
             Storage.closeSilently(sqlConnection);
         }
     }
-        
+
+    /**
+     * Update details.
+     *
+     * @param details the player details to save
+     */
+    public static void saveDetails(PlayerDetails details) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET figure = ?, pool_figure = ?, sex = ?, rank = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setString(1, details.getFigure());
+            preparedStatement.setString(2, details.getPoolFigure());
+            preparedStatement.setString(3, details.getSex());
+            preparedStatement.setInt(4, details.getRank());
+            preparedStatement.setInt(5, details.getId());
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
+     * Update details.
+     *
+     * @param details the player details to save
+     */
+    public static void saveMotto(PlayerDetails details) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET motto = ?, console_motto = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setString(1, details.getMotto());
+            preparedStatement.setString(2, details.getConsoleMotto());
+            preparedStatement.setInt(3, details.getId());
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
+     * Update currency.
+     *
+     * @param details the player details to save
+     */
+    public static void saveCurrency(PlayerDetails details) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET credits = ?, tickets = ?, film = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, details.getCredits());
+            preparedStatement.setInt(2, details.getTickets());
+            preparedStatement.setInt(3, details.getFilm());
+            preparedStatement.setInt(4, details.getId());
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
     /**
      * Fill player data
      *
