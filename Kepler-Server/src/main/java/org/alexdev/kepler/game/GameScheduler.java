@@ -1,5 +1,12 @@
 package org.alexdev.kepler.game;
 
+import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.messages.outgoing.user.PING;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.lang.management.PlatformLoggingMXBean;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -7,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GameScheduler implements Runnable {
+    private static Logger logger = LoggerFactory.getLogger(GameScheduler.class);
     private AtomicLong tickRate = new AtomicLong();
 
     private ScheduledExecutorService scheduler;
@@ -24,11 +32,27 @@ public class GameScheduler implements Runnable {
      */
     @Override
     public void run() {
-        tickRate.incrementAndGet();
+        this.tickRate.incrementAndGet();
 
-        // If this task has ticked for an entire minute...
-        if (tickRate.get() % 60 == 0) {
+        synchronized (PlayerManager.getInstance().getPlayers()) {
+            for (Player player : PlayerManager.getInstance().getPlayers()) {
 
+                // If this task has ticked for an entire minute...
+                if (this.tickRate.get() % 60 == 0) {
+                    if (player.isPingOK()) {
+                        player.setPingOK(false);
+                        player.send(new PING());
+                    } else {
+                        if (player.isLoggedIn()) {
+                            logger.info("Player {} has timed out.", player.getDetails().getName());
+                        } else {
+                            logger.info("Connection {} has timed out.", player.getNetwork().getConnectionId());
+                        }
+
+                        player.getNetwork().close();
+                    }
+                }
+            }
         }
     }
 

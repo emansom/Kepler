@@ -56,6 +56,7 @@ public class MessageHandler {
     public void registerUserPackets() {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
+        registerEvent(196, new PONG());
     }
 
     /**

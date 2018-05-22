@@ -29,13 +29,16 @@ public class Player extends Entity {
     private PlayerDetails details;
     private RoomUser roomUser;
     private Messenger messenger;
+
     private boolean loggedIn;
+    private boolean pingOK;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
         this.roomUser = new RoomUser(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
+        this.pingOK = true;
     }
 
     /**
@@ -48,6 +51,7 @@ public class Player extends Entity {
         RoomManager.getInstance().addRoomsByUser(this.details.getId());
 
         this.loggedIn = true;
+        this.pingOK = true;
         this.messenger = new Messenger(this);
 
         // Update logger to show name
@@ -119,6 +123,33 @@ public class Player extends Entity {
      */
     public NettyPlayerNetwork getNetwork() {
         return this.network;
+    }
+
+    /**
+     * Get if the player has logged in or not.
+     *
+     * @return true, if they have
+     */
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    /**
+     * Get if the connection has timed out or not.
+     *
+     * @return false, if it hasn't.
+     */
+    public boolean isPingOK() {
+        return pingOK;
+    }
+
+    /**
+     * Set if the connection has timed out or not.
+     *
+     * @param pingOK the value to determine of the connection has timed out
+     */
+    public void setPingOK(boolean pingOK) {
+        this.pingOK = pingOK;
     }
 
     /**
