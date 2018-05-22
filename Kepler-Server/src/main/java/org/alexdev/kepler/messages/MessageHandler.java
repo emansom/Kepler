@@ -114,7 +114,8 @@ public class MessageHandler {
         registerEvent(39, new MESSENGER_REQUESTBUDDY());
         registerEvent(38, new MESSENGER_DECLINEBUDDY());
         registerEvent(37, new MESSENGER_ACCEPTBUDDY());
-        registerEvent(191, new MESSENGER_GETREQUESTS());
+        registerEvent(233, new MESSENGER_GETREQUESTS());
+        registerEvent(191, new MESSENGER_GETMESSAGES());
         registerEvent(36, new MESSENGER_ASSIGNPERSMSG());
         registerEvent(40, new MESSENGER_REMOVEBUDDY());
         registerEvent(33, new MESSENGER_SENDMSG());
