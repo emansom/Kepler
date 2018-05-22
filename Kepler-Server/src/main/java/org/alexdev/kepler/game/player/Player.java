@@ -6,13 +6,11 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.messenger.Messenger;
-import org.alexdev.kepler.game.messenger.MessengerUser;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -168,7 +166,7 @@ public class Player extends Entity {
         }
 
         for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(this.details.getId()))) {
-            room.dispose();
+            room.dispose(true);
         }
     }
 

@@ -25,9 +25,9 @@ public class IdleConnectionHandler extends ChannelDuplexHandler {
                     player.send(new PING());
                 } else {
                     if (player.isLoggedIn()) {
-                        logger.info("Player {} has timed out.", player.getDetails().getName());
+                        logger.info("Player {} has timed out", player.getDetails().getName());
                     } else {
-                        logger.info("Connection {} has timed out.", player.getNetwork().getConnectionId());
+                        logger.info("Connection {} has timed out", player.getNetwork().getConnectionId());
                     }
 
                     player.getNetwork().close();

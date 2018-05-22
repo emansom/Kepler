@@ -105,6 +105,7 @@ public class MessageHandler {
         registerEvent(24, new UPDATEFLAT());
         registerEvent(153, new SETFLATCAT());
         registerEvent(152, new GETFLATCAT());
+        registerEvent(23, new DELETEFLAT());
     }
 
     /**

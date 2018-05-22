@@ -143,7 +143,7 @@ public class RoomEntityManager {
         this.room.getData().setVisitorsNow(this.room.getEntities().size());
 
         this.room.send(new LOGOUT(entity.getRoomUser().getInstanceId()));
-        this.room.dispose();
+        this.room.dispose(true);
 
         entity.getRoomUser().reset();
 
