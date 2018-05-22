@@ -2,9 +2,11 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -23,6 +25,7 @@ public class RoomUser {
     private boolean isWalkingAllowed;
     private boolean isWalking;
     private boolean needsUpdate;
+    private boolean isGoingAway;
 
     public RoomUser(Entity entity) {
         this.entity = entity;
@@ -35,6 +38,7 @@ public class RoomUser {
         this.room = null;
         this.isWalkingAllowed = true;
         this.isWalking = false;
+        this.isGoingAway = false;
         this.instanceId = -1;
         this.statuses = new HashMap<>();
         this.path = new LinkedList<>();
@@ -69,12 +73,75 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
+
         LinkedList<Position> path = Pathfinder.makePath(this.entity);
 
         if (path.size() > 0) {
             this.path = path;
             this.isWalking = true;
         }
+    }
+
+    /**
+     * Called to make a user stop walking.
+     */
+    public void stopWalking() {
+        this.path.clear();
+        this.isWalking = false;
+        this.needsUpdate = true;
+        this.nextPosition = null;
+        this.removeStatus(EntityStatus.MOVE);
+
+        if (this.isGoingAway) {
+            this.room.getEntityManager().leaveRoom(this.entity, true);
+        }
+    }
+
+    /**
+     * Triggers the current item that the player has walked on top of.
+     */
+    public void invokeItem() {
+        boolean needsUpdate = false;
+        double height = this.getTile().getTileHeight();
+
+        if (height != this.position.getZ()) {
+            this.position.setZ(height);
+            needsUpdate = true;
+        }
+
+        RoomTile tile = this.getTile();
+
+        Item item = null;
+
+        if (tile.getHighestItem() != null) {
+            item = tile.getHighestItem();
+        }
+
+        if (item == null || (!item.getDefinition().getBehaviour().isCanSitOnTop() || !item.getDefinition().getBehaviour().isCanLayOnTop())) {
+            if (this.containsStatus(EntityStatus.SIT) || this.containsStatus(EntityStatus.LAY)) {
+                this.removeStatus(EntityStatus.SIT);
+                this.removeStatus(EntityStatus.LAY);
+                needsUpdate = true;
+            }
+        }
+
+        if (item != null) {
+            if (item.getDefinition().getBehaviour().isCanSitOnTop()) {
+                this.removeStatus(EntityStatus.DANCE);
+                this.position.setRotation(item.getPosition().getRotation());
+                this.setStatus(EntityStatus.SIT, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                needsUpdate = true;
+            }
+
+            if (item.getDefinition().getBehaviour().isCanLayOnTop()) {
+                this.removeStatus(EntityStatus.DANCE);
+                this.position.setRotation(item.getPosition().getRotation());
+                this.setStatus(EntityStatus.LAY, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                needsUpdate = true;
+            }
+        }
+
+        this.needsUpdate = needsUpdate;
     }
 
     /**
@@ -116,10 +183,8 @@ public class RoomUser {
      * @param status the status
      * @return if the user contained the status
      */
-    public boolean removeStatus(EntityStatus status) {
-        boolean containedStatus = this.statuses.containsKey(status);
+    public void removeStatus(EntityStatus status) {
         this.statuses.remove(status);
-        return containedStatus;
     }
 
     /**
@@ -129,7 +194,6 @@ public class RoomUser {
      * @param value the value
      */
     public void setStatus(EntityStatus status, String value) {
-
         if (this.containsStatus(status)) {
             this.removeStatus(status);
         }
@@ -215,5 +279,13 @@ public class RoomUser {
 
     public void setNeedsUpdate(boolean needsUpdate) {
         this.needsUpdate = needsUpdate;
+    }
+
+    public boolean isGoingAway() {
+        return isGoingAway;
+    }
+
+    public void setGoingAway(boolean goingAway) {
+        isGoingAway = goingAway;
     }
 }

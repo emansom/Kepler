@@ -27,8 +27,8 @@ public class MessengerUser {
         response.writeString(details.getConsoleMotto());
 
         Player player = PlayerManager.getInstance().getPlayerById(details.getId());
-
         boolean isOnline = (player != null);
+
         response.writeBool(isOnline);
 
         if (isOnline) {
@@ -44,7 +44,7 @@ public class MessengerUser {
                 response.writeString("On hotel view");
             }
         } else {
-            response.writeString("");
+            response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
         }
 
         response.writeString(DateUtil.getDateAsString(details.getLastOnline()));

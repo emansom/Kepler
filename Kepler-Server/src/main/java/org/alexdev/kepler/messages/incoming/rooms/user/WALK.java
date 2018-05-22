@@ -7,8 +7,13 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class WALK implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
+        if (player.getRoomUser().isGoingAway()) {
+            return;
+        }
+
         int X = reader.readBase64();
         int Y = reader.readBase64();
+
         player.getRoomUser().walkTo(X, Y);
     }
 }

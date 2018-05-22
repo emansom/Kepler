@@ -1,10 +1,8 @@
 package org.alexdev.kepler.messages.types;
 
-import io.netty.buffer.ByteBuf;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public abstract class MessageComposer {
-
     /**
      * Write the message to send back to the client.
      */

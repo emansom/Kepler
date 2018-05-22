@@ -88,16 +88,12 @@ public class RoomData {
         this.description = description;
     }
 
-    public String getModelName() {
+    public String getModelId() {
         return model;
     }
 
     public RoomModel getModel() {
         return RoomModelManager.getInstance().getModel(this.model);
-    }
-
-    public void setModel(String model) {
-        this.model = model;
     }
 
     public String getCcts() {

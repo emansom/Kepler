@@ -11,6 +11,6 @@ public class QUIT implements MessageEvent {
             return;
         }
 
-        player.getRoomUser().getRoom().getEntityManager().leaveRoom(player);
+        player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, false);
     }
 }

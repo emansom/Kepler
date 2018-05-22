@@ -3,6 +3,9 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
+import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
+import org.alexdev.kepler.messages.incoming.catalogue.GET_ALIAS_LIST;
 import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
@@ -36,6 +39,7 @@ public class MessageHandler {
         registerRoomUserPackets();
         registerRoomSettingsPackets();
         registerMessengerPackets();
+        registerCataloguePackets();
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
@@ -56,6 +60,8 @@ public class MessageHandler {
     public void registerUserPackets() {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
+        registerEvent(196, new PONG());
+        //registerEvent(315, new TEST_LATENCY());
     }
 
     /**
@@ -90,6 +96,7 @@ public class MessageHandler {
     public void registerRoomUserPackets() {
         registerEvent(53, new QUIT());
         registerEvent(75, new WALK());
+        registerEvent(115, new GOAWAY());
     }
 
     /**
@@ -97,6 +104,12 @@ public class MessageHandler {
      */
     public void registerRoomSettingsPackets() {
         registerEvent(21, new GETFLATINFO());
+        registerEvent(29, new CREATEFLAT());
+        registerEvent(25, new SETFLATINFO());
+        registerEvent(24, new UPDATEFLAT());
+        registerEvent(153, new SETFLATCAT());
+        registerEvent(152, new GETFLATCAT());
+        registerEvent(23, new DELETEFLAT());
     }
 
     /**
@@ -108,13 +121,23 @@ public class MessageHandler {
         registerEvent(39, new MESSENGER_REQUESTBUDDY());
         registerEvent(38, new MESSENGER_DECLINEBUDDY());
         registerEvent(37, new MESSENGER_ACCEPTBUDDY());
-        registerEvent(191, new MESSENGER_GETREQUESTS());
+        registerEvent(233, new MESSENGER_GETREQUESTS());
+        registerEvent(191, new MESSENGER_GETMESSAGES());
         registerEvent(36, new MESSENGER_ASSIGNPERSMSG());
         registerEvent(40, new MESSENGER_REMOVEBUDDY());
         registerEvent(33, new MESSENGER_SENDMSG());
         registerEvent(32, new MESSENGER_MARKREAD());
         registerEvent(262, new FOLLOW_FRIEND());
         registerEvent(15, new FRIENDLIST_UPDATE());
+    }
+
+    /**
+     * Register catalogue packets
+     */
+    private void registerCataloguePackets() {
+        registerEvent(101, new GCIX());
+        registerEvent(102, new GCAP());
+        registerEvent(215, new GET_ALIAS_LIST());
     }
 
     /**

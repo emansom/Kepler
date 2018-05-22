@@ -19,10 +19,10 @@ public class MessengerDao {
     /**
      * Gets the friends.
      *
-     * @param from_id the user id
+     * @param userId the user id
      * @return the friends
      */
-    public static List<MessengerUser> getFriends(int from_id) {
+    public static List<MessengerUser> getFriends(int userId) {
         List<MessengerUser> friends = new ArrayList<>();
 
         Connection sqlConnection = null;
@@ -31,20 +31,24 @@ public class MessengerDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM messenger_friends WHERE (from_id = " + from_id + ") OR (to_id = " + from_id + ")", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT to_id, from_id FROM messenger_friends WHERE (to_id = ?) OR (from_id = ?)", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, userId);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
+                int toId = resultSet.getInt("to_id");
+                int fromId = resultSet.getInt("from_id");
 
-                MessengerUser friend = null;
+                int friendId = -1;
 
-                if (resultSet.getInt("from_id") != from_id) {
-                    friend = new MessengerUser(resultSet.getInt("from_id"));
+                if (toId != userId) {
+                    friendId = toId;
                 } else {
-                    friend = new MessengerUser(resultSet.getInt("to_id"));
+                    friendId = fromId;
                 }
 
-                friends.add(friend);
+                friends.add(new MessengerUser(friendId));
             }
 
         } catch (Exception e) {

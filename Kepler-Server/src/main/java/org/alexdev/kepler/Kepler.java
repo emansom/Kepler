@@ -4,12 +4,15 @@ import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.console.ConsoleReader;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.commands.CommandManager;
+import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
+import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.util.StringUtil;
@@ -22,6 +25,7 @@ import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;
 import java.net.InetAddress;
+import java.util.List;
 
 public class Kepler {
 
@@ -60,6 +64,10 @@ public class Kepler {
                 return;
             }
 
+            log.info("Setting up game");
+
+            ItemManager.getInstance();
+            CatalogueManager.getInstance();
             RoomModelManager.getInstance();
             RoomManager.getInstance();
             PlayerManager.getInstance();
@@ -68,6 +76,7 @@ public class Kepler {
             GameScheduler.getInstance();
             CommandManager.getInstance();
             MessageHandler.getInstance();
+            TextsManager.getInstance();
 
             // Get the server variables for the socket to listen on
             serverIP = Configuration.getString("server.bind");
@@ -107,7 +116,7 @@ public class Kepler {
                 return false;
             }
 
-            int number = Integer.valueOf(part);
+            int number = Integer.parseInt(part);
 
             if (number > 255 || number < 0) {
                 return false;

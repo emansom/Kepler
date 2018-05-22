@@ -19,7 +19,7 @@ public class PlayerDetails {
     private String badge;
     private String badgeActive;
 
-    public PlayerDetails() {  }
+    public PlayerDetails() { }
 
     /**
      * Fill the player data for the entity.

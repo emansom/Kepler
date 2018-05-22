@@ -45,25 +45,25 @@ public class NAVIGATE_LIST extends MessageComposer {
 
         for (Room room : this.rooms) {
             if (room.isPublicRoom()) {
-                response.writeInt(room.getData().getId());
+                response.writeInt(room.getId());
                 response.writeInt(1);
                 response.writeString(room.getData().getName());
                 response.writeInt(room.getData().getVisitorsNow());
                 response.writeInt(room.getData().getVisitorsMax());
                 response.writeInt(room.getData().getCategoryId());
                 response.writeString(room.getData().getDescription());
-                response.writeInt(room.getData().getId());
+                response.writeInt(room.getId());
                 response.writeInt(0);
                 response.writeString(room.getData().getCcts());
                 response.writeInt(0);
                 response.writeInt(1);
             } else {
-                response.writeInt(room.getData().getId());
+                response.writeInt(room.getId());
                 response.writeString(room.getData().getName());
 
                 if (room.getData().getOwnerId() == viewer.getDetails().getId() ||
                         room.getData().showName() ||
-                        viewer.hasPermission("fuse_see_all_roomowners")) {
+                        viewer.hasFuse("fuse_see_all_roomowners")) {
                     response.writeString(room.getData().getOwnerName());
                 } else {
                     response.writeString("-");

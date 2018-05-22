@@ -17,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class NettyServer  {
 
@@ -25,17 +27,18 @@ public class NettyServer  {
 	final private static Logger log = LoggerFactory.getLogger(NettyServer.class);
 
     private final String ip;
-
     private final Integer port;
 
     private DefaultChannelGroup channels;
     private ServerBootstrap bootstrap;
+    private AtomicInteger connectionIds;
 
     public NettyServer(String ip, Integer port) {
         this.ip = ip;
         this.port = port;
         this.channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
         this.bootstrap = new ServerBootstrap();
+        this.connectionIds = new AtomicInteger(0);
     }
 
     public void createSocket() {
@@ -83,4 +86,14 @@ public class NettyServer  {
     public DefaultChannelGroup getChannels() {
         return channels;
     }
+
+    /**
+     * Get handler for connection ids.
+     *
+     * @return the atomic int instance
+     */
+    public AtomicInteger getConnectionIds() {
+        return connectionIds;
+    }
+
 }

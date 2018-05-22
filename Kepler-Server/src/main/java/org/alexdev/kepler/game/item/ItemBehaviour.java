@@ -27,15 +27,11 @@ public class ItemBehaviour {
     private boolean isSoundMachineSampleSet;
     private boolean has_extra_parameter;
 
-    public ItemBehaviour() {
-
-    }
-
-    public static ItemBehaviour parse(ItemDefinition definition) {
+    public static ItemBehaviour parse(String behaviourData) {
         ItemBehaviour behaviour = new ItemBehaviour();
 
-        for (int i = 0; i < definition.getBehaviourData().length(); i++) {
-            char c = definition.getBehaviourData().charAt(i);
+        for (int i = 0; i < behaviourData.length(); i++) {
+            char c = behaviourData.charAt(i);
 
             if (c == 'W') {
                 behaviour.isWallItem = true;

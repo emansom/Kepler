@@ -34,7 +34,7 @@ public class TRYFLAT implements MessageEvent {
             return;
         }
 
-        if (!player.hasPermission("fuse_enter_locked_rooms")) {
+        if (!player.hasFuse("fuse_enter_locked_rooms")) {
             if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId())) {
                 // TODO: Knocking
             }

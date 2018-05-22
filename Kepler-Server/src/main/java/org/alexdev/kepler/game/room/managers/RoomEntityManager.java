@@ -7,6 +7,8 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
+import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
+import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,7 +90,7 @@ public class RoomEntityManager {
      */
     public void enterRoom(Entity entity) {
         if (entity.getRoomUser().getRoom() != null) {
-            entity.getRoomUser().getRoom().getEntityManager().leaveRoom(entity);
+            entity.getRoomUser().getRoom().getEntityManager().leaveRoom(entity, false);
         }
 
         if (this.room.getEntityManager().getEntitiesByClass(Player.class).isEmpty()) {
@@ -116,7 +118,7 @@ public class RoomEntityManager {
         Player player = (Player) entity;
 
         player.send(new ROOM_URL());
-        player.send(new ROOM_READY(this.room.getData().getId(), this.room.getData().getModelName()));
+        player.send(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
     }
 
     /**
@@ -132,7 +134,7 @@ public class RoomEntityManager {
      *
      * @param entity the entity to leave
      */
-    public void leaveRoom(Entity entity) {
+    public void leaveRoom(Entity entity, boolean hotelView) {
         if (!this.room.getEntities().contains(entity)) {
             return;
         }
@@ -140,14 +142,20 @@ public class RoomEntityManager {
         this.room.getEntities().remove(entity);
         this.room.getData().setVisitorsNow(this.room.getEntities().size());
 
+        this.room.send(new LOGOUT(entity.getRoomUser().getInstanceId()));
+        this.room.dispose(true);
+
         entity.getRoomUser().reset();
-        this.room.dispose();
 
         // From this point onwards we send packets for the user to leave
         if (entity.getType() !=  EntityType.PLAYER) {
             return;
         }
 
+        Player player = (Player) entity;
 
+        if (hotelView) {
+            player.send(new HOTEL_VIEW());
+        }
     }
 }

@@ -11,9 +11,5 @@ public class MESSENGERINIT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         player.send(new FRIENDSLIST(player.getDetails().getConsoleMotto(), player.getMessenger().getFriends()));
-
-        for (MessengerMessage offlineMessage : player.getMessenger().getOfflineMessages()) {
-            player.send(new MESSENGER_MSG(offlineMessage));
-        }
     }
 }

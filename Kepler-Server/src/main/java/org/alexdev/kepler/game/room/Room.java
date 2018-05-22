@@ -8,12 +8,10 @@ import org.alexdev.kepler.game.room.managers.RoomEntityManager;
 import org.alexdev.kepler.game.room.managers.RoomItemManager;
 import org.alexdev.kepler.game.room.managers.RoomTaskManager;
 import org.alexdev.kepler.game.room.mapping.RoomMapping;
-import org.alexdev.kepler.game.room.tasks.ProcessEntityTask;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
 
 public class Room {
     private RoomData roomData;
@@ -59,8 +57,10 @@ public class Room {
     /**
      * Dispose room, or at least try to when
      * the stars align allowing it to be removed from the manager.
+     *
+     * @param isForced whether the disposal is forced
      */
-    public void dispose() {
+    public void dispose(boolean isForced) {
         if (this.roomEntityManager.getEntitiesByClass(Player.class).size() > 0) {
             return;
         }
@@ -73,16 +73,13 @@ public class Room {
 
         // Clear items here
 
-        if (PlayerManager.getInstance().getPlayerById(this.roomData.getOwnerId()) != null) { // Don't remove completely if owner is online
-            return;
+        if (!isForced) {
+            if (PlayerManager.getInstance().getPlayerById(this.roomData.getOwnerId()) != null) { // Don't remove completely if owner is online
+                return;
+            }
         }
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
-
-        this.roomData = null;
-        this.roomTaskManager = null;
-        this.roomEntityManager = null;
-        this.roomItemManager = null;
     }
 
     /**
@@ -155,5 +152,12 @@ public class Room {
      */
     public boolean isPublicRoom() {
         return this.roomData.getOwnerId() == 0;
+    }
+
+    /**
+     * Get the room id of this room.
+     */
+    public int getId() {
+        return this.roomData.getId();
     }
 }

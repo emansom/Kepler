@@ -22,10 +22,7 @@ public class USER_OBJECTS extends MessageComposer {
     }
 
     public USER_OBJECTS(Entity entity) {
-        List<Entity> entities = new ArrayList<>();
-        entities.add(entity);
-
-        createEntityStates(entities);
+        createEntityStates(List.of(entity));
     }
 
     private void createEntityStates(List<Entity> entities) {

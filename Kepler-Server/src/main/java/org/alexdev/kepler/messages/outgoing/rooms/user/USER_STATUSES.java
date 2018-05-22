@@ -24,13 +24,6 @@ public class USER_STATUSES extends MessageComposer {
         createEntityStates(users);
     }
 
-    public USER_STATUSES(Entity entity) {
-        List<Entity> entities = new ArrayList<>();
-        entities.add(entity);
-
-        createEntityStates(entities);
-    }
-
     private void createEntityStates(List<Entity> entities) {
         this.states = new ArrayList<>();
 

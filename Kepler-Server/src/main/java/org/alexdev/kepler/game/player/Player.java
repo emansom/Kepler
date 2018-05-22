@@ -1,21 +1,21 @@
 package org.alexdev.kepler.game.player;
 
 import io.netty.util.AttributeKey;
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.messenger.Messenger;
-import org.alexdev.kepler.game.messenger.MessengerUser;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
+import org.alexdev.kepler.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,38 +28,48 @@ public class Player extends Entity {
     private RoomUser roomUser;
     private Messenger messenger;
 
+    private boolean loggedIn;
+    private boolean pingOK;
+
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
         this.roomUser = new RoomUser(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
+        this.pingOK = true;
     }
 
     /**
      * Login handler for player
      */
     public void login() {
-        PlayerManager.getInstance().addPlayer(this);
-        RoomManager.getInstance().addRoomsByUser(this.details.getId());
-
-        this.messenger = new Messenger(this);
-
         // Update logger to show name
         this.log = LoggerFactory.getLogger("Player " + this.details.getName());
 
+        PlayerManager.getInstance().disconnectSession(this.details.getId()); // Kill other sessions with same id
+        PlayerManager.getInstance().addPlayer(this); // Add new connection
+        RoomManager.getInstance().addRoomsByUser(this.details.getId());
+
+        this.loggedIn = true;
+        this.pingOK = true;
+        this.messenger = new Messenger(this);
+
         this.send(new LOGIN());
         this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+
+        PlayerDao.updateLastOnline(this.getDetails().getId());
+        this.details.setLastOnline(DateUtil.getCurrentTimeSeconds());
     }
 
     /**
      * Check if the player has a permission for a rank.
      *
-     * @param permission the permission
+     * @param fuse the permission
      * @return true, if successful
      */
     @Override
-    public boolean hasPermission(String permission) {
-        return false;
+    public boolean hasFuse(String fuse) {
+        return FuserightsManager.getInstance().hasFuseright(fuse, this.details.getRank());
     }
 
     /**
@@ -113,18 +123,50 @@ public class Player extends Entity {
     }
 
     /**
-     * Dispose player when disconnect happens/
+     * Get if the player has logged in or not.
+     *
+     * @return true, if they have
+     */
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    /**
+     * Get if the connection has timed out or not.
+     *
+     * @return false, if it hasn't.
+     */
+    public boolean isPingOK() {
+        return pingOK;
+    }
+
+    /**
+     * Set if the connection has timed out or not.
+     *
+     * @param pingOK the value to determine of the connection has timed out
+     */
+    public void setPingOK(boolean pingOK) {
+        this.pingOK = pingOK;
+    }
+
+    /**
+     * Dispose player when disconnect happens.
      */
     @Override
     public void dispose() {
+        if (!this.loggedIn) {
+            return;
+        }
+
+        PlayerDao.updateLastOnline(this.getDetails().getId());
         PlayerManager.getInstance().removePlayer(this);
 
         if (this.roomUser.getRoom() != null) {
-            this.roomUser.getRoom().getEntityManager().leaveRoom(this);
+            this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
         }
 
         for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(this.details.getId()))) {
-            room.dispose();
+            room.dispose(true);
         }
     }
 
