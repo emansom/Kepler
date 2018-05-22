@@ -22,17 +22,14 @@ public class MESSENGER_REMOVEBUDDY implements MessageEvent {
         MessengerDao.removeFriend(player.getDetails().getId(), userId);
 
         player.send(new REMOVE_FRIEND(userId));
+        player.getMessenger().getFriends().remove(player.getMessenger().getFriend(userId));
 
         Player friend = PlayerManager.getInstance().getPlayerById(userId);
 
-        // Remove request instance
-        player.getMessenger().getRequests().remove( player.getMessenger().getFriend(userId));
 
         if (friend != null) {
             friend.send(new REMOVE_FRIEND(player.getDetails().getId()));
-
-            // Remove request instance
-            friend.getMessenger().getRequests().remove(friend.getMessenger().getFriend(userId));
+            friend.getMessenger().getFriends().remove(friend.getMessenger().getFriend(player.getDetails().getId()));
         }
     }
 }

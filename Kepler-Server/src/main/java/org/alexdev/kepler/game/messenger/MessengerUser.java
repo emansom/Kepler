@@ -25,7 +25,12 @@ public class MessengerUser {
         response.writeString(details.getName());
         response.writeBool(details.getSex().toLowerCase().equals("m"));
         response.writeString(details.getConsoleMotto());
+        this.serialiseStatus(response, details);
+        response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
+        response.writeString(details.getFigure());
+    }
 
+    public void serialiseStatus(NettyResponse response, PlayerDetails details) {
         Player player = PlayerManager.getInstance().getPlayerById(details.getId());
 
         boolean isOnline = (player != null);
@@ -46,9 +51,6 @@ public class MessengerUser {
         } else {
             response.writeString("");
         }
-
-        response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
-        response.writeString(details.getFigure());
     }
 
     public int getUserId() {

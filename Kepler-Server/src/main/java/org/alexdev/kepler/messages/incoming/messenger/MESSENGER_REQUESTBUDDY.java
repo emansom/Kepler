@@ -28,10 +28,12 @@ public class MESSENGER_REQUESTBUDDY implements MessageEvent {
         }
 
         MessengerDao.newRequest(player.getDetails().getId(), userId);
+
         Player requested = PlayerManager.getInstance().getPlayerById(userId);
 
         if (requested != null) {
-            player.send(new FRIEND_REQUEST(player.getDetails()));
+            requested.send(new FRIEND_REQUEST(player.getDetails()));
+            requested.getMessenger().getRequests().add(new MessengerUser(player.getDetails().getId()));
         }
     }
 }

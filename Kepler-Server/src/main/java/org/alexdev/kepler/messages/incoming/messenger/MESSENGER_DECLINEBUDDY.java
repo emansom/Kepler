@@ -24,14 +24,12 @@ public class MESSENGER_DECLINEBUDDY implements MessageEvent {
             MessengerDao.removeRequest(userId, player.getDetails().getId());
             MessengerDao.removeRequest(player.getDetails().getId(), userId);
 
-            Player friend = PlayerManager.getInstance().getPlayerById(userId);
-
-            // Remove request instance
             player.getMessenger().getRequests().remove(player.getMessenger().getRequest(userId));
 
+            Player friend = PlayerManager.getInstance().getPlayerById(userId);
+
             if (friend != null) {
-                // Remove request instance
-                friend.getMessenger().getRequests().remove(friend.getMessenger().getRequest(userId));
+                friend.getMessenger().getRequests().remove(friend.getMessenger().getRequest(player.getDetails().getId()));
             }
         }
     }

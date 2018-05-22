@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.messenger;
 
 import org.alexdev.kepler.dao.mysql.MessengerDao;
+import org.alexdev.kepler.game.messenger.MessengerUser;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.messenger.NEW_FRIEND;
@@ -25,18 +26,20 @@ public class MESSENGER_ACCEPTBUDDY implements MessageEvent {
             MessengerDao.removeRequest(player.getDetails().getId(), userId);
 
             player.send(new NEW_FRIEND(PlayerManager.getInstance().getPlayerData(userId)));
+
+            player.getMessenger().getRequests().remove(player.getMessenger().getRequest(userId));
+            player.getMessenger().getFriends().add(new MessengerUser(userId));
+
             Player friend = PlayerManager.getInstance().getPlayerById(userId);
 
+            System.out.println("debug 123");
 
             if (friend != null) {
                 friend.send(new NEW_FRIEND(player.getDetails()));
 
-                // Remove request instance
-                friend.getMessenger().getRequests().remove(friend.getMessenger().getRequest(userId));
+                friend.getMessenger().getRequests().remove(friend.getMessenger().getRequest(player.getDetails().getId()));
+                friend.getMessenger().getFriends().add(new MessengerUser(friend.getDetails().getId()));
             }
-
-            // Remove request instance
-            player.getMessenger().getRequests().remove(friend.getMessenger().getRequest(userId));
         }
     }
 }
