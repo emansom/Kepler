@@ -161,7 +161,6 @@ public class PlayerDao {
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("UPDATE users SET mission = ?, figure = ?, gender = ?, rank = ?, credits = ?, duckets = ?, home_room = ? WHERE id = ?", sqlConnection);
-
             preparedStatement.execute();
         } catch (Exception e) {
             Storage.logError(e);
