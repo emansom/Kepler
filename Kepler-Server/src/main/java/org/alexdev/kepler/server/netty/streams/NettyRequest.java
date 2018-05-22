@@ -95,7 +95,7 @@ public class NettyRequest {
     public String getMessageBody() {
         String consoleText = this.buffer.toString(Charset.defaultCharset());
 
-        for (int i = 0; i < 13; i++) {
+        for (int i = 0; i < 14; i++) {
             consoleText = consoleText.replace(Character.toString((char)i), "[" + i + "]");
         }
 
