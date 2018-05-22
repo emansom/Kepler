@@ -44,8 +44,11 @@ public class Kepler {
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
 
-            // The "Doom" ASCII from
-            // http://patorjk.com/software/taag/#p=display&f=Doom&t=Icarus
+            // TODO: The "Doom" ASCII from
+            // http://patorjk.com/software/taag/#p=display&f=Doom&t=Kepler
+            // On a grey background with white ASCII text
+            // ASCII logo on the left side, contributors and other credits/info on the right side
+            // TODO: also a way to disable the fancy headers, as in production it would only fill the logs
             log.info("Kepler - Habbo Hotel V21 Emulation");
             log.info("Loading server...");
             log.info("");
@@ -71,6 +74,7 @@ public class Kepler {
             serverPort = Configuration.getInstance().getServerConfig().get("Server", "server.port", int.class);
 
             // Override with valid IP that we have resolved
+            // TODO: check IPv6 too. And rely on stdlib functions instead of reinventing the wheel
             if (!isValidIpAddress(serverIP)) {
                 serverIP = InetAddress.getByName(serverIP).getHostAddress();
             }
