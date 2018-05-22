@@ -45,17 +45,16 @@ public class Player extends Entity {
      * Login handler for player
      */
     public void login() {
+        // Update logger to show name
+        this.log = LoggerFactory.getLogger("Player " + this.details.getName());
+
         PlayerManager.getInstance().disconnectSession(this.details.getId()); // Kill other sessions with same id
         PlayerManager.getInstance().addPlayer(this); // Add new connection
-
         RoomManager.getInstance().addRoomsByUser(this.details.getId());
 
         this.loggedIn = true;
         this.pingOK = true;
         this.messenger = new Messenger(this);
-
-        // Update logger to show name
-        this.log = LoggerFactory.getLogger("Player " + this.details.getName());
 
         this.send(new LOGIN());
         this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));

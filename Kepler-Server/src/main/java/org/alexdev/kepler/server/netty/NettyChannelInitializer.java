@@ -3,12 +3,13 @@ package org.alexdev.kepler.server.netty;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.timeout.IdleStateHandler;
 import org.alexdev.kepler.server.netty.codec.NetworkDecoder;
 import org.alexdev.kepler.server.netty.codec.NetworkEncoder;
 import org.alexdev.kepler.server.netty.connections.ConnectionHandler;
+import org.alexdev.kepler.server.netty.connections.IdleConnectionHandler;
 
 public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
-
     private final NettyServer nettyServer;
 
     public NettyChannelInitializer(NettyServer nettyServer) {
@@ -21,5 +22,7 @@ public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
         pipeline.addLast("gameEncoder", new NetworkEncoder());
         pipeline.addLast("gameDecoder", new NetworkDecoder());
         pipeline.addLast("handler", new ConnectionHandler(this.nettyServer));
+        pipeline.addLast("idleStateHandler", new IdleStateHandler(10, 0, 0));
+        pipeline.addLast("idleHandler", new IdleConnectionHandler());
     }
 }

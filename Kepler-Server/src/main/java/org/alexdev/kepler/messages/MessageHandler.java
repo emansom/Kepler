@@ -57,6 +57,7 @@ public class MessageHandler {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
         registerEvent(196, new PONG());
+        //registerEvent(315, new TEST_LATENCY());
     }
 
     /**

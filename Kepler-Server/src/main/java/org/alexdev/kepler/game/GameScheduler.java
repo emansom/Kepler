@@ -36,22 +36,7 @@ public class GameScheduler implements Runnable {
 
         synchronized (PlayerManager.getInstance().getPlayers()) {
             for (Player player : PlayerManager.getInstance().getPlayers()) {
-
-                // If this task has ticked for an entire minute...
-                if (this.tickRate.get() % 60 == 0) {
-                    if (player.isPingOK()) {
-                        player.setPingOK(false);
-                        player.send(new PING());
-                    } else {
-                        if (player.isLoggedIn()) {
-                            logger.info("Player {} has timed out.", player.getDetails().getName());
-                        } else {
-                            logger.info("Connection {} has timed out.", player.getNetwork().getConnectionId());
-                        }
-
-                        player.getNetwork().close();
-                    }
-                }
+                // Do stuff here like add credits per x minutes, etc.
             }
         }
     }
