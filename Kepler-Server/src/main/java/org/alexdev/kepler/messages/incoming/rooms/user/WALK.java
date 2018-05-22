@@ -7,7 +7,7 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class WALK implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        if (player.getRoomUser().isGoingAway()) {
+        if (player.getRoomUser().isBeingKicked()) {
             return;
         }
 
