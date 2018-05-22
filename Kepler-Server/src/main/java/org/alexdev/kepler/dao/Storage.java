@@ -45,6 +45,7 @@ public class Storage {
             config.addDataSourceProperty("useUnicode","true");
             config.addDataSourceProperty("useSSL","false");
             config.addDataSourceProperty("serverTimezone","UTC");
+            config.addDataSourceProperty("sessionVariables", "sql_mode='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'");
 
             this.ds = new HikariDataSource(config);
             this.isConnected = true;
