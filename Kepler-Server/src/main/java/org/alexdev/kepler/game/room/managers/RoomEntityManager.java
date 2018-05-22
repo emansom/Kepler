@@ -116,7 +116,7 @@ public class RoomEntityManager {
         Player player = (Player) entity;
 
         player.send(new ROOM_URL());
-        player.send(new ROOM_READY(this.room.getData().getId(), this.room.getData().getModelName()));
+        player.send(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
     }
 
     /**

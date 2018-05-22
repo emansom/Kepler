@@ -18,7 +18,7 @@ public class FLATINFO extends MessageComposer {
     public void compose(NettyResponse response) {
         response.writeBool(this.room.getData().allowSuperUsers());
         response.writeInt(this.room.getData().getAccessTypeId());
-        response.writeInt(this.room.getData().getId());
+        response.writeInt(this.room.getId());
 
         if (this.room.getData().getOwnerId() == player.getDetails().getId() || this.room.getData().showName() ||
                 this.player.hasPermission("fuse_see_all_roomowners")) {
@@ -27,7 +27,7 @@ public class FLATINFO extends MessageComposer {
             response.writeString("-");
         }
 
-        response.writeString(this.room.getData().getModelName());
+        response.writeString(this.room.getData().getModelId());
         response.writeString(this.room.getData().getName());
         response.writeString(this.room.getData().getDescription());
         response.writeBool(this.room.getData().showName());

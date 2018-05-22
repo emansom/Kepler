@@ -16,7 +16,7 @@ public class USER_FLATS extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
         for (Room room : this.roomList) {
-            response.writeDelimeter(room.getData().getId(), (char) 9);
+            response.writeDelimeter(room.getId(), (char) 9);
             response.writeDelimeter(room.getData().getName(), (char) 9);
             response.writeDelimeter(room.getData().getOwnerName(), (char) 9);
             response.writeDelimeter(room.getData().getAccessType(), (char) 9);

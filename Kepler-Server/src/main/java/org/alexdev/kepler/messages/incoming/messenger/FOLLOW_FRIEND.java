@@ -20,7 +20,7 @@ public class FOLLOW_FRIEND implements MessageEvent {
             if (friend != null) {
                 if (friend.getRoomUser().getRoom() != null) {
                     boolean isPublic = friend.getRoomUser().getRoom().isPublicRoom();
-                    int roomId = friend.getRoomUser().getRoom().getData().getId();
+                    int roomId = friend.getRoomUser().getRoom().getId();
 
                     player.send(new FOLLOW_REQUEST(isPublic, roomId));
                 } else {

@@ -156,4 +156,11 @@ public class Room {
     public boolean isPublicRoom() {
         return this.roomData.getOwnerId() == 0;
     }
+
+    /**
+     * Get the room id of this room.
+     */
+    public int getId() {
+        return this.roomData.getId();
+    }
 }
