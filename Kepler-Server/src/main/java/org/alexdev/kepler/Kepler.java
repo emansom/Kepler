@@ -47,7 +47,7 @@ public class Kepler {
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
 
             // The "Doom" ASCII from
-            // http://patorjk.com/software/taag/#p=display&f=Doom&t=Icarus
+            // http://patorjk.com/software/taag/#p=display&f=Doom&t=Kepler
             log.info("Kepler - Habbo Hotel V21 Emulation");
             log.info("Loading server...");
             log.info("");

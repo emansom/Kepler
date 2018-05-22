@@ -20,7 +20,7 @@ public class Configuration {
             writeFileIfNotExist();
             configuration = new Wini(new File("kepler.properties"));
         } catch (Exception e) {
-            Log.getErrorLogger().error("Unhandled exception while loading the configurion: ", e);
+            Log.getErrorLogger().error("Unhandled exception while loading the configuration: ", e);
         }
     }
 
@@ -94,7 +94,7 @@ public class Configuration {
     private void writeMainConfiguration(PrintWriter writer) {
         writer.println("[Server]");
         writer.println("server.ip=127.0.0.1");
-        writer.println("server.port=30001");
+        writer.println("server.port=12321");
         writer.println();
         writer.println("[Database]");
         writer.println("mysql.hostname=127.0.0.1");
