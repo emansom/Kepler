@@ -38,7 +38,7 @@ public class NettyServer  {
         this.port = port;
         this.channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
         this.bootstrap = new ServerBootstrap();
-        this.connectionIds = new AtomicInteger(-1);
+        this.connectionIds = new AtomicInteger(0);
     }
 
     public void createSocket() {
