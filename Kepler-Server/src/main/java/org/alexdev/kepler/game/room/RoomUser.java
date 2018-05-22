@@ -2,9 +2,11 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -78,6 +80,53 @@ public class RoomUser {
     }
 
     /**
+     * Triggers the current item that the player has walked on top of.
+     */
+    public void invokeItem() {
+        boolean needsUpdate = false;
+        double height = this.getTile().getTileHeight();
+
+        if (height != this.position.getZ()) {
+            this.position.setZ(height);
+            needsUpdate = true;
+        }
+
+        RoomTile tile = this.getTile();
+
+        Item item = null;
+
+        if (tile.getHighestItem() != null) {
+            item = tile.getHighestItem();
+        }
+
+        if (item == null || (!item.getDefinition().getBehaviour().isCanSitOnTop() || !item.getDefinition().getBehaviour().isCanLayOnTop())) {
+            if (this.containsStatus(EntityStatus.SIT) || this.containsStatus(EntityStatus.LAY)) {
+                this.removeStatus(EntityStatus.SIT);
+                this.removeStatus(EntityStatus.LAY);
+                needsUpdate = true;
+            }
+        }
+
+        if (item != null) {
+            if (item.getDefinition().getBehaviour().isCanSitOnTop()) {
+                this.removeStatus(EntityStatus.DANCE);
+                this.position.setRotation(item.getPosition().getRotation());
+                this.setStatus(EntityStatus.SIT, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                needsUpdate = true;
+            }
+
+            if (item.getDefinition().getBehaviour().isCanLayOnTop()) {
+                this.removeStatus(EntityStatus.DANCE);
+                this.position.setRotation(item.getPosition().getRotation());
+                this.setStatus(EntityStatus.LAY, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                needsUpdate = true;
+            }
+        }
+
+        this.needsUpdate = needsUpdate;
+    }
+
+    /**
      * Update new height.
      *
      * @param position the position
@@ -116,10 +165,8 @@ public class RoomUser {
      * @param status the status
      * @return if the user contained the status
      */
-    public boolean removeStatus(EntityStatus status) {
-        boolean containedStatus = this.statuses.containsKey(status);
+    public void removeStatus(EntityStatus status) {
         this.statuses.remove(status);
-        return containedStatus;
     }
 
     /**

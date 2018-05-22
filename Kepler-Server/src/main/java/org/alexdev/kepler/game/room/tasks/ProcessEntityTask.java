@@ -99,6 +99,7 @@ public class ProcessEntityTask implements Runnable {
                 roomUser.setNextPosition(null);
                 roomUser.setWalking(false);
                 roomUser.removeStatus(EntityStatus.MOVE);
+                roomUser.invokeItem();
             }
 
             // If we're walking, make sure to tell the server
