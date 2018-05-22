@@ -32,8 +32,6 @@ public class MESSENGER_ACCEPTBUDDY implements MessageEvent {
 
             Player friend = PlayerManager.getInstance().getPlayerById(userId);
 
-            System.out.println("debug 123");
-
             if (friend != null) {
                 friend.send(new NEW_FRIEND(player.getDetails()));
 
