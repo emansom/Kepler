@@ -59,7 +59,7 @@ public class Player extends Entity {
      */
     @Override
     public boolean hasPermission(String permission) {
-        return false;
+        return FuserightsManager.getInstance().hasFuseright(permission, this.details.getRank());
     }
 
     /**
