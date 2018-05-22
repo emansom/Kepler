@@ -27,9 +27,28 @@ public class FRIENDS_UPDATE extends MessageComposer {
 
             response.writeInt(details.getId());
             response.writeString(details.getConsoleMotto());
-            friend.serialiseStatus(response, details);
-            response.writeString("");
-            response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
+
+            Player player = PlayerManager.getInstance().getPlayerById(details.getId());
+            boolean isOnline = (player != null);
+
+            response.writeBool(isOnline);
+
+            if (isOnline) {
+                if (player.getRoomUser().getRoom() != null) {
+                    Room room = player.getRoomUser().getRoom();
+
+                    if (room.getData().getOwnerId() > 0) {
+                        response.writeString("Floor1a");
+                    } else {
+                        response.writeString(room.getData().getName());
+                    }
+                } else {
+                    response.writeString("On hotel view");
+                }
+            } else {
+                response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
+            }
+
         }
     }
 
