@@ -99,7 +99,10 @@ public class MessageHandler {
     public void registerRoomSettingsPackets() {
         registerEvent(21, new GETFLATINFO());
         registerEvent(29, new CREATEFLAT());
+        registerEvent(25, new SETFLATINFO());
+        registerEvent(24, new UPDATEFLAT());
         registerEvent(153, new SETFLATCAT());
+        registerEvent(152, new GETFLATCAT());
     }
 
     /**
