@@ -4,7 +4,9 @@ import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.console.ConsoleReader;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.commands.CommandManager;
+import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -58,6 +60,8 @@ public class Kepler {
 
             log.info("Setting up game");
 
+            ItemManager.getInstance();
+            CatalogueManager.getInstance();
             RoomModelManager.getInstance();
             RoomManager.getInstance();
             PlayerManager.getInstance();

@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.item;
 
 public class ItemDefinition {
+    private int id;
     private String sprite;
     private ItemBehaviour behaviour;
     private String behaviourData;
@@ -19,6 +20,21 @@ public class ItemDefinition {
         this.stackHeight = 0.01;
         this.length = 1;
         this.width = 1;
+    }
+
+    public ItemDefinition(int id, String sprite, String behaviourData, double topHeight, int length, int width, String colour) {
+        this.id = id;
+        this.sprite = sprite;
+        this.behaviourData = behaviourData;
+        this.behaviour = ItemBehaviour.parse(this.behaviourData);
+        this.topHeight = topHeight;
+        this.length = length;
+        this.width = width;
+        this.colour = colour;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getSprite() {

@@ -57,7 +57,8 @@ public class Room {
     /**
      * Dispose room, or at least try to when
      * the stars align allowing it to be removed from the manager.
-     * @param isForced
+     *
+     * @param isForced whether the disposal is forced
      */
     public void dispose(boolean isForced) {
         if (this.roomEntityManager.getEntitiesByClass(Player.class).size() > 0) {
@@ -72,8 +73,10 @@ public class Room {
 
         // Clear items here
 
-        if (!isForced && PlayerManager.getInstance().getPlayerById(this.roomData.getOwnerId()) != null) { // Don't remove completely if owner is online
-            return;
+        if (!isForced) {
+            if (PlayerManager.getInstance().getPlayerById(this.roomData.getOwnerId()) != null) { // Don't remove completely if owner is online
+                return;
+            }
         }
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
