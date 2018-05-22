@@ -27,6 +27,7 @@ public class Player extends Entity {
     private PlayerDetails details;
     private RoomUser roomUser;
     private Messenger messenger;
+    private boolean loggedIn;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
@@ -39,9 +40,12 @@ public class Player extends Entity {
      * Login handler for player
      */
     public void login() {
-        PlayerManager.getInstance().addPlayer(this);
+        PlayerManager.getInstance().disconnectSession(this.details.getId()); // Kill other sessions with same id
+        PlayerManager.getInstance().addPlayer(this); // Add new connection
+
         RoomManager.getInstance().addRoomsByUser(this.details.getId());
 
+        this.loggedIn = true;
         this.messenger = new Messenger(this);
 
         // Update logger to show name
@@ -113,10 +117,14 @@ public class Player extends Entity {
     }
 
     /**
-     * Dispose player when disconnect happens/
+     * Dispose player when disconnect happens.
      */
     @Override
     public void dispose() {
+        if (!this.loggedIn) {
+            return;
+        }
+
         PlayerManager.getInstance().removePlayer(this);
 
         if (this.roomUser.getRoom() != null) {
