@@ -43,6 +43,36 @@ public class CATALOGUE_PAGE extends MessageComposer {
 
             response.writeKeyValue("t" + labelDataId, this.page.getLabelExtra().get(extraDataId));
         }
+
+        for (CatalogueItem item : this.catalogueItems) {
+            if (item.isPackage()) {
+                continue;
+            }
+
+            response.write("p:");
+            response.writeDelimeter(item.getName(), (char) 9);
+            response.writeDelimeter(item.getDescription(), (char) 9);
+            response.writeDelimeter(item.getPrice(), (char) 9);
+            response.writeDelimeter("", (char) 9);
+            response.writeDelimeter(item.getType(), (char) 9);
+            response.writeDelimeter(item.getIcon(), (char) 9);
+            response.writeDelimeter(item.getSize(), (char) 9);
+            response.writeDelimeter(item.getDimensions(), (char) 9);
+            response.writeDelimeter(item.getSaleCode(), (char) 9);
+
+            if (item.getDefinition().getSprite().equals("poster")) {
+                response.writeDelimeter("", (char) 9);
+            }
+
+
+            if (item.isPackage()) {
+
+            } else if (!item.getDefinition().getBehaviour().isWallItem()) {
+                response.writeDelimeter(item.getDefinition().getColour(), (char) 9);
+            }
+
+            response.write(Character.toString((char) 13));
+        }
     }
 
     @Override

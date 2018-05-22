@@ -1,5 +1,7 @@
 package org.alexdev.kepler.game.item;
 
+import org.alexdev.kepler.game.texts.TextsManager;
+
 public class ItemDefinition {
     private int id;
     private String sprite;
@@ -31,6 +33,92 @@ public class ItemDefinition {
         this.length = length;
         this.width = width;
         this.colour = colour;
+    }
+
+    /**
+     * Get the item name by creating an external text key and reading external text entries.
+     *
+     * @param specialSpriteId the special sprite id
+     * @return the name
+     */
+    public String getName(int specialSpriteId) {
+        if (this.behaviour.isDecoration()) {
+            return this.sprite;
+        }
+
+        String etxernalTextKey = this.getExternalTextKey(specialSpriteId);
+        String name = etxernalTextKey + "_name";
+
+        String value = TextsManager.getInstance().getValue(etxernalTextKey);
+
+        if (value == null) {
+            return "null";
+        }
+
+        return name;
+    }
+
+    /**
+     * Get the item description by creating an external text key and reading external text entries.
+     *
+     * @param specialSpriteId the special sprite id
+     * @return the description
+     */
+    public String getDescription(int specialSpriteId) {
+        if (this.behaviour.isDecoration()) {
+            return this.sprite;
+        }
+
+        String etxernalTextKey = this.getExternalTextKey(specialSpriteId);
+        String name = etxernalTextKey + "_desc";
+
+        String value = TextsManager.getInstance().getValue(etxernalTextKey);
+
+        if (value == null) {
+            return "null";
+        }
+
+        return name;
+    }
+
+    /**
+     * Create the catalogue icon through using the special sprite id.
+     *
+     * @param specialSpriteId the special sprite id
+     * @return the catalogue icon
+     */
+    public String getIcon(int specialSpriteId) {
+        String icon = "";
+
+        icon += this.sprite;
+
+        if (specialSpriteId > 0) {
+            icon += " " + specialSpriteId;
+        }
+
+        return icon;
+    }
+
+    private String getExternalTextKey(int specialSpriteId) {
+        String key = "";
+
+        if (specialSpriteId == 0) {
+            if (this.behaviour.isWallItem()) {
+                key = "wallitem";
+            } else {
+                key = "furni";
+            }
+
+            key += "_";
+        }
+
+        key += this.sprite;
+
+        if (specialSpriteId > 0) {
+            key += ("_" + specialSpriteId);
+        }
+
+        return key;
     }
 
     public int getId() {

@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
+import org.alexdev.kepler.messages.incoming.catalogue.GET_ALIAS_LIST;
 import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
@@ -136,6 +137,7 @@ public class MessageHandler {
     private void registerCataloguePackets() {
         registerEvent(101, new GCIX());
         registerEvent(102, new GCAP());
+        registerEvent(215, new GET_ALIAS_LIST());
     }
 
     /**
