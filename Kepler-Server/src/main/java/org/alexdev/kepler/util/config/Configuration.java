@@ -32,7 +32,7 @@ public class Configuration {
      */
     private void checkLog4j() throws FileNotFoundException {
 
-    	String output = "log4j.rootLogger=INFO, stdout\n" +
+    	String output = "log4j.rootLogger=INFO, stdout, SERVER_LOG\n" +
                 "log4j.appender.stdout.threshold=info\n" +
                 "log4j.appender.stdout=org.apache.log4j.ConsoleAppender\n" +
                 "log4j.appender.stdout.Target=System.out\n" +
@@ -40,7 +40,7 @@ public class Configuration {
                 "log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5p [%c] - %m%n\n" +
                 "\n" +
                 "# Create new logger information for error\n" +
-                "log4j.logger.ErrorLogger=ERROR, error, FILE\n" +
+                "log4j.logger.ErrorLogger=ERROR, error, ERROR_FILE\n" +
                 "log4j.additivity.ErrorLogger=false\n" +
                 "\n" +
                 "# Set settings for the error logger\n" +
@@ -49,14 +49,23 @@ public class Configuration {
                 "log4j.appender.error.layout=org.apache.log4j.PatternLayout\n" +
                 "log4j.appender.error.layout.ConversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5p [%c] - %m%n\n" +
                 "\n" +
-                "# Define the file appender\n" +
-                "log4j.appender.FILE=org.apache.log4j.FileAppender\n" +
-                "log4j.appender.FILE.File=error.log\n" +
-                "log4j.appender.FILE.ImmediateFlush=true\n" +
-                "log4j.appender.FILE.Threshold=debug\n" +
-                "log4j.appender.FILE.Append=false\n" +
-                "log4j.appender.FILE.layout=org.apache.log4j.PatternLayout\n" +
-                "log4j.appender.FILE.layout.conversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} - [%c] - %m%n\n";
+                "# Define the file appender for errors\n" +
+                "log4j.appender.ERROR_FILE=org.apache.log4j.FileAppender\n" +
+                "log4j.appender.ERROR_FILE.File=error.log\n" +
+                "log4j.appender.ERROR_FILE.ImmediateFlush=true\n" +
+                "log4j.appender.ERROR_FILE.Threshold=debug\n" +
+                "log4j.appender.ERROR_FILE.Append=true\n" +
+                "log4j.appender.ERROR_FILE.layout=org.apache.log4j.PatternLayout\n" +
+                "log4j.appender.ERROR_FILE.layout.conversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} - [%c] - %m%n\n" +
+                "\n" +
+                "# Define the file appender for server output\n" +
+                "log4j.appender.SERVER_LOG=org.apache.log4j.FileAppender\n" +
+                "log4j.appender.SERVER_LOG.File=server.log\n" +
+                "log4j.appender.SERVER_LOG.ImmediateFlush=true\n" +
+                "log4j.appender.SERVER_LOG.Threshold=debug\n" +
+                "log4j.appender.SERVER_LOG.Append=true\n" +
+                "log4j.appender.SERVER_LOG.layout=org.apache.log4j.PatternLayout\n" +
+                "log4j.appender.SERVER_LOG.layout.conversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} - [%c] - %m%n\n";
     	
     	File loggingConfig = new File("log4j.properties");
     	
