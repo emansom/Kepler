@@ -5,6 +5,9 @@ import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CatalogueItem {
     private String saleCode;
     private int pageId;
@@ -15,6 +18,7 @@ public class CatalogueItem {
     private String packageName;
     private String packageDescription;
     private boolean isPackage;
+    private List<CataloguePackage> packages;
 
     public CatalogueItem(String saleCode, int pageId, int orderId, int price, int definitionId, int itemSpecialId, String packageName, String packageDescription, boolean isPackage) {
         this.saleCode = saleCode;
@@ -26,6 +30,7 @@ public class CatalogueItem {
         this.packageName = packageName;
         this.packageDescription = packageDescription;
         this.isPackage = isPackage;
+        this.packages = new ArrayList<>();
     }
 
     public String getName() {
@@ -113,5 +118,9 @@ public class CatalogueItem {
 
     public boolean isPackage() {
         return isPackage;
+    }
+
+    public List<CataloguePackage> getPackages() {
+        return packages;
     }
 }

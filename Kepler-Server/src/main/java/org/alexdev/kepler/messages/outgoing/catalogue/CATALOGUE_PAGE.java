@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.outgoing.catalogue;
 
 import org.alexdev.kepler.game.catalogue.CatalogueItem;
+import org.alexdev.kepler.game.catalogue.CataloguePackage;
 import org.alexdev.kepler.game.catalogue.CataloguePage;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -45,10 +46,6 @@ public class CATALOGUE_PAGE extends MessageComposer {
         }
 
         for (CatalogueItem item : this.catalogueItems) {
-            if (item.isPackage()) {
-                continue;
-            }
-
             response.write("p:");
             response.writeDelimeter(item.getName(), (char) 9);
             response.writeDelimeter(item.getDescription(), (char) 9);
@@ -60,12 +57,19 @@ public class CATALOGUE_PAGE extends MessageComposer {
             response.writeDelimeter(item.getDimensions(), (char) 9);
             response.writeDelimeter(item.getSaleCode(), (char) 9);
 
-            if (item.getDefinition().getSprite().equals("poster")) {
+            if (item.isPackage() || item.getDefinition().getSprite().equals("poster")) {
                 response.writeDelimeter("", (char) 9);
             }
 
 
             if (item.isPackage()) {
+                response.writeDelimeter(item.getPackages().size(), (char) 9);
+
+                for (CataloguePackage cataloguePackage : item.getPackages()) {
+                    response.writeDelimeter(cataloguePackage.getDefinition().getIcon(cataloguePackage.getSpecialSpriteId()), (char) 9);
+                    response.writeDelimeter(cataloguePackage.getAmount(), (char) 9);
+                    response.writeDelimeter(cataloguePackage.getDefinition().getColour(), (char) 9);
+                }
 
             } else if (!item.getDefinition().getBehaviour().isWallItem()) {
                 response.writeDelimeter(item.getDefinition().getColour(), (char) 9);

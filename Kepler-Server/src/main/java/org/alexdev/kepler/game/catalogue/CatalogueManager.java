@@ -14,8 +14,26 @@ public class CatalogueManager {
 
     public CatalogueManager() {
         this.cataloguePageList = CatalogueDao.getPages();
-        this.catalogueItemList = CatalogueDao.getItems();
         this.cataloguePackageList = CatalogueDao.getPackages();
+        this.catalogueItemList = CatalogueDao.getItems();
+        this.loadPackages();
+    }
+
+    /**
+     * Load catalogue packages for all catalogue items.
+     */
+    private void loadPackages() {
+        for (CatalogueItem catalogueItem : this.catalogueItemList) {
+            if (!catalogueItem.isPackage()) {
+                continue;
+            }
+
+            for (CataloguePackage cataloguePackage : this.cataloguePackageList) {
+                if (catalogueItem.getSaleCode().equals(cataloguePackage.getSaleCode())) {
+                    catalogueItem.getPackages().add(cataloguePackage);
+                }
+            }
+        }
     }
 
     /**
@@ -60,6 +78,15 @@ public class CatalogueManager {
      */
     public List<CataloguePage> getCataloguePages() {
         return cataloguePageList;
+    }
+
+    /**
+     * Get catalogue packages list.
+     *
+     * @return the list of catalogue packages
+     */
+    public List<CataloguePackage> getCataloguePackages() {
+        return cataloguePackageList;
     }
 
     /**

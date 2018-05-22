@@ -99,6 +99,12 @@ public class ItemDefinition {
         return icon;
     }
 
+    /**
+     * Get external text key by definition.
+     *
+     * @param specialSpriteId the special sprite id
+     * @return the external text key
+     */
     private String getExternalTextKey(int specialSpriteId) {
         String key = "";
 
