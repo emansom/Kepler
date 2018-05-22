@@ -14,7 +14,7 @@ public abstract class Entity {
      * @param permission the permission
      * @return true, if successful
      */
-    public abstract boolean hasPermission(String permission);
+    public abstract boolean hasFuse(String permission);
     
     /**
      * Gets the details.

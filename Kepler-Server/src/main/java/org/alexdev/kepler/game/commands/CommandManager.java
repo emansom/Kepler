@@ -78,7 +78,7 @@ public class CommandManager {
         if (cmd.getPermissions().length > 0) {
 
             for (String permission : cmd.getPermissions()) {
-                if (entity.hasPermission(permission)) {
+                if (entity.hasFuse(permission)) {
                     return true;
                 }
             }

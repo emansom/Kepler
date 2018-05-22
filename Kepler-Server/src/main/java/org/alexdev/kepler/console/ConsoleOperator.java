@@ -8,7 +8,7 @@ import org.alexdev.kepler.game.room.RoomUser;
 public class ConsoleOperator extends Entity {
 
     @Override
-    public boolean hasPermission(String permission) {
+    public boolean hasFuse(String permission) {
         return permission.equalsIgnoreCase("operator");
     }
 

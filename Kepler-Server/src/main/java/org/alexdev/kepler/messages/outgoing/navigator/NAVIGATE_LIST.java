@@ -63,7 +63,7 @@ public class NAVIGATE_LIST extends MessageComposer {
 
                 if (room.getData().getOwnerId() == viewer.getDetails().getId() ||
                         room.getData().showName() ||
-                        viewer.hasPermission("fuse_see_all_roomowners")) {
+                        viewer.hasFuse("fuse_see_all_roomowners")) {
                     response.writeString(room.getData().getOwnerName());
                 } else {
                     response.writeString("-");

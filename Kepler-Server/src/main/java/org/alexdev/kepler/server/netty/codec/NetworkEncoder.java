@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class NetworkEncoder extends MessageToMessageEncoder<MessageComposer> {
-
     final private static Logger log = LoggerFactory.getLogger(NetworkEncoder.class);
 
     @Override

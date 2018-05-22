@@ -109,7 +109,7 @@ public class Kepler {
                 return false;
             }
 
-            int number = Integer.valueOf(part);
+            int number = Integer.parseInt(part);
 
             if (number > 255 || number < 0) {
                 return false;

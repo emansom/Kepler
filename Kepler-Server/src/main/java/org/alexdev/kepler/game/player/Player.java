@@ -58,12 +58,12 @@ public class Player extends Entity {
     /**
      * Check if the player has a permission for a rank.
      *
-     * @param permission the permission
+     * @param fuse the permission
      * @return true, if successful
      */
     @Override
-    public boolean hasPermission(String permission) {
-        return FuserightsManager.getInstance().hasFuseright(permission, this.details.getRank());
+    public boolean hasFuse(String fuse) {
+        return FuserightsManager.getInstance().hasFuseright(fuse, this.details.getRank());
     }
 
     /**

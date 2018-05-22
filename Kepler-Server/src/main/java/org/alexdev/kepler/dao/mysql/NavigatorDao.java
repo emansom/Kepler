@@ -3,10 +3,12 @@ package org.alexdev.kepler.dao.mysql;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.util.DateUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -89,5 +91,39 @@ public class NavigatorDao {
         }
 
         return rooms;
+    }
+
+    public static int createRoom(int ownerId, String roomName, String roomModel, boolean roomShowName, int accessType) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        int roomId = 0;
+
+        try {
+
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO rooms (owner_id, name, description, model, showname, password, accesstype) VALUES (?,?,?,?,?, '', ?)", sqlConnection);
+            preparedStatement.setInt(1, ownerId);
+            preparedStatement.setString(2, roomName);
+            preparedStatement.setString(3, "");
+            preparedStatement.setString(4, roomModel);
+            preparedStatement.setBoolean(5, roomShowName);
+            preparedStatement.setInt(6, accessType);
+            preparedStatement.executeUpdate();
+
+            ResultSet row = preparedStatement.getGeneratedKeys();
+
+            if (row != null && row.next()) {
+                roomId = row.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return roomId;
     }
 }
