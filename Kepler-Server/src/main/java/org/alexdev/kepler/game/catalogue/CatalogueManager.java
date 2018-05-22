@@ -10,10 +10,12 @@ public class CatalogueManager {
 
     private List<CataloguePage> cataloguePageList;
     private List<CatalogueItem> catalogueItemList;
+    private List<CataloguePackage> cataloguePackageList;
 
     public CatalogueManager() {
         this.cataloguePageList = CatalogueDao.getPages();
         this.catalogueItemList = CatalogueDao.getItems();
+        this.cataloguePackageList = CatalogueDao.getPackages();
     }
 
     /**

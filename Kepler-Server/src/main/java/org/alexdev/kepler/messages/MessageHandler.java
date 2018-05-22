@@ -3,6 +3,8 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
+import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
 import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
@@ -36,6 +38,7 @@ public class MessageHandler {
         registerRoomUserPackets();
         registerRoomSettingsPackets();
         registerMessengerPackets();
+        registerCataloguePackets();
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
@@ -125,6 +128,14 @@ public class MessageHandler {
         registerEvent(32, new MESSENGER_MARKREAD());
         registerEvent(262, new FOLLOW_FRIEND());
         registerEvent(15, new FRIENDLIST_UPDATE());
+    }
+
+    /**
+     * Register catalogue packets
+     */
+    private void registerCataloguePackets() {
+        registerEvent(101, new GCIX());
+        registerEvent(102, new GCAP());
     }
 
     /**

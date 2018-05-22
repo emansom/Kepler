@@ -1,5 +1,12 @@
 package org.alexdev.kepler.game.catalogue;
 
+import org.alexdev.kepler.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class CataloguePage {
     private int id;
     private int minRole;
@@ -11,7 +18,7 @@ public class CataloguePage {
     private String body;
     private String labelPick;
     private String labelExtra_s;
-    private String labelExtra_t;
+    private Map<String, String> labelExtra;
 
     public CataloguePage(int id, int minRole, String nameIndex, String name, String layout, String imageHeadline, String imageTeasers, String body, String labelPick, String labelExtra_s, String labelExtra_t) {
         this.id = id;
@@ -24,7 +31,20 @@ public class CataloguePage {
         this.body = body;
         this.labelPick = labelPick;
         this.labelExtra_s = labelExtra_s;
-        this.labelExtra_t = labelExtra_t;
+        this.labelExtra = new HashMap<>();
+
+        if (!StringUtil.isNullOrEmpty(labelExtra_t)) {
+            String[] extraTypedData = labelExtra_t.split("\r\n");
+
+            for (String dbExtraData : extraTypedData) {
+                String extraData = StringUtil.filterInput(dbExtraData, true);
+
+                String extraId = extraData.substring(0, extraData.indexOf(':'));
+                String data = extraData.substring(extraId.length() + 1);
+
+                this.labelExtra.put("label_extra_t_" + extraId, data);
+            }
+        }
     }
 
     public int getId() {
@@ -107,11 +127,7 @@ public class CataloguePage {
         this.labelExtra_s = labelExtra_s;
     }
 
-    public String getLabelExtra_t() {
-        return labelExtra_t;
-    }
-
-    public void setLabelExtra_t(String labelExtra_t) {
-        this.labelExtra_t = labelExtra_t;
+    public Map<String, String> getLabelExtra() {
+        return labelExtra;
     }
 }
