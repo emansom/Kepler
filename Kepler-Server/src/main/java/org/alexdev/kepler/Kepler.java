@@ -10,6 +10,7 @@ import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
+import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.Configuration;
@@ -63,6 +64,7 @@ public class Kepler {
             NavigatorManager.getInstance();
             GameScheduler.getInstance();
             CommandManager.getInstance();
+            MessageHandler.getInstance();
 
             log.info("Setting up server");
 
