@@ -9,7 +9,6 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
 public class GETFLATINFO implements MessageEvent {
-
     @Override
     public void handle(Player player, NettyRequest reader) {
         int roomId = Integer.parseInt(reader.contents());
