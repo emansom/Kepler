@@ -41,9 +41,6 @@ public class Kepler {
     public static void main(String[] args) {
         startupTime = DateUtil.getCurrentTimeSeconds();
 
-        File loggingConfig = new File("log4j.properties");
-        PropertyConfigurator.configure(loggingConfig.getAbsolutePath());
-
         try {
             Configuration.load("config.ini");
 
