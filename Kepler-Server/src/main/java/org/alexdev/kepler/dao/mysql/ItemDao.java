@@ -125,6 +125,29 @@ public class ItemDao {
     }
 
     /**
+     * Delete item by item id.
+     *
+     * @param itemId the id of the item to delete it
+     */
+    public static void deleteItem(int itemId) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM items WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, itemId);
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
      * Fill item with data retrieved from the SQL query.
      *
      * @param item the item to fill data for

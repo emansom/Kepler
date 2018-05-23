@@ -139,6 +139,22 @@ public class Inventory {
     }
 
     /**
+     * Get inventory item by id.
+     *
+     * @param itemId the id used to get the inventory item
+     * @return the inventory item
+     */
+    public Item getItem(int itemId) {
+        for (Item item : this.items) {
+            if (item.getId() == itemId) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get the list of inventory items.
      *
      * @return the list of items

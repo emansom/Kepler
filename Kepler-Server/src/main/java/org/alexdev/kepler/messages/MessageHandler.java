@@ -158,6 +158,7 @@ public class MessageHandler {
      */
     private void registerInventoryPackets() {
         registerEvent(65, new GETSTRIP());
+        registerEvent(66, new FLATPROPBYITEM());
     }
 
     /**
