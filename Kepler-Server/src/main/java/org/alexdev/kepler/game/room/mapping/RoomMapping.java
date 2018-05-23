@@ -49,7 +49,7 @@ public class RoomMapping {
                     continue;
                 }
 
-                if (tile.getTileHeight() < item.getTotalHeight()) {
+                if (tile.getTileHeight() < item.getTotalHeight() || item.getDefinition().getBehaviour().isPublicSpaceObject()) {
                     tile.setItemBelow(tile.getHighestItem());
                     tile.setTileHeight(item.getTotalHeight());
                     tile.setHighestItem(item);
@@ -80,8 +80,11 @@ public class RoomMapping {
             return false;
         }
 
-        double oldHeight = this.getTile(current.getX(), current.getY()).getTileHeight();
-        double newHeight = this.getTile(tmp.getX(), tmp.getY()).getTileHeight();
+        RoomTile fromTile = this.getTile(current.getX(), current.getY());
+        RoomTile toTile = this.getTile(tmp.getX(), tmp.getY());
+
+        double oldHeight = fromTile.getTileHeight();
+        double newHeight = toTile.getTileHeight();
 
         if (oldHeight - 4 >= newHeight) {
             return false;
@@ -89,6 +92,47 @@ public class RoomMapping {
 
         if (oldHeight + 1.5 <= newHeight) {
             return false;
+        }
+
+        Item fromItem = fromTile.getHighestItem();
+        Item toItem = toTile.getHighestItem();
+
+        if (fromItem != null) {
+            if (fromItem.getDefinition().getSprite().equals("poolEnter") ||
+                fromItem.getDefinition().getSprite().equals("poolLeave")) {
+                return entity.getDetails().getPoolFigure().length() > 0;
+            }
+
+            if (toItem != null) {
+                if (entity.getRoomUser().getRoom().getData().getModelId().equals("pool_b")) {
+                    if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
+                        toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        if (toItem != null) {
+            if (toItem.getDefinition().getSprite().equals("poolBooth") ||
+                toItem.getDefinition().getSprite().equals("poolLift")) {
+
+                if (toItem.getCurrentProgramValue().equals("close")) {
+                    return false;
+                } else {
+                    return !toItem.getDefinition().getSprite().equals("poolLift") || entity.getDetails().getPoolFigure().length() > 0;
+                }
+            }
+
+            if (entity.getRoomUser().getRoom().getData().getModel().getModelName().equals("pool_b") &&
+                toItem.getDefinition().getSprite().equals("queue_tile2")) {
+
+                if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
+                    return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;
+                } else {
+                    return false;
+                }
+            }
         }
 
         return true;
