@@ -188,11 +188,17 @@ public class RoomMapping {
             return false;
         }
 
-        if (tile.getHighestItem() != null) {
-            return tile.getHighestItem().isWalkable();
+        if (this.roomModel.getTileState(position.getX(), position.getY()) == RoomTileState.CLOSED) {
+            return false;
         }
 
-        return this.roomModel.getTileState(position.getX(), position.getY()) == RoomTileState.OPEN;
+        if (tile.getHighestItem() != null) {
+            if (!tile.getHighestItem().isWalkable()) {
+                return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
+            }
+        }
+
+        return true;
     }
 
     /**
