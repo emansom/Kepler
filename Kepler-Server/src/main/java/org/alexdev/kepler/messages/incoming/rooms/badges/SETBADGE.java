@@ -28,8 +28,6 @@ public class SETBADGE implements MessageEvent {
         PlayerDao.saveCurrentBadge(player.getDetails());
 
         // Notify room
-
-        System.out.printf("Current badge: %s, show badge: %s", player.getDetails().getCurrentBadge(), player.getDetails().getShowBadge());
         player.getRoom().getEntityManager().refreshBadges(player);
     }
 }
