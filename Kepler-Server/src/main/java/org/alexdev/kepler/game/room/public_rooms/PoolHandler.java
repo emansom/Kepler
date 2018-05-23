@@ -58,7 +58,7 @@ public class PoolHandler {
         }
 
         if (!room.getData().getModel().getModelName().equals("pool_a") &&
-                !room.getData().getModel().getModelName().equals("md_a")) {
+            !room.getData().getModel().getModelName().equals("md_a")) {
             return;
         }
 

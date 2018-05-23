@@ -27,9 +27,15 @@ public class Item {
         this.position = new Position();
         this.customData = "";
         this.wallPosition = "";
+        this.currentProgram = "";
+        this.currentProgramValue = "";
     }
 
     public void showProgram(String value) {
+        if (value == null) {
+            value = "";
+        }
+
         this.currentProgramValue = value;
 
         Room room = this.getRoom();

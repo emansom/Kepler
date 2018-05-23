@@ -125,7 +125,7 @@ public class RoomEntityManager {
         player.send(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
 
         for (Item item : this.room.getItems()) {
-            if (!StringUtil.isNullOrEmpty(item.getCurrentProgram())) {
+            if (item.getCurrentProgramValue().length() > 0) {
                 player.send(new SHOWPROGRAM(item.getCurrentProgram(), item.getCurrentProgramValue()));
             }
         }

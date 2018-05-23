@@ -17,7 +17,7 @@ public class SHOWPROGRAM extends MessageComposer {
     public void compose(NettyResponse response) {
         response.write(this.currentProgram);
 
-        if (!StringUtil.isNullOrEmpty(this.currentProgramValue)) {
+        if (this.currentProgramValue.length() > 0) {
             response.write(" ");
             response.write(this.currentProgramValue);
         }
