@@ -15,9 +15,6 @@ dependencies {
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
 
-    // https://mvnrepository.com/artifact/org.ini4j/ini4j
-    compile group: 'org.ini4j', name: 'ini4j', version: '0.5.4'
-
     // https://mvnrepository.com/artifact/io.netty/netty-all
     compile group: 'io.netty', name: 'netty-all', version: '4.1.25.Final'
 

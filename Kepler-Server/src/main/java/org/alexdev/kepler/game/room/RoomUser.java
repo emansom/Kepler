@@ -93,18 +93,6 @@ public class RoomUser {
         this.nextPosition = null;
         this.removeStatus(EntityStatus.MOVE);
 
-        // TODO: refactor this to a better place
-        if (this.entity.getType() == EntityType.PLAYER) {
-            var doorX = room.getData().getModel().getDoorX();
-            var doorY = room.getData().getModel().getDoorY();
-
-            var position = this.entity.getRoomUser().getPosition();
-
-            if (position.getX() == doorX && position.getY() == doorY) {
-                this.room.getEntityManager().leaveRoom(this.entity, true);
-            }
-        }
-
         if (this.beingKicked) {
             this.room.getEntityManager().leaveRoom(this.entity, true);
         }
