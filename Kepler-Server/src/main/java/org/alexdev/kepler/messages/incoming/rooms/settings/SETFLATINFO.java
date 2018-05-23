@@ -12,7 +12,12 @@ public class SETFLATINFO implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         String contents = reader.contents();
-        int roomId = Integer.parseInt(contents.split("/")[1]);
+
+        if (contents.startsWith("/")) {
+            contents = contents.substring(1);
+        }
+
+        int roomId = Integer.parseInt(contents.split("/")[0]);
 
         Room room = RoomManager.getInstance().getRoomById(roomId);
 
