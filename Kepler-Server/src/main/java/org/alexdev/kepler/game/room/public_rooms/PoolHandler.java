@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.room.public_rooms;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -10,11 +9,17 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
-import org.alexdev.kepler.util.StringUtil;
 
 public class PoolHandler {
+
+    /**
+     * Setup booth coordinate registration in multiple areas of the map.
+     * Used for both standing in the booth, and the curtain.
+     *
+     * @param room the room to setup the booth for
+     * @param item the item to to set
+     */
     public static void setupRedirections(Room room, Item item) {
         if (item.getDefinition().getSprite().equals("poolBooth")) {
             if (item.getPosition().getX() == 17 && item.getPosition().getY() == 11) {
@@ -35,6 +40,12 @@ public class PoolHandler {
         }
     }
 
+    /**
+     * Interact with a pool item.
+     *
+     * @param item the item to handle
+     * @param entity the entity to handles
+     */
     public static void interact(Item item, Entity entity) {
         if (entity.getType() != EntityType.PLAYER) {
             return;
@@ -102,6 +113,15 @@ public class PoolHandler {
         }
     }
 
+    /**
+     * Warps the player to a location fluidly with splashing.
+     *
+     * @param item the item, it's either a poolExit or poolEnter
+     * @param entity the entity to warp
+     * @param warp the warp location
+     * @param goal the goal location to swim to
+     * @param exit whether it was exiting or entering the ladder, to add or remove swimming
+     */
     private static void warpSwim(Item item, Entity entity, Position warp, Position goal, boolean exit) {
         RoomUser roomUser = entity.getRoomUser();
         Room room = roomUser.getRoom();
@@ -112,20 +132,20 @@ public class PoolHandler {
             roomUser.setStatus(EntityStatus.SWIM, "");
         }
 
-        System.out.println("Walk to: " + warp);
-
-        //roomUser.setWalking(false);
         roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp.getX(), warp.getY()).getTileHeight()));
-
         roomUser.getPath().clear();
         roomUser.getPath().add(goal);
-
         roomUser.setWalking(true);
 
         item.showProgram("");
-        //roomUser.walkTo(goal.getX(), goal.getY());
     }
 
+    /**
+     * Called when a player exits a changing booth, it will automatically
+     * make the player leave the booth.
+     *
+     * @param player the player to leave
+     */
     public static void exitBooth(Player player) {
         RoomTile tile = player.getRoomUser().getTile();
         Room room = player.getRoomUser().getRoom();
@@ -167,6 +187,12 @@ public class PoolHandler {
         }
     }
 
+    /**
+     * Handle item program when player disconnects or leaves room.
+     * Will re-open up pool lift or the changing booths.
+     *
+     * @param player the player to handle
+     */
     public static void disconnect(Player player) {
         RoomTile tile = player.getRoomUser().getTile();
         Room room = player.getRoomUser().getRoom();
