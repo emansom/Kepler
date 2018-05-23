@@ -315,6 +315,6 @@ public class PlayerDao {
                 row.getString("motto"), row.getString("console_motto"), row.getString("sex"),
                 row.getInt("tickets"), row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
-                row.getString("badge_active"));
+                row.getBoolean("badge_active"), row.getBoolean("allow_stalking"));
     }
 }

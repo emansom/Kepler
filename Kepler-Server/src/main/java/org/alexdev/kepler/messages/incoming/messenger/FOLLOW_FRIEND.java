@@ -8,33 +8,53 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
 public class FOLLOW_FRIEND implements MessageEvent {
+    private enum FollowErrors {
+        NOT_FRIEND(0),
+        OFFLINE(1),
+        ON_HOTELVIEW(2),
+        NO_CREEPING_ALLOWED(3);
+
+        private int id;
+
+        FollowErrors(int id) {
+            this.id = id;
+        }
+
+        public int getID(){
+            return id;
+        }
+    }
+
     @Override
     public void handle(Player player, NettyRequest reader) {
         int friendId = reader.readInt();
 
-        int errorId = -1;
-
-        if (player.getMessenger().isFriend(friendId)) {
-            Player friend = PlayerManager.getInstance().getPlayerById(friendId);
-
-            if (friend != null) {
-                if (friend.getRoomUser().getRoom() != null) {
-                    boolean isPublic = friend.getRoomUser().getRoom().isPublicRoom();
-                    int roomId = friend.getRoomUser().getRoom().getId();
-
-                    player.send(new FOLLOW_REQUEST(isPublic, roomId));
-                } else {
-                    errorId = 2;
-                }
-            } else {
-                errorId = 1; // Friend is not offline
-            }
-        } else {
-            errorId = 0; // Not their friend
+        if (!player.getMessenger().isFriend(friendId)) {
+            player.send(new FOLLOW_ERROR(FollowErrors.NOT_FRIEND.getID())); // Not their friend
+            return;
         }
 
-        if (errorId != -1) {
-            player.send(new FOLLOW_ERROR(errorId));
+        Player friend = PlayerManager.getInstance().getPlayerById(friendId);
+
+        if (friend == null) {
+            player.send(new FOLLOW_ERROR(FollowErrors.OFFLINE.getID())); // Friend is not online
+            return;
         }
+
+        if (friend.getRoomUser().getRoom() == null) {
+            player.send(new FOLLOW_ERROR(FollowErrors.ON_HOTELVIEW.getID())); // Friend is on hotelview
+            return;
+        }
+
+        // TODO: FUSE permission instead of rank check
+        if (!friend.getDetails().doesAllowStalking() && player.getDetails().getRank() < 5) {
+            player.send(new FOLLOW_ERROR(FollowErrors.NO_CREEPING_ALLOWED.getID())); // Friend does not allow stalking
+            return;
+        }
+
+        boolean isPublic = friend.getRoomUser().getRoom().isPublicRoom();
+        int roomId = friend.getRoomUser().getRoom().getId();
+
+        player.send(new FOLLOW_REQUEST(isPublic, roomId));
     }
 }

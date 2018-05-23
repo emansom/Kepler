@@ -17,7 +17,8 @@ public class PlayerDetails {
     private long clubSubscribed;
     private long clubExpiration;
     private String badge;
-    private String badgeActive;
+    private boolean badgeActive;
+    private boolean allowStalking;
 
     public PlayerDetails() { }
 
@@ -39,10 +40,11 @@ public class PlayerDetails {
      * @param lastOnline the last time they were online in a unix timestamp
      * @param clubSubscribed the club subscribed date in a unix timestamp
      * @param clubExpiration the club expiration date in a unix timestamp
-     * @param badge their badges
-     * @param badgeActive the current badge
+     * @param badge the current badge
+     * @param badgeActive whether the badge is shown or not
+     * @param allowStalking allow stalking/following
      */
-    public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String badge, String badgeActive) {
+    public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String badge, boolean badgeActive, boolean allowStalking) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -60,6 +62,7 @@ public class PlayerDetails {
         this.clubExpiration = clubExpiration;
         this.badge = badge;
         this.badgeActive = badgeActive;
+        this.allowStalking = allowStalking;
     }
 
     public int getId() {
@@ -174,11 +177,15 @@ public class PlayerDetails {
         this.badge = badge;
     }
 
-    public String getBadgeActive() {
+    public boolean isBadgeActive() {
         return badgeActive;
     }
 
-    public void setBadgeActive(String badgeActive) {
+    public void setBadgeActive(boolean badgeActive) {
         this.badgeActive = badgeActive;
     }
+
+    public boolean doesAllowStalking() { return allowStalking; }
+
+    public void setAllowStalking() { this.allowStalking = allowStalking; }
 }
