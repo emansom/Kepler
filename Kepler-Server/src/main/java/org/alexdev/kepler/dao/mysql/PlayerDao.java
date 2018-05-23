@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.util.DateUtil;
 
 import java.sql.*;
+import java.util.*;
 
 public class PlayerDao {
     
@@ -297,6 +298,59 @@ public class PlayerDao {
     }
 
     /**
+     * Update current badge
+     *
+     * @param details the player details to save
+     */
+    public static void saveCurrentBadge(PlayerDetails details) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET badge = ?, badge_active = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setString(1, details.getCurrentBadge());
+            preparedStatement.setBoolean(2, details.getShowBadge());
+            preparedStatement.setInt(3, details.getId());
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    public static List<String> getBadges(int userId) {
+        List<String> badges = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet row = null;
+
+        try {
+            conn = Storage.getStorage().getConnection();
+            // TODO: complex join where it also loads the badges for rank
+            stmt = Storage.getStorage().prepare("SELECT badge FROM users_badges WHERE user_id = ?", conn);
+            stmt.setInt(1, userId);
+            row = stmt.executeQuery();
+
+            while (row.next()) {
+                badges.add(row.getString("badge"));
+            }
+
+        } catch (Exception err) {
+            Storage.logError(err);
+        } finally {
+            Storage.closeSilently(row);
+            Storage.closeSilently(stmt);
+            Storage.closeSilently(conn);
+        }
+
+        return badges;
+    }
+
+    /**
      * Fill player data
      *
      * @param details the details
@@ -315,6 +369,6 @@ public class PlayerDao {
                 row.getString("motto"), row.getString("console_motto"), row.getString("sex"),
                 row.getInt("tickets"), row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
-                row.getBoolean("badge_active"), row.getBoolean("allow_stalking"));
+                row.getBoolean("badge_active"), PlayerDao.getBadges(row.getInt("id")), row.getBoolean("allow_stalking"));
     }
 }
