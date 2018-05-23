@@ -48,11 +48,9 @@ public class RoomEntityManager {
     public <T extends Entity> List<T> getEntitiesByClass(Class<T> entityClass) {
         List<T> entities = new ArrayList<>();
 
-        synchronized (this.room.getEntities()) {
-            for (Entity entity : this.room.getEntities()) {
-                if (entity.getClass().isAssignableFrom(entityClass)) {
-                    entities.add(entityClass.cast(entity));
-                }
+        for (Entity entity : this.room.getEntities()) {
+            if (entity.getClass().isAssignableFrom(entityClass)) {
+                entities.add(entityClass.cast(entity));
             }
         }
 
@@ -65,11 +63,9 @@ public class RoomEntityManager {
      * @return the entity, if successful, else null
      */
     private Entity getEntityByInstanceId(int instanceId) {
-        synchronized (this.room.getEntities()) {
-            for (Entity entity : this.room.getEntities()) {
-                if (entity.getRoomUser().getInstanceId() == instanceId) {
-                    return entity;
-                }
+        for (Entity entity : this.room.getEntities()) {
+            if (entity.getRoomUser().getInstanceId() == instanceId) {
+                return entity;
             }
         }
 
@@ -102,7 +98,7 @@ public class RoomEntityManager {
         }
 
         this.room.getEntities().add(entity);
-        this.room.getData().setVisitorsNow(this.room.getEntities().size());
+        this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.createInstanceId());
@@ -156,10 +152,10 @@ public class RoomEntityManager {
         }
 
         this.room.getEntities().remove(entity);
-        this.room.getData().setVisitorsNow(this.room.getEntities().size());
+        this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         this.room.send(new LOGOUT(entity.getRoomUser().getInstanceId()));
-        this.room.dispose(true);
+        this.room.dispose(false);
 
         entity.getRoomUser().reset();
 
