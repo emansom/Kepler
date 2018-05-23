@@ -12,7 +12,6 @@
 gradlew
 gradlew.bat
 run.bat
-settings.gradle
 
 config.ini
 locale.ini
