@@ -52,6 +52,21 @@ public class CatalogueManager {
         return null;
     }
 
+    /**
+     * Get an item by it's sale code.
+     *
+     * @param saleCode the item sale code identifier
+     * @return the item, if successful
+     */
+    public CatalogueItem getCatalogueItem(String saleCode) {
+        for (CatalogueItem catalogueItem : this.catalogueItemList) {
+            if (catalogueItem.getSaleCode().equals(saleCode)) {
+                return catalogueItem;
+            }
+        }
+
+        return null;
+    }
 
     /**
      * Get a list of items for the catalogue page.
@@ -101,7 +116,4 @@ public class CatalogueManager {
 
         return instance;
     }
-
-
-
 }

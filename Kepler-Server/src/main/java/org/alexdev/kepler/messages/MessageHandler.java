@@ -3,9 +3,11 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.inventory.GETSTRIP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
 import org.alexdev.kepler.messages.incoming.catalogue.GET_ALIAS_LIST;
+import org.alexdev.kepler.messages.incoming.catalogue.GRPC;
 import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
@@ -42,10 +44,12 @@ public class MessageHandler {
         registerRoomSettingsPackets();
         registerMessengerPackets();
         registerCataloguePackets();
+        registerInventoryPackets();
         //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
     }
+
     /**
      * Register handshake packets.
      */
@@ -145,7 +149,15 @@ public class MessageHandler {
     private void registerCataloguePackets() {
         registerEvent(101, new GCIX());
         registerEvent(102, new GCAP());
+        registerEvent(100, new GRPC());
         registerEvent(215, new GET_ALIAS_LIST());
+    }
+
+    /**
+     * Register inventory packets.
+     */
+    private void registerInventoryPackets() {
+        registerEvent(65, new GETSTRIP());
     }
 
     /**
