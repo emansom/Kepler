@@ -55,7 +55,7 @@ public class GRPC implements MessageEvent {
         player.send(new CREDIT_BALANCE(player.getDetails()));
 
         PlayerDao.saveCurrency(player.getDetails());
-        player.getInventory().getView("new");
+        player.getInventory().getView("last");
     }
 
     private void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) {
