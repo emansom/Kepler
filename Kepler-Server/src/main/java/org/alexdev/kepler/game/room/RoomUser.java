@@ -77,7 +77,7 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
-        System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
+        //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
         LinkedList<Position> path = Pathfinder.makePath(this.entity);
 
