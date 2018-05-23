@@ -67,8 +67,37 @@ public class PoolHandler {
                 goal = new Position(30, 12);
             }
 
-            if (warp != null && goal != null) {
+            if (warp != null) {
                 warpSwim(item, entity, warp, goal, false);
+            }
+        }
+
+        if (item.getDefinition().getSprite().equals("poolExit")) {
+            Position warp = null;
+            Position goal = null;
+
+            if (item.getPosition().getX() == 21 && item.getPosition().getY() == 28) {
+                warp = new Position(20, 28);
+                goal = new Position(19, 28);
+            }
+
+            if (item.getPosition().getX() == 17 && item.getPosition().getY() == 22) {
+                warp = new Position(17, 21);
+                goal = new Position(17, 20);
+            }
+
+            if (item.getPosition().getX() == 31 && item.getPosition().getY() == 11) {
+                warp = new Position(31, 10);
+                goal = new Position(31, 9);
+            }
+
+            if (item.getPosition().getX() == 20 && item.getPosition().getY() == 19) {
+                warp = new Position(19, 19);
+                goal = new Position(18, 19);
+            }
+
+            if (warp != null) {
+                warpSwim(item, entity, warp, goal, true);
             }
         }
     }
@@ -87,10 +116,14 @@ public class PoolHandler {
 
         //roomUser.setWalking(false);
         roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp.getX(), warp.getY()).getTileHeight()));
+
+        roomUser.getPath().clear();
+        roomUser.getPath().add(goal);
+
         roomUser.setWalking(true);
 
         item.showProgram("");
-        roomUser.walkTo(goal.getX(), goal.getY());
+        //roomUser.walkTo(goal.getX(), goal.getY());
     }
 
     public static void exitBooth(Player player) {

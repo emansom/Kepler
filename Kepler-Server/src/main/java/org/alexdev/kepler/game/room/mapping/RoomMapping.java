@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.mapping;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -98,11 +99,6 @@ public class RoomMapping {
         Item toItem = toTile.getHighestItem();
 
         if (fromItem != null) {
-            if (fromItem.getDefinition().getSprite().equals("poolEnter") ||
-                fromItem.getDefinition().getSprite().equals("poolLeave")) {
-                return entity.getDetails().getPoolFigure().length() > 0;
-            }
-
             if (toItem != null) {
                 if (entity.getRoomUser().getRoom().getData().getModelId().equals("pool_b")) {
                     if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
@@ -114,6 +110,22 @@ public class RoomMapping {
         }
 
         if (toItem != null) {
+            if (toItem.getDefinition().getSprite().equals("poolEnter") ||
+                toItem.getDefinition().getSprite().equals("poolLeave")) {
+
+                return entity.getDetails().getPoolFigure().length() > 0;
+            }
+
+            if (entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
+                toItem.getDefinition().getSprite().equals("poolEnter")) {
+                return false;
+            }
+
+            if (!entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
+                toItem.getDefinition().getSprite().equals("poolExit")) {
+                return false;
+            }
+
             if (toItem.getDefinition().getSprite().equals("poolBooth") ||
                 toItem.getDefinition().getSprite().equals("poolLift")) {
 
