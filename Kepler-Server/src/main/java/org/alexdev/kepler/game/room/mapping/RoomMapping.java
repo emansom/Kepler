@@ -87,6 +87,11 @@ public class RoomMapping {
         }
     }
 
+    /**
+     * Add a specific item to the room map
+     *
+     * @param item the item to add
+     */
     public void addItem(Item item) {
         item.setRoomId(this.room.getId());
         this.room.getItems().add(item);
@@ -103,6 +108,13 @@ public class RoomMapping {
         ItemDao.updateItem(item);
     }
 
+    /**
+     * Move an item, will regenerate the map if the item is a floor item.
+     *
+     * @param item the item that is moving
+     * @param isRotation whether it's just rotation or not
+     *        (don't regenerate map or adjust position if it's just a rotation)
+     */
     public void moveItem(Item item, boolean isRotation, Position oldPosition) {
         item.setRoomId(this.room.getId());
 
@@ -116,6 +128,11 @@ public class RoomMapping {
         ItemDao.updateItem(item);
     }
 
+    /**
+     * Remove an item from the room.
+     *
+     * @param item the item that is being removed
+     */
     public void removeItem(Item item) {
         item.setOwnerId(this.room.getData().getOwnerId());
         this.room.getItems().remove(item);
@@ -135,7 +152,12 @@ public class RoomMapping {
 
         ItemDao.updateItem(item);
     }
-
+    /**
+     * Handle item adjustment.
+     *
+     * @param item the item
+     * @param isRotation the rotation only
+     */
     private void handleItemAdjustment(Item item, boolean isRotation) {
         RoomTile tile = this.getTile(item.getPosition().getX(), item.getPosition().getY());
 
