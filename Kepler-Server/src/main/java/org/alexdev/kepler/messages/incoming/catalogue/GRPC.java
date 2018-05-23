@@ -66,7 +66,7 @@ public class GRPC implements MessageEvent {
                 customData = extraData;
             } else {
                 if (specialSpriteId > 0) {
-                    customData = String.valueOf(extraData);
+                    customData = String.valueOf(specialSpriteId);
                 }
             }
 
