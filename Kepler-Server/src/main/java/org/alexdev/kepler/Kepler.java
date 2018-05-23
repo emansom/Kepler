@@ -1,7 +1,6 @@
 package org.alexdev.kepler;
 
 import io.netty.util.ResourceLeakDetector;
-import org.alexdev.kepler.console.ConsoleReader;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
@@ -18,14 +17,12 @@ import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.Configuration;
 import org.alexdev.kepler.util.DateUtil;
-import org.alexdev.kepler.util.config.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;
 import java.net.InetAddress;
-import java.util.List;
 
 public class Kepler {
 

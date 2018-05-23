@@ -2,8 +2,6 @@ package org.alexdev.kepler.game.commands;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.util.config.Configuration;
-import org.alexdev.kepler.util.config.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
