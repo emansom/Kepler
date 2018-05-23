@@ -10,6 +10,7 @@ import org.alexdev.kepler.util.StringUtil;
 
 public class Item {
     private int id;
+    private int ownerId;
     private ItemDefinition definition;
     private int definitionId;
     private Position position;
@@ -130,6 +131,14 @@ public class Item {
         this.id = id;
     }
 
+    public int getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(int ownerId) {
+        this.ownerId = ownerId;
+    }
+
     public ItemDefinition getDefinition() {
         return definition;
     }
@@ -144,6 +153,14 @@ public class Item {
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public String getWallPosition() {
+        return wallPosition;
+    }
+
+    public void setWallPosition(String wallPosition) {
+        this.wallPosition = wallPosition;
     }
 
     public boolean hasExtraParameter() {
@@ -189,5 +206,6 @@ public class Item {
     public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
+
 }
 

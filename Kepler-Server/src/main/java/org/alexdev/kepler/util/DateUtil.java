@@ -18,6 +18,21 @@ public class DateUtil {
     }
 
     /**
+     * Returns the current date as "dd-MM-yyyy"
+     * @return the date as string
+     */
+    public static String getShortDate() {
+        try {
+            Date date = new Date();
+            return new SimpleDateFormat("dd-MM-yyyy").format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
      * Gets the current formatted date as string.
      *
      * @return the date as string

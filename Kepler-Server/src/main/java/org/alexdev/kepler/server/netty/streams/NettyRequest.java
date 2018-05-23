@@ -96,7 +96,7 @@ public class NettyRequest {
         String consoleText = this.buffer.toString(Charset.defaultCharset());
 
         for (int i = 0; i < 14; i++) {
-            consoleText = consoleText.replace(Character.toString((char)i), "[" + i + "]");
+            consoleText = consoleText.replace(Character.toString((char)i), "{" + i + "}");
         }
 
         return this.header + consoleText;

@@ -5,6 +5,7 @@ import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.inventory.Inventory;
 import org.alexdev.kepler.game.messenger.Messenger;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.Room;
@@ -27,6 +28,7 @@ public class Player extends Entity {
     private PlayerDetails details;
     private RoomUser roomUser;
     private Messenger messenger;
+    private Inventory inventory;
 
     private boolean loggedIn;
     private boolean pingOK;
@@ -52,7 +54,9 @@ public class Player extends Entity {
 
         this.loggedIn = true;
         this.pingOK = true;
+
         this.messenger = new Messenger(this);
+        this.inventory = new Inventory(this);
 
         this.send(new LOGIN());
         this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
@@ -104,11 +108,20 @@ public class Player extends Entity {
         return this.roomUser;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
+
     @Override
     public EntityType getType() {
         return EntityType.PLAYER;
     }
 
+    /**
+     * Get the player logger.
+     *
+     * @return the logger
+     */
     public Logger getLogger() {
         return this.log;
     }
