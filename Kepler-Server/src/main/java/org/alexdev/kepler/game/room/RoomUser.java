@@ -146,7 +146,9 @@ public class RoomUser {
                 needsUpdate = true;
             }
 
-            if (item.getDefinition().getSprite().equals("poolBooth")) {
+            if (item.getDefinition().getSprite().equals("poolBooth") ||
+                item.getDefinition().getSprite().equals("poolExit") ||
+                item.getDefinition().getSprite().equals("poolEnter")) {
                 PoolHandler.interact(item, this.entity);
             }
         }

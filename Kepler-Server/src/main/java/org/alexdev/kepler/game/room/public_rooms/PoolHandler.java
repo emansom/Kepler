@@ -1,10 +1,14 @@
 package org.alexdev.kepler.game.room.public_rooms;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
@@ -43,6 +47,50 @@ public class PoolHandler {
             player.getRoomUser().setWalkingAllowed(false);
             player.send(new OPEN_UIMAKOPPI());
         }
+
+        if (item.getDefinition().getSprite().equals("poolEnter")) {
+            Position warp = null;
+            Position goal = null;
+
+            if (item.getPosition().getX() == 20 && item.getPosition().getY() == 28) {
+                warp = new Position(21, 28);
+                goal = new Position(22, 28);
+            }
+
+            if (item.getPosition().getX() == 17 && item.getPosition().getY() == 21) {
+                warp = new Position(16, 22);
+                goal = new Position(16, 23);
+            }
+
+            if (item.getPosition().getX() == 31 && item.getPosition().getY() == 10) {
+                warp = new Position(30, 11);
+                goal = new Position(30, 12);
+            }
+
+            if (warp != null && goal != null) {
+                warpSwim(item, entity, warp, goal, false);
+            }
+        }
+    }
+
+    private static void warpSwim(Item item, Entity entity, Position warp, Position goal, boolean exit) {
+        RoomUser roomUser = entity.getRoomUser();
+        Room room = roomUser.getRoom();
+
+        if (exit) {
+            roomUser.removeStatus(EntityStatus.SWIM);
+        } else {
+            roomUser.setStatus(EntityStatus.SWIM, "");
+        }
+
+        System.out.println("Walk to: " + warp);
+
+        //roomUser.setWalking(false);
+        roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp.getX(), warp.getY()).getTileHeight()));
+        roomUser.setWalking(true);
+
+        item.showProgram("");
+        roomUser.walkTo(goal.getX(), goal.getY());
     }
 
     public static void exitBooth(Player player) {
