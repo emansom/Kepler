@@ -125,6 +125,97 @@ public class ItemDao {
     }
 
     /**
+     * Get the room list of items.
+     *
+     * @param roomId the id of the user to get the inventory for
+     * @return the list of items
+     */
+    public static List<Item> getRoomItems(int roomId) {
+        List<Item> items = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM items WHERE room_id = ?", sqlConnection);
+            preparedStatement.setInt(1, roomId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Item item = new Item();
+                fill(item, resultSet);
+                items.add(item);
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return items;
+    }
+
+    /**
+     * Delete item by item id.
+     *
+     * @param itemId the id of the item to delete it
+     */
+    public static void deleteItem(int itemId) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM items WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, itemId);
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
+     * Update item by item instance.
+     *
+     * @param item the instance of the item to update it
+     */
+    public static void updateItem(Item item) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE items SET user_id = ?, room_id = ?, definition_id = ?, x = ?, y = ?, z = ?, rotation = ?, wall_position = ?, custom_data = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, item.getOwnerId());
+            preparedStatement.setInt(2, item.getRoomId());
+            preparedStatement.setInt(3, item.getDefinition().getId());
+            preparedStatement.setInt(4, item.getPosition().getX());
+            preparedStatement.setInt(5, item.getPosition().getY());
+            preparedStatement.setDouble(6, item.getPosition().getZ());
+            preparedStatement.setInt(7, item.getPosition().getRotation());
+            preparedStatement.setString(8, item.getWallPosition());
+            preparedStatement.setString(9, item.getCustomData());
+            preparedStatement.setInt(10, item.getId());
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
      * Fill item with data retrieved from the SQL query.
      *
      * @param item the item to fill data for

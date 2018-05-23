@@ -16,6 +16,7 @@ public class G_STAT implements MessageEvent {
         }
 
         Room room = player.getRoomUser().getRoom();
+        room.refreshRights(player);
 
         player.send(new USER_STATUSES(room.getEntities()));
         player.getRoomUser().setNeedsUpdate(true);

@@ -61,7 +61,6 @@ public class CATALOGUE_PAGE extends MessageComposer {
                 response.writeDelimeter("", (char) 9);
             }
 
-
             if (item.isPackage()) {
                 response.writeDelimeter(item.getPackages().size(), (char) 9);
 

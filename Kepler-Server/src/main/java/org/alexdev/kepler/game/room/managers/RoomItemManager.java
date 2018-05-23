@@ -23,17 +23,25 @@ public class RoomItemManager {
         this.room = room;
     }
 
+    public Item getById(int itemId) {
+        for (Item item : this.room.getItems()) {
+            if (item.getId() == itemId) {
+                return item;
+            }
+        }
+
+        return null;
+    }
+
     public List<Item> getPublicItems() {
         List<Item> items = new ArrayList<>();
 
-        synchronized (this.room.getItems()) {
-            for (Item item : this.room.getItems()) {
-                if (!item.getDefinition().getBehaviour().isPublicSpaceObject()) {
-                    continue;
-                }
-
-                items.add(item);
+        for (Item item : this.room.getItems()) {
+            if (!item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                continue;
             }
+
+            items.add(item);
         }
 
         return items;
@@ -42,18 +50,16 @@ public class RoomItemManager {
     public List<Item> getFloorItems() {
         List<Item> items = new ArrayList<>();
 
-        synchronized (this.room.getItems()) {
-            for (Item item : this.room.getItems()) {
-                if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
-                    continue;
-                }
-
-                if (item.getDefinition().getBehaviour().isWallItem()) {
-                    continue;
-                }
-
-                items.add(item);
+        for (Item item : this.room.getItems()) {
+            if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                continue;
             }
+
+            if (item.getDefinition().getBehaviour().isWallItem()) {
+                continue;
+            }
+
+            items.add(item);
         }
 
         return items;
@@ -62,18 +68,16 @@ public class RoomItemManager {
     public List<Item> getWallItems() {
         List<Item> items = new ArrayList<>();
 
-        synchronized (this.room.getItems()) {
-            for (Item item : this.room.getItems()) {
-                if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
-                    continue;
-                }
-
-                if (!item.getDefinition().getBehaviour().isWallItem()) {
-                    continue;
-                }
-
-                items.add(item);
+        for (Item item : this.room.getItems()) {
+            if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                continue;
             }
+
+            if (!item.getDefinition().getBehaviour().isWallItem()) {
+                continue;
+            }
+
+            items.add(item);
         }
 
         return items;

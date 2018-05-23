@@ -86,39 +86,42 @@ public class Item {
      * @param response the response to serialise to
      */
     public void serialise(NettyResponse response) {
-        if (!this.definition.getBehaviour().isPublicSpaceObject()) {
-            response.writeString(this.id);
+        if (this.definition.getBehaviour().isPublicSpaceObject()) {
+            response.writeDelimeter(this.customData, ' ');
             response.writeString(this.definition.getSprite());
-            response.writeInt(this.position.getX());
-            response.writeInt(this.position.getY());
-            response.writeInt(this.definition.getLength());
-            response.writeInt(this.definition.getWidth());
-            response.writeInt(this.position.getRotation());
-            response.writeString(StringUtil.format(this.position.getZ()));
-            response.writeString(this.definition.getColour());
-            response.writeString("");
-            response.writeInt(0);
-            response.writeString(this.customData);
+            response.writeDelimeter(this.position.getX(), ' ');
+            response.writeDelimeter(this.position.getY(), ' ');
+            response.writeDelimeter((int) this.position.getZ(), ' ');
+            response.write(this.position.getRotation());
+
+            if (this.hasExtraParameter) {
+                response.write(" 2");
+            }
+
+            response.write(Character.toString((char) 13));
         } else {
             if (this.definition.getBehaviour().isWallItem()) {
-                response.writeDelimeter(this.id, (char)9);
-                response.writeDelimeter(this.definition.getSprite(), (char)9);
-                response.writeDelimeter(" ", (char)9);
-                response.writeDelimeter(this.wallPosition, (char)9);
-                response.write(this.customData);
-            } else {
-                response.writeDelimeter(this.customData, ' ');
-                response.writeString(this.definition.getSprite());
-                response.writeDelimeter(this.position.getX(), ' ');
-                response.writeDelimeter(this.position.getY(), ' ');
-                response.writeDelimeter((int) this.position.getZ(), ' ');
-                response.write(this.position.getRotation());
+                response.writeDelimeter(this.id, (char) 9);
+                response.writeDelimeter(this.definition.getSprite(), (char) 9);
+                response.writeDelimeter(" ", (char) 9);
+                response.writeDelimeter(this.wallPosition, (char) 9);
 
-                if (this.hasExtraParameter) {
-                    response.write(" 2");
+                if (this.customData.length() > 0) {
+                    response.write(this.customData);
                 }
-
-                response.write(Character.toString((char) 13));
+            } else {
+                response.writeString(this.id);
+                response.writeString(this.definition.getSprite());
+                response.writeInt(this.position.getX());
+                response.writeInt(this.position.getY());
+                response.writeInt(this.definition.getLength());
+                response.writeInt(this.definition.getWidth());
+                response.writeInt(this.position.getRotation());
+                response.writeString(StringUtil.format(this.position.getZ()));
+                response.writeString(this.definition.getColour());
+                response.writeString("");
+                response.writeInt(0);
+                response.writeString(this.customData);
             }
         }
     }

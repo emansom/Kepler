@@ -12,6 +12,9 @@ import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
+import org.alexdev.kepler.messages.incoming.rooms.items.ADDSTRIPITEM;
+import org.alexdev.kepler.messages.incoming.rooms.items.MOVESTUFF;
+import org.alexdev.kepler.messages.incoming.rooms.items.PLACESTUFF;
 import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
@@ -42,6 +45,7 @@ public class MessageHandler {
         registerRoomUserPackets();
         registerRoomPoolPackets();
         registerRoomSettingsPackets();
+        registerRoomItemPackets();
         registerMessengerPackets();
         registerCataloguePackets();
         registerInventoryPackets();
@@ -118,6 +122,15 @@ public class MessageHandler {
     }
 
     /**
+     * Register room item packets.
+     */
+    private void registerRoomItemPackets() {
+        registerEvent(90, new PLACESTUFF());
+        registerEvent(73, new MOVESTUFF());
+        registerEvent(67, new ADDSTRIPITEM());
+    }
+
+    /**
      * Register room pool packets.
      */
     private void registerRoomPoolPackets() {
@@ -158,6 +171,7 @@ public class MessageHandler {
      */
     private void registerInventoryPackets() {
         registerEvent(65, new GETSTRIP());
+        registerEvent(66, new FLATPROPBYITEM());
     }
 
     /**

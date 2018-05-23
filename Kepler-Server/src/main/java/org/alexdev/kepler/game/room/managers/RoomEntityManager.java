@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.managers;
 
+import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -7,6 +8,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
@@ -122,6 +124,14 @@ public class RoomEntityManager {
         player.send(new ROOM_URL());
         player.send(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
 
+        if (this.room.getData().getWallpaper() > 0) {
+            player.send(new FLATPROPERTY("wallpaper", this.room.getData().getWallpaper()));
+        }
+
+        if (this.room.getData().getFloor() > 0) {
+            player.send(new FLATPROPERTY("floor", this.room.getData().getFloor()));
+        }
+
         for (Item item : this.room.getItems()) {
             if (item.getCurrentProgramValue().length() > 0) {
                 player.send(new SHOWPROGRAM(item.getCurrentProgram(), item.getCurrentProgramValue()));
@@ -133,6 +143,10 @@ public class RoomEntityManager {
      * Setup the room initially for room entry.
      */
     private void initialiseRoom() {
+        if (!this.room.isPublicRoom()) {
+            this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
+        }
+
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();
     }

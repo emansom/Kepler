@@ -29,10 +29,19 @@ public class ItemDefinition {
         this.sprite = sprite;
         this.behaviourData = behaviourData;
         this.behaviour = ItemBehaviour.parse(this.behaviourData);
+        this.stackHeight = topHeight;
         this.topHeight = topHeight;
         this.length = length;
         this.width = width;
         this.colour = colour;
+
+        if (!this.behaviour.isCanStackOnTop()) {
+            this.stackHeight = 0;
+        }
+
+        if (this.stackHeight == 0) {
+            this.stackHeight = 0.001;
+        }
     }
 
     /**

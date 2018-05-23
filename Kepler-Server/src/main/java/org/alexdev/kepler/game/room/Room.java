@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -8,10 +9,11 @@ import org.alexdev.kepler.game.room.managers.RoomEntityManager;
 import org.alexdev.kepler.game.room.managers.RoomItemManager;
 import org.alexdev.kepler.game.room.managers.RoomTaskManager;
 import org.alexdev.kepler.game.room.mapping.RoomMapping;
+import org.alexdev.kepler.messages.incoming.rooms.user.YOUAROWNER;
+import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARECONTROLLER;
 import org.alexdev.kepler.messages.types.MessageComposer;
+import org.alexdev.kepler.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -57,6 +59,49 @@ public class Room {
     }
 
     /**
+     * Get if the player has rights.
+     *
+     * @param userId the user id to check if they have rights
+     * @return true, if successful
+     */
+    public boolean hasRights(int userId) {
+        if (this.isOwner(userId)) {
+            return true;
+        }
+
+        if (this.roomData.allowSuperUsers()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Refresh the room rights for the user.
+     *
+     * @param player the player to refresh the rights for
+     */
+    public void refreshRights(Player player) {
+        String rightsValue = "";
+
+        if (hasRights(player.getDetails().getId())) {
+            player.send(new YOUARECONTROLLER());
+        }
+
+        if (isOwner(player.getDetails().getId())) {
+            player.send(new YOUAROWNER());
+            rightsValue = " useradmin";
+        }
+
+        player.getRoomUser().removeStatus(EntityStatus.FLAT_CONTROL);
+
+        if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId())) {
+            player.getRoomUser().setStatus(EntityStatus.FLAT_CONTROL, rightsValue);
+            player.getRoomUser().setNeedsUpdate(true);
+        }
+    }
+
+    /**
      * Dispose room, or at least try to when
      * the stars align allowing it to be removed from the manager.
      *
@@ -73,7 +118,7 @@ public class Room {
             return;
         }
 
-        // Clear items here
+        this.items.clear();
 
         if (!isForced) {
             if (PlayerManager.getInstance().getPlayerById(this.roomData.getOwnerId()) != null) { // Don't remove completely if owner is online

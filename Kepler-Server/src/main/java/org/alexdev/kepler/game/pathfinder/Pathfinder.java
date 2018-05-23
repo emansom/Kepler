@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 
 public class Pathfinder {
 
@@ -24,7 +28,91 @@ public class Pathfinder {
             new Position(0, 1),
             new Position(-1, 0)
     };
-    
+
+    /**
+     * Method for the pathfinder to check if the tile next to the current tile is a valid step.
+     *
+     * @param entity the entity walking
+     * @param current the current tile
+     * @param tmp the temporary tile around the current tile to check
+     * @param isFinalMove if the move was final
+     * @return true, if a valid step
+     */
+    public static boolean isValidStep(Room room, Entity entity, Position current, Position tmp, boolean isFinalMove) {
+        if (!room.getMapping().isValidTile(entity, new Position(current.getX(), current.getY()))) {
+            return false;
+        }
+
+        if (!room.getMapping().isValidTile(entity, new Position(tmp.getX(), tmp.getY()))) {
+            return false;
+        }
+
+        RoomTile fromTile = room.getMapping().getTile(current.getX(), current.getY());
+        RoomTile toTile = room.getMapping().getTile(tmp.getX(), tmp.getY());
+
+        double oldHeight = fromTile.getTileHeight();
+        double newHeight = toTile.getTileHeight();
+
+        if (oldHeight - 4 >= newHeight) {
+            return false;
+        }
+
+        if (oldHeight + 1.5 <= newHeight) {
+            return false;
+        }
+
+        Item fromItem = fromTile.getHighestItem();
+        Item toItem = toTile.getHighestItem();
+
+        if (fromItem != null && toItem != null) {
+            if (entity.getRoomUser().getRoom().getData().getModelId().equals("pool_b")) {
+                if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
+                        toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                    return true;
+                }
+            }
+        }
+
+        if (toItem != null) {
+            if (toItem.getDefinition().getSprite().equals("poolEnter") ||
+                    toItem.getDefinition().getSprite().equals("poolLeave")) {
+                return entity.getDetails().getPoolFigure().length() > 0;
+            }
+
+            if (entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
+                    toItem.getDefinition().getSprite().equals("poolEnter")) {
+                return false;
+            }
+
+            if (!entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
+                    toItem.getDefinition().getSprite().equals("poolExit")) {
+                return false;
+            }
+
+            if (toItem.getDefinition().getSprite().equals("poolBooth") ||
+                    toItem.getDefinition().getSprite().equals("poolLift")) {
+
+                if (toItem.getCurrentProgramValue().equals("close")) {
+                    return false;
+                } else {
+                    return !toItem.getDefinition().getSprite().equals("poolLift") || entity.getDetails().getPoolFigure().length() > 0;
+                }
+            }
+
+            if (entity.getRoomUser().getRoom().getData().getModel().getModelName().equals("pool_b") &&
+                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
+
+                if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
+                    return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     /**
      * Make path.
      *
@@ -45,7 +133,7 @@ public class Pathfinder {
      * @param y the y coord to move from
      * @return the linked list
      */
-    public static LinkedList<Position> makePath(Entity entity, int x, int y) {
+    private static LinkedList<Position> makePath(Entity entity, int x, int y) {
         if (!entity.getRoom().getMapping().isValidTile(entity, new Position(x, y))) {
             return new LinkedList<>();
         }
@@ -99,7 +187,7 @@ public class Pathfinder {
 
                 boolean isFinalMove = (tmp.getX() == end.getX() && tmp.getY() == end.getY());
 
-                if (entity.getRoomUser().getRoom().getMapping().isValidStep(entity, new Position(current.getPosition().getX(), current.getPosition().getY(), current.getPosition().getZ()), tmp, isFinalMove)) {
+                if (isValidStep(entity.getRoomUser().getRoom(), entity, new Position(current.getPosition().getX(), current.getPosition().getY(), current.getPosition().getZ()), tmp, isFinalMove)) {
                     if (map[tmp.getX()][tmp.getY()] == null) {
                         node = new PathfinderNode(tmp);
                         map[tmp.getX()][tmp.getY()] = node;
