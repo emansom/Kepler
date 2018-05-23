@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.commands;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.texts.TextsManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,9 +107,9 @@ public class CommandManager {
             if (args.length < cmd.getArguments().length) {
                 if (entity instanceof Player) {
                     Player player = (Player)entity;
-                    player.sendMessage(Locale.getInstance().getEntry("player.commands.no.args"));
+                    player.sendMessage(TextsManager.getInstance().getValue("player.commands.no.args"));
                 } else {
-                    System.out.println(Locale.getInstance().getEntry("player.commands.no.args"));
+                    System.out.println(TextsManager.getInstance().getValue("player.commands.no.args"));
                 }
                 return;
             }

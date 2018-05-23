@@ -16,6 +16,7 @@ import java.util.Map;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.SubnodeConfiguration;
 import org.apache.commons.configuration2.ex.ConfigurationException;
+import org.apache.log4j.PropertyConfigurator;
 
 public class Configuration {
     private static Map<String, String> config = new ConcurrentHashMap<>();
@@ -46,6 +47,7 @@ public class Configuration {
 
     public static void load(String configPath) throws IOError, IOException, ConfigurationException {
         setDefaults();
+        checkLog4j();
 
         Path path = Paths.get(configPath);
 
@@ -78,55 +80,61 @@ public class Configuration {
 
 
 
-//	/**
-//     * Create the configuration files for this application, with the default values. Will throw an
-//     * exception if it could not create such files.
-//     *
-//     * @throws IOException
-//     */
-//    private void checkLog4j() throws FileNotFoundException {
-//
-//    	String output = "log4j.rootLogger=INFO, stdout\n" +
-//                "log4j.appender.stdout.threshold=info\n" +
-//                "log4j.appender.stdout=org.apache.log4j.ConsoleAppender\n" +
-//                "log4j.appender.stdout.Target=System.out\n" +
-//                "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout\n" +
-//                "log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5p [%c] - %m%n\n" +
-//                "\n" +
-//                "# Create new logger information for error\n" +
-//                "log4j.logger.ErrorLogger=ERROR, error, FILE\n" +
-//                "log4j.additivity.ErrorLogger=false\n" +
-//                "\n" +
-//                "# Set settings for the error logger\n" +
-//                "log4j.appender.error=org.apache.log4j.ConsoleAppender\n" +
-//                "log4j.appender.error.Target=System.err\n" +
-//                "log4j.appender.error.layout=org.apache.log4j.PatternLayout\n" +
-//                "log4j.appender.error.layout.ConversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5p [%c] - %m%n\n" +
-//                "\n" +
-//                "# Define the file appender\n" +
-//                "log4j.appender.FILE=org.apache.log4j.FileAppender\n" +
-//                "log4j.appender.FILE.File=error.log\n" +
-//                "log4j.appender.FILE.ImmediateFlush=true\n" +
-//                "log4j.appender.FILE.Threshold=debug\n" +
-//                "log4j.appender.FILE.Append=false\n" +
-//                "log4j.appender.FILE.layout=org.apache.log4j.PatternLayout\n" +
-//                "log4j.appender.FILE.layout.conversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} - [%c] - %m%n\n";
-//
-//    	File loggingConfig = new File("log4j.properties");
-//
-//    	if (!loggingConfig.exists()) {
-//            PrintWriter writer = new PrintWriter(loggingConfig.getAbsoluteFile());
-//            writer.write(output);
-//            writer.flush();
-//            writer.close();
-//    	}
-//
-//    	// Change the path where the logger property should be read from
-//    	PropertyConfigurator.configure(loggingConfig.getAbsolutePath());
-//
-//    	//...after this, we should be able to use Log4j (yay!)
-//        // (hopefully, anyways, if no one operating this server screwed something up).
-//	}
+/**
+   * Create the configuration files for this application, with the default values. Will throw an
+   * exception if it could not create such files.
+   *
+     * @throws IOException
+    */
+   private static void checkLog4j() throws FileNotFoundException {
+
+    	String output = "log4j.rootLogger=INFO, stdout, SERVER_LOG\n" +
+                "log4j.appender.stdout.threshold=info\n" +
+                "log4j.appender.stdout=org.apache.log4j.ConsoleAppender\n" +
+                "log4j.appender.stdout.Target=System.out\n" +
+                "log4j.appender.stdout.layout=org.apache.log4j.PatternLayout\n" +
+                "log4j.appender.stdout.layout.ConversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5p [%c] - %m%n\n" +
+                "\n" +
+                "# Create new logger information for error\n" +
+                "log4j.logger.ErrorLogger=ERROR, error, ERROR_FILE\n" +
+                "log4j.additivity.ErrorLogger=false\n" +
+                "\n" +
+                "# Set settings for the error logger\n" +
+                "log4j.appender.error=org.apache.log4j.ConsoleAppender\n" +
+                "log4j.appender.error.Target=System.err\n" +
+                "log4j.appender.error.layout=org.apache.log4j.PatternLayout\n" +
+                "log4j.appender.error.layout.ConversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} %-5p [%c] - %m%n\n" +
+                "\n" +
+                "# Define the file appender for errors\n" +
+                "log4j.appender.ERROR_FILE=org.apache.log4j.FileAppender\n" +
+                "log4j.appender.ERROR_FILE.File=error.log\n" +
+                "log4j.appender.ERROR_FILE.ImmediateFlush=true\n" +
+                "log4j.appender.ERROR_FILE.Threshold=debug\n" +
+                "log4j.appender.ERROR_FILE.Append=true\n" +
+                "log4j.appender.ERROR_FILE.layout=org.apache.log4j.PatternLayout\n" +
+                "log4j.appender.ERROR_FILE.layout.conversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} - [%c] - %m%n\n" +
+                "\n" +
+                "# Define the file appender for server output\n" +
+                "log4j.appender.SERVER_LOG=org.apache.log4j.FileAppender\n" +
+                "log4j.appender.SERVER_LOG.File=server.log\n" +
+                "log4j.appender.SERVER_LOG.ImmediateFlush=true\n" +
+                "log4j.appender.SERVER_LOG.Threshold=debug\n" +
+                "log4j.appender.SERVER_LOG.Append=true\n" +
+                "log4j.appender.SERVER_LOG.layout=org.apache.log4j.PatternLayout\n" +
+                "log4j.appender.SERVER_LOG.layout.conversionPattern=%d{yyyy-MM-dd'T'HH:mm:ss.SSS} - [%c] - %m%n\n";
+
+    	File loggingConfig = new File("log4j.properties");
+
+    	if (!loggingConfig.exists()) {
+            PrintWriter writer = new PrintWriter(loggingConfig.getAbsoluteFile());
+            writer.write(output);
+            writer.flush();
+            writer.close();
+    	}
+
+    	 //Change the path where the logger property should be read from
+    	PropertyConfigurator.configure(loggingConfig.getAbsolutePath());
+	}
 //
 //	private void writeFileIfNotExist() throws IOException {
 //        File file = new File("kepler.properties");
@@ -181,8 +189,8 @@ public class Configuration {
     /**
      * Get key from configuration and cast to an Boolean
      *
-     * @param key
-     * @return key as boolean
+     * @param key the key to use
+     * @return value as boolean
      */
     public static boolean getBoolean(String key) {
         String val = config.getOrDefault(key, "false");
@@ -195,28 +203,25 @@ public class Configuration {
             return true;
         }
 
-        if (val.equalsIgnoreCase("yes")) {
-            return true;
-        }
+        return val.equalsIgnoreCase("yes");
 
-        return false;
     }
 
     /**
-     * Get key from configuration
+     * Get value from configuration
      *
-     * @param key
-     * @return key
+     * @param key the key to use
+     * @return value
      */
     public static String getString(String key) {
         return config.getOrDefault(key, key);
     }
 
     /**
-     * Get key from configuration and cast to an Integer
+     * Get value from configuration and cast to an Integer
      *
-     * @param key
-     * @return key as int
+     * @param key the key to use
+     * @return value as int
      */
     public static int getInteger(String key) {
         return Integer.parseInt(config.getOrDefault(key, "0"));
