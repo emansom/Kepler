@@ -34,9 +34,9 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
         player.send(new HELLO());
 
-        if (Configuration.getBoolean("log.connections")) {
-            log.info("[{}] Connection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
-        }
+        //if (Configuration.getBoolean("log.connections")) {
+        log.info("[{}] Connection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
+        //}
     }
 
     @Override
@@ -46,9 +46,9 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
         Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
 
-        if (Configuration.getBoolean("log.connections")) {
-            log.info("[{}] Disonnection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
-        }
+        //if (Configuration.getBoolean("log.connections")) {
+        log.info("[{}] Disonnection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
+        //}
 
         player.dispose();
     }

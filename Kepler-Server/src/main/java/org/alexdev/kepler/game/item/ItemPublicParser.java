@@ -72,6 +72,11 @@ public class ItemPublicParser {
                     item.getDefinition().getBehaviour().setPublicSpaceObject(false);
                 }
 
+                if (item.getDefinition().getSprite().equals("poolLift") ||
+                    item.getDefinition().getSprite().equals("poolBooth")) {
+                    item.setCurrentProgramValue("open");
+                }
+
                 items.add(item);
             }
         } catch (IOException e) {

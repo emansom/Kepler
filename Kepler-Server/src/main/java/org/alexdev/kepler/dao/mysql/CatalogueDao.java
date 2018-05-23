@@ -4,7 +4,6 @@ import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.catalogue.CatalogueItem;
 import org.alexdev.kepler.game.catalogue.CataloguePackage;
 import org.alexdev.kepler.game.catalogue.CataloguePage;
-import org.alexdev.kepler.game.item.ItemDefinition;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

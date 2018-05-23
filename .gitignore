@@ -4,22 +4,20 @@
 **.iml
 /gradle/
 /build/
-bin/
+/bin/
 /cmake-build-debug/
+.idea/workspace.xml
+*.jar
 
 gradlew
 gradlew.bat
 run.bat
 
-habbohotel.properties
-game.properties
-kepler.properties
+config.ini
 locale.ini
 log4j.properties
-error.log
-site-config.ini
-Icarus-Web-all.jar
 
-.idea/workspace.xml
-*.jar
+Kepler-Server-all.jar
+
 server.log
+error.log

@@ -1,9 +1,8 @@
 package org.alexdev.kepler.game.catalogue;
 
-import org.alexdev.kepler.game.item.ItemDefinition;
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.texts.TextsManager;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;

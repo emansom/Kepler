@@ -1,7 +1,7 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.game.item.ItemDefinition;
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

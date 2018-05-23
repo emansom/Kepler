@@ -49,7 +49,11 @@ public class RoomData {
         this.password = password;
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
-        this.room.getItems().addAll(this.getModel().getPublicItems());
+
+        for (var item : this.getModel().getPublicItems()) {
+            item.setRoomId(this.id);
+            this.room.getItems().add(item);
+        }
     }
 
     public int getId() {

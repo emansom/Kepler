@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ public class RoomUser {
     private Position nextPosition;
     private Room room;
     private int instanceId;
+    private int authenticateId;
 
     private HashMap<EntityStatus, String> statuses;
     private LinkedList<Position> path;
@@ -41,6 +43,7 @@ public class RoomUser {
         this.isWalking = false;
         this.beingKicked = false;
         this.instanceId = -1;
+        this.authenticateId = -1;
         this.statuses = new HashMap<>();
         this.path = new LinkedList<>();
     }
@@ -74,6 +77,7 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
+        System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
         LinkedList<Position> path = Pathfinder.makePath(this.entity);
 
@@ -95,7 +99,10 @@ public class RoomUser {
 
         if (this.beingKicked) {
             this.room.getEntityManager().leaveRoom(this.entity, true);
+            return;
         }
+
+        this.invokeItem();
     }
 
     /**
@@ -139,6 +146,12 @@ public class RoomUser {
                 this.position.setRotation(item.getPosition().getRotation());
                 this.setStatus(EntityStatus.LAY, " " + StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
+            }
+
+            if (item.getDefinition().getSprite().equals("poolBooth") ||
+                item.getDefinition().getSprite().equals("poolExit") ||
+                item.getDefinition().getSprite().equals("poolEnter")) {
+                PoolHandler.interact(item, this.entity);
             }
         }
 
@@ -288,5 +301,13 @@ public class RoomUser {
 
     public boolean isBeingKicked() {
         return beingKicked;
+    }
+
+    public int getAuthenticateId() {
+        return authenticateId;
+    }
+
+    public void setAuthenticateId(int authenticateId) {
+        this.authenticateId = authenticateId;
     }
 }

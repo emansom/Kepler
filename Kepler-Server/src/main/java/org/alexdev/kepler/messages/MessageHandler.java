@@ -10,6 +10,7 @@ import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
+import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.user.*;
@@ -37,6 +38,7 @@ public class MessageHandler {
         registerNavigatorPackets();
         registerRoomPackets();
         registerRoomUserPackets();
+        registerRoomPoolPackets();
         registerRoomSettingsPackets();
         registerMessengerPackets();
         registerCataloguePackets();
@@ -44,7 +46,6 @@ public class MessageHandler {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
     }
-
     /**
      * Register handshake packets.
      */
@@ -110,6 +111,13 @@ public class MessageHandler {
         registerEvent(153, new SETFLATCAT());
         registerEvent(152, new GETFLATCAT());
         registerEvent(23, new DELETEFLAT());
+    }
+
+    /**
+     * Register room pool packets.
+     */
+    private void registerRoomPoolPackets() {
+        registerEvent(116, new SWIMSUIT());
     }
 
     /**

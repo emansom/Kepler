@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.item;
+package org.alexdev.kepler.game.item.base;
 
 import org.alexdev.kepler.game.texts.TextsManager;
 

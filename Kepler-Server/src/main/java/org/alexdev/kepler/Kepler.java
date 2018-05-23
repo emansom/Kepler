@@ -1,7 +1,6 @@
 package org.alexdev.kepler;
 
 import io.netty.util.ResourceLeakDetector;
-import org.alexdev.kepler.console.ConsoleReader;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
@@ -18,14 +17,12 @@ import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.Configuration;
 import org.alexdev.kepler.util.DateUtil;
-import org.alexdev.kepler.util.config.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.log4j.PropertyConfigurator;
 
 import java.io.File;
 import java.net.InetAddress;
-import java.util.List;
 
 public class Kepler {
 
@@ -44,17 +41,14 @@ public class Kepler {
     public static void main(String[] args) {
         startupTime = DateUtil.getCurrentTimeSeconds();
 
-        File loggingConfig = new File("log4j.properties");
-        PropertyConfigurator.configure(loggingConfig.getAbsolutePath());
-
         try {
             Configuration.load("config.ini");
 
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
 
-            // TODO: The "Doom" ASCII from
-            // http://patorjk.com/software/taag/#p=display&f=Doom&t=Kepler
+            // TODO: The "Standard" ASCII from
+            // http://patorjk.com/software/taag/#p=display&f=Standard&t=Kepler
             // On a grey background with white ASCII text
             // ASCII logo on the left side, contributors and other credits/info on the right side
             // TODO: also a way to disable the fancy headers, as in production it would only fill the logs

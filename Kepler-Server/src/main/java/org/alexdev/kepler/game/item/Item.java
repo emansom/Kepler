@@ -1,17 +1,25 @@
 package org.alexdev.kepler.game.item;
 
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
 
 public class Item {
     private int id;
     private ItemDefinition definition;
+    private int definitionId;
     private Position position;
     private String wallPosition;
     private boolean hasExtraParameter;
-    private String currentProgram;
     private String customData;
+    private int roomId;
+
+    private String currentProgram;
+    private String currentProgramValue;
 
     public Item() {
         this.id = 0;
@@ -19,6 +27,22 @@ public class Item {
         this.position = new Position();
         this.customData = "";
         this.wallPosition = "";
+        this.currentProgram = "";
+        this.currentProgramValue = "";
+    }
+
+    public void showProgram(String value) {
+        if (value == null) {
+            value = "";
+        }
+
+        this.currentProgramValue = value;
+
+        Room room = this.getRoom();
+
+        if (room != null) {
+            room.send(new SHOWPROGRAM(this.currentProgram, this.currentProgramValue));
+        }
     }
 
     /**
@@ -110,6 +134,10 @@ public class Item {
         return definition;
     }
 
+    public void setDefinitionId(int definitionId) {
+        this.definition = ItemManager.getInstance().getDefinition(definitionId);
+    }
+
     public Position getPosition() {
         return position;
     }
@@ -140,6 +168,26 @@ public class Item {
 
     public void setCustomData(String customData) {
         this.customData = customData;
+    }
+
+    public String getCurrentProgramValue() {
+        return currentProgramValue;
+    }
+
+    public void setCurrentProgramValue(String currentProgramValue) {
+        this.currentProgramValue = currentProgramValue;
+    }
+
+    public Room getRoom() {
+        return RoomManager.getInstance().getRoomById(this.roomId);
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 }
 

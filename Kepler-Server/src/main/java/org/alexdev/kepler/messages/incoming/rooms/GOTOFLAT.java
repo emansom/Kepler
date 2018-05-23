@@ -12,6 +12,10 @@ public class GOTOFLAT implements MessageEvent {
     public void handle(Player player, NettyRequest reader) {
         int roomId = Integer.parseInt(reader.contents());
 
+        if (player.getRoomUser().getAuthenticateId() != roomId) {
+            return;
+        }
+
         Room room = RoomManager.getInstance().getRoomById(roomId);
 
         if (room == null) {

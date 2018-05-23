@@ -2,13 +2,17 @@ package org.alexdev.kepler.game.room.managers;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
+import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -110,6 +114,8 @@ public class RoomEntityManager {
                 this.room.getData().getModel().getDoorRotation()
         ));
 
+        entity.getRoomUser().setAuthenticateId(-1);
+
         // From this point onwards we send packets for the user to enter
         if (entity.getType() !=  EntityType.PLAYER) {
             return;
@@ -119,6 +125,12 @@ public class RoomEntityManager {
 
         player.send(new ROOM_URL());
         player.send(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
+
+        for (Item item : this.room.getItems()) {
+            if (item.getCurrentProgramValue().length() > 0) {
+                player.send(new SHOWPROGRAM(item.getCurrentProgram(), item.getCurrentProgramValue()));
+            }
+        }
     }
 
     /**
@@ -137,6 +149,10 @@ public class RoomEntityManager {
     public void leaveRoom(Entity entity, boolean hotelView) {
         if (!this.room.getEntities().contains(entity)) {
             return;
+        }
+
+        if (entity.getType() == EntityType.PLAYER) {
+            PoolHandler.disconnect((Player) entity);
         }
 
         this.room.getEntities().remove(entity);
