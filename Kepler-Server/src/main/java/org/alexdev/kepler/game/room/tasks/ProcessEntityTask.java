@@ -82,6 +82,15 @@ public class ProcessEntityTask implements Runnable {
                 RoomTile previousTile = roomUser.getTile();
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next.getX(), next.getY());
 
+                // Leave room if the tile is the door and we are in a flat
+                var doorX = roomUser.getRoom().getData().getModel().getDoorX();
+                var doorY = roomUser.getRoom().getData().getModel().getDoorY();
+
+                if (next.getX() == doorX && next.getY() == doorY) {
+                    roomUser.getRoom().getEntityManager().leaveRoom(entity, true);
+                    return;
+                }
+
                 //previousTile.removeEntity(entity);
                 //nextTile.addEntity(entity);
 

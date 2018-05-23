@@ -14,7 +14,9 @@ public class GOAWAY implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        player.getRoomUser().setGoingAway(true);
-        player.getRoomUser().walkTo(room.getData().getModel().getDoorX(), room.getData().getModel().getDoorY());
+        var doorX = room.getData().getModel().getDoorX();
+        var doorY = room.getData().getModel().getDoorY();
+
+        player.getRoomUser().walkTo(doorX, doorY);
     }
 }

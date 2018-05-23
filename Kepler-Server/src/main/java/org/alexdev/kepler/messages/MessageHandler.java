@@ -174,7 +174,7 @@ public class MessageHandler {
      */
     public void handleRequest(Player player, NettyRequest message) {
         try {
-            if (Configuration.getInstance().getServerConfig().get("Logging", "log.received.packets", Boolean.class)) {
+            if (Configuration.getBoolean("log.received.packets")) {
                 if (this.messages.containsKey(message.getHeaderId())) {
                     MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
                     player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());

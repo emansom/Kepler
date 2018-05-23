@@ -45,6 +45,7 @@ public class Storage {
             config.addDataSourceProperty("useUnicode","true");
             config.addDataSourceProperty("useSSL","false");
             config.addDataSourceProperty("serverTimezone","UTC");
+            config.addDataSourceProperty("sessionVariables", "sql_mode='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'");
 
             this.ds = new HikariDataSource(config);
             this.isConnected = true;
@@ -61,10 +62,10 @@ public class Storage {
     public static boolean connect() {
         Storage.getLogger().info("Connecting to MySQL server");
 
-        storage = new Storage(Configuration.getInstance().getServerConfig().get("Database", "mysql.hostname", String.class),
-                Configuration.getInstance().getServerConfig().get("Database", "mysql.username", String.class),
-                Configuration.getInstance().getServerConfig().get("Database", "mysql.password", String.class),
-                Configuration.getInstance().getServerConfig().get("Database", "mysql.database", String.class));
+        storage = new Storage(Configuration.getString("mysql.hostname"),
+                Configuration.getString("mysql.username"),
+                Configuration.getString("mysql.password"),
+                Configuration.getString("mysql.database"));
 
         if (!storage.isConnected()) {
             Storage.getLogger().error("Could not connect");

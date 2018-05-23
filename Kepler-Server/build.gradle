@@ -15,9 +15,6 @@ dependencies {
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
 
-    // https://mvnrepository.com/artifact/org.ini4j/ini4j
-    compile group: 'org.ini4j', name: 'ini4j', version: '0.5.4'
-
     // https://mvnrepository.com/artifact/io.netty/netty-all
     compile group: 'io.netty', name: 'netty-all', version: '4.1.25.Final'
 
@@ -29,6 +26,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/log4j/log4j/1.2.17
     compile group: 'log4j', name: 'log4j', version: '1.2.17'
+
+// https://mvnrepository.com/artifact/org.apache.commons/commons-configuration2
+    compile group: 'org.apache.commons', name: 'commons-configuration2', version: '2.2'
 }
 
 task fatJar(type: Jar) {
