@@ -33,6 +33,7 @@ public class USER_OBJECTS extends MessageComposer {
                     user.getDetails().getId(),
                     user.getRoomUser().getInstanceId(),
                     user.getDetails(),
+                    user.getRoomUser().getRoom(),
                     user.getRoomUser().getPosition().copy(),
                     user.getRoomUser().getStatuses()));
         }
@@ -54,6 +55,14 @@ public class USER_OBJECTS extends MessageComposer {
 
             if (states.getDetails().getBadgeActive().length() > 0) {
                 response.writeKeyValue("b", states.getDetails().getBadgeActive());
+            }
+
+            if (states.getRoom().getData().getModel().getModelName().startsWith("pool_") ||
+                    states.getRoom().getData().getModel().getModelName().equals("md_a")) {
+
+                if (states.getDetails().getPoolFigure().length() > 0) {
+                    response.writeKeyValue("p", states.getDetails().getPoolFigure());
+                }
             }
         }
     }

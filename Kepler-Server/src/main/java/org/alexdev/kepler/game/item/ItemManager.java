@@ -1,14 +1,9 @@
 package org.alexdev.kepler.game.item;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
-import org.alexdev.kepler.dao.mysql.PlayerDao;
-import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.player.PlayerDetails;
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class ItemManager {
     private static ItemManager instance;

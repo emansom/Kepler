@@ -47,8 +47,8 @@ public class Kepler {
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
 
-            // TODO: The "Doom" ASCII from
-            // http://patorjk.com/software/taag/#p=display&f=Doom&t=Kepler
+            // TODO: The "Standard" ASCII from
+            // http://patorjk.com/software/taag/#p=display&f=Standard&t=Kepler
             // On a grey background with white ASCII text
             // ASCII logo on the left side, contributors and other credits/info on the right side
             // TODO: also a way to disable the fancy headers, as in production it would only fill the logs

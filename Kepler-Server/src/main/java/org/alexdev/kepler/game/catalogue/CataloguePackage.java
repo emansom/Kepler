@@ -1,6 +1,6 @@
 package org.alexdev.kepler.game.catalogue;
 
-import org.alexdev.kepler.game.item.ItemDefinition;
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.ItemManager;
 
 public class CataloguePackage {

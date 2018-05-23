@@ -1,7 +1,5 @@
 package org.alexdev.kepler.game.texts;
 
-import org.alexdev.kepler.dao.mysql.ItemDao;
-import org.alexdev.kepler.game.item.ItemDefinition;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.io.BufferedReader;

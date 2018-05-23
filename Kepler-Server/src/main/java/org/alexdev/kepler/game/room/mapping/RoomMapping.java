@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
+import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,10 @@ public class RoomMapping {
                     tile.setItemBelow(tile.getHighestItem());
                     tile.setTileHeight(item.getTotalHeight());
                     tile.setHighestItem(item);
+
+                    if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                        PoolHandler.setupRedirections(this.room, item);
+                    }
                 }
             }
         }

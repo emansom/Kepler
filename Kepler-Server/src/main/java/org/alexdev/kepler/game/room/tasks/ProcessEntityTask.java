@@ -105,7 +105,6 @@ public class ProcessEntityTask implements Runnable {
                 roomUser.setNextPosition(next);
             } else {
                 roomUser.stopWalking();
-                roomUser.invokeItem();
             }
 
             // If we're walking, make sure to tell the server

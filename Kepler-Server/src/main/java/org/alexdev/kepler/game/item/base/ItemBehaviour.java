@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.item;
+package org.alexdev.kepler.game.item.base;
 
 public class ItemBehaviour {
     private boolean isWallItem;

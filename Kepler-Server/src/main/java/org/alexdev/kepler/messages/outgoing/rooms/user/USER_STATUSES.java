@@ -32,6 +32,7 @@ public class USER_STATUSES extends MessageComposer {
                     user.getDetails().getId(),
                     user.getRoomUser().getInstanceId(),
                     user.getDetails(),
+                    user.getRoomUser().getRoom(),
                     user.getRoomUser().getPosition().copy(),
                     user.getRoomUser().getStatuses()));
         }

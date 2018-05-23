@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.item;
 
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
@@ -7,6 +8,7 @@ import org.alexdev.kepler.util.StringUtil;
 public class Item {
     private int id;
     private ItemDefinition definition;
+    private int definitionId;
     private Position position;
     private String wallPosition;
     private boolean hasExtraParameter;
@@ -108,6 +110,10 @@ public class Item {
 
     public ItemDefinition getDefinition() {
         return definition;
+    }
+
+    public void setDefinitionId(int definitionId) {
+        this.definition = ItemManager.getInstance().getDefinition(definitionId);
     }
 
     public Position getPosition() {
