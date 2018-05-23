@@ -48,11 +48,9 @@ public class RoomEntityManager {
     public <T extends Entity> List<T> getEntitiesByClass(Class<T> entityClass) {
         List<T> entities = new ArrayList<>();
 
-        synchronized (this.room.getEntities()) {
-            for (Entity entity : this.room.getEntities()) {
-                if (entity.getClass().isAssignableFrom(entityClass)) {
-                    entities.add(entityClass.cast(entity));
-                }
+        for (Entity entity : this.room.getEntities()) {
+            if (entity.getClass().isAssignableFrom(entityClass)) {
+                entities.add(entityClass.cast(entity));
             }
         }
 
@@ -65,11 +63,9 @@ public class RoomEntityManager {
      * @return the entity, if successful, else null
      */
     private Entity getEntityByInstanceId(int instanceId) {
-        synchronized (this.room.getEntities()) {
-            for (Entity entity : this.room.getEntities()) {
-                if (entity.getRoomUser().getInstanceId() == instanceId) {
-                    return entity;
-                }
+        for (Entity entity : this.room.getEntities()) {
+            if (entity.getRoomUser().getInstanceId() == instanceId) {
+                return entity;
             }
         }
 

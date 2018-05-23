@@ -11,7 +11,9 @@ import org.alexdev.kepler.game.room.mapping.RoomMapping;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Room {
     private RoomData roomData;
@@ -29,8 +31,8 @@ public class Room {
         this.roomItemManager = new RoomItemManager(this);
         this.roomTaskManager = new RoomTaskManager(this);
         this.roomMapping = new RoomMapping(this);
-        this.entities = new ArrayList<>();
-        this.items = new ArrayList<>();
+        this.entities = new CopyOnWriteArrayList<>();
+        this.items = new CopyOnWriteArrayList<>();
     }
 
     /**
