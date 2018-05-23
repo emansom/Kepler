@@ -98,13 +98,11 @@ public class RoomMapping {
         Item fromItem = fromTile.getHighestItem();
         Item toItem = toTile.getHighestItem();
 
-        if (fromItem != null) {
-            if (toItem != null) {
-                if (entity.getRoomUser().getRoom().getData().getModelId().equals("pool_b")) {
-                    if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
-                        toItem.getDefinition().getSprite().equals("queue_tile2")) {
-                        return true;
-                    }
+        if (fromItem != null && toItem != null) {
+            if (entity.getRoomUser().getRoom().getData().getModelId().equals("pool_b")) {
+                if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
+                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                    return true;
                 }
             }
         }
@@ -112,7 +110,6 @@ public class RoomMapping {
         if (toItem != null) {
             if (toItem.getDefinition().getSprite().equals("poolEnter") ||
                 toItem.getDefinition().getSprite().equals("poolLeave")) {
-
                 return entity.getDetails().getPoolFigure().length() > 0;
             }
 

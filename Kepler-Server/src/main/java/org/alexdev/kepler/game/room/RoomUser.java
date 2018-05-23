@@ -20,6 +20,7 @@ public class RoomUser {
     private Position nextPosition;
     private Room room;
     private int instanceId;
+    private int authenticateId;
 
     private HashMap<EntityStatus, String> statuses;
     private LinkedList<Position> path;
@@ -42,6 +43,7 @@ public class RoomUser {
         this.isWalking = false;
         this.beingKicked = false;
         this.instanceId = -1;
+        this.authenticateId = -1;
         this.statuses = new HashMap<>();
         this.path = new LinkedList<>();
     }
@@ -299,5 +301,13 @@ public class RoomUser {
 
     public boolean isBeingKicked() {
         return beingKicked;
+    }
+
+    public int getAuthenticateId() {
+        return authenticateId;
+    }
+
+    public void setAuthenticateId(int authenticateId) {
+        this.authenticateId = authenticateId;
     }
 }

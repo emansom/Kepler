@@ -114,6 +114,8 @@ public class RoomEntityManager {
                 this.room.getData().getModel().getDoorRotation()
         ));
 
+        entity.getRoomUser().setAuthenticateId(-1);
+
         // From this point onwards we send packets for the user to enter
         if (entity.getType() !=  EntityType.PLAYER) {
             return;

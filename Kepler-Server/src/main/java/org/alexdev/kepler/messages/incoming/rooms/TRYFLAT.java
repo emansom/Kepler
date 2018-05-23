@@ -50,7 +50,7 @@ public class TRYFLAT implements MessageEvent {
         /*if (player.getRoomUser().getRoom() != null) {
             player.getRoomUser().getRoom().getEntityManager().leaveRoom(player);
         }*/
-
+        player.getRoomUser().setAuthenticateId(roomId);
         player.send(new FLAT_ACCESSIBLE());
     }
 }
