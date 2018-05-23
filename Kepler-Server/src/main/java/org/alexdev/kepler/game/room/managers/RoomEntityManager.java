@@ -98,7 +98,7 @@ public class RoomEntityManager {
         }
 
         this.room.getEntities().add(entity);
-        this.room.getData().setVisitorsNow(this.room.getEntities().size());
+        this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.createInstanceId());
@@ -152,10 +152,10 @@ public class RoomEntityManager {
         }
 
         this.room.getEntities().remove(entity);
-        this.room.getData().setVisitorsNow(this.room.getEntities().size());
+        this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         this.room.send(new LOGOUT(entity.getRoomUser().getInstanceId()));
-        this.room.dispose(true);
+        this.room.dispose(false);
 
         entity.getRoomUser().reset();
 
