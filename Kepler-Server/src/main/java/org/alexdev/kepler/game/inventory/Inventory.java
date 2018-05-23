@@ -44,33 +44,32 @@ public class Inventory {
      * Get the inventory casts for opening hand.
      * Credits to Woodpecker v3 for this, thanks Nillus yet again. <3
      */
-    private Map<Integer,Item> getCasts(Map<Integer,Item> casts, int end_id) {
-        int start_id = 0;
+    private Map<Integer,Item> getCasts(Map<Integer,Item> casts, int endId) {
+        int startId = 0;
 
         if (casts == null) {
             casts = new HashMap<>();
 
             if (this.handStripPageIndex == 255) {
-                this.handStripPageIndex = ((end_id - 1) / 9);
+                this.handStripPageIndex = ((endId - 1) / 9);
             }
         }
 
-        if (end_id > 0) {
-            start_id = this.handStripPageIndex * 9;
+        if (endId > 0) {
+            startId = this.handStripPageIndex * 9;
 
-            if (end_id > (start_id + 9)) {
-                end_id = start_id + 9;
+            if (endId > (startId + 9)) {
+                endId = startId + 9;
             }
 
-            if (start_id >= end_id) {
+            if (startId >= endId) {
                 this.handStripPageIndex--;
-                getCasts(casts, end_id);
+                getCasts(casts, endId);
             }
 
-            for (int strip_slot_id = start_id; strip_slot_id < end_id; strip_slot_id++) {
-                Item item = this.items.get(strip_slot_id);
-                casts.put(strip_slot_id, item);
-
+            for (int stripSlotId = startId; stripSlotId < endId; stripSlotId++) {
+                Item item = this.items.get(stripSlotId);
+                casts.put(stripSlotId, item);
             }
         }
 

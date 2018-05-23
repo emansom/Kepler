@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.managers;
 
+import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -142,6 +143,10 @@ public class RoomEntityManager {
      * Setup the room initially for room entry.
      */
     private void initialiseRoom() {
+        if (!this.room.isPublicRoom()) {
+            this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
+        }
+
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();
     }

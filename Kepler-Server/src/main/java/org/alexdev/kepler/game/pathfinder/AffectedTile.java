@@ -10,52 +10,26 @@ public class AffectedTile {
      *
      * @param length the length
      * @param width the width
-     * @param posX the pos X
-     * @param posY the pos Y
+     * @param y the pos X
+     * @param y the pos Y
      * @param rotation the rotation
      * @return the affected tiles
      */
-    public static List<Position> getAffectedTiles(int length, int width, int posX, int posY, int rotation) {
-        
-        List<Position> points = new ArrayList<Position>();
+    public static List<Position> getAffectedTiles(int length, int width, int x, int y, int rotation) {
+        List<Position> points = new ArrayList<>();
 
-        if (length > 1)    {
+        if (length != width) {
             if (rotation == 0 || rotation == 4) {
-                for (int i = 1; i < length; i++) {
-                    points.add(new Position(posX, posY + i, i));
-
-                    for (int j = 1; j < width; j++) {
-                        points.add(new Position(posX + j, posY + i, (i < j) ? j : i));
-                    }
-                }
-            } else if (rotation == 2 || rotation == 6) {
-                for (int i = 1; i < length; i++) {
-                    points.add(new Position(posX + i, posY, i));
-
-                    for (int j = 1; j < width; j++) {
-                        points.add(new Position(posX + i, posY + j, (i < j) ? j : i));
-                    }
-                }
+                int l = length;
+                length = width;
+                width = l;
             }
         }
 
-        if (width > 1) {
-            if (rotation == 0 || rotation == 4) {
-                for (int i = 1; i < width; i++) {
-                    points.add(new Position(posX + i, posY, i));
-
-                    for (int j = 1; j < length; j++) {
-                        points.add(new Position(posX + i, posY + j, (i < j) ? j : i));
-                    }
-                }
-            } else if (rotation == 2 || rotation == 6) {
-                for (int i = 1; i < width; i++) {
-                    points.add(new Position(posX, posY + i, i));
-
-                    for (int j = 1; j < length; j++) {
-                        points.add(new Position(posX + j, posY + i, (i < j) ? j : i));
-                    }
-                }
+        for (int newX = x; newX < x + width; newX++) {
+            for (int newY = y; newY < y + length; newY++) {
+                Position pos = new Position(newX, newY);
+                points.add(pos);
             }
         }
         

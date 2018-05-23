@@ -1,12 +1,20 @@
 package org.alexdev.kepler.game.room.mapping;
 
+import javafx.geometry.Pos;
+import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.messages.incoming.rooms.items.REMOVE_FLOORITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_WALLITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_WALLITEM;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,116 +43,113 @@ public class RoomMapping {
             }
         }
 
-        synchronized (this.room.getItems()) {
-            List<Item> items = new ArrayList<>(this.room.getItems());
-            items.sort((item1, item2) -> Double.compare(item1.getPosition().getZ(), item2.getPosition().getZ()));
+        List<Item> items = new ArrayList<>(this.room.getItems());
+        items.sort((item1, item2) -> Double.compare(item1.getPosition().getZ(), item2.getPosition().getZ()));
 
-            for (Item item : items) {
-                if (item.getDefinition().getBehaviour().isWallItem()) {
-                    continue;
-                }
+        for (Item item : items) {
+            if (item.getDefinition().getBehaviour().isWallItem()) {
+                continue;
+            }
 
-                RoomTile tile = getTile(item.getPosition().getX(), item.getPosition().getY());
+            RoomTile tile = getTile(item.getPosition().getX(), item.getPosition().getY());
 
-                if (tile == null) {
-                    continue;
-                }
+            if (tile == null) {
+                continue;
+            }
 
-                if (tile.getTileHeight() < item.getTotalHeight() || item.getDefinition().getBehaviour().isPublicSpaceObject()) {
-                    tile.setItemBelow(tile.getHighestItem());
-                    tile.setTileHeight(item.getTotalHeight());
-                    tile.setHighestItem(item);
+            if (tile.getTileHeight() < item.getTotalHeight() || item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                tile.setItemBelow(tile.getHighestItem());
+                tile.setTileHeight(item.getTotalHeight());
+                tile.setHighestItem(item);
 
-                    if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
-                        PoolHandler.setupRedirections(this.room, item);
+                List<Position> affectedTiles = AffectedTile.getAffectedTiles(
+                        item.getDefinition().getLength(),
+                        item.getDefinition().getWidth(),
+                        item.getPosition().getX(),
+                        item.getPosition().getY(),
+                        item.getPosition().getRotation());
+
+                for (Position position : affectedTiles) {
+                    if (position.getX() == item.getPosition().getX() && position.getY() == item.getPosition().getY()) {
+                        continue;
                     }
+
+                    RoomTile affectedTile = this.getTile(position.getX(), position.getY());
+
+                    affectedTile.setTileHeight(item.getTotalHeight());
+                    affectedTile.setHighestItem(item);
+                }
+
+                if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                    PoolHandler.setupRedirections(this.room, item);
                 }
             }
         }
     }
 
-    /**
-     * Method for the pathfinder to check if the tile next to the current tile is a valid step.
-     *
-     * @param entity the entity walking
-     * @param current the current tile
-     * @param tmp the temporary tile around the current tile to check
-     * @param isFinalMove if the move was final
-     * @return true, if a valid step
-     */
-    public boolean isValidStep(Entity entity, Position current, Position tmp, boolean isFinalMove) {
-        if (!this.isValidTile(entity, new Position(current.getX(), current.getY()))) {
-            return false;
+    public void addItem(Item item) {
+        item.setRoomId(this.room.getId());
+        this.room.getItems().add(item);
+
+        if (item.getDefinition().getBehaviour().isWallItem()) {
+            this.room.send(new PLACE_WALLITEM(item));
+        } else {
+            this.handleItemAdjustment(item, false);
+            this.regenerateCollisionMap();
+
+            this.room.send(new PLACE_FLOORITEM(item));
         }
 
-        if (!this.isValidTile(entity, new Position(tmp.getX(), tmp.getY()))) {
-            return false;
+        ItemDao.updateItem(item);
+    }
+
+    public void moveItem(Item item, boolean isRotation, Position oldPosition) {
+        item.setRoomId(this.room.getId());
+
+        if (!item.getDefinition().getBehaviour().isWallItem()) {
+            this.handleItemAdjustment(item, isRotation);
+            this.regenerateCollisionMap();
+
+            this.room.send(new MOVE_FLOORITEM(item));
         }
 
-        RoomTile fromTile = this.getTile(current.getX(), current.getY());
-        RoomTile toTile = this.getTile(tmp.getX(), tmp.getY());
+        ItemDao.updateItem(item);
+    }
 
-        double oldHeight = fromTile.getTileHeight();
-        double newHeight = toTile.getTileHeight();
+    public void removeItem(Item item) {
+        item.setOwnerId(this.room.getData().getOwnerId());
+        this.room.getItems().remove(item);
 
-        if (oldHeight - 4 >= newHeight) {
-            return false;
+        if (item.getDefinition().getBehaviour().isWallItem()) {
+            this.room.send(new REMOVE_WALLITEM(item));
+        } else {
+            this.regenerateCollisionMap();
+            this.room.send(new REMOVE_FLOORITEM(item));
         }
 
-        if (oldHeight + 1.5 <= newHeight) {
-            return false;
+        item.getPosition().setX(0);
+        item.getPosition().setY(0);
+        item.getPosition().setZ(0);
+        item.getPosition().setRotation(0);
+        item.setRoomId(0);
+
+        ItemDao.updateItem(item);
+    }
+
+    private void handleItemAdjustment(Item item, boolean isRotation) {
+        RoomTile tile = this.getTile(item.getPosition().getX(), item.getPosition().getY());
+
+        if (tile == null) {
+            return;
         }
 
-        Item fromItem = fromTile.getHighestItem();
-        Item toItem = toTile.getHighestItem();
-
-        if (fromItem != null && toItem != null) {
-            if (entity.getRoomUser().getRoom().getData().getModelId().equals("pool_b")) {
-                if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
-                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
-                    return true;
-                }
-            }
+        if (!isRotation) {
+            item.getPosition().setZ(tile.getTileHeight());
         }
 
-        if (toItem != null) {
-            if (toItem.getDefinition().getSprite().equals("poolEnter") ||
-                toItem.getDefinition().getSprite().equals("poolLeave")) {
-                return entity.getDetails().getPoolFigure().length() > 0;
-            }
-
-            if (entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
-                toItem.getDefinition().getSprite().equals("poolEnter")) {
-                return false;
-            }
-
-            if (!entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
-                toItem.getDefinition().getSprite().equals("poolExit")) {
-                return false;
-            }
-
-            if (toItem.getDefinition().getSprite().equals("poolBooth") ||
-                toItem.getDefinition().getSprite().equals("poolLift")) {
-
-                if (toItem.getCurrentProgramValue().equals("close")) {
-                    return false;
-                } else {
-                    return !toItem.getDefinition().getSprite().equals("poolLift") || entity.getDetails().getPoolFigure().length() > 0;
-                }
-            }
-
-            if (entity.getRoomUser().getRoom().getData().getModel().getModelName().equals("pool_b") &&
-                toItem.getDefinition().getSprite().equals("queue_tile2")) {
-
-                if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
-                    return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;
-                } else {
-                    return false;
-                }
-            }
+        if (item.getPosition().getZ() > 8) {
+            item.getPosition().setZ(8);
         }
-
-        return true;
     }
 
     /**
