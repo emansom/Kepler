@@ -23,11 +23,14 @@ public class Configuration {
 
     public static void setDefaults() {
         // Default settings
-        config.put("server.ip.address", "127.0.0.1");
+        config.put("server.bind", "127.0.0.1");
         config.put("server.port", "12321");
 
-        config.put("rcon.ip.address", "127.0.0.1");
+        config.put("rcon.bind", "127.0.0.1");
         config.put("rcon.port", "12309");
+
+        config.put("log.sent.packets", "false");
+        config.put("log.received.packets", "false");
 
         config.put("mysql.hostname", "127.0.0.1");
         config.put("mysql.username", "kepler");
@@ -42,12 +45,13 @@ public class Configuration {
 
         config.put("roller.tick.default", "6");
 
-        config.put("debug", "true");
+        config.put("debug", "false");
     }
 
     public static void load(String configPath) throws IOError, IOException, ConfigurationException {
         setDefaults();
         checkLog4j();
+        writeFileIfNotExist();
 
         Path path = Paths.get(configPath);
 
@@ -57,7 +61,7 @@ public class Configuration {
         ini.read(reader);
 
         Set<String> sectionNames = ini.getSections();
-        System.out.printf("Section names: %s", sectionNames.toString());
+        //System.out.printf("Section names: %s", sectionNames.toString());
 
         for (String sectionName : sectionNames) {
             SubnodeConfiguration section = ini.getSection(sectionName);
@@ -76,6 +80,8 @@ public class Configuration {
                 }
             }
         }
+
+        reader.close();
     }
 
 
@@ -84,7 +90,7 @@ public class Configuration {
    * Create the configuration files for this application, with the default values. Will throw an
    * exception if it could not create such files.
    *
-     * @throws IOException
+     * @throws FileNotFoundException the exception if an error happens
     */
    private static void checkLog4j() throws FileNotFoundException {
 
@@ -135,56 +141,60 @@ public class Configuration {
     	 //Change the path where the logger property should be read from
     	PropertyConfigurator.configure(loggingConfig.getAbsolutePath());
 	}
-//
-//	private void writeFileIfNotExist() throws IOException {
-//        File file = new File("kepler.properties");
-//
-//        if (!file.isFile()) {
-//            file.createNewFile();
-//            PrintWriter writer = new PrintWriter(file.getAbsoluteFile());
-//            writeMainConfiguration(writer);
-//            writer.flush();
-//            writer.close();
-//        }
-//	}
-//
-//	/**
-//     * Writes default server configuration
-//     *
-//     * @param writer - {@link PrintWriter} the file writer
-//     */
-//    private void writeMainConfiguration(PrintWriter writer) {
-//        writer.println("[Server]");
-//        writer.println("server.ip=127.0.0.1");
-//        writer.println("server.port=30001");
-//        writer.println();
-//        writer.println("[Database]");
-//        writer.println("mysql.hostname=127.0.0.1");
-//        writer.println("mysql.username=user");
-//        writer.println("mysql.password=123");
-//        writer.println("mysql.database=kepler");
-//        writer.println();
-//        writer.println("[Logging]");
-//        writer.println("log.connections=true");
-//        writer.println("log.sent.packets=false");
-//        writer.println("log.received.packets=false");
-//        writer.println("log.items.loaded=true");
-//        writer.println();
-//    }
-//
-//    /**
-//     * Get the main server configuration that controls logging, database access,
-//     * and server details.
-//     *
-//     * @return the configuration
-//     */
-//    public Wini getServerConfig() {
-//        return configuration;
-//    }
-//
-//    public static void init() {
-//        instance = new Configuration();
-//    }
+
+    /**
+     * Create config file
+     * @throws IOException the exception if the file couldn't be read/written to
+     */
+	private static void writeFileIfNotExist() throws IOException {
+        File file = new File("config.ini");
+
+        if (!file.isFile() && file.createNewFile()) {
+            PrintWriter writer = new PrintWriter(file.getAbsoluteFile());
+            writeMainConfiguration(writer);
+            writer.flush();
+            writer.close();
+        }
+	}
+
+	/**
+     * Writes default server configuration
+     *
+     * @param writer - {@link PrintWriter} the file writer
+     */
+    private static void writeMainConfiguration(PrintWriter writer) {
+        writer.println("[Server]");
+        writer.println("server.bind=" + config.get("server.bind"));
+        writer.println("server.port=" + config.get("server.port"));
+        writer.println("");
+        writer.println("[Rcon]");
+        writer.println("rcon.bind=" + config.get("rcon.bind"));
+        writer.println("rcon.port=" + config.get("rcon.port"));
+        writer.println("");
+        writer.println("[Database]");
+        writer.println("mysql.hostname=" + config.get("mysql.hostname"));
+        writer.println("mysql.username=" + config.get("mysql.username"));
+        writer.println("mysql.password=" + config.get("mysql.password"));
+        writer.println("mysql.database=" + config.get("mysql.database"));
+        writer.println("");
+        writer.println("[Logging]");
+        writer.println("log.received.packets=" + config.get("log.received.packets"));
+        writer.println("log.sent.packets=" + config.get("log.sent.packets"));
+        writer.println("");
+        writer.println("[Game]");
+        writer.println("sso.tickets.enabled=" + config.get("sso.tickets.enabled"));
+        writer.println("fuck.aaron=true" + config.get("fuck.aaron"));
+        writer.println("");
+        writer.println("welcome.message.enabled=" + config.get("welcome.message.enabled"));
+        writer.println("welcome.message.content=" + config.get("welcome.message.content"));
+        writer.println("");
+        writer.println("# 1 tick = 500ms, 6 is 3 seconds");
+        writer.println("roller.tick.default=" + config.get("roller.tick.default"));
+        writer.println("");
+        writer.println("[Console]");
+        writer.println("debug=" + config.get("debug"));
+        writer.println("");
+    }
 
     /**
      * Get key from configuration and cast to an Boolean
