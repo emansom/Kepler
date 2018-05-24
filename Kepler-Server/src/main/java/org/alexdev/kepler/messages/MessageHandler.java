@@ -12,6 +12,8 @@ import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
+import org.alexdev.kepler.messages.incoming.rooms.badges.GETAVAILABLEBADGES;
+import org.alexdev.kepler.messages.incoming.rooms.badges.SETBADGE;
 import org.alexdev.kepler.messages.incoming.rooms.items.ADDSTRIPITEM;
 import org.alexdev.kepler.messages.incoming.rooms.items.MOVESTUFF;
 import org.alexdev.kepler.messages.incoming.rooms.items.PLACESTUFF;
@@ -43,6 +45,7 @@ public class MessageHandler {
         registerNavigatorPackets();
         registerRoomPackets();
         registerRoomUserPackets();
+        registerRoomBadgesPackets();
         registerRoomPoolPackets();
         registerRoomSettingsPackets();
         registerRoomItemPackets();
@@ -70,7 +73,7 @@ public class MessageHandler {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
         registerEvent(196, new PONG());
-        //registerEvent(315, new TEST_LATENCY());
+        registerEvent(315, new TEST_LATENCY());
     }
 
     /**
@@ -106,6 +109,15 @@ public class MessageHandler {
         registerEvent(53, new QUIT());
         registerEvent(75, new WALK());
         registerEvent(115, new GOAWAY());
+    }
+
+
+    /**
+     * Register room badges packets;
+     */
+    public void registerRoomBadgesPackets() {
+        registerEvent(157, new GETAVAILABLEBADGES());
+        registerEvent(158, new SETBADGE());
     }
 
     /**

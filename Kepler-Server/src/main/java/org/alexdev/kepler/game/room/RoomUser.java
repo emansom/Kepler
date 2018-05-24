@@ -2,7 +2,6 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityStatus;
-import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -12,6 +11,7 @@ import org.alexdev.kepler.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class RoomUser {
     private Entity entity;
@@ -22,7 +22,7 @@ public class RoomUser {
     private int instanceId;
     private int authenticateId;
 
-    private HashMap<EntityStatus, String> statuses;
+    private Map<EntityStatus, String> statuses;
     private LinkedList<Position> path;
 
     private boolean isWalkingAllowed;
@@ -259,7 +259,7 @@ public class RoomUser {
         this.instanceId = instanceId;
     }
 
-    public HashMap<EntityStatus, String> getStatuses() {
+    public Map<EntityStatus, String> getStatuses() {
         return this.statuses;
     }
 

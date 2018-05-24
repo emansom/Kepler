@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
+import org.alexdev.kepler.messages.outgoing.rooms.badges.USER_BADGE;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
@@ -172,5 +173,20 @@ public class RoomEntityManager {
         if (hotelView) {
             player.send(new HOTEL_VIEW());
         }
+    }
+
+    /**
+     * Refresh user badges in room
+     *
+     * @param entity
+     */
+    public void refreshBadges(Entity entity) {
+        if (entity.getType() !=  EntityType.PLAYER) {
+            return;
+        }
+
+        Player player = (Player) entity;
+
+        this.room.send(new USER_BADGE(entity.getRoomUser().getInstanceId(), player.getDetails()));
     }
 }

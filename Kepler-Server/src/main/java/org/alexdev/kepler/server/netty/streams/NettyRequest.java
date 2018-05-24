@@ -41,7 +41,7 @@ public class NettyRequest {
 
     public boolean readBoolean()  {
         try {
-            return this.buffer.readByte() == 1;
+            return this.readInt() == 1;
         } catch (Exception e)    {
             return false;
         }

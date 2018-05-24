@@ -4,7 +4,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.room.Room;
 
-import java.util.HashMap;
+import java.util.Map;
 
 public class EntityState {
     private int entityId;
@@ -12,9 +12,9 @@ public class EntityState {
     private PlayerDetails details;
     private Room room;
     private Position position;
-    private HashMap<EntityStatus, String> statuses;
+    private Map<EntityStatus, String> statuses;
 
-    public EntityState(int entityId, int instanceId, PlayerDetails details, Room room, Position position, HashMap<EntityStatus, String> statuses) {
+    public EntityState(int entityId, int instanceId, PlayerDetails details, Room room, Position position, Map<EntityStatus, String> statuses) {
         this.entityId = entityId;
         this.instanceId = instanceId;
         this.details = details;
@@ -31,7 +31,7 @@ public class EntityState {
         return position;
     }
 
-    public HashMap<EntityStatus, String> getStatuses() {
+    public Map<EntityStatus, String> getStatuses() {
         return statuses;
     }
 

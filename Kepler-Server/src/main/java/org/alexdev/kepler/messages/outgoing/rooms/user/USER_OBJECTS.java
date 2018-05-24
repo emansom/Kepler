@@ -53,8 +53,8 @@ public class USER_OBJECTS extends MessageComposer {
                 response.writeKeyValue("c", states.getDetails().getMotto());
             }
 
-            if (states.getDetails().getBadgeActive().length() > 0) {
-                response.writeKeyValue("b", states.getDetails().getBadgeActive());
+            if (states.getDetails().getShowBadge()) {
+                response.writeKeyValue("b", states.getDetails().getCurrentBadge());
             }
 
             if (states.getRoom().getData().getModel().getModelName().startsWith("pool_") ||

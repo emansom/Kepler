@@ -1,5 +1,7 @@
 package org.alexdev.kepler.game.player;
 
+import java.util.List;
+
 public class PlayerDetails {
     private int id;
     private String username;
@@ -16,8 +18,10 @@ public class PlayerDetails {
     private long lastOnline;
     private long clubSubscribed;
     private long clubExpiration;
-    private String badge;
-    private String badgeActive;
+    private String currentBadge;
+    private boolean showBadge;
+    private List<String> badges;
+    private boolean allowStalking;
 
     public PlayerDetails() { }
 
@@ -39,10 +43,12 @@ public class PlayerDetails {
      * @param lastOnline the last time they were online in a unix timestamp
      * @param clubSubscribed the club subscribed date in a unix timestamp
      * @param clubExpiration the club expiration date in a unix timestamp
-     * @param badge their badges
-     * @param badgeActive the current badge
+     * @param currentBadge the current badge
+     * @param showBadge whether the badge is shown or not
+     * @param badges An array of strings of badges
+     * @param allowStalking allow stalking/following
      */
-    public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String badge, String badgeActive) {
+    public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -58,8 +64,10 @@ public class PlayerDetails {
         this.lastOnline = lastOnline;
         this.clubSubscribed = clubSubscribed;
         this.clubExpiration = clubExpiration;
-        this.badge = badge;
-        this.badgeActive = badgeActive;
+        this.currentBadge = currentBadge;
+        this.showBadge = showBadge;
+        this.badges = badges;
+        this.allowStalking = allowStalking;
     }
 
     public int getId() {
@@ -166,19 +174,35 @@ public class PlayerDetails {
         this.clubExpiration = clubExpiration;
     }
 
-    public String getBadge() {
-        return badge;
+    public String getCurrentBadge() {
+        return currentBadge;
     }
 
-    public void setBadge(String badge) {
-        this.badge = badge;
+    public void setCurrentBadge(String badge) {
+        this.currentBadge = badge;
     }
 
-    public String getBadgeActive() {
-        return badgeActive;
+    public boolean getShowBadge() {
+        return showBadge;
     }
 
-    public void setBadgeActive(String badgeActive) {
-        this.badgeActive = badgeActive;
+    public void setShowBadge(boolean badgeActive) {
+        this.showBadge = badgeActive;
+    }
+
+    public List<String> getBadges() {
+        return this.badges;
+    }
+
+    public void setBadges(List<String> badges) {
+        this.badges = badges;
+    }
+
+    public boolean doesAllowStalking() {
+        return allowStalking;
+    }
+
+    public void setAllowStalking() {
+        this.allowStalking = allowStalking;
     }
 }

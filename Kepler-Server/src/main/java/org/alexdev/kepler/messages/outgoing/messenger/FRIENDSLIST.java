@@ -19,9 +19,9 @@ public class FRIENDSLIST extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
         response.writeString(this.consoleMotto);
-        response.writeInt(600);
-        response.writeInt(200);
-        response.writeInt(600);
+        response.writeInt(600); // TODO: describe this limit
+        response.writeInt(200); // TODO: describe this limit
+        response.writeInt(600); // TODO: describe this limit
         response.writeInt(this.friends.size());
 
         for (MessengerUser friend : this.friends) {
