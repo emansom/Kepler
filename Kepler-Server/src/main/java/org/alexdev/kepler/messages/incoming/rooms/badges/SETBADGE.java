@@ -25,12 +25,12 @@ public class SETBADGE implements MessageEvent {
         player.getDetails().setCurrentBadge(newBadge);
         player.getDetails().setShowBadge(showBadge);
 
-        // Persist to database
-        PlayerDao.saveCurrentBadge(player.getDetails());
-
         // Notify room
         if (player.getRoom() != null) {
             player.getRoom().send(new USER_BADGE(player.getRoomUser().getInstanceId(), player.getDetails()));
         }
+
+        // Persist to database
+        PlayerDao.saveCurrentBadge(player.getDetails());
     }
 }
