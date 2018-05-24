@@ -51,8 +51,8 @@ public class PlayerManager {
      * @return the player data, else if offline will query the database, else null
      */
     public PlayerDetails getPlayerData(int userId) {
-        if (this.playerIdMap.containsKey(userId)) {
-            return this.playerIdMap.get(userId).getDetails();
+        if (getPlayerById(userId) != null) {
+            return getPlayerById(userId).getDetails();
         }
 
         return PlayerDao.getDetails(userId);
