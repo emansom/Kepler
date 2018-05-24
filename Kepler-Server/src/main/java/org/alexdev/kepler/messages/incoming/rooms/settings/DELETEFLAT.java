@@ -1,7 +1,9 @@
 package org.alexdev.kepler.messages.incoming.rooms.settings;
 
+import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
@@ -24,6 +26,10 @@ public class DELETEFLAT implements MessageEvent {
 
         if (!room.isOwner(player.getDetails().getId())) {
             return;
+        }
+
+        for (Item item : room.getItems()) {
+            ItemDao.deleteItem(item.getId());
         }
 
         List<Entity> entities = new ArrayList<>(room.getEntities());
