@@ -65,9 +65,9 @@ public class Pathfinder {
         Item toItem = toTile.getHighestItem();
 
         if (fromItem != null && toItem != null) {
-            if (entity.getRoomUser().getRoom().getData().getModelId().equals("pool_b")) {
+            if (entity.getRoom().getData().getModelId().equals("pool_b")) {
                 if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
-                        toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
                     return true;
                 }
             }
@@ -75,22 +75,22 @@ public class Pathfinder {
 
         if (toItem != null) {
             if (toItem.getDefinition().getSprite().equals("poolEnter") ||
-                    toItem.getDefinition().getSprite().equals("poolLeave")) {
+                toItem.getDefinition().getSprite().equals("poolLeave")) {
                 return entity.getDetails().getPoolFigure().length() > 0;
             }
 
             if (entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
-                    toItem.getDefinition().getSprite().equals("poolEnter")) {
+                toItem.getDefinition().getSprite().equals("poolEnter")) {
                 return false;
             }
 
             if (!entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
-                    toItem.getDefinition().getSprite().equals("poolExit")) {
+                toItem.getDefinition().getSprite().equals("poolExit")) {
                 return false;
             }
 
             if (toItem.getDefinition().getSprite().equals("poolBooth") ||
-                    toItem.getDefinition().getSprite().equals("poolLift")) {
+                toItem.getDefinition().getSprite().equals("poolLift")) {
 
                 if (toItem.getCurrentProgramValue().equals("close")) {
                     return false;
@@ -99,8 +99,8 @@ public class Pathfinder {
                 }
             }
 
-            if (entity.getRoomUser().getRoom().getData().getModel().getModelName().equals("pool_b") &&
-                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
+            if (entity.getRoom().getData().getModel().getModelName().equals("pool_b") &&
+                toItem.getDefinition().getSprite().equals("queue_tile2")) {
 
                 if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
                     return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;

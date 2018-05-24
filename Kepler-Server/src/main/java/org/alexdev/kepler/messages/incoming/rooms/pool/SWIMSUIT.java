@@ -11,7 +11,7 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class SWIMSUIT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        Room room = player.getRoomUser().getRoom();
+        Room room = player.getRoom();
 
         if (room == null) {
             return;

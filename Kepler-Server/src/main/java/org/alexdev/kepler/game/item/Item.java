@@ -32,6 +32,12 @@ public class Item {
         this.currentProgramValue = "";
     }
 
+    /**
+     * Broadcast item program to current room, used for the pool lift, booth, pool ladders, etc
+     * for special effects like splashing, closing/open curtains, etc.
+     *
+     * @param value the new program value to show
+     */
     public void showProgram(String value) {
         if (value == null) {
             value = "";
@@ -44,6 +50,10 @@ public class Item {
         if (room != null) {
             room.send(new SHOWPROGRAM(this.currentProgram, this.currentProgramValue));
         }
+    }
+
+    public void updateEntities(Position oldPosition) {
+
     }
 
     /**
@@ -109,6 +119,9 @@ public class Item {
                 if (this.customData.length() > 0) {
                     response.write(this.customData);
                 }
+
+                response.write(Character.toString((char) 13));
+
             } else {
                 response.writeString(this.id);
                 response.writeString(this.definition.getSprite());

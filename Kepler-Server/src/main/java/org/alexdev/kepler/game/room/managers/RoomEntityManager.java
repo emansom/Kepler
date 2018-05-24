@@ -17,28 +17,18 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 import org.alexdev.kepler.util.StringUtil;
 
+import javax.management.AttributeList;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
     private Room room;
+    private AtomicInteger instanceIdCounter;
 
     public RoomEntityManager(Room room) {
         this.room = room;
-    }
-
-    /**
-     * Create a new instance ID for the next user who joins
-     * @return the instance id
-     */
-    private int createInstanceId() {
-        int instanceId = 0;
-
-        while (this.getEntityByInstanceId(instanceId) != null) {
-            instanceId++;
-        }
-
-        return instanceId;
+        this.instanceIdCounter = new AtomicInteger(0);
     }
 
     /**
@@ -92,8 +82,8 @@ public class RoomEntityManager {
      * @param entity the entity to add
      */
     public void enterRoom(Entity entity) {
-        if (entity.getRoomUser().getRoom() != null) {
-            entity.getRoomUser().getRoom().getEntityManager().leaveRoom(entity, false);
+        if (entity.getRoom() != null) {
+            entity.getRoom().getEntityManager().leaveRoom(entity, false);
         }
 
         if (this.room.getEntityManager().getEntitiesByClass(Player.class).isEmpty()) {
@@ -104,7 +94,7 @@ public class RoomEntityManager {
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         entity.getRoomUser().setRoom(this.room);
-        entity.getRoomUser().setInstanceId(this.createInstanceId());
+        entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
         entity.getRoomUser().setPosition(new Position(
                 this.room.getData().getModel().getDoorX(),
                 this.room.getData().getModel().getDoorY(),
@@ -187,17 +177,11 @@ public class RoomEntityManager {
     }
 
     /**
-     * Refresh user badges in room
+     * Get the atomic integer counter for instance ids.
      *
-     * @param entity
+     * @return the instance id counter
      */
-    public void refreshBadges(Entity entity) {
-        if (entity.getType() !=  EntityType.PLAYER) {
-            return;
-        }
-
-        Player player = (Player) entity;
-
-        this.room.send(new USER_BADGE(entity.getRoomUser().getInstanceId(), player.getDetails()));
+    public AtomicInteger getInstanceIdCounter() {
+        return this.instanceIdCounter;
     }
 }

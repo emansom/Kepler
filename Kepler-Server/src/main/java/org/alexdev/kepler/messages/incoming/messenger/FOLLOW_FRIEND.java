@@ -20,7 +20,7 @@ public class FOLLOW_FRIEND implements MessageEvent {
             this.id = id;
         }
 
-        public int getID(){
+        public int getErrorId(){
             return id;
         }
     }
@@ -30,30 +30,30 @@ public class FOLLOW_FRIEND implements MessageEvent {
         int friendId = reader.readInt();
 
         if (!player.getMessenger().isFriend(friendId)) {
-            player.send(new FOLLOW_ERROR(FollowErrors.NOT_FRIEND.getID())); // Not their friend
+            player.send(new FOLLOW_ERROR(FollowErrors.NOT_FRIEND.getErrorId())); // Not their friend
             return;
         }
 
         Player friend = PlayerManager.getInstance().getPlayerById(friendId);
 
         if (friend == null) {
-            player.send(new FOLLOW_ERROR(FollowErrors.OFFLINE.getID())); // Friend is not online
+            player.send(new FOLLOW_ERROR(FollowErrors.OFFLINE.getErrorId())); // Friend is not online
             return;
         }
 
-        if (friend.getRoomUser().getRoom() == null) {
-            player.send(new FOLLOW_ERROR(FollowErrors.ON_HOTELVIEW.getID())); // Friend is on hotelview
+        if (friend.getRoom() == null) {
+            player.send(new FOLLOW_ERROR(FollowErrors.ON_HOTELVIEW.getErrorId())); // Friend is on hotelview
             return;
         }
 
         // TODO: FUSE permission instead of rank check
         if (!friend.getDetails().doesAllowStalking() && player.getDetails().getRank() < 5) {
-            player.send(new FOLLOW_ERROR(FollowErrors.NO_CREEPING_ALLOWED.getID())); // Friend does not allow stalking
+            player.send(new FOLLOW_ERROR(FollowErrors.NO_CREEPING_ALLOWED.getErrorId())); // Friend does not allow stalking
             return;
         }
 
-        boolean isPublic = friend.getRoomUser().getRoom().isPublicRoom();
-        int roomId = friend.getRoomUser().getRoom().getId();
+        boolean isPublic = friend.getRoom().isPublicRoom();
+        int roomId = friend.getRoom().getId();
 
         player.send(new FOLLOW_REQUEST(isPublic, roomId));
     }

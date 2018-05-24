@@ -113,6 +113,7 @@ public class Room {
         }
 
         this.roomTaskManager.stopTasks();
+        this.roomEntityManager.getInstanceIdCounter().set(0);
 
         if (this.isPublicRoom()) {
             return;
