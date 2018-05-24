@@ -151,27 +151,6 @@ public class PlayerDao {
     }
 
     /**
-     * Save.
-     *
-     * @param details the details
-     */
-    public static void save(PlayerDetails details) {
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("UPDATE users SET mission = ?, figure = ?, gender = ?, rank = ?, credits = ?, duckets = ?, home_room = ? WHERE id = ?", sqlConnection);
-            preparedStatement.execute();
-        } catch (Exception e) {
-            Storage.logError(e);
-        } finally {
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
-        }
-    }
-
-    /**
      * Update last online.
      *
      * @param userId the user id
