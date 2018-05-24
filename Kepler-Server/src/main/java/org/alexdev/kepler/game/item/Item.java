@@ -32,6 +32,12 @@ public class Item {
         this.currentProgramValue = "";
     }
 
+    /**
+     * Broadcast item program to current room, used for the pool lift, booth, pool ladders, etc
+     * for special effects like splashing, closing/open curtains, etc.
+     *
+     * @param value the new program value to show
+     */
     public void showProgram(String value) {
         if (value == null) {
             value = "";
