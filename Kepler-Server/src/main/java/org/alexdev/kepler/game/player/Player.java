@@ -58,8 +58,10 @@ public class Player extends Entity {
         this.messenger = new Messenger(this);
         this.inventory = new Inventory(this);
 
-        this.send(new LOGIN());
-        this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+        this.sendQueued(new LOGIN());
+        this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+
+        this.flushSendQueue();
 
         PlayerDao.updateLastOnline(this.getDetails().getId());
         this.details.setLastOnline(DateUtil.getCurrentTimeSeconds());
@@ -87,6 +89,26 @@ public class Player extends Entity {
         } catch (Exception e) {
             Log.getErrorLogger().error("[Player] Could not send message to player {}", this.details.getName());
         }
+    }
+
+    /**
+     * Defer a response to the player
+     *
+     * @param response the response
+     */
+    public void sendQueued(MessageComposer response) {
+        try {
+            this.network.enqueue(response);
+        } catch (Exception e) {
+            Log.getErrorLogger().error("[Player] Could not send message to player {}", this.details.getName());
+        }
+    }
+
+    /**
+     * Flush send queue
+     */
+    public void flushSendQueue() {
+        this.network.flush();
     }
 
     /**

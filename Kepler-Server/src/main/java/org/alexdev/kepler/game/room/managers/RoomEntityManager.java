@@ -112,22 +112,24 @@ public class RoomEntityManager {
 
         Player player = (Player) entity;
 
-        player.send(new ROOM_URL());
-        player.send(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
+        player.sendQueued(new ROOM_URL());
+        player.sendQueued(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
 
         if (this.room.getData().getWallpaper() > 0) {
-            player.send(new FLATPROPERTY("wallpaper", this.room.getData().getWallpaper()));
+            player.sendQueued(new FLATPROPERTY("wallpaper", this.room.getData().getWallpaper()));
         }
 
         if (this.room.getData().getFloor() > 0) {
-            player.send(new FLATPROPERTY("floor", this.room.getData().getFloor()));
+            player.sendQueued(new FLATPROPERTY("floor", this.room.getData().getFloor()));
         }
 
         for (Item item : this.room.getItems()) {
             if (item.getCurrentProgramValue().length() > 0) {
-                player.send(new SHOWPROGRAM(item.getCurrentProgram(), item.getCurrentProgramValue()));
+                player.sendQueued(new SHOWPROGRAM(item.getCurrentProgram(), item.getCurrentProgramValue()));
             }
         }
+
+        player.flushSendQueue();
     }
 
     /**

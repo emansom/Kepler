@@ -281,24 +281,37 @@ public class PlayerDao {
 
         Connection conn = null;
         PreparedStatement stmt = null;
+        PreparedStatement stmt2 = null;
         ResultSet row = null;
+        ResultSet row2 = null;
 
+        // TODO: merge two queries somehow
         try {
             conn = Storage.getStorage().getConnection();
-            // TODO: complex join where it also loads the badges for rank
+
             stmt = Storage.getStorage().prepare("SELECT badge FROM users_badges WHERE user_id = ?", conn);
             stmt.setInt(1, userId);
             row = stmt.executeQuery();
 
+            stmt2 = Storage.getStorage().prepare("SELECT rank_badges.badge FROM rank_badges LEFT JOIN users ON rank_badges.rank <= users.rank WHERE users.id = ?", conn);
+            stmt2.setInt(1, userId);
+            row2 = stmt2.executeQuery();
+
             while (row.next()) {
                 badges.add(row.getString("badge"));
+            }
+
+            while (row2.next()) {
+                badges.add(row2.getString("badge"));
             }
 
         } catch (Exception err) {
             Storage.logError(err);
         } finally {
             Storage.closeSilently(row);
+            Storage.closeSilently(row2);
             Storage.closeSilently(stmt);
+            Storage.closeSilently(stmt2);
             Storage.closeSilently(conn);
         }
 
