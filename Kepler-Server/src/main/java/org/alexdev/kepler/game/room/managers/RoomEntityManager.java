@@ -17,6 +17,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 import org.alexdev.kepler.util.StringUtil;
 
+import javax.management.AttributeList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -176,17 +177,11 @@ public class RoomEntityManager {
     }
 
     /**
-     * Refresh user badges in room
+     * Get the atomic integer counter for instance ids.
      *
-     * @param entity
+     * @return the instance id counter
      */
-    public void refreshBadges(Entity entity) {
-        if (entity.getType() !=  EntityType.PLAYER) {
-            return;
-        }
-
-        Player player = (Player) entity;
-
-        this.room.send(new USER_BADGE(entity.getRoomUser().getInstanceId(), player.getDetails()));
+    public AtomicInteger getInstanceIdCounter() {
+        return this.instanceIdCounter;
     }
 }
