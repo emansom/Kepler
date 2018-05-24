@@ -173,8 +173,4 @@ public class RoomEntityManager {
             player.send(new HOTEL_VIEW());
         }
     }
-
-    public AtomicInteger getInstanceIdCounter() {
-        return instanceIdCounter;
-    }
 }
