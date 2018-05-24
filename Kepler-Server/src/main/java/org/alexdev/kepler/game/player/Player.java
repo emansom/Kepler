@@ -185,6 +185,14 @@ public class Player extends Entity {
     }
 
     /**
+     * Get rid of the player from the server.
+     */
+    public void kickFromServer() {
+        this.network.close();
+        this.dispose();
+    }
+
+    /**
      * Dispose player when disconnect happens.
      */
     @Override
@@ -203,6 +211,8 @@ public class Player extends Entity {
         for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(this.details.getId()))) {
             room.dispose(false);
         }
+
+        this.loggedIn = false;
     }
 
     public void sendMessage(String entry) {

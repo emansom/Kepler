@@ -100,7 +100,7 @@ public class PlayerManager {
             return;
         }
 
-        player.getNetwork().close();
+        player.kickFromServer();
     }
 
     /**
