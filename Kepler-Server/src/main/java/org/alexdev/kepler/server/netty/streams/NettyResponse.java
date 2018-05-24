@@ -14,7 +14,7 @@ public class NettyResponse  {
     public NettyResponse(short header, ByteBuf buffer) {
         this.id = header;
         this.buffer = buffer;
-        this.buffer.writeBytes(Base64Encoding.encodeB64(header, 2));
+        this.buffer.writeBytes(Base64Encoding.encode(header, 2));
     }
 
     /**
@@ -42,7 +42,7 @@ public class NettyResponse  {
      * @param number the number to encode.
      */
     public void writeInt(Integer number) {
-        this.buffer.writeBytes(VL64Encoding.encodeVL64(number));
+        this.buffer.writeBytes(VL64Encoding.encode(number));
     }
 
     /**

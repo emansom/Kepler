@@ -20,7 +20,7 @@ public class NetworkDecoder extends ByteToMessageDecoder {
         }
 
         buffer.markReaderIndex();
-        int length = Base64Encoding.decodeB64(new byte[] { buffer.readByte(), buffer.readByte(), buffer.readByte() });
+        int length = Base64Encoding.decode(new byte[] { buffer.readByte(), buffer.readByte(), buffer.readByte() });
 
         if (buffer.readableBytes() < length) {
             buffer.resetReaderIndex();

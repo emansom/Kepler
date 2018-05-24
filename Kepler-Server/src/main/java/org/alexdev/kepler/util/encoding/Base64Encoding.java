@@ -4,7 +4,7 @@ public class Base64Encoding {
     public byte NEGATIVE = 64;
     public byte POSITIVE = 65;
 
-    public static byte[] encodeB64(int i, int numBytes) {
+    public static byte[] encode(int i, int numBytes) {
         byte[] bzRes = new byte[numBytes];
         for (int j = 1; j <= numBytes; j++)
         {
@@ -15,7 +15,7 @@ public class Base64Encoding {
         return bzRes;
     }
 
-    public static int decodeB64(byte[] bzData) {
+    public static int decode(byte[] bzData) {
         int i = 0;
         int j = 0;
         for (int k = bzData.length - 1; k >= 0; k--)
