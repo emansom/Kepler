@@ -119,6 +119,9 @@ public class Item {
                 if (this.customData.length() > 0) {
                     response.write(this.customData);
                 }
+
+                response.write(Character.toString((char) 13));
+
             } else {
                 response.writeString(this.id);
                 response.writeString(this.definition.getSprite());
