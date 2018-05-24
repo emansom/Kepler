@@ -7,7 +7,7 @@ public class VL64Encoding {
     public static byte POSITIVE = 73;
     public static int MAX_INTEGER_BYTE_AMOUNT = 6;
 
-    public static byte[] encodeVL64(int i) {
+    public static byte[] encode(int i) {
         byte[] wf = new byte[VL64Encoding.MAX_INTEGER_BYTE_AMOUNT];
 
         int pos = 0;
@@ -32,7 +32,7 @@ public class VL64Encoding {
         return bzData;
     }
 
-    public static int decodeVL64(byte[] bzData, AtomicInteger totalBytes) {
+    public static int decode(byte[] bzData, AtomicInteger totalBytes) {
         if (totalBytes == null) {
             return 0;
         }

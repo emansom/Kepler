@@ -17,13 +17,13 @@ public class NettyRequest {
         this.buffer = buffer;
         this.length = length;
         this.header = new String(new byte[] { buffer.readByte(), buffer.readByte() });
-        this.headerId = Base64Encoding.decodeB64(header.getBytes());
+        this.headerId = Base64Encoding.decode(header.getBytes());
     }
 
     public Integer readInt() {
         try {
             AtomicInteger length = new AtomicInteger(0);
-            int value = VL64Encoding.decodeVL64(remainingBytes(), length);
+            int value = VL64Encoding.decode(remainingBytes(), length);
 
             readBytes(length.get());
             return value;
@@ -33,7 +33,7 @@ public class NettyRequest {
     }
 
     public int readBase64() {
-        return Base64Encoding.decodeB64(new byte[] {
+        return Base64Encoding.decode(new byte[] {
                 this.buffer.readByte(),
                 this.buffer.readByte()
         });

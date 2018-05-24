@@ -1,6 +1,7 @@
 package org.alexdev.kepler.server.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
+import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
@@ -11,6 +12,7 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.flush.FlushConsolidationHandler;
 import io.netty.util.concurrent.GlobalEventExecutor;
 import org.alexdev.kepler.log.Log;
 import org.slf4j.Logger;
@@ -54,7 +56,7 @@ public class NettyServer  {
             .childOption(ChannelOption.SO_KEEPALIVE, true)
             .childOption(ChannelOption.SO_RCVBUF, BUFFER_SIZE)
             .childOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(BUFFER_SIZE))
-            .childOption(ChannelOption.ALLOCATOR, new UnpooledByteBufAllocator(false));
+            .childOption(ChannelOption.ALLOCATOR, new PooledByteBufAllocator(true));
     }
 
     public boolean bind() {
