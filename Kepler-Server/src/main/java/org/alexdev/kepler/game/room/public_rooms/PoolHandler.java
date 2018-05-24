@@ -124,7 +124,7 @@ public class PoolHandler {
      */
     private static void warpSwim(Item item, Entity entity, Position warp, Position goal, boolean exit) {
         RoomUser roomUser = entity.getRoomUser();
-        Room room = roomUser.getRoom();
+        Room room = entity.getRoom();
 
         if (exit) {
             roomUser.removeStatus(EntityStatus.SWIM);
@@ -148,7 +148,7 @@ public class PoolHandler {
      */
     public static void exitBooth(Player player) {
         RoomTile tile = player.getRoomUser().getTile();
-        Room room = player.getRoomUser().getRoom();
+        Room room = player.getRoom();
 
         if (tile == null || tile.getHighestItem() == null || room == null) {
             return;

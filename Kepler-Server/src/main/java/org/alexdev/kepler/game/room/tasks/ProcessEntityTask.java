@@ -73,7 +73,7 @@ public class ProcessEntityTask implements Runnable {
             if (roomUser.getPath().size() > 0) {
                 Position next = roomUser.getPath().pop();
 
-                if (!roomUser.getRoom().getMapping().isValidTile(entity, next.copy())) {
+                if (!roomUser.getMapping().isValidTile(entity, next.copy())) {
                     roomUser.walkTo(goal.getX(), goal.getY()); // Tile was invalid after we started walking, so lets try again!
                     this.processEntity(entity);
                     return;

@@ -82,8 +82,8 @@ public class RoomEntityManager {
      * @param entity the entity to add
      */
     public void enterRoom(Entity entity) {
-        if (entity.getRoomUser().getRoom() != null) {
-            entity.getRoomUser().getRoom().getEntityManager().leaveRoom(entity, false);
+        if (entity.getRoom() != null) {
+            entity.getRoom().getEntityManager().leaveRoom(entity, false);
         }
 
         if (this.room.getEntityManager().getEntitiesByClass(Player.class).isEmpty()) {

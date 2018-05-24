@@ -170,30 +170,6 @@ public class PlayerDao {
             Storage.closeSilently(sqlConnection);
         }
     }
-    
-    /**
-     * Clear ticket.
-     *
-     * @param userId the user id
-     */
-    public static void clearTicket(int userId) {
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("UPDATE users SET sso_ticket = ? WHERE id = ?", sqlConnection);
-            preparedStatement.setNull(1, Types.VARCHAR);
-            preparedStatement.setInt(2, userId);
-            preparedStatement.execute();
-
-        } catch (Exception e) {
-            Storage.logError(e);
-        } finally {
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
-        }
-    }
 
     /**
      * Update last online.
