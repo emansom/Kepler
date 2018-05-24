@@ -18,26 +18,15 @@ import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
     private Room room;
+    private AtomicInteger instanceIdCounter;
 
     public RoomEntityManager(Room room) {
         this.room = room;
-    }
-
-    /**
-     * Create a new instance ID for the next user who joins
-     * @return the instance id
-     */
-    private int createInstanceId() {
-        int instanceId = 0;
-
-        while (this.getEntityByInstanceId(instanceId) != null) {
-            instanceId++;
-        }
-
-        return instanceId;
+        this.instanceIdCounter = new AtomicInteger(0);
     }
 
     /**
@@ -103,7 +92,7 @@ public class RoomEntityManager {
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         entity.getRoomUser().setRoom(this.room);
-        entity.getRoomUser().setInstanceId(this.createInstanceId());
+        entity.getRoomUser().setInstanceId(this.instanceIdCounter.incrementAndGet());
         entity.getRoomUser().setPosition(new Position(
                 this.room.getData().getModel().getDoorX(),
                 this.room.getData().getModel().getDoorY(),
@@ -183,5 +172,9 @@ public class RoomEntityManager {
         if (hotelView) {
             player.send(new HOTEL_VIEW());
         }
+    }
+
+    public AtomicInteger getInstanceIdCounter() {
+        return instanceIdCounter;
     }
 }

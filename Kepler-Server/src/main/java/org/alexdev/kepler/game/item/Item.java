@@ -46,6 +46,10 @@ public class Item {
         }
     }
 
+    public void updateEntities(Position oldPosition) {
+
+    }
+
     /**
      * Get the total height, which is the height of the item plus stack size.
      *
