@@ -93,9 +93,6 @@ public class ProcessEntityTask implements Runnable {
                 previousTile.removeEntity(entity);
                 nextTile.addEntity(entity);
 
-                //previousTile.removeEntity(entity);
-                //nextTile.addEntity(entity);
-
                 roomUser.removeStatus(EntityStatus.LAY);
                 roomUser.removeStatus(EntityStatus.SIT);
 
