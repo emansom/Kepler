@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.models;
 
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.ItemPublicParser;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -34,6 +35,10 @@ public class RoomModel {
         this.publicItems = ItemPublicParser.getPublicItems(this.modelId);
     }
 
+    /**
+     * Parse heightmap, add invalid tiles and the tile heights used
+     * for walking, stairs, etc.
+     */
     public void parse() {
         String[] lines = this.heightmap.split("\r");
 
@@ -65,6 +70,14 @@ public class RoomModel {
         }
     }
 
+    /**
+     * Get the tile state by given coordinates. This
+     * doesn't include room furniture.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the room state
+     */
     public RoomTileState getTileState(int x, int y) {
         if (x < 0 || y < 0) {
             return RoomTileState.CLOSED;
@@ -77,6 +90,14 @@ public class RoomModel {
         return tileStates[x][y];
     }
 
+    /**
+     * Get the tile height, this doesn't include
+     * furniture heights.
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the room height
+     */
     public double getTileHeight(int x, int y) {
         if (x < 0 || y < 0) {
             return 0;
@@ -98,20 +119,8 @@ public class RoomModel {
         return modelName;
     }
 
-    public int getDoorX() {
-        return doorX;
-    }
-
-    public int getDoorY() {
-        return doorY;
-    }
-
-    public double getDoorZ() {
-        return doorZ;
-    }
-
-    public int getDoorRotation() {
-        return doorRotation;
+    public Position getDoorLocation() {
+        return new Position(this.doorX, this.doorY, this.doorZ, this.doorRotation, this.doorRotation);
     }
 
     public int getMapSizeX() {

@@ -31,7 +31,7 @@ public class RoomTile {
      * @param entity the new entity
      */
     public void addEntity(Entity entity) {
-        if (new Position(this.position.getX(), this.position.getY()).equals(new Position(this.room.getModel().getDoorX(), this.room.getModel().getDoorY()))) {
+        if (new Position(this.position.getX(), this.position.getY()).equals(this.room.getModel().getDoorLocation())) {
             return;
         }
 

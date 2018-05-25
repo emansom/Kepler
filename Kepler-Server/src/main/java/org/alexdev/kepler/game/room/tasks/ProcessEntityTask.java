@@ -73,9 +73,17 @@ public class ProcessEntityTask implements Runnable {
             if (roomUser.getPath().size() > 0) {
                 Position next = roomUser.getPath().pop();
 
+                // Tile was invalid after we started walking, so lets try again!
                 if (!roomUser.getRoom().getMapping().isValidTile(entity, next.copy())) {
-                    roomUser.walkTo(goal.getX(), goal.getY()); // Tile was invalid after we started walking, so lets try again!
+                    roomUser.walkTo(goal.getX(), goal.getY());
                     this.processEntity(entity);
+                    return;
+                }
+
+                // Leave room if the tile is the door and we are in a flat
+                // TODO: disable if in public room with teleporting tiles
+                if (next.equals(roomUser.getRoom().getModel().getDoorLocation())) {
+                    roomUser.getRoom().getEntityManager().leaveRoom(entity, true);
                     return;
                 }
 
@@ -84,16 +92,6 @@ public class ProcessEntityTask implements Runnable {
 
                 previousTile.removeEntity(entity);
                 nextTile.addEntity(entity);
-
-                // Leave room if the tile is the door and we are in a flat
-                // TODO: disable if in public room with teleporting tiles
-                var doorX = roomUser.getRoom().getModel().getDoorX();
-                var doorY = roomUser.getRoom().getModel().getDoorY();
-
-                if (next.getX() == doorX && next.getY() == doorY) {
-                    roomUser.getRoom().getEntityManager().leaveRoom(entity, true);
-                    return;
-                }
 
                 //previousTile.removeEntity(entity);
                 //nextTile.addEntity(entity);

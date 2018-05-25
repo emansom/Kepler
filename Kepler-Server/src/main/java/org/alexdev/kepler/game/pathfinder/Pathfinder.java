@@ -110,9 +110,7 @@ public class Pathfinder {
             }
         }
 
-        if (current.getX() != room.getModel().getDoorX() &&
-            current.getY() != room.getModel().getDoorY()) {
-
+        if (!current.equals(room.getModel().getDoorLocation())) {
             if (toItem != null) {
                 if (isFinalMove) {
                     return toItem.isWalkable();

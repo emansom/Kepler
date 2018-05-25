@@ -14,17 +14,16 @@ public class GOAWAY implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        var doorX = room.getModel().getDoorX();
-        var doorY = room.getModel().getDoorY();
         var curPos = player.getRoomUser().getPosition();
+        var doorPos = room.getModel().getDoorLocation();
 
         // If we're standing in the door, immediately leave room
-        if (curPos.getX() == doorX && curPos.getY() == doorY) {
+        if (curPos.equals(doorPos)) {
             room.getEntityManager().leaveRoom(player, true);
             return;
         }
 
         // Walk to door
-        player.getRoomUser().walkTo(doorX, doorY);
+        player.getRoomUser().walkTo(doorPos.getX(), doorPos.getY());
     }
 }
