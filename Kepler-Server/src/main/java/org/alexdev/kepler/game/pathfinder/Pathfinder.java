@@ -38,7 +38,7 @@ public class Pathfinder {
      * @param isFinalMove if the move was final
      * @return true, if a valid step
      */
-    public static boolean isValidStep(Room room, Entity entity, Position current, Position tmp, boolean isFinalMove) {
+    private static boolean isValidStep(Room room, Entity entity, Position current, Position tmp, boolean isFinalMove) {
         if (!room.getMapping().isValidTile(entity, new Position(current.getX(), current.getY()))) {
             return false;
         }
@@ -106,6 +106,18 @@ public class Pathfinder {
                     return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;
                 } else {
                     return false;
+                }
+            }
+        }
+
+        if (current.getX() != room.getData().getModel().getDoorX() &&
+            current.getY() != room.getData().getModel().getDoorY()) {
+
+            if (toItem != null) {
+                if (isFinalMove) {
+                    return toItem.isWalkable();
+                } else {
+                    return toItem.getDefinition().getBehaviour().isCanStandOnTop();
                 }
             }
         }

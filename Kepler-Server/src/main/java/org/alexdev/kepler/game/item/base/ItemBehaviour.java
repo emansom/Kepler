@@ -25,7 +25,35 @@ public class ItemBehaviour {
     private boolean isRedeemable;
     private boolean isSoundMachine;
     private boolean isSoundMachineSampleSet;
-    private boolean has_extra_parameter;
+    private boolean hasExtraParameter;
+    
+    public ItemBehaviour() {
+        this.isWallItem = false;
+        this.isSolid = false;
+        this.canSitOnTop = false;
+        this.canLayOnTop = false;
+        this.canStandOnTop = false;
+        this.canStackOnTop = false;
+        this.isRoller = false;
+        this.isPublicSpaceObject = false;
+        this.isInvisible = false;
+        this.requiresRightsForInteraction = false;
+        this.requiresTouchingForInteraction = false;
+        this.customDataTrueFalse = false;
+        this.customDataOnOff = false;
+        this.customDataNumericOnOff = false;
+        this.customDataNumericState = false;
+        this.isDecoration = false;
+        this.isPostIt = false;
+        this.isDoor = false;
+        this.isTeleporter = false;
+        this.isDice = false;
+        this.isPrizeTrophy = false;
+        this.isRedeemable = false;
+        this.isSoundMachine = false;
+        this.isSoundMachineSampleSet = false;
+        this.hasExtraParameter = false;
+    }
 
     public static ItemBehaviour parse(String behaviourData) {
         ItemBehaviour behaviour = new ItemBehaviour();
@@ -325,11 +353,11 @@ public class ItemBehaviour {
         isSoundMachineSampleSet = soundMachineSampleSet;
     }
 
-    public boolean isHas_extra_parameter() {
-        return has_extra_parameter;
+    public boolean isHasExtraParameter() {
+        return hasExtraParameter;
     }
 
-    public void setHas_extra_parameter(boolean has_extra_parameter) {
-        this.has_extra_parameter = has_extra_parameter;
+    public void setHasExtraParameter(boolean hasExtraParameter) {
+        this.hasExtraParameter = hasExtraParameter;
     }
 }

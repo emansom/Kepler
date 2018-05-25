@@ -52,7 +52,7 @@ public class ItemPublicParser {
                         || item.getDefinition().getSprite().equals("k")
                         || item.getDefinition().getSprite().equals("shift1")) {
                     item.getDefinition().getBehaviour().setCanSitOnTop(true);
-                    item.getDefinition().getBehaviour().setCanStandOnTop(true);
+                    item.getDefinition().getBehaviour().setCanStandOnTop(false);
                     item.getDefinition().setTopHeight(1.0);
                 } else {
                     item.getDefinition().getBehaviour().setCanSitOnTop(false);

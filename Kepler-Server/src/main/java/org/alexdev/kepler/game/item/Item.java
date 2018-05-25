@@ -121,7 +121,6 @@ public class Item {
                 }
 
                 response.write(Character.toString((char) 13));
-
             } else {
                 response.writeString(this.id);
                 response.writeString(this.definition.getSprite());
