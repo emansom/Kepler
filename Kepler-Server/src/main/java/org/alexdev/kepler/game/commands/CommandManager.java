@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.commands;
 
 import org.alexdev.kepler.game.commands.registered.AboutCommand;
+import org.alexdev.kepler.game.commands.registered.HelpCommand;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.texts.TextsManager;
@@ -20,6 +21,7 @@ public class CommandManager {
     public CommandManager() {
         commands = new HashMap<>();
         commands.put(new String[] { "about", "info" }, new AboutCommand());
+        commands.put(new String[] { "help"}, new HelpCommand());
 
         log.info("Loaded {} commands", commands.size());
     }

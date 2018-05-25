@@ -25,6 +25,6 @@ public class AboutCommand extends Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Get the information about Kepler";
     }
 }
