@@ -53,7 +53,7 @@ public class RoomTile {
 
         if (!room.isPublicRoom()) {
             if (tile.getEntities().size() > 0) {
-                return tile.getEntities().contains(entity); // Allow walk if you exist already in the tile
+                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
             }
         }
 
@@ -87,7 +87,6 @@ public class RoomTile {
      * Removes the entity.
      *
      * @param entity the entity
-     * @return true, if successful
      */
     public void removeEntity(Entity entity) {
         this.entities.remove(entity);
