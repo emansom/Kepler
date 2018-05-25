@@ -37,9 +37,13 @@ public class RoomMapping {
 
         for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
             for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
-                this.roomMap[x][y] = new RoomTile(new Position(x, y));
+                this.roomMap[x][y] = new RoomTile(this.room, new Position(x, y));
                 this.roomMap[x][y].setTileHeight(this.roomModel.getTileHeight(x, y));
             }
+        }
+
+        for (Entity entity : this.room.getEntities()) {
+            this.getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY()).addEntity(entity);
         }
 
         List<Item> items = new ArrayList<>(this.room.getItems());
@@ -61,12 +65,7 @@ public class RoomMapping {
                 tile.setTileHeight(item.getTotalHeight());
                 tile.setHighestItem(item);
 
-                List<Position> affectedTiles = AffectedTile.getAffectedTiles(
-                        item.getDefinition().getLength(),
-                        item.getDefinition().getWidth(),
-                        item.getPosition().getX(),
-                        item.getPosition().getY(),
-                        item.getPosition().getRotation());
+                List<Position> affectedTiles = AffectedTile.getAffectedTiles(item);
 
                 for (Position position : affectedTiles) {
                     if (position.getX() == item.getPosition().getX() && position.getY() == item.getPosition().getY()) {
@@ -104,6 +103,7 @@ public class RoomMapping {
             this.room.send(new PLACE_FLOORITEM(item));
         }
 
+        item.updateEntities(null);
         ItemDao.updateItem(item);
     }
 
@@ -124,6 +124,7 @@ public class RoomMapping {
             this.room.send(new MOVE_FLOORITEM(item));
         }
 
+        item.updateEntities(oldPosition);
         ItemDao.updateItem(item);
     }
 
@@ -134,7 +135,6 @@ public class RoomMapping {
      */
     public void removeItem(Item item) {
         item.setOwnerId(this.room.getData().getOwnerId());
-        this.room.getItems().remove(item);
 
         if (item.getDefinition().getBehaviour().isWallItem()) {
             this.room.send(new REMOVE_WALLITEM(item));
@@ -143,12 +143,13 @@ public class RoomMapping {
             this.room.send(new REMOVE_FLOORITEM(item));
         }
 
+        item.updateEntities(null);
+
         item.getPosition().setX(0);
         item.getPosition().setY(0);
         item.getPosition().setZ(0);
         item.getPosition().setRotation(0);
         item.setRoomId(0);
-
         ItemDao.updateItem(item);
     }
     /**

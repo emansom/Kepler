@@ -1,17 +1,61 @@
 package org.alexdev.kepler.game.room.mapping;
 
+import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.room.Room;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RoomTile {
+    private Room room;
     private Position position;
+    private List<Entity> entities;
+
     private double tileHeight;
 
     private Item highestItem;
     private Item itemBelow;
 
-    public RoomTile(Position position) {
+    public RoomTile(Room room, Position position) {
+        this.room = room;
         this.position = position;
+        this.entities = new CopyOnWriteArrayList<>();
+    }
+
+    /**
+     * Sets the entity.
+     *
+     * @param entity the new entity
+     */
+    public void addEntity(Entity entity) {
+        if (new Position(this.position.getX(), this.position.getY()).equals(new Position(this.room.getData().getModel().getDoorX(), this.room.getData().getModel().getDoorY()))) {
+            return;
+        }
+
+        this.entities.add(entity);
+    }
+
+    /**
+     * Contains the entity.
+     *
+     * @param entity the entity
+     * @return true, if successful
+     */
+    public boolean containsEntity(Entity entity) {
+        return this.entities.contains(entity);
+    }
+
+    /**
+     * Removes the entity.
+     *
+     * @param entity the entity
+     * @return true, if successful
+     */
+    public void removeEntity(Entity entity) {
+        this.entities.remove(entity);
     }
 
     /**
@@ -75,5 +119,9 @@ public class RoomTile {
      */
     public void setItemBelow(Item itemBelow) {
         this.itemBelow = itemBelow;
+    }
+
+    public List<Entity> getEntities() {
+        return this.entities;
     }
 }

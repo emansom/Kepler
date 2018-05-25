@@ -1,12 +1,19 @@
 package org.alexdev.kepler.game.item;
 
+import javafx.geometry.Pos;
+import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Item {
     private int id;
@@ -52,8 +59,45 @@ public class Item {
         }
     }
 
+    /**
+     * Update user statuses on items with their old position and new position.
+     * The old position is never null if the item is moved.
+     *
+     * @param oldPosition the old position of the item
+     */
     public void updateEntities(Position oldPosition) {
+        if (this.definition.getBehaviour().isWallItem()) {
+            return;
+        }
 
+        List<Entity> entitiesToUpdate = new ArrayList<>();
+
+        if (oldPosition != null) {
+            for (Position position : AffectedTile.getAffectedTiles(this, oldPosition.getX(), oldPosition.getY(), oldPosition.getRotation())) {
+                RoomTile tile = this.getRoom().getMapping().getTile(position.getX(), position.getY());
+
+                if (tile == null) {
+                    continue;
+                }
+
+                entitiesToUpdate.addAll(tile.getEntities());
+            }
+        }
+
+        for (Position position :  AffectedTile.getAffectedTiles(this)) {
+            RoomTile tile = this.getRoom().getMapping().getTile(position.getX(), position.getY());
+
+            if (tile == null) {
+                continue;
+            }
+
+            entitiesToUpdate.addAll(tile.getEntities());
+        }
+
+        for (Entity entity : entitiesToUpdate) {
+            System.out.println("Update: " + entity.getDetails().getName());
+            entity.getRoomUser().invokeItem();
+        }
     }
 
     /**
