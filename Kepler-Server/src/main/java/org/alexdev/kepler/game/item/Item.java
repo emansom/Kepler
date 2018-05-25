@@ -74,7 +74,7 @@ public class Item {
 
         if (oldPosition != null) {
             for (Position position : AffectedTile.getAffectedTiles(this, oldPosition.getX(), oldPosition.getY(), oldPosition.getRotation())) {
-                RoomTile tile = this.getRoom().getMapping().getTile(position.getX(), position.getY());
+                RoomTile tile = this.getRoom().getMapping().getTile(position);
 
                 if (tile == null) {
                     continue;
@@ -85,7 +85,7 @@ public class Item {
         }
 
         for (Position position :  AffectedTile.getAffectedTiles(this)) {
-            RoomTile tile = this.getRoom().getMapping().getTile(position.getX(), position.getY());
+            RoomTile tile = this.getRoom().getMapping().getTile(position);
 
             if (tile == null) {
                 continue;

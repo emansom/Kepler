@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.mapping;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityStatus;
@@ -43,7 +44,7 @@ public class RoomMapping {
         }
 
         for (Entity entity : this.room.getEntities()) {
-            this.getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY()).addEntity(entity);
+            this.getTile(entity.getRoomUser().getPosition()).addEntity(entity);
         }
 
         List<Item> items = new ArrayList<>(this.room.getItems());
@@ -54,7 +55,7 @@ public class RoomMapping {
                 continue;
             }
 
-            RoomTile tile = getTile(item.getPosition().getX(), item.getPosition().getY());
+            RoomTile tile = getTile(item.getPosition());
 
             if (tile == null) {
                 continue;
@@ -72,7 +73,7 @@ public class RoomMapping {
                         continue;
                     }
 
-                    RoomTile affectedTile = this.getTile(position.getX(), position.getY());
+                    RoomTile affectedTile = this.getTile(position);
 
                     affectedTile.setTileHeight(item.getTotalHeight());
                     affectedTile.setHighestItem(item);
@@ -160,7 +161,7 @@ public class RoomMapping {
      * @param isRotation the rotation only
      */
     private void handleItemAdjustment(Item item, boolean isRotation) {
-        RoomTile tile = this.getTile(item.getPosition().getX(), item.getPosition().getY());
+        RoomTile tile = this.getTile(item.getPosition());
 
         if (tile == null) {
             return;
@@ -173,6 +174,16 @@ public class RoomMapping {
         if (item.getPosition().getZ() > 8) {
             item.getPosition().setZ(8);
         }
+    }
+
+    /**
+     * Get the tile by {@link Position} instance
+     *
+     * @param position the position class to find tile
+     * @return the tile, found, else null
+     */
+    public RoomTile getTile(Position position) {
+        return getTile(position.getX(), position.getY());
     }
 
     /**

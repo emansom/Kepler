@@ -88,7 +88,7 @@ public class ProcessEntityTask implements Runnable {
                 }
 
                 RoomTile previousTile = roomUser.getTile();
-                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next.getX(), next.getY());
+                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
 
                 previousTile.removeEntity(entity);
                 nextTile.addEntity(entity);
@@ -100,7 +100,7 @@ public class ProcessEntityTask implements Runnable {
                 roomUser.removeStatus(EntityStatus.SIT);
 
                 int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
-                double height = this.room.getMapping().getTile(next.getX(), next.getY()).getTileHeight();
+                double height = this.room.getMapping().getTile(next).getTileHeight();
 
                 roomUser.getPosition().setRotation(rotation);
                 roomUser.setStatus(EntityStatus.MOVE, " " + next.getX() + "," + next.getY() + "," + StringUtil.format(height));

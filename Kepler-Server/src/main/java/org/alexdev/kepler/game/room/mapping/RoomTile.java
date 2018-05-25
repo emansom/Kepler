@@ -39,7 +39,7 @@ public class RoomTile {
             return false;
         }
 
-        RoomTile tile = room.getMapping().getTile(position.getX(), position.getY());
+        RoomTile tile = room.getMapping().getTile(position);
 
         if (tile == null) {
             return false;

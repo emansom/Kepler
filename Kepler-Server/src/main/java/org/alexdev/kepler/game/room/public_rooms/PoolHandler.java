@@ -132,7 +132,7 @@ public class PoolHandler {
             roomUser.setStatus(EntityStatus.SWIM, "");
         }
 
-        roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp.getX(), warp.getY()).getTileHeight()));
+        roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp).getTileHeight()));
         roomUser.getPath().clear();
         roomUser.getPath().add(goal);
         roomUser.setWalking(true);

@@ -47,8 +47,8 @@ public class Pathfinder {
             return false;
         }
 
-        RoomTile fromTile = room.getMapping().getTile(current.getX(), current.getY());
-        RoomTile toTile = room.getMapping().getTile(tmp.getX(), tmp.getY());
+        RoomTile fromTile = room.getMapping().getTile(current);
+        RoomTile toTile = room.getMapping().getTile(tmp);
 
         double oldHeight = fromTile.getTileHeight();
         double newHeight = toTile.getTileHeight();

@@ -164,7 +164,7 @@ public class RoomUser {
      * @param position the position
      */
     public void updateNewHeight(Position position) {
-        double height = this.room.getMapping().getTile(position.getX(), position.getY()).getTileHeight();
+        double height = this.room.getMapping().getTile(position).getTileHeight();
         this.position.setZ(height);
     }
 
@@ -178,7 +178,7 @@ public class RoomUser {
             return null;
         }
 
-        return this.room.getMapping().getTile(this.position.getX(), this.position.getY());
+        return this.room.getMapping().getTile(this.position);
     }
 
     /**
