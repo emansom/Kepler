@@ -14,7 +14,7 @@ public class MESSENGER_REQUESTBUDDY implements MessageEvent {
     public void handle(Player player, NettyRequest reader) {
         int userId = PlayerDao.getId(reader.readString());
 
-        if (userId == -1) {
+        if (userId == -1 || userId == player.getDetails().getId()) {
             return;
         }
 
