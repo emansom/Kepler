@@ -152,6 +152,7 @@ public class RoomMapping {
         item.setRoomId(0);
         ItemDao.updateItem(item);
     }
+
     /**
      * Handle item adjustment.
      *
@@ -172,33 +173,6 @@ public class RoomMapping {
         if (item.getPosition().getZ() > 8) {
             item.getPosition().setZ(8);
         }
-    }
-
-    /**
-     * Gets if the tile was valid.
-     *
-     * @param entity the entity checking
-     * @param position the position of the tile
-     * @return true, if successful
-     */
-    public boolean isValidTile(Entity entity, Position position) {
-        RoomTile tile = getTile(position.getX(), position.getY());
-
-        if (tile == null) {
-            return false;
-        }
-
-        if (this.roomModel.getTileState(position.getX(), position.getY()) == RoomTileState.CLOSED) {
-            return false;
-        }
-
-        if (tile.getHighestItem() != null) {
-            if (!tile.getHighestItem().isWalkable()) {
-                return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
-            }
-        }
-
-        return true;
     }
 
     /**

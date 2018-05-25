@@ -26,6 +26,35 @@ public class RoomTile {
     }
 
     /**
+     * Gets if the tile was valid.
+     *
+     * @param entity the entity checking
+     * @param position the position of the tile
+     * @return true, if successful
+     */
+    public static boolean isValidTile(Entity entity, Position position) {
+        Room room = entity.getRoom();
+
+        if (room == null) {
+            return false;
+        }
+
+        RoomTile tile = room.getMapping().getTile(position.getX(), position.getY());
+
+        if (tile == null) {
+            return false;
+        }
+
+        if (tile.getHighestItem() != null) {
+            if (!tile.getHighestItem().isWalkable()) {
+                return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
+            }
+        }
+
+        return true;
+    }
+
+    /**
      * Sets the entity.
      *
      * @param entity the new entity
