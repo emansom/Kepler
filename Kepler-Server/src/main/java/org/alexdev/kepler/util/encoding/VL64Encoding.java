@@ -32,24 +32,20 @@ public class VL64Encoding {
         return bzData;
     }
 
-    public static int decode(byte[] bzData, AtomicInteger totalBytes) {
-        if (totalBytes == null) {
-            return 0;
-        }
-
+    public static int decode(byte[] bzData) {
         int pos = 0;
         int v = 0;
 
         boolean negative = (bzData[pos] & 4) == 4;
+        int totalBytes = bzData[pos] >> 3 & 7;
 
-        totalBytes.set(bzData[pos] >> 3 & 7);
         v = bzData[pos] & 3;
 
         pos++;
 
         int shiftAmount = 2;
 
-        for (int b = 1; b < totalBytes.get(); b++)
+        for (int b = 1; b < totalBytes; b++)
         {
             v |= (bzData[pos] & 0x3f) << shiftAmount;
             shiftAmount = 2 + 6 * b;

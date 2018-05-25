@@ -22,10 +22,12 @@ public class NettyRequest {
 
     public Integer readInt() {
         try {
-            AtomicInteger length = new AtomicInteger(0);
-            int value = VL64Encoding.decode(remainingBytes(), length);
+            byte[] remaining = this.remainingBytes();
 
-            readBytes(length.get());
+            int length = remaining[0] >> 3 & 7;
+            int value = VL64Encoding.decode(remaining);
+            readBytes(length);
+
             return value;
         } catch (Exception e) {
             return 0;
