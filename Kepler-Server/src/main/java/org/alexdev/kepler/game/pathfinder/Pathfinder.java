@@ -81,26 +81,26 @@ public class Pathfinder {
             if (toItem != null) {
                 // Check if they have swimmers before trying to enter pool
                 if (toItem.getDefinition().getSprite().equals("poolEnter") ||
-                        toItem.getDefinition().getSprite().equals("poolLeave")) {
+                    toItem.getDefinition().getSprite().equals("poolLeave")) {
                     return entity.getDetails().getPoolFigure().length() > 0;
                 }
 
                 // Don't allow to "enter" the pool if they're already swimming
                 if (entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
-                        toItem.getDefinition().getSprite().equals("poolEnter")) {
+                    toItem.getDefinition().getSprite().equals("poolEnter")) {
                     return false;
                 }
 
                 // Don't allow to "leave" the pool if they're not swimming
                 if (!entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
-                        toItem.getDefinition().getSprite().equals("poolExit")) {
+                    toItem.getDefinition().getSprite().equals("poolExit")) {
                     return false;
                 }
 
                 // Don't allow people to enter the booth if it's closed, or don't allow
                 // if they attempt to use the pool lift without swimmers
                 if (toItem.getDefinition().getSprite().equals("poolBooth") ||
-                        toItem.getDefinition().getSprite().equals("poolLift")) {
+                    toItem.getDefinition().getSprite().equals("poolLift")) {
 
                     if (toItem.getCurrentProgramValue().equals("close")) {
                         return false;
@@ -112,7 +112,7 @@ public class Pathfinder {
                 // Don't allow people to enter the queue from any coordinate, and don't allow
                 // if they don't have a ticket or have swimmers.
                 if (entity.getRoom().getModel().getName().equals("pool_b") &&
-                        toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
 
                     if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
                         return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;
