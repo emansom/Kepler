@@ -66,7 +66,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
             }
 
         } catch (Exception ex) {
-            Log.getErrorLogger().error("Could not handle message: ", ex);
+            Log.getErrorLogger().error("Exception occurred when handling (" + message.getHeaderId() + "): ", e);
         }
     }
 

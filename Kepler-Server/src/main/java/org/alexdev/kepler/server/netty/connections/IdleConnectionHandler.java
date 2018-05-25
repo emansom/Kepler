@@ -13,7 +13,7 @@ public class IdleConnectionHandler extends ChannelDuplexHandler {
     private static Logger logger = LoggerFactory.getLogger(IdleConnectionHandler.class);
 
     @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object event) throws Exception {
+    public void userEventTriggered(ChannelHandlerContext ctx, Object event) {
         if (event instanceof IdleStateEvent) {
             IdleStateEvent e = (IdleStateEvent) event;
 

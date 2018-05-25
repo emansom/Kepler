@@ -219,17 +219,13 @@ public class MessageHandler {
      * @param message the message
      */
     public void handleRequest(Player player, NettyRequest message) {
-        try {
-            if (Configuration.getBoolean("log.received.packets")) {
-                if (this.messages.containsKey(message.getHeaderId())) {
-                    MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
-                    player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
-                } else {
-                    player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
-                }
+        if (Configuration.getBoolean("log.received.packets")) {
+            if (this.messages.containsKey(message.getHeaderId())) {
+                MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
+                player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
+            } else {
+                player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
             }
-        } catch (Exception e) {
-            Log.getErrorLogger().error("Exception occurred when handling (" + message.getHeaderId() + "): ", e);
         }
 
         invoke(player, message.getHeaderId(), message);
