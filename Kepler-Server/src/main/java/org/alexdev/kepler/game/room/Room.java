@@ -102,32 +102,34 @@ public class Room {
     }
 
     /**
-     * Dispose room, or at least try to when
-     * the stars align allowing it to be removed from the manager.
+     * Try to dispose room, it will happen when the
+     * stars align allowing it to be removed from the manager.
      *
      * @param isForced whether the disposal is forced
+     * @return if the room was successfully disposed
      */
-    public void dispose(boolean isForced) {
+    public boolean tryDispose(boolean isForced) {
         if (this.roomEntityManager.getEntitiesByClass(Player.class).size() > 0) {
-            return;
+            return false;
         }
 
         this.roomTaskManager.stopTasks();
         this.roomEntityManager.getInstanceIdCounter().set(0);
 
         if (this.isPublicRoom()) {
-            return;
+            return false;
         }
 
         this.items.clear();
 
         if (!isForced) {
             if (PlayerManager.getInstance().getPlayerById(this.roomData.getOwnerId()) != null) { // Don't remove completely if owner is online
-                return;
+                return false;
             }
         }
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
+        return true;
     }
 
     /**

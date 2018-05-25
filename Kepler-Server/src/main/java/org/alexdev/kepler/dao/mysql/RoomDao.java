@@ -14,7 +14,7 @@ import java.util.List;
 public class RoomDao {
 
     public static List<Room> getRoomsByUserId(int roomId) {
-        List<Room> rooms = new ArrayList<Room>();
+        List<Room> rooms = new ArrayList<>();
 
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
@@ -24,6 +24,43 @@ public class RoomDao {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE owner_id = ?", sqlConnection);
             preparedStatement.setInt(1, roomId);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Room room = new Room();
+                fill(room.getData(), resultSet);
+                rooms.add(room);
+                //fuserights.put(resultSet.getString("fuseright"), resultSet.getInt("min_rank"));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return rooms;
+    }
+
+    /**
+     * Get a list of random rooms.
+     *
+     * @param limit the limit of rooms
+     * @return the list of rooms
+     */
+    public static List<Room> getRandomRooms(int limit) {
+        List<Room> rooms = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE owner_id > 0 ORDER BY RAND() LIMIT ?", sqlConnection);
+            preparedStatement.setInt(1, limit);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

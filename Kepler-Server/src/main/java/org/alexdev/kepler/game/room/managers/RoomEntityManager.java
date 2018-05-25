@@ -11,13 +11,10 @@ import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
-import org.alexdev.kepler.messages.outgoing.rooms.badges.USER_BADGE;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
-import org.alexdev.kepler.util.StringUtil;
 
-import javax.management.AttributeList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -162,7 +159,7 @@ public class RoomEntityManager {
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         this.room.send(new LOGOUT(entity.getRoomUser().getInstanceId()));
-        this.room.dispose(false);
+        this.room.tryDispose(false);
 
         entity.getRoomUser().reset();
 
