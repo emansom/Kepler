@@ -7,7 +7,9 @@ public enum EntityStatus {
     LAY("lay"), 
     FLAT_CONTROL("flatctrl"), 
     DANCE("dance"),
-    SWIM("swim");
+    SWIM("swim"),
+    CAMERA("cri"),
+    BLANK("");
 
     private String statusCode;
 

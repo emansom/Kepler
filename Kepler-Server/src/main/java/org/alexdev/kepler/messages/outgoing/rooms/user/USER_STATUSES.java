@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages.outgoing.rooms.user;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityState;
 import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
@@ -48,9 +49,13 @@ public class USER_STATUSES extends MessageComposer {
             response.writeDelimeter(states.getPosition().getHeadRotation(), ',');
             response.writeDelimeter(states.getPosition().getBodyRotation(), '/');
 
-            for (Map.Entry<EntityStatus, String> set : states.getStatuses().entrySet()) {
-                response.write(set.getKey().getStatusCode());
-                response.write(set.getValue());
+            for (var status : states.getStatuses().values()) {
+                response.write(status.getKey().getStatusCode());
+
+                if (status.getKey() != EntityStatus.BLANK) {
+                    response.write(status.getValue());
+                }
+
                 response.write("/");
             }
 

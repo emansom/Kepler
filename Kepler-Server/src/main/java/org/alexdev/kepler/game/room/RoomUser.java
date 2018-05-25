@@ -9,9 +9,10 @@ import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.util.StringUtil;
 
-import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomUser {
     private Entity entity;
@@ -23,7 +24,7 @@ public class RoomUser {
     private int instanceId;
     private int authenticateId;
 
-    private Map<EntityStatus, String> statuses;
+    private Map<String, RoomUserStatus> statuses;
     private LinkedList<Position> path;
 
     private boolean isWalkingAllowed;
@@ -47,7 +48,7 @@ public class RoomUser {
         this.isTyping = false;
         this.instanceId = -1;
         this.authenticateId = -1;
-        this.statuses = new HashMap<>();
+        this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
     }
 
@@ -191,7 +192,7 @@ public class RoomUser {
      * @return true, if successful
      */
     public boolean containsStatus(EntityStatus status) {
-        return this.statuses.containsKey(status);
+        return this.statuses.containsKey(status.getStatusCode());
     }
 
     /**
@@ -201,7 +202,7 @@ public class RoomUser {
      * @return if the user contained the status
      */
     public void removeStatus(EntityStatus status) {
-        this.statuses.remove(status);
+        this.statuses.remove(status.getStatusCode());
     }
 
     /**
@@ -215,7 +216,15 @@ public class RoomUser {
             this.removeStatus(status);
         }
 
-        this.statuses.put(status, value);
+        this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value));
+    }
+
+    public void setStatus(EntityStatus status, String value, int secLifetime, EntityStatus action, int secActionSwitch, int secSwitchLifetime) {
+        if (this.containsStatus(status)) {
+            this.removeStatus(status);
+        }
+
+        this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value, secLifetime, action, secActionSwitch, secSwitchLifetime));
     }
 
     public Entity getEntity() {
@@ -262,7 +271,7 @@ public class RoomUser {
         this.instanceId = instanceId;
     }
 
-    public Map<EntityStatus, String> getStatuses() {
+    public Map<String, RoomUserStatus> getStatuses() {
         return this.statuses;
     }
 

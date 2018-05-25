@@ -29,7 +29,6 @@ public class ProcessEntityTask implements Runnable {
 
         List<Entity> entitiesToUpdate = new ArrayList<>();
 
-        synchronized (this.room.getEntities())  {
             for (Entity entity : this.room.getEntities()) {
                 if (entity != null) {
                     if (entity.getRoomUser() != null && entity.getRoomUser().getRoom() != null) {
@@ -43,7 +42,6 @@ public class ProcessEntityTask implements Runnable {
                     }
                 }
             }
-        }
 
         if (entitiesToUpdate.size() > 0) {
             this.room.send(new USER_STATUSES(entitiesToUpdate));

@@ -3,8 +3,10 @@ package org.alexdev.kepler.game.entity;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomUserStatus;
 
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class EntityState {
     private int entityId;
@@ -12,15 +14,15 @@ public class EntityState {
     private PlayerDetails details;
     private Room room;
     private Position position;
-    private Map<EntityStatus, String> statuses;
+    private Map<String, RoomUserStatus> statuses;
 
-    public EntityState(int entityId, int instanceId, PlayerDetails details, Room room, Position position, Map<EntityStatus, String> statuses) {
+    public EntityState(int entityId, int instanceId, PlayerDetails details, Room room, Position position, Map<String, RoomUserStatus> statuses) {
         this.entityId = entityId;
         this.instanceId = instanceId;
         this.details = details;
         this.room = room;
         this.position = position;
-        this.statuses = statuses;
+        this.statuses = new ConcurrentHashMap<>(statuses);
     }
 
     public int getInstanceId() {
@@ -31,7 +33,7 @@ public class EntityState {
         return position;
     }
 
-    public Map<EntityStatus, String> getStatuses() {
+    public Map<String, RoomUserStatus> getStatuses() {
         return statuses;
     }
 

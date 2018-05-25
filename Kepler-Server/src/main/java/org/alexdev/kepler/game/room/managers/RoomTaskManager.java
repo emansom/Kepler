@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.ProcessEntityTask;
+import org.alexdev.kepler.game.room.tasks.ProcessStatusTask;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 
@@ -21,9 +22,13 @@ public class RoomTaskManager {
     private ProcessEntityTask processEntity;
     private ScheduledFuture<?> scheduledProcessEntity;
 
+    private ProcessStatusTask processStatus;
+    private ScheduledFuture<?> scheduledProcessStatus;
+
     public RoomTaskManager(Room room) {
         this.room = room;
         this.processEntity = new ProcessEntityTask(room);
+        this.processStatus = new ProcessStatusTask(room);
     }
 
     /**
@@ -35,6 +40,11 @@ public class RoomTaskManager {
             this.scheduledProcessEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
                     this.processEntity, 0, 500, TimeUnit.MILLISECONDS);
         }
+
+        if (this.scheduledProcessStatus == null) {
+            this.scheduledProcessStatus = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
+                    this.processStatus, 0, 1, TimeUnit.SECONDS);
+        }
     }
 
     /**
@@ -44,6 +54,11 @@ public class RoomTaskManager {
         if (this.scheduledProcessEntity != null) {
             this.scheduledProcessEntity.cancel(false);
             this.scheduledProcessEntity = null;
+        }
+
+        if (this.scheduledProcessStatus != null) {
+            this.scheduledProcessStatus.cancel(false);
+            this.scheduledProcessStatus = null;
         }
     }
 }

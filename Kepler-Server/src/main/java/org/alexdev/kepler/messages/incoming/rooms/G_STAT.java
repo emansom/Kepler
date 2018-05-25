@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
+import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.ACTIVE_OBJECTS;
