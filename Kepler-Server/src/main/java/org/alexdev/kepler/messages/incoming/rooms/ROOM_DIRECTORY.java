@@ -8,14 +8,12 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
 public class ROOM_DIRECTORY implements MessageEvent {
-
     @Override
     public void handle(Player player, NettyRequest reader) {
         char is_public = reader.contents().charAt(0);
 
-        player.send(new OPEN_CONNECTION());
-
         if (is_public != 'A') {
+            player.send(new OPEN_CONNECTION());
             return;
         }
 
