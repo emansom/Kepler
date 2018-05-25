@@ -90,11 +90,11 @@ public class RoomModel {
     }
 
 
-    public String getModelId() {
+    public String getId() {
         return modelId;
     }
 
-    public String getModelName() {
+    public String getName() {
         return modelName;
     }
 

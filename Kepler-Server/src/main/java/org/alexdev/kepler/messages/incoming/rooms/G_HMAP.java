@@ -13,6 +13,6 @@ public class G_HMAP implements MessageEvent {
             return;
         }
 
-        player.send(new HEIGHTMAP(player.getRoomUser().getRoom().getData().getModel()));
+        player.send(new HEIGHTMAP(player.getRoomUser().getRoom().getModel()));
     }
 }

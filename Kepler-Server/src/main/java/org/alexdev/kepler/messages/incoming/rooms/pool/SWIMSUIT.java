@@ -17,8 +17,8 @@ public class SWIMSUIT implements MessageEvent {
             return;
         }
 
-        if (!room.getData().getModel().getModelName().equals("pool_a") &&
-            !room.getData().getModel().getModelName().equals("md_a")) {
+        if (!room.getData().getModel().equals("pool_a") &&
+            !room.getData().getModel().equals("md_a")) {
             return;
         }
 

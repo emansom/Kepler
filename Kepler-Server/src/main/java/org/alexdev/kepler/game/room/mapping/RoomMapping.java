@@ -32,7 +32,7 @@ public class RoomMapping {
      * furniture detection.
      */
     public void regenerateCollisionMap() {
-        this.roomModel = this.room.getData().getModel();
+        this.roomModel = this.room.getModel();
         this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
 
         for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {

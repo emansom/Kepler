@@ -9,6 +9,8 @@ import org.alexdev.kepler.game.room.managers.RoomEntityManager;
 import org.alexdev.kepler.game.room.managers.RoomItemManager;
 import org.alexdev.kepler.game.room.managers.RoomTaskManager;
 import org.alexdev.kepler.game.room.mapping.RoomMapping;
+import org.alexdev.kepler.game.room.models.RoomModel;
+import org.alexdev.kepler.game.room.models.RoomModelManager;
 import org.alexdev.kepler.messages.incoming.rooms.user.YOUAROWNER;
 import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARECONTROLLER;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -175,6 +177,10 @@ public class Room {
      */
     public RoomData getData() {
         return roomData;
+    }
+
+    public RoomModel getModel() {
+        return RoomModelManager.getInstance().getModel(this.roomData.getModel());
     }
 
     /**

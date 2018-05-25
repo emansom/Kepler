@@ -27,7 +27,7 @@ public class FLATINFO extends MessageComposer {
             response.writeString("-");
         }
 
-        response.writeString(this.room.getData().getModelId());
+        response.writeString(this.room.getModel().getName());
         response.writeString(this.room.getData().getName());
         response.writeString(this.room.getData().getDescription());
         response.writeBool(this.room.getData().showName());

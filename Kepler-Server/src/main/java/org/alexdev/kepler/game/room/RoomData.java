@@ -50,7 +50,7 @@ public class RoomData {
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
 
-        for (var item : this.getModel().getPublicItems()) {
+        for (var item : this.room.getModel().getPublicItems()) {
             item.setRoomId(this.id);
             this.room.getItems().add(item);
         }
@@ -92,12 +92,8 @@ public class RoomData {
         this.description = description;
     }
 
-    public String getModelId() {
+    public String getModel() {
         return model;
-    }
-
-    public RoomModel getModel() {
-        return RoomModelManager.getInstance().getModel(this.model);
     }
 
     public String getCcts() {

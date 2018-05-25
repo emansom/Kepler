@@ -65,7 +65,7 @@ public class Pathfinder {
         Item toItem = toTile.getHighestItem();
 
         if (fromItem != null && toItem != null) {
-            if (entity.getRoom().getData().getModelId().equals("pool_b")) {
+            if (entity.getRoom().getModel().getName().equals("pool_b")) {
                 if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
                     toItem.getDefinition().getSprite().equals("queue_tile2")) {
                     return true;
@@ -99,7 +99,7 @@ public class Pathfinder {
                 }
             }
 
-            if (entity.getRoom().getData().getModel().getModelName().equals("pool_b") &&
+            if (entity.getRoom().getModel().getName().equals("pool_b") &&
                 toItem.getDefinition().getSprite().equals("queue_tile2")) {
 
                 if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
@@ -110,8 +110,8 @@ public class Pathfinder {
             }
         }
 
-        if (current.getX() != room.getData().getModel().getDoorX() &&
-            current.getY() != room.getData().getModel().getDoorY()) {
+        if (current.getX() != room.getModel().getDoorX() &&
+            current.getY() != room.getModel().getDoorY()) {
 
             if (toItem != null) {
                 if (isFinalMove) {
@@ -174,7 +174,7 @@ public class Pathfinder {
     private static PathfinderNode makePathReversed(Entity entity, int X, int Y) {
         LinkedList<PathfinderNode> openList = new LinkedList<>();
 
-        PathfinderNode[][] map = new PathfinderNode[entity.getRoom().getData().getModel().getMapSizeX()][entity.getRoom().getData().getModel().getMapSizeY()];
+        PathfinderNode[][] map = new PathfinderNode[entity.getRoom().getModel().getMapSizeX()][entity.getRoom().getModel().getMapSizeY()];
         PathfinderNode node;
         Position tmp;
 

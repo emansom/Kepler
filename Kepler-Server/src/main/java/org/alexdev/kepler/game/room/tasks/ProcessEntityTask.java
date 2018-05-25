@@ -87,8 +87,8 @@ public class ProcessEntityTask implements Runnable {
 
                 // Leave room if the tile is the door and we are in a flat
                 // TODO: disable if in public room with teleporting tiles
-                var doorX = roomUser.getRoom().getData().getModel().getDoorX();
-                var doorY = roomUser.getRoom().getData().getModel().getDoorY();
+                var doorX = roomUser.getRoom().getModel().getDoorX();
+                var doorY = roomUser.getRoom().getModel().getDoorY();
 
                 if (next.getX() == doorX && next.getY() == doorY) {
                     roomUser.getRoom().getEntityManager().leaveRoom(entity, true);

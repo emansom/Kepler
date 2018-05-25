@@ -93,11 +93,11 @@ public class RoomEntityManager {
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
         entity.getRoomUser().setPosition(new Position(
-                this.room.getData().getModel().getDoorX(),
-                this.room.getData().getModel().getDoorY(),
-                this.room.getData().getModel().getDoorZ(),
-                this.room.getData().getModel().getDoorRotation(),
-                this.room.getData().getModel().getDoorRotation()
+                this.room.getModel().getDoorX(),
+                this.room.getModel().getDoorY(),
+                this.room.getModel().getDoorZ(),
+                this.room.getModel().getDoorRotation(),
+                this.room.getModel().getDoorRotation()
         ));
 
         entity.getRoomUser().setAuthenticateId(-1);
@@ -110,7 +110,7 @@ public class RoomEntityManager {
         Player player = (Player) entity;
 
         player.sendQueued(new ROOM_URL());
-        player.sendQueued(new ROOM_READY(this.room.getId(), this.room.getData().getModel().getModelName()));
+        player.sendQueued(new ROOM_READY(this.room.getId(), this.room.getModel().getName()));
 
         if (this.room.getData().getWallpaper() > 0) {
             player.sendQueued(new FLATPROPERTY("wallpaper", this.room.getData().getWallpaper()));

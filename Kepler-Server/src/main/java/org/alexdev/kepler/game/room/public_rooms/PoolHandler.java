@@ -158,15 +158,15 @@ public class PoolHandler {
             return;
         }
 
-        if (!room.getData().getModel().getModelName().equals("pool_a") &&
-            !room.getData().getModel().getModelName().equals("md_a")) {
+        if (!room.getModel().getName().equals("pool_a") &&
+            !room.getModel().getName().equals("md_a")) {
             return;
         }
 
         tile.getHighestItem().showProgram("open");
         player.getRoomUser().setWalkingAllowed(true);
 
-        if (room.getData().getModel().getModelName().equals("pool_a")) {
+        if (room.getData().getModel().equals("pool_a")) {
             if (player.getRoomUser().getPosition().getY() == 11) {
                 player.getRoomUser().walkTo(19, 11);
             }
@@ -176,7 +176,7 @@ public class PoolHandler {
             }
         }
 
-        if (room.getData().getModel().getModelName().equals("md_a")) {
+        if (room.getData().getModel().equals("md_a")) {
             if (player.getRoomUser().getPosition().getX() == 8) {
                 player.getRoomUser().walkTo(8, 2);
             }
