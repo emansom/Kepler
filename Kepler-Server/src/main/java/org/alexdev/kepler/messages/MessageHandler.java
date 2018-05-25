@@ -37,7 +37,7 @@ public class MessageHandler {
     private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
     private static MessageHandler instance;
 
-    public MessageHandler() {
+    private MessageHandler() {
         this.messages = new ConcurrentHashMap<>();
 
         registerHandshakePackets();
@@ -69,7 +69,7 @@ public class MessageHandler {
     /**
      * Register general purpose user packets.
      */
-    public void registerUserPackets() {
+    private void registerUserPackets() {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
         registerEvent(196, new PONG());
@@ -79,7 +79,7 @@ public class MessageHandler {
     /**
      * Register navigator packets.
      */
-    public void registerNavigatorPackets() {
+    private void registerNavigatorPackets() {
         registerEvent(150, new NAVIGATE());
         registerEvent(16, new SUSERF());
         registerEvent(151, new GETUSERFLATCATS());
@@ -89,7 +89,7 @@ public class MessageHandler {
     /**
      * Register room packets.
      */
-    public void registerRoomPackets() {
+    private void registerRoomPackets() {
         registerEvent(57, new TRYFLAT());
         registerEvent(59, new GOTOFLAT());
         registerEvent(182, new GETINTEREST());
@@ -105,7 +105,7 @@ public class MessageHandler {
     /**
      * Register room user packets.
      */
-    public void registerRoomUserPackets() {
+    private void registerRoomUserPackets() {
         registerEvent(53, new QUIT());
         registerEvent(75, new WALK());
         registerEvent(115, new GOAWAY());
@@ -115,7 +115,7 @@ public class MessageHandler {
     /**
      * Register room badges packets;
      */
-    public void registerRoomBadgesPackets() {
+    private void registerRoomBadgesPackets() {
         registerEvent(157, new GETAVAILABLEBADGES());
         registerEvent(158, new SETBADGE());
     }
@@ -123,7 +123,7 @@ public class MessageHandler {
     /**
      * Register room settings packets.
      */
-    public void registerRoomSettingsPackets() {
+    private void registerRoomSettingsPackets() {
         registerEvent(21, new GETFLATINFO());
         registerEvent(29, new CREATEFLAT());
         registerEvent(25, new SETFLATINFO());
@@ -152,7 +152,7 @@ public class MessageHandler {
     /**
      * Register messenger packets.
      */
-    public void registerMessengerPackets() {
+    private void registerMessengerPackets() {
         registerEvent(12, new MESSENGERINIT());
         registerEvent(41, new FINDUSER());
         registerEvent(39, new MESSENGER_REQUESTBUDDY());
@@ -256,7 +256,7 @@ public class MessageHandler {
      *
      * @return the messages
      */
-    public ConcurrentHashMap<Integer, List<MessageEvent>> getMessages() {
+    private ConcurrentHashMap<Integer, List<MessageEvent>> getMessages() {
         return messages;
     }
 

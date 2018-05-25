@@ -14,9 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest> {
-
     final private static Logger log = LoggerFactory.getLogger(ConnectionHandler.class);
-    private NettyServer server;
+    final private NettyServer server;
 
     public ConnectionHandler(NettyServer server) {
         this.server = server;
