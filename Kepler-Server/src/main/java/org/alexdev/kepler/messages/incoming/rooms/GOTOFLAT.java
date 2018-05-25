@@ -19,7 +19,7 @@ public class GOTOFLAT implements MessageEvent {
         Room room = RoomManager.getInstance().getRoomById(roomId);
 
         if (room == null) {
-            room = RoomDao.getRoomById(roomId);
+            room = RoomManager.getInstance().addRoom(roomId);
         }
 
         if (room == null) {

@@ -58,12 +58,10 @@ public class RoomManager {
      *
      * @param roomId the id of the room to add
      */
-    public void addRoom(int roomId) {
-        if (this.roomMap.containsKey(roomId)) {
-            return;
-        }
-
-        addRoom(RoomDao.getRoomById(roomId));
+    public Room addRoom(int roomId) {
+        Room room = RoomDao.getRoomById(roomId);
+        addRoom(room);
+        return room;
     }
 
     /**
@@ -73,6 +71,10 @@ public class RoomManager {
      */
     public void addRoom(Room room) {
         if (room == null) {
+            return;
+        }
+
+        if (this.roomMap.containsKey(room.getId())) {
             return;
         }
 
