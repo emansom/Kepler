@@ -95,7 +95,6 @@ public class Item {
         }
 
         for (Entity entity : entitiesToUpdate) {
-            System.out.println("Update: " + entity.getDetails().getName());
             entity.getRoomUser().invokeItem();
         }
     }
