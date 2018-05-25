@@ -51,7 +51,13 @@ public class RoomTile {
             }
         }
 
-        return true;
+        if (!room.isPublicRoom()) {
+            if (tile.getEntities().size() > 0) {
+                return tile.getEntities().contains(entity); // Allow walk if you exist already in the tile
+            }
+        }
+
+        return room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.OPEN;
     }
 
     /**

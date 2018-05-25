@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
@@ -147,6 +148,12 @@ public class RoomEntityManager {
 
         if (entity.getType() == EntityType.PLAYER) {
             PoolHandler.disconnect((Player) entity);
+        }
+
+        RoomTile tile = entity.getRoomUser().getTile();
+
+        if (tile != null) {
+            tile.removeEntity(entity);
         }
 
         this.room.getEntities().remove(entity);

@@ -198,6 +198,10 @@ public class RoomMapping {
             return null;
         }
 
+        if (x >= this.room.getModel().getMapSizeX() || y >= this.room.getModel().getMapSizeY()) {
+            return null;
+        }
+
         if (x >= this.roomModel.getMapSizeX() || y >= this.roomModel.getMapSizeY()) {
             return null;
         }
