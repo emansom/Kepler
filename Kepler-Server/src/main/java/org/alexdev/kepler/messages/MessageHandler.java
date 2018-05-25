@@ -109,6 +109,8 @@ public class MessageHandler {
         registerEvent(75, new WALK());
         registerEvent(115, new GOAWAY());
         registerEvent(52, new CHAT());
+        registerEvent(55, new SHOUT());
+        registerEvent(56, new WHISPER());
         registerEvent(317, new USER_START_TYPING());
         registerEvent(318, new USER_CANCEL_TYPING());
     }

@@ -6,8 +6,8 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 public class CHAT_MESSAGE extends MessageComposer {
     public enum type {
         CHAT (24), // @X
-        SHOUT (0),
-        WHISPER (0);
+        SHOUT (26), // @Z
+        WHISPER (25); // @Y
 
         private final short header;
 
