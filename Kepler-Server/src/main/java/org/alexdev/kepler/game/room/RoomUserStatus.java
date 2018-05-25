@@ -35,6 +35,9 @@ public class RoomUserStatus {
         this.actionSwitchCountdown = -1;
     }
 
+    /**
+     * Swap the key and action for timed statuses, used for drinking, etc.
+     */
     public void swapKeyAction() {
         EntityStatus temp = this.key;
         this.key = this.action;
@@ -45,10 +48,6 @@ public class RoomUserStatus {
         return key;
     }
 
-    public void setKey(EntityStatus status) {
-        this.key = status;
-    }
-
     public String getValue() {
         return value;
     }
@@ -57,37 +56,15 @@ public class RoomUserStatus {
         this.value = value;
     }
 
-    public int getSecLifetime() {
-        return secLifetime;
-    }
-
-    public void setSecLifetime(int secLifetime) {
-        this.secLifetime = secLifetime;
-    }
-
     public int getSecActionSwitch() {
         return secActionSwitch;
     }
 
-    public void setSecActionSwitch(int secActionSwitch) {
-        this.secActionSwitch = secActionSwitch;
-    }
 
     public int getSecSwitchLifetime() {
         return secSwitchLifetime;
     }
 
-    public void setSecSwitchLifetime(int secSwitchLifetime) {
-        this.secSwitchLifetime = secSwitchLifetime;
-    }
-
-    public EntityStatus getAction() {
-        return action;
-    }
-
-    public void setAction(EntityStatus action) {
-        this.action = action;
-    }
 
     public int getLifetimeCountdown() {
         return lifetimeCountdown;
