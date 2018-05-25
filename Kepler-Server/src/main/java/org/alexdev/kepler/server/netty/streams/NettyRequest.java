@@ -10,91 +10,70 @@ import org.alexdev.kepler.util.encoding.VL64Encoding;
 public class NettyRequest {
     final private int headerId;
     final private String header;
-    final private int length;
     final private ByteBuf buffer;
 
-    public NettyRequest(int length, ByteBuf buffer) {
+    public NettyRequest(ByteBuf buffer) {
         this.buffer = buffer;
-        this.length = length;
         this.header = new String(new byte[] { buffer.readByte(), buffer.readByte() });
         this.headerId = Base64Encoding.decode(header.getBytes());
     }
 
     public Integer readInt() {
-        try {
-            byte[] remaining = this.remainingBytes();
+        byte[] remaining = this.remainingBytes();
 
-            int length = remaining[0] >> 3 & 7;
-            int value = VL64Encoding.decode(remaining);
-            readBytes(length);
+        int length = remaining[0] >> 3 & 7;
+        int value = VL64Encoding.decode(remaining);
+        readBytes(length);
 
-            return value;
-        } catch (Exception e) {
-            return 0;
-        }
+        return value;
     }
 
     public int readBase64() {
         return Base64Encoding.decode(new byte[] {
-                this.buffer.readByte(),
-                this.buffer.readByte()
+            this.buffer.readByte(),
+            this.buffer.readByte()
         });
     }
 
     public boolean readBoolean()  {
-        try {
-            return this.readInt() == 1;
-        } catch (Exception e)    {
-            return false;
-        }
+        return this.readInt() == 1;
     }
 
     public String readString() {
-        try {
-            int length = this.readBase64();
-            byte[] data = this.readBytes(length);
+        int length = this.readBase64();
+        byte[] data = this.readBytes(length);
 
-            return new String(data);
-        } catch (Exception e) {
-            return null;
-        }
+        return new String(data);
     }
 
     public byte[] readBytes(int len) {
-        try {
-            byte[] payload = new byte[len];
-            this.buffer.readBytes(payload);
+        byte[] payload = new byte[len];
+        this.buffer.readBytes(payload);
 
-            return payload;
-        } catch (Exception e) {
-            return null;
-        }
+        return payload;
     }
 
-    public byte[] remainingBytes() {
-        try {
-            this.buffer.markReaderIndex();
+    private byte[] remainingBytes() {
+        this.buffer.markReaderIndex();
 
-            byte[] bytes = new byte[this.buffer.readableBytes()];
-            buffer.readBytes(bytes);
+        byte[] bytes = new byte[this.buffer.readableBytes()];
+        buffer.readBytes(bytes);
 
-            this.buffer.resetReaderIndex();
-            return bytes;
-
-        } catch (Exception e) {
-            return null;
-        }
+        this.buffer.resetReaderIndex();
+        return bytes;
     }
 
     public String contents() {
-        try {
-            return new String(this.remainingBytes());
-        } catch (Exception e) {
-            return null;
+        byte[] remiainingBytes = this.remainingBytes();
+
+        if (remiainingBytes != null) {
+            return new String(remiainingBytes);
         }
+
+        return null;
     }
 
-    public String getMessageBody() {
+     public String getMessageBody() {
         String consoleText = this.buffer.toString(Charset.defaultCharset());
 
         for (int i = 0; i < 14; i++) {

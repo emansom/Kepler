@@ -2,7 +2,6 @@ package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.incoming.inventory.GETSTRIP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
@@ -73,7 +72,7 @@ public class MessageHandler {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
         registerEvent(196, new PONG());
-        registerEvent(315, new TEST_LATENCY());
+        //registerEvent(315, new TEST_LATENCY());
     }
 
     /**
@@ -109,6 +108,9 @@ public class MessageHandler {
         registerEvent(53, new QUIT());
         registerEvent(75, new WALK());
         registerEvent(115, new GOAWAY());
+        registerEvent(52, new CHAT());
+        registerEvent(317, new USER_START_TYPING());
+        registerEvent(318, new USER_CANCEL_TYPING());
     }
 
 

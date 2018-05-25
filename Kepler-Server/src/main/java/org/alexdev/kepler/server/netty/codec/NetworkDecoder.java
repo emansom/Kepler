@@ -12,8 +12,6 @@ public class NetworkDecoder extends ByteToMessageDecoder {
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
-        buffer.markReaderIndex();
-
         if (buffer.readableBytes() < 5) {
             // If the incoming data is less than 5 bytes, it's junk.
             return;
@@ -31,7 +29,7 @@ public class NetworkDecoder extends ByteToMessageDecoder {
             return;
         }
 
-        out.add(new NettyRequest(length, buffer.readBytes(length)));
+        out.add(new NettyRequest(buffer.readBytes(length)));
 
         //int messageHeader = Base64Encoding.decodeB64(new byte[] { buffer.readByte(), buffer.readByte() });
 

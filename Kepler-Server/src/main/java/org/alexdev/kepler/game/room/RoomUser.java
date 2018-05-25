@@ -19,6 +19,7 @@ public class RoomUser {
     private Position goal;
     private Position nextPosition;
     private Room room;
+
     private int instanceId;
     private int authenticateId;
 
@@ -29,6 +30,7 @@ public class RoomUser {
     private boolean isWalking;
     private boolean beingKicked;
     private boolean needsUpdate;
+    private boolean isTyping;
 
     public RoomUser(Entity entity) {
         this.entity = entity;
@@ -42,6 +44,7 @@ public class RoomUser {
         this.isWalkingAllowed = true;
         this.isWalking = false;
         this.beingKicked = false;
+        this.isTyping = false;
         this.instanceId = -1;
         this.authenticateId = -1;
         this.statuses = new HashMap<>();
@@ -310,4 +313,13 @@ public class RoomUser {
     public void setAuthenticateId(int authenticateId) {
         this.authenticateId = authenticateId;
     }
+
+    public boolean isTyping() {
+        return isTyping;
+    }
+
+    public void setTyping(boolean typing) {
+        isTyping = typing;
+    }
+
 }

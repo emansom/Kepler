@@ -64,9 +64,9 @@ public class NettyResponse  {
      * @param key the key to write
      * @param value the delimeter to write
      */
-    public void writeDelimeter(Object key, char value) {
+    public void writeDelimeter(Object key, Object value) {
         this.buffer.writeBytes(key.toString().getBytes());
-        this.buffer.writeBytes(Character.toString(value).getBytes());
+        this.buffer.writeBytes(value.toString().getBytes());
     }
 
     /**
