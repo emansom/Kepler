@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -135,6 +136,14 @@ public class Item {
         return false;
     }
 
+    public void updateStatus() {
+        Room room = this.getRoom();
+
+        if (room != null) {
+            room.send(new UPDATE_ITEM(this));
+        }
+    }
+
     /**
      * Serialise item function for item handling packets.
      *
@@ -162,7 +171,11 @@ public class Item {
                 response.writeDelimeter(this.wallPosition, (char) 9);
 
                 if (this.customData.length() > 0) {
-                    response.write(this.customData);
+                    if (this.definition.getBehaviour().isPostIt()) {
+                        response.write(this.customData.substring(0, 6)); // Only show post-it colour
+                    } else {
+                        response.write(this.customData);
+                    }
                 }
 
                 response.write(Character.toString((char) 13));

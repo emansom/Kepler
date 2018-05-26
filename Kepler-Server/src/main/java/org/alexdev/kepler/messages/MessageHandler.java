@@ -13,9 +13,7 @@ import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
 import org.alexdev.kepler.messages.incoming.rooms.badges.GETAVAILABLEBADGES;
 import org.alexdev.kepler.messages.incoming.rooms.badges.SETBADGE;
-import org.alexdev.kepler.messages.incoming.rooms.items.ADDSTRIPITEM;
-import org.alexdev.kepler.messages.incoming.rooms.items.MOVESTUFF;
-import org.alexdev.kepler.messages.incoming.rooms.items.PLACESTUFF;
+import org.alexdev.kepler.messages.incoming.rooms.items.*;
 import org.alexdev.kepler.messages.incoming.rooms.pool.BTCKS;
 import org.alexdev.kepler.messages.incoming.rooms.pool.DIVE;
 import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
@@ -146,6 +144,9 @@ public class MessageHandler {
         registerEvent(90, new PLACESTUFF());
         registerEvent(73, new MOVESTUFF());
         registerEvent(67, new ADDSTRIPITEM());
+        registerEvent(83, new G_IDATA());
+        registerEvent(84, new SETITEMDATA());
+        registerEvent(85, new REMOVEITEM());
     }
 
     /**
