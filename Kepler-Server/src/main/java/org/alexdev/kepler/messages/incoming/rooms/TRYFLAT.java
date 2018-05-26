@@ -13,9 +13,9 @@ public class TRYFLAT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         int roomId = -1;
-        String password = null;
 
         String contents = reader.contents();
+        String password = "";
 
         if (contents.contains("/")) {
             roomId = Integer.parseInt(contents.split("/")[0]);

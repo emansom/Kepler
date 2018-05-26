@@ -115,12 +115,6 @@ public class RoomEntityManager {
             player.sendQueued(new FLATPROPERTY("floor", this.room.getData().getFloor()));
         }
 
-        for (Item item : this.room.getItems()) {
-            if (item.getCurrentProgramValue().length() > 0) {
-                player.sendQueued(new SHOWPROGRAM(item.getCurrentProgram(), item.getCurrentProgramValue()));
-            }
-        }
-
         player.flushSendQueue();
     }
 
