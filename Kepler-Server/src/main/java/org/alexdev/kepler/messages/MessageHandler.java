@@ -16,6 +16,7 @@ import org.alexdev.kepler.messages.incoming.rooms.badges.SETBADGE;
 import org.alexdev.kepler.messages.incoming.rooms.items.ADDSTRIPITEM;
 import org.alexdev.kepler.messages.incoming.rooms.items.MOVESTUFF;
 import org.alexdev.kepler.messages.incoming.rooms.items.PLACESTUFF;
+import org.alexdev.kepler.messages.incoming.rooms.pool.BTCKS;
 import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
@@ -151,6 +152,7 @@ public class MessageHandler {
      */
     private void registerRoomPoolPackets() {
         registerEvent(116, new SWIMSUIT());
+        registerEvent(105, new BTCKS());
     }
 
     /**
