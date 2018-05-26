@@ -91,6 +91,8 @@ public class Item {
                 continue;
             }
 
+            System.out.println("test 123");
+
             entitiesToUpdate.addAll(tile.getEntities());
         }
 

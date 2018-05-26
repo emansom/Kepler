@@ -93,6 +93,7 @@ public class RoomMapping {
      */
     public void addItem(Item item) {
         item.setRoomId(this.room.getId());
+        item.setOwnerId(this.room.getData().getOwnerId());
         this.room.getItems().add(item);
 
         if (item.getDefinition().getBehaviour().isWallItem()) {
@@ -135,7 +136,7 @@ public class RoomMapping {
      * @param item the item that is being removed
      */
     public void removeItem(Item item) {
-        item.setOwnerId(this.room.getData().getOwnerId());
+        this.room.getItems().remove(item);
 
         if (item.getDefinition().getBehaviour().isWallItem()) {
             this.room.send(new REMOVE_WALLITEM(item));
