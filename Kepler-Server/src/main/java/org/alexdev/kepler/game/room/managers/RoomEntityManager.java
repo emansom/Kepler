@@ -84,7 +84,7 @@ public class RoomEntityManager {
             entity.getRoom().getEntityManager().leaveRoom(entity, false);
         }
 
-        if (this.room.getEntityManager().getEntitiesByClass(Player.class).isEmpty()) {
+        if (this.room.getData().getVisitorsNow() == 0) {
             this.initialiseRoom();
         }
 

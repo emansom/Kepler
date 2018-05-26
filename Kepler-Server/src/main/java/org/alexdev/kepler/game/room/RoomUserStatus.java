@@ -7,18 +7,22 @@ public class RoomUserStatus {
     private String value;
     private EntityStatus action;
 
-    private int secLifetime;
     private int secActionSwitch;
     private int secSwitchLifetime;
     private int lifetimeCountdown;
+
     private int actionCountdown;
     private int actionSwitchCountdown;
 
     public RoomUserStatus(EntityStatus status, String value) {
         this.key = status;
         this.value = value;
-        this.secLifetime = -1;
+
         this.secSwitchLifetime = -1;
+        this.lifetimeCountdown = -1;
+        this.secActionSwitch = -1;
+        this.actionSwitchCountdown = -1;
+        this.actionCountdown = -1;
     }
 
     public RoomUserStatus(EntityStatus status, String value, int secLifetime, EntityStatus action, int secActionSwitch, int secSwitchLifetime) {
@@ -26,7 +30,6 @@ public class RoomUserStatus {
         this.value = value;
         this.action = action;
 
-        this.secLifetime = secLifetime;
         this.secActionSwitch = secActionSwitch;
         this.secSwitchLifetime = secSwitchLifetime;
 

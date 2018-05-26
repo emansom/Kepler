@@ -63,7 +63,7 @@ public class ProcessStatusTask implements Runnable {
                 rus.setActionCountdown(rus.getActionCountdown() - 1);
             } else if (rus.getActionCountdown() == 0) {
                 rus.setActionCountdown(-1);
-                rus.setActionSwitchCountdown(rus.getSecSwitchLifetime());//rus.action_switch_countdown = rus.sec_switch_lifetime;
+                rus.setActionSwitchCountdown(rus.getSecSwitchLifetime());
 
                 // Swap key to action and update status
                 rus.swapKeyAction();
@@ -75,7 +75,7 @@ public class ProcessStatusTask implements Runnable {
             } else if (rus.getLifetimeCountdown() == 0) {
                 rus.setLifetimeCountdown(-1);
                 toRemove.add(key);
-               //room_user_remove_status(room_user, key);
+
                 entity.getRoomUser().setNeedsUpdate(true);
             }
         }
