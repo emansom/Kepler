@@ -5,8 +5,6 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
 
 public abstract class Entity {
-    
-    protected boolean disposed;
 
     /**
      * Checks for permission.
@@ -58,32 +56,5 @@ public abstract class Entity {
      */
     public Room getRoom() {
         return getRoomUser().getRoom();
-    }
-
-    /**
-     * In room.
-     *
-     * @return true, if successful
-     */
-    public boolean inRoom() {
-        return getRoomUser().getRoom() != null;
-    }
-    
-    /**
-     * Checks if is disposed.
-     *
-     * @return true, if is disposed
-     */
-    public boolean isDisposed() {
-        return this.disposed;
-    }
-    
-    /**
-     * Sets the disposed.
-     *
-     * @param flag the new disposed
-     */
-    public void setDisposed(boolean flag) {
-        this.disposed = flag;
     }
 }

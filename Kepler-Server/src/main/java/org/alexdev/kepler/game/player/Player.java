@@ -11,7 +11,6 @@ import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.RoomUser;
-import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -60,11 +59,9 @@ public class Player extends Entity {
 
         this.sendQueued(new LOGIN());
         this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
-
         this.flushSendQueue();
 
-        PlayerDao.updateLastOnline(this.getDetails().getId());
-        this.details.setLastOnline(DateUtil.getCurrentTimeSeconds());
+        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
     }
 
     /**
@@ -84,11 +81,7 @@ public class Player extends Entity {
      * @param response the response
      */
     public void send(MessageComposer response) {
-        try {
-            this.network.send(response);
-        } catch (Exception e) {
-            Log.getErrorLogger().error("[Player] Could not send message to player {}", this.details.getName());
-        }
+        this.network.send(response);
     }
 
     /**
@@ -97,11 +90,7 @@ public class Player extends Entity {
      * @param response the response
      */
     public void sendQueued(MessageComposer response) {
-        try {
-            this.network.enqueue(response);
-        } catch (Exception e) {
-            Log.getErrorLogger().error("[Player] Could not send message to player {}", this.details.getName());
-        }
+        this.network.enqueue(response);
     }
 
     /**
@@ -201,7 +190,7 @@ public class Player extends Entity {
             return;
         }
 
-        PlayerDao.updateLastOnline(this.getDetails().getId());
+        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
         PlayerManager.getInstance().removePlayer(this);
 
         if (this.roomUser.getRoom() != null) {

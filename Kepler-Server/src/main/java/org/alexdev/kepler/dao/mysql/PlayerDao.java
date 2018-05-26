@@ -153,17 +153,17 @@ public class PlayerDao {
     /**
      * Update last online.
      *
-     * @param userId the user id
+     * @param details the details of the user
      */
-    public static void updateLastOnline(int userId) {
+    public static void saveLastOnline(PlayerDetails details, long currentTime) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("UPDATE users SET last_online = ? WHERE id = ?", sqlConnection);
-            preparedStatement.setLong(1, DateUtil.getCurrentTimeSeconds());
-            preparedStatement.setInt(2, userId);
+            preparedStatement.setLong(1, currentTime);
+            preparedStatement.setInt(2, details.getId());
             preparedStatement.execute();
 
         } catch (Exception e) {

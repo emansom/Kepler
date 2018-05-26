@@ -1,6 +1,5 @@
 package org.alexdev.kepler.server.netty;
 
-import com.google.protobuf.Message;
 import io.netty.channel.Channel;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
