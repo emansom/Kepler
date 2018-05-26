@@ -290,9 +290,10 @@ public class Position {
     }
 
     /**
-     * Checks if is match.
+     * Checks if is match, only checks X and Y coordinate, which is
+     * intentional.
      *
-     * @param obj the point
+     * @param obj the {@link Position}
      * @return true, if is match
      */
     @Override
