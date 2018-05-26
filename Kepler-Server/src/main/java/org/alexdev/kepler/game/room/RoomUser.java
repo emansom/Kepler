@@ -20,6 +20,7 @@ public class RoomUser {
     private Position goal;
     private Position nextPosition;
     private Room room;
+    private Item currentItem;
 
     private int instanceId;
     private int authenticateId;
@@ -40,6 +41,7 @@ public class RoomUser {
 
     public void reset() {
         this.nextPosition = null;
+        this.currentItem = null;
         this.goal = null;
         this.room = null;
         this.isWalkingAllowed = true;
@@ -107,6 +109,9 @@ public class RoomUser {
         }
 
         this.invokeItem();
+
+        // Use walk to next tile if on pool queue
+        PoolHandler.checkPoolQueue(this.entity);
     }
 
     /**
@@ -154,22 +159,29 @@ public class RoomUser {
 
             if (item.getDefinition().getSprite().equals("poolBooth") ||
                 item.getDefinition().getSprite().equals("poolExit") ||
-                item.getDefinition().getSprite().equals("poolEnter")) {
+                item.getDefinition().getSprite().equals("poolEnter") ||
+                item.getDefinition().getSprite().equals("poolLift")) {
                 PoolHandler.interact(item, this.entity);
             }
         }
 
+        this.updateNewHeight(this.position);
+
+        this.currentItem = item;
         this.needsUpdate = needsUpdate;
     }
 
     /**
      * Update new height.
-     *
-     * @param position the position
      */
     public void updateNewHeight(Position position) {
         double height = this.room.getMapping().getTile(position).getTileHeight();
-        this.position.setZ(height);
+        double oldHeight = this.position.getZ();
+
+        if (height != oldHeight) {
+            this.position.setZ(height);
+            this.needsUpdate = true;
+        }
     }
 
     /**
@@ -331,4 +343,7 @@ public class RoomUser {
         isTyping = typing;
     }
 
+    public Item getCurrentItem() {
+        return currentItem;
+    }
 }

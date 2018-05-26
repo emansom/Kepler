@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.public_rooms;
 
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -9,6 +10,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.messages.outgoing.rooms.pool.JUMPINGPLACE_OK;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
 
 public class PoolHandler {
@@ -53,10 +55,20 @@ public class PoolHandler {
 
         Player player = (Player) entity;
 
-        if (item.getDefinition().getSprite().equals("poolBooth")) {
+        if (item.getDefinition().getSprite().equals("poolLift")) {
             item.showProgram("close");
             player.getRoomUser().setWalkingAllowed(false);
+            player.send(new JUMPINGPLACE_OK());
+        }
+
+        if (item.getDefinition().getSprite().equals("poolBooth")) {
+            item.showProgram("close");
+
+            player.getDetails().setTickets(player.getDetails().getTickets() - 1);
+            player.getRoomUser().setWalkingAllowed(false);
             player.send(new OPEN_UIMAKOPPI());
+
+            PlayerDao.saveCurrency(player.getDetails());
         }
 
         if (item.getDefinition().getSprite().equals("poolEnter")) {
@@ -206,6 +218,19 @@ public class PoolHandler {
         if (item.getDefinition().getSprite().equals("poolBooth") ||
             item.getDefinition().getSprite().equals("poolLift")) {
             item.showProgram("open");
+        }
+    }
+
+    public static void checkPoolQueue(Entity entity) {
+        if (entity.getRoomUser().isWalking()) {
+            return;
+        }
+
+        if (entity.getRoomUser().getCurrentItem() != null) {
+            if (entity.getRoomUser().getCurrentItem().getDefinition().getSprite().equals("queue_tile2")) {
+                Position front =  entity.getRoomUser().getCurrentItem().getPosition().getSquareInFront();
+                entity.getRoomUser().walkTo(front.getX(), front.getY());
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -42,7 +43,10 @@ public class ProcessStatusTask implements Runnable {
      * @param entity the entity
      */
     private void processEntity(Entity entity) {
-        List<String> toRemove = new ArrayList<>();
+        List<String> toRemove =        new ArrayList<>();
+
+        // Use walk to next tile if on pool queue
+        PoolHandler.checkPoolQueue(entity);
 
         for (var kvp : entity.getRoomUser().getStatuses().entrySet()) {
             String key = kvp.getKey();

@@ -105,7 +105,7 @@ public class Pathfinder {
                     if (toItem.getCurrentProgramValue().equals("close")) {
                         return false;
                     } else {
-                        return !toItem.getDefinition().getSprite().equals("poolLift") || entity.getDetails().getPoolFigure().length() > 0;
+                        return entity.getDetails().getPoolFigure().length() > 0;
                     }
                 }
 
