@@ -17,10 +17,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class USER_STATUSES extends MessageComposer {
     private List<EntityState> states;
 
-    public USER_STATUSES(ConcurrentLinkedQueue<Entity> entities) {
-        createEntityStates(new ArrayList<>(entities));
-    }
-
     public USER_STATUSES(List<Entity> users) {
         createEntityStates(users);
     }

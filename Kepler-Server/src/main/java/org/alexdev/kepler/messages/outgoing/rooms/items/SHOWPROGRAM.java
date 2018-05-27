@@ -5,22 +5,31 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
 
 public class SHOWPROGRAM extends MessageComposer {
-    private final String currentProgramValue;
-    private final String currentProgram;
+    private final String[] arguments;
+    /*private final String currentProgramValue;
+    private final String currentProgram;*/
 
     public SHOWPROGRAM(String currentProgram, String currentProgramValue) {
-        this.currentProgram = currentProgram;
-        this.currentProgramValue = currentProgramValue;
+        this(new String[] { currentProgram, currentProgramValue });
+    }
+
+    public SHOWPROGRAM(String[] arguments) {
+        this.arguments = arguments;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        response.write(this.currentProgram);
+        for (String argument : arguments) {
+            if (argument.length() > 0) {
+                response.writeDelimeter(argument, ' ');
+            }
+        }
+       /* response.write(this.currentProgram);
 
         if (this.currentProgramValue.length() > 0) {
             response.write(" ");
             response.write(this.currentProgramValue);
-        }
+        }*/
     }
 
     @Override

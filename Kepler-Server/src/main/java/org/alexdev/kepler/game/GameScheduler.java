@@ -34,10 +34,8 @@ public class GameScheduler implements Runnable {
     public void run() {
         this.tickRate.incrementAndGet();
 
-        synchronized (PlayerManager.getInstance().getPlayers()) {
-            for (Player player : PlayerManager.getInstance().getPlayers()) {
-                // Do stuff here like add credits per x minutes, etc.
-            }
+        for (Player player : PlayerManager.getInstance().getPlayers()) {
+            // Do stuff here like add credits per x minutes, etc.
         }
     }
 
