@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 set -e
 
 if [ -z "$MYSQL_HOST" ]; then
