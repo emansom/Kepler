@@ -47,21 +47,6 @@ public class RoomEntityManager {
     }
 
     /**
-     * Find an entity by the instance id
-     * @param instanceId the instance id used to find
-     * @return the entity, if successful, else null
-     */
-    private Entity getEntityByInstanceId(int instanceId) {
-        for (Entity entity : this.room.getEntities()) {
-            if (entity.getRoomUser().getInstanceId() == instanceId) {
-                return entity;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Return the list of players currently in this room by its
      * given class.
      *
