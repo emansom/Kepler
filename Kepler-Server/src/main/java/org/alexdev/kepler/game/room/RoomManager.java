@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,7 @@ public class RoomManager {
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
         this.addRoomsByUser(0);
+        this.addWalkwaySettings();
     }
 
     /**
@@ -39,7 +41,7 @@ public class RoomManager {
             if (!publicRoom.isPublicRoom()) {
                 continue;
             }
-            publicRoom.getData().checkWalkwaySettings();
+            publicRoom.getData().checkWalkwaySettings(this);
         }
     }
 
@@ -133,6 +135,10 @@ public class RoomManager {
         }
 
         return roomList;
+    }
+
+    public void sortRooms(List<Room> roomList) {
+        roomList.sort(Comparator.comparingDouble((Room room) -> room.getData().getTotalVisitorsNow()).reversed());
     }
 
     /**

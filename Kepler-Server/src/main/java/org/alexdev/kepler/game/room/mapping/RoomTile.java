@@ -13,16 +13,16 @@ public class RoomTile {
     private Room room;
     private Position position;
     private List<Entity> entities;
+    private List<Item> items;
 
     private double tileHeight;
-
     private Item highestItem;
-    private Item itemBelow;
 
     public RoomTile(Room room, Position position) {
         this.room = room;
         this.position = position;
         this.entities = new CopyOnWriteArrayList<>();
+        this.items = new CopyOnWriteArrayList<>();
     }
 
     /**
@@ -32,9 +32,7 @@ public class RoomTile {
      * @param position the position of the tile
      * @return true, if successful
      */
-    public static boolean isValidTile(Entity entity, Position position) {
-        Room room = entity.getRoom();
-
+    public static boolean isValidTile(Room room, Entity entity, Position position) {
         if (room == null) {
             return false;
         }
@@ -45,15 +43,19 @@ public class RoomTile {
             return false;
         }
 
-        if (tile.getHighestItem() != null) {
-            if (!tile.getHighestItem().isWalkable()) {
+        if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
+            if (entity != null) {
                 return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
+            } else {
+                return false;
             }
         }
 
-        if (!room.isPublicRoom()) {
-            if (tile.getEntities().size() > 0) {
-                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
+        if (entity != null) {
+            if (!room.isPublicRoom()) {
+                if (tile.getEntities().size() > 0) {
+                    return tile.containsEntity(entity); // Allow walk if you exist already in the tile
+                }
             }
         }
 
@@ -137,25 +139,11 @@ public class RoomTile {
         this.highestItem = highestItem;
     }
 
-    /**
-     * Get the item below the highest item in this tile.
-     *
-     * @return the item below
-     */
-    public Item getItemBelow() {
-        return itemBelow;
-    }
-
-    /**
-     * Set the item below the highest item in this tile.
-     *
-     * @param itemBelow the item below
-     */
-    public void setItemBelow(Item itemBelow) {
-        this.itemBelow = itemBelow;
-    }
-
     public List<Entity> getEntities() {
         return this.entities;
+    }
+
+    public List<Item> getItems() {
+        return items;
     }
 }

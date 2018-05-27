@@ -20,6 +20,7 @@ public class SRCHF implements MessageEvent {
                 RoomDao.querySearchRooms(searchQuery));
 
         if (roomList.size() > 0) {
+            RoomManager.getInstance().sortRooms(roomList);
             player.send(new SEARCH_RESULTS(roomList, player));
         } else {
             player.send(new SEARCH_NO_RESULTS());

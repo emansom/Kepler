@@ -18,6 +18,7 @@ public class SUSERF implements MessageEvent {
                 RoomDao.getRoomsByUserId(player.getDetails().getId()));
 
         if (roomList.size() > 0) {
+            RoomManager.getInstance().sortRooms(roomList);
             player.send(new USER_FLATS(roomList));
         } else {
             player.send(new NO_ROOMS(player.getDetails().getName()));

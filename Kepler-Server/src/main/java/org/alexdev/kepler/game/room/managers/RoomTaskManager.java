@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.ProcessEntityTask;
+import org.alexdev.kepler.game.room.tasks.ProcessRollerTask;
 import org.alexdev.kepler.game.room.tasks.ProcessStatusTask;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
@@ -19,16 +20,12 @@ import java.util.concurrent.TimeUnit;
 public class RoomTaskManager {
     private Room room;
 
-    private ProcessEntityTask processEntity;
     private ScheduledFuture<?> scheduledProcessEntity;
-
-    private ProcessStatusTask processStatus;
-    private ScheduledFuture<?> scheduledProcessStatus;
+    private ScheduledFuture<?> scheduledProcessStatus;;
+    private ScheduledFuture<?> scheduledProcessRoller;
 
     public RoomTaskManager(Room room) {
         this.room = room;
-        this.processEntity = new ProcessEntityTask(room);
-        this.processStatus = new ProcessStatusTask(room);
     }
 
     /**
@@ -37,13 +34,15 @@ public class RoomTaskManager {
      */
     public void startTasks() {
         if (this.scheduledProcessEntity == null) {
-            this.scheduledProcessEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
-                    this.processEntity, 0, 500, TimeUnit.MILLISECONDS);
+            this.scheduledProcessEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(new ProcessEntityTask(room), 0, 500, TimeUnit.MILLISECONDS);
         }
 
         if (this.scheduledProcessStatus == null) {
-            this.scheduledProcessStatus = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
-                    this.processStatus, 0, 1, TimeUnit.SECONDS);
+            this.scheduledProcessStatus = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(new ProcessStatusTask(room), 0, 1, TimeUnit.SECONDS);
+        }
+
+        if (this.scheduledProcessRoller == null) {
+            this.scheduledProcessRoller = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(new ProcessRollerTask(room), 0, 3, TimeUnit.SECONDS);
         }
     }
 
@@ -59,6 +58,11 @@ public class RoomTaskManager {
         if (this.scheduledProcessStatus != null) {
             this.scheduledProcessStatus.cancel(false);
             this.scheduledProcessStatus = null;
+        }
+
+        if (this.scheduledProcessRoller != null) {
+            this.scheduledProcessRoller.cancel(false);
+            this.scheduledProcessRoller = null;
         }
     }
 }

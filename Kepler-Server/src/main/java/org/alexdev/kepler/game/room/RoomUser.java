@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomUser {
     private Entity entity;
@@ -40,6 +41,7 @@ public class RoomUser {
     private boolean isWalking;
     private boolean beingKicked;
     private boolean needsUpdate;
+    private AtomicInteger needsUpdateCountdown;
     private boolean isTyping;
     private boolean isDiving;
 
@@ -63,6 +65,7 @@ public class RoomUser {
 
         this.instanceId = -1;
         this.authenticateId = -1;
+        this.needsUpdateCountdown = new AtomicInteger(-1);
 
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
@@ -144,6 +147,13 @@ public class RoomUser {
      * Triggers the current item that the player has walked on top of.
      */
     public void invokeItem() {
+        this.invokeItem(false);
+    }
+
+    /**
+     * Triggers the current item that the player has walked on top of.
+     */
+    public void invokeItem(boolean silent) {
         boolean needsUpdate = false;
         double height = this.getTile().getTileHeight();
 
@@ -194,7 +204,12 @@ public class RoomUser {
         this.updateNewHeight(this.position);
 
         this.currentItem = item;
-        this.needsUpdate = needsUpdate;
+
+        if (silent) {
+            this.needsUpdate = false;
+        } else {
+            this.needsUpdate = needsUpdate;
+        }
     }
 
 
@@ -435,6 +450,14 @@ public class RoomUser {
 
     public void setBeingKicked(boolean beingKicked) {
         this.beingKicked = beingKicked;
+    }
+
+    public AtomicInteger getNeedsUpdateCountdown() {
+        return needsUpdateCountdown;
+    }
+
+    public void setNeedsUpdateCountdown(int needsUpdateCountdown) {
+        this.needsUpdateCountdown = new AtomicInteger(needsUpdateCountdown);
     }
 
     public boolean isBeingKicked() {
