@@ -14,6 +14,8 @@ public class RECOMMENDED_ROOMS implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         List<Room> roomList = RoomManager.getInstance().replaceQueryRooms(RoomDao.getRandomRooms(3));
+        RoomManager.getInstance().sortRooms(roomList);
+
         player.send(new NAVIGATOR_RECOMMENDED_ROOMS(player, roomList));
     }
 }
