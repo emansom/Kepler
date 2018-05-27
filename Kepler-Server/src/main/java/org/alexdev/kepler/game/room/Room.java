@@ -178,6 +178,11 @@ public class Room {
         return roomData;
     }
 
+    /**
+     * Get the room model instance.
+     *
+     * @return the room model
+     */
     public RoomModel getModel() {
         return RoomModelManager.getInstance().getModel(this.roomData.getModel());
     }

@@ -30,6 +30,10 @@ public class RoomManager {
 
     }
 
+    /**
+     * Add walkway settings for various public rooms that have enabled walkways.
+     * Such as making sure the total room population is counted and adding the sub rooms.
+     */
     public void addWalkwaySettings() {
         for (Room publicRoom : this.roomMap.values()) {
             if (!publicRoom.isPublicRoom()) {
@@ -39,6 +43,12 @@ public class RoomManager {
         }
     }
 
+    /**
+     * Find a room by its model.
+     *
+     * @param model the model to find the room by
+     * @return the room found, else null
+     */
     public Room getRoomByModel(String model) {
         for (Room room : this.roomMap.values()) {
             if (room.getModel().getName().equals(model)) {
