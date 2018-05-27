@@ -47,16 +47,14 @@ public class Item {
      * @param value the new program value to show
      */
     public void showProgram(String value) {
-        if (value == null) {
-            value = "";
+        if (value != null) {
+            this.currentProgramValue = value;
         }
-
-        this.currentProgramValue = value;
 
         Room room = this.getRoom();
 
         if (room != null) {
-            room.send(new SHOWPROGRAM(this.currentProgram, this.currentProgramValue));
+            room.send(new SHOWPROGRAM(new String[] { this.currentProgram, this.currentProgramValue }));
         }
     }
 

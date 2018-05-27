@@ -22,9 +22,7 @@ public class G_OBJS implements MessageEvent {
         player.sendQueued(new ACTIVE_OBJECTS(room));
 
         for (Item item : room.getItems()) {
-            if (item.getCurrentProgramValue().length() > 0) {
-                player.sendQueued(new SHOWPROGRAM(item.getCurrentProgram(), item.getCurrentProgramValue()));
-            }
+            item.showProgram(null);
         }
 
         player.flushSendQueue();

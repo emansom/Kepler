@@ -12,6 +12,7 @@ import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.JUMPINGPLACE_OK;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
+import org.alexdev.kepler.messages.outgoing.user.TICKET_BALANCE;
 
 public class PoolHandler {
 
@@ -57,8 +58,14 @@ public class PoolHandler {
 
         if (item.getDefinition().getSprite().equals("poolLift")) {
             item.showProgram("close");
+
             player.getRoomUser().setWalkingAllowed(false);
+            player.getRoomUser().setDiving(true);
+
+            player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
             player.send(new JUMPINGPLACE_OK());
+
+            PlayerDao.saveCurrency(player.getDetails());
         }
 
         if (item.getDefinition().getSprite().equals("poolBooth")) {

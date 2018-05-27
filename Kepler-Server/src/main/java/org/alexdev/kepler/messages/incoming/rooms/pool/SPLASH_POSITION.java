@@ -19,6 +19,10 @@ public class SPLASH_POSITION implements MessageEvent {
             return;
         }
 
+        if (!player.getRoomUser().isDiving()) {
+            return;
+        }
+
         Room room = player.getRoomUser().getRoom();
 
         if (!room.getModel().getName().equals("pool_b")) {
@@ -45,6 +49,7 @@ public class SPLASH_POSITION implements MessageEvent {
         room.send(new SHOWPROGRAM(new String[] { "BIGSPLASH", "POSITION", contents,}));
 
         player.getRoomUser().setWalkingAllowed(true);
+        player.getRoomUser().setDiving(true);
         player.getRoomUser().walkTo(20, 19);
 
         currentItem.showProgram("open");

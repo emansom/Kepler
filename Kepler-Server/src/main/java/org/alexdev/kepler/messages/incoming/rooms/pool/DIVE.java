@@ -13,6 +13,10 @@ public class DIVE implements MessageEvent {
             return;
         }
 
+        if (!player.getRoomUser().isDiving()) {
+            return;
+        }
+
         Room room = player.getRoomUser().getRoom();
 
         String divingHandle = reader.contents();

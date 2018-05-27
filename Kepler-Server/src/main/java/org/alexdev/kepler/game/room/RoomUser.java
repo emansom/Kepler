@@ -33,6 +33,7 @@ public class RoomUser {
     private boolean beingKicked;
     private boolean needsUpdate;
     private boolean isTyping;
+    private boolean isDiving;
 
     public RoomUser(Entity entity) {
         this.entity = entity;
@@ -44,12 +45,17 @@ public class RoomUser {
         this.currentItem = null;
         this.goal = null;
         this.room = null;
+
         this.isWalkingAllowed = true;
+
         this.isWalking = false;
         this.beingKicked = false;
         this.isTyping = false;
+        this.isDiving = true;
+
         this.instanceId = -1;
         this.authenticateId = -1;
+
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
     }
@@ -345,5 +351,13 @@ public class RoomUser {
 
     public Item getCurrentItem() {
         return currentItem;
+    }
+
+    public boolean isDiving() {
+        return isDiving;
+    }
+
+    public void setDiving(boolean diving) {
+        isDiving = diving;
     }
 }

@@ -6,13 +6,6 @@ import org.alexdev.kepler.util.StringUtil;
 
 public class SHOWPROGRAM extends MessageComposer {
     private final String[] arguments;
-    /*private final String currentProgramValue;
-    private final String currentProgram;*/
-
-    public SHOWPROGRAM(String currentProgram, String currentProgramValue) {
-        this(new String[] { currentProgram, currentProgramValue });
-    }
-
     public SHOWPROGRAM(String[] arguments) {
         this.arguments = arguments;
     }
@@ -24,12 +17,6 @@ public class SHOWPROGRAM extends MessageComposer {
                 response.writeDelimeter(argument, ' ');
             }
         }
-       /* response.write(this.currentProgram);
-
-        if (this.currentProgramValue.length() > 0) {
-            response.write(" ");
-            response.write(this.currentProgramValue);
-        }*/
     }
 
     @Override
