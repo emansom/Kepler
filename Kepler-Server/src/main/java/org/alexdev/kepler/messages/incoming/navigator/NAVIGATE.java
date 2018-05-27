@@ -38,6 +38,10 @@ public class NAVIGATE implements MessageEvent {
 
         if (category.isPublicSpaces()) {
             for (Room room : RoomManager.getInstance().getRooms()) {
+                if (room.getData().isNavigatorHide()) {
+                    continue;
+                }
+
                 if (room.getData().getCategoryId() != category.getId()) {
                     continue;
                 }

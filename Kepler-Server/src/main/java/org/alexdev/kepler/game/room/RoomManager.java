@@ -27,6 +27,27 @@ public class RoomManager {
         for (Room publicRoom : RoomDao.getRoomsByUserId(ownerId)) {
             this.addRoom(publicRoom);
         }
+
+    }
+
+    public void addWalkwaySettings() {
+        for (Room publicRoom : this.roomMap.values()) {
+            if (!publicRoom.isPublicRoom()) {
+                continue;
+            }
+            publicRoom.getData().checkWalkwaySettings();
+        }
+    }
+
+    public Room getRoomByModel(String model) {
+        for (Room room : this.roomMap.values()) {
+            if (room.getModel().getName().equals(model)) {
+
+                return room;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -66,6 +66,7 @@ public class Kepler {
             CatalogueManager.getInstance();
             RoomModelManager.getInstance();
             RoomManager.getInstance();
+            RoomManager.getInstance().addWalkwaySettings();
             PlayerManager.getInstance();
             FuserightsManager.getInstance();
             NavigatorManager.getInstance();
