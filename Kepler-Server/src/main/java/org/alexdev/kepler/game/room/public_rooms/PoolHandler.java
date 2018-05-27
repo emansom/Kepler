@@ -2,7 +2,7 @@ package org.alexdev.kepler.game.room.public_rooms;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -146,9 +146,9 @@ public class PoolHandler {
         Room room = entity.getRoom();
 
         if (exit) {
-            roomUser.removeStatus(EntityStatus.SWIM);
+            roomUser.removeStatus(StatusType.SWIM);
         } else {
-            roomUser.setStatus(EntityStatus.SWIM, "");
+            roomUser.setStatus(StatusType.SWIM, "");
         }
 
         roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp).getTileHeight()));

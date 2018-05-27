@@ -1,18 +1,19 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.room.enums.DrinkType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
+import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -109,7 +110,7 @@ public class RoomUser {
         this.isWalking = false;
         this.needsUpdate = true;
         this.nextPosition = null;
-        this.removeStatus(EntityStatus.MOVE);
+        this.removeStatus(StatusType.MOVE);
 
         WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this);
 
@@ -155,25 +156,25 @@ public class RoomUser {
         }
 
         if (item == null || (!item.getDefinition().getBehaviour().isCanSitOnTop() || !item.getDefinition().getBehaviour().isCanLayOnTop())) {
-            if (this.containsStatus(EntityStatus.SIT) || this.containsStatus(EntityStatus.LAY)) {
-                this.removeStatus(EntityStatus.SIT);
-                this.removeStatus(EntityStatus.LAY);
+            if (this.containsStatus(StatusType.SIT) || this.containsStatus(StatusType.LAY)) {
+                this.removeStatus(StatusType.SIT);
+                this.removeStatus(StatusType.LAY);
                 needsUpdate = true;
             }
         }
 
         if (item != null) {
             if (item.getDefinition().getBehaviour().isCanSitOnTop()) {
-                this.removeStatus(EntityStatus.DANCE);
+                this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
-                this.setStatus(EntityStatus.SIT, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                this.setStatus(StatusType.SIT, " " + StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
             }
 
             if (item.getDefinition().getBehaviour().isCanLayOnTop()) {
-                this.removeStatus(EntityStatus.DANCE);
+                this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
-                this.setStatus(EntityStatus.LAY, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                this.setStatus(StatusType.LAY, " " + StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
             }
 
@@ -189,6 +190,81 @@ public class RoomUser {
 
         this.currentItem = item;
         this.needsUpdate = needsUpdate;
+    }
+
+
+    public void carryItem(int carryId, String carryName) {
+        DrinkType[] drinks = new DrinkType[26];
+        drinks[1] = DrinkType.DRINK;  // Tea
+        drinks[2] = DrinkType.DRINK;  // Juice
+        drinks[3] = DrinkType.EAT;    // Carrot
+        drinks[4] = DrinkType.EAT;    // Ice-cream
+        drinks[5] = DrinkType.DRINK;  // Milk
+        drinks[6] = DrinkType.DRINK;  // Blackcurrant
+        drinks[7] = DrinkType.DRINK;  // Water
+        drinks[8] = DrinkType.DRINK;  // Regular
+        drinks[9] = DrinkType.DRINK;  // Decaff
+        drinks[10] = DrinkType.DRINK; // Latte
+        drinks[11] = DrinkType.DRINK; // Mocha
+        drinks[12] = DrinkType.DRINK; // Macchiato
+        drinks[13] = DrinkType.DRINK; // Espresso
+        drinks[14] = DrinkType.DRINK; // Filter
+        drinks[15] = DrinkType.DRINK; // Iced
+        drinks[16] = DrinkType.DRINK; // Cappuccino
+        drinks[17] = DrinkType.DRINK; // Java
+        drinks[18] = DrinkType.DRINK; // Tap
+        drinks[19] = DrinkType.DRINK; // H*bbo Cola
+        drinks[20] = DrinkType.ITEM;  // Camera
+        drinks[21] = DrinkType.EAT;   // Hamburger
+        drinks[22] = DrinkType.DRINK; // Lime H*bbo Soda
+        drinks[23] = DrinkType.DRINK; // Beetroot H*bbo Soda
+        drinks[24] = DrinkType.DRINK; // Bubble juice from 1999
+        drinks[25] = DrinkType.DRINK; // Lovejuice
+
+        // Public rooms send the localised handitem name instead of the drink ID
+        if (carryName != null) {
+            for (int i = 0; i <= 25; i++) {
+                String external_drink_key = "handitem" + i;
+                String external_drink_name = TextsManager.getInstance().getValue(external_drink_key);
+
+                if (external_drink_name != null && external_drink_name.equals(carryName)) {
+                    carryId = i;
+                }
+            }
+        }
+
+        // Not a valid drink ID
+        if (carryId == 0 || carryId > 25) {
+            return;
+        }
+
+        StatusType carryStatus = null;
+        StatusType useStatus = null;
+
+        DrinkType type = drinks[carryId];
+
+        if (type == DrinkType.DRINK) {
+            carryStatus = StatusType.CARRY_DRINK;
+            useStatus = StatusType.USE_DRINK;
+        }
+
+        if (type == DrinkType.EAT) {
+            carryStatus = StatusType.CARRY_FOOD;
+            useStatus = StatusType.USE_FOOD;
+        }
+
+        if (type == DrinkType.ITEM) {
+            carryStatus = StatusType.CARRY_ITEM;
+            useStatus = StatusType.USE_ITEM;
+        }
+
+        this.removeStatus(StatusType.CARRY_ITEM);
+        this.removeStatus(StatusType.CARRY_FOOD);
+        this.removeStatus(StatusType.CARRY_DRINK);
+        this.removeStatus(StatusType.DANCE);
+
+        this.setStatus(carryStatus, " " + carryId, 120, useStatus, 12, 1);
+        this.needsUpdate = true;
     }
 
     /**
@@ -223,7 +299,7 @@ public class RoomUser {
      * @param status the status
      * @return true, if successful
      */
-    public boolean containsStatus(EntityStatus status) {
+    public boolean containsStatus(StatusType status) {
         return this.statuses.containsKey(status.getStatusCode());
     }
 
@@ -233,7 +309,7 @@ public class RoomUser {
      * @param status the status
      * @return if the user contained the status
      */
-    public void removeStatus(EntityStatus status) {
+    public void removeStatus(StatusType status) {
         this.statuses.remove(status.getStatusCode());
     }
 
@@ -243,7 +319,7 @@ public class RoomUser {
      * @param status the status
      * @param value the value
      */
-    public void setStatus(EntityStatus status, String value) {
+    public void setStatus(StatusType status, String value) {
         if (this.containsStatus(status)) {
             this.removeStatus(status);
         }
@@ -251,7 +327,7 @@ public class RoomUser {
         this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value));
     }
 
-    public void setStatus(EntityStatus status, String value, int secLifetime, EntityStatus action, int secActionSwitch, int secSwitchLifetime) {
+    public void setStatus(StatusType status, String value, int secLifetime, StatusType action, int secActionSwitch, int secSwitchLifetime) {
         if (this.containsStatus(status)) {
             this.removeStatus(status);
         }

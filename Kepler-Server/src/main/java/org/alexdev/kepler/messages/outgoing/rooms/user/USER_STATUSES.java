@@ -2,17 +2,13 @@ package org.alexdev.kepler.messages.outgoing.rooms.user;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityState;
-import org.alexdev.kepler.game.entity.EntityStatus;
-import org.alexdev.kepler.game.room.RoomUserStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class USER_STATUSES extends MessageComposer {
     private List<EntityState> states;
@@ -48,7 +44,7 @@ public class USER_STATUSES extends MessageComposer {
             for (var status : states.getStatuses().values()) {
                 response.write(status.getKey().getStatusCode());
 
-                if (status.getKey() != EntityStatus.BLANK) {
+                if (status.getKey() != StatusType.BLANK) {
                     response.write(status.getValue());
                 }
 

@@ -1,6 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms.pool;
 
-import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
@@ -43,7 +43,7 @@ public class SPLASH_POSITION implements MessageEvent {
 
         player.getRoomUser().setPosition(destination);
         player.getRoomUser().updateNewHeight(destination);
-        player.getRoomUser().setStatus(EntityStatus.SWIM, "");
+        player.getRoomUser().setStatus(StatusType.SWIM, "");
 
         room.send(new USER_STATUSES(List.of(player)));
         room.send(new SHOWPROGRAM(new String[] { "BIGSPLASH", "POSITION", contents,}));

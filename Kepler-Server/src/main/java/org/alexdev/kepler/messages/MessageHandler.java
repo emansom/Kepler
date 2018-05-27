@@ -114,6 +114,8 @@ public class MessageHandler {
         registerEvent(56, new WHISPER());
         registerEvent(317, new USER_START_TYPING());
         registerEvent(318, new USER_CANCEL_TYPING());
+        registerEvent(79, new LOOKTO());
+        registerEvent(80, new CARRYDRINK());
     }
 
 
@@ -148,6 +150,7 @@ public class MessageHandler {
         registerEvent(83, new G_IDATA());
         registerEvent(84, new SETITEMDATA());
         registerEvent(85, new REMOVEITEM());
+        registerEvent(74, new SETSTUFFDATA());
     }
 
     /**

@@ -15,6 +15,10 @@ public class UPDATE_ITEM extends MessageComposer {
     public void compose(NettyResponse response) {
         if (this.item.getDefinition().getBehaviour().isWallItem()) {
             this.item.serialise(response);
+        } else {
+            response.writeString(this.item.getId());
+            response.writeString(this.item.getCustomData());
+            response.writeString("");
         }
     }
 
@@ -22,7 +26,8 @@ public class UPDATE_ITEM extends MessageComposer {
     public short getHeader() {
         if (this.item.getDefinition().getBehaviour().isWallItem()) {
             return 85; // "AU"
+        } else {
+            return 88; // "AX"
         }
-        return 0;
     }
 }

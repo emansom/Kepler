@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
@@ -86,13 +86,13 @@ public class Pathfinder {
                 }
 
                 // Don't allow to "enter" the pool if they're already swimming
-                if (entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
+                if (entity.getRoomUser().containsStatus(StatusType.SWIM) &&
                     toItem.getDefinition().getSprite().equals("poolEnter")) {
                     return false;
                 }
 
                 // Don't allow to "leave" the pool if they're not swimming
-                if (!entity.getRoomUser().containsStatus(EntityStatus.SWIM) &&
+                if (!entity.getRoomUser().containsStatus(StatusType.SWIM) &&
                     toItem.getDefinition().getSprite().equals("poolExit")) {
                     return false;
                 }

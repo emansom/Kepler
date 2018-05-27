@@ -1,7 +1,7 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.room.Room;
@@ -89,14 +89,14 @@ public class ProcessEntityTask implements Runnable {
                 previousTile.removeEntity(entity);
                 nextTile.addEntity(entity);
 
-                roomUser.removeStatus(EntityStatus.LAY);
-                roomUser.removeStatus(EntityStatus.SIT);
+                roomUser.removeStatus(StatusType.LAY);
+                roomUser.removeStatus(StatusType.SIT);
 
                 int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
                 double height = this.room.getMapping().getTile(next).getTileHeight();
 
                 roomUser.getPosition().setRotation(rotation);
-                roomUser.setStatus(EntityStatus.MOVE, " " + next.getX() + "," + next.getY() + "," + StringUtil.format(height));
+                roomUser.setStatus(StatusType.MOVE, " " + next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomUser.setNextPosition(next);
             } else {
                 roomUser.stopWalking();

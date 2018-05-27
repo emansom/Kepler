@@ -1,7 +1,7 @@
 package org.alexdev.kepler.game.pathfinder;
 
 public class Rotation {
-    int calculateHumanDirection(int x1, int y1, int X2, int Y2) {
+    public static int calculateHumanDirection(int x1, int y1, int X2, int Y2) {
         int rotation = 0;
 
         if (x1 > X2 && y1 > Y2)

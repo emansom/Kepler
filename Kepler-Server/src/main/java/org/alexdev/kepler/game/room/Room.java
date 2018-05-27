@@ -1,7 +1,7 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -14,7 +14,6 @@ import org.alexdev.kepler.game.room.models.RoomModelManager;
 import org.alexdev.kepler.messages.incoming.rooms.user.YOUAROWNER;
 import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARECONTROLLER;
 import org.alexdev.kepler.messages.types.MessageComposer;
-import org.alexdev.kepler.util.StringUtil;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -95,10 +94,10 @@ public class Room {
             rightsValue = " useradmin";
         }
 
-        player.getRoomUser().removeStatus(EntityStatus.FLAT_CONTROL);
+        player.getRoomUser().removeStatus(StatusType.FLAT_CONTROL);
 
         if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId())) {
-            player.getRoomUser().setStatus(EntityStatus.FLAT_CONTROL, rightsValue);
+            player.getRoomUser().setStatus(StatusType.FLAT_CONTROL, rightsValue);
         }
     }
 

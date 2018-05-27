@@ -1,11 +1,11 @@
 package org.alexdev.kepler.game.room;
 
-import org.alexdev.kepler.game.entity.EntityStatus;
+import org.alexdev.kepler.game.room.enums.StatusType;
 
 public class RoomUserStatus {
-    private EntityStatus key;
+    private StatusType key;
     private String value;
-    private EntityStatus action;
+    private StatusType action;
 
     private int secActionSwitch;
     private int secSwitchLifetime;
@@ -14,7 +14,7 @@ public class RoomUserStatus {
     private int actionCountdown;
     private int actionSwitchCountdown;
 
-    public RoomUserStatus(EntityStatus status, String value) {
+    public RoomUserStatus(StatusType status, String value) {
         this.key = status;
         this.value = value;
 
@@ -25,7 +25,7 @@ public class RoomUserStatus {
         this.actionCountdown = -1;
     }
 
-    public RoomUserStatus(EntityStatus status, String value, int secLifetime, EntityStatus action, int secActionSwitch, int secSwitchLifetime) {
+    public RoomUserStatus(StatusType status, String value, int secLifetime, StatusType action, int secActionSwitch, int secSwitchLifetime) {
         this.key = status;
         this.value = value;
         this.action = action;
@@ -42,12 +42,12 @@ public class RoomUserStatus {
      * Swap the key and action for timed statuses, used for drinking, etc.
      */
     public void swapKeyAction() {
-        EntityStatus temp = this.key;
+        StatusType temp = this.key;
         this.key = this.action;
         this.action = temp;
     }
 
-    public EntityStatus getKey() {
+    public StatusType getKey() {
         return key;
     }
 
