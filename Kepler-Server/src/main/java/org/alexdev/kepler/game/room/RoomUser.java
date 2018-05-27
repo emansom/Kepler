@@ -229,10 +229,9 @@ public class RoomUser {
         // Public rooms send the localised handitem name instead of the drink ID
         if (carryName != null) {
             for (int i = 0; i <= 25; i++) {
-                String external_drink_key = "handitem" + i;
-                String external_drink_name = TextsManager.getInstance().getValue(external_drink_key);
+                String externalDrinkName = TextsManager.getInstance().getValue("handitem" + i);
 
-                if (external_drink_name != null && external_drink_name.equals(carryName)) {
+                if (externalDrinkName != null && externalDrinkName.equals(carryName)) {
                     carryId = i;
                 }
             }

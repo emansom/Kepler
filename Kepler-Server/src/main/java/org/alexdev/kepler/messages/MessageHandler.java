@@ -117,6 +117,7 @@ public class MessageHandler {
         registerEvent(79, new LOOKTO());
         registerEvent(80, new CARRYDRINK());
         registerEvent(94, new WAVE());
+        registerEvent(93, new DANCE());
     }
 
 
