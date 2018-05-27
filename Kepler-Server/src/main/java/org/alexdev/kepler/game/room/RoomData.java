@@ -106,7 +106,7 @@ public class RoomData {
 
     public int getTotalVisitorsNow() {
         if (this.childRooms.size() > 0) {
-            int totalVisitors = 0;
+            int totalVisitors = this.visitorsNow;
 
             for (Room room : this.childRooms) {
                 totalVisitors += room.getData().getVisitorsNow();
@@ -120,7 +120,7 @@ public class RoomData {
 
     public int getTotalVisitorsMax() {
         if (this.childRooms.size() > 0) {
-            int totalMaxVisitors = 0;
+            int totalMaxVisitors = this.visitorsMax;
 
             for (Room room : this.childRooms) {
                 totalMaxVisitors += room.getData().getVisitorsMax();
