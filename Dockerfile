@@ -1,4 +1,4 @@
-FROM ubuntu:18.04
+FROM openjdk:10
 LABEL maintainer="ewout@freedom.nl"
 
 RUN apt update && apt install -y \
