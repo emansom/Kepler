@@ -1,6 +1,5 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
-import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
@@ -26,6 +25,6 @@ public class GOTOFLAT implements MessageEvent {
             return;
         }
 
-        room.getEntityManager().enterRoom(player);
+        room.getEntityManager().enterRoom(player, null);
     }
 }

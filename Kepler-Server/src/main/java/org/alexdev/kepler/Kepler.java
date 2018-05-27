@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
+import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.server.netty.NettyServer;
@@ -60,6 +61,7 @@ public class Kepler {
 
             log.info("Setting up game");
 
+            WalkwaysManager.getInstance();
             ItemManager.getInstance();
             CatalogueManager.getInstance();
             RoomModelManager.getInstance();

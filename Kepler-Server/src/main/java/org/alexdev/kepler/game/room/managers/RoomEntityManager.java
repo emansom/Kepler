@@ -3,7 +3,6 @@ package org.alexdev.kepler.game.room.managers;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
-import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -12,7 +11,6 @@ import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 
@@ -78,8 +76,9 @@ public class RoomEntityManager {
      * Will send packets if the entity is a player.
      *
      * @param entity the entity to add
+     * @param destination
      */
-    public void enterRoom(Entity entity) {
+    public void enterRoom(Entity entity, Position destination) {
         if (entity.getRoom() != null) {
             entity.getRoom().getEntityManager().leaveRoom(entity, false);
         }
@@ -93,7 +92,12 @@ public class RoomEntityManager {
 
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
-        entity.getRoomUser().setPosition(this.room.getModel().getDoorLocation());
+
+        if (destination != null) {
+            entity.getRoomUser().setPosition(destination);
+        } else {
+            entity.getRoomUser().setPosition(this.room.getModel().getDoorLocation());
+        }
 
         entity.getRoomUser().setAuthenticateId(-1);
 

@@ -24,6 +24,6 @@ public class ROOM_DIRECTORY implements MessageEvent {
             return;
         }
 
-        room.getEntityManager().enterRoom(player);
+        room.getEntityManager().enterRoom(player, null);
      }
 }

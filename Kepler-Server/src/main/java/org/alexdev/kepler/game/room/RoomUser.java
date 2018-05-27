@@ -7,6 +7,8 @@ import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
+import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.LinkedList;
@@ -108,6 +110,18 @@ public class RoomUser {
         this.needsUpdate = true;
         this.nextPosition = null;
         this.removeStatus(EntityStatus.MOVE);
+
+        WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this);
+
+        if (entrance != null) {
+            Room room = WalkwaysManager.getInstance().getWalkwayRoom(entrance.getModelTo());
+
+            if (room != null) {
+                room.getEntityManager().enterRoom(this.entity, entrance.getDestination());
+            }
+
+            return;
+        }
 
         if (this.beingKicked) {
             this.room.getEntityManager().leaveRoom(this.entity, true);
