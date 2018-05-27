@@ -12,7 +12,6 @@ public class FLATPROPERTY extends MessageComposer {
         this.value = value;
     }
 
-
     @Override
     public void compose(NettyResponse response) {
         response.write(this.property);
@@ -22,6 +21,6 @@ public class FLATPROPERTY extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 46; // @n
+        return 46; // "@n"
     }
 }
