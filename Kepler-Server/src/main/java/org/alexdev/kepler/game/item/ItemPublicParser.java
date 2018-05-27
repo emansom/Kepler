@@ -47,6 +47,7 @@ public class ItemPublicParser {
                         || item.getDefinition().getSprite().contains("seat")
                         || item.getDefinition().getSprite().contains("stool")
                         || item.getDefinition().getSprite().contains("sofa")
+                        || item.getDefinition().getSprite().equals("rooftop_flatcurb")
                         || item.getDefinition().getSprite().equals("l")
                         || item.getDefinition().getSprite().equals("m")
                         || item.getDefinition().getSprite().equals("k")
