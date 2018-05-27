@@ -39,7 +39,7 @@ RUN touch /usr/src/kepler/config.ini && \
     crudini --set /usr/src/kepler/config.ini Game roller.tick.default 6 && \
     crudini --set /usr/src/kepler/config.ini Game fuck.aaron true && \
     crudini --set /usr/src/kepler/config.ini Game welcome.message.enabled true && \
-    crudini --set /usr/src/kepler/config.ini Game welcome.message.content Hello, %username%! And welcome to the Kepler server! && \
+    crudini --set /usr/src/kepler/config.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
     crudini --set /usr/src/kepler/config.ini Console debug true && \
     mv /usr/src/kepler/config.ini /usr/src/kepler/tmp.ini && \
     cat /usr/src/kepler/tmp.ini | tr -d "[:blank:]" > /usr/src/kepler/config.ini && \
