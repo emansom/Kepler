@@ -133,7 +133,7 @@ public class RoomData {
             return totalMaxVisitors;
         }
 
-        return this.visitorsNow;
+        return this.visitorsMax;
     }
 
     public int getId() {
