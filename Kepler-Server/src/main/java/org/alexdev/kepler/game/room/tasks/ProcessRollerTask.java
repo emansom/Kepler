@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ProcessRollerTask implements Runnable {
@@ -20,7 +21,7 @@ public class ProcessRollerTask implements Runnable {
 
     @Override
     public void run() {
-        boolean redoMap = false;
+        List<Item> itemsToUpdate = new ArrayList<>();
 
         for (Item roller : this.room.getItems()) {
             if (!roller.getDefinition().getBehaviour().isRoller()) {
@@ -33,7 +34,7 @@ public class ProcessRollerTask implements Runnable {
             // Process items on rollers
             for (Item item : items) {
                 if (this.processItem(roller, item)) {
-                    redoMap = true;
+                    itemsToUpdate.add(item);
                 }
             }
 
@@ -43,8 +44,9 @@ public class ProcessRollerTask implements Runnable {
             }
         }
 
-        if (redoMap) {
+        if (itemsToUpdate.size() > 0) {
             this.room.getMapping().regenerateCollisionMap();
+            ItemDao.updateItems(itemsToUpdate);
         }
     }
 
@@ -113,8 +115,6 @@ public class ProcessRollerTask implements Runnable {
         item.getPosition().setX(front.getX());
         item.getPosition().setY(front.getY());
         item.getPosition().setZ(nextHeight);
-
-        ItemDao.updateItem(item);
 
         return true;
     }

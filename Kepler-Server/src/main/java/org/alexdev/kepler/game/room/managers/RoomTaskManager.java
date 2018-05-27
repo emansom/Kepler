@@ -34,18 +34,15 @@ public class RoomTaskManager {
      */
     public void startTasks() {
         if (this.scheduledProcessEntity == null) {
-            this.scheduledProcessEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
-                    new ProcessEntityTask(room), 0, 500, TimeUnit.MILLISECONDS);
+            this.scheduledProcessEntity = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(new ProcessEntityTask(room), 0, 500, TimeUnit.MILLISECONDS);
         }
 
         if (this.scheduledProcessStatus == null) {
-            this.scheduledProcessStatus = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
-                    new ProcessStatusTask(room), 0, 1, TimeUnit.SECONDS);
+            this.scheduledProcessStatus = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(new ProcessStatusTask(room), 0, 1, TimeUnit.SECONDS);
         }
 
         if (this.scheduledProcessRoller == null) {
-            this.scheduledProcessRoller = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(
-                    new ProcessRollerTask(room), 0, 3, TimeUnit.SECONDS);
+            this.scheduledProcessRoller = GameScheduler.getInstance().getScheduler().scheduleAtFixedRate(new ProcessRollerTask(room), 0, 3, TimeUnit.SECONDS);
         }
     }
 

@@ -189,23 +189,39 @@ public class ItemDao {
      * @param item the instance of the item to update it
      */
     public static void updateItem(Item item) {
+        updateItems(List.of(item));
+    }
+
+    /**
+     * Update an entire list of items at once.
+     *
+     * @param items the list of items
+     */
+    public static void updateItems(List<Item> items) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("UPDATE items SET user_id = ?, room_id = ?, definition_id = ?, x = ?, y = ?, z = ?, rotation = ?, wall_position = ?, custom_data = ? WHERE id = ?", sqlConnection);
-            preparedStatement.setInt(1, item.getOwnerId());
-            preparedStatement.setInt(2, item.getRoomId());
-            preparedStatement.setInt(3, item.getDefinition().getId());
-            preparedStatement.setInt(4, item.getPosition().getX());
-            preparedStatement.setInt(5, item.getPosition().getY());
-            preparedStatement.setDouble(6, item.getPosition().getZ());
-            preparedStatement.setInt(7, item.getPosition().getRotation());
-            preparedStatement.setString(8, item.getWallPosition());
-            preparedStatement.setString(9, item.getCustomData());
-            preparedStatement.setInt(10, item.getId());
-            preparedStatement.execute();
+            sqlConnection.setAutoCommit(false);
+
+            for (Item item : items) {
+                preparedStatement.setInt(1, item.getOwnerId());
+                preparedStatement.setInt(2, item.getRoomId());
+                preparedStatement.setInt(3, item.getDefinition().getId());
+                preparedStatement.setInt(4, item.getPosition().getX());
+                preparedStatement.setInt(5, item.getPosition().getY());
+                preparedStatement.setDouble(6, item.getPosition().getZ());
+                preparedStatement.setInt(7, item.getPosition().getRotation());
+                preparedStatement.setString(8, item.getWallPosition());
+                preparedStatement.setString(9, item.getCustomData());
+                preparedStatement.setInt(10, item.getId());
+                preparedStatement.addBatch();
+            }
+
+            preparedStatement.executeBatch();
+            sqlConnection.setAutoCommit(true);
 
         } catch (Exception e) {
             Storage.logError(e);
