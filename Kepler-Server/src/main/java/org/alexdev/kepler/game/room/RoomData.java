@@ -95,6 +95,10 @@ public class RoomData {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("pool_b"));
         }
 
+        if (this.model.equals("bar_a")) {
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("bar_b"));
+        }
+
         if (this.model.equals("hallway2")) {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway0"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway1"));
