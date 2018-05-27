@@ -15,6 +15,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_WALLITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_WALLITEM;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class RoomMapping {
@@ -46,7 +47,7 @@ public class RoomMapping {
         }
 
         List<Item> items = new ArrayList<>(this.room.getItems());
-        items.sort((item1, item2) -> Double.compare(item1.getPosition().getZ(), item2.getPosition().getZ()));
+        items.sort(Comparator.comparingDouble((Item item) -> item.getPosition().getZ()));
 
         for (Item item : items) {
             if (item.getDefinition().getBehaviour().isWallItem()) {
