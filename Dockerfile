@@ -45,12 +45,12 @@ RUN touch /usr/src/kepler/config.ini && \
     cat /usr/src/kepler/tmp.ini | tr -d "[:blank:]" > /usr/src/kepler/config.ini && \
     cat /usr/src/kepler/config.ini
 
-WORKDIR /usr/src/kepler
-
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
 EXPOSE 12321
 EXPOSE 12309
+
+USER kepler
 
 CMD ["java -jar Kepler-Server/build/libs/Kepler-Server-all.jar"]
