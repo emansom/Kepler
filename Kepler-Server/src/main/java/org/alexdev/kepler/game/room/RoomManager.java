@@ -15,6 +15,7 @@ public class RoomManager {
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
         this.addRoomsByUser(0);
+        this.addWalkwaySettings();
     }
 
     /**
@@ -39,7 +40,7 @@ public class RoomManager {
             if (!publicRoom.isPublicRoom()) {
                 continue;
             }
-            publicRoom.getData().checkWalkwaySettings();
+            publicRoom.getData().checkWalkwaySettings(this);
         }
     }
 
