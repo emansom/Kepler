@@ -30,7 +30,6 @@ public class RoomDao {
                 Room room = new Room();
                 fill(room.getData(), resultSet);
                 rooms.add(room);
-                //fuserights.put(resultSet.getString("fuseright"), resultSet.getInt("min_rank"));
             }
 
         } catch (Exception e) {
@@ -67,7 +66,38 @@ public class RoomDao {
                 Room room = new Room();
                 fill(room.getData(), resultSet);
                 rooms.add(room);
-                //fuserights.put(resultSet.getString("fuseright"), resultSet.getInt("min_rank"));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return rooms;
+    }
+
+
+    public static List<Room> querySearchRooms(String searchQuery) {
+        List<Room> rooms = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms INNER JOIN users ON rooms.owner_id = users.id WHERE users.username LIKE ? OR rooms.name LIKE ? LIMIT 30", sqlConnection);
+            preparedStatement.setString(1, "%" + searchQuery + "%");
+            preparedStatement.setString(2, "%" + searchQuery + "%");
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                Room room = new Room();
+                fill(room.getData(), resultSet);
+                rooms.add(room);
             }
 
         } catch (Exception e) {

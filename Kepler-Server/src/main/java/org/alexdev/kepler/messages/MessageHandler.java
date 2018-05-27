@@ -84,6 +84,7 @@ public class MessageHandler {
         registerEvent(16, new SUSERF());
         registerEvent(151, new GETUSERFLATCATS());
         registerEvent(264, new RECOMMENDED_ROOMS());
+        registerEvent(17, new SRCHF());
     }
 
     /**
@@ -118,6 +119,7 @@ public class MessageHandler {
         registerEvent(80, new CARRYDRINK());
         registerEvent(94, new WAVE());
         registerEvent(93, new DANCE());
+        registerEvent(88, new STOP());
     }
 
 
