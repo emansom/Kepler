@@ -43,7 +43,8 @@ RUN touch /usr/src/kepler/config.ini && \
     crudini --set /usr/src/kepler/config.ini Console debug true && \
     mv /usr/src/kepler/config.ini /usr/src/kepler/tmp.ini && \
     cat /usr/src/kepler/tmp.ini | tr -d "[:blank:]" > /usr/src/kepler/config.ini && \
-    cat /usr/src/kepler/config.ini
+    cat /usr/src/kepler/config.ini && \
+    chown kepler:kepler /usr/src/kepler/config.ini
 
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
