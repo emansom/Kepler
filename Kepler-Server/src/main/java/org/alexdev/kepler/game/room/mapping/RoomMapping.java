@@ -1,16 +1,14 @@
 package org.alexdev.kepler.game.room.mapping;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.entity.EntityStatus;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
-import org.alexdev.kepler.messages.incoming.rooms.items.REMOVE_FLOORITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_WALLITEM;

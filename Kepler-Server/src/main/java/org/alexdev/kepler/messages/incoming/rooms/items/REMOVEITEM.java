@@ -21,7 +21,6 @@ public class REMOVEITEM implements MessageEvent {
         }
 
         int itemId = Integer.parseInt(reader.contents());
-
         Item item = room.getItemManager().getById(itemId);
 
         if (item == null) {

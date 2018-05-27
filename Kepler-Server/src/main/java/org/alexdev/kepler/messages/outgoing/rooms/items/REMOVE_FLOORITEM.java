@@ -1,4 +1,4 @@
-package org.alexdev.kepler.messages.incoming.rooms.items;
+package org.alexdev.kepler.messages.outgoing.rooms.items;
 
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.messages.types.MessageComposer;
