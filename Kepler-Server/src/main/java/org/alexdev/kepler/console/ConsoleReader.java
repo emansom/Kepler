@@ -25,7 +25,6 @@ public class ConsoleReader implements Runnable {
 
     @Override
     public void run() {
-
         while (true) {
             Scanner scanner = new Scanner(System.in);
             String command = ":" + scanner.nextLine();

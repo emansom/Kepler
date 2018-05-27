@@ -54,14 +54,16 @@ public class RoomMapping {
                 continue;
             }
 
-            RoomTile tile = getTile(item.getPosition());
+            RoomTile tile = item.getTile();
 
             if (tile == null) {
                 continue;
             }
 
+            tile.getItems().add(item);
+
             if (tile.getTileHeight() < item.getTotalHeight() || item.getDefinition().getBehaviour().isPublicSpaceObject()) {
-                tile.setItemBelow(tile.getHighestItem());
+                item.setItemBelow(tile.getHighestItem());
                 tile.setTileHeight(item.getTotalHeight());
                 tile.setHighestItem(item);
 

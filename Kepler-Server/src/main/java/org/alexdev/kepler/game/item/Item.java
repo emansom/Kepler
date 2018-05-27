@@ -30,6 +30,8 @@ public class Item {
     private String currentProgram;
     private String currentProgramValue;
 
+    private Item itemBelow;
+
     public Item() {
         this.id = 0;
         this.definition = new ItemDefinition();
@@ -194,6 +196,16 @@ public class Item {
         }
     }
 
+    public RoomTile getTile() {
+        Room room = this.getRoom();
+
+        if (room != null) {
+            return this.getRoom().getMapping().getTile(this.position);
+        }
+
+        return null;
+    }
+
     public int getId() {
         return id;
     }
@@ -278,5 +290,12 @@ public class Item {
         this.roomId = roomId;
     }
 
+    public Item getItemBelow() {
+        return itemBelow;
+    }
+
+    public void setItemBelow(Item itemBelow) {
+        this.itemBelow = itemBelow;
+    }
 }
 
