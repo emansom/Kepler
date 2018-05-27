@@ -49,9 +49,11 @@ RUN touch /usr/src/kepler/config.ini && \
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
 
+WORKDIR /usr/src/kepler
+
 EXPOSE 12321
 EXPOSE 12309
 
 USER kepler
 
-CMD java -jar /usr/src/kepler/Kepler-Server/build/libs/Kepler-Server-all.jar
+CMD java -jar Kepler-Server/build/libs/Kepler-Server-all.jar
