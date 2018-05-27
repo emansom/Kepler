@@ -56,7 +56,9 @@ public class Item {
         Room room = this.getRoom();
 
         if (room != null) {
+            if (this.currentProgram.length() > 0) {
                 room.send(new SHOWPROGRAM(new String[]{this.currentProgram, this.currentProgramValue}));
+            }
         }
     }
 
