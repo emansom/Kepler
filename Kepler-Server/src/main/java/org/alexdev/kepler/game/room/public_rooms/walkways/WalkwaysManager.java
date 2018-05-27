@@ -15,8 +15,8 @@ public class WalkwaysManager {
     public WalkwaysManager() {
         this.walkways = new ArrayList<>();
 
-        this.addWalkway("rooftop", "rooftop_2", "9,4 10,3 9,3", null, false);
-        this.addWalkway("rooftop_2", "rooftop", "3,10 4,10 5,10 3,11 4,11 5,11", "10,5,4,4", true);
+        this.addWalkway("rooftop", "rooftop_2", "9,4 10,4 9,3", null, false);
+        this.addWalkway("rooftop_2", "rooftop", "3,11 4,11 5,11", "10,5,4,4", true);
 
         this.addWalkway("old_skool0", "old_skool1", "16,18", null, false);
         this.addWalkway("old_skool1", "old_skool0", "0,7", "15,18,0,6", true);
@@ -76,6 +76,10 @@ public class WalkwaysManager {
         }
 
         for (WalkwaysEntrance entrance : this.walkways) {
+            if (!entrance.getModelFrom().equals(roomUser.getRoom().getModel().getName())) {
+                continue;
+            }
+
             for (Position coord : entrance.getFromCoords()) {
                 if (coord.equals(roomUser.getPosition())) {
                     return entrance;

@@ -61,7 +61,7 @@ public class RoomEntityManager {
      * Will send packets if the entity is a player.
      *
      * @param entity the entity to add
-     * @param destination
+     * @param destination the (optional) destination to take the user to when they enter
      */
     public void enterRoom(Entity entity, Position destination) {
         if (entity.getRoom() != null) {
