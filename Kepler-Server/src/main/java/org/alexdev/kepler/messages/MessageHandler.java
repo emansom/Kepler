@@ -116,6 +116,7 @@ public class MessageHandler {
         registerEvent(318, new USER_CANCEL_TYPING());
         registerEvent(79, new LOOKTO());
         registerEvent(80, new CARRYDRINK());
+        registerEvent(94, new WAVE());
     }
 
 

@@ -13,7 +13,8 @@ public enum StatusType {
     CARRY_FOOD("carryf"),
     USE_FOOD("eat"),
     CARRY_DRINK("carryd"),
-    USE_DRINK("drink");
+    USE_DRINK("drink"),
+    WAVE("wave");
 
     private String statusCode;
 

@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room;
 
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
@@ -10,12 +11,16 @@ import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
+import org.alexdev.kepler.game.room.tasks.WaveHandler;
 import org.alexdev.kepler.game.texts.TextsManager;
+import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 public class RoomUser {
     private Entity entity;
@@ -265,6 +270,20 @@ public class RoomUser {
 
         this.setStatus(carryStatus, " " + carryId, 120, useStatus, 12, 1);
         this.needsUpdate = true;
+    }
+
+    /**
+     * Force room user to wave
+     */
+    public void wave() {
+        this.setStatus(StatusType.WAVE, "");
+
+        if (!this.entity.getRoomUser().isWalking()) {
+            this.room.send(new USER_STATUSES(List.of(this.entity)));
+        }
+
+        GameScheduler.getInstance().getScheduler().schedule(new WaveHandler(this.entity), 2, TimeUnit.SECONDS);
+
     }
 
     /**
