@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.item;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
