@@ -67,7 +67,6 @@ public class NAVIGATE implements MessageEvent {
         }
 
         RoomManager.getInstance().sortRooms(rooms);
-
         player.send(new NAVIGATE_LIST(player, category, rooms, hideFull, subCategories, categoryCurrentVisitors, categoryMaxVisitors, player.getDetails().getRank()));
 
     }
