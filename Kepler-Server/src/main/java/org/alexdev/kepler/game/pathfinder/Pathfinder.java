@@ -38,12 +38,12 @@ public class Pathfinder {
      * @param isFinalMove if the move was final
      * @return true, if a valid step
      */
-    private static boolean isValidStep(Room room, Entity entity, Position current, Position tmp, boolean isFinalMove) {
-        if (!RoomTile.isValidTile(entity, new Position(current.getX(), current.getY()))) {
+    public static boolean isValidStep(Room room, Entity entity, Position current, Position tmp, boolean isFinalMove) {
+        if (!RoomTile.isValidTile(room, entity, new Position(current.getX(), current.getY()))) {
             return false;
         }
 
-        if (!RoomTile.isValidTile(entity, new Position(tmp.getX(), tmp.getY()))) {
+        if (!RoomTile.isValidTile(room, entity, new Position(tmp.getX(), tmp.getY()))) {
             return false;
         }
 
@@ -158,7 +158,7 @@ public class Pathfinder {
      * @return the linked list
      */
     private static LinkedList<Position> makePath(Entity entity, int x, int y) {
-        if (!RoomTile.isValidTile(entity, new Position(x, y))) {
+        if (!RoomTile.isValidTile(entity.getRoom(), entity, new Position(x, y))) {
             return new LinkedList<>();
         }
 

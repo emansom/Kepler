@@ -22,7 +22,6 @@ public class ProcessEntityTask implements Runnable {
 
     @Override
     public void run() {
-
         if (this.room.getEntities().size() == 0) {
             return;
         }
@@ -70,7 +69,7 @@ public class ProcessEntityTask implements Runnable {
                 Position next = roomUser.getPath().pop();
 
                 // Tile was invalid after we started walking, so lets try again!
-                if (!RoomTile.isValidTile(entity, next)) {
+                if (!RoomTile.isValidTile(this.room, entity, next)) {
                     roomUser.walkTo(goal.getX(), goal.getY());
                     this.processEntity(entity);
                     return;
