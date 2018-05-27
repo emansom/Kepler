@@ -36,6 +36,6 @@ public class WalkwaysEntrance {
     }
 
     public Position getDestination() {
-        return this.destination.copy();
+        return this.destination;
     }
 }

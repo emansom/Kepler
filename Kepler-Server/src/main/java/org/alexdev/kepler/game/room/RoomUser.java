@@ -127,9 +127,9 @@ public class RoomUser {
 
             if (room != null) {
                 room.getEntityManager().enterRoom(this.entity, entrance.getDestination());
+                return;
             }
 
-            return;
         }
 
         if (this.beingKicked) {

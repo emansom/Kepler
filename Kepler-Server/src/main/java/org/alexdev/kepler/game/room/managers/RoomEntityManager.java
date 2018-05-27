@@ -79,7 +79,7 @@ public class RoomEntityManager {
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
 
         if (destination != null) {
-            entity.getRoomUser().setPosition(destination);
+            entity.getRoomUser().setPosition(destination.copy());
         } else {
             entity.getRoomUser().setPosition(this.room.getModel().getDoorLocation());
         }
@@ -87,7 +87,7 @@ public class RoomEntityManager {
         entity.getRoomUser().setAuthenticateId(-1);
 
         // From this point onwards we send packets for the user to enter
-        if (entity.getType() !=  EntityType.PLAYER) {
+        if (entity.getType() != EntityType.PLAYER) {
             return;
         }
 
@@ -112,7 +112,7 @@ public class RoomEntityManager {
      */
     private void initialiseRoom() {
         if (!this.room.isPublicRoom()) {
-            this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
+            //this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
         }
 
         this.room.getMapping().regenerateCollisionMap();
