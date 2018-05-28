@@ -114,8 +114,8 @@ public class Room {
 
         this.roomTaskManager.stopTasks();
         this.roomEntityManager.getInstanceIdCounter().set(0);
-
         this.items.clear();
+
         RoomManager.getInstance().removeRoom(this.roomData.getId());
         return true;
     }

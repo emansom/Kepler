@@ -71,7 +71,7 @@ public class RoomEntityManager {
 
         // If the room is not loaded, add room, as we intend to join it.
         if (!RoomManager.getInstance().hasRoom(this.room.getId())) {
-            RoomManager.getInstance().addRoom(room);
+            RoomManager.getInstance().addRoom(this.room);
         }
 
         if (this.room.getData().getVisitorsNow() == 0) {
