@@ -69,7 +69,7 @@ public class RoomEntityManager {
             entity.getRoom().getEntityManager().leaveRoom(entity, false);
         }
 
-        // If the room is not loaded, then query the room
+        // If the room is not loaded, add room, as we intend to join it.
         if (!RoomManager.getInstance().hasRoom(this.room.getId())) {
             RoomManager.getInstance().addRoom(room);
         }

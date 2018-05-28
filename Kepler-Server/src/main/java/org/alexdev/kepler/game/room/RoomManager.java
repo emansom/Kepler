@@ -24,7 +24,7 @@ public class RoomManager {
      * @return the room found, else null
      */
     public Room getRoomByModel(String model) {
-        int roomId = RoomDao.getRoomIdByModel(model);
+        int roomId = RoomDao.getIdByModel(model);
         return getRoomById(roomId);
     }
 
