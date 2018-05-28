@@ -297,6 +297,11 @@ public class RoomUser {
      * @param isShout whether the chat was a shout or not
      */
     public void showChat(String message, boolean isShout) {
+        if (message.equals("o/")) {
+            this.wave();
+            return;
+        }
+
         String[] words = message.split(" ");
         int talkDuration = 1;
 
