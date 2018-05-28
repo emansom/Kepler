@@ -1,7 +1,6 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
-import org.alexdev.kepler.dao.mysql.RoomDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,10 +53,10 @@ public class RoomData {
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
         this.childRooms = new ArrayList<>();
-        this.checkWalkwaySettings();
+        this.applyModelSettings();
     }
 
-    public void checkWalkwaySettings() {
+    public void applyModelSettings() {
         if (this.model.equals("rooftop_2")
                 || this.model.equals("old_skool1")
                 || this.model.equals("malja_bar_b")
