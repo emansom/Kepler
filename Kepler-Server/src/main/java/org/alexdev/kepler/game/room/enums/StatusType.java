@@ -14,7 +14,9 @@ public enum StatusType {
     USE_FOOD("eat"),
     CARRY_DRINK("carryd"),
     USE_DRINK("drink"),
-    WAVE("wave");
+    WAVE("wave"),
+    GESTURE("gest"),
+    TALK("talk");
 
     private String statusCode;
 

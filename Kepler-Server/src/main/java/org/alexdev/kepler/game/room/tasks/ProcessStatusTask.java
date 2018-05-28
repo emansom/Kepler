@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,13 @@ public class ProcessStatusTask implements Runnable {
      * @param entity the entity
      */
     private void processEntity(Entity entity) {
-        List<String> toRemove =        new ArrayList<>();
+        List<String> toRemove = new ArrayList<>();
+
+        if (entity.getRoomUser().getLookTimer() != -1 && DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getLookTimer()) {
+            entity.getRoomUser().setLookTimer(-1);
+            entity.getRoomUser().getPosition().setHeadRotation(entity.getRoomUser().getPosition().getBodyRotation());
+            entity.getRoomUser().setNeedsUpdate(true);
+        }
 
         // Use walk to next tile if on pool queue
         PoolHandler.checkPoolQueue(entity);

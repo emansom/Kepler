@@ -21,13 +21,15 @@ public class SHOUT implements MessageEvent {
 
         String message = StringUtil.filterInput(reader.readString(), true);
 
+        player.getRoomUser().setTyping(false);
+        room.send(new TYPING_STATUS(player.getRoomUser().getInstanceId(), player.getRoomUser().isTyping()));
+
         if (CommandManager.getInstance().hasCommand(player, message)) {
             CommandManager.getInstance().invokeCommand(player, message);
-
-            player.getRoomUser().setTyping(false);
-            room.send(new TYPING_STATUS(player.getRoomUser().getInstanceId(), player.getRoomUser().isTyping()));
             return;
         }
+
+        player.getRoomUser().showChat(message, false);
 
         room.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.SHOUT, player.getRoomUser().getInstanceId(), message));
     }

@@ -2,6 +2,8 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.pathfinder.Rotation;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
@@ -14,8 +16,10 @@ import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.room.tasks.WaveHandler;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
+import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -41,9 +45,9 @@ public class RoomUser {
     private boolean isWalking;
     private boolean beingKicked;
     private boolean needsUpdate;
-    private AtomicInteger needsUpdateCountdown;
     private boolean isTyping;
     private boolean isDiving;
+    private int lookTimer;
 
     public RoomUser(Entity entity) {
         this.entity = entity;
@@ -65,7 +69,7 @@ public class RoomUser {
 
         this.instanceId = -1;
         this.authenticateId = -1;
-        this.needsUpdateCountdown = new AtomicInteger(-1);
+        this.lookTimer = -1;
 
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
@@ -287,6 +291,118 @@ public class RoomUser {
     }
 
     /**
+     * Animates the users mouth when speaking and detects any gestures.
+     *
+     * @param message the text to read for any gestures and to find animation length
+     * @param isShout whether the chat was a shout or not
+     */
+    public void showChat(String message, boolean isShout) {
+        int talkDuration = 1;
+
+        if (message.length() > 1) {
+            if (message.length() >= 10) {
+                talkDuration = 5;
+            } else {
+                talkDuration = (int) (message.length() / 2);
+            }
+        }
+
+        String gesture = null;
+        boolean gestureFound = false;
+
+        if (message.contains(":)")
+                || message.contains(":-)")
+                || message.contains(":p")
+                || message.contains(":d")
+                || message.contains(":D")
+                || message.contains(";)")
+                || message.contains(";-)") ) {
+            gesture = "sml";
+            gestureFound = true;
+        }
+
+        if (!gestureFound &&
+                message.contains(":s")
+                || message.contains(":(")
+                || message.contains(":-(")
+                || message.contains(":'(") ) {
+            gesture = "sad";
+            gestureFound = true;
+        }
+
+        if (!gestureFound &&
+                message.contains(":o")
+                || message.contains(":O") ) {
+            gesture = "srp";
+            gestureFound = true;
+        }
+
+
+        if (!gestureFound &&
+                message.contains(":@")
+                || message.contains(">:(") ) {
+            gesture = "agr";
+            gestureFound = true;
+        }
+
+        if (gestureFound) {
+            this.setStatus(StatusType.GESTURE, " " + gesture, 5, StatusType.BLANK, -1, -1);
+        }
+
+        this.setStatus(StatusType.TALK, "", talkDuration, StatusType.BLANK, -1, -1);
+        this.needsUpdate = true;
+
+        List<Player> players;
+
+        if (isShout) {
+            players = this.room.getEntityManager().getEntitiesByClass(Player.class);
+        } else {
+            players = new ArrayList<>();
+
+            for (Player player : this.room.getEntityManager().getEntitiesByClass(Player.class)) {
+                if (player.getEntityId() == this.entity.getEntityId()) {
+                    continue;
+                }
+
+                if (player.getRoomUser().getPosition().getDistanceSquared(this.entity.getRoomUser().getPosition()) <= 10) {
+                    players.add(player);
+                }
+            }
+        }
+
+        for (Player player : players) {
+            player.getRoomUser().look(this.position);
+        }
+    }
+
+    /**
+     * Look towards a certain point.
+     *
+     * @param towards the coordinate direction to look towards
+     */
+    private void look(Position towards) {
+        if (this.isWalking) {
+            return;
+        }
+
+        int diff = this.position.getRotation() - Rotation.calculateHumanDirection(this.position.getX(), this.position.getY(), towards.getX(), towards.getY());
+
+
+        if ((this.position.getRotation() % 2) == 0) {
+            if (diff > 0) {
+                this.position.setHeadRotation(this.position.getRotation() - 1);
+            } else if (diff < 0) {
+                this.position.setHeadRotation(this.position.getRotation() + 1);
+            } else {
+                this.position.setHeadRotation(this.position.getRotation());
+            }
+        }
+
+        this.lookTimer = DateUtil.getCurrentTimeSeconds() + 6;
+        this.needsUpdate = true;
+    }
+
+    /**
      * Force room user to wave
      */
     public void wave() {
@@ -452,14 +568,6 @@ public class RoomUser {
         this.beingKicked = beingKicked;
     }
 
-    public AtomicInteger getNeedsUpdateCountdown() {
-        return needsUpdateCountdown;
-    }
-
-    public void setNeedsUpdateCountdown(int needsUpdateCountdown) {
-        this.needsUpdateCountdown = new AtomicInteger(needsUpdateCountdown);
-    }
-
     public boolean isBeingKicked() {
         return beingKicked;
     }
@@ -490,5 +598,13 @@ public class RoomUser {
 
     public void setDiving(boolean diving) {
         isDiving = diving;
+    }
+
+    public int getLookTimer() {
+        return lookTimer;
+    }
+
+    public void setLookTimer(int lookTimer) {
+        this.lookTimer = lookTimer;
     }
 }
