@@ -47,7 +47,7 @@ public class ProcessRollerTask implements Runnable {
             // Process entities on rollers
             for (Entity entity : entities) {
                 if (blacklist.contains(entity)) {
-                    //continue;
+                    continue;
                 }
 
                 this.processEntity(roller, entity);
