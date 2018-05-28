@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.dao.mysql.RoomDao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +26,7 @@ public class RoomData {
     private int visitorsNow;
     private int visitorsMax;
     private boolean navigatorHide;
-    //private long timeSinceUpdate;
-    private List<Room> childRooms;// = new ArrayList<>();
+    private List<Room> childRooms;
 
     RoomData(Room room) {
         this.room = room;
@@ -53,34 +53,11 @@ public class RoomData {
         this.password = password;
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
-        //this.timeSinceUpdate = (DateUtil.getCurrentTimeSeconds() + SECONDS_UNTIL_UPDATE);
         this.childRooms = new ArrayList<>();
+        this.checkWalkwaySettings();
     }
 
-    /*public void updateDetails() {
-        if (DateUtil.getCurrentTimeSeconds() > this.timeSinceUpdate) {
-            boolean rowRemoved = RoomDao.refillRoom(this.id);
-
-            if (rowRemoved) {
-                for (Entity entity : this.room.getEntities()) {
-                    this.room.getEntityManager().leaveRoom(entity, true);
-                }
-
-                RoomManager.getInstance().removeRoom(this.id);
-            }
-
-            this.timeSinceUpdate = (DateUtil.getCurrentTimeSeconds() + SECONDS_UNTIL_UPDATE);
-        }
-    }*/
-
-    void addPublicItems() {
-        for (var item : this.room.getModel().getPublicItems()) {
-            item.setRoomId(this.id);
-            this.room.getItems().add(item);
-        }
-    }
-
-    void checkWalkwaySettings(RoomManager roomManager) {
+    public void checkWalkwaySettings() {
         if (this.model.equals("rooftop_2")
                 || this.model.equals("old_skool1")
                 || this.model.equals("malja_bar_b")
@@ -95,31 +72,31 @@ public class RoomData {
         }
 
         if (this.model.equals("rooftop")) {
-            this.childRooms.add(roomManager.getRoomByModel("rooftop_2"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("rooftop_2"));
         }
 
         if (this.model.equals("old_skool0")) {
-            this.childRooms.add(roomManager.getRoomByModel("old_skool1"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("old_skool1"));
         }
 
         if (this.model.equals("malja_bar_a")) {
-            this.childRooms.add(roomManager.getRoomByModel("malja_bar_b"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("malja_bar_b"));
         }
 
         if (this.model.equals("pool_a")) {
-            this.childRooms.add(roomManager.getRoomByModel("pool_b"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("pool_b"));
         }
 
         if (this.model.equals("bar_a")) {
-            this.childRooms.add(roomManager.getRoomByModel("bar_b"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("bar_b"));
         }
 
         if (this.model.equals("hallway2")) {
-            this.childRooms.add(roomManager.getRoomByModel("hallway0"));
-            this.childRooms.add(roomManager.getRoomByModel("hallway1"));
-            this.childRooms.add(roomManager.getRoomByModel("hallway3"));
-            this.childRooms.add(roomManager.getRoomByModel("hallway4"));
-            this.childRooms.add(roomManager.getRoomByModel("hallway5"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway0"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway1"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway3"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway4"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway5"));
         }
     }
 

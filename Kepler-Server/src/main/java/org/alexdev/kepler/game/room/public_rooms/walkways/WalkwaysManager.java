@@ -91,13 +91,7 @@ public class WalkwaysManager {
     }
 
     public Room getWalkwayRoom(String model) {
-        for (Room room : RoomManager.getInstance().getRooms()) {
-            if (room.isPublicRoom() && room.getModel().getName().equals(model)) {
-                return room;
-            }
-        }
-
-        return null;
+        return RoomManager.getInstance().getRoomByModel(model);
     }
 
     /**

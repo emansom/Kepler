@@ -80,8 +80,8 @@ public class RoomDao {
         return rooms;
     }
 
-    public static boolean refillRoom(int roomId) {
-        boolean rowRemoved = true;
+    public static int getRoomIdByModel(String model) {
+        int roomId = -1;
 
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
@@ -89,17 +89,12 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE id = ?", sqlConnection);
-            preparedStatement.setInt(1, roomId);
+            preparedStatement = Storage.getStorage().prepare("SELECT id FROM rooms WHERE model = ?", sqlConnection);
+            preparedStatement.setString(1, model);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                Room room = RoomManager.getInstance().getRoomById(roomId);
-
-                if (room != null) {
-                    fill(room.getData(), resultSet);
-                    rowRemoved = false;
-                }
+                roomId = resultSet.getInt("id");
             }
 
         } catch (Exception e) {
@@ -110,7 +105,36 @@ public class RoomDao {
             Storage.closeSilently(sqlConnection);
         }
 
-        return rowRemoved;
+        return roomId;
+    }
+
+    public static Room getRoomByModel(String model) {
+        Room room = null;
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE model = ?", sqlConnection);
+            preparedStatement.setString(1, model);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                room = new Room();
+                fill(room.getData(), resultSet);
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return room;
     }
 
     public static List<Room> querySearchRooms(String searchQuery) {

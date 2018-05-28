@@ -18,7 +18,9 @@ public class ROOM_DIRECTORY implements MessageEvent {
         }
 
         reader.readBytes(1); // strip 'A'
-        Room room = RoomManager.getInstance().getRoomById(reader.readInt());
+        int roomId = reader.readInt();
+
+        Room room = RoomManager.getInstance().getRoomById(roomId);
 
         if (room == null) {
             return;
