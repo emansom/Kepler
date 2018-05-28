@@ -54,14 +54,23 @@ public class RoomManager {
      * Find a room by room id.
      *
      * @param roomId the id of the room to find
-     * @return the room, if successful, else null.
+     * @return the loaded room instance, if successful, else query the db
      */
     public Room getRoomById(int roomId) {
         if (this.roomMap.containsKey(roomId)) {
             return this.roomMap.get(roomId);
         }
 
-        return null;
+        return RoomDao.getRoomById(roomId);
+    }
+
+    /**
+     *
+     * @param roomId
+     * @return
+     */
+    public boolean hasRoom(int roomId) {
+        return this.roomMap.containsKey(roomId);
     }
 
     /**
@@ -71,18 +80,6 @@ public class RoomManager {
      */
     public void removeRoom(int roomId) {
         this.roomMap.remove(roomId);
-    }
-
-    /**
-     * Add a room to the map, by querying the database for the
-     * specific type of id.
-     *
-     * @param roomId the id of the room to add
-     */
-    public Room addRoom(int roomId) {
-        Room room = RoomDao.getRoomById(roomId);
-        addRoom(room);
-        return room;
     }
 
     /**

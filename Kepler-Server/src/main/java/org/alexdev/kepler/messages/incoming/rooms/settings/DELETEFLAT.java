@@ -42,7 +42,7 @@ public class DELETEFLAT implements MessageEvent {
             room.getEntityManager().leaveRoom(entity, true);
         }
 
-        if (!room.tryDispose(true)) {
+        if (!room.tryDispose()) {
             Log.getErrorLogger().error("Room " + roomId + " did not want to get disposed by player id " + userId);
         }
 

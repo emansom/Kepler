@@ -195,7 +195,7 @@ public class Player extends Entity {
         }
 
         for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(this.details.getId()))) {
-            room.tryDispose(false);
+            room.tryDispose();
         }
 
         this.loggedIn = false;
