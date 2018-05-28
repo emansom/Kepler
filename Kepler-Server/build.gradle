@@ -7,6 +7,9 @@ repositories {
     mavenCentral()
 }
 
+sourceCompatibility = "1.10"
+targetCompatibility = "1.10"
+
 dependencies {
 
     // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
