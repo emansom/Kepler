@@ -15,22 +15,6 @@ public class RoomManager {
 
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
-        this.initialisePublicRooms();
-    }
-
-    /**
-     * Add walkway settings for various public rooms that have enabled walkways.
-     * Such as making sure the total room population is counted and adding the sub rooms.
-     */
-    public void initialisePublicRooms() {
-        for (Room publicRoom : this.roomMap.values()) {
-            if (!publicRoom.isPublicRoom()) {
-                continue;
-            }
-
-            publicRoom.getData().addPublicItems();
-            publicRoom.getData().checkWalkwaySettings(this);
-        }
     }
 
     /**
@@ -40,14 +24,8 @@ public class RoomManager {
      * @return the room found, else null
      */
     public Room getRoomByModel(String model) {
-        for (Room room : this.roomMap.values()) {
-            if (room.getModel().getName().equals(model)) {
-
-                return room;
-            }
-        }
-
-        return null;
+        int roomId = RoomDao.getIdByModel(model);
+        return getRoomById(roomId);
     }
 
     /**

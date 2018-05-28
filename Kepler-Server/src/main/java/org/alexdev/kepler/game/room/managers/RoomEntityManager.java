@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
@@ -68,6 +69,11 @@ public class RoomEntityManager {
             entity.getRoom().getEntityManager().leaveRoom(entity, false);
         }
 
+        // If the room is not loaded, add room, as we intend to join it.
+        if (!RoomManager.getInstance().hasRoom(this.room.getId())) {
+            RoomManager.getInstance().addRoom(room);
+        }
+
         if (this.room.getData().getVisitorsNow() == 0) {
             this.initialiseRoom();
         }
@@ -111,7 +117,12 @@ public class RoomEntityManager {
      * Setup the room initially for room entry.
      */
     private void initialiseRoom() {
-        if (!this.room.isPublicRoom()) {
+        if (this.room.isPublicRoom()) {
+            for (var item : this.room.getModel().getPublicItems()) {
+                item.setRoomId(this.room.getId());
+                this.room.getItems().add(item);
+            }
+        } else {
             this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
         }
 

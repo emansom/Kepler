@@ -80,8 +80,8 @@ public class RoomDao {
         return rooms;
     }
 
-    public static boolean refillRoom(int roomId) {
-        boolean rowRemoved = true;
+    public static int getIdByModel(String model) {
+        int roomId = -1;
 
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
@@ -89,17 +89,12 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE id = ?", sqlConnection);
-            preparedStatement.setInt(1, roomId);
+            preparedStatement = Storage.getStorage().prepare("SELECT id FROM rooms WHERE model = ?", sqlConnection);
+            preparedStatement.setString(1, model);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                Room room = RoomManager.getInstance().getRoomById(roomId);
-
-                if (room != null) {
-                    fill(room.getData(), resultSet);
-                    rowRemoved = false;
-                }
+                roomId = resultSet.getInt("id");
             }
 
         } catch (Exception e) {
@@ -110,8 +105,9 @@ public class RoomDao {
             Storage.closeSilently(sqlConnection);
         }
 
-        return rowRemoved;
+        return roomId;
     }
+
 
     public static List<Room> querySearchRooms(String searchQuery) {
         List<Room> rooms = new ArrayList<>();

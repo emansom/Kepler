@@ -17,11 +17,6 @@ public class GOTOFLAT implements MessageEvent {
 
         Room room = RoomManager.getInstance().getRoomById(roomId);
 
-        // If the room is not loaded, then query the room
-        if (!RoomManager.getInstance().hasRoom(roomId)) {
-            RoomManager.getInstance().addRoom(room);
-        }
-
         if (room == null) {
             return;
         }
