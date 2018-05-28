@@ -207,7 +207,7 @@ public class Item {
      */
     public boolean isValidMove(Room room, int x, int y, int rotation) {
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
-            RoomTile tile = this.getRoom().getMapping().getTile(position);
+            RoomTile tile = room.getMapping().getTile(position);
 
             if (tile == null) {
                 return false;
