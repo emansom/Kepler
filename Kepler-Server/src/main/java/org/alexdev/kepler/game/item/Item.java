@@ -213,7 +213,7 @@ public class Item {
                 return false;
             }
 
-            if (room.getModel().getTileState(x, y) == RoomTileState.CLOSED) {
+            if (room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.CLOSED) {
                 return false;
             }
 
