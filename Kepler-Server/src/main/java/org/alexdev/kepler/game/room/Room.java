@@ -1,6 +1,8 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.navigator.NavigatorCategory;
+import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
@@ -172,6 +174,15 @@ public class Room {
      */
     public RoomModel getModel() {
         return RoomModelManager.getInstance().getModel(this.roomData.getModel());
+    }
+
+    /**
+     * Get the {@link NavigatorCategory} for this room.
+     *
+     * @return the navigator category
+     */
+    public NavigatorCategory getCategory() {
+        return NavigatorManager.getInstance().getCategoryById(this.roomData.getCategoryId());
     }
 
     /**
