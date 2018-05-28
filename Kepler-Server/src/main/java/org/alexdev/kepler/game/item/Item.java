@@ -136,6 +136,9 @@ public class Item {
         return false;
     }
 
+    /**
+     * Send status update of the item.
+     */
     public void updateStatus() {
         Room room = this.getRoom();
 
@@ -236,8 +239,9 @@ public class Item {
     }
 
     /**
-     * The room tile this t
-     * @return
+     * Get the room tile this item is on.
+     *
+     * @return the room tile, else null
      */
     public RoomTile getTile() {
         Room room = this.getRoom();
