@@ -18,14 +18,17 @@ public class DELETEFLAT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         int roomId = Integer.parseInt(reader.contents());
+        delete(roomId, player.getDetails().getId());
+    }
 
+    public static void delete(int roomId, int userId) {
         Room room = RoomManager.getInstance().getRoomById(roomId);
 
         if (room == null) {
             return;
         }
 
-        if (!room.isOwner(player.getDetails().getId())) {
+        if (!room.isOwner(userId)) {
             return;
         }
 
@@ -40,7 +43,7 @@ public class DELETEFLAT implements MessageEvent {
         }
 
         if (!room.tryDispose(true)) {
-            Log.getErrorLogger().error("Room " + roomId + " did not want to get disposed by player id " + player.getEntityId());
+            Log.getErrorLogger().error("Room " + roomId + " did not want to get disposed by player id " + userId);
         }
 
         RoomDao.delete(room);

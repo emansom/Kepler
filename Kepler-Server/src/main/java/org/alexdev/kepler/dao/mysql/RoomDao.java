@@ -3,6 +3,7 @@ package org.alexdev.kepler.dao.mysql;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomData;
+import org.alexdev.kepler.game.room.RoomManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -79,6 +80,38 @@ public class RoomDao {
         return rooms;
     }
 
+    public static boolean refillRoom(int roomId) {
+        boolean rowRemoved = true;
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, roomId);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                Room room = RoomManager.getInstance().getRoomById(roomId);
+
+                if (room != null) {
+                    fill(room.getData(), resultSet);
+                    rowRemoved = false;
+                }
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return rowRemoved;
+    }
 
     public static List<Room> querySearchRooms(String searchQuery) {
         List<Room> rooms = new ArrayList<>();

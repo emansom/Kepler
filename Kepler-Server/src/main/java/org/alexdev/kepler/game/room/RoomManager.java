@@ -15,32 +15,20 @@ public class RoomManager {
 
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
-        this.addRoomsByUser(0);
-        this.addWalkwaySettings();
-    }
-
-    /**
-     * Adds all rooms to the map if they dont already exist, by
-     * the owner id
-     *
-     * @param ownerId the owner of the room
-     */
-    public void addRoomsByUser(int ownerId) {
-        for (Room publicRoom : RoomDao.getRoomsByUserId(ownerId)) {
-            this.addRoom(publicRoom);
-        }
-
+        this.initialisePublicRooms();
     }
 
     /**
      * Add walkway settings for various public rooms that have enabled walkways.
      * Such as making sure the total room population is counted and adding the sub rooms.
      */
-    public void addWalkwaySettings() {
+    public void initialisePublicRooms() {
         for (Room publicRoom : this.roomMap.values()) {
             if (!publicRoom.isPublicRoom()) {
                 continue;
             }
+
+            publicRoom.getData().addPublicItems();
             publicRoom.getData().checkWalkwaySettings(this);
         }
     }
