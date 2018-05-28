@@ -50,6 +50,14 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
+
+        if (!item.isValidMove(room, x, y, rotation)) {
+
+            // Send item update even though we cancelled, otherwise the client will be confused.
+            player.send(new MOVE_FLOORITEM(item));
+            return;
+        }
+
         item.getPosition().setX(x);
         item.getPosition().setY(y);
         item.getPosition().setRotation(rotation);

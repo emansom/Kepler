@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -196,6 +197,46 @@ public class Item {
         }
     }
 
+    /**
+     *
+     * @param room
+     * @param x
+     * @param y
+     * @param rotation
+     * @return
+     */
+    public boolean isValidMove(Room room, int x, int y, int rotation) {
+        for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
+            RoomTile tile = this.getRoom().getMapping().getTile(position);
+
+            if (tile == null) {
+                return false;
+            }
+
+            if (room.getModel().getTileState(x, y) == RoomTileState.CLOSED) {
+                return false;
+            }
+
+            for (Item tileItem : tile.getItems()) {
+                if (tileItem.getDefinition().getBehaviour().isRoller()) {
+                    if (this.definition.getBehaviour().isRoller()) {
+                        return false; // Can't place rollers on top of rollers
+                    }
+
+                    if (this.definition.getLength() > 1 || this.definition.getWidth() > 1) {
+                        return false; // Item is too big to place on rollers.
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * The room tile this t
+     * @return
+     */
     public RoomTile getTile() {
         Room room = this.getRoom();
 
