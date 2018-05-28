@@ -31,10 +31,10 @@ public class PLACESTUFF implements MessageEvent {
             return;
         }
 
-        if (item.getDefinition().getBehaviour().isWallItem()) {
+        if (item.getBehaviour().isWallItem()) {
             String wallPosition = content.substring(data[0].length() + 1);
 
-            if (item.getDefinition().getBehaviour().isPostIt()) {
+            if (item.getBehaviour().isPostIt()) {
                 String defaultColour = "FFFF33";
 
                 Item sticky = new Item();

@@ -113,7 +113,7 @@ public class Inventory {
         response.writeDelimeter(item.getId(), (char) 30);
         response.writeDelimeter(stripSlotId, (char) 30);
 
-        if (item.getDefinition().getBehaviour().isWallItem()) {
+        if (item.getBehaviour().isWallItem()) {
             response.writeDelimeter("I", (char) 30);
         } else {
             response.writeDelimeter("S", (char) 30);
@@ -122,7 +122,7 @@ public class Inventory {
         response.writeDelimeter(item.getId(), (char) 30);
         response.writeDelimeter(item.getDefinition().getSprite(), (char) 30);
 
-        if (item.getDefinition().getBehaviour().isWallItem()) {
+        if (item.getBehaviour().isWallItem()) {
             response.writeDelimeter(item.getCustomData(), (char) 30);
             response.writeDelimeter("0", (char) 30);
         } else {

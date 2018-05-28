@@ -129,7 +129,7 @@ public class Pathfinder {
                 if (isFinalMove) {
                     return toItem.isWalkable();
                 } else {
-                    return toItem.getDefinition().getBehaviour().isCanStandOnTop();
+                    return toItem.getBehaviour().isCanStandOnTop();
                 }
             }
         }

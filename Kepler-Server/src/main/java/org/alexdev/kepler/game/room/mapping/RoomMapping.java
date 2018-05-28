@@ -50,7 +50,7 @@ public class RoomMapping {
         items.sort(Comparator.comparingDouble((Item item) -> item.getPosition().getZ()));
 
         for (Item item : items) {
-            if (item.getDefinition().getBehaviour().isWallItem()) {
+            if (item.getBehaviour().isWallItem()) {
                 continue;
             }
 
@@ -62,7 +62,7 @@ public class RoomMapping {
 
             tile.getItems().add(item);
 
-            if (tile.getTileHeight() < item.getTotalHeight() || item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+            if (tile.getTileHeight() < item.getTotalHeight() || item.getBehaviour().isPublicSpaceObject()) {
                 item.setItemBelow(tile.getHighestItem());
                 tile.setTileHeight(item.getTotalHeight());
                 tile.setHighestItem(item);
@@ -80,7 +80,7 @@ public class RoomMapping {
                     affectedTile.setHighestItem(item);
                 }
 
-                if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+                if (item.getBehaviour().isPublicSpaceObject()) {
                     PoolHandler.setupRedirections(this.room, item);
                 }
             }
@@ -97,7 +97,7 @@ public class RoomMapping {
         item.setOwnerId(this.room.getData().getOwnerId());
         this.room.getItems().add(item);
 
-        if (item.getDefinition().getBehaviour().isWallItem()) {
+        if (item.getBehaviour().isWallItem()) {
             this.room.send(new PLACE_WALLITEM(item));
         } else {
             this.handleItemAdjustment(item, false);
@@ -120,7 +120,7 @@ public class RoomMapping {
     public void moveItem(Item item, boolean isRotation, Position oldPosition) {
         item.setRoomId(this.room.getId());
 
-        if (!item.getDefinition().getBehaviour().isWallItem()) {
+        if (!item.getBehaviour().isWallItem()) {
             this.handleItemAdjustment(item, isRotation);
             this.regenerateCollisionMap();
 
@@ -139,7 +139,7 @@ public class RoomMapping {
     public void removeItem(Item item) {
         this.room.getItems().remove(item);
 
-        if (item.getDefinition().getBehaviour().isWallItem()) {
+        if (item.getBehaviour().isWallItem()) {
             this.room.send(new REMOVE_WALLITEM(item));
         } else {
             this.regenerateCollisionMap();

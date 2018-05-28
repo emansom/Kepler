@@ -25,7 +25,7 @@ public class ProcessRollerTask implements Runnable {
         List<Object> blacklist = new ArrayList<>();
 
         for (Item roller : this.room.getItems()) {
-            if (!roller.getDefinition().getBehaviour().isRoller()) {
+            if (!roller.getBehaviour().isRoller()) {
                 continue;
             }
 
@@ -91,8 +91,8 @@ public class ProcessRollerTask implements Runnable {
         double nextHeight = frontTile.getTileHeight();
 
         if (frontTile.getHighestItem() != null) {
-            if (!frontTile.getHighestItem().getDefinition().getBehaviour().isRoller()) {
-                if (item.getDefinition().getBehaviour().isCanStackOnTop() && item.getDefinition().getStackHeight() == frontTile.getHighestItem().getDefinition().getStackHeight()) {
+            if (!frontTile.getHighestItem().getBehaviour().isRoller()) {
+                if (item.getBehaviour().isCanStackOnTop() && item.getDefinition().getStackHeight() == frontTile.getHighestItem().getDefinition().getStackHeight()) {
                     nextHeight -= item.getDefinition().getStackHeight();
                 }
             }
@@ -100,7 +100,7 @@ public class ProcessRollerTask implements Runnable {
 
         // If this item is stacked, we maintain its stack height
         if (item.getItemBelow() != null) {
-            if (!item.getItemBelow().getDefinition().getBehaviour().isRoller()) {
+            if (!item.getItemBelow().getBehaviour().isRoller()) {
                 nextHeight = item.getPosition().getZ();
 
                 // If the next tile/front tile is not a roller, we need to adjust the sliding so the stacked items
@@ -108,7 +108,7 @@ public class ProcessRollerTask implements Runnable {
                 boolean subtractRollerHeight = false;
 
                 if (frontTile.getHighestItem() != null) {
-                    if (!frontTile.getHighestItem().getDefinition().getBehaviour().isRoller()) {
+                    if (!frontTile.getHighestItem().getBehaviour().isRoller()) {
                         subtractRollerHeight = true;
                     }
                 } else {

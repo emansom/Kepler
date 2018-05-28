@@ -174,7 +174,7 @@ public class RoomUser {
             item = tile.getHighestItem();
         }
 
-        if (item == null || (!item.getDefinition().getBehaviour().isCanSitOnTop() || !item.getDefinition().getBehaviour().isCanLayOnTop())) {
+        if (item == null || (!item.getBehaviour().isCanSitOnTop() || !item.getBehaviour().isCanLayOnTop())) {
             if (this.containsStatus(StatusType.SIT) || this.containsStatus(StatusType.LAY)) {
                 this.removeStatus(StatusType.SIT);
                 this.removeStatus(StatusType.LAY);
@@ -183,14 +183,14 @@ public class RoomUser {
         }
 
         if (item != null) {
-            if (item.getDefinition().getBehaviour().isCanSitOnTop()) {
+            if (item.getBehaviour().isCanSitOnTop()) {
                 this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
                 this.setStatus(StatusType.SIT, " " + StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
             }
 
-            if (item.getDefinition().getBehaviour().isCanLayOnTop()) {
+            if (item.getBehaviour().isCanLayOnTop()) {
                 this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
                 this.setStatus(StatusType.LAY, " " + StringUtil.format(item.getDefinition().getTopHeight()));

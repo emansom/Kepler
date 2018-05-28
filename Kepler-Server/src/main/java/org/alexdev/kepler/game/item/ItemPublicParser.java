@@ -23,7 +23,7 @@ public class ItemPublicParser {
 
                 Item item = new Item();
                 item.setId(id++);
-                item.getDefinition().getBehaviour().setPublicSpaceObject(true);
+                item.getBehaviour().setPublicSpaceObject(true);
                 item.getDefinition().setSprite(data[1]);
 
                 item.setCustomData(data[0]);
@@ -53,12 +53,12 @@ public class ItemPublicParser {
                         || item.getDefinition().getSprite().equals("k")
                         || item.getDefinition().getSprite().equals("shift1")
                         || item.getDefinition().getSprite().equals("stone")) {
-                    item.getDefinition().getBehaviour().setCanSitOnTop(true);
-                    item.getDefinition().getBehaviour().setCanStandOnTop(false);
+                    item.getBehaviour().setCanSitOnTop(true);
+                    item.getBehaviour().setCanStandOnTop(false);
                     item.getDefinition().setTopHeight(1.0);
                 } else {
-                    item.getDefinition().getBehaviour().setCanSitOnTop(false);
-                    item.getDefinition().getBehaviour().setCanStandOnTop(false);
+                    item.getBehaviour().setCanSitOnTop(false);
+                    item.getBehaviour().setCanStandOnTop(false);
                 }
 
                 if (item.getDefinition().getSprite().equals("poolEnter")
@@ -66,12 +66,12 @@ public class ItemPublicParser {
                     || item.getDefinition().getSprite().equals("poolLift")
                     || item.getDefinition().getSprite().equals("poolBooth")
                     || item.getDefinition().getSprite().equals("queue_tile2")) {
-                    item.getDefinition().getBehaviour().setCanSitOnTop(false);
-                    item.getDefinition().getBehaviour().setCanStandOnTop(true);
+                    item.getBehaviour().setCanSitOnTop(false);
+                    item.getBehaviour().setCanStandOnTop(true);
                 }
 
                 if (item.getDefinition().getSprite().equals("queue_tile2")) {
-                    item.getDefinition().getBehaviour().setPublicSpaceObject(false);
+                    item.getBehaviour().setPublicSpaceObject(false);
                 }
 
                 if (item.getDefinition().getSprite().equals("poolLift") ||

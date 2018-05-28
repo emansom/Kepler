@@ -37,7 +37,7 @@ public class RoomItemManager {
         List<Item> items = new ArrayList<>();
 
         for (Item item : this.room.getItems()) {
-            if (!item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+            if (!item.getBehaviour().isPublicSpaceObject()) {
                 continue;
             }
 
@@ -51,11 +51,11 @@ public class RoomItemManager {
         List<Item> items = new ArrayList<>();
 
         for (Item item : this.room.getItems()) {
-            if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+            if (item.getBehaviour().isPublicSpaceObject()) {
                 continue;
             }
 
-            if (item.getDefinition().getBehaviour().isWallItem()) {
+            if (item.getBehaviour().isWallItem()) {
                 continue;
             }
 
@@ -69,11 +69,11 @@ public class RoomItemManager {
         List<Item> items = new ArrayList<>();
 
         for (Item item : this.room.getItems()) {
-            if (item.getDefinition().getBehaviour().isPublicSpaceObject()) {
+            if (item.getBehaviour().isPublicSpaceObject()) {
                 continue;
             }
 
-            if (!item.getDefinition().getBehaviour().isWallItem()) {
+            if (!item.getBehaviour().isWallItem()) {
                 continue;
             }
 

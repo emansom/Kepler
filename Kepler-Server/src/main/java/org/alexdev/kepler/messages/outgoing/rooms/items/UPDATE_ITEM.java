@@ -13,7 +13,7 @@ public class UPDATE_ITEM extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        if (this.item.getDefinition().getBehaviour().isWallItem()) {
+        if (this.item.getBehaviour().isWallItem()) {
             this.item.serialise(response);
         } else {
             response.writeString(this.item.getId());
@@ -24,7 +24,7 @@ public class UPDATE_ITEM extends MessageComposer {
 
     @Override
     public short getHeader() {
-        if (this.item.getDefinition().getBehaviour().isWallItem()) {
+        if (this.item.getBehaviour().isWallItem()) {
             return 85; // "AU"
         } else {
             return 88; // "AX"

@@ -31,7 +31,7 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
-        if (item.getDefinition().getBehaviour().isWallItem()) {
+        if (item.getBehaviour().isWallItem()) {
             return;
         }
 

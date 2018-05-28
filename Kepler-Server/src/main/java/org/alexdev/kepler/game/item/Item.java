@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.item;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -223,7 +224,7 @@ public class Item {
             }
 
             for (Item tileItem : tile.getItems()) {
-                if (tileItem.getDefinition().getBehaviour().isRoller()) {
+                if (tileItem.getBehaviour().isRoller()) {
                     if (this.definition.getBehaviour().isRoller()) {
                         return false; // Can't place rollers on top of rollers
                     }
@@ -270,7 +271,11 @@ public class Item {
     }
 
     public ItemDefinition getDefinition() {
-        return definition;
+        return this.definition;
+    }
+
+    public ItemBehaviour getBehaviour() {
+        return this.definition.getBehaviour();
     }
 
     public void setDefinitionId(int definitionId) {
