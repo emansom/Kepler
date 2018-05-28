@@ -47,7 +47,9 @@ public class GRPC implements MessageEvent {
             purchase(player, item.getDefinition(), extraData, item.getItemSpecialId());
         } else {
             for (CataloguePackage cataloguePackage : item.getPackages()) {
-                purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId());
+                for (int i = 0; i < cataloguePackage.getAmount(); i++){
+                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId());
+                }
             }
         }
 
@@ -59,7 +61,6 @@ public class GRPC implements MessageEvent {
     }
 
     private void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) {
-
         String customData = "";
 
         if (extraData != null) {
