@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -195,6 +196,49 @@ public class Item {
         }
     }
 
+    /**
+     * Check if the move is valid before moving an item. Will prevent long
+     * furniture from being on top of rollers, will prevent placing rollers on top of other rollers.
+     * Will prevent items being placed on closed tile states.
+     *
+     * @param room the room to check inside
+     * @param x the new x to check
+     * @param y the new y to check
+     * @param rotation the new rotation to check
+     * @return true, if successful
+     */
+    public boolean isValidMove(Room room, int x, int y, int rotation) {
+        for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
+            RoomTile tile = room.getMapping().getTile(position);
+
+            if (tile == null) {
+                return false;
+            }
+
+            if (room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.CLOSED) {
+                return false;
+            }
+
+            for (Item tileItem : tile.getItems()) {
+                if (tileItem.getDefinition().getBehaviour().isRoller()) {
+                    if (this.definition.getBehaviour().isRoller()) {
+                        return false; // Can't place rollers on top of rollers
+                    }
+
+                    if (this.definition.getLength() > 1 || this.definition.getWidth() > 1) {
+                        return false; // Item is too big to place on rollers.
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * The room tile this t
+     * @return
+     */
     public RoomTile getTile() {
         Room room = this.getRoom();
 
