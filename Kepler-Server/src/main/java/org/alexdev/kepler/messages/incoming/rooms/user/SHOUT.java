@@ -29,7 +29,7 @@ public class SHOUT implements MessageEvent {
             return;
         }
 
-        player.getRoomUser().showChat(message, false);
+        player.getRoomUser().showChat(message, true);
 
         room.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.SHOUT, player.getRoomUser().getInstanceId(), message));
     }
