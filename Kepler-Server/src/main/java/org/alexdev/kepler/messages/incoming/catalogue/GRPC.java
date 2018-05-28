@@ -59,6 +59,7 @@ public class GRPC implements MessageEvent {
     }
 
     private void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) {
+
         String customData = "";
 
         if (extraData != null) {

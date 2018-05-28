@@ -29,7 +29,7 @@ public class ProcessEntityTask implements Runnable {
         List<Entity> entitiesToUpdate = new ArrayList<>();
 
         for (Entity entity : this.room.getEntities()) {
-            if (entity != null && entity.getRoomUser().getRoom() != null) {
+            if (entity != null && entity.getRoomUser().getRoom() != null && entity.getRoomUser().getRoom() == this.room) {
                 this.processEntity(entity);
                 RoomUser roomEntity = entity.getRoomUser();
 

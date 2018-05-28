@@ -23,7 +23,7 @@ public class ProcessStatusTask implements Runnable {
 
         for (Entity entity : this.room.getEntities()) {
             if (entity != null) {
-                if (entity.getRoomUser() != null && entity.getRoomUser().getRoom() != null) {
+                if (entity.getRoomUser().getRoom() != null && entity.getRoomUser().getRoom() == this.room) {
                     this.processEntity(entity);
                 }
             }

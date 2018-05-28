@@ -20,22 +20,22 @@ public class WalkwaysEntrance {
     }
 
     public String getModelFrom() {
-        return modelFrom;
+        return this.modelFrom;
     }
 
     public String getModelTo() {
-        return modelTo;
+        return this.modelTo;
     }
 
     public List<Position> getFromCoords() {
-        return fromCoords;
+        return this.fromCoords;
     }
 
     public boolean isHideRoom() {
-        return hideRoom;
+        return this.hideRoom;
     }
 
     public Position getDestination() {
-        return destination;
+        return this.destination;
     }
 }

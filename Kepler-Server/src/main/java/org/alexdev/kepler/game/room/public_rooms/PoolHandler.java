@@ -71,11 +71,8 @@ public class PoolHandler {
         if (item.getDefinition().getSprite().equals("poolBooth")) {
             item.showProgram("close");
 
-            player.getDetails().setTickets(player.getDetails().getTickets() - 1);
             player.getRoomUser().setWalkingAllowed(false);
             player.send(new OPEN_UIMAKOPPI());
-
-            PlayerDao.saveCurrency(player.getDetails());
         }
 
         if (item.getDefinition().getSprite().equals("poolEnter")) {
@@ -156,7 +153,7 @@ public class PoolHandler {
         roomUser.getPath().add(goal);
         roomUser.setWalking(true);
 
-        item.showProgram("");
+        item.showProgram(null);
     }
 
     /**
