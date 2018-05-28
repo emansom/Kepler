@@ -297,15 +297,13 @@ public class RoomUser {
      * @param isShout whether the chat was a shout or not
      */
     public void showChat(String message, boolean isShout) {
+        String[] words = message.split(" ");
         int talkDuration = 1;
 
-        if (message.length() > 1) {
-            if (message.length() >= 10) {
-                talkDuration = 5;
-            } else {
-                talkDuration = (int) (message.length() / 2);
-            }
-        }
+        if (words.length <= 5)
+            talkDuration = words.length / 2;
+        else
+            talkDuration = 5;
 
         String gesture = null;
         boolean gestureFound = false;
@@ -316,7 +314,7 @@ public class RoomUser {
                 || message.contains(":d")
                 || message.contains(":D")
                 || message.contains(";)")
-                || message.contains(";-)") ) {
+                || message.contains(";-)")) {
             gesture = "sml";
             gestureFound = true;
         }
@@ -325,14 +323,14 @@ public class RoomUser {
                 message.contains(":s")
                 || message.contains(":(")
                 || message.contains(":-(")
-                || message.contains(":'(") ) {
+                || message.contains(":'(")) {
             gesture = "sad";
             gestureFound = true;
         }
 
         if (!gestureFound &&
                 message.contains(":o")
-                || message.contains(":O") ) {
+                || message.contains(":O")) {
             gesture = "srp";
             gestureFound = true;
         }
@@ -340,7 +338,7 @@ public class RoomUser {
 
         if (!gestureFound &&
                 message.contains(":@")
-                || message.contains(">:(") ) {
+                || message.contains(">:(")) {
             gesture = "agr";
             gestureFound = true;
         }
