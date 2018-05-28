@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomData {
+    //private static final int SECONDS_UNTIL_UPDATE = 60;
     private Room room;
     private int id;
     private int ownerId;
@@ -24,10 +25,10 @@ public class RoomData {
     private int visitorsNow;
     private int visitorsMax;
     private boolean navigatorHide;
-
+    //private long timeSinceUpdate;
     private List<Room> childRooms;// = new ArrayList<>();
 
-    public RoomData(Room room) {
+    RoomData(Room room) {
         this.room = room;
     }
 
@@ -52,20 +53,34 @@ public class RoomData {
         this.password = password;
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
+        //this.timeSinceUpdate = (DateUtil.getCurrentTimeSeconds() + SECONDS_UNTIL_UPDATE);
         this.childRooms = new ArrayList<>();
-
-        this.addNavigatorRooms();
-        //this.checkWalkwaySettings();
     }
 
-    private void addNavigatorRooms() {
+    /*public void updateDetails() {
+        if (DateUtil.getCurrentTimeSeconds() > this.timeSinceUpdate) {
+            boolean rowRemoved = RoomDao.refillRoom(this.id);
+
+            if (rowRemoved) {
+                for (Entity entity : this.room.getEntities()) {
+                    this.room.getEntityManager().leaveRoom(entity, true);
+                }
+
+                RoomManager.getInstance().removeRoom(this.id);
+            }
+
+            this.timeSinceUpdate = (DateUtil.getCurrentTimeSeconds() + SECONDS_UNTIL_UPDATE);
+        }
+    }*/
+
+    void addPublicItems() {
         for (var item : this.room.getModel().getPublicItems()) {
             item.setRoomId(this.id);
             this.room.getItems().add(item);
         }
     }
 
-    public void checkWalkwaySettings(RoomManager roomManager) {
+    void checkWalkwaySettings(RoomManager roomManager) {
         if (this.model.equals("rooftop_2")
                 || this.model.equals("old_skool1")
                 || this.model.equals("malja_bar_b")

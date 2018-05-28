@@ -50,7 +50,6 @@ public class Player extends Entity {
 
         PlayerManager.getInstance().disconnectSession(this.details.getId()); // Kill other sessions with same id
         PlayerManager.getInstance().addPlayer(this); // Add new connection
-        RoomManager.getInstance().addRoomsByUser(this.details.getId());
 
         this.messenger = new Messenger(this);
         this.inventory = new Inventory(this);
