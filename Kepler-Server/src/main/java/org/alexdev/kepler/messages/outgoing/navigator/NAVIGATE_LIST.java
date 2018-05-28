@@ -72,6 +72,7 @@ public class NAVIGATE_LIST extends MessageComposer {
                 response.writeString(room.getData().getAccessType());
                 response.writeInt(room.getData().getVisitorsNow());
                 response.writeInt(room.getData().getVisitorsMax());
+                response.writeString(room.getData().getDescription());
             }
         }
 
