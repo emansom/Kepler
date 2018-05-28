@@ -22,6 +22,7 @@ public class ProcessRollerTask implements Runnable {
     @Override
     public void run() {
         List<Item> itemsToUpdate = new ArrayList<>();
+        List<Object> blacklist = new ArrayList<>();
 
         for (Item roller : this.room.getItems()) {
             if (!roller.getDefinition().getBehaviour().isRoller()) {
@@ -33,14 +34,24 @@ public class ProcessRollerTask implements Runnable {
 
             // Process items on rollers
             for (Item item : items) {
+                if (blacklist.contains(item)) {
+                    continue;
+                }
+
                 if (this.processItem(roller, item)) {
                     itemsToUpdate.add(item);
+                    blacklist.add(item);
                 }
             }
 
             // Process entities on rollers
             for (Entity entity : entities) {
+                if (blacklist.contains(entity)) {
+                    //continue;
+                }
+
                 this.processEntity(roller, entity);
+                blacklist.add(entity);
             }
         }
 

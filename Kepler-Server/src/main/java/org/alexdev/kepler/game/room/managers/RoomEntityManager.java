@@ -112,7 +112,7 @@ public class RoomEntityManager {
      */
     private void initialiseRoom() {
         if (!this.room.isPublicRoom()) {
-            //this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
+            this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
         }
 
         this.room.getMapping().regenerateCollisionMap();
