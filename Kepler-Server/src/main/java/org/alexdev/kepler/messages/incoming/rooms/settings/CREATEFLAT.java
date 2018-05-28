@@ -56,7 +56,6 @@ public class CREATEFLAT implements MessageEvent {
         }
 
         int roomId = NavigatorDao.createRoom(player.getDetails().getId(), roomName, roomModel, roomShowName, accessType);
-        RoomManager.getInstance().addRoom(roomId);
 
         player.getRoomUser().setAuthenticateId(roomId);
         player.send(new GOTO_FLAT(roomId, roomName));
