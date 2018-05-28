@@ -198,12 +198,15 @@ public class Item {
     }
 
     /**
+     * Check if the move is valid before moving an item. Will prevent long
+     * furniture from being on top of rollers, will prevent placing rollers on top of other rollers.
+     * Will prevent items being placed on closed tile states.
      *
-     * @param room
-     * @param x
-     * @param y
-     * @param rotation
-     * @return
+     * @param room the room to check inside
+     * @param x the new x to check
+     * @param y the new y to check
+     * @param rotation the new rotation to check
+     * @return true, if successful
      */
     public boolean isValidMove(Room room, int x, int y, int rotation) {
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
