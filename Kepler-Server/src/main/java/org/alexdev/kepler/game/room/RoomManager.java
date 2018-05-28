@@ -15,6 +15,7 @@ public class RoomManager {
 
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
+        RoomDao.resetVisitors();
     }
 
     /**
@@ -24,7 +25,7 @@ public class RoomManager {
      * @return the room found, else null
      */
     public Room getRoomByModel(String model) {
-        int roomId = RoomDao.getIdByModel(model);
+        int roomId = RoomDao.getRoomIdByModel(model);
         return getRoomById(roomId);
     }
 
@@ -100,6 +101,11 @@ public class RoomManager {
         return roomList;
     }
 
+    /**
+     * Sort the list of rooms by higher populated rooms appearing first.
+     *
+     * @param roomList
+     */
     public void sortRooms(List<Room> roomList) {
         roomList.sort(Comparator.comparingDouble((Room room) -> room.getData().getTotalVisitorsNow()).reversed());
     }

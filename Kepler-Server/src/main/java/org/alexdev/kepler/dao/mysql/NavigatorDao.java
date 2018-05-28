@@ -70,7 +70,7 @@ public class NavigatorDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE category = ? AND owner_id > 0 ORDER BY id DESC LIMIT ? ", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE category = ? AND owner_id > 0 AND visitors_now > 0 ORDER BY id DESC LIMIT ? ", sqlConnection);
             preparedStatement.setInt(1, categoryId);
             preparedStatement.setInt(2, limit);
             resultSet = preparedStatement.executeQuery();

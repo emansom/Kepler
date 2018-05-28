@@ -14,7 +14,17 @@ import java.util.List;
 
 public class RoomDao {
 
-    public static List<Room> getRoomsByUserId(int roomId) {
+    public static void resetVisitors() {
+        Storage.getStorage().execute("UPDATE rooms SET visitors_now = 0 WHERE visitors_now > 0");
+    }
+
+    /**
+     * Get a list of rooms by the owner id, use "0" for public rooms.
+     *
+     * @param userId the user id to get the rooms by
+     * @return the list of rooms
+     */
+    public static List<Room> getRoomsByUserId(int userId) {
         List<Room> rooms = new ArrayList<>();
 
         Connection sqlConnection = null;
@@ -24,7 +34,7 @@ public class RoomDao {
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE owner_id = ?", sqlConnection);
-            preparedStatement.setInt(1, roomId);
+            preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
@@ -80,7 +90,13 @@ public class RoomDao {
         return rooms;
     }
 
-    public static int getIdByModel(String model) {
+    /**
+     * Get the room id of a room by its model, used for walkways.
+     *
+     * @param model the model used to get the id for
+     * @return the id, else -1
+     */
+    public static int getRoomIdByModel(String model) {
         int roomId = -1;
 
         Connection sqlConnection = null;
@@ -109,6 +125,12 @@ public class RoomDao {
     }
 
 
+    /**
+     * Search query for when people use the navigator search, will search either by username or room name similarities.
+     *
+     * @param searchQuery the query to use
+     * @return the list of possible room matches
+     */
     public static List<Room> querySearchRooms(String searchQuery) {
         List<Room> rooms = new ArrayList<>();
 
@@ -192,6 +214,30 @@ public class RoomDao {
             preparedStatement.setString(9, room.getData().getPassword());
             preparedStatement.setInt(10, room.getData().getVisitorsMax());
             preparedStatement.setInt(11, room.getId());
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+
+    /**
+     * Save visitor count of rooms
+     *
+     * @param room the room to save
+     */
+    public static void saveVisitors(Room room) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE rooms SET visitors_now = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, room.getData().getVisitorsNow());
+            preparedStatement.setInt(2, room.getId());
             preparedStatement.execute();
         } catch (Exception e) {
             Storage.logError(e);
