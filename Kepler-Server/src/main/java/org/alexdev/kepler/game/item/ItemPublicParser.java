@@ -51,7 +51,8 @@ public class ItemPublicParser {
                         || item.getDefinition().getSprite().equals("l")
                         || item.getDefinition().getSprite().equals("m")
                         || item.getDefinition().getSprite().equals("k")
-                        || item.getDefinition().getSprite().equals("shift1")) {
+                        || item.getDefinition().getSprite().equals("shift1")
+                        || item.getDefinition().getSprite().equals("stone")) {
                     item.getDefinition().getBehaviour().setCanSitOnTop(true);
                     item.getDefinition().getBehaviour().setCanStandOnTop(false);
                     item.getDefinition().setTopHeight(1.0);
