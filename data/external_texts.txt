@@ -1,5 +1,4 @@
-﻿player.commands.no.args=You have not supplied any arguments!
-
+player.commands.no.args=You have not supplied any arguments!
 furni_glass_table*7_desc=Translucent beauty
 nav_public_helptext_hd=Public Rooms
 furni_glass_table*8_desc=Translucent beauty
