@@ -34,13 +34,7 @@ public class SitCommand extends Command {
 
         RoomTile tile = player.getRoomUser().getTile();
         double height = tile.getTileHeight();
-        int rotation = player.getRoomUser().getPosition().getRotation();
-
-        if (rotation > 0 && rotation <= 7) {
-            if (rotation % 2 == 0) {
-                rotation--;
-            }
-        }
+        int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
 
         if (height != player.getRoomUser().getPosition().getZ()) {
             player.getRoomUser().getPosition().setZ(height);
