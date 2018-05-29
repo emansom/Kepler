@@ -9,7 +9,6 @@ import org.alexdev.kepler.messages.outgoing.handshake.HELLO;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
-import org.alexdev.kepler.util.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
         player.send(new HELLO());
 
-        //if (Configuration.getBoolean("log.connections")) {
+        //if (ServerConfiguration.getBoolean("log.connections")) {
         log.info("[{}] Connection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
         //}
     }
@@ -45,7 +44,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
         Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
 
-        //if (Configuration.getBoolean("log.connections")) {
+        //if (ServerConfiguration.getBoolean("log.connections")) {
         log.info("[{}] Disonnection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
         //}
 

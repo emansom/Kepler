@@ -26,7 +26,7 @@ import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.user.*;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
-import org.alexdev.kepler.util.config.Configuration;
+import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class MessageHandler {
         registerMessengerPackets();
         registerCataloguePackets();
         registerInventoryPackets();
-        //if (Configuration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
+        //if (ServerConfiguration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
     }
@@ -250,7 +250,7 @@ public class MessageHandler {
      * @param message the message
      */
     public void handleRequest(Player player, NettyRequest message) {
-        if (Configuration.getBoolean("log.received.packets")) {
+        if (ServerConfiguration.getBoolean("log.received.packets")) {
             if (this.messages.containsKey(message.getHeaderId())) {
                 MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
                 player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());

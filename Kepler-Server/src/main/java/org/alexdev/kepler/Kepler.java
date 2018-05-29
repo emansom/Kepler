@@ -16,13 +16,13 @@ import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.util.StringUtil;
-import org.alexdev.kepler.util.config.Configuration;
+import org.alexdev.kepler.util.config.GameConfiguration;
+import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.util.config.LoggingConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.log4j.PropertyConfigurator;
 
-import java.io.File;
 import java.net.InetAddress;
 
 public class Kepler {
@@ -43,7 +43,10 @@ public class Kepler {
         startupTime = DateUtil.getCurrentTimeSeconds();
 
         try {
-            Configuration.load("config.ini");
+            LoggingConfiguration.checkLoggingConfig();
+
+            ServerConfiguration.load("server.ini");
+            GameConfiguration.load("game.ini");
 
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
@@ -75,8 +78,8 @@ public class Kepler {
             TextsManager.getInstance();
 
             // Get the server variables for the socket to listen on
-            serverIP = Configuration.getString("server.bind");
-            serverPort = Configuration.getInteger("server.port");
+            serverIP = ServerConfiguration.getString("server.bind");
+            serverPort = ServerConfiguration.getInteger("server.port");
 
             // Override with valid IP that we have resolved
             // TODO: check IPv6 too. And rely on stdlib functions instead of reinventing the wheel

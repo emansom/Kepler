@@ -1,12 +1,11 @@
 package org.alexdev.kepler.server.netty.codec;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
-import org.alexdev.kepler.util.config.Configuration;
+import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +26,7 @@ public class NetworkEncoder extends MessageToMessageEncoder<MessageComposer> {
             response.setFinalised(true);
         }
 
-        if (Configuration.getBoolean("log.sent.packets")) {
+        if (ServerConfiguration.getBoolean("log.sent.packets")) {
             log.info("SENT: {} / {}", msg.getHeader(), response.getBodyString());
         }
 
