@@ -62,7 +62,7 @@ public class GiveDrinkCommand extends Command {
             if (!targetUser.getRoomUser().containsStatus(StatusType.CARRY_FOOD) &&
                 !targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK) &&
                 !targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
-                targetUser.getRoomUser().carryItem(Integer.parseInt(status.getValue().substring(1)), null);
+                targetUser.getRoomUser().carryItem(Integer.parseInt(status.getValue()), null);
             }
         }
     }
