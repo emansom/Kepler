@@ -72,8 +72,7 @@ public class RoomUser {
 
         this.instanceId = -1;
         this.authenticateId = -1;
-        this.lookTimer = -1;
-        this.afkTimer = -1;
+        this.resetRoomTimer();
 
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
