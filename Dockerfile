@@ -23,7 +23,8 @@ RUN groupadd -g 1000 kepler && \
     useradd -r -u 1000 -g kepler kepler && \
     chown -R kepler:kepler /usr/src/kepler
 
-RUN touch /usr/src/kepler/{game,server}.ini && \
+RUN touch /usr/src/kepler/game.ini && \
+    touch /usr/src/kepler/server.ini && \
     crudini --set /usr/src/kepler/server.ini Server server.bind 0.0.0.0 && \
     crudini --set /usr/src/kepler/server.ini Server server.port 12321 && \
     crudini --set /usr/src/kepler/server.ini Rcon rcon.bind 0.0.0.0 && \
