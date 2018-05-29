@@ -68,7 +68,7 @@ public class GiveDrinkCommand extends Command {
                     targetUser.getRoomUser().carryItem(carryID, null);
                     String carryName = TextsManager.getInstance().getValue("handitem" + carryID);
 
-                    targetUser.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, targetUser.getRoomUser().getInstanceId(), player.getDetails().getName() + " handed you " + carryName + "."));
+                    targetUser.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, targetUser.getRoomUser().getInstanceId(), player.getDetails().getName() + " handed you a " + carryName + "."));
 
                     player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
                     player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
