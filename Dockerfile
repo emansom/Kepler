@@ -23,7 +23,7 @@ RUN groupadd -g 1000 kepler && \
     useradd -r -u 1000 -g kepler kepler && \
     chown -R kepler:kepler /usr/src/kepler
 
-RUN touch /usr/src/kepler/config.ini && \
+RUN touch /usr/src/kepler/{game,config}.ini && \
     crudini --set /usr/src/kepler/config.ini Server server.bind 0.0.0.0 && \
     crudini --set /usr/src/kepler/config.ini Server server.port 12321 && \
     crudini --set /usr/src/kepler/config.ini Rcon rcon.bind 0.0.0.0 && \
@@ -36,16 +36,24 @@ RUN touch /usr/src/kepler/config.ini && \
     crudini --set /usr/src/kepler/config.ini Logging log.sent.packets true && \
     crudini --set /usr/src/kepler/config.ini Logging log.received.packets true && \
     crudini --set /usr/src/kepler/config.ini Logging log.items.loaded true && \
-    crudini --set /usr/src/kepler/config.ini Game sso.tickets.enabled true && \
-    crudini --set /usr/src/kepler/config.ini Game roller.tick.default 6 && \
-    crudini --set /usr/src/kepler/config.ini Game fuck.aaron true && \
-    crudini --set /usr/src/kepler/config.ini Game welcome.message.enabled true && \
-    crudini --set /usr/src/kepler/config.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
+    crudini --set /usr/src/kepler/game.ini Game sso.tickets.enabled true && \
+    crudini --set /usr/src/kepler/game.ini Game roller.tick.default 6 && \
+    crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds=900 && \
+    crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds=300 && \
+    crudini --set /usr/src/kepler/game.ini Game fuck.aaron true && \
+    crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled true && \
+    crudini --set /usr/src/kepler/game.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
     crudini --set /usr/src/kepler/config.ini Console debug true && \
     mv /usr/src/kepler/config.ini /usr/src/kepler/tmp.ini && \
     cat /usr/src/kepler/tmp.ini | tr -d "[:blank:]" > /usr/src/kepler/config.ini && \
+    rm /usr/src/kepler/tmp.ini && \
+    mv /usr/src/kepler/game.ini /usr/src/kepler/gametmp.ini && \
+    cat /usr/src/kepler/gametmp.ini | tr -d "[:blank:]" > /usr/src/kepler/game.ini && \
+    rm /usr/src/kepler/gametmp.ini && \
     cat /usr/src/kepler/config.ini && \
-    chown kepler:kepler /usr/src/kepler/config.ini
+    cat /usr/src/kepler/game.ini && \
+    chown kepler:kepler /usr/src/kepler/config.ini && \
+    chown kepler:kepler /usr/src/kepler/game.ini
 
 COPY docker-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-entrypoint.sh"]
