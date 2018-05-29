@@ -1,12 +1,20 @@
 package org.alexdev.kepler.game.texts;
 
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.configuration2.INIConfiguration;
+import org.apache.commons.configuration2.SubnodeConfiguration;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class TextsManager {
     private static TextsManager instance;
@@ -14,41 +22,41 @@ public class TextsManager {
     private Map<String, String> textsMap;
 
     public TextsManager() {
-        this.textsMap = this.readExternalTexts();
+        this.textsMap = new HashMap<>();
+        this.readExternalTexts();
     }
 
-    private Map<String, String> readExternalTexts() {
-        Map<String, String> texts = new HashMap<>();
+    private void readExternalTexts() {
+        try {
+            INIConfiguration ini = new INIConfiguration();
+            BufferedReader reader = reader = Files.newBufferedReader(
+                    Paths.get("data", "external_texts.txt"),
+                    StandardCharsets.UTF_8);
 
-        File file = new File("data" + File.separator + "external_texts.txt");
+            ini.read(reader);
 
-        if (!file.exists()) {
-            return texts;
-        }
+            Set<String> sectionNames = ini.getSections();
 
-        int id = 0;
+            for (String sectionName : sectionNames) {
+                SubnodeConfiguration section = ini.getSection(sectionName);
 
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            String fileLine;
+                if (section != null) {
+                    Iterator<String> keys = section.getKeys();
 
-            while ((fileLine = br.readLine()) != null) {
-                if (fileLine.indexOf('=') == -1) {
-                    continue;
+                    while (keys.hasNext()) {
+                        String key = keys.next();
+                        String value = section.getString(key);
+
+                        if (value != null) {
+                            key = key.replace("..", "."); // TODO: find a better way than this hack
+                            this.textsMap.put(key, value);
+                        }
+                    }
                 }
-
-                String line = StringUtil.filterInput(fileLine, true);
-
-                String key = line.substring(0, line.indexOf('='));
-                String value = line.substring(key.length() + 1);
-
-                texts.put(key, value);
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return texts;
     }
 
     /**
