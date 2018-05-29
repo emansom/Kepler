@@ -61,15 +61,20 @@ public class GiveDrinkCommand extends Command {
         if (status != null) {
             // Give drink to user if they're not already having a drink or food, and they're not dancing
             if (!targetUser.getRoomUser().containsStatus(StatusType.CARRY_FOOD) &&
-                !targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK) &&
-                !targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
-                targetUser.getRoomUser().carryItem(Integer.parseInt(status.getValue()), null);
+                !targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
+                if (!targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
+                    targetUser.getRoomUser().carryItem(Integer.parseInt(status.getValue()), null);
 
-                player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
-                player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
-                player.getRoomUser().setNeedsUpdate(true);
+                    targetUser.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, targetUser.getRoomUser().getInstanceId(), player.getDetails().getName() + " handed you their drink."));
+
+                    player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
+                    player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
+                    player.getRoomUser().setNeedsUpdate(true);
+                } else {
+                    player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is dancing."));
+                }
             } else {
-                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is already enjoying a beverage."));
+                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is already enjoying a drink."));
             }
         }
     }
