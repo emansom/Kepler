@@ -101,15 +101,11 @@ public class Kepler {
             server.createSocket();
             server.bind();
 
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> exit()));
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> dispose()));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    private static void exit() {
-        dispose();
     }
 
     private static void dispose() {
