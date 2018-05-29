@@ -12,11 +12,7 @@ public class SHOWPROGRAM extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        for (String argument : arguments) {
-            if (!StringUtil.isNullOrEmpty(argument)) {
-                response.writeDelimeter(argument, ' ');
-            }
-        }
+        response.write(String.join(" ", this.arguments));
     }
 
     @Override

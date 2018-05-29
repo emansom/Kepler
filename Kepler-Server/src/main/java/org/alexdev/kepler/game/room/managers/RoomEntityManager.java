@@ -5,6 +5,7 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.RoomRightsDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -14,6 +15,7 @@ import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 
