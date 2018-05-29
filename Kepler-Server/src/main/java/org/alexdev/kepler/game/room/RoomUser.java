@@ -18,7 +18,8 @@ import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
-import org.alexdev.kepler.util.config.Configuration;
+import org.alexdev.kepler.util.config.GameConfiguration;
+import org.alexdev.kepler.util.config.ServerConfiguration;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -426,7 +427,7 @@ public class RoomUser {
      * Set the room timer, make it 10 minutes by default
      */
     public void resetRoomTimer() {
-        this.resetRoomTimer(Configuration.getInteger("afk.timer.seconds"));
+        this.resetRoomTimer(GameConfiguration.getInteger("afk.timer.seconds"));
     }
 
     /**
@@ -436,7 +437,13 @@ public class RoomUser {
      */
     public void resetRoomTimer(int afkTimer) {
         this.afkTimer = DateUtil.getCurrentTimeSeconds() + afkTimer;
-        this.sleepTimer = DateUtil.getCurrentTimeSeconds() + Configuration.getInteger("sleep.timer.seconds");
+        this.sleepTimer = DateUtil.getCurrentTimeSeconds() + GameConfiguration.getInteger("sleep.timer.seconds");
+
+        // If the user was sleeping, remove the sleep and tell the room cycle to update our character
+        if (this.containsStatus(StatusType.SLEEP)) {
+            this.removeStatus(StatusType.SLEEP);
+            this.needsUpdate = true;
+        }
     }
 
     /**

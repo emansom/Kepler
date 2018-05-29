@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.util.config.Configuration;
+import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,10 +62,10 @@ public class Storage {
     public static boolean connect() {
         Storage.getLogger().info("Connecting to MySQL server");
 
-        storage = new Storage(Configuration.getString("mysql.hostname"),
-                Configuration.getString("mysql.username"),
-                Configuration.getString("mysql.password"),
-                Configuration.getString("mysql.database"));
+        storage = new Storage(ServerConfiguration.getString("mysql.hostname"),
+                ServerConfiguration.getString("mysql.username"),
+                ServerConfiguration.getString("mysql.password"),
+                ServerConfiguration.getString("mysql.database"));
 
         if (!storage.isConnected()) {
             Storage.getLogger().error("Could not connect");
