@@ -68,4 +68,4 @@ USER kepler
 
 STOPSIGNAL SIGINT
 
-CMD java -jar Kepler-Server/build/libs/Kepler-Server-all.jar
+CMD ["java", "-jar", "Kepler-Server/build/libs/Kepler-Server-all.jar"]
