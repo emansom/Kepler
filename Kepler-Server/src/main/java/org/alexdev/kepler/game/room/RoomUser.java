@@ -67,11 +67,10 @@ public class RoomUser {
         this.room = null;
 
         this.isWalkingAllowed = true;
-
         this.isWalking = false;
         this.beingKicked = false;
         this.isTyping = false;
-        this.isDiving = true;
+        this.isDiving = false;
 
         this.instanceId = -1;
         this.authenticateId = -1;
