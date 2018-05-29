@@ -365,6 +365,10 @@ public class RoomUser {
         }
 
         for (Player player : players) {
+            if (player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                continue;
+            }
+            
             player.getRoomUser().look(this.position);
         }
     }
