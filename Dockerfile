@@ -39,8 +39,8 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/server.ini Logging log.items.loaded true && \
     crudini --set /usr/src/kepler/game.ini Game sso.tickets.enabled true && \
     crudini --set /usr/src/kepler/game.ini Game roller.tick.default 6 && \
-    crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds=900 && \
-    crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds=300 && \
+    crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds 900 && \
+    crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds 300 && \
     crudini --set /usr/src/kepler/game.ini Game fuck.aaron true && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled true && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
