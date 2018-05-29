@@ -103,6 +103,12 @@ public class PlayerManager {
         player.kickFromServer();
     }
 
+    public void dispose() {
+        for (Player player : this.getPlayers()) {
+            player.kickFromServer();
+        }
+    }
+
     /**
      * Get the collection of players on the server.
      *
