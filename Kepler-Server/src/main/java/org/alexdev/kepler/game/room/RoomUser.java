@@ -58,6 +58,9 @@ public class RoomUser {
     }
 
     public void reset() {
+        this.statuses = new ConcurrentHashMap<>();
+        this.path = new LinkedList<>();
+
         this.nextPosition = null;
         this.currentItem = null;
         this.goal = null;
@@ -73,9 +76,6 @@ public class RoomUser {
         this.instanceId = -1;
         this.authenticateId = -1;
         this.resetRoomTimer();
-
-        this.statuses = new ConcurrentHashMap<>();
-        this.path = new LinkedList<>();
     }
 
     /**
