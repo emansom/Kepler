@@ -34,38 +34,27 @@ public class SitCommand extends Command {
 
         RoomTile tile = player.getRoomUser().getTile();
         double height = tile.getTileHeight();
+        int rotation = player.getRoomUser().getPosition().getRotation();
+
+        if (rotation > 0 && rotation <= 7) {
+            if (rotation % 2 == 0) {
+                rotation--;
+            }
+        }
 
         if (height != player.getRoomUser().getPosition().getZ()) {
             player.getRoomUser().getPosition().setZ(height);
         }
 
-        Item item = null;
-
         if (tile.getHighestItem() != null) {
-            item = tile.getHighestItem();
-        }
-
-        if (item != null) {
-            if (!item.getBehaviour().isCanSitOnTop()) {
-                return;
-            }
+            Item item = tile.getHighestItem();
 
             height = item.getDefinition().getTopHeight();
-            player.getRoomUser().getPosition().setRotation(item.getPosition().getRotation());
-            player.getRoomUser().setStatus(StatusType.SIT, StringUtil.format(item.getDefinition().getTopHeight()));
-        } else {
-            int rotation = player.getRoomUser().getPosition().getRotation();
-
-            if (rotation > 0 && rotation <= 7) {
-                if (rotation % 2 == 0) {
-                    rotation--;
-                }
-            }
-
-            player.getRoomUser().getPosition().setRotation(rotation);
-            player.getRoomUser().setStatus(StatusType.SIT, StringUtil.format(tile.getTileHeight()));
+            rotation = item.getPosition().getRotation();
         }
 
+        player.getRoomUser().getPosition().setRotation(rotation);
+        player.getRoomUser().setStatus(StatusType.SIT, StringUtil.format(height));
         player.getRoomUser().removeStatus(StatusType.DANCE);
         player.getRoomUser().setNeedsUpdate(true);
     }
