@@ -7,7 +7,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.enums.StatusType;
-import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 
 public class GiveDrinkCommand extends Command {
@@ -39,12 +39,12 @@ public class GiveDrinkCommand extends Command {
         if (targetUser == null ||
                 targetUser.getRoomUser().getRoom() == null ||
                 targetUser.getRoom().getId() != player.getRoom().getId()) {
-            player.send(new ALERT("Could not find user: " + args[0]));
+            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Could not find user: " + args[0]));
             return;
         }
 
         if (!player.getRoomUser().containsStatus(StatusType.CARRY_DRINK) && !player.getRoomUser().containsStatus(StatusType.CARRY_FOOD)) {
-            player.send(new ALERT("You are not carrying any food or drinks to give."));
+            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "You are not carrying any food or drinks to give."));
             return;
         }
 
@@ -68,6 +68,8 @@ public class GiveDrinkCommand extends Command {
                 player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
                 player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
                 player.getRoomUser().setNeedsUpdate(true);
+            } else {
+                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is already enjoying a beverage."));
             }
         }
     }
