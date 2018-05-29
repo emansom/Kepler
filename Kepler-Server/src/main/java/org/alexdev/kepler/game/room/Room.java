@@ -17,6 +17,7 @@ import org.alexdev.kepler.messages.incoming.rooms.user.YOUAROWNER;
 import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARECONTROLLER;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -29,6 +30,7 @@ public class Room {
 
     private List<Entity> entities;
     private List<Item> items;
+    private List<Integer> rights;
 
     public Room() {
         this.roomData = new RoomData(this);
@@ -38,6 +40,7 @@ public class Room {
         this.roomMapping = new RoomMapping(this);
         this.entities = new CopyOnWriteArrayList<>();
         this.items = new CopyOnWriteArrayList<>();
+        this.rights = new ArrayList<>();
     }
 
     /**
@@ -58,6 +61,12 @@ public class Room {
      * @return true, if successful
      */
     public boolean isOwner(int ownerId) {
+        Player player = PlayerManager.getInstance().getPlayerById(ownerId);
+
+        if (player != null && player.hasFuse("fuse_any_room_controller")) {
+            return true;
+        }
+
         return this.roomData.getOwnerId() == ownerId;
     }
 
@@ -73,6 +82,10 @@ public class Room {
         }
 
         if (this.roomData.allowSuperUsers()) {
+            return true;
+        }
+
+        if (this.rights.contains(userId)) {
             return true;
         }
 
@@ -116,7 +129,9 @@ public class Room {
 
         this.roomTaskManager.stopTasks();
         this.roomEntityManager.getInstanceIdCounter().set(0);
+
         this.items.clear();
+        this.rights.clear();
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
         return true;
@@ -204,6 +219,15 @@ public class Room {
     }
 
     /**
+     * Get a list of user ids with room rights.
+     *
+     * @return the room rights list
+     */
+    public List<Integer> getRights() {
+        return rights;
+    }
+
+    /**
      * Get whether the room is a public room or not.
      *
      * @return true, if successful
@@ -218,5 +242,4 @@ public class Room {
     public int getId() {
         return this.roomData.getId();
     }
-
 }

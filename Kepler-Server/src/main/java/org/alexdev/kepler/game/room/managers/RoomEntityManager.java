@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.managers;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
+import org.alexdev.kepler.dao.mysql.RoomRightsDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -125,6 +126,7 @@ public class RoomEntityManager {
                 this.room.getItems().add(item);
             }
         } else {
+            this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getId()));
             this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
         }
 
