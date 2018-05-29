@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.managers;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.RoomRightsDao;
@@ -87,13 +88,15 @@ public class RoomEntityManager {
 
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
+        entity.getRoomUser().resetRoomTimer();
+
+        Position entryPosition = this.room.getModel().getDoorLocation();
 
         if (destination != null) {
-            entity.getRoomUser().setPosition(destination.copy());
-        } else {
-            entity.getRoomUser().setPosition(this.room.getModel().getDoorLocation());
+            entryPosition = destination.copy();
         }
 
+        entity.getRoomUser().setPosition(entryPosition);
         entity.getRoomUser().setAuthenticateId(-1);
 
         // From this point onwards we send packets for the user to enter

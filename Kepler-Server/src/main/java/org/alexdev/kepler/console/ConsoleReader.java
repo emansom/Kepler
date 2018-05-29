@@ -20,7 +20,7 @@ public class ConsoleReader implements Runnable {
      * Create the task for reading console input
      */
     private void createTask() {
-        GameScheduler.getInstance().getScheduler().schedule(this, 0, TimeUnit.MILLISECONDS);
+        GameScheduler.getInstance().getSchedulerService().schedule(this, 0, TimeUnit.MILLISECONDS);
     }
 
     @Override

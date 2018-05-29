@@ -19,5 +19,7 @@ public class STOP implements MessageEvent {
             player.getRoomUser().removeStatus(StatusType.CARRY_ITEM);
             player.getRoomUser().setNeedsUpdate(true);
         }
+
+        player.getRoomUser().resetRoomTimer();
     }
 }

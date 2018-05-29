@@ -19,5 +19,7 @@ public class CARRYDRINK implements MessageEvent {
         } else {
             player.getRoomUser().carryItem(-1, contents);
         }
+
+        player.getRoomUser().resetRoomTimer();
     }
 }

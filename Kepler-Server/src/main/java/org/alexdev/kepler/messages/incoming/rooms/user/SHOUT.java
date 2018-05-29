@@ -30,6 +30,7 @@ public class SHOUT implements MessageEvent {
         }
 
         player.getRoomUser().showChat(message, true);
+        player.getRoomUser().resetRoomTimer();
 
         room.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.SHOUT, player.getRoomUser().getInstanceId(), message));
     }

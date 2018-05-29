@@ -60,6 +60,7 @@ public class BTCKS implements MessageEvent {
             return;
         }
 
+        player.getRoomUser().resetRoomTimer();
         player.getDetails().setCredits(player.getDetails().getCredits() - costCredits);
         player.send(new CREDIT_BALANCE(player.getDetails()));
 

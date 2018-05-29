@@ -32,13 +32,14 @@ public class CHAT implements MessageEvent {
         }
 
         player.getRoomUser().showChat(message, false);
+        player.getRoomUser().resetRoomTimer();
 
         // Make chat hard to read for long distance in public rooms
         if (room.isPublicRoom()) {
             int sourceX = player.getRoomUser().getPosition().getX();
             int sourceY = player.getRoomUser().getPosition().getY();
 
-            for (Player roomPlayer : room.getEntityManager().getEntitiesByClass(Player.class)) {
+            for (Player roomPlayer : room.getEntityManager().getPlayers()) {
                 int distX = Math.abs(sourceX - roomPlayer.getRoomUser().getPosition().getX()) - 1;
                 int distY = Math.abs(sourceY - roomPlayer.getRoomUser().getPosition().getY()) - 1;
 

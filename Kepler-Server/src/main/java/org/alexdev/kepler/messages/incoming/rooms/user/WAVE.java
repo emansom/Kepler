@@ -8,6 +8,7 @@ public class WAVE implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         player.getRoomUser().wave();
+        player.getRoomUser().resetRoomTimer();
     }
 
 }
