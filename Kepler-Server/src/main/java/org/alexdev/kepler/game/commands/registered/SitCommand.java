@@ -25,13 +25,18 @@ public class SitCommand extends Command {
             return;
         }
 
+        if (player.getRoomUser().containsStatus(StatusType.SIT)) {
+            return;
+        }
+
         player.getRoomUser().removeStatus(StatusType.DANCE);
         player.getRoomUser().setStatus(StatusType.SIT, "0.0");
+        player.getRoomUser().setNeedsUpdate(true);
 
     }
 
     @Override
     public String getDescription() {
-        return "Put your arse on the floor.";
+        return "Puts your arse on the floor.";
     }
 }

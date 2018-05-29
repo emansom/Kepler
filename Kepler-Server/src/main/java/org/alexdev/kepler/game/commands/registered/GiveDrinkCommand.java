@@ -71,7 +71,7 @@ public class GiveDrinkCommand extends Command {
                     player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
                     player.getRoomUser().setNeedsUpdate(true);
                 } else {
-                    player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is dancing."));
+                    player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Can't hand drink to user [" + targetUser.getDetails().getName() + "], because he/she is dancing."));
                 }
             } else {
                 player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is already enjoying a drink."));
