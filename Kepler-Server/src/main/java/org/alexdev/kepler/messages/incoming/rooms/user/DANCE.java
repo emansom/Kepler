@@ -22,7 +22,7 @@ public class DANCE implements MessageEvent {
             }
 
             int danceId = reader.readInt();
-            player.getRoomUser().setStatus(StatusType.DANCE, " " + danceId);
+            player.getRoomUser().setStatus(StatusType.DANCE, danceId);
         }
 
         player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);

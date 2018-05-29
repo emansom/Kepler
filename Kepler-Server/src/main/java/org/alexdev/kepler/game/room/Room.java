@@ -93,7 +93,7 @@ public class Room {
 
         if (isOwner(player.getDetails().getId())) {
             player.send(new YOUAROWNER());
-            rightsValue = " useradmin";
+            rightsValue = "useradmin";
         }
 
         player.getRoomUser().removeStatus(StatusType.FLAT_CONTROL);

@@ -186,14 +186,14 @@ public class RoomUser {
             if (item.getBehaviour().isCanSitOnTop()) {
                 this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
-                this.setStatus(StatusType.SIT, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                this.setStatus(StatusType.SIT, StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
             }
 
             if (item.getBehaviour().isCanLayOnTop()) {
                 this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
-                this.setStatus(StatusType.LAY, " " + StringUtil.format(item.getDefinition().getTopHeight()));
+                this.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
             }
 
@@ -286,7 +286,7 @@ public class RoomUser {
         this.removeStatus(StatusType.CARRY_DRINK);
         this.removeStatus(StatusType.DANCE);
 
-        this.setStatus(carryStatus, " " + carryId, 120, useStatus, 12, 1);
+        this.setStatus(carryStatus, carryId, 120, useStatus, 12, 1);
         this.needsUpdate = true;
     }
 
@@ -349,7 +349,7 @@ public class RoomUser {
         }
 
         if (gestureFound) {
-            this.setStatus(StatusType.GESTURE, " " + gesture, 5, StatusType.BLANK, -1, -1);
+            this.setStatus(StatusType.GESTURE, gesture, 5, StatusType.BLANK, -1, -1);
         }
 
         this.setStatus(StatusType.TALK, "", talkDuration, StatusType.BLANK, -1, -1);
@@ -471,20 +471,20 @@ public class RoomUser {
      * @param status the status
      * @param value the value
      */
-    public void setStatus(StatusType status, String value) {
+    public void setStatus(StatusType status, Object value) {
         if (this.containsStatus(status)) {
             this.removeStatus(status);
         }
 
-        this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value));
+        this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value.toString()));
     }
 
-    public void setStatus(StatusType status, String value, int secLifetime, StatusType action, int secActionSwitch, int secSwitchLifetime) {
+    public void setStatus(StatusType status, Object value, int secLifetime, StatusType action, int secActionSwitch, int secSwitchLifetime) {
         if (this.containsStatus(status)) {
             this.removeStatus(status);
         }
 
-        this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value, secLifetime, action, secActionSwitch, secSwitchLifetime));
+        this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value.toString(), secLifetime, action, secActionSwitch, secSwitchLifetime));
     }
 
     public Entity getEntity() {

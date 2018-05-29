@@ -95,7 +95,7 @@ public class ProcessEntityTask implements Runnable {
                 double height = this.room.getMapping().getTile(next).getTileHeight();
 
                 roomUser.getPosition().setRotation(rotation);
-                roomUser.setStatus(StatusType.MOVE, " " + next.getX() + "," + next.getY() + "," + StringUtil.format(height));
+                roomUser.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomUser.setNextPosition(next);
             } else {
                 roomUser.stopWalking();
