@@ -44,7 +44,7 @@ public class USER_STATUSES extends MessageComposer {
             for (var status : states.getStatuses().values()) {
                 response.write(status.getKey().getStatusCode());
 
-                if (status.getKey() != StatusType.BLANK && status.getValue().length() > 0) {
+                if (status.getValue().length() > 0) {
                     response.write(" ");
                     response.write(status.getValue());
                 }

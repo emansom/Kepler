@@ -349,10 +349,10 @@ public class RoomUser {
         }
 
         if (gestureFound) {
-            this.setStatus(StatusType.GESTURE, gesture, 5, StatusType.BLANK, -1, -1);
+            this.setStatus(StatusType.GESTURE, gesture, 5, null, -1, -1);
         }
 
-        this.setStatus(StatusType.TALK, "", talkDuration, StatusType.BLANK, -1, -1);
+        this.setStatus(StatusType.TALK, "", talkDuration, null, -1, -1);
         this.needsUpdate = true;
 
         List<Player> players;

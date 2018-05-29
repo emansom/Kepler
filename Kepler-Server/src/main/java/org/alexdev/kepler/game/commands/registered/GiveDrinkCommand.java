@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 
 public class GiveDrinkCommand extends Command {
@@ -63,12 +64,16 @@ public class GiveDrinkCommand extends Command {
                 !targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK) &&
                 !targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
                 targetUser.getRoomUser().carryItem(Integer.parseInt(status.getValue()), null);
+
+                player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
+                player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
+                player.getRoomUser().setNeedsUpdate(true);
             }
         }
     }
 
     @Override
     public String getDescription() {
-        return "Gives a user your own drink";
+        return "Gives a user your own drink.";
     }
 }

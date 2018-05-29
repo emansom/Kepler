@@ -7,7 +7,6 @@ public enum StatusType {
     FLAT_CONTROL("flatctrl"), 
     DANCE("dance"),
     SWIM("swim"),
-    BLANK(""),
     CARRY_ITEM("cri"),
     USE_ITEM("usei"),
     CARRY_FOOD("carryf"),
