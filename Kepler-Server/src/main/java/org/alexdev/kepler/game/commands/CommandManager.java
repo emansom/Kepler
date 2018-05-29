@@ -1,10 +1,12 @@
 package org.alexdev.kepler.game.commands;
 
 import org.alexdev.kepler.game.commands.registered.AboutCommand;
+import org.alexdev.kepler.game.commands.registered.GiveDrinkCommand;
 import org.alexdev.kepler.game.commands.registered.HelpCommand;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.texts.TextsManager;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,9 +21,10 @@ public class CommandManager {
     private static CommandManager instance;
 
     public CommandManager() {
-        commands = new HashMap<>();
-        commands.put(new String[] { "about", "info" }, new AboutCommand());
-        commands.put(new String[] { "help"}, new HelpCommand());
+        this.commands = new HashMap<>();
+        this.commands.put(new String[] { "about", "info" }, new AboutCommand());
+        this.commands.put(new String[] { "help"}, new HelpCommand());
+        this.commands.put(new String[] { "givedrink"}, new GiveDrinkCommand());
 
         log.info("Loaded {} commands", commands.size());
     }
@@ -109,7 +112,7 @@ public class CommandManager {
             if (args.length < cmd.getArguments().length) {
                 if (entity instanceof Player) {
                     Player player = (Player)entity;
-                    player.sendMessage(TextsManager.getInstance().getValue("player.commands.no.args"));
+                    player.send(new ALERT(TextsManager.getInstance().getValue("player.commands.no.args")));
                 } else {
                     System.out.println(TextsManager.getInstance().getValue("player.commands.no.args"));
                 }
