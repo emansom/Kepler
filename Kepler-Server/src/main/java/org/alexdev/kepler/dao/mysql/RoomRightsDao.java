@@ -86,4 +86,23 @@ public class RoomRightsDao {
             Storage.closeSilently(sqlConnection);
         }
     }
+
+    public static void deleteRoomRights(int roomId) {
+        List<Integer> users = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM rooms_rights WHERE room_id = ?", sqlConnection);
+            preparedStatement.setInt(1, roomId);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
 }

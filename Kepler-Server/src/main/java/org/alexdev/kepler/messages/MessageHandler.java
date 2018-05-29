@@ -15,6 +15,7 @@ import org.alexdev.kepler.messages.incoming.rooms.badges.GETAVAILABLEBADGES;
 import org.alexdev.kepler.messages.incoming.rooms.badges.SETBADGE;
 import org.alexdev.kepler.messages.incoming.rooms.items.*;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.ASSIGNRIGHTS;
+import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVEALLRIGHTS;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVERIGHTS;
 import org.alexdev.kepler.messages.incoming.rooms.pool.BTCKS;
 import org.alexdev.kepler.messages.incoming.rooms.pool.DIVE;
@@ -176,6 +177,7 @@ public class MessageHandler {
     private void registerRoomModerationPackets() {
         registerEvent(96, new ASSIGNRIGHTS());
         registerEvent(97, new REMOVERIGHTS());
+        registerEvent(155, new REMOVEALLRIGHTS());
     }
 
     /**
