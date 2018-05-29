@@ -35,7 +35,7 @@ public class SitCommand extends Command {
         int x = player.getRoomUser().getPosition().getX();
         int y = player.getRoomUser().getPosition().getY();
         double itemHeight = 0.0;
-        double tileHeight = player.getRoom().getModel().getTileHeight(x, y);
+        //double tileHeight = player.getRoom().getModel().getTileHeight(x, y);
         int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
 
         RoomTile tile = player.getRoomUser().getTile();
@@ -47,7 +47,7 @@ public class SitCommand extends Command {
             rotation = item.getPosition().getRotation();
         }
 
-        player.getRoomUser().getPosition().setZ(tileHeight);
+        //player.getRoomUser().getPosition().setZ(tileHeight);
         player.getRoomUser().getPosition().setRotation(rotation);
         player.getRoomUser().setStatus(StatusType.SIT, StringUtil.format(itemHeight));
         player.getRoomUser().removeStatus(StatusType.DANCE);
