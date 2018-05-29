@@ -110,7 +110,6 @@ public class Kepler {
 
     private static void exit() {
         dispose();
-        System.exit(0); // 0 = success
     }
 
     private static void dispose() {
@@ -159,6 +158,11 @@ public class Kepler {
         return startupTime;
     }
 
+    /**
+     * Are we shutting down?
+     *
+     * @return boolean yes/no
+     */
     public static boolean getIsShutdown() {
         return isShutdown;
     }
