@@ -30,7 +30,7 @@ public class SitCommand extends Command {
         }
 
         player.getRoomUser().removeStatus(StatusType.DANCE);
-        player.getRoomUser().setStatus(StatusType.SIT, "0.0");
+        player.getRoomUser().setStatus(StatusType.SIT, "1.0");
         player.getRoomUser().setNeedsUpdate(true);
 
     }
