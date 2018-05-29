@@ -108,7 +108,6 @@ public class CommandManager {
         }
 
         if (cmd != null) {
-            
             if (args.length < cmd.getArguments().length) {
                 if (entity instanceof Player) {
                     Player player = (Player)entity;
