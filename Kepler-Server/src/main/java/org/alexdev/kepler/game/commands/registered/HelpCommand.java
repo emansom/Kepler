@@ -44,6 +44,6 @@ public class HelpCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "Gets the list of available help commands by permission.";
+        return "List available commands.";
     }
 }

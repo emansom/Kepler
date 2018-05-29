@@ -22,7 +22,7 @@ public class WaveHandler implements Runnable {
 
         this.entity.getRoomUser().removeStatus(StatusType.WAVE);
 
-        if (this.entity.getRoom() != null && !this.entity.getRoomUser().isWalking()) {
+        if (!this.entity.getRoomUser().isWalking()) {
             this.entity.getRoom().send(new USER_STATUSES(List.of(this.entity)));
         }
     }
