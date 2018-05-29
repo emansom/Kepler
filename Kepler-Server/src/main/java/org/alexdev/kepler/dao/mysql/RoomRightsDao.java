@@ -28,7 +28,7 @@ public class RoomRightsDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms_rights WHERE room_id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT user_id FROM rooms_rights WHERE room_id = ?", sqlConnection);
             preparedStatement.setInt(1, roomId);
             resultSet = preparedStatement.executeQuery();
 
@@ -45,5 +45,45 @@ public class RoomRightsDao {
         }
 
         return users;
+    }
+
+    public static void addRights(int userId, int roomId) {
+        List<Integer> users = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO rooms_rights (user_id, room_id) VALUES (?, ?)", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, roomId);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    public static void removeRights(int userId, int roomId) {
+        List<Integer> users = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM rooms_rights WHERE user_id = ? AND room_id = ?", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, roomId);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
     }
 }

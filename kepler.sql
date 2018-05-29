@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 28, 2018 at 12:06 PM
+-- Generation Time: May 29, 2018 at 10:28 AM
 -- Server version: 10.2.15-MariaDB
 -- PHP Version: 5.6.31
 
@@ -1639,10 +1639,6 @@ CREATE TABLE `messenger_friends` (
   `to_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `messenger_friends`
---
-
 -- --------------------------------------------------------
 
 --
@@ -1657,10 +1653,6 @@ CREATE TABLE `messenger_messages` (
   `body` varchar(255) DEFAULT NULL,
   `date` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `messenger_messages`
---
 
 -- --------------------------------------------------------
 
@@ -1853,7 +1845,7 @@ INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`,
 (21, 0, 9, 0, 'The Green Heart', 1, 0, 1, 6),
 (101, 0, 4, 0, 'Staff HQ', 0, 1, 4, 5),
 (112, 0, 4, 0, 'Restaurant, Bar & Night Club Rooms', 0, 0, 1, 1),
-(113, 0, 4, 0, 'Trade floor', 0, 0, 1, 1),
+(113, 0, 4, 0, 'Trade floor', 0, 1, 1, 1),
 (114, 0, 4, 0, 'Chill, Chat & Discussion Rooms', 0, 0, 1, 1),
 (115, 0, 4, 0, 'Hair Salons & Modelling Rooms', 0, 0, 1, 1),
 (116, 0, 4, 0, 'Maze & Theme Park Rooms', 0, 0, 1, 1),
@@ -1965,6 +1957,17 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rooms_rights`
+--
+
+CREATE TABLE `rooms_rights` (
+  `user_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1995,8 +1998,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `password`, `figure`, `pool_figure`, `sex`, `motto`, `credits`, `tickets`, `film`, `rank`, `console_motto`, `last_online`, `sso_ticket`, `club_subscribed`, `club_expiration`, `badge`, `badge_active`, `allow_stalking`) VALUES
-(1, 'Alex', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61', 'ch=s02/42,199,210', 'M', 'de kepler whey', 99529, 26, 0, 7, 'lol amirite?', 1527443096, '123', 1526277229, 1626277229, '', 0, 1),
-(2, 'Daniel', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', '', 'M', 'de kepler whey', 99854, 20, 0, 2, 'I\'m a new user!', 1527489012, 'keplerTicket', 1526277229, 1626277229, '', 0, 1),
+(1, 'Alex', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61', 'ch=s02/42,199,210', 'M', 'de kepler whey', 99472, 26, 0, 7, 'lol amirite?', 1527582285, '123', 1526277229, 1626277229, '', 0, 1),
+(2, 'Daniel', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', '', 'M', 'de kepler whey', 99854, 20, 0, 1, 'I\'m a new user!', 1527582282, 'keplerTicket', 1526277229, 1626277229, '', 0, 1),
 (3, 'John', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', 'ch=s02/182,243,255', 'M', 'de kepler whey', 99887, 19, 0, 2, 'I\'m a new user!', 1526567261, 'kek', 1526277229, 1626277229, '', 0, 1);
 
 -- --------------------------------------------------------
@@ -2117,7 +2120,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `rooms`
 --
