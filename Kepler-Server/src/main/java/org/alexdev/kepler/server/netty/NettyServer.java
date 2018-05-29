@@ -3,6 +3,7 @@ package org.alexdev.kepler.server.netty;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.buffer.UnpooledByteBufAllocator;
+import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.FixedRecvByteBufAllocator;
@@ -36,6 +37,9 @@ public class NettyServer  {
     private ServerBootstrap bootstrap;
     private AtomicInteger connectionIds;
 
+    private EventLoopGroup bossGroup;
+    private EventLoopGroup workerGroup;
+
     public NettyServer(String ip, Integer port) {
         this.ip = ip;
         this.port = port;
@@ -46,18 +50,18 @@ public class NettyServer  {
 
     public void createSocket() {
         int threads = Runtime.getRuntime().availableProcessors();
-        EventLoopGroup bossGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup(threads) : new NioEventLoopGroup(threads);
-        EventLoopGroup workerGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+        this.bossGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup(threads) : new NioEventLoopGroup(threads);
+        this.workerGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup() : new NioEventLoopGroup();
 
         this.bootstrap.group(bossGroup, workerGroup)
-            .channel((Epoll.isAvailable()) ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
-            .childHandler(new NettyChannelInitializer(this))
-            .option(ChannelOption.SO_BACKLOG, BACK_LOG)
-            .childOption(ChannelOption.TCP_NODELAY, true)
-            .childOption(ChannelOption.SO_KEEPALIVE, true)
-            .childOption(ChannelOption.SO_RCVBUF, BUFFER_SIZE)
-            .childOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(BUFFER_SIZE))
-            .childOption(ChannelOption.ALLOCATOR, new PooledByteBufAllocator(true));
+                .channel((Epoll.isAvailable()) ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
+                .childHandler(new NettyChannelInitializer(this))
+                .option(ChannelOption.SO_BACKLOG, BACK_LOG)
+                .childOption(ChannelOption.TCP_NODELAY, true)
+                .childOption(ChannelOption.SO_KEEPALIVE, true)
+                .childOption(ChannelOption.SO_RCVBUF, BUFFER_SIZE)
+                .childOption(ChannelOption.RCVBUF_ALLOCATOR, new FixedRecvByteBufAllocator(BUFFER_SIZE))
+                .childOption(ChannelOption.ALLOCATOR, new PooledByteBufAllocator(true));
     }
 
     public boolean bind() {
@@ -99,4 +103,11 @@ public class NettyServer  {
         return connectionIds;
     }
 
+    public EventLoopGroup getBossGroup() {
+        return bossGroup;
+    }
+
+    public EventLoopGroup getWorkerGroup() {
+        return workerGroup;
+    }
 }
