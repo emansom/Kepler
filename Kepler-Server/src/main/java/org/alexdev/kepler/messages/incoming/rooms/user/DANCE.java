@@ -34,5 +34,6 @@ public class DANCE implements MessageEvent {
         }
 
         player.getRoomUser().getRoom().send(new USER_STATUSES(List.of(player)));
+        player.getRoomUser().resetRoomTimer();
     }
 }

@@ -45,6 +45,9 @@ public class Configuration {
 
         config.put("roller.tick.default", "6");
 
+        config.put("afk.timer.seconds", "900");
+        config.put("sleep.timer.seconds", "300");
+
         config.put("debug", "false");
     }
 
@@ -229,6 +232,9 @@ public class Configuration {
         writer.println("");
         writer.println("# 1 tick = 500ms, 6 is 3 seconds");
         writer.println("roller.tick.default=" + config.get("roller.tick.default"));
+        writer.println("");
+        writer.println("afk.timer.seconds=" + config.get("afk.timer.seconds"));
+        writer.println("sleep.timer.seconds=" + config.get("sleep.timer.seconds"));
         writer.println("");
         writer.println("[Console]");
         writer.println("debug=" + config.get("debug"));

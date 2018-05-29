@@ -18,6 +18,7 @@ import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
+import org.alexdev.kepler.util.config.Configuration;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -25,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomUser {
     private Entity entity;
@@ -48,6 +48,8 @@ public class RoomUser {
     private boolean isTyping;
     private boolean isDiving;
     private int lookTimer;
+    private long afkTimer;
+    private long sleepTimer;
 
     public RoomUser(Entity entity) {
         this.entity = entity;
@@ -70,6 +72,7 @@ public class RoomUser {
         this.instanceId = -1;
         this.authenticateId = -1;
         this.lookTimer = -1;
+        this.afkTimer = -1;
 
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
@@ -111,6 +114,7 @@ public class RoomUser {
         if (path.size() > 0) {
             this.path = path;
             this.isWalking = true;
+            this.resetRoomTimer();
         }
     }
 
@@ -146,18 +150,10 @@ public class RoomUser {
         // Use walk to next tile if on pool queue
         PoolHandler.checkPoolQueue(this.entity);
     }
-
     /**
      * Triggers the current item that the player has walked on top of.
      */
     public void invokeItem() {
-        this.invokeItem(false);
-    }
-
-    /**
-     * Triggers the current item that the player has walked on top of.
-     */
-    public void invokeItem(boolean silent) {
         boolean needsUpdate = false;
         double height = this.getTile().getTileHeight();
 
@@ -208,12 +204,7 @@ public class RoomUser {
         this.updateNewHeight(this.position);
 
         this.currentItem = item;
-
-        if (silent) {
-            this.needsUpdate = false;
-        } else {
-            this.needsUpdate = needsUpdate;
-        }
+        this.needsUpdate = needsUpdate;
     }
 
 
@@ -358,11 +349,11 @@ public class RoomUser {
         List<Player> players;
 
         if (isShout) {
-            players = this.room.getEntityManager().getEntitiesByClass(Player.class);
+            players = this.room.getEntityManager().getPlayers();
         } else {
             players = new ArrayList<>();
 
-            for (Player player : this.room.getEntityManager().getEntitiesByClass(Player.class)) {
+            for (Player player : this.room.getEntityManager().getPlayers()) {
                 if (player.getEntityId() == this.entity.getEntityId()) {
                     continue;
                 }
@@ -415,8 +406,7 @@ public class RoomUser {
             this.room.send(new USER_STATUSES(List.of(this.entity)));
         }
 
-        GameScheduler.getInstance().getScheduler().schedule(new WaveHandler(this.entity), 2, TimeUnit.SECONDS);
-
+        GameScheduler.getInstance().getSchedulerService().schedule(new WaveHandler(this.entity), 2, TimeUnit.SECONDS);
     }
 
     /**
@@ -430,6 +420,23 @@ public class RoomUser {
             this.position.setZ(height);
             this.needsUpdate = true;
         }
+    }
+
+    /**
+     * Set the room timer, make it 10 minutes by default
+     */
+    public void resetRoomTimer() {
+        this.resetRoomTimer(Configuration.getInteger("afk.timer.seconds"));
+    }
+
+    /**
+     * Set the room timer, but with an option to override it.
+     *
+     * @param afkTimer the timer to override
+     */
+    public void resetRoomTimer(int afkTimer) {
+        this.afkTimer = DateUtil.getCurrentTimeSeconds() + afkTimer;
+        this.sleepTimer = DateUtil.getCurrentTimeSeconds() + Configuration.getInteger("sleep.timer.seconds");
     }
 
     /**
@@ -503,10 +510,6 @@ public class RoomUser {
         return goal;
     }
 
-    public void setGoal(Position goal) {
-        this.goal = goal;
-    }
-
     public Position getNextPosition() {
         return nextPosition;
     }
@@ -537,10 +540,6 @@ public class RoomUser {
 
     public LinkedList<Position> getPath() {
         return path;
-    }
-
-    public void setPath(LinkedList<Position> path) {
-        this.path = path;
     }
 
     public boolean isWalkingAllowed() {
@@ -609,5 +608,21 @@ public class RoomUser {
 
     public void setLookTimer(int lookTimer) {
         this.lookTimer = lookTimer;
+    }
+
+    public long getAfkTimer() {
+        return afkTimer;
+    }
+
+    public void setAfkTimer(int afkTimer) {
+        this.afkTimer = afkTimer;
+    }
+
+    public long getSleepTimer() {
+        return sleepTimer;
+    }
+
+    public void setSleepTimer(long sleepTimer) {
+        this.sleepTimer = sleepTimer;
     }
 }

@@ -2,11 +2,11 @@ package org.alexdev.kepler.game;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
-import org.alexdev.kepler.messages.outgoing.user.PING;
+import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.management.PlatformLoggingMXBean;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -17,14 +17,14 @@ public class GameScheduler implements Runnable {
     private static Logger logger = LoggerFactory.getLogger(GameScheduler.class);
     private AtomicLong tickRate = new AtomicLong();
 
-    private ScheduledExecutorService scheduler;
+    private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
 
     private static GameScheduler instance;
 
     private GameScheduler() {
-        scheduler = createNewScheduler();
-        gameScheduler = scheduler.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+        schedulerService = createNewScheduler();
+        gameScheduler = schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
     }
     
     /* (non-Javadoc)
@@ -35,21 +35,42 @@ public class GameScheduler implements Runnable {
         this.tickRate.incrementAndGet();
 
         for (Player player : PlayerManager.getInstance().getPlayers()) {
-            // Do stuff here like add credits per x minutes, etc.
+            if (player.getRoom() != null) {
+
+                if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
+                    if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                        player.getRoomUser().setStatus(StatusType.SLEEP, "");
+                        player.getRoomUser().setNeedsUpdate(true);
+                    }
+                }
+
+                if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
+                    player.getRoom().getEntityManager().leaveRoom(player, true);
+                }
+            }
         }
     }
 
     /**
-     * Gets the scheduler.
+     * Gets the scheduler service.
      *
-     * @return the scheduler
+     * @return the scheduler service
      */
-    public ScheduledExecutorService getScheduler() {
-        return scheduler;
+    public ScheduledExecutorService getSchedulerService() {
+        return schedulerService;
     }
 
     /**
-     * Creates the new scheduler.
+     * Get the game scheduler loop
+     *
+     * @return the game scheduler loop
+     */
+    public ScheduledFuture<?> getGameScheduler() {
+        return gameScheduler;
+    }
+
+    /**
+     * Creates the new schedulerService.
      *
      * @return the scheduled executor service
      */

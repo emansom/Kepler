@@ -13,8 +13,8 @@ import org.alexdev.kepler.game.room.managers.RoomTaskManager;
 import org.alexdev.kepler.game.room.mapping.RoomMapping;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
-import org.alexdev.kepler.messages.incoming.rooms.user.YOUAROWNER;
-import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARECONTROLLER;
+import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUAROWNER;
+import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUARECONTROLLER;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public class Room {
      * @return if the room was successfully disposed
      */
     public boolean tryDispose() {
-        if (this.roomEntityManager.getEntitiesByClass(Player.class).size() > 0) {
+        if (this.roomEntityManager.getPlayers().size() > 0) {
             return false;
         }
 

@@ -8,14 +8,15 @@ public enum StatusType {
     DANCE("dance"),
     SWIM("swim"),
     CARRY_ITEM("cri"),
-    USE_ITEM("usei"),
-    CARRY_FOOD("carryf"),
-    USE_FOOD("eat"),
     CARRY_DRINK("carryd"),
+    CARRY_FOOD("carryf"),
+    USE_ITEM("usei"),
+    USE_FOOD("eat"),
     USE_DRINK("drink"),
     WAVE("wave"),
     GESTURE("gest"),
-    TALK("talk");
+    TALK("talk"),
+    SLEEP("Sleep");
 
     private String statusCode;
 
