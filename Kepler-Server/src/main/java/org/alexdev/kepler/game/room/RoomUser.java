@@ -72,8 +72,7 @@ public class RoomUser {
 
         this.instanceId = -1;
         this.authenticateId = -1;
-        this.lookTimer = -1;
-        this.afkTimer = -1;
+        this.resetRoomTimer();
 
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
@@ -366,6 +365,10 @@ public class RoomUser {
         }
 
         for (Player player : players) {
+            if (player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                continue;
+            }
+            
             player.getRoomUser().look(this.position);
         }
     }
