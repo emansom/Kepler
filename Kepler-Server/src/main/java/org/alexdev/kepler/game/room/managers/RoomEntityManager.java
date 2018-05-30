@@ -76,10 +76,6 @@ public class RoomEntityManager {
             RoomManager.getInstance().addRoom(this.room);
         }
 
-        if (this.room.getData().getVisitorsNow() == 0) {
-            this.initialiseRoom();
-        }
-
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
@@ -99,6 +95,10 @@ public class RoomEntityManager {
         // From this point onwards we send packets for the user to enter
         if (entity.getType() != EntityType.PLAYER) {
             return;
+        }
+
+        if (this.room.getData().getVisitorsNow() == 1) {
+            this.initialiseRoom();
         }
 
         Player player = (Player) entity;
