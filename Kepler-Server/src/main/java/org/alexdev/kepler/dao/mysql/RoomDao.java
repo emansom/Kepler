@@ -196,24 +196,46 @@ public class RoomDao {
      *
      * @param room the room to save
      */
+    public static void saveDecorations(Room room) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE rooms SET wallpaper = ?, floor = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, room.getData().getWallpaper());
+            preparedStatement.setInt(2, room.getData().getFloor());
+            preparedStatement.setInt(3, room.getId());
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
+     * Save all room information.
+     *
+     * @param room the room to save
+     */
     public static void save(Room room) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("UPDATE rooms SET category = ?, name = ?, description = ?, wallpaper = ?, floor = ?, showname = ?, superusers = ?, accesstype = ?, password = ?, visitors_max = ? WHERE id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("UPDATE rooms SET category = ?, name = ?, description = ?, showname = ?, superusers = ?, accesstype = ?, password = ?, visitors_max = ? WHERE id = ?", sqlConnection);
             preparedStatement.setInt(1, room.getData().getCategoryId());
             preparedStatement.setString(2, room.getData().getName());
             preparedStatement.setString(3, room.getData().getDescription());
-            preparedStatement.setInt(4, room.getData().getWallpaper());
-            preparedStatement.setInt(5, room.getData().getFloor());
-            preparedStatement.setBoolean(6, room.getData().showName());
-            preparedStatement.setBoolean(7, room.getData().allowSuperUsers());
-            preparedStatement.setInt(8, room.getData().getAccessTypeId());
-            preparedStatement.setString(9, room.getData().getPassword());
-            preparedStatement.setInt(10, room.getData().getVisitorsMax());
-            preparedStatement.setInt(11, room.getId());
+            preparedStatement.setBoolean(4, room.getData().showName());
+            preparedStatement.setBoolean(5, room.getData().allowSuperUsers());
+            preparedStatement.setInt(6, room.getData().getAccessTypeId());
+            preparedStatement.setString(7, room.getData().getPassword());
+            preparedStatement.setInt(8, room.getData().getVisitorsMax());
+            preparedStatement.setInt(9, room.getId());
             preparedStatement.execute();
         } catch (Exception e) {
             Storage.logError(e);

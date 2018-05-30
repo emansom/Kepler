@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
+import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -46,6 +47,6 @@ public class FLATPROPBYITEM implements MessageEvent {
         player.getInventory().getItems().remove(item);
 
         ItemDao.deleteItem(itemId);
-
+        RoomDao.saveDecorations(room);
     }
 }
