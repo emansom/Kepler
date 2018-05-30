@@ -132,6 +132,7 @@ public class Room {
 
         this.items.clear();
         this.rights.clear();
+        this.entities.clear();
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
         return true;
