@@ -389,19 +389,7 @@ public class RoomUser {
             return;
         }
 
-        int diff = this.position.getRotation() - Rotation.calculateHumanDirection(this.position.getX(), this.position.getY(), towards.getX(), towards.getY());
-
-
-        if ((this.position.getRotation() % 2) == 0) {
-            if (diff > 0) {
-                this.position.setHeadRotation(this.position.getRotation() - 1);
-            } else if (diff < 0) {
-                this.position.setHeadRotation(this.position.getRotation() + 1);
-            } else {
-                this.position.setHeadRotation(this.position.getRotation());
-            }
-        }
-
+        this.position.setHeadRotation(Rotation.getHeadRotation(this.position, towards));
         this.lookTimer = DateUtil.getCurrentTimeSeconds() + 6;
         this.needsUpdate = true;
     }

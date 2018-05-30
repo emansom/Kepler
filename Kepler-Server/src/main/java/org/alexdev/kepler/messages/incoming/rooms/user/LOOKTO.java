@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
@@ -22,8 +23,7 @@ public class LOOKTO implements MessageEvent {
                 Integer.parseInt(data[0]),
                 Integer.parseInt(data[1]));
 
-        if (player.getRoomUser().containsStatus(StatusType.SIT) && !player.getRoomUser().isSitCommand() ||
-                player.getRoomUser().containsStatus(StatusType.LAY)) {
+        if (player.getRoomUser().containsStatus(StatusType.LAY)) {
             return;
         }
 
@@ -41,7 +41,13 @@ public class LOOKTO implements MessageEvent {
             rotation = rotation / 2 * 2;
         }
 
-        player.getRoomUser().getPosition().setRotation(rotation);
+        if (player.getRoomUser().containsStatus(StatusType.SIT)) {
+            Position current = player.getRoomUser().getPosition();
+            player.getRoomUser().getPosition().setHeadRotation(Rotation.getHeadRotation(current, lookDirection));
+        } else {
+            player.getRoomUser().getPosition().setRotation(rotation);
+        }
+
         player.getRoomUser().setNeedsUpdate(true);
         player.getRoomUser().resetRoomTimer();
     }
