@@ -1,6 +1,5 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
