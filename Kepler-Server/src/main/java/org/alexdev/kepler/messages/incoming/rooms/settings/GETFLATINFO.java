@@ -16,10 +16,6 @@ public class GETFLATINFO implements MessageEvent {
         Room room = RoomManager.getInstance().getRoomById(roomId);
 
         if (room == null) {
-            room = RoomDao.getRoomById(roomId);
-        }
-
-        if (room == null) {
             return;
         }
 
