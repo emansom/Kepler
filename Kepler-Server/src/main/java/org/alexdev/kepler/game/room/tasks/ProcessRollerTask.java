@@ -159,12 +159,13 @@ public class ProcessRollerTask implements Runnable {
         nextTile.addEntity(entity);
 
         double nextHeight = nextTile.getTileHeight();
+        double displayNextHeight = nextHeight;
 
         if (entity.getRoomUser().isSittingOnGround()) {
-            nextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
+            displayNextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
         }
 
-        this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), nextHeight));
+        this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
 
         entity.getRoomUser().invokeItem();
         entity.getRoomUser().setNeedsUpdate(true);
