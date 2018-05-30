@@ -24,7 +24,8 @@ public class Storage {
     private Storage(String host, String username, String password, String db) {
         try {
             HikariConfig config = new HikariConfig();
-            config.setJdbcUrl("jdbc:mysql://" + host + ":3306/" + db);
+            config.setDriverClassName("org.mariadb.jdbc.Driver");
+            config.setJdbcUrl("jdbc:mariadb://" + host + ":3306/" + db);
             config.setUsername(username);
             config.setPassword(password);
             
@@ -157,17 +158,6 @@ public class Storage {
         }
 
         return value;
-    }
-    
-    /**
-     * Check driver.
-     */
-    public void checkDriver() {
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
     }
 
     /**
