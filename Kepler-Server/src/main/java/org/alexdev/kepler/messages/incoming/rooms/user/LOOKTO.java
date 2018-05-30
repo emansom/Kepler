@@ -40,12 +40,15 @@ public class LOOKTO implements MessageEvent {
         if (player.getRoomUser().containsStatus(StatusType.SIT)) {
             Position current = player.getRoomUser().getPosition();
 
-            // When sitting on a chair only rotate head
-            if (player.getRoomUser().isSittingOnChair()) {
-                player.getRoomUser().getPosition().setHeadRotation(Rotation.getHeadRotation(current.getRotation(), current, lookDirection));
-            } else {
-                player.getRoomUser().getPosition().setRotation(Rotation.getHeadRotation(current.getRotation(), current, lookDirection));
+            // If they're sitting on the ground also rotate body.
+            if (player.getRoomUser().isSittingOnGround()) {
+                rotation = rotation / 2 * 2;
+                player.getRoomUser().getPosition().setBodyRotation(rotation);
             }
+
+            // And now rotate their head for all sitting people.
+            player.getRoomUser().getPosition().setHeadRotation(Rotation.getHeadRotation(current.getRotation(), current, lookDirection));
+
         } else {
             player.getRoomUser().getPosition().setRotation(rotation);
         }
