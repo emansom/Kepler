@@ -41,7 +41,11 @@ public class SitCommand extends Command {
         Item item = tile.getHighestItem();
 
         if (item != null) {
-            height += item.getDefinition().getTopHeight();
+            var itemHeight = item.getDefinition().getTopHeight();
+
+            if (itemHeight > height) {
+                height = itemHeight;
+            }
         }
 
         player.getRoomUser().getPosition().setRotation(rotation);
