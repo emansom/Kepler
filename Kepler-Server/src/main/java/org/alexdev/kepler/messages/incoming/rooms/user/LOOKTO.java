@@ -37,14 +37,17 @@ public class LOOKTO implements MessageEvent {
                 lookDirection.getX(),
                 lookDirection.getY());
 
+        if (player.getRoomUser().containsStatus(StatusType.SIT)) {
+            Position current = player.getRoomUser().getPosition();
+            player.getRoomUser().getPosition().setHeadRotation(Rotation.getHeadRotation(current, lookDirection));
+        }
+
         if (player.getRoomUser().isSittingOnGround()) {
             rotation = rotation / 2 * 2;
         }
 
-        if (player.getRoomUser().containsStatus(StatusType.SIT)) {
-            Position current = player.getRoomUser().getPosition();
-            player.getRoomUser().getPosition().setHeadRotation(Rotation.getHeadRotation(current, lookDirection));
-        } else {
+        // Rotate person if they're on the ground or standing.
+        if (!player.getRoomUser().isSittingOnChair() || player.getRoomUser().isSittingOnGround()) {
             player.getRoomUser().getPosition().setRotation(rotation);
         }
 
