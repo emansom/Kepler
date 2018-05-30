@@ -209,7 +209,7 @@ public class Item {
      * @param rotation the new rotation to check
      * @return true, if successful
      */
-    public boolean isValidMove(Room room, int x, int y, int rotation) {
+    public boolean isValidMove(Item item, Room room, int x, int y, int rotation) {
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
             RoomTile tile = room.getMapping().getTile(position);
 
@@ -222,6 +222,10 @@ public class Item {
             }
 
             for (Item tileItem : tile.getItems()) {
+                if (tileItem.getId() == item.getId()) {
+                    continue;
+                }
+
                 if (tileItem.getBehaviour().isRoller()) {
                     if (this.definition.getBehaviour().isRoller()) {
                         return false; // Can't place rollers on top of rollers
