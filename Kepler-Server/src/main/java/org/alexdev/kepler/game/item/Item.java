@@ -192,7 +192,7 @@ public class Item {
                 response.writeString(StringUtil.format(this.position.getZ()));
                 response.writeString(this.definition.getColour());
                 response.writeString("");
-                response.writeInt(this.getBehaviour().isRoller() ? 2 : 0);
+                response.writeInt(this.getBehaviour().isRoller() ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
                 response.writeString(this.customData);
             }
         }
