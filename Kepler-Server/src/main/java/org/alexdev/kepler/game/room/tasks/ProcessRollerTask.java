@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
+import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,6 +159,11 @@ public class ProcessRollerTask implements Runnable {
         nextTile.addEntity(entity);
 
         double nextHeight = nextTile.getTileHeight();
+
+        if (entity.getRoomUser().isSittingOnGround()) {
+            nextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
+        }
+
         this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), nextHeight));
 
         entity.getRoomUser().invokeItem();
