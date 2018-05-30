@@ -37,11 +37,6 @@ public class LOOKTO implements MessageEvent {
                 lookDirection.getX(),
                 lookDirection.getY());
 
-        // When sitting calculate even rotation
-        if (player.getRoomUser().containsStatus(StatusType.SIT)) {
-            rotation = rotation / 2 * 2;
-        }
-
         if (player.getRoomUser().containsStatus(StatusType.SIT)) {
             Position current = player.getRoomUser().getPosition();
 
