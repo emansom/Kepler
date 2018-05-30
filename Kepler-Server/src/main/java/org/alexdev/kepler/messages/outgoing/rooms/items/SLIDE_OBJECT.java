@@ -47,8 +47,14 @@ public class SLIDE_OBJECT extends MessageComposer {
             response.writeInt(2);
             response.writeInt(this.entity.getRoomUser().getInstanceId());
         }
+
         response.writeString(StringUtil.format(this.from.getZ()));
-        response.writeString(StringUtil.format(this.nextHeight));
+
+        if (this.entity.getRoomUser().isSitCommand()) {
+            response.writeString(StringUtil.format(this.nextHeight) - 0.5); // Take away sit offset because yeah, weird stuff.
+        } else {
+            response.writeString(StringUtil.format(this.nextHeight));
+        }
 
         if (this.item != null) {
             response.writeInt(this.rollerId);

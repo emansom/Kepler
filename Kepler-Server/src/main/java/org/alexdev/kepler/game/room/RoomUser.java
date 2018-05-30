@@ -48,6 +48,8 @@ public class RoomUser {
     private boolean needsUpdate;
     private boolean isTyping;
     private boolean isDiving;
+    private boolean isSitCommand;
+
     private int lookTimer;
     private long afkTimer;
     private long sleepTimer;
@@ -71,6 +73,7 @@ public class RoomUser {
         this.beingKicked = false;
         this.isTyping = false;
         this.isDiving = false;
+        this.isSitCommand = false;
 
         this.instanceId = -1;
         this.authenticateId = -1;
@@ -153,6 +156,10 @@ public class RoomUser {
      * Triggers the current item that the player has walked on top of.
      */
     public void invokeItem() {
+        if (this.isSitCommand) {
+            return;
+        }
+
         boolean needsUpdate = false;
         double height = this.getTile().getTileHeight();
 
@@ -633,5 +640,13 @@ public class RoomUser {
 
     public void setSleepTimer(long sleepTimer) {
         this.sleepTimer = sleepTimer;
+    }
+
+    public boolean isSitCommand() {
+        return isSitCommand;
+    }
+
+    public void setSitCommand(boolean sitCommand) {
+        isSitCommand = sitCommand;
     }
 }
