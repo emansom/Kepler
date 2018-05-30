@@ -32,8 +32,7 @@ public class SitCommand extends Command {
             return;
         }
 
-        int x = player.getRoomUser().getPosition().getX();
-        int y = player.getRoomUser().getPosition().getY();
+
         double height = 0.5;
         int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
 
@@ -41,10 +40,12 @@ public class SitCommand extends Command {
         Item item = tile.getHighestItem();
 
         if (item != null) {
-            var itemHeight = item.getDefinition().getTopHeight();
+            if (item.getBehaviour().isCanSitOnTop() || item.getBehaviour().isCanLayOnTop()) {
+                return; // Don't process :sit command on furniture that the user is already on.
+            }
 
-            if (itemHeight > height) {
-                height = itemHeight;
+            if (!item.getBehaviour().isRoller()) {
+                height += item.getDefinition().getTopHeight();
             }
         }
 

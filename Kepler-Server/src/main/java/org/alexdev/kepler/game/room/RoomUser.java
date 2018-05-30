@@ -48,6 +48,7 @@ public class RoomUser {
     private boolean needsUpdate;
     private boolean isTyping;
     private boolean isDiving;
+
     private int lookTimer;
     private long afkTimer;
     private long sleepTimer;
@@ -153,6 +154,10 @@ public class RoomUser {
      * Triggers the current item that the player has walked on top of.
      */
     public void invokeItem() {
+        if (this.isSittingOnGround()) {
+            return;
+        }
+
         boolean needsUpdate = false;
         double height = this.getTile().getTileHeight();
 
@@ -382,19 +387,7 @@ public class RoomUser {
             return;
         }
 
-        int diff = this.position.getRotation() - Rotation.calculateHumanDirection(this.position.getX(), this.position.getY(), towards.getX(), towards.getY());
-
-
-        if ((this.position.getRotation() % 2) == 0) {
-            if (diff > 0) {
-                this.position.setHeadRotation(this.position.getRotation() - 1);
-            } else if (diff < 0) {
-                this.position.setHeadRotation(this.position.getRotation() + 1);
-            } else {
-                this.position.setHeadRotation(this.position.getRotation());
-            }
-        }
-
+        this.position.setHeadRotation(Rotation.getHeadRotation(this.position, towards));
         this.lookTimer = DateUtil.getCurrentTimeSeconds() + 6;
         this.needsUpdate = true;
     }
@@ -501,6 +494,22 @@ public class RoomUser {
         }
 
         this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value.toString(), secLifetime, action, secActionSwitch, secSwitchLifetime));
+    }
+
+    public boolean isSittingOnGround() {
+        if (this.currentItem != null && !this.currentItem.getBehaviour().isCanSitOnTop()) {
+            return this.containsStatus(StatusType.SIT);
+        }
+
+        return false;
+    }
+
+    public boolean isSittingOnChair() {
+        if (this.currentItem != null) {
+            return this.currentItem.getBehaviour().isCanSitOnTop();
+        }
+
+        return false;
     }
 
     public Entity getEntity() {
@@ -634,4 +643,5 @@ public class RoomUser {
     public void setSleepTimer(long sleepTimer) {
         this.sleepTimer = sleepTimer;
     }
+
 }
