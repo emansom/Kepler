@@ -3,6 +3,7 @@ package org.alexdev.kepler.server.netty.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.config.ServerConfiguration;
@@ -19,7 +20,13 @@ public class NetworkEncoder extends MessageToMessageEncoder<MessageComposer> {
         ByteBuf buffer = ctx.alloc().buffer(); // TODO: initial capacity calculation
 
         NettyResponse response = new NettyResponse(msg.getHeader(), buffer);
-        msg.compose(response);
+
+        try {
+            msg.compose(response);
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("Error when composing (" + response.getHeader() + ") occurred: ", ex);
+            return;
+        }
 
         if (!response.isFinalised()) {
             buffer.writeByte(1);
