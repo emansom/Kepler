@@ -167,7 +167,6 @@ public class RoomUser {
         }
 
         RoomTile tile = this.getTile();
-
         Item item = null;
 
         if (tile.getHighestItem() != null) {
@@ -211,7 +210,12 @@ public class RoomUser {
         this.needsUpdate = needsUpdate;
     }
 
-
+    /**
+     * Assign a hand item to an entity, either by carry ID or carry name.
+     *
+     * @param carryId the drink ID to add
+     * @param carryName the carry name to add
+     */
     public void carryItem(int carryId, String carryName) {
         DrinkType[] drinks = new DrinkType[26];
         drinks[1] = DrinkType.DRINK;  // Tea
@@ -488,6 +492,17 @@ public class RoomUser {
         this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value.toString()));
     }
 
+    /**
+     * Set a status with a limited lifetime, and optional swap to action every x seconds which lasts for
+     * x seconds. Use -1 and 'null' for action and lifetimes to make it last indefinitely.
+     *
+     * @param status the status to add
+     * @param value the status value
+     * @param secLifetime the seconds of lifetime this status has in total
+     * @param action the action to switch to
+     * @param secActionSwitch the seconds to count until it switches to this action
+     * @param secSwitchLifetime the lifetime the action lasts for before switching back.
+     */
     public void setStatus(StatusType status, Object value, int secLifetime, StatusType action, int secActionSwitch, int secSwitchLifetime) {
         if (this.containsStatus(status)) {
             this.removeStatus(status);
@@ -496,6 +511,11 @@ public class RoomUser {
         this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value.toString(), secLifetime, action, secActionSwitch, secSwitchLifetime));
     }
 
+    /**
+     * Get if the entity is sitting on the ground, or on furniture which isn't a chair.
+     *
+     * @return true, if successful
+     */
     public boolean isSittingOnGround() {
         if (this.currentItem == null || !this.currentItem.getBehaviour().isCanSitOnTop()) {
             return this.containsStatus(StatusType.SIT);
@@ -504,6 +524,11 @@ public class RoomUser {
         return false;
     }
 
+    /**
+     * Get if the entity is sitting on a chair.
+     *
+     * @return true, if successful.
+     */
     public boolean isSittingOnChair() {
         if (this.currentItem != null) {
             return this.currentItem.getBehaviour().isCanSitOnTop();
