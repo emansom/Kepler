@@ -387,7 +387,7 @@ public class RoomUser {
             return;
         }
 
-        this.position.setHeadRotation(Rotation.getHeadRotation(this.position, towards));
+        this.position.setHeadRotation(Rotation.getHeadRotation(this.position.getRotation(), this.position, towards));
         this.lookTimer = DateUtil.getCurrentTimeSeconds() + 6;
         this.needsUpdate = true;
     }
