@@ -139,11 +139,15 @@ public class ProcessRollerTask implements Runnable {
      */
     private void processEntity(Item roller, Entity entity) {
         if (entity.getRoomUser().isWalking()) {
-            return;
+            return; // Don't roll user if they're working.
+        }
+
+        if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
+            return; // Don't roll users who aren't on this tile.
         }
 
         if (entity.getRoomUser().getPosition().getZ() < roller.getPosition().getZ()) {
-            return;
+            return; // Don't roll user if they're below the roller
         }
 
         Position front = roller.getPosition().getSquareInFront();
