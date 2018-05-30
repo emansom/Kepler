@@ -22,7 +22,8 @@ public class LOOKTO implements MessageEvent {
                 Integer.parseInt(data[0]),
                 Integer.parseInt(data[1]));
 
-        if (player.getRoomUser().containsStatus(StatusType.SIT) || player.getRoomUser().containsStatus(StatusType.LAY)) {
+        if (player.getRoomUser().containsStatus(StatusType.SIT) && !player.getRoomUser().isSitCommand() ||
+                player.getRoomUser().containsStatus(StatusType.LAY)) {
             return;
         }
 
@@ -35,6 +36,10 @@ public class LOOKTO implements MessageEvent {
                 player.getRoomUser().getPosition().getY(),
                 lookDirection.getX(),
                 lookDirection.getY());
+
+        if (player.getRoomUser().isSitCommand()) {
+            rotation = rotation / 2 * 2;
+        }
 
         player.getRoomUser().getPosition().setRotation(rotation);
         player.getRoomUser().setNeedsUpdate(true);
