@@ -296,7 +296,7 @@ public class RoomUser {
      * @param isShout whether the chat was a shout or not
      */
     public void showChat(String message, boolean isShout) {
-        if (message.equals("o/")) {
+        if (message.contains("o/")) {
             this.wave();
             return;
         }
