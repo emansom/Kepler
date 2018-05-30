@@ -48,7 +48,6 @@ public class RoomUser {
     private boolean needsUpdate;
     private boolean isTyping;
     private boolean isDiving;
-    private boolean isSitCommand;
 
     private int lookTimer;
     private long afkTimer;
@@ -73,7 +72,6 @@ public class RoomUser {
         this.beingKicked = false;
         this.isTyping = false;
         this.isDiving = false;
-        this.isSitCommand = false;
 
         this.instanceId = -1;
         this.authenticateId = -1;
@@ -156,7 +154,7 @@ public class RoomUser {
      * Triggers the current item that the player has walked on top of.
      */
     public void invokeItem() {
-        if (this.isSitCommand) {
+        if (this.isSittingOnGround()) {
             return;
         }
 
@@ -498,6 +496,22 @@ public class RoomUser {
         this.statuses.put(status.getStatusCode(), new RoomUserStatus(status, value.toString(), secLifetime, action, secActionSwitch, secSwitchLifetime));
     }
 
+    public boolean isSittingOnGround() {
+        if (this.currentItem != null && !this.currentItem.getBehaviour().isCanSitOnTop()) {
+            return this.containsStatus(StatusType.SIT);
+        }
+
+        return false;
+    }
+
+    public boolean isSittingOnChair() {
+        if (this.currentItem != null) {
+            return this.currentItem.getBehaviour().isCanSitOnTop();
+        }
+
+        return false;
+    }
+
     public Entity getEntity() {
         return entity;
     }
@@ -630,11 +644,4 @@ public class RoomUser {
         this.sleepTimer = sleepTimer;
     }
 
-    public boolean isSitCommand() {
-        return isSitCommand;
-    }
-
-    public void setSitCommand(boolean sitCommand) {
-        isSitCommand = sitCommand;
-    }
 }

@@ -53,8 +53,6 @@ public class SitCommand extends Command {
         player.getRoomUser().setStatus(StatusType.SIT, StringUtil.format(height));
         player.getRoomUser().removeStatus(StatusType.DANCE);
         player.getRoomUser().setNeedsUpdate(true);
-
-        player.getRoomUser().setSitCommand(true);
     }
 
     @Override
