@@ -60,7 +60,6 @@ public class PlayerDao {
         ResultSet resultSet = null;
 
         try {
-
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE sso_ticket = ? LIMIT 1", sqlConnection);
             preparedStatement.setString(1, ssoTicket);
@@ -80,6 +79,30 @@ public class PlayerDao {
         }
 
         return success;
+    }
+
+    /**
+     * Clear SSO ticket
+     * Protects against replay attacks
+     *
+     * @param userId ID of user
+     */
+    public static void clearTicket(int userId) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET sso_ticket = '' WHERE id = ? LIMIT 1", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
     }
 
     /**

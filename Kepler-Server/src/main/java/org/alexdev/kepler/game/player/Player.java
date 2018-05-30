@@ -59,6 +59,9 @@ public class Player extends Entity {
         this.flushSendQueue();
 
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
+
+        // Protect against replay attacks
+        PlayerDao.clearTicket(this.details.getId());
     }
 
     /**
