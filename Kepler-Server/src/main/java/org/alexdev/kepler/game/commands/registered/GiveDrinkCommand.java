@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 
@@ -63,9 +64,11 @@ public class GiveDrinkCommand extends Command {
             if (!targetUser.getRoomUser().containsStatus(StatusType.CARRY_FOOD) &&
                 !targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
                 if (!targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
-                    targetUser.getRoomUser().carryItem(Integer.parseInt(status.getValue()), null);
+                    int carryID = Integer.parseInt(status.getValue());
+                    targetUser.getRoomUser().carryItem(carryID, null);
+                    String carryName = TextsManager.getInstance().getValue("handitem" + carryID);
 
-                    targetUser.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, targetUser.getRoomUser().getInstanceId(), player.getDetails().getName() + " handed you their drink."));
+                    targetUser.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, targetUser.getRoomUser().getInstanceId(), player.getDetails().getName() + " handed you a " + carryName + "."));
 
                     player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
                     player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);

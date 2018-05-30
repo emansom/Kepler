@@ -2,6 +2,7 @@ package org.alexdev.kepler.server.netty.connections;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
+import org.alexdev.kepler.Kepler;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.MessageHandler;
@@ -25,7 +26,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         Player player = new Player(new NettyPlayerNetwork(ctx.channel(), this.server.getConnectionIds().getAndIncrement()));
         ctx.channel().attr(Player.PLAYER_KEY).set(player);
 
-        if (!server.getChannels().add(ctx.channel())) {
+        if (!server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
             ctx.disconnect();
             return;
         }

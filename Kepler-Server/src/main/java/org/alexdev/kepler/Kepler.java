@@ -15,13 +15,13 @@ import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.server.netty.NettyServer;
-import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.LoggingConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.InetAddress;
 
@@ -31,6 +31,8 @@ public class Kepler {
 
     private static String serverIP;
     private static int serverPort;
+
+    private static boolean isShutdown;
     
     private static NettyServer server;
     private static Logger log;
@@ -81,48 +83,41 @@ public class Kepler {
             serverIP = ServerConfiguration.getString("server.bind");
             serverPort = ServerConfiguration.getInteger("server.port");
 
-            // Override with valid IP that we have resolved
-            // TODO: check IPv6 too. And rely on stdlib functions instead of reinventing the wheel
-            if (!isValidIpAddress(serverIP)) {
-                serverIP = InetAddress.getByName(serverIP).getHostAddress();
+            // Get an InetAddressValidator
+            InetAddressValidator validator = InetAddressValidator.getInstance();
+
+            // Validate an IPv4 or IPv6 address
+            if (!validator.isValid(serverIP)) {
+                log.error("%s is not a valid IP", serverIP);
+                return;
             }
 
+            // getByName parses IPv6, IPv4 and DNS all in one go
+            serverIP = InetAddress.getByName(serverIP).getHostAddress();
+
             // Create the server instance
+            // TODO: listen on both IPv4 and IPv6 if serverIP is 0.0.0.0 or localhost
             server = new NettyServer(serverIP, serverPort);
             server.createSocket();
             server.bind();
+
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> dispose()));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    /**
-     * Validate IP address that the server attempts to listen to
-     * 
-     * @param ip the ipv4
-     * @return true if valid IPv4
-     */
-    public static boolean isValidIpAddress(String ip) {
-        String[] numbers = ip.split("\\.");
+    private static void dispose() {
+        log.info("Shutting down server!");
+        isShutdown = true;
 
-        if (numbers.length != 4) {
-            return false;
-        }
+        // TODO: all the managers
+        PlayerManager.getInstance().dispose();
 
-        for (String part : numbers) {
-            if (!StringUtil.isNumber(part)) {
-                return false;
-            }
-
-            int number = Integer.parseInt(part);
-
-            if (number > 255 || number < 0) {
-                return false;
-            }
-        }
-
-        return true;
+        // Stop listening
+        getServer().getWorkerGroup().shutdownGracefully();
+        getServer().getBossGroup().shutdownGracefully();
     }
 
     /**
@@ -157,5 +152,14 @@ public class Kepler {
      */
     public static long getStartupTime() {
         return startupTime;
+    }
+
+    /**
+     * Are we shutting down?
+     *
+     * @return boolean yes/no
+     */
+    public static boolean getIsShutdown() {
+        return isShutdown;
     }
 }
