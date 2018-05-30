@@ -34,18 +34,18 @@ public class SitCommand extends Command {
 
         int x = player.getRoomUser().getPosition().getX();
         int y = player.getRoomUser().getPosition().getY();
-        double offset = 0.5;
+        double height = 0.5;
         int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
 
         RoomTile tile = player.getRoomUser().getTile();
         Item item = tile.getHighestItem();
 
         if (item != null) {
-            offset = item.getDefinition().getTopHeight();
+            height += item.getDefinition().getTopHeight();
         }
 
         player.getRoomUser().getPosition().setRotation(rotation);
-        player.getRoomUser().setStatus(StatusType.SIT, StringUtil.format(offset));
+        player.getRoomUser().setStatus(StatusType.SIT, StringUtil.format(height));
         player.getRoomUser().removeStatus(StatusType.DANCE);
         player.getRoomUser().setNeedsUpdate(true);
     }
