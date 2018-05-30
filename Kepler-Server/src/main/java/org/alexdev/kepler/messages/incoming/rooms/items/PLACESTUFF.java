@@ -66,7 +66,7 @@ public class PLACESTUFF implements MessageEvent {
             int x = Integer.parseInt(data[1]);
             int y = Integer.parseInt(data[2]);
 
-            if (!item.isValidMove(room, x, y, 0)) {
+            if (!item.isValidMove(item, room, x, y, 0)) {
                 return;
             }
 
