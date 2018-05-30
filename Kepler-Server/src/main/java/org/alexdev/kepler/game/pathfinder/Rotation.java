@@ -45,18 +45,15 @@ public class Rotation {
         }
     }
 
-    public static int getHeadRotation(Position position, Position towards) {
-        int headRotation = position.getHeadRotation();
-
-        int diff = position.getRotation() - Rotation.calculateHumanDirection(position.getX(), position.getY(), towards.getX(), towards.getY());
+    public static int getHeadRotation(int rotation, Position position, Position towards) {
+        int headRotation = rotation;
+        int diff = rotation - Rotation.calculateHumanDirection(position.getX(), position.getY(), towards.getX(), towards.getY());
 
         if ((position.getRotation() % 2) == 0) {
             if (diff > 0) {
-                headRotation =- 1;
+                headRotation = (rotation - 1);
             } else if (diff < 0) {
-                headRotation =+ 1;
-            } else {
-                headRotation = position.getRotation();
+                headRotation = (rotation + 1);
             }
         }
 
