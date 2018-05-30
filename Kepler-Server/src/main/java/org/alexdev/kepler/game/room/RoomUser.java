@@ -497,7 +497,7 @@ public class RoomUser {
     }
 
     public boolean isSittingOnGround() {
-        if (this.currentItem != null && !this.currentItem.getBehaviour().isCanSitOnTop()) {
+        if (this.currentItem == null || !this.currentItem.getBehaviour().isCanSitOnTop()) {
             return this.containsStatus(StatusType.SIT);
         }
 
