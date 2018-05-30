@@ -154,10 +154,6 @@ public class RoomUser {
      * Triggers the current item that the player has walked on top of.
      */
     public void invokeItem() {
-        if (this.isSittingOnGround()) {
-            return;
-        }
-
         boolean needsUpdate = false;
         double height = this.getTile().getTileHeight();
 
