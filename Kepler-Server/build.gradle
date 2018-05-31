@@ -35,6 +35,9 @@ dependencies {
 
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
+
+    // https://mvnrepository.com/artifact/org.abstractj.kalium/kalium
+    compile group: 'org.abstractj.kalium', name: 'kalium', version: '0.8.0'
 }
 
 // Create fat jar with librarys inside of it.

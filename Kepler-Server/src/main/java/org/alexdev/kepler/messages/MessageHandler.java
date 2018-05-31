@@ -68,6 +68,7 @@ public class MessageHandler {
         registerEvent(206, new INIT_CRYPTO());
         registerEvent(202, new GENERATEKEY());
         registerEvent(204, new SSO());
+        registerEvent(4, new TRY_LOGIN());
     }
 
     /**

@@ -6,14 +6,15 @@ import org.alexdev.kepler.messages.outgoing.user.LOCALISED_ERROR;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class SSO implements MessageEvent {
+public class TRY_LOGIN implements MessageEvent {
 
     @Override
     public void handle(Player player, NettyRequest reader) {
-        String ticket = reader.readString();
+        String username = reader.readString();
+        String password = reader.readString();
 
-        if (!PlayerDao.loginTicket(player, ticket)) {
-            player.send(new LOCALISED_ERROR("Incorrect SSO ticket"));
+        if (!PlayerDao.login(player, username, password)) {
+            player.send(new LOCALISED_ERROR("Login incorrect"));
         } else {
             player.login();
         }

@@ -5,10 +5,13 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.util.DateUtil;
 
+import org.abstractj.kalium.crypto.Password;
+
 import java.sql.*;
 import java.util.*;
 
 public class PlayerDao {
+    private static final Password passwordHasher = new Password();
     
     /**
      * Gets the details.
@@ -46,13 +49,13 @@ public class PlayerDao {
     }
 
     /**
-     * Login.
+     * Login with SSO ticket.
      *
      * @param player the player
      * @param ssoTicket the sso ticket
      * @return true, if successful
      */
-    public static boolean login(Player player, String ssoTicket) {
+    public static boolean loginTicket(Player player, String ssoTicket) {
         boolean success = false;
         
         Connection sqlConnection = null;
@@ -68,6 +71,47 @@ public class PlayerDao {
             if (resultSet.next()) {
                 fill(player.getDetails(), resultSet);
                 success = true;
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return success;
+    }
+
+    /**
+     * Login with SSO ticket.
+     *
+     * @param player the player
+     * @param ssoTicket the sso ticket
+     * @return true, if successful
+     */
+    public static boolean login(Player player, String username, String password) {
+        boolean success = false;
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE username = ? LIMIT 1", sqlConnection);
+            preparedStatement.setString(1, username);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                String hashedPassword = resultSet.getString("password");
+
+                success = passwordHasher.verify(hashedPassword.getBytes(), password.getBytes());
+
+                if (success) {
+                    fill(player.getDetails(), resultSet);
+                }
             }
 
         } catch (Exception e) {
