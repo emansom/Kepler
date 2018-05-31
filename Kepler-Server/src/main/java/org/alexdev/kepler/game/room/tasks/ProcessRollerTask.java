@@ -56,6 +56,10 @@ public class ProcessRollerTask implements Runnable {
             }
         }
 
+        if (blacklist.size() > 0) {
+            this.room.flushQueued();
+        }
+
         if (itemsToUpdate.size() > 0) {
             this.room.getMapping().regenerateCollisionMap();
             ItemDao.updateItems(itemsToUpdate);
@@ -122,7 +126,7 @@ public class ProcessRollerTask implements Runnable {
             }
         }
 
-        this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+        this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
 
         item.getPosition().setX(front.getX());
         item.getPosition().setY(front.getY());
@@ -169,7 +173,7 @@ public class ProcessRollerTask implements Runnable {
             displayNextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
         }
 
-        this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
+        this.room.sendQueued(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
 
         if (!entity.getRoomUser().isSittingOnGround()) {
             entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
