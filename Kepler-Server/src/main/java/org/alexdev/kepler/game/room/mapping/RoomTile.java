@@ -139,10 +139,20 @@ public class RoomTile {
         this.highestItem = highestItem;
     }
 
+    /**
+     * Get list of entities on this tile.
+     *
+     * @return the list of entities
+     */
     public List<Entity> getEntities() {
         return this.entities;
     }
 
+    /**
+     * Get the list of items on this tile.
+     *
+     * @return the list of items
+     */
     public List<Item> getItems() {
         return items;
     }
