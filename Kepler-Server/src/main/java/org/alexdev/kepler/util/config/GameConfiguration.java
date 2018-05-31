@@ -21,7 +21,6 @@ public class GameConfiguration {
     }
 
     private static void setConfigurationDefaults() {
-        config.put("sso.tickets.enabled", "true");
         config.put("fuck.aaron", "true");
 
         config.put("welcome.message.enabled", "true");
@@ -40,7 +39,6 @@ public class GameConfiguration {
      */
     private static void setConfigurationData(PrintWriter writer) {
         writer.println("[Game]");
-        writer.println("sso.tickets.enabled=" + config.get("sso.tickets.enabled"));
         writer.println("fuck.aaron=true" + config.get("fuck.aaron"));
         writer.println("");
         writer.println("welcome.message.enabled=" + config.get("welcome.message.enabled"));
