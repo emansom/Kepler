@@ -1,7 +1,7 @@
 repositories {
     mavenCentral()
-    flatDir {
-        dirs 'libs'
+    maven {
+        url  "https://dl.bintray.com/terl/lazysodium-maven"
     }
 }
 
@@ -40,7 +40,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.abstractj.kalium/kalium
     //compile group: 'org.abstractj.kalium', name: 'kalium', version: '0.8.0'
-    compile name: 'kalium-0.8.1-SNAPSHOT'
+    implementation "com.goterl.lazycode:lazysodium-java:2.2.0"
 }
 
 // Create fat jar with librarys inside of it.

@@ -1,19 +1,18 @@
 package org.alexdev.kepler.dao.mysql;
 
+import com.goterl.lazycode.lazysodium.SodiumJava;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
-import org.alexdev.kepler.util.DateUtil;
 
-import org.abstractj.kalium.crypto.Argon2Password;
+import com.goterl.lazycode.lazysodium.LazySodiumJava;
 
-import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
 public class PlayerDao {
-    private static final Argon2Password passwordHasher = new Argon2Password();
-    
+    private static final LazySodiumJava sodium = new LazySodiumJava(new SodiumJava());
+
     /**
      * Gets the details.
      *
@@ -108,7 +107,7 @@ public class PlayerDao {
             if (resultSet.next()) {
                 String hashedPassword = resultSet.getString("password");
 
-                success = passwordHasher.verify(hashedPassword.getBytes(), password.getBytes(StandardCharsets.UTF_8));
+                success = sodium.cryptoPwHashStrVerify(hashedPassword, password);
 
                 if (success) {
                     fill(player.getDetails(), resultSet);
