@@ -16,7 +16,8 @@ public enum StatusType {
     WAVE("wave"),
     GESTURE("gest"),
     TALK("talk"),
-    SLEEP("Sleep");
+    SLEEP("Sleep"),
+    TRADE("trd");
 
     private String statusCode;
 

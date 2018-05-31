@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -9,6 +10,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.enums.DrinkType;
+import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.public_rooms.SunTerraceHandler;
@@ -53,14 +55,21 @@ public class RoomUser {
     private long afkTimer;
     private long sleepTimer;
 
+    private Player tradePartner;
+    private List<Item> tradeItems;
+    private boolean tradeAccept;
+
     public RoomUser(Entity entity) {
         this.entity = entity;
+        this.tradeItems = new ArrayList<>();
+        this.statuses = new ConcurrentHashMap<>();
+        this.path = new LinkedList<>();
         this.reset();
     }
 
     public void reset() {
-        this.statuses = new ConcurrentHashMap<>();
-        this.path = new LinkedList<>();
+        this.statuses.clear();
+        this.path.clear();
 
         this.nextPosition = null;
         this.currentItem = null;
@@ -75,7 +84,12 @@ public class RoomUser {
 
         this.instanceId = -1;
         this.authenticateId = -1;
+
         this.resetRoomTimer();
+
+        if (this.entity.getType() == EntityType.PLAYER) {
+            RoomTradeManager.close(this);
+        }
     }
 
     /**
@@ -661,4 +675,23 @@ public class RoomUser {
         return sleepTimer;
     }
 
+    public Player getTradePartner() {
+        return tradePartner;
+    }
+
+    public void setTradePartner(Player tradePartner) {
+        this.tradePartner = tradePartner;
+    }
+
+    public boolean hasAcceptedTrade() {
+        return tradeAccept;
+    }
+
+    public void setTradeAccept(boolean tradeAccept) {
+        this.tradeAccept = tradeAccept;
+    }
+
+    public List<Item> getTradeItems() {
+        return tradeItems;
+    }
 }
