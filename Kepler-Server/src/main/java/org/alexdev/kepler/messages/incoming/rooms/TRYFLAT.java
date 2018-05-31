@@ -38,10 +38,8 @@ public class TRYFLAT implements MessageEvent {
 
         if (!player.hasFuse("fuse_enter_locked_rooms")) {
             if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId())) {
-               // int messageId = 131; // "BC" - tell user there's no answer
 
                 if (rangDoorbell(room, player)) {
-                    //messageId = 91; // "A[" - tell user that you're waiting for doorbell
                     player.send(new DOORBELL_WAIT());
                 } else {
                     player.send(new DOORBELL_NOANSWER());
