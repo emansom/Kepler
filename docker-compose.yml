@@ -1,7 +1,6 @@
 version: '3.2'
 services:
     kepler:
-        build: .
         image: ewout/kepler:latest
         restart: always
         environment:
