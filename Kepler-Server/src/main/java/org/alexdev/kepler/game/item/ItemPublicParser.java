@@ -79,6 +79,15 @@ public class ItemPublicParser {
                     item.setCurrentProgramValue("open");
                 }
 
+                // Custom heights for these furniture
+                if (item.getDefinition().getSprite().equals("picnic_dummychair4")) {
+                    item.getDefinition().setTopHeight(4.0);
+                }
+
+                if (item.getDefinition().getSprite().equals("picnic_dummychair6")) {
+                    item.getDefinition().setTopHeight(7.0);
+                }
+
                 items.add(item);
             }
         } catch (IOException e) {
