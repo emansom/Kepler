@@ -39,7 +39,7 @@ public class GameConfiguration {
      */
     private static void setConfigurationData(PrintWriter writer) {
         writer.println("[Game]");
-        writer.println("fuck.aaron=true" + config.get("fuck.aaron"));
+        writer.println("fuck.aaron=" + config.get("fuck.aaron"));
         writer.println("");
         writer.println("welcome.message.enabled=" + config.get("welcome.message.enabled"));
         writer.println("welcome.message.content=" + config.get("welcome.message.content"));
