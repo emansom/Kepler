@@ -30,6 +30,10 @@ public class CatalogueItem {
         this.packageDescription = packageDescription;
         this.isPackage = isPackage;
         this.packages = new ArrayList<>();
+
+        if (this.definition == null && !this.isPackage) {
+            System.out.println("Item (" + this.saleCode + ") has an invalid definition id: " + definitionId);
+        }
     }
 
     public String getName() {
