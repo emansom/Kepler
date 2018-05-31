@@ -7,7 +7,7 @@
 /bin/
 /cmake-build-debug/
 .idea/workspace.xml
-*.jar
+/*.jar
 
 gradlew
 gradlew.bat

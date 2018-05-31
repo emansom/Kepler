@@ -5,13 +5,14 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.util.DateUtil;
 
-import org.abstractj.kalium.crypto.Password;
+import org.abstractj.kalium.crypto.Argon2Password;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
 public class PlayerDao {
-    private static final Password passwordHasher = new Password();
+    private static final Argon2Password passwordHasher = new Argon2Password();
     
     /**
      * Gets the details.
@@ -107,7 +108,7 @@ public class PlayerDao {
             if (resultSet.next()) {
                 String hashedPassword = resultSet.getString("password");
 
-                success = passwordHasher.verify(hashedPassword.getBytes(), password.getBytes());
+                success = passwordHasher.verify(hashedPassword.getBytes(), password.getBytes(StandardCharsets.UTF_8));
 
                 if (success) {
                     fill(player.getDetails(), resultSet);
