@@ -13,9 +13,11 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,6 +58,14 @@ public class Player extends Entity {
 
         this.sendQueued(new LOGIN());
         this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+
+        if (GameConfiguration.getBoolean("welcome.message.enabled")) {
+            String alertMessage = GameConfiguration.getString("welcome.message.contents");
+            alertMessage = alertMessage.replace("%username%", this.details.getName());
+
+            this.sendQueued(new ALERT(alertMessage));
+        }
+
         this.flushSendQueue();
 
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
