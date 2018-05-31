@@ -60,6 +60,22 @@ public class RoomEntityManager {
     }
 
     /**
+     * Get an entity by instance id.
+     *
+     * @param instanceId the instance id to get by
+     * @return the entity
+     */
+    public Entity getByInstanceId(int instanceId) {
+        for (Entity entity : this.room.getEntities()) {
+            if (entity.getRoomUser().getInstanceId() == instanceId) {
+                return entity;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Adds a generic entity to the room.
      * Will send packets if the entity is a player.
      *

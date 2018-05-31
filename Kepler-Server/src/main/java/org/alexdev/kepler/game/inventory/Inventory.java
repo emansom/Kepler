@@ -108,7 +108,7 @@ public class Inventory {
      * @param item the item to use the data for the packet
      * @param stripSlotId the slot in the hand
      */
-    public void serialise(NettyResponse response, Item item, int stripSlotId) {
+    public static void serialise(NettyResponse response, Item item, int stripSlotId) {
         response.writeDelimeter("SI", (char) 30);
         response.writeDelimeter(item.getId(), (char) 30);
         response.writeDelimeter(stripSlotId, (char) 30);

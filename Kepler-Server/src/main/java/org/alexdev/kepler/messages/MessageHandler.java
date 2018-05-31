@@ -23,7 +23,9 @@ import org.alexdev.kepler.messages.incoming.rooms.pool.SPLASH_POSITION;
 import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
+import org.alexdev.kepler.messages.incoming.trade.*;
 import org.alexdev.kepler.messages.incoming.user.*;
+import org.alexdev.kepler.messages.outgoing.trade.TRADE_END;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.ServerConfiguration;
@@ -56,6 +58,7 @@ public class MessageHandler {
         registerMessengerPackets();
         registerCataloguePackets();
         registerInventoryPackets();
+        registerTradePackets();
         //if (ServerConfiguration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
@@ -180,6 +183,17 @@ public class MessageHandler {
         registerEvent(96, new ASSIGNRIGHTS());
         registerEvent(97, new REMOVERIGHTS());
         registerEvent(155, new REMOVEALLRIGHTS());
+    }
+
+    /**
+     * Register room trade packets
+     */
+    private void registerTradePackets() {
+        registerEvent(71, new TRADE_OPEN());
+        registerEvent(72, new TRADE_ADDITEM());
+        registerEvent(70, new TRADE_CLOSE());
+        registerEvent(69, new TRADE_ACCEPT());
+        registerEvent(68, new TRADE_UNACCEPT());
     }
 
     /**
