@@ -1,6 +1,7 @@
 package org.alexdev.kepler.dao.mysql;
 
 import com.goterl.lazycode.lazysodium.SodiumJava;
+import com.goterl.lazycode.lazysodium.interfaces.PwHash;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
@@ -107,7 +108,9 @@ public class PlayerDao {
             if (resultSet.next()) {
                 String hashedPassword = resultSet.getString("password");
 
-                success = sodium.cryptoPwHashStrVerify(hashedPassword, password);
+
+                PwHash.Lazy pwHash = (PwHash.Lazy) sodium;
+                success = pwHash.cryptoPwHashStrVerify(hashedPassword, password);
 
                 if (success) {
                     fill(player.getDetails(), resultSet);
