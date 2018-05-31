@@ -10,7 +10,7 @@ public class GCIX implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         player.send(new CATALOGUE_PAGES(
-                player.getDetails().getId(),
+                player.getDetails().getRank(),
                 CatalogueManager.getInstance().getCataloguePages()));
     }
 }
