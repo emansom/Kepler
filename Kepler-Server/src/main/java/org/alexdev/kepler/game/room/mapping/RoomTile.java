@@ -52,10 +52,8 @@ public class RoomTile {
         }
 
         if (entity != null) {
-            if (!room.isPublicRoom()) {
-                if (tile.getEntities().size() > 0) {
-                    return tile.containsEntity(entity); // Allow walk if you exist already in the tile
-                }
+            if (tile.getEntities().size() > 0) {
+                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
             }
         }
 
@@ -139,10 +137,20 @@ public class RoomTile {
         this.highestItem = highestItem;
     }
 
+    /**
+     * Get list of entities on this tile.
+     *
+     * @return the list of entities
+     */
     public List<Entity> getEntities() {
         return this.entities;
     }
 
+    /**
+     * Get the list of items on this tile.
+     *
+     * @return the list of items
+     */
     public List<Item> getItems() {
         return items;
     }
