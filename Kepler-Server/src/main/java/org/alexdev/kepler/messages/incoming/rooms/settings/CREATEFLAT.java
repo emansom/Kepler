@@ -36,10 +36,12 @@ public class CREATEFLAT implements MessageEvent {
 
         String modelType = roomModel.replace("model_", "");
 
+        // TODO: validate modelType for the fuse permission too
         if (!modelType.equals("a") &&
                 !modelType.equals("b") &&
                 !modelType.equals("c") &&
                 !modelType.equals("d") &&
+                !modelType.equals("f") &&
                 !player.hasFuse("fuse_use_special_room_layouts")) {
             return; // Fuck off, scripter.
         }

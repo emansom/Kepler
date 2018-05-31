@@ -1,12 +1,14 @@
+repositories {
+    mavenCentral()
+    maven {
+        url  "https://dl.bintray.com/terl/lazysodium-maven"
+    }
+}
+
 apply plugin: 'idea'
 apply plugin: 'application'
 
 mainClassName = 'org.alexdev.kepler.Kepler'
-
-repositories {
-    mavenCentral()
-}
-
 sourceCompatibility = "1.10"
 targetCompatibility = "1.10"
 
@@ -15,8 +17,8 @@ dependencies {
     // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.1'
 
-    // https://mvnrepository.com/artifact/mysql/mysql-connector-java
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.11'
+    // https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.2.5'
 
     // https://mvnrepository.com/artifact/io.netty/netty-all
     compile group: 'io.netty', name: 'netty-all', version: '4.1.25.Final'
@@ -35,6 +37,10 @@ dependencies {
 
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
+
+    // https://mvnrepository.com/artifact/org.abstractj.kalium/kalium
+    //compile group: 'org.abstractj.kalium', name: 'kalium', version: '0.8.0'
+    compile "com.goterl.lazycode:lazysodium-java:2.2.0"
 }
 
 // Create fat jar with librarys inside of it.

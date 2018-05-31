@@ -1,15 +1,19 @@
 package org.alexdev.kepler.dao.mysql;
 
+import com.goterl.lazycode.lazysodium.SodiumJava;
+import com.goterl.lazycode.lazysodium.interfaces.PwHash;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
-import org.alexdev.kepler.util.DateUtil;
 
+import com.goterl.lazycode.lazysodium.LazySodiumJava;
+
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
 public class PlayerDao {
-    
+
     /**
      * Gets the details.
      *
@@ -46,13 +50,13 @@ public class PlayerDao {
     }
 
     /**
-     * Login.
+     * Login with SSO ticket.
      *
      * @param player the player
      * @param ssoTicket the sso ticket
      * @return true, if successful
      */
-    public static boolean login(Player player, String ssoTicket) {
+    public static boolean loginTicket(Player player, String ssoTicket) {
         boolean success = false;
         
         Connection sqlConnection = null;
@@ -60,7 +64,6 @@ public class PlayerDao {
         ResultSet resultSet = null;
 
         try {
-
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE sso_ticket = ? LIMIT 1", sqlConnection);
             preparedStatement.setString(1, ssoTicket);
@@ -80,6 +83,76 @@ public class PlayerDao {
         }
 
         return success;
+    }
+
+    /**
+     * Login with SSO ticket.
+     *
+     * @param player the player
+     * @param username username
+     * @param password password
+     * @return true, if successful
+     */
+    public static boolean login(Player player, String username, String password) {
+        boolean success = false;
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE username = ? LIMIT 1", sqlConnection);
+            preparedStatement.setString(1, username);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                byte[] hashedPassword = resultSet.getString("password").getBytes(StandardCharsets.UTF_8);
+                byte[] pass = password.getBytes(StandardCharsets.UTF_8);
+
+                var sodium = new LazySodiumJava(new SodiumJava());
+
+                PwHash.Native pwHash = (PwHash.Native) sodium;
+                success = pwHash.cryptoPwHashStrVerify(hashedPassword, pass, pass.length);
+
+                if (success) {
+                    fill(player.getDetails(), resultSet);
+                }
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return success;
+    }
+
+    /**
+     * Clear SSO ticket
+     * Protects against replay attacks
+     *
+     * @param userId ID of user
+     */
+    public static void clearTicket(int userId) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET sso_ticket = '' WHERE id = ? LIMIT 1", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
     }
 
     /**

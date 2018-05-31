@@ -1,6 +1,5 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
@@ -37,6 +36,7 @@ public class LOOKTO implements MessageEvent {
                 lookDirection.getX(),
                 lookDirection.getY());
 
+        // When sitting calculate even rotation
         if (player.getRoomUser().containsStatus(StatusType.SIT)) {
             Position current = player.getRoomUser().getPosition();
 
