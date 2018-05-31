@@ -42,7 +42,7 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds 900 && \
     crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds 300 && \
     crudini --set /usr/src/kepler/game.ini Game fuck.aaron true && \
-    crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled true && \
+    crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled false && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
     crudini --set /usr/src/kepler/server.ini Console debug true && \
     mv /usr/src/kepler/server.ini /usr/src/kepler/tmp.ini && \
