@@ -4,6 +4,8 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
+import org.alexdev.kepler.messages.outgoing.rooms.DOORBELL_NOANSWER;
+import org.alexdev.kepler.messages.outgoing.rooms.DOORBELL_WAIT;
 import org.alexdev.kepler.messages.outgoing.rooms.FLAT_ACCESSIBLE;
 import org.alexdev.kepler.messages.outgoing.user.LOCALISED_ERROR;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -36,7 +38,16 @@ public class TRYFLAT implements MessageEvent {
 
         if (!player.hasFuse("fuse_enter_locked_rooms")) {
             if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId())) {
-                // TODO: Knocking
+               // int messageId = 131; // "BC" - tell user there's no answer
+
+                if (rangDoorbell(room, player)) {
+                    //messageId = 91; // "A[" - tell user that you're waiting for doorbell
+                    player.send(new DOORBELL_WAIT());
+                } else {
+                    player.send(new DOORBELL_NOANSWER());
+                }
+
+                return;
             }
 
             if (room.getData().getAccessTypeId() == 2 && !room.isOwner(player.getDetails().getId())) {
@@ -52,5 +63,20 @@ public class TRYFLAT implements MessageEvent {
         }*/
         player.getRoomUser().setAuthenticateId(roomId);
         player.send(new FLAT_ACCESSIBLE());
+    }
+
+    private boolean rangDoorbell(Room room, Player player) {
+        boolean sentWithRights = false;
+
+        for (Player user : room.getEntityManager().getPlayers()) {
+            if (!room.hasRights(user.getEntityId())) {
+                continue;
+            }
+
+            user.send(new DOORBELL_WAIT(player.getDetails().getName()));
+            sentWithRights = true;
+        }
+
+        return sentWithRights;
     }
 }

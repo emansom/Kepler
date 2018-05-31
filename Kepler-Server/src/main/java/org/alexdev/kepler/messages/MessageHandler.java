@@ -105,6 +105,7 @@ public class MessageHandler {
         registerEvent(61,  new G_USRS());
         registerEvent(64, new G_STAT());
         registerEvent(63, new G_ITEMS());
+        registerEvent(98, new LETUSERIN());
     }
 
     /**
