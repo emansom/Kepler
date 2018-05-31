@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.player.PlayerDetails;
 
 import com.goterl.lazycode.lazysodium.LazySodiumJava;
 
+import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.*;
 
@@ -106,12 +107,13 @@ public class PlayerDao {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                String hashedPassword = resultSet.getString("password");
+                byte[] hashedPassword = resultSet.getString("password").getBytes(StandardCharsets.UTF_8);
+                byte[] pass = password.getBytes(StandardCharsets.UTF_8);
 
                 var sodium = new LazySodiumJava(new SodiumJava());
-                PwHash.Lazy pwHasher = (PwHash.Lazy) sodium;
 
-                success = pwHasher.cryptoPwHashStrVerify(hashedPassword, password);
+                PwHash.Native pwHash = (PwHash.Native) sodium;
+                success = pwHash.cryptoPwHashStrVerify(hashedPassword, pass, pass.length);
 
                 if (success) {
                     fill(player.getDetails(), resultSet);
