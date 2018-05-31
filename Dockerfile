@@ -37,7 +37,6 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/server.ini Logging log.sent.packets true && \
     crudini --set /usr/src/kepler/server.ini Logging log.received.packets true && \
     crudini --set /usr/src/kepler/server.ini Logging log.items.loaded true && \
-    crudini --set /usr/src/kepler/game.ini Game sso.tickets.enabled true && \
     crudini --set /usr/src/kepler/game.ini Game roller.tick.default 6 && \
     crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds 900 && \
     crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds 300 && \
