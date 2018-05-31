@@ -653,16 +653,8 @@ public class RoomUser {
         return afkTimer;
     }
 
-    public void setAfkTimer(int afkTimer) {
-        this.afkTimer = afkTimer;
-    }
-
     public long getSleepTimer() {
         return sleepTimer;
-    }
-
-    public void setSleepTimer(long sleepTimer) {
-        this.sleepTimer = sleepTimer;
     }
 
 }
