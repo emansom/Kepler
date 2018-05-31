@@ -40,7 +40,7 @@ dependencies {
 
     // https://mvnrepository.com/artifact/org.abstractj.kalium/kalium
     //compile group: 'org.abstractj.kalium', name: 'kalium', version: '0.8.0'
-    implementation "com.goterl.lazycode:lazysodium-java:2.2.0"
+    compile "com.goterl.lazycode:lazysodium-java:2.2.0"
 }
 
 // Create fat jar with librarys inside of it.
