@@ -52,10 +52,8 @@ public class RoomTile {
         }
 
         if (entity != null) {
-            if (!room.isPublicRoom()) {
-                if (tile.getEntities().size() > 0) {
-                    return tile.containsEntity(entity); // Allow walk if you exist already in the tile
-                }
+            if (tile.getEntities().size() > 0) {
+                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
             }
         }
 
