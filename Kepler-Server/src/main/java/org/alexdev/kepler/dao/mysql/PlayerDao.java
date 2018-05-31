@@ -12,7 +12,6 @@ import java.sql.*;
 import java.util.*;
 
 public class PlayerDao {
-    private static final LazySodiumJava sodium = new LazySodiumJava(new SodiumJava());
 
     /**
      * Gets the details.
@@ -89,7 +88,8 @@ public class PlayerDao {
      * Login with SSO ticket.
      *
      * @param player the player
-     * @param ssoTicket the sso ticket
+     * @param username username
+     * @param password password
      * @return true, if successful
      */
     public static boolean login(Player player, String username, String password) {
@@ -108,6 +108,7 @@ public class PlayerDao {
             if (resultSet.next()) {
                 String hashedPassword = resultSet.getString("password");
 
+                var sodium = new LazySodiumJava(new SodiumJava());
 
                 PwHash.Lazy pwHash = (PwHash.Lazy) sodium;
                 success = pwHash.cryptoPwHashStrVerify(hashedPassword, password);
