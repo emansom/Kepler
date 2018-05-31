@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.enums.DrinkType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.game.room.public_rooms.SunTerraceHandler;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.room.tasks.WaveTask;
@@ -84,11 +85,15 @@ public class RoomUser {
      * @param Y the y
      */
     public void walkTo(int X, int Y) {
+        if (this.room == null) {
+            return;
+        }
+
         if (!this.isWalkingAllowed) {
             return;
         }
 
-        if (this.room == null) {
+        if (SunTerraceHandler.isRedirected(this, X, Y)) {
             return;
         }
 
