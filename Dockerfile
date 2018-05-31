@@ -2,6 +2,7 @@ FROM openjdk:10
 LABEL maintainer="ewout@freedom.nl"
 
 RUN apt update && apt install -y \
+    libsodium-dev \
     mysql-client \
     bash \
     crudini \
