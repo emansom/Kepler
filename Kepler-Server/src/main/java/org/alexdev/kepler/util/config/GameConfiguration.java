@@ -23,7 +23,7 @@ public class GameConfiguration {
     private static void setConfigurationDefaults() {
         config.put("fuck.aaron", "true");
 
-        config.put("welcome.message.enabled", "true");
+        config.put("welcome.message.enabled", "false");
         config.put("welcome.message.content", "Hello, %username%! And welcome to the Kepler server!");
 
         config.put("roller.tick.default", "6");

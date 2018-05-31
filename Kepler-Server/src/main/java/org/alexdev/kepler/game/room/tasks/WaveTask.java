@@ -7,10 +7,10 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 
 import java.util.List;
 
-public class WaveHandler implements Runnable {
+public class WaveTask implements Runnable {
     private final Entity entity;
 
-    public WaveHandler(Entity entity) {
+    public WaveTask(Entity entity) {
         this.entity = entity;
     }
 

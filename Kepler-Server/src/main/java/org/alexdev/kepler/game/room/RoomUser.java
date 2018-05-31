@@ -11,15 +11,15 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.enums.DrinkType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.game.room.public_rooms.SunTerraceHandler;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
-import org.alexdev.kepler.game.room.tasks.WaveHandler;
+import org.alexdev.kepler.game.room.tasks.WaveTask;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
-import org.alexdev.kepler.util.config.ServerConfiguration;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -85,11 +85,15 @@ public class RoomUser {
      * @param Y the y
      */
     public void walkTo(int X, int Y) {
+        if (this.room == null) {
+            return;
+        }
+
         if (!this.isWalkingAllowed) {
             return;
         }
 
-        if (this.room == null) {
+        if (SunTerraceHandler.isRedirected(this, X, Y)) {
             return;
         }
 
@@ -402,7 +406,7 @@ public class RoomUser {
             this.room.send(new USER_STATUSES(List.of(this.entity)));
         }
 
-        GameScheduler.getInstance().getSchedulerService().schedule(new WaveHandler(this.entity), 2, TimeUnit.SECONDS);
+        GameScheduler.getInstance().getSchedulerService().schedule(new WaveTask(this.entity), 2, TimeUnit.SECONDS);
     }
 
     /**
@@ -653,16 +657,8 @@ public class RoomUser {
         return afkTimer;
     }
 
-    public void setAfkTimer(int afkTimer) {
-        this.afkTimer = afkTimer;
-    }
-
     public long getSleepTimer() {
         return sleepTimer;
-    }
-
-    public void setSleepTimer(long sleepTimer) {
-        this.sleepTimer = sleepTimer;
     }
 
 }
