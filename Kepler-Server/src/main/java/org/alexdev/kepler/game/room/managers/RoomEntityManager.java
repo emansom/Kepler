@@ -103,18 +103,17 @@ public class RoomEntityManager {
 
         Player player = (Player) entity;
 
-        player.sendQueued(new ROOM_URL());
-        player.sendQueued(new ROOM_READY(this.room.getId(), this.room.getModel().getName()));
+        player.send(new ROOM_URL());
+        player.send(new ROOM_READY(this.room.getId(), this.room.getModel().getName()));
 
         if (this.room.getData().getWallpaper() > 0) {
-            player.sendQueued(new FLATPROPERTY("wallpaper", this.room.getData().getWallpaper()));
+            player.send(new FLATPROPERTY("wallpaper", this.room.getData().getWallpaper()));
         }
 
         if (this.room.getData().getFloor() > 0) {
-            player.sendQueued(new FLATPROPERTY("floor", this.room.getData().getFloor()));
+            player.send(new FLATPROPERTY("floor", this.room.getData().getFloor()));
         }
 
-        player.flushSendQueue();
         RoomDao.saveVisitors(this.room);
     }
 
