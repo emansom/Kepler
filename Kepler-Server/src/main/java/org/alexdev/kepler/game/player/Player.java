@@ -60,7 +60,7 @@ public class Player extends Entity {
         this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
 
         if (GameConfiguration.getBoolean("welcome.message.enabled")) {
-            String alertMessage = GameConfiguration.getString("welcome.message.contents");
+            String alertMessage = GameConfiguration.getString("welcome.message.content");
             alertMessage = alertMessage.replace("%username%", this.details.getName());
 
             this.sendQueued(new ALERT(alertMessage));
