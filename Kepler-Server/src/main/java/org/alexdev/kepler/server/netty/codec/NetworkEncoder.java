@@ -24,7 +24,7 @@ public class NetworkEncoder extends MessageToMessageEncoder<MessageComposer> {
         try {
             msg.compose(response);
         } catch (Exception ex) {
-            Log.getErrorLogger().error("Error when composing (" + response.getHeader() + ") occurred: ", ex);
+            Log.getErrorLogger().error("Error occurred when composing " + response.getHeader() + ": ", ex);
             return;
         }
 

@@ -229,12 +229,12 @@ public class ItemDao {
             }
 
         } catch (Exception e) {
+            // Reset amount
+            updatedAmount = -1;
+
             try {
                 // Rollback these queries
                 conn.rollback();
-
-                // Reset amount
-                updatedAmount = -1;
             } catch(SQLException re) {
                 Storage.logError(re);
             }
@@ -243,7 +243,7 @@ public class ItemDao {
         } finally {
             try {
                 conn.setAutoCommit(true);
-            } catch(SQLException ce) {
+            } catch (SQLException ce) {
                 Storage.logError(ce);
             }
 
