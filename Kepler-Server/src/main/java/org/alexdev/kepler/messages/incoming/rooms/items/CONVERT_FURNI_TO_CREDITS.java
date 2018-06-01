@@ -37,12 +37,14 @@ public class CONVERT_FURNI_TO_CREDITS implements MessageEvent {
         // Sprite is of format CF_50_goldbar. This retrieves the 50 part
         Integer amount = Integer.parseInt(item.getDefinition().getSprite().split("_")[1]);
 
-        room.getMapping().removeItem(item);
-        ItemDao.deleteItem(item.getId());
+        // Delete item and update credits amount in one atomic operation
+        int currentAmount = ItemDao.redeemCreditItem(amount, itemId, player.getDetails().getId());
 
-        int currentAmount = PlayerDao.increaseCredits(amount, player.getDetails().getId());
+        // Notify room of item removal and set credits of player
+        room.getMapping().removeItem(item);
         player.getDetails().setCredits(currentAmount);
 
+        // Send new credit amount
         player.send(new CREDIT_BALANCE(player.getDetails()));
     }
 }

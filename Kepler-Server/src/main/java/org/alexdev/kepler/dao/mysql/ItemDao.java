@@ -60,6 +60,7 @@ public class ItemDao {
     public static void newItem(Item item) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet row = null;
 
         int itemId = 0;
 
@@ -72,7 +73,7 @@ public class ItemDao {
             preparedStatement.setString(3, item.getCustomData());
             preparedStatement.executeUpdate();
 
-            ResultSet row = preparedStatement.getGeneratedKeys();
+            row = preparedStatement.getGeneratedKeys();
 
             if (row != null && row.next()) {
                 itemId = row.getInt(1);
@@ -81,6 +82,7 @@ public class ItemDao {
         } catch (SQLException e) {
             Storage.logError(e);
         } finally {
+            Storage.closeSilently(row);
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }
@@ -181,6 +183,78 @@ public class ItemDao {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }
+    }
+
+    /**
+     * Redeem credit furniture atomicly
+     *
+     * @param amount credit amount to increase by
+     * @param userID user ID
+     */
+    public static int redeemCreditItem(int amount, int itemID, int userID) {
+        int updatedAmount = 0;
+        Connection conn = null;
+        PreparedStatement deleteQuery = null;
+        PreparedStatement updateQuery = null;
+        PreparedStatement fetchQuery = null;
+        ResultSet row = null;
+
+        try {
+            conn = Storage.getStorage().getConnection();
+
+            // We disable autocommit to make sure the following queries share the same atomic transaction
+            conn.setAutoCommit(false);
+
+            deleteQuery = Storage.getStorage().prepare("DELETE FROM items WHERE id = ?", conn);
+            deleteQuery.setInt(1, itemID);
+            deleteQuery.execute();
+
+            // Increase credits
+            updateQuery = Storage.getStorage().prepare("UPDATE users SET credits = credits + ? WHERE id = ?", conn);
+            updateQuery.setInt(1, amount);
+            updateQuery.setInt(2, userID);
+            updateQuery.execute();
+
+            // Fetch increased amount
+            fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
+            fetchQuery.setInt(1, userID);
+            row = fetchQuery.executeQuery();
+
+            // Commit these queries
+            conn.commit();
+
+            // Set amount
+            if (row != null && row.next()) {
+                updatedAmount = row.getInt("credits");
+            }
+
+        } catch (Exception e) {
+            try {
+                // Rollback these queries
+                conn.rollback();
+
+                // Reset amount
+                updatedAmount = 0;
+            } catch(SQLException re) {
+                Storage.logError(re);
+            }
+
+            Storage.logError(e);
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch(SQLException ce) {
+                Storage.logError(ce);
+            }
+
+            Storage.closeSilently(row);
+            Storage.closeSilently(deleteQuery);
+            Storage.closeSilently(updateQuery);
+            Storage.closeSilently(fetchQuery);
+            Storage.closeSilently(conn);
+        }
+
+        return updatedAmount;
     }
 
     /**

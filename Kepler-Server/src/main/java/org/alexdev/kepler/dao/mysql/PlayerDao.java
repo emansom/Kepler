@@ -326,36 +326,6 @@ public class PlayerDao {
     }
 
     /**
-     * Increase credit amount atomicly
-     *
-     * @param amount credit amount to increase by
-     * @param userID user ID
-     */
-    public static int increaseCredits(int amount, int userID) {
-        int updatedAmount = 0;
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet row = null;
-
-        try {
-            sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("UPDATE users SET credits = credits + ? WHERE id = ?", sqlConnection);
-            preparedStatement.setInt(1, amount);
-            preparedStatement.setInt(2, userID);
-            row  = preparedStatement.executeQuery();
-            updatedAmount = row.getInt("credits");
-        } catch (Exception e) {
-            Storage.logError(e);
-        } finally {
-            Storage.closeSilently(row);
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
-        }
-
-        return updatedAmount;
-    }
-
-    /**
      * Update current badge
      *
      * @param details the player details to save
