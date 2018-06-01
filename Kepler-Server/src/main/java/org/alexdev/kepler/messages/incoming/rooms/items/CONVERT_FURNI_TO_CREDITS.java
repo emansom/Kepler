@@ -22,7 +22,11 @@ public class CONVERT_FURNI_TO_CREDITS implements MessageEvent {
             return;
         }
 
-        int itemId = Integer.parseInt(reader.contents());
+        int itemId = reader.readInt();
+
+        if (itemId < 0) {
+            return;
+        }
 
         Item item = room.getItemManager().getById(itemId);
 
