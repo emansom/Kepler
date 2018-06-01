@@ -20,6 +20,9 @@ services:
             - "12321"
             - "12309"
 
+    # TODO: move nginx into matcha container to get rid of volume requirements
+    # TODO: use Phalcon's migration for site_menu to lose site.sql volume for MariaDB
+    # TODO: database initialization in Kepler to lose kepler.sql volume for MariaDB
     matcha:
         image: ewout/matcha:latest
         depends_on:
