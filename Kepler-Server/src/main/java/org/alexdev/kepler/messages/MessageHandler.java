@@ -161,6 +161,7 @@ public class MessageHandler {
         registerEvent(84, new SETITEMDATA());
         registerEvent(85, new REMOVEITEM());
         registerEvent(74, new SETSTUFFDATA());
+        registerEvent(183, new CONVERT_FURNI_TO_CREDITS());
     }
 
     /**
