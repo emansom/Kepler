@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.zip.ZipFile;
 
 public class PlayerManager {
     private static PlayerManager instance;
