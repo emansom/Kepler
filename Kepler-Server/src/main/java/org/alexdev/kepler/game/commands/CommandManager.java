@@ -1,9 +1,6 @@
 package org.alexdev.kepler.game.commands;
 
-import org.alexdev.kepler.game.commands.registered.AboutCommand;
-import org.alexdev.kepler.game.commands.registered.GiveDrinkCommand;
-import org.alexdev.kepler.game.commands.registered.HelpCommand;
-import org.alexdev.kepler.game.commands.registered.SitCommand;
+import org.alexdev.kepler.game.commands.registered.*;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.texts.TextsManager;
@@ -27,6 +24,7 @@ public class CommandManager {
         this.commands.put(new String[] { "help", "commands" }, new HelpCommand());
         this.commands.put(new String[] { "givedrink"}, new GiveDrinkCommand());
         this.commands.put(new String[] { "sit"}, new SitCommand());
+        this.commands.put(new String[] { "uptime", "status" }, new UptimeCommand());
 
         log.info("Loaded {} commands", commands.size());
     }
