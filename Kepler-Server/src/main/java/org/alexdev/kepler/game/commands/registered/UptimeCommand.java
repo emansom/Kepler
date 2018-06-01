@@ -5,6 +5,8 @@ import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
@@ -23,7 +25,21 @@ public class UptimeCommand extends Command {
 
         Player player = (Player) entity;
 
-        int liveConns = Kepler.getServer().getChannels().size();
+        int authenticatedPlayers = PlayerManager.getInstance().getPlayers().size();
+        int activePlayers = 0;
+
+        for (Player session : PlayerManager.getInstance().getPlayers()) {
+            if (session.getRoomUser().getRoom() == null) {
+                continue;
+            }
+
+            if (session.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                continue;
+            }
+
+            activePlayers++;
+        }
+
         long uptime = (DateUtil.getCurrentTimeSeconds() - Kepler.getStartupTime()) * 1000;
         long days = (uptime / (1000 * 60 * 60 * 24));
         long hours = (uptime - days * (1000 * 60 * 60 * 24)) / (1000 * 60 * 60);
@@ -36,12 +52,13 @@ public class UptimeCommand extends Command {
         StringBuilder msg = new StringBuilder();
         msg.append("SERVER\r");
         msg.append("Server uptime is " + days + " day(s), " + hours + " hour(s), " + minutes + " minute(s) and " + seconds + " second(s).\r");
-        msg.append("Currently there are " + liveConns + " connections in use.\r");
-        msg.append("Your connection ID is " + player.getNetwork().getConnectionId() + ".\r");
+        msg.append("There are " + activePlayers + " active players, and " + authenticatedPlayers + " authenticated players.\r");
         msg.append("\r");
         msg.append("SYSTEM\r");
         msg.append("CPU cores: " + runtime.availableProcessors() + "\r");
-        msg.append("JVM memory usage: " + memoryUsage + " MB");
+        msg.append("JVM memory usage: " + memoryUsage + " MB\r");
+        msg.append("Java: " + System.getProperty("java.version") + " " + System.getProperty("java.vendor") + "\r");
+        msg.append("OS: " + System.getProperty("os.name") + " " + System.getProperty("os.arch"));
         player.send(new ALERT(msg.toString()));
     }
 
