@@ -1,9 +1,13 @@
 package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.room.enums.StatusType;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.zip.ZipFile;
 
 public class PlayerManager {
     private static PlayerManager instance;
@@ -118,6 +122,33 @@ public class PlayerManager {
         return this.playerIdMap.values();
     }
 
+    /**
+     * Get the collection of active players on the server.
+     *
+     * @return the collection of active players
+     */
+    public Collection<Player> getActivePlayers() {
+        List<Player> activePlayers = new ArrayList<>();
+        for (Player player : PlayerManager.getInstance().getPlayers()) {
+            if (player.getRoomUser().getRoom() == null) {
+                continue;
+            }
+
+            if (player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                continue;
+            }
+
+            activePlayers.add(player);
+        }
+
+        return activePlayers;
+    }
+
+    /**
+     * Gets the instance
+     *
+     * @return the instance
+     */
     public static PlayerManager getInstance() {
         if (instance == null) {
             instance = new PlayerManager();

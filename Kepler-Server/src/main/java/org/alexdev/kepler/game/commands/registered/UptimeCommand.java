@@ -26,19 +26,7 @@ public class UptimeCommand extends Command {
         Player player = (Player) entity;
 
         int authenticatedPlayers = PlayerManager.getInstance().getPlayers().size();
-        int activePlayers = 0;
-
-        for (Player session : PlayerManager.getInstance().getPlayers()) {
-            if (session.getRoomUser().getRoom() == null) {
-                continue;
-            }
-
-            if (session.getRoomUser().containsStatus(StatusType.SLEEP)) {
-                continue;
-            }
-
-            activePlayers++;
-        }
+        int activePlayers = PlayerManager.getInstance().getActivePlayers().size();
 
         long uptime = (DateUtil.getCurrentTimeSeconds() - Kepler.getStartupTime()) * 1000;
         long days = (uptime / (1000 * 60 * 60 * 24));
@@ -47,7 +35,7 @@ public class UptimeCommand extends Command {
         long seconds = (uptime - days * (1000 * 60 * 60 * 24) - hours * (1000 * 60 * 60) - minutes * (1000 * 60)) / (1000);
 
         Runtime runtime = Runtime.getRuntime();
-        int memoryUsage = (int) (runtime.totalMemory() / 1024 / 1024);
+        int memoryUsage = (int) ((Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024 / 1024);
 
         StringBuilder msg = new StringBuilder();
         msg.append("SERVER\r");
