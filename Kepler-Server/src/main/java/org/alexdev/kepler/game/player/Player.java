@@ -216,8 +216,4 @@ public class Player extends Entity {
 
         this.loggedIn = false;
     }
-
-    public void sendMessage(String entry) {
-
-    }
 }
