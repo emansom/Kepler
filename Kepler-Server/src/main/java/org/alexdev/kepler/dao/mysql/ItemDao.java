@@ -235,7 +235,7 @@ public class ItemDao {
 
                 // Reset amount
                 updatedAmount = 0;
-            } catch(SQLException re) {
+            } catch (SQLException re) {
                 Storage.logError(re);
             }
 
@@ -243,7 +243,7 @@ public class ItemDao {
         } finally {
             try {
                 conn.setAutoCommit(true);
-            } catch(SQLException ce) {
+            } catch (SQLException ce) {
                 Storage.logError(ce);
             }
 
