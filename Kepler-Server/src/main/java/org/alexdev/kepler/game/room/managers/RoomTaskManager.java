@@ -2,9 +2,9 @@ package org.alexdev.kepler.game.room.managers;
 
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.tasks.ProcessEntityTask;
-import org.alexdev.kepler.game.room.tasks.ProcessRollerTask;
-import org.alexdev.kepler.game.room.tasks.ProcessStatusTask;
+import org.alexdev.kepler.game.room.tasks.EntityTask;
+import org.alexdev.kepler.game.room.tasks.RollerTask;
+import org.alexdev.kepler.game.room.tasks.StatusTask;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -25,16 +25,17 @@ public class RoomTaskManager {
      * in the room.
      */
     public void startTasks() {
+        // TODO: create scheduler service per room instance so performance of this room won't affect others
         if (this.scheduledProcessEntity == null) {
-            this.scheduledProcessEntity = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new ProcessEntityTask(room), 0, 500, TimeUnit.MILLISECONDS);
+            this.scheduledProcessEntity = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new EntityTask(room), 0, 500, TimeUnit.MILLISECONDS);
         }
 
         if (this.scheduledProcessStatus == null) {
-            this.scheduledProcessStatus = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new ProcessStatusTask(room), 0, 1, TimeUnit.SECONDS);
+            this.scheduledProcessStatus = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new StatusTask(room), 0, 1, TimeUnit.SECONDS);
         }
 
         if (this.scheduledProcessRoller == null) {
-            this.scheduledProcessRoller = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new ProcessRollerTask(room), 0, 3, TimeUnit.SECONDS);
+            this.scheduledProcessRoller = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new RollerTask(room), 0, 3, TimeUnit.SECONDS);
         }
     }
 

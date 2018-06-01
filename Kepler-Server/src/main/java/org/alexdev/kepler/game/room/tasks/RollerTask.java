@@ -13,10 +13,10 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessRollerTask implements Runnable {
+public class RollerTask implements Runnable {
     private final Room room;
 
-    public ProcessRollerTask(Room room) {
+    public RollerTask(Room room) {
         this.room = room;
     }
 
