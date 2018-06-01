@@ -26,9 +26,8 @@ public class RoomModelDao {
                         resultSet.getInt("door_x"), resultSet.getInt("door_y"), resultSet.getDouble("door_z"),
                         resultSet.getInt("door_dir"), resultSet.getString("heightmap"));
 
-                roomModels.put(roomModel.getId(), roomModel);
                 roomModel.parse();
-                //fuserights.put(resultSet.getString("fuseright"), resultSet.getInt("min_rank"));
+                roomModels.put(roomModel.getId(), roomModel);
             }
 
         } catch (Exception e) {
