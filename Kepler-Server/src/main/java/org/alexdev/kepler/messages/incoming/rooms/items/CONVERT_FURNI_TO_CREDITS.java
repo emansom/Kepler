@@ -5,6 +5,7 @@ import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -39,6 +40,13 @@ public class CONVERT_FURNI_TO_CREDITS implements MessageEvent {
 
         // Delete item and update credits amount in one atomic operation
         int currentAmount = ItemDao.redeemCreditItem(amount, itemId, player.getDetails().getId());
+
+        // Couldn't redeem item (database error)
+        if (currentAmount == -1) {
+            // TODO: find real composer for this. Maybe use error composer?
+            player.send(new ALERT("Unable to redeem furniture! Contact staff or support team."));
+            return;
+        }
 
         // Notify room of item removal and set credits of player
         room.getMapping().removeItem(item);

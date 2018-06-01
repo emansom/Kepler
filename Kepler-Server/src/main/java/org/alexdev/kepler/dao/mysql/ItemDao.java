@@ -192,7 +192,7 @@ public class ItemDao {
      * @param userID user ID
      */
     public static int redeemCreditItem(int amount, int itemID, int userID) {
-        int updatedAmount = 0;
+        int updatedAmount = -1;
         Connection conn = null;
         PreparedStatement deleteQuery = null;
         PreparedStatement updateQuery = null;
@@ -234,7 +234,7 @@ public class ItemDao {
                 conn.rollback();
 
                 // Reset amount
-                updatedAmount = 0;
+                updatedAmount = -1;
             } catch(SQLException re) {
                 Storage.logError(re);
             }
