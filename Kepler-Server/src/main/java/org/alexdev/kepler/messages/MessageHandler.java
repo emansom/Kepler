@@ -25,19 +25,16 @@ import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.trade.*;
 import org.alexdev.kepler.messages.incoming.user.*;
-import org.alexdev.kepler.messages.outgoing.trade.TRADE_END;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageHandler {
-    private ConcurrentHashMap<Integer, List<MessageEvent>> messages;
+    private ConcurrentHashMap<Integer, MessageEvent> messages;
 
     private static final Logger log = LoggerFactory.getLogger(MessageHandler.class);
     private static MessageHandler instance;
@@ -241,24 +238,12 @@ public class MessageHandler {
      * @param messageEvent the message event
      */
     private void registerEvent(int header, MessageEvent messageEvent) {
-        if (!this.messages.containsKey(header)) {
+        /*if (!this.messages.containsKey(header)) {
             this.messages.put(header, new ArrayList<>());
         }
 
-        this.messages.get(header).add(messageEvent);
-    }
-
-    /**
-     * Unegister event.
-     *
-     * @param header the header
-     */
-    private void unregisterEvent(int header) {
-        List<MessageEvent> events = this.messages.get(header);
-
-        if (events != null) {
-            this.messages.remove(header);
-        }
+        this.messages.get(header).add(messageEvent);*/
+        this.messages.put(header, messageEvent);
     }
 
     /**
@@ -269,7 +254,7 @@ public class MessageHandler {
     public void handleRequest(Player player, NettyRequest message) {
         if (ServerConfiguration.getBoolean("log.received.packets")) {
             if (this.messages.containsKey(message.getHeaderId())) {
-                MessageEvent event = this.messages.get(message.getHeaderId()).get(0);
+                MessageEvent event = this.messages.get(message.getHeaderId());
                 player.getLogger().info("Received ({}): {} / {} ", event.getClass().getSimpleName(), message.getHeaderId(), message.getMessageBody());
             } else {
                 player.getLogger().info("Received ({}): {} / {} ", "Unknown", message.getHeaderId(), message.getMessageBody());
@@ -287,9 +272,8 @@ public class MessageHandler {
      */
     private void invoke(Player player, int messageId, NettyRequest message) {
         if (this.messages.containsKey(messageId)) {
-            for (MessageEvent event : this.messages.get(messageId)) {
-                event.handle(player, message);
-            }
+            MessageEvent event = this.messages.get(messageId);
+            event.handle(player, message);
         }
 
         message.dispose();
@@ -300,7 +284,7 @@ public class MessageHandler {
      *
      * @return the messages
      */
-    private ConcurrentHashMap<Integer, List<MessageEvent>> getMessages() {
+    private ConcurrentHashMap<Integer, MessageEvent> getMessages() {
         return messages;
     }
 

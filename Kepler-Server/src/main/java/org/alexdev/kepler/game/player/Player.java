@@ -18,6 +18,7 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,8 +71,10 @@ public class Player extends Entity {
 
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
 
-        // Protect against replay attacks
-        PlayerDao.clearTicket(this.details.getId());
+        if (!ServerConfiguration.getBoolean("debug")) {
+            PlayerDao.clearTicket(this.details.getId()); // Protect against replay attacks
+        }
+
     }
 
     /**
