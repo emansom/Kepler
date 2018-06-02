@@ -24,7 +24,6 @@ public class Item {
     private int definitionId;
     private Position position;
     private String wallPosition;
-    private boolean hasExtraParameter;
     private String customData;
     private int roomId;
 
@@ -163,7 +162,7 @@ public class Item {
             response.writeDelimeter((int) this.position.getZ(), ' ');
             response.write(this.position.getRotation());
 
-            if (this.hasExtraParameter) {
+            if (this.getBehaviour().hasExtraParameter()) {
                 response.write(" 2");
             }
 
@@ -301,14 +300,6 @@ public class Item {
 
     public void setWallPosition(String wallPosition) {
         this.wallPosition = wallPosition;
-    }
-
-    public boolean hasExtraParameter() {
-        return hasExtraParameter;
-    }
-
-    public void setHasExtraParameter(boolean hasExtraParameter) {
-        this.hasExtraParameter = hasExtraParameter;
     }
 
     public String getCurrentProgram() {

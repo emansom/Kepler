@@ -36,7 +36,7 @@ public class ItemPublicParser {
                     String customData = data[6];
 
                     if (customData.equals("2")) {
-                        item.setHasExtraParameter(true);
+                        item.getBehaviour().setHasExtraParameter(true);
                     } else {
                         item.setCurrentProgram(customData);
                     }

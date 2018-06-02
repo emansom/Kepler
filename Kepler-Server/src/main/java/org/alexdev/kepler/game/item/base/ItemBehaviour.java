@@ -353,7 +353,7 @@ public class ItemBehaviour {
         isSoundMachineSampleSet = soundMachineSampleSet;
     }
 
-    public boolean isHasExtraParameter() {
+    public boolean hasExtraParameter() {
         return hasExtraParameter;
     }
 
