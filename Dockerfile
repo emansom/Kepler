@@ -45,12 +45,6 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled false && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
     crudini --set /usr/src/kepler/server.ini Console debug true && \
-    mv /usr/src/kepler/server.ini /usr/src/kepler/tmp.ini && \
-    cat /usr/src/kepler/tmp.ini | tr -d "[:blank:]" > /usr/src/kepler/server.ini && \
-    rm /usr/src/kepler/tmp.ini && \
-    mv /usr/src/kepler/game.ini /usr/src/kepler/gametmp.ini && \
-    cat /usr/src/kepler/gametmp.ini | tr -d "[:blank:]" > /usr/src/kepler/game.ini && \
-    rm /usr/src/kepler/gametmp.ini && \
     cat /usr/src/kepler/server.ini && \
     cat /usr/src/kepler/game.ini && \
     chown kepler:kepler /usr/src/kepler/server.ini && \
@@ -65,7 +59,5 @@ EXPOSE 12321
 EXPOSE 12309
 
 USER kepler
-
-#STOPSIGNAL SIGINT
 
 CMD ["java", "-jar", "Kepler-Server/build/libs/Kepler-Server-all.jar"]
