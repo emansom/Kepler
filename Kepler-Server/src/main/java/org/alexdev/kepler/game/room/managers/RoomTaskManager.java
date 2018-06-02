@@ -13,8 +13,6 @@ public class RoomTaskManager {
     private ScheduledFuture<?> scheduledProcessEntity;
     private ScheduledFuture<?> scheduledProcessStatus;
     private ScheduledFuture<?> scheduledProcessRoller;
-    private ScheduledFuture<?> scheduledProcessDice;
-    private ScheduledFuture<?> scheduledProcessFortune;
 
     public RoomTaskManager(Room room) {
         this.room = room;
@@ -37,14 +35,6 @@ public class RoomTaskManager {
         if (this.scheduledProcessRoller == null) {
             this.scheduledProcessRoller = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new RollerTask(room), 0, 3, TimeUnit.SECONDS);
         }
-
-        if (this.scheduledProcessDice == null) {
-            this.scheduledProcessDice = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new DiceTask(room), 0,2, TimeUnit.SECONDS);
-        }
-
-        if (this.scheduledProcessFortune == null) {
-            this.scheduledProcessFortune = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new FortuneTask(room), 0,4250, TimeUnit.MILLISECONDS);
-        }
     }
 
     /**
@@ -64,16 +54,6 @@ public class RoomTaskManager {
         if (this.scheduledProcessRoller != null) {
             this.scheduledProcessRoller.cancel(false);
             this.scheduledProcessRoller = null;
-        }
-
-        if (this.scheduledProcessDice != null) {
-            this.scheduledProcessDice.cancel(false);
-            this.scheduledProcessDice = null;
-        }
-
-        if (this.scheduledProcessFortune != null) {
-            this.scheduledProcessFortune.cancel(false);
-            this.scheduledProcessFortune = null;
         }
     }
 }

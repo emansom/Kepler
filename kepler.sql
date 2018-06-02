@@ -986,8 +986,8 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (348, 'rare_fan*1', '#3C75FF,0,0,0', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (349, 'rare_fan*8', '#00E5E2,0,0,0', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (350, 'rare_fan*2', '#55CD01,0,0,0', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
-(351, 'habbowheel', '', 1, 1, 1, 'wall_item'),
-(352, 'roomdimmer', '', 1, 1, 1, 'wall_item'),
+(351, 'habbowheel', '', 1, 1, 1, 'wall_item,wheel_of_fortune'),
+(352, 'roomdimmer', '', 1, 1, 1, 'wall_item,roomdimmer'),
 (353, 'jukebox*1', '', 1, 1, 1, 'solid,jukebox'),
 (354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox');
 

@@ -26,4 +26,6 @@ public enum ItemBehaviour {
     WALL_ITEM,
     POST_IT,
     DECORATION,
+    WHEEL_OF_FORTUNE,
+    ROOMDIMMER
 }
