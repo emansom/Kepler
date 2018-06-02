@@ -119,7 +119,6 @@ public class RoomEntityManager {
             Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
 
             entryPosition = linkedTeleporter.getPosition().copy();
-            entity.getRoomUser().setAuthenticateTelporterId(-1);
 
             /*GameScheduler.getInstance().getSchedulerService().schedule(new TeleporterTask(
                     linkedTeleporter,
@@ -129,10 +128,9 @@ public class RoomEntityManager {
                     linkedTeleporter,
                     entity,
                     this.room).run();
-        } else {
-            entity.getRoomUser().setPosition(entryPosition);
         }
 
+        entity.getRoomUser().setPosition(entryPosition);
         entity.getRoomUser().setAuthenticateId(-1);
 
         // From this point onwards we send packets for the user to enter

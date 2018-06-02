@@ -25,5 +25,7 @@ public class TeleporterTask implements Runnable {
 
         this.room.send(new USER_STATUSES(List.of(this.entity)));
         this.room.send(new BROADCAST_TELEPORTER(this.item, this.entity.getDetails().getName(), false));
+
+        entity.getRoomUser().setAuthenticateTelporterId(-1);
     }
 }
