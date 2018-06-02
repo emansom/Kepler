@@ -13,10 +13,10 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessEntityTask implements Runnable {
+public class EntityTask implements Runnable {
     private final Room room;
 
-    public ProcessEntityTask(Room room) {
+    public EntityTask(Room room) {
         this.room = room;
     }
 

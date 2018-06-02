@@ -61,6 +61,13 @@ public class RoomTile {
     }
 
     /**
+     * Checks if current tile touches target tile
+     */
+    public boolean touches(RoomTile targetTile) {
+        return this.position.getDistanceSquared(targetTile.getPosition()) == 1;
+    }
+
+    /**
      * Sets the entity.
      *
      * @param entity the new entity

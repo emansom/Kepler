@@ -33,6 +33,8 @@ public class Item {
 
     private Item itemBelow;
 
+    private boolean requiresUpdate;
+
     public Item() {
         this.id = 0;
         this.definition = new ItemDefinition();
@@ -41,6 +43,7 @@ public class Item {
         this.wallPosition = "";
         this.currentProgram = "";
         this.currentProgramValue = "";
+        this.requiresUpdate = false;
     }
 
     /**
@@ -350,6 +353,14 @@ public class Item {
 
     public void setItemBelow(Item itemBelow) {
         this.itemBelow = itemBelow;
+    }
+
+    public boolean getRequiresUpdate() {
+        return requiresUpdate;
+    }
+
+    public void setRequiresUpdate(boolean requiresUpdate) {
+        this.requiresUpdate = requiresUpdate;
     }
 }
 

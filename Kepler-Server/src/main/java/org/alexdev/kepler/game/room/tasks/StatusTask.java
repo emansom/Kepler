@@ -9,10 +9,10 @@ import org.alexdev.kepler.util.DateUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProcessStatusTask implements Runnable {
+public class StatusTask implements Runnable {
     private final Room room;
 
-    public ProcessStatusTask(Room room) {
+    public StatusTask(Room room) {
         this.room = room;
     }
 
