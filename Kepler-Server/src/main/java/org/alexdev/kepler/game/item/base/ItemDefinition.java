@@ -2,19 +2,21 @@ package org.alexdev.kepler.game.item.base;
 
 import org.alexdev.kepler.game.texts.TextsManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemDefinition {
     private int id;
     private String sprite;
-    private ItemBehaviour behaviour;
     private String behaviourData;
     private double topHeight;
     private double stackHeight;
     private int length;
     private int width;
     private String colour;
+    private List<ItemBehaviour> behaviourList;
 
     public ItemDefinition() {
-        this.behaviour = new ItemBehaviour();
         this.sprite = "";
         this.behaviourData = "";
         this.colour = "";
@@ -22,20 +24,21 @@ public class ItemDefinition {
         this.stackHeight = 0.01;
         this.length = 1;
         this.width = 1;
+        this.behaviourList = new ArrayList<>();
     }
 
     public ItemDefinition(int id, String sprite, String behaviourData, double topHeight, int length, int width, String colour) {
         this.id = id;
         this.sprite = sprite;
         this.behaviourData = behaviourData;
-        this.behaviour = ItemBehaviour.parse(this.behaviourData);
         this.stackHeight = topHeight;
         this.topHeight = topHeight;
         this.length = length;
         this.width = width;
         this.colour = colour;
+        this.behaviourList = parseBehaviour(this.behaviourData);
 
-        if (!this.behaviour.isCanStackOnTop()) {
+        if (!this.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
             this.stackHeight = 0;
         }
 
@@ -45,13 +48,61 @@ public class ItemDefinition {
     }
 
     /**
+     * Parse the behaviour list seperated by comma.
+     *
+     * @param behaviourData the behaviourData to parse
+     * @return the behaviour list
+     */
+    private static List<ItemBehaviour> parseBehaviour(String behaviourData) {
+        List<ItemBehaviour> behaviourList = new ArrayList<>();
+
+        for (String behaviourEnum : behaviourData.split(",")) {
+            behaviourList.add(ItemBehaviour.valueOf(behaviourEnum.toUpperCase()));
+        }
+
+        return behaviourList;
+    }
+
+    /**
+     * Get if the item has a type of behaviour.
+     *
+     * @param behaviour the behaviour to check
+     * @return true, if successful
+     */
+    private boolean hasBehaviour(ItemBehaviour behaviour) {
+        return this.behaviourList.contains(behaviour);
+    }
+
+    /**
+     * Add a behaviour to the list.
+     *
+     * @param behaviour the behaviour to add
+     */
+    public void addBehaviour(ItemBehaviour behaviour) {
+        if (this.behaviourList.contains(behaviour)) {
+            return;
+        }
+
+        this.behaviourList.add(behaviour);
+    }
+
+    /**
+     * Remove a behaviour from the list.
+     *
+     * @param behaviour the behaviour to remove
+     */
+    public void removeBehaviour(ItemBehaviour behaviour) {
+        this.behaviourList.remove(behaviour);
+    }
+
+    /**
      * Get the item name by creating an external text key and reading external text entries.
      *
      * @param specialSpriteId the special sprite id
      * @return the name
      */
     public String getName(int specialSpriteId) {
-        if (this.behaviour.isDecoration()) {
+        if (this.hasBehaviour(ItemBehaviour.DECORATION)) {
             return this.sprite;
         }
 
@@ -74,7 +125,7 @@ public class ItemDefinition {
      * @return the description
      */
     public String getDescription(int specialSpriteId) {
-        if (this.behaviour.isDecoration()) {
+        if (this.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
             return this.sprite;
         }
 
@@ -118,7 +169,7 @@ public class ItemDefinition {
         String key = "";
 
         if (specialSpriteId == 0) {
-            if (this.behaviour.isWallItem()) {
+            if (this.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 key = "wallitem";
             } else {
                 key = "furni";
@@ -168,9 +219,6 @@ public class ItemDefinition {
         this.topHeight = topHeight;
     }
 
-    public ItemBehaviour getBehaviour() {
-        return behaviour;
-    }
     public String getBehaviourData() {
         return behaviourData;
     }

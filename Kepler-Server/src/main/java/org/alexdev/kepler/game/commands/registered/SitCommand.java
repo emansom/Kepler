@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
@@ -40,11 +41,11 @@ public class SitCommand extends Command {
         Item item = tile.getHighestItem();
 
         if (item != null) {
-            if (item.getBehaviour().isCanSitOnTop() || item.getBehaviour().isCanLayOnTop()) {
+            if (item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
                 return; // Don't process :sit command on furniture that the user is already on.
             }
 
-            if (!item.getBehaviour().isRoller()) {
+            if (!item.hasBehaviour(ItemBehaviour.ROLLER)) {
                 height += item.getDefinition().getTopHeight();
             }
         }

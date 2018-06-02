@@ -43,13 +43,26 @@ dependencies {
     compile "com.goterl.lazycode:lazysodium-java:2.2.0"
 }
 
-// Create fat jar with librarys inside of it.
+// Create fat jar with libraries inside of it.
 task fatJar(type: Jar) {
     manifest {
         attributes 'Main-Class': mainClassName
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+// Create fat jar with no libraries inside of it.
+task slimJar(type: Jar) {
+    manifest {
+        attributes (
+                'Main-Class': mainClassName,
+                "Class-Path": '. dependency-jars/' + configurations.compile.collect {
+                    it.getName()
+                }.join(' dependency-jars/')
+        )
+    }
     with jar
 }
 

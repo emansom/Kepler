@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages.outgoing.catalogue;
 import org.alexdev.kepler.game.catalogue.CatalogueItem;
 import org.alexdev.kepler.game.catalogue.CataloguePackage;
 import org.alexdev.kepler.game.catalogue.CataloguePage;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
@@ -70,7 +71,7 @@ public class CATALOGUE_PAGE extends MessageComposer {
                     response.writeDelimeter(cataloguePackage.getDefinition().getColour(), (char) 9);
                 }
 
-            } else if (!item.getDefinition().getBehaviour().isWallItem()) {
+            } else if (!item.getDefinition().hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 response.writeDelimeter(item.getDefinition().getColour(), (char) 9);
             }
 

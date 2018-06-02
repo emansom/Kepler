@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
@@ -41,7 +42,7 @@ public class THROW_DICE implements MessageEvent {
         Item item = room.getItemManager().getById(itemId);
 
         // Check if item exists and if it is a dice
-        if (item == null || !item.getBehaviour().isDice()) {
+        if (item == null || !item.hasBehaviour(ItemBehaviour.DICE)) {
             return;
         }
 

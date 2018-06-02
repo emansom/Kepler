@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.room.mapping;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -50,7 +51,7 @@ public class RoomMapping {
         items.sort(Comparator.comparingDouble((Item item) -> item.getPosition().getZ()));
 
         for (Item item : items) {
-            if (item.getBehaviour().isWallItem()) {
+            if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 continue;
             }
 
@@ -62,7 +63,7 @@ public class RoomMapping {
 
             tile.getItems().add(item);
 
-            if (tile.getTileHeight() < item.getTotalHeight() || item.getBehaviour().isPublicSpaceObject()) {
+            if (tile.getTileHeight() < item.getTotalHeight() || item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 item.setItemBelow(tile.getHighestItem());
                 tile.setTileHeight(item.getTotalHeight());
                 tile.setHighestItem(item);
@@ -80,7 +81,7 @@ public class RoomMapping {
                     affectedTile.setHighestItem(item);
                 }
 
-                if (item.getBehaviour().isPublicSpaceObject()) {
+                if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                     PoolHandler.setupRedirections(this.room, item);
                 }
             }
@@ -97,7 +98,7 @@ public class RoomMapping {
         item.setOwnerId(this.room.getData().getOwnerId());
         this.room.getItems().add(item);
 
-        if (item.getBehaviour().isWallItem()) {
+        if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.room.send(new PLACE_WALLITEM(item));
         } else {
             this.handleItemAdjustment(item, false);
@@ -120,7 +121,7 @@ public class RoomMapping {
     public void moveItem(Item item, boolean isRotation, Position oldPosition) {
         item.setRoomId(this.room.getId());
 
-        if (!item.getBehaviour().isWallItem()) {
+        if (!item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.handleItemAdjustment(item, isRotation);
             this.regenerateCollisionMap();
 
@@ -139,7 +140,7 @@ public class RoomMapping {
     public void removeItem(Item item) {
         this.room.getItems().remove(item);
 
-        if (item.getBehaviour().isWallItem()) {
+        if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.room.send(new REMOVE_WALLITEM(item));
         } else {
             this.regenerateCollisionMap();

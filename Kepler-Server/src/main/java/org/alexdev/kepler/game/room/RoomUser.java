@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.room;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -187,7 +188,7 @@ public class RoomUser {
             item = tile.getHighestItem();
         }
 
-        if (item == null || (!item.getBehaviour().isCanSitOnTop() || !item.getBehaviour().isCanLayOnTop())) {
+        if (item == null || (!item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || !item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP))) {
             if (this.containsStatus(StatusType.SIT) || this.containsStatus(StatusType.LAY)) {
                 this.removeStatus(StatusType.SIT);
                 this.removeStatus(StatusType.LAY);
@@ -196,14 +197,14 @@ public class RoomUser {
         }
 
         if (item != null) {
-            if (item.getBehaviour().isCanSitOnTop()) {
+            if (item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
                 this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
                 this.setStatus(StatusType.SIT, StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
             }
 
-            if (item.getBehaviour().isCanLayOnTop()) {
+            if (item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
                 this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
                 this.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
@@ -531,7 +532,7 @@ public class RoomUser {
      * @return true, if successful
      */
     public boolean isSittingOnGround() {
-        if (this.currentItem == null || !this.currentItem.getBehaviour().isCanSitOnTop()) {
+        if (this.currentItem == null || !this.currentItem.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
             return this.containsStatus(StatusType.SIT);
         }
 
@@ -545,7 +546,7 @@ public class RoomUser {
      */
     public boolean isSittingOnChair() {
         if (this.currentItem != null) {
-            return this.currentItem.getBehaviour().isCanSitOnTop();
+            return this.currentItem.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
         }
 
         return false;
