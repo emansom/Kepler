@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.room.tasks;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -26,7 +27,7 @@ public class RollerTask implements Runnable {
         List<Object> blacklist = new ArrayList<>();
 
         for (Item roller : this.room.getItems()) {
-            if (!roller.getBehaviour().isRoller()) {
+            if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
                 continue;
             }
 
@@ -96,8 +97,8 @@ public class RollerTask implements Runnable {
         double nextHeight = frontTile.getTileHeight();
 
         if (frontTile.getHighestItem() != null) {
-            if (!frontTile.getHighestItem().getBehaviour().isRoller()) {
-                if (item.getBehaviour().isCanStackOnTop() && item.getDefinition().getStackHeight() == frontTile.getHighestItem().getDefinition().getStackHeight()) {
+            if (!frontTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
+                if (item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && item.getDefinition().getStackHeight() == frontTile.getHighestItem().getDefinition().getStackHeight()) {
                     nextHeight -= item.getDefinition().getStackHeight();
                 }
             }
@@ -105,7 +106,7 @@ public class RollerTask implements Runnable {
 
         // If this item is stacked, we maintain its stack height
         if (item.getItemBelow() != null) {
-            if (!item.getItemBelow().getBehaviour().isRoller()) {
+            if (!item.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
                 nextHeight = item.getPosition().getZ();
 
                 // If the next tile/front tile is not a roller, we need to adjust the sliding so the stacked items
@@ -113,7 +114,7 @@ public class RollerTask implements Runnable {
                 boolean subtractRollerHeight = false;
 
                 if (frontTile.getHighestItem() != null) {
-                    if (!frontTile.getHighestItem().getBehaviour().isRoller()) {
+                    if (!frontTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
                         subtractRollerHeight = true;
                     }
                 } else {

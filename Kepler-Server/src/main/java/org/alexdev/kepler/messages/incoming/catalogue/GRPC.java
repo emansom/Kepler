@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.catalogue.CataloguePackage;
 import org.alexdev.kepler.game.catalogue.CataloguePage;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.catalogue.NO_CREDITS;
@@ -64,7 +65,7 @@ public class GRPC implements MessageEvent {
         String customData = "";
 
         if (extraData != null) {
-            if (def.getBehaviour().isDecoration()) {
+            if (def.hasBehaviour(ItemBehaviour.DECORATION)) {
                 customData = extraData;
             } else {
                 if (specialSpriteId > 0) {
@@ -72,11 +73,11 @@ public class GRPC implements MessageEvent {
                 }
             }
 
-            if (def.getBehaviour().isPostIt()) {
+            if (def.hasBehaviour(ItemBehaviour.POST_IT)) {
                 customData = "20";
             }
 
-            if (def.getBehaviour().isPrizeTrophy()) {
+            if (def.hasBehaviour(ItemBehaviour.PRIZE_TROPHY)) {
                 customData += player.getDetails().getName();
                 customData += (char)9;
 

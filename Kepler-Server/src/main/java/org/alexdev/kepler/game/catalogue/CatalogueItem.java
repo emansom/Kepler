@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.catalogue;
 
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.texts.TextsManager;
@@ -56,7 +57,7 @@ public class CatalogueItem {
         if (this.isPackage) {
             return "d";
         } else {
-            if (this.definition.getBehaviour().isWallItem()) {
+            if (this.definition.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 return "i";
             } else {
                 return "s";
@@ -73,7 +74,7 @@ public class CatalogueItem {
     }
 
     public String getSize() {
-        if (this.isPackage || this.definition.getBehaviour().isWallItem()) {
+        if (this.isPackage || this.definition.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             return "";
         } else {
             return "0";
@@ -81,7 +82,7 @@ public class CatalogueItem {
     }
 
     public String getDimensions() {
-        if (this.isPackage || this.definition.getBehaviour().isWallItem()) {
+        if (this.isPackage || this.definition.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             return "";
         } else {
             return this.definition.getLength() + "," + this.definition.getWidth();

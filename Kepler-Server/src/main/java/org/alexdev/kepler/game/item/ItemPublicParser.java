@@ -1,5 +1,7 @@
 package org.alexdev.kepler.game.item;
 
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class ItemPublicParser {
 
                 Item item = new Item();
                 item.setId(id++);
-                item.getBehaviour().setPublicSpaceObject(true);
+                item.getDefinition().addBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT);
                 item.getDefinition().setSprite(data[1]);
 
                 item.setCustomData(data[0]);
@@ -36,7 +38,7 @@ public class ItemPublicParser {
                     String customData = data[6];
 
                     if (customData.equals("2")) {
-                        item.setHasExtraParameter(true);
+                        item.getDefinition().addBehaviour(ItemBehaviour.EXTRA_PARAMETER);
                     } else {
                         item.setCurrentProgram(customData);
                     }
@@ -53,12 +55,12 @@ public class ItemPublicParser {
                         || item.getDefinition().getSprite().equals("k")
                         || item.getDefinition().getSprite().equals("shift1")
                         || item.getDefinition().getSprite().equals("stone")) {
-                    item.getBehaviour().setCanSitOnTop(true);
-                    item.getBehaviour().setCanStandOnTop(false);
+                    item.getDefinition().addBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
+                    item.getDefinition().removeBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
                     item.getDefinition().setTopHeight(1.0);
                 } else {
-                    item.getBehaviour().setCanSitOnTop(false);
-                    item.getBehaviour().setCanStandOnTop(false);
+                    item.getDefinition().removeBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
+                    item.getDefinition().removeBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
                 }
 
                 if (item.getDefinition().getSprite().equals("poolEnter")
@@ -66,12 +68,14 @@ public class ItemPublicParser {
                     || item.getDefinition().getSprite().equals("poolLift")
                     || item.getDefinition().getSprite().equals("poolBooth")
                     || item.getDefinition().getSprite().equals("queue_tile2")) {
-                    item.getBehaviour().setCanSitOnTop(false);
-                    item.getBehaviour().setCanStandOnTop(true);
+                    //item.getBehaviour().setCanSitOnTop(false);
+                    //item.getBehaviour().setCanStandOnTop(true);
+                    item.getDefinition().removeBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
+                    item.getDefinition().addBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
                 }
 
                 if (item.getDefinition().getSprite().equals("queue_tile2")) {
-                    item.getBehaviour().setPublicSpaceObject(false);
+                    item.getDefinition().removeBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT);
                 }
 
                 if (item.getDefinition().getSprite().equals("poolLift") ||

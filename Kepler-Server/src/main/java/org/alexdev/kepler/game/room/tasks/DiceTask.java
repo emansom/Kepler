@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.items.DICE_VALUE;
 import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
@@ -12,9 +13,10 @@ public class DiceTask implements Runnable {
         this.room = room;
     }
 
+    @Override
     public void run() {
         for (Item item : this.room.getItems()) {
-            if (!item.getBehaviour().isDice()) {
+            if (!item.hasBehaviour(ItemBehaviour.DICE)) {
                 continue;
             }
 

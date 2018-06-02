@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -31,10 +32,10 @@ public class PLACESTUFF implements MessageEvent {
             return;
         }
 
-        if (item.getBehaviour().isWallItem()) {
+        if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             String wallPosition = content.substring(data[0].length() + 1);
 
-            if (item.getBehaviour().isPostIt()) {
+            if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
                 String defaultColour = "FFFF33";
 
                 Item sticky = new Item();

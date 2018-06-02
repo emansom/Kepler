@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.inventory;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.inventory.INVENTORY;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -113,7 +114,7 @@ public class Inventory {
         response.writeDelimeter(item.getId(), (char) 30);
         response.writeDelimeter(stripSlotId, (char) 30);
 
-        if (item.getBehaviour().isWallItem()) {
+        if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             response.writeDelimeter("I", (char) 30);
         } else {
             response.writeDelimeter("S", (char) 30);
@@ -122,7 +123,7 @@ public class Inventory {
         response.writeDelimeter(item.getId(), (char) 30);
         response.writeDelimeter(item.getDefinition().getSprite(), (char) 30);
 
-        if (item.getBehaviour().isWallItem()) {
+        if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             response.writeDelimeter(item.getCustomData(), (char) 30);
             response.writeDelimeter("0", (char) 30);
         } else {

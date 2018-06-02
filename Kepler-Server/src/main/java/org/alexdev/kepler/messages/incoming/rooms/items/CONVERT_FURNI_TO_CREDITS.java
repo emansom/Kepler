@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages.incoming.rooms.items;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
@@ -31,7 +32,7 @@ public class CONVERT_FURNI_TO_CREDITS implements MessageEvent {
 
         Item item = room.getItemManager().getById(itemId);
 
-        if (item == null || !item.getBehaviour().isRedeemable()) {
+        if (item == null || !item.hasBehaviour(ItemBehaviour.REDEEMABLE)) {
             return;
         }
 

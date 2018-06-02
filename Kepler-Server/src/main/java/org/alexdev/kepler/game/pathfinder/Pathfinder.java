@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.room.Room;
@@ -129,7 +130,7 @@ public class Pathfinder {
                 if (isFinalMove) {
                     return toItem.isWalkable();
                 } else {
-                    return toItem.getBehaviour().isCanStandOnTop();
+                    return toItem.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
                 }
             }
         }

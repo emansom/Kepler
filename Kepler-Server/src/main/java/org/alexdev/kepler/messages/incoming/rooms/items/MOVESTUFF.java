@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -31,7 +32,7 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
-        if (item.getBehaviour().isWallItem()) {
+        if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             return;
         }
 

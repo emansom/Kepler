@@ -20,18 +20,15 @@ import java.util.List;
 public class Item {
     private int id;
     private int ownerId;
+    private int roomId;
     private ItemDefinition definition;
-    private int definitionId;
+    private Item itemBelow;
+
     private Position position;
     private String wallPosition;
-    private boolean hasExtraParameter;
     private String customData;
-    private int roomId;
-
     private String currentProgram;
     private String currentProgramValue;
-
-    private Item itemBelow;
 
     private boolean requiresUpdate;
 
@@ -71,7 +68,7 @@ public class Item {
      * @param oldPosition the old position of the item
      */
     public void updateEntities(Position oldPosition) {
-        if (this.definition.getBehaviour().isWallItem()) {
+        if (this.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             return;
         }
 
@@ -119,19 +116,19 @@ public class Item {
      * @return true, if successful.
      */
     public boolean isWalkable() {
-        if (this.definition.getBehaviour().isCanSitOnTop()) {
+        if (this.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
             return true;
         }
 
-        if (this.definition.getBehaviour().isCanLayOnTop()) {
+        if (this.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
             return true;
         }
 
-        if (this.definition.getBehaviour().isCanStandOnTop()) {
+        if (this.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP)) {
             return true;
         }
 
-        if (this.definition.getBehaviour().isDoor()) {
+        if (this.hasBehaviour(ItemBehaviour.DOOR)) {
             return this.customData.equals("O");
         }
 
@@ -155,7 +152,7 @@ public class Item {
      * @param response the response to serialise to
      */
     public void serialise(NettyResponse response) {
-        if (this.definition.getBehaviour().isPublicSpaceObject()) {
+        if (this.definition.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
             response.writeDelimeter(this.customData, ' ');
             response.writeString(this.definition.getSprite());
             response.writeDelimeter(this.position.getX(), ' ');
@@ -163,20 +160,20 @@ public class Item {
             response.writeDelimeter((int) this.position.getZ(), ' ');
             response.write(this.position.getRotation());
 
-            if (this.hasExtraParameter) {
+            if (this.hasBehaviour(ItemBehaviour.EXTRA_PARAMETER)) {
                 response.write(" 2");
             }
 
             response.write(Character.toString((char) 13));
         } else {
-            if (this.definition.getBehaviour().isWallItem()) {
+            if (this.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 response.writeDelimeter(this.id, (char) 9);
                 response.writeDelimeter(this.definition.getSprite(), (char) 9);
                 response.writeDelimeter(" ", (char) 9);
                 response.writeDelimeter(this.wallPosition, (char) 9);
 
                 if (this.customData.length() > 0) {
-                    if (this.definition.getBehaviour().isPostIt()) {
+                    if (this.hasBehaviour(ItemBehaviour.POST_IT)) {
                         response.write(this.customData.substring(0, 6)); // Only show post-it colour
                     } else {
                         response.write(this.customData);
@@ -195,7 +192,7 @@ public class Item {
                 response.writeString(StringUtil.format(this.position.getZ()));
                 response.writeString(this.definition.getColour());
                 response.writeString("");
-                response.writeInt(this.getBehaviour().isRoller() ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
+                response.writeInt(this.hasBehaviour(ItemBehaviour.ROLLER) ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
                 response.writeString(this.customData);
             }
         }
@@ -229,8 +226,8 @@ public class Item {
                     continue;
                 }
 
-                if (tileItem.getBehaviour().isRoller()) {
-                    if (this.definition.getBehaviour().isRoller()) {
+                if (tileItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    if (this.hasBehaviour(ItemBehaviour.ROLLER)) {
                         return false; // Can't place rollers on top of rollers
                     }
 
@@ -259,6 +256,16 @@ public class Item {
         return null;
     }
 
+    /**
+     * Get if the item has a type of behaviour.
+     *
+     * @param behaviour the behaviour to check
+     * @return true, if successful
+     */
+    public boolean hasBehaviour(ItemBehaviour behaviour) {
+        return this.hasBehaviour(behaviour);
+    }
+
     public int getId() {
         return id;
     }
@@ -279,10 +286,6 @@ public class Item {
         return this.definition;
     }
 
-    public ItemBehaviour getBehaviour() {
-        return this.definition.getBehaviour();
-    }
-
     public void setDefinitionId(int definitionId) {
         this.definition = ItemManager.getInstance().getDefinition(definitionId);
     }
@@ -301,14 +304,6 @@ public class Item {
 
     public void setWallPosition(String wallPosition) {
         this.wallPosition = wallPosition;
-    }
-
-    public boolean hasExtraParameter() {
-        return hasExtraParameter;
-    }
-
-    public void setHasExtraParameter(boolean hasExtraParameter) {
-        this.hasExtraParameter = hasExtraParameter;
     }
 
     public String getCurrentProgram() {

@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -37,7 +38,7 @@ public class RoomItemManager {
         List<Item> items = new ArrayList<>();
 
         for (Item item : this.room.getItems()) {
-            if (!item.getBehaviour().isPublicSpaceObject()) {
+            if (!item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 continue;
             }
 
@@ -51,11 +52,11 @@ public class RoomItemManager {
         List<Item> items = new ArrayList<>();
 
         for (Item item : this.room.getItems()) {
-            if (item.getBehaviour().isPublicSpaceObject()) {
+            if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 continue;
             }
 
-            if (item.getBehaviour().isWallItem()) {
+            if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 continue;
             }
 
@@ -69,11 +70,11 @@ public class RoomItemManager {
         List<Item> items = new ArrayList<>();
 
         for (Item item : this.room.getItems()) {
-            if (item.getBehaviour().isPublicSpaceObject()) {
+            if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 continue;
             }
 
-            if (!item.getBehaviour().isWallItem()) {
+            if (!item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 continue;
             }
 

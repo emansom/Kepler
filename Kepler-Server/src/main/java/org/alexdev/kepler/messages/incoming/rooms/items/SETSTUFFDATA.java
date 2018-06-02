@@ -2,6 +2,8 @@ package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -30,31 +32,31 @@ public class SETSTUFFDATA implements MessageEvent {
             return;
         }
 
-        if (item.getDefinition().getBehaviour().isRequiresRightsForInteraction() &&
+        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) &&
                 !room.hasRights(player.getEntityId())) {
             return;
         }
 
         String newData = null;
 
-        if (item.getDefinition().getBehaviour().isDoor()) {
+        if (item.getDefinition().hasBehaviour(ItemBehaviour.DOOR)) {
             if (itemData.equals("O") || itemData.equals("C")) {
                 newData = itemData;
             }
         } else {
-            if (item.getDefinition().getBehaviour().isCustomDataTrueFalse() && (itemData.equals("TRUE") || itemData.equals("FALSE"))) {
+            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE) && (itemData.equals("TRUE") || itemData.equals("FALSE"))) {
                 newData = itemData;
             }
 
-            if (item.getDefinition().getBehaviour().isCustomDataNumericOnOff() && (itemData.equals("2") || itemData.equals("1"))) {
+            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_ON_OFF) && (itemData.equals("2") || itemData.equals("1"))) {
                 newData = itemData;
             }
 
-            if (item.getDefinition().getBehaviour().isCustomDataOnOff() && (itemData.equals("ON") || itemData.equals("OFF"))) {
+            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_ON_OFF) && (itemData.equals("ON") || itemData.equals("OFF"))) {
                 newData = itemData;
             }
 
-            if (item.getDefinition().getBehaviour().isCustomDataNumericState()) {
+            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_STATE)) {
                 if (!itemData.equals("x")) {
                     int stateId = Integer.parseInt(itemData);
 
@@ -72,7 +74,7 @@ public class SETSTUFFDATA implements MessageEvent {
         item.setCustomData(newData);
         item.updateStatus();
 
-        if (!item.getDefinition().getBehaviour().isCustomDataTrueFalse()) {
+        if (!item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE)) {
             ItemDao.updateItem(item);
         }
     }
