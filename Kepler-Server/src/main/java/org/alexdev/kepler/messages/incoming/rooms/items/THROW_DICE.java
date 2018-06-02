@@ -60,6 +60,8 @@ public class THROW_DICE implements MessageEvent {
             return;
         }
 
+        // TODO: change rotation of user towards dice
+
         int randomNumber = ThreadLocalRandom.current().nextInt(1, 7); // between 1 and 6
 
         room.send(new DICE_VALUE(itemId, true, 0));
