@@ -84,6 +84,6 @@ public class GiveDrinkCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "Gives a user your own drink.";
+        return "Gives a user your own drink";
     }
 }

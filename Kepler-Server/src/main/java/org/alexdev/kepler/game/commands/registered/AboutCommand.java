@@ -25,6 +25,6 @@ public class AboutCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "Information about the software powering this retro.";
+        return "Information about the software powering this retro";
     }
 }
