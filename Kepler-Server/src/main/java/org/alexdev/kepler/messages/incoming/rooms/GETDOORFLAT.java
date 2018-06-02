@@ -49,7 +49,7 @@ public class GETDOORFLAT implements MessageEvent {
             player.send(new TELEPORTER_INIT(item.getTeleporterId(), linkedTeleporter.getRoomId()));
         } else {
             GameScheduler.getInstance().getSchedulerService().schedule(new TeleporterTask(
-                    item,
+                    room.getItemManager().getById(item.getTeleporterId()),
                     player,
                     room),1000, TimeUnit.MILLISECONDS);
         }
