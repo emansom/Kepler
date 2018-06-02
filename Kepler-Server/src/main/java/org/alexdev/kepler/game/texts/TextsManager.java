@@ -5,10 +5,7 @@ import org.alexdev.kepler.util.StringUtil;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.SubnodeConfiguration;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -31,7 +28,7 @@ public class TextsManager {
         try {
             INIConfiguration ini = new INIConfiguration();
 
-            BufferedReader reader = Files.newBufferedReader(Paths.get("data", "external_texts.txt"), StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(Paths.get("data", "external_texts.txt").toFile()), "utf-8"));
             ini.read(reader);
 
             for (String sectionName : ini.getSections()) {
