@@ -6,14 +6,13 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.rooms.items.DICE_VALUE;
+import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
 
-import java.util.concurrent.ThreadLocalRandom;
 
-
-public class THROW_DICE implements MessageEvent {
+public class DICE_OFF implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         RoomUser roomUser = player.getRoomUser();
@@ -50,13 +49,10 @@ public class THROW_DICE implements MessageEvent {
             return;
         }
 
-        int randomNumber = ThreadLocalRandom.current().nextInt(1, 7); // between 1 and 6
+        room.send(new DICE_VALUE(itemId, false, 0));
+        room.send(new UPDATE_ITEM(item));
 
-        room.send(new DICE_VALUE(itemId, true, 0));
-
-        item.setCustomData(Integer.toString(randomNumber));
-        item.setRequiresUpdate(true);
-
+        item.setCustomData("0");
         ItemDao.updateItem(item);
     }
 }
