@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.room.Room;
 
 public class FortuneTask implements Runnable {
@@ -12,7 +13,7 @@ public class FortuneTask implements Runnable {
 
     public void run() {
         for (Item item : this.room.getItems()) {
-            if (!item.getDefinition().getSprite().equals("habbowheel")) {
+            if (!item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
                 continue;
             }
 

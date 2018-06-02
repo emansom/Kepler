@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
@@ -37,7 +38,7 @@ public class SPIN_WHEEL_OF_FORTUNE implements MessageEvent {
         Item item = room.getItemManager().getById(itemId);
 
         // Check if item exists and if it is a wheel of fortune
-        if (item == null || !item.getDefinition().getSprite().equals("habbowheel")) {
+        if (item == null || !item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
             return;
         }
 
