@@ -164,6 +164,7 @@ public class MessageHandler {
         registerEvent(183, new CONVERT_FURNI_TO_CREDITS());
         registerEvent(76, new THROW_DICE());
         registerEvent(77, new DICE_OFF());
+        registerEvent(247, new SPIN_WHEEL_OF_FORTUNE());
     }
 
     /**

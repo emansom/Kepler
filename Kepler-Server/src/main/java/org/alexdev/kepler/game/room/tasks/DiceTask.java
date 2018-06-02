@@ -28,20 +28,15 @@ public class DiceTask implements Runnable {
      * @param dice the dice being used
      */
     private void processDice(Item dice) {
-        if (dice == null) {
-            return;
-        }
-
         if (!dice.getRequiresUpdate()) {
             return;
         }
 
         int randomNumber = Integer.parseInt(dice.getCustomData());
 
-        // TODO: figure out the *38 logic (comes from Woodpecker)
         this.room.send(new DICE_VALUE(dice.getId(), false, randomNumber));
-        this.room.send(new UPDATE_ITEM(dice));
 
+        dice.updateStatus();
         dice.setRequiresUpdate(false);
     }
 }

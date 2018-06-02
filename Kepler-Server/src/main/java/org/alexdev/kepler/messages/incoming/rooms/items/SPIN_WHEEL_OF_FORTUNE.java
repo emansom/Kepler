@@ -13,7 +13,7 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.concurrent.ThreadLocalRandom;
 
 
-public class THROW_DICE implements MessageEvent {
+public class SPIN_WHEEL_OF_FORTUNE implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         RoomUser roomUser = player.getRoomUser();
@@ -23,15 +23,11 @@ public class THROW_DICE implements MessageEvent {
             return;
         }
 
-        String contents = reader.contents();
-
-        // Check if input is numeric
-        if (!StringUtil.isNumber(contents)) {
+        if (!room.hasRights(player.getEntityId())) {
             return;
         }
 
-        // Parse numeric content
-        int itemId = Integer.parseInt(contents);
+        int itemId = reader.readInt();
 
         if (itemId < 0) {
             return;
@@ -40,24 +36,22 @@ public class THROW_DICE implements MessageEvent {
         // Get item by ID
         Item item = room.getItemManager().getById(itemId);
 
-        // Check if item exists and if it is a dice
-        if (item == null || !item.getBehaviour().isDice()) {
+        // Check if item exists and if it is a wheel of fortune
+        if (item == null || !item.getDefinition().getSprite().equals("habbowheel")) {
             return;
         }
 
-        // Return if dice is already being rolled
+        // Spin already being executed, return
         if (item.getRequiresUpdate()) {
             return;
         }
 
-        // Check if user is next to dice
-        if (!roomUser.getTile().touches(item.getTile())) {
-            return;
-        }
+        // Send spinning animation to room
+        item.setCustomData("-1");
+        item.updateStatus();
 
-        int randomNumber = ThreadLocalRandom.current().nextInt(1, 7); // between 1 and 6
-
-        room.send(new DICE_VALUE(itemId, true, 0));
+        // Set random number that gets picked up by the FortuneTask
+        int randomNumber = ThreadLocalRandom.current().nextInt(1, 11); // between 1 and 10
 
         item.setCustomData(Integer.toString(randomNumber));
         item.setRequiresUpdate(true);
