@@ -69,7 +69,7 @@ public class ItemDefinition {
      * @param behaviour the behaviour to check
      * @return true, if successful
      */
-    private boolean hasBehaviour(ItemBehaviour behaviour) {
+    public boolean hasBehaviour(ItemBehaviour behaviour) {
         return this.behaviourList.contains(behaviour);
     }
 

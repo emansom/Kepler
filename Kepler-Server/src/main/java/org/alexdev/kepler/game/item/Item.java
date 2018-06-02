@@ -166,14 +166,14 @@ public class Item {
 
             response.write(Character.toString((char) 13));
         } else {
-            if (this.definition.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
+            if (this.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 response.writeDelimeter(this.id, (char) 9);
                 response.writeDelimeter(this.definition.getSprite(), (char) 9);
                 response.writeDelimeter(" ", (char) 9);
                 response.writeDelimeter(this.wallPosition, (char) 9);
 
                 if (this.customData.length() > 0) {
-                    if (this.definition.hasBehaviour(ItemBehaviour.POST_IT)) {
+                    if (this.hasBehaviour(ItemBehaviour.POST_IT)) {
                         response.write(this.customData.substring(0, 6)); // Only show post-it colour
                     } else {
                         response.write(this.customData);
@@ -192,7 +192,7 @@ public class Item {
                 response.writeString(StringUtil.format(this.position.getZ()));
                 response.writeString(this.definition.getColour());
                 response.writeString("");
-                response.writeInt(this.definition.hasBehaviour(ItemBehaviour.ROLLER) ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
+                response.writeInt(this.hasBehaviour(ItemBehaviour.ROLLER) ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
                 response.writeString(this.customData);
             }
         }
@@ -227,7 +227,7 @@ public class Item {
                 }
 
                 if (tileItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                    if (this.definition.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    if (this.hasBehaviour(ItemBehaviour.ROLLER)) {
                         return false; // Can't place rollers on top of rollers
                     }
 
@@ -263,7 +263,7 @@ public class Item {
      * @return true, if successful
      */
     public boolean hasBehaviour(ItemBehaviour behaviour) {
-        return this.definition.hasBehaviour(behaviour);
+        return this.hasBehaviour(behaviour);
     }
 
     public int getId() {
