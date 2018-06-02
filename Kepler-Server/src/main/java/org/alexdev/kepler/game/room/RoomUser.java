@@ -88,6 +88,8 @@ public class RoomUser {
         this.instanceId = -1;
         this.authenticateId = -1;
 
+        this.authenticateTelporterId = -1;
+
         this.resetRoomTimer();
 
         if (this.entity.getType() == EntityType.PLAYER) {
