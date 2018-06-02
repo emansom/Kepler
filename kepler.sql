@@ -488,7 +488,9 @@ INSERT INTO `catalogue_items` (`sale_code`, `page_id`, `order_id`, `price`, `def
 ('rare_fan*8', 40, 0, 5, 349, 0, NULL, NULL, 0),
 ('rare_fan*9', 40, 0, 5, 343, 0, NULL, NULL, 0),
 ('habbowheel_fan', 19, 0, 8, 351, 0, NULL, NULL, 0),
-('roomdimmer', 19, 0, 12, 352, 0, NULL, NULL, 0);
+('roomdimmer', 19, 0, 12, 352, 0, NULL, NULL, 0),
+('jukebox', 11, 0, 3, 353, 0, NULL, NULL, 0),
+('jukebox_ptv', 11, 0, 8, 354, 0, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -985,7 +987,9 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (349, 'rare_fan*8', '#00E5E2,0,0,0', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (350, 'rare_fan*2', '#55CD01,0,0,0', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (351, 'habbowheel', '', 1, 1, 1, 'wall_item'),
-(352, 'roomdimmer', '', 1, 1, 1, 'wall_item');
+(352, 'roomdimmer', '', 1, 1, 1, 'wall_item'),
+(353, 'jukebox*1', '', 1, 1, 1, 'solid,jukebox'),
+(354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox');
 
 -- --------------------------------------------------------
 
@@ -1457,7 +1461,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=353;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=355;
 --
 -- AUTO_INCREMENT for table `messenger_messages`
 --
