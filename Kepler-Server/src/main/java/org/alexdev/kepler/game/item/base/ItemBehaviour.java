@@ -22,6 +22,7 @@ public enum ItemBehaviour {
     REDEEMABLE,
     SOUND_MACHINE,
     SOUND_MACHINE_SAMPLE_SET,
+    JUKEBOX,
     WALL_ITEM,
     POST_IT,
     DECORATION,
