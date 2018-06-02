@@ -263,7 +263,7 @@ public class Item {
      * @return true, if successful
      */
     public boolean hasBehaviour(ItemBehaviour behaviour) {
-        return this.hasBehaviour(behaviour);
+        return this.definition.hasBehaviour(behaviour);
     }
 
     public int getId() {
