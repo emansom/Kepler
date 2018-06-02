@@ -1,13 +1,11 @@
 package org.alexdev.kepler.game.texts;
 
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.util.StringUtil;
 import org.apache.commons.configuration2.INIConfiguration;
 import org.apache.commons.configuration2.SubnodeConfiguration;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -29,33 +27,35 @@ public class TextsManager {
     private void readExternalTexts() {
         try {
             INIConfiguration ini = new INIConfiguration();
-            BufferedReader reader = reader = Files.newBufferedReader(
+
+            BufferedReader reader = Files.newBufferedReader(
                     Paths.get("data", "external_texts.txt"),
                     StandardCharsets.ISO_8859_1);
 
             ini.read(reader);
 
-            Set<String> sectionNames = ini.getSections();
-
-            for (String sectionName : sectionNames) {
+            for (String sectionName : ini.getSections()) {
                 SubnodeConfiguration section = ini.getSection(sectionName);
 
-                if (section != null) {
-                    Iterator<String> keys = section.getKeys();
+                if (section == null) {
+                    continue;
+                }
 
-                    while (keys.hasNext()) {
-                        String key = keys.next();
-                        String value = section.getString(key);
+                Iterator<String> keys = section.getKeys();
 
-                        if (value != null) {
-                            key = key.replace("..", "."); // TODO: find a better way than this hack
-                            this.textsMap.put(key, value);
-                        }
+                while (keys.hasNext()) {
+                    String key = keys.next();
+                    String value = section.getString(key);
+
+                    if (value != null) {
+                        key = key.replace("..", "."); // TODO: find a better way than this hack
+                        this.textsMap.put(key, value);
                     }
+
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("Error occurred when reading external_texts.txt: ", ex);
         }
     }
 
