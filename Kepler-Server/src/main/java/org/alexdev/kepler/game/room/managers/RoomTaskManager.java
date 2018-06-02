@@ -2,10 +2,7 @@ package org.alexdev.kepler.game.room.managers;
 
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.tasks.DiceTask;
-import org.alexdev.kepler.game.room.tasks.EntityTask;
-import org.alexdev.kepler.game.room.tasks.RollerTask;
-import org.alexdev.kepler.game.room.tasks.StatusTask;
+import org.alexdev.kepler.game.room.tasks.*;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -17,6 +14,7 @@ public class RoomTaskManager {
     private ScheduledFuture<?> scheduledProcessStatus;
     private ScheduledFuture<?> scheduledProcessRoller;
     private ScheduledFuture<?> scheduledProcessDice;
+    private ScheduledFuture<?> scheduledProcessFortune;
 
     public RoomTaskManager(Room room) {
         this.room = room;
@@ -43,6 +41,10 @@ public class RoomTaskManager {
         if (this.scheduledProcessDice == null) {
             this.scheduledProcessDice = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new DiceTask(room), 0,2, TimeUnit.SECONDS);
         }
+
+        if (this.scheduledProcessFortune == null) {
+            this.scheduledProcessFortune = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new FortuneTask(room), 0,4250, TimeUnit.MILLISECONDS);
+        }
     }
 
     /**
@@ -67,6 +69,11 @@ public class RoomTaskManager {
         if (this.scheduledProcessDice != null) {
             this.scheduledProcessDice.cancel(false);
             this.scheduledProcessDice = null;
+        }
+
+        if (this.scheduledProcessFortune != null) {
+            this.scheduledProcessFortune.cancel(false);
+            this.scheduledProcessFortune = null;
         }
     }
 }
