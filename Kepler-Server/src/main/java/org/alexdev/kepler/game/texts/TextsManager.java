@@ -28,7 +28,10 @@ public class TextsManager {
         try {
             INIConfiguration ini = new INIConfiguration();
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(Paths.get("data", "external_texts.txt").toFile()), "utf-8"));
+            BufferedReader reader = Files.newBufferedReader(
+                    Paths.get("data", "external_texts.txt"),
+                    StandardCharsets.ISO_8859_1);
+
             ini.read(reader);
 
             for (String sectionName : ini.getSections()) {
