@@ -3,22 +3,27 @@ package org.alexdev.kepler.game.room.managers;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.RoomRightsDao;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.game.room.tasks.TeleporterTask;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
+import org.alexdev.kepler.messages.outgoing.rooms.items.BROADCAST_TELEPORTER;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
@@ -95,6 +100,10 @@ public class RoomEntityManager {
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
+        if (this.getPlayers().size() == 1) {
+            this.initialiseRoom();
+        }
+
         entity.getRoomUser().resetRoomTimer();
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
@@ -105,6 +114,23 @@ public class RoomEntityManager {
             entryPosition = destination.copy();
         }
 
+        if (entity.getRoomUser().getAuthenticateTelporterId() != -1) {
+            Item teleporter = ItemDao.getItem(entity.getRoomUser().getAuthenticateTelporterId());
+            Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
+
+            entryPosition = linkedTeleporter.getPosition().copy();
+            entity.getRoomUser().setAuthenticateTelporterId(-1);
+
+            /*GameScheduler.getInstance().getSchedulerService().schedule(new TeleporterTask(
+                    linkedTeleporter,
+                    entity,
+                    this.room),1500, TimeUnit.MILLISECONDS);*/
+            new TeleporterTask(
+                    linkedTeleporter,
+                    entity,
+                    this.room).run();
+        }
+
         entity.getRoomUser().setPosition(entryPosition);
         entity.getRoomUser().setAuthenticateId(-1);
 
@@ -113,9 +139,6 @@ public class RoomEntityManager {
             return;
         }
 
-        if (this.room.getData().getVisitorsNow() == 1) {
-            this.initialiseRoom();
-        }
 
         Player player = (Player) entity;
 

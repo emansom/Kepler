@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.catalogue;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.dao.mysql.TeleporterDao;
 import org.alexdev.kepler.game.catalogue.CatalogueItem;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.catalogue.CataloguePackage;
@@ -95,5 +96,21 @@ public class GRPC implements MessageEvent {
 
         ItemDao.newItem(item);
         player.getInventory().getItems().add(item);
+
+        if (def.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            Item linkedTeleporterItem = new Item();
+            linkedTeleporterItem.setOwnerId(player.getDetails().getId());
+            linkedTeleporterItem.setDefinitionId(def.getId());
+            linkedTeleporterItem.setCustomData(customData);
+
+            linkedTeleporterItem.setTeleporterId(item.getId());
+            item.setTeleporterId(linkedTeleporterItem.getId());
+
+            ItemDao.newItem(linkedTeleporterItem);
+            player.getInventory().getItems().add(linkedTeleporterItem);
+
+            TeleporterDao.addPair(linkedTeleporterItem.getId(), item.getId());
+            TeleporterDao.addPair(item.getId(), linkedTeleporterItem.getId());
+        }
     }
 }

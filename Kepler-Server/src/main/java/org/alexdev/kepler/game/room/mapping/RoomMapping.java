@@ -44,6 +44,10 @@ public class RoomMapping {
         }
 
         for (Entity entity : this.room.getEntities()) {
+            if (entity.getRoomUser().getPosition() == null) {
+                continue;
+            }
+
             this.getTile(entity.getRoomUser().getPosition()).addEntity(entity);
         }
 

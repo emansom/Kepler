@@ -127,6 +127,41 @@ public class ItemDao {
     }
 
     /**
+     * Get the item by item id
+     *
+     * @param itemId the id of the item to to get
+     * @return the item
+     */
+    public static Item getItem(int itemId) {
+        Item item = null;
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM items WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, itemId);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                item = new Item();
+                fill(item, resultSet);
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return item;
+    }
+
+    /**
      * Get the room list of items.
      *
      * @param roomId the id of the user to get the inventory for
@@ -313,15 +348,9 @@ public class ItemDao {
      * @throws SQLException an exception if an error happened
      */
     private static void fill(Item item, ResultSet resultSet) throws SQLException {
-        item.setId(resultSet.getInt("id"));
-        item.setOwnerId(resultSet.getInt("user_id"));
-        item.setRoomId(resultSet.getInt("room_id"));
-        item.setDefinitionId(resultSet.getInt("definition_id"));
-        item.getPosition().setX(resultSet.getInt("x"));
-        item.getPosition().setY(resultSet.getInt("y"));
-        item.getPosition().setZ(resultSet.getDouble("z"));
-        item.getPosition().setRotation(resultSet.getInt("rotation"));
-        item.setWallPosition(resultSet.getString("wall_position"));
-        item.setCustomData(resultSet.getString("custom_data"));
+        item.fill(resultSet.getInt("id"), resultSet.getInt("user_id"), resultSet.getInt("room_id"),
+                resultSet.getInt("definition_id"), resultSet.getInt("x"), resultSet.getInt("y"),
+                resultSet.getDouble("z"), resultSet.getInt("rotation"), resultSet.getString("wall_position"),
+                resultSet.getString("custom_data"));
     }
 }

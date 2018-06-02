@@ -74,7 +74,12 @@ public class PLACESTUFF implements MessageEvent {
             if (room.getMapping().getTile(x, y) != null) {
                 item.getPosition().setX(x);
                 item.getPosition().setY(y);
-                item.getPosition().setRotation(0);
+
+                if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+                    item.getPosition().setRotation(2); // Teleporter is only limited to rotation 2 or 4.
+                } else {
+                    item.getPosition().setRotation(0);
+                }
             }
         }
 

@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.item;
 
+import org.alexdev.kepler.dao.mysql.TeleporterDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
@@ -21,6 +22,8 @@ public class Item {
     private int id;
     private int ownerId;
     private int roomId;
+    private int teleporterId;
+
     private ItemDefinition definition;
     private Item itemBelow;
 
@@ -41,6 +44,33 @@ public class Item {
         this.currentProgram = "";
         this.currentProgramValue = "";
         this.requiresUpdate = false;
+    }
+
+    /*
+    id
+            item.setOwnerId(resultSet.getInt("user_id"));
+        item.setRoomId(resultSet.getInt("room_id"));
+        item.setDefinitionId(resultSet.getInt("definition_id"));
+        item.getPosition().setX(resultSet.getInt("x"));
+        item.getPosition().setY(resultSet.getInt("y"));
+        item.getPosition().setZ(resultSet.getDouble("z"));
+        item.getPosition().setRotation(resultSet.getInt("rotation"));
+        item.setWallPosition(resultSet.getString("wall_position"));
+        item.setCustomData(resultSet.getString("custom_data"));
+     */
+
+    public void fill(int id, int ownerId, int roomId, int definitionId, int X, int Y, double Z, int rotation, String wallPosition, String customData) {
+        this.id = id;
+        this.ownerId = ownerId;
+        this.roomId = roomId;
+        this.setDefinitionId(definitionId);
+        this.position = new Position(X, Y, Z, rotation, rotation);
+        this.wallPosition = wallPosition;
+        this.customData = customData;
+
+        if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            this.teleporterId = TeleporterDao.getTeleporterId(this.id);
+        }
     }
 
     /**
@@ -126,6 +156,10 @@ public class Item {
 
         if (this.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP)) {
             return true;
+        }
+
+        if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            return this.customData.contains("TRUE");
         }
 
         if (this.hasBehaviour(ItemBehaviour.DOOR)) {
@@ -280,6 +314,14 @@ public class Item {
 
     public void setOwnerId(int ownerId) {
         this.ownerId = ownerId;
+    }
+
+    public int getTeleporterId() {
+        return teleporterId;
+    }
+
+    public void setTeleporterId(int teleporterId) {
+        this.teleporterId = teleporterId;
     }
 
     public ItemDefinition getDefinition() {

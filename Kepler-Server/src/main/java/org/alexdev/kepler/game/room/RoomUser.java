@@ -41,6 +41,7 @@ public class RoomUser {
 
     private int instanceId;
     private int authenticateId;
+    private int authenticateTelporterId;
 
     private Map<String, RoomUserStatus> statuses;
     private LinkedList<Position> path;
@@ -65,6 +66,7 @@ public class RoomUser {
         this.tradeItems = new ArrayList<>();
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
+        this.authenticateTelporterId = -1;
         this.reset();
     }
 
@@ -695,4 +697,13 @@ public class RoomUser {
     public List<Item> getTradeItems() {
         return tradeItems;
     }
+
+    public int getAuthenticateTelporterId() {
+        return authenticateTelporterId;
+    }
+
+    public void setAuthenticateTelporterId(int authenticateTelporterId) {
+        this.authenticateTelporterId = authenticateTelporterId;
+    }
+
 }

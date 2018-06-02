@@ -165,6 +165,10 @@ public class MessageHandler {
         registerEvent(76, new THROW_DICE());
         registerEvent(77, new DICE_OFF());
         registerEvent(247, new SPIN_WHEEL_OF_FORTUNE());
+        registerEvent(81, new INTODOOR());
+        registerEvent(28, new GETDOORFLAT());
+        registerEvent(82, new DOORGOIN());
+        registerEvent(54, new GOVIADOOR());
     }
 
     /**
