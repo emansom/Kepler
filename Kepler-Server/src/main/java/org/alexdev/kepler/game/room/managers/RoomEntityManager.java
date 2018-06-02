@@ -129,9 +129,10 @@ public class RoomEntityManager {
                     linkedTeleporter,
                     entity,
                     this.room).run();
+        } else {
+            entity.getRoomUser().setPosition(entryPosition);
         }
 
-        entity.getRoomUser().setPosition(entryPosition);
         entity.getRoomUser().setAuthenticateId(-1);
 
         // From this point onwards we send packets for the user to enter
