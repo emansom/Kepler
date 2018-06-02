@@ -103,11 +103,11 @@ public class GRPC implements MessageEvent {
             linkedTeleporterItem.setDefinitionId(def.getId());
             linkedTeleporterItem.setCustomData(customData);
 
-            linkedTeleporterItem.setTeleporterId(item.getId());
-            item.setTeleporterId(linkedTeleporterItem.getId());
-
             ItemDao.newItem(linkedTeleporterItem);
             player.getInventory().getItems().add(linkedTeleporterItem);
+            
+            linkedTeleporterItem.setTeleporterId(item.getId());
+            item.setTeleporterId(linkedTeleporterItem.getId());
 
             TeleporterDao.addPair(linkedTeleporterItem.getId(), item.getId());
             TeleporterDao.addPair(item.getId(), linkedTeleporterItem.getId());
