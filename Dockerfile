@@ -66,6 +66,6 @@ EXPOSE 12309
 
 USER kepler
 
-STOPSIGNAL SIGINT
+#STOPSIGNAL SIGINT
 
 CMD ["java", "-jar", "Kepler-Server/build/libs/Kepler-Server-all.jar"]
