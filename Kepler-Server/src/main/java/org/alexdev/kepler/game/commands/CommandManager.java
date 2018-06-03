@@ -23,8 +23,10 @@ public class CommandManager {
         this.commands.put(new String[] { "about", "info" }, new AboutCommand());
         this.commands.put(new String[] { "help", "commands" }, new HelpCommand());
         this.commands.put(new String[] { "givedrink"}, new GiveDrinkCommand());
-        this.commands.put(new String[] { "sit"}, new SitCommand());
+        this.commands.put(new String[] { "sit" }, new SitCommand());
         this.commands.put(new String[] { "uptime", "status" }, new UptimeCommand());
+        this.commands.put(new String[] { "reloadcatalog", "refreshcatalog" }, new RefreshCatalogueCommand());
+        this.commands.put(new String[] { "poof" }, new PoofCommand());
 
         log.info("Loaded {} commands", commands.size());
     }

@@ -116,4 +116,12 @@ public class CatalogueManager {
 
         return instance;
     }
+
+    /**
+     * Resets the catalogue manger singleton.
+     */
+    public static void reset() {
+        instance = null;
+        CatalogueManager.getInstance();
+    }
 }
