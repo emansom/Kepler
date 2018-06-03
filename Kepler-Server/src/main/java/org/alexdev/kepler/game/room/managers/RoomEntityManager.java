@@ -176,8 +176,9 @@ public class RoomEntityManager {
             }
         } else {
             this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getId()));
-            this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
         }
+
+        this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
 
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();
