@@ -5,6 +5,7 @@ import org.alexdev.kepler.dao.Storage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class TeleporterDao {
         return teleporterId;
     }
 
-    public static void addPair(int itemId, int linkedId) {
+    public static void addPair(int itemId, int linkedId) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -49,6 +50,7 @@ public class TeleporterDao {
             preparedStatement.execute();
         } catch (Exception e) {
             Storage.logError(e);
+            throw e;
         } finally {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);

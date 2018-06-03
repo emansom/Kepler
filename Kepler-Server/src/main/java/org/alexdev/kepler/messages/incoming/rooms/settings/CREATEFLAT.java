@@ -10,10 +10,11 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.lang.management.PlatformLoggingMXBean;
+import java.sql.SQLException;
 
 public class CREATEFLAT implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         String[] data = reader.contents().split("/");
 
         String floorSetting = data[1];
