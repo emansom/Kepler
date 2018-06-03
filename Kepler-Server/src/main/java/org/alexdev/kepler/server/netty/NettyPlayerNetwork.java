@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class NettyPlayerNetwork {
     private Channel channel;
     private int connectionId;
-    private final Queue<MessageComposer> messageQueue = new ConcurrentLinkedQueue<>();
 
     public NettyPlayerNetwork(Channel channel, int connectionId) {
         this.channel = channel;
@@ -21,18 +20,14 @@ public class NettyPlayerNetwork {
     }
 
     public void send(MessageComposer response) {
-        channel.writeAndFlush(response);
+        channel.writeAndFlush(response).syncUninterruptibly();
     }
 
     public void enqueue(MessageComposer response) {
-        messageQueue.add(response);
+        channel.write(response);
     }
 
     public void flush() {
-        while (!messageQueue.isEmpty()) {
-            channel.write(messageQueue.remove());
-        }
-
         channel.flush();
     }
 
