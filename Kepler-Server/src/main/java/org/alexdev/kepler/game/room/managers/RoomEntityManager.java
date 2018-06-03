@@ -110,6 +110,13 @@ public class RoomEntityManager {
             entryPosition = destination.copy();
         }
 
+        entity.getRoomUser().setPosition(entryPosition);
+        entity.getRoomUser().setAuthenticateId(-1);
+
+        if (!this.room.isActive()) {
+            this.initialiseRoom();
+        }
+
         if (entity.getRoomUser().getAuthenticateTelporterId() != -1) {
             Item teleporter = ItemDao.getItem(entity.getRoomUser().getAuthenticateTelporterId());
 
@@ -123,17 +130,12 @@ public class RoomEntityManager {
                             linkedTeleporter,
                             entity,
                             this.room).run();
+
+                    entity.getRoomUser().setPosition(entryPosition);
                 }
             }
-        }
 
-        entity.getRoomUser().setPosition(entryPosition);
-
-        entity.getRoomUser().setAuthenticateId(-1);
-        entity.getRoomUser().setAuthenticateTelporterId(-1);
-
-        if (!this.room.isActive()) {
-            this.initialiseRoom();
+            entity.getRoomUser().setAuthenticateTelporterId(-1);
         }
 
         // From this point onwards we send packets for the user to enter
