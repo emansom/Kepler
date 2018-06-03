@@ -76,7 +76,7 @@ public class PLACESTUFF implements MessageEvent {
                 item.getPosition().setY(y);
 
                 if (item.hasBehaviour(ItemBehaviour.DICE)) {
-                    item.setCustomData("0");
+                    item.setCustomData("1");
                 }
 
                 if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
