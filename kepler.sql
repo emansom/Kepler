@@ -491,7 +491,8 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (452, 'habbowheel_fan', 19, 0, 8, 351, 0, NULL, NULL, 0),
 (453, 'roomdimmer', 19, 0, 12, 352, 0, NULL, NULL, 0),
 (454, 'jukebox', 11, 0, 3, 353, 0, NULL, NULL, 0),
-(455, 'jukebox_ptv', 11, 0, 8, 354, 0, NULL, NULL, 0);
+(455, 'jukebox_ptv', 11, 0, 8, 354, 0, NULL, NULL, 0),
+(456, 'carpet_soft_tut', 23, 0, 1, 355, 0, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -990,7 +991,8 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (351, 'habbowheel', '', 1, 1, 1, 'wall_item,wheel_of_fortune'),
 (352, 'roomdimmer', '', 1, 1, 1, 'wall_item,roomdimmer'),
 (353, 'jukebox*1', '', 1, 1, 1, 'solid,jukebox'),
-(354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox');
+(354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox'),
+(355, 'carpet_soft_tut', '', 1, 1, 0, 'can_stand_on_top,can_stack_on_top');
 
 -- --------------------------------------------------------
 
@@ -1368,6 +1370,13 @@ CREATE TABLE `users` (
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `username`, `password`, `figure`, `pool_figure`, `sex`, `motto`, `credits`, `tickets`, `film`, `rank`, `console_motto`, `last_online`, `sso_ticket`, `club_subscribed`, `club_expiration`, `badge`, `badge_active`, `allow_stalking`) VALUES
+(1, 'Alex', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61', 'ch=s02/53,51,44', 'M', 'de kepler whey', 99360, 26, 0, 7, 'lol amirite?', 1528036187, '123', 1526277229, 1626277229, '', 0, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -1480,7 +1489,7 @@ ALTER TABLE `users_badges`
 -- AUTO_INCREMENT for table `catalogue_items`
 --
 ALTER TABLE `catalogue_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=456;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
 --
 -- AUTO_INCREMENT for table `items`
 --
@@ -1490,7 +1499,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=355;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=356;
 --
 -- AUTO_INCREMENT for table `messenger_messages`
 --
@@ -1515,7 +1524,7 @@ ALTER TABLE `rooms_models`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- Constraints for dumped tables
 --
