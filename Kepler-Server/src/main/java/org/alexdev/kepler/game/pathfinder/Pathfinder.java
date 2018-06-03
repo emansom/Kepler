@@ -130,7 +130,7 @@ public class Pathfinder {
                 if (isFinalMove) {
                     return toItem.isWalkable();
                 } else {
-                    return toItem.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP) || toItem.hasBehaviour(ItemBehaviour.DOOR);
+                    return toItem.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP) || (toItem.hasBehaviour(ItemBehaviour.DOOR) && toItem.getCustomData().equals("O"));
                 }
             }
         }
