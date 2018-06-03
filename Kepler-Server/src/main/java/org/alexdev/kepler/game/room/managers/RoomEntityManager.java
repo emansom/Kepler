@@ -119,7 +119,6 @@ public class RoomEntityManager {
             Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
 
             entryPosition = linkedTeleporter.getPosition().copy();
-            entity.getRoomUser().setAuthenticateTelporterId(-1);
 
             /*GameScheduler.getInstance().getSchedulerService().schedule(new TeleporterTask(
                     linkedTeleporter,

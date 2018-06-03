@@ -32,6 +32,7 @@ public class DELETEFLAT implements MessageEvent {
             return;
         }
 
+        // TODO: ItemDao.deleteItems
         for (Item item : room.getItems()) {
             ItemDao.deleteItem(item.getId());
         }
