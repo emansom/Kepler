@@ -28,6 +28,8 @@ public class Room {
     private RoomItemManager roomItemManager;
     private RoomTaskManager roomTaskManager;
 
+    private boolean isActive;
+
     private List<Entity> entities;
     private List<Item> items;
     private List<Integer> rights;
@@ -147,6 +149,7 @@ public class Room {
             return false;
         }
 
+        this.isActive = false;
         this.roomTaskManager.stopTasks();
         this.roomEntityManager.getInstanceIdCounter().set(0);
 
@@ -262,5 +265,23 @@ public class Room {
      */
     public int getId() {
         return this.roomData.getId();
+    }
+
+    /**
+     * Get if the room is active (has players in it).
+     *
+     * @return true, if successful
+     */
+    public boolean isActive() {
+        return isActive;
+    }
+
+    /**
+     * Set if the room is active, if it's the first player who joined, etc.
+     *
+     * @param active the active flag
+     */
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

@@ -100,10 +100,6 @@ public class RoomEntityManager {
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
-        if (this.getPlayers().size() == 1) {
-            this.initialiseRoom();
-        }
-
         entity.getRoomUser().resetRoomTimer();
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
@@ -136,6 +132,10 @@ public class RoomEntityManager {
         entity.getRoomUser().setAuthenticateId(-1);
         entity.getRoomUser().setAuthenticateTelporterId(-1);
 
+        if (!this.room.isActive()) {
+            this.initialiseRoom();
+        }
+
         // From this point onwards we send packets for the user to enter
         if (entity.getType() != EntityType.PLAYER) {
             return;
@@ -161,6 +161,12 @@ public class RoomEntityManager {
      * Setup the room initially for room entry.
      */
     private void initialiseRoom() {
+        if (this.room.isActive()) {
+            return;
+        }
+
+        this.room.setActive(true);
+
         if (this.room.isPublicRoom()) {
             for (var item : this.room.getModel().getPublicItems()) {
                 item.setRoomId(this.room.getId());
