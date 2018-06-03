@@ -13,6 +13,7 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
+import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
@@ -75,6 +76,23 @@ public class Player extends Entity {
             PlayerDao.clearTicket(this.details.getId()); // Protect against replay attacks
         }
 
+    }
+
+    /**
+     * Refreshes user appearance
+     */
+    public void refreshAppearance() {
+        var newDetails = PlayerDao.getDetails(this.details.getId());
+
+        this.details.setFigure(newDetails.getFigure());
+        this.details.setSex(newDetails.getSex());
+        this.details.setMotto(newDetails.getMotto());
+
+        var room = this.getRoom();
+
+        if (room != null) {
+            room.send(new FIGURE_CHANGE(this.roomUser.getInstanceId(), this.details));
+        }
     }
 
     /**
