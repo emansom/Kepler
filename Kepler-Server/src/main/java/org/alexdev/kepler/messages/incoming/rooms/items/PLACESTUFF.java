@@ -76,7 +76,18 @@ public class PLACESTUFF implements MessageEvent {
                 item.getPosition().setY(y);
 
                 if (item.hasBehaviour(ItemBehaviour.DICE)) {
-                    item.setCustomData("1");
+                    // For some reason the client expects the HC dice to have a default of 1 while the normal dice a default of 0 (off)
+
+                    // Client expects default of 1 for HC dices
+                    if (item.getDefinition().getSprite().equals("hcdice")) {
+                        item.setCustomData("1");
+                    } else if (item.getDefinition().getSprite().equals("edice")) {
+                        // Client expects default of 0 (off) for 'normal'/'oldskool' dices
+                        item.setCustomData("0");
+                    } else {
+                        // Handle custom furniture dices (TODO: define behaviour differences between HC dice and 'oldskool' dices)
+                        item.setCustomData("1");
+                    }
                 }
 
                 if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {

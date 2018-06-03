@@ -60,16 +60,19 @@ public class THROW_DICE implements MessageEvent {
             return;
         }
 
-        // TODO: change rotation of user towards dice
+        // We reset the room timer here too as in casinos you might be in the same place for a while
+        // And you don't want to get kicked while you're still actively rolling dices for people :)
+        player.getRoomUser().resetRoomTimer();
 
-        int randomNumber = ThreadLocalRandom.current().nextInt(1, 7); // between 1 and 6
+        // TODO: change rotation of user towards dice
 
         room.send(new DICE_VALUE(itemId, true, 0));
 
-        item.setCustomData(Integer.toString(randomNumber));
-        item.setRequiresUpdate(true);
+        // Send spinning animation to room
+        item.setCustomData("-1");
+        item.updateStatus();
 
-        ItemDao.updateItem(item);
+        item.setRequiresUpdate(true);
 
         GameScheduler.getInstance().getSchedulerService().schedule(new DiceTask(item), 2, TimeUnit.SECONDS);
     }
