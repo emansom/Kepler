@@ -1368,15 +1368,6 @@ CREATE TABLE `users` (
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `figure`, `pool_figure`, `sex`, `motto`, `credits`, `tickets`, `film`, `rank`, `console_motto`, `last_online`, `sso_ticket`, `club_subscribed`, `club_expiration`, `badge`, `badge_active`, `allow_stalking`) VALUES
-(1, 'Alex', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61', 'ch=s02/53,51,44', 'M', 'de kepler whey', 99360, 26, 0, 7, 'lol amirite?', 1528036187, '123', 1526277229, 1626277229, '', 0, 1),
-(2, 'Daniel', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', 'ch=s02/53,51,44', 'M', 'de kepler whey', 99851, 20, 0, 1, 'I\'m a new user!', 1528035248, 'kepler', 1526277229, 1626277229, '', 0, 1),
-(3, 'John', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hr-170-34.hd-180-1.ch-260-63.lg-270-64.sh-300-91', 'ch=s02/182,243,255', 'M', 'de kepler whey', 99887, 19, 0, 2, 'I\'m a new user!', 1527682052, 'kek', 1526277229, 1626277229, '', 0, 1);
-
 -- --------------------------------------------------------
 
 --
@@ -1524,7 +1515,7 @@ ALTER TABLE `rooms_models`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
 --
 -- Constraints for dumped tables
 --
