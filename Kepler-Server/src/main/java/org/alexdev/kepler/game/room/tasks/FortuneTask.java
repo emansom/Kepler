@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.tasks;
 
+import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
 
 public class FortuneTask implements Runnable {
@@ -16,5 +17,7 @@ public class FortuneTask implements Runnable {
 
         fortune.updateStatus();
         fortune.setRequiresUpdate(false);
+
+        ItemDao.updateItem(fortune);
     }
 }
