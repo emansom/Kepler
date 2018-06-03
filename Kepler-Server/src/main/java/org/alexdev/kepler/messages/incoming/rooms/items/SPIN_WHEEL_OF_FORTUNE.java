@@ -52,13 +52,7 @@ public class SPIN_WHEEL_OF_FORTUNE implements MessageEvent {
         item.setCustomData("-1");
         item.updateStatus();
 
-        // Set random number that gets picked up by the FortuneTask
-        int randomNumber = ThreadLocalRandom.current().nextInt(1, 11); // between 1 and 10
-
-        item.setCustomData(Integer.toString(randomNumber));
         item.setRequiresUpdate(true);
-
-        ItemDao.updateItem(item);
 
         GameScheduler.getInstance().getSchedulerService().schedule(new FortuneTask(item), 4250, TimeUnit.MILLISECONDS);
     }
