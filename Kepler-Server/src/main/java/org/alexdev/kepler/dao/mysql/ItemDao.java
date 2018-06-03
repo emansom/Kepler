@@ -57,7 +57,7 @@ public class ItemDao {
      *
      * @param item the item to create
      */
-    public static void newItem(Item item) {
+    public static void newItem(Item item) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
         ResultSet row = null;
@@ -81,6 +81,7 @@ public class ItemDao {
 
         } catch (SQLException e) {
             Storage.logError(e);
+            throw e;
         } finally {
             Storage.closeSilently(row);
             Storage.closeSilently(preparedStatement);

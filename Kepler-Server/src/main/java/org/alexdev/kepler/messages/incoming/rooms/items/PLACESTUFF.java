@@ -9,9 +9,11 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
 
+import java.sql.SQLException;
+
 public class PLACESTUFF implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         Room room = player.getRoomUser().getRoom();
 
         if (room == null) {
