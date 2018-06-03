@@ -18,9 +18,11 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 
+import java.sql.SQLException;
+
 public class GRPC implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         String content = reader.contents();
         String[] data = content.split(Character.toString((char) 13));
 
@@ -62,7 +64,7 @@ public class GRPC implements MessageEvent {
         player.getInventory().getView("last");
     }
 
-    private void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) {
+    private void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) throws SQLException {
         String customData = "";
 
         if (extraData != null) {

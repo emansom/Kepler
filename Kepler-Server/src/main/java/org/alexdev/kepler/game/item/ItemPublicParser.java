@@ -15,7 +15,7 @@ public class ItemPublicParser {
             return items;
         }
 
-        int id = 0;
+        int id = Integer.MAX_VALUE;
 
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
@@ -24,7 +24,7 @@ public class ItemPublicParser {
                 String[] data = line.split(" ");
 
                 Item item = new Item();
-                item.setId(id++);
+                item.setId(id--);
                 item.getDefinition().addBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT);
                 item.getDefinition().setSprite(data[1]);
 

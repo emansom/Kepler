@@ -47,7 +47,7 @@ public class RoomRightsDao {
         return users;
     }
 
-    public static void addRights(int userId, int roomId) {
+    public static void addRights(int userId, int roomId) throws SQLException {
         List<Integer> users = new ArrayList<>();
 
         Connection sqlConnection = null;
@@ -61,6 +61,7 @@ public class RoomRightsDao {
             preparedStatement.execute();
         } catch (Exception e) {
             Storage.logError(e);
+            throw e;
         } finally {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);

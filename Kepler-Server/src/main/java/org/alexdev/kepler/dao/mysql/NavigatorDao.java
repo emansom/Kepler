@@ -93,7 +93,7 @@ public class NavigatorDao {
         return rooms;
     }
 
-    public static int createRoom(int ownerId, String roomName, String roomModel, boolean roomShowName, int accessType) {
+    public static int createRoom(int ownerId, String roomName, String roomModel, boolean roomShowName, int accessType) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -119,6 +119,7 @@ public class NavigatorDao {
 
         } catch (SQLException e) {
             Storage.logError(e);
+            throw e;
         } finally {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);

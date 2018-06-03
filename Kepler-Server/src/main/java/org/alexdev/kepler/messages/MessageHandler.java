@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.incoming.inventory.GETSTRIP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
@@ -280,7 +281,11 @@ public class MessageHandler {
     private void invoke(Player player, int messageId, NettyRequest message) {
         if (this.messages.containsKey(messageId)) {
             MessageEvent event = this.messages.get(messageId);
-            event.handle(player, message);
+            try {
+                event.handle(player, message);
+            } catch (Exception ex) {
+                Log.getErrorLogger().error("Error occurred when handling (" + message.getHeaderId() + "):", ex);
+            }
         }
 
         message.dispose();
