@@ -116,28 +116,30 @@ public class RoomEntityManager {
 
         if (entity.getRoomUser().getAuthenticateTelporterId() != -1) {
             Item teleporter = ItemDao.getItem(entity.getRoomUser().getAuthenticateTelporterId());
-            Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
 
-            entryPosition = linkedTeleporter.getPosition().copy();
+            if (teleporter != null) {
+                Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
 
-            /*GameScheduler.getInstance().getSchedulerService().schedule(new TeleporterTask(
-                    linkedTeleporter,
-                    entity,
-                    this.room),1500, TimeUnit.MILLISECONDS);*/
-            new TeleporterTask(
-                    linkedTeleporter,
-                    entity,
-                    this.room).run();
+                if (linkedTeleporter != null) {
+                    entryPosition = linkedTeleporter.getPosition().copy();
+
+                    new TeleporterTask(
+                            linkedTeleporter,
+                            entity,
+                            this.room).run();
+                }
+            }
         }
 
         entity.getRoomUser().setPosition(entryPosition);
+
         entity.getRoomUser().setAuthenticateId(-1);
+        entity.getRoomUser().setAuthenticateTelporterId(-1);
 
         // From this point onwards we send packets for the user to enter
         if (entity.getType() != EntityType.PLAYER) {
             return;
         }
-
 
         Player player = (Player) entity;
 
