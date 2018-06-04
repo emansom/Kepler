@@ -261,9 +261,9 @@ public class Item {
                 }
 
                 // Can't place items on solid objects
-                //if (tileItem.hasBehaviour(ItemBehaviour.SOLID)) {
-                //    return false;
-                //}
+                if (tileItem.hasBehaviour(ItemBehaviour.SOLID)) {
+                    return false;
+                }
 
                 if (tileItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                     if (this.hasBehaviour(ItemBehaviour.ROLLER)) {
