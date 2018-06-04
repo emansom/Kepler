@@ -118,7 +118,7 @@ public class CatalogueManager {
     }
 
     /**
-     * Resets the catalogue manger singleton.
+     * Resets the catalogue manager singleton.
      */
     public static void reset() {
         instance = null;
