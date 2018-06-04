@@ -261,7 +261,7 @@ public class Item {
                 }
 
                 // Can't place items on solid objects
-                if (tileItem.hasBehaviour(ItemBehaviour.SOLID)) {
+                if (tileItem.hasBehaviour(ItemBehaviour.SOLID) && !tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
                     return false;
                 }
 
