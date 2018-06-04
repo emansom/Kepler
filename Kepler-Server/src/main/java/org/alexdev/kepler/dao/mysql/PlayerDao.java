@@ -349,6 +349,70 @@ public class PlayerDao {
         }
     }
 
+    /**
+     * Add new badge to user
+     *
+     * @param userId
+     * @param badge
+     */
+    public static void addBadge(int userId, String badge) {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+
+        try {
+            conn = Storage.getStorage().getConnection();
+            stmt = Storage.getStorage().prepare("INSERT INTO users_badges (user_id, badge) VALUES (?, ?)", conn);
+            stmt.setInt(1, userId);
+            stmt.setString(2, badge);
+            stmt.execute();
+        } catch (SQLException e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(stmt);
+            Storage.closeSilently(conn);
+        }
+    }
+
+    /**
+     * Get all rank badges
+     *
+     * @return list of badges
+     */
+    public static List<String> getAllRankBadges() {
+        List<String> badges = new ArrayList<>();
+
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet row = null;
+
+        // TODO: merge two queries somehow
+        try {
+            conn = Storage.getStorage().getConnection();
+
+            stmt = Storage.getStorage().prepare("SELECT badge FROM rank_badges", conn);
+            row = stmt.executeQuery();
+
+            while (row.next()) {
+                badges.add(row.getString("badge"));
+            }
+
+        } catch (Exception err) {
+            Storage.logError(err);
+        } finally {
+            Storage.closeSilently(row);
+            Storage.closeSilently(stmt);
+            Storage.closeSilently(conn);
+        }
+
+        return badges;
+    }
+
+    /**
+     * Get badges for user, including those inherited from rank
+     *
+     * @param userId
+     * @return list of badges
+     */
     public static List<String> getBadges(int userId) {
         List<String> badges = new ArrayList<>();
 
