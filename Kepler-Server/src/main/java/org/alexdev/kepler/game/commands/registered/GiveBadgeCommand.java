@@ -8,6 +8,8 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.rooms.badges.AVAILABLE_BADGES;
+import org.alexdev.kepler.messages.outgoing.rooms.badges.USER_BADGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.util.StringUtil;
@@ -68,7 +70,7 @@ public class GiveBadgeCommand extends Command {
 
         // Check if characters are uppercase
         for (int i=0; i < badge.length(); i++) {
-            if (!Character.isUpperCase(badge.charAt(i))) {
+            if (!Character.isUpperCase(badge.charAt(i)) && !Character.isDigit(badge.charAt(i))) {
                 player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Badge code should be uppercase."));
                 return;
             }
@@ -101,10 +103,14 @@ public class GiveBadgeCommand extends Command {
         // Set badge to active for display
         targetDetails.setShowBadge(true);
 
+        // Send badges to user
+        targetUser.send(new AVAILABLE_BADGES(targetDetails));
+
         Room targetRoom = targetUser.getRoom();
 
         // Let other room users know something changed if targetUser is inside a room
         if (targetRoom != null) {
+            targetRoom.send(new USER_BADGE(targetUser.getRoomUser().getInstanceId(), targetDetails));
             targetRoom.send(new FIGURE_CHANGE(targetUser.getRoomUser().getInstanceId(), targetDetails));
         }
 
