@@ -255,6 +255,15 @@ public class Item {
                 return false;
             }
 
+            Item highestItem = tile.getHighestItem();
+
+            if (highestItem != null) {
+                // Can't place items on solid objects
+                if (highestItem.hasBehaviour(ItemBehaviour.SOLID) && !highestItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                    return false;
+                }
+            }
+
             for (Item tileItem : tile.getItems()) {
                 if (tileItem.getId() == item.getId()) {
                     continue;
