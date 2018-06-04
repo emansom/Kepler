@@ -36,7 +36,7 @@ public class MESSENGER_ACCEPTBUDDY implements MessageEvent {
                 friend.send(new NEW_FRIEND(player.getDetails()));
 
                 friend.getMessenger().getRequests().remove(friend.getMessenger().getRequest(player.getDetails().getId()));
-                friend.getMessenger().getFriends().add(new MessengerUser(friend.getDetails().getId()));
+                friend.getMessenger().getFriends().add(new MessengerUser(player.getDetails().getId()));
             }
         }
     }
