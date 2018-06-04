@@ -41,4 +41,12 @@ public class ItemManager {
 
         return instance;
     }
+
+    /**
+     * Resets the item manager singleton.
+     */
+    public static void reset() {
+        instance = null;
+        ItemManager.getInstance();
+    }
 }
