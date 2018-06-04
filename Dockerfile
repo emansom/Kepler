@@ -9,7 +9,10 @@ RUN apt update && apt install -y \
     openjdk-11-jdk-headless \
     gradle \
     && rm -rf /var/lib/apt/lists/* \
-    && mkdir /usr/src/kepler
+    && mkdir /usr/src/kepler && \
+    groupadd -g 1000 kepler && \
+    useradd -r -u 1000 -g kepler kepler && \
+    chown -R kepler:kepler /usr/src/kepler
 
 COPY Kepler-Server/ /usr/src/kepler/Kepler-Server/
 COPY data/ /usr/src/kepler/data/
@@ -19,10 +22,6 @@ COPY kepler.sql /usr/src/kepler
 RUN cd /usr/src/kepler && \
     gradle build fatJar && \
     cd
-
-RUN groupadd -g 1000 kepler && \
-    useradd -r -u 1000 -g kepler kepler && \
-    chown -R kepler:kepler /usr/src/kepler
 
 RUN touch /usr/src/kepler/game.ini && \
     touch /usr/src/kepler/server.ini && \
@@ -41,6 +40,7 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/game.ini Game roller.tick.default 6 && \
     crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds 900 && \
     crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds 300 && \
+    crudini --set /usr/src/kepler/game.ini Game carry.timer.seconds 300 && \
     crudini --set /usr/src/kepler/game.ini Game fuck.aaron true && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled false && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
