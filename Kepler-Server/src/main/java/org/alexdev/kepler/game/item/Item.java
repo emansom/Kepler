@@ -257,9 +257,8 @@ public class Item {
 
             Item highestItem = tile.getHighestItem();
 
-            if (highestItem != null) {
-                // Can't place items on solid objects
-                if (highestItem.hasBehaviour(ItemBehaviour.SOLID) && !highestItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+            if (highestItem != null && highestItem.getId() != item.getId()) {
+                if (!this.canPlaceOnTop(item, highestItem)) {
                     return false;
                 }
             }
@@ -269,8 +268,7 @@ public class Item {
                     continue;
                 }
 
-                // Can't place items on solid objects
-                if (tileItem.hasBehaviour(ItemBehaviour.SOLID) && !tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                if (!this.canPlaceOnTop(item, tileItem)) {
                     return false;
                 }
 
@@ -284,6 +282,32 @@ public class Item {
                     }
                 }
             }
+        }
+
+
+        return true;
+    }
+
+    /**
+     * Get if placing an item on top of another item is allowed.
+     * @param item the item to place
+     * @param tileItem the item to check if they're allowed to place on top of
+     * @return true, if successful
+     */
+    private boolean canPlaceOnTop(Item item, Item tileItem) {
+        // Can't place items on solid objects
+        if (tileItem.hasBehaviour(ItemBehaviour.SOLID) && !tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+            return false;
+        }
+
+        // Can't place items on sittable items
+        if (tileItem.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
+            return false;
+        }
+
+        // Can't place item on layable items
+        if (tileItem.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
+            return false;
         }
 
         return true;
