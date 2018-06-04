@@ -302,7 +302,7 @@ public class RoomUser {
         this.removeStatus(StatusType.CARRY_DRINK);
         this.removeStatus(StatusType.DANCE);
 
-        this.setStatus(carryStatus, carryId, 120, useStatus, 12, 1);
+        this.setStatus(carryStatus, carryId, GameConfiguration.getInteger("carry.timer.seconds"), useStatus, 12, 1);
         this.needsUpdate = true;
     }
 
