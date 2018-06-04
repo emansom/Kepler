@@ -260,6 +260,11 @@ public class Item {
                     continue;
                 }
 
+                // Can't place items on solid objects
+                if (tileItem.hasBehaviour(ItemBehaviour.SOLID)) {
+                    return false;
+                }
+
                 if (tileItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                     if (this.hasBehaviour(ItemBehaviour.ROLLER)) {
                         return false; // Can't place rollers on top of rollers
