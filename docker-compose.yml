@@ -3,7 +3,7 @@ services:
     kepler:
         image: ewout/kepler:0.0.3
         restart: always
-        env_file: .secrets
+        env_file: ~/.kepler-secrets
         environment:
             MYSQL_HOST: mariadb
             MYSQL_USER: kepler
@@ -24,7 +24,7 @@ services:
     matcha:
         image: ewout/matcha:0.0.1
         restart: always
-        env_file: .secrets
+        env_file: ~/.kepler-secrets
         environment:
             MYSQL_HOST: mariadb
             MYSQL_USER: kepler
@@ -52,7 +52,7 @@ services:
     mariadb:
         image: mariadb:10
         restart: always
-        env_file: .secrets
+        env_file: ~/.kepler-secrets
         environment:
             MYSQL_ROOT_PASSWORD: superverysecret
             MYSQL_DATABASE: kepler
