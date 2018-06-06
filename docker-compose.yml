@@ -1,7 +1,7 @@
 version: '3.2'
 services:
     kepler:
-        image: ewout/kepler:latest
+        image: ewout/kepler:0.0.1
         restart: always
         environment:
             MYSQL_HOST: mariadb
@@ -21,7 +21,7 @@ services:
             - "12321:12321"
 
     matcha:
-        image: ewout/matcha:latest
+        image: ewout/matcha:0.0.1
         restart: always
         environment:
             MYSQL_HOST: mariadb
@@ -30,7 +30,8 @@ services:
             MYSQL_PASSWORD: verysecret
             REDIS_HOST: redis
             REDIS_PORT: 6379
-            KEPLER_HOST: kepler
+            KEPLER_INTERNAL_HOST: kepler
+            KEPLER_EXTERNAL_HOST: oldhabbo.localhost
             KEPLER_RCON_PORT: 12309
         depends_on:
             - redis
@@ -43,7 +44,7 @@ services:
             - "127.0.0.1:12316:12316"
 
     redis:
-        image: redis:latest
+        image: redis:4
         restart: always
 
     mariadb:
