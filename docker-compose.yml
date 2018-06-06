@@ -55,5 +55,9 @@ services:
             MYSQL_DATABASE: kepler
             MYSQL_USER: kepler
             MYSQL_PASSWORD: verysecret
+        volumes:
+            - kepler-data:/var/lib/mysql
         ports:
             - "127.0.0.1:3307:3306"
+volumes:
+    kepler-data:
