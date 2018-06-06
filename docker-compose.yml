@@ -3,6 +3,7 @@ services:
     kepler:
         image: ewout/kepler:0.0.3
         restart: always
+        env_file: .secrets
         environment:
             MYSQL_HOST: mariadb
             MYSQL_USER: kepler
@@ -23,6 +24,7 @@ services:
     matcha:
         image: ewout/matcha:0.0.1
         restart: always
+        env_file: .secrets
         environment:
             MYSQL_HOST: mariadb
             MYSQL_USER: kepler
@@ -31,7 +33,7 @@ services:
             REDIS_HOST: redis
             REDIS_PORT: 6379
             KEPLER_INTERNAL_HOST: kepler
-            KEPLER_EXTERNAL_HOST: oldhabbo.localhost
+            KEPLER_EXTERNAL_HOST: localhost
             KEPLER_RCON_PORT: 12309
         depends_on:
             - redis
@@ -48,8 +50,9 @@ services:
         restart: always
 
     mariadb:
-        image: mariadb:10.2.15
+        image: mariadb:10
         restart: always
+        env_file: .secrets
         environment:
             MYSQL_ROOT_PASSWORD: superverysecret
             MYSQL_DATABASE: kepler

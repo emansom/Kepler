@@ -1,4 +1,5 @@
 .inertia.toml
+.secrets
 .gradle/
 .idea/
 /out/
