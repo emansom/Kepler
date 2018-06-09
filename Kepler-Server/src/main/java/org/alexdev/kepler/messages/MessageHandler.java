@@ -24,6 +24,7 @@ import org.alexdev.kepler.messages.incoming.rooms.pool.SPLASH_POSITION;
 import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
+import org.alexdev.kepler.messages.incoming.songs.GET_SONG_LIST;
 import org.alexdev.kepler.messages.incoming.trade.*;
 import org.alexdev.kepler.messages.incoming.user.*;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -57,6 +58,7 @@ public class MessageHandler {
         registerCataloguePackets();
         registerInventoryPackets();
         registerTradePackets();
+        registerSongPackets();
         //if (ServerConfiguration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
@@ -237,6 +239,13 @@ public class MessageHandler {
     private void registerInventoryPackets() {
         registerEvent(65, new GETSTRIP());
         registerEvent(66, new FLATPROPBYITEM());
+    }
+
+    /**
+     * Register song packets.
+     */
+    private void registerSongPackets() {
+        registerEvent(244, new GET_SONG_LIST());
     }
 
     /**
