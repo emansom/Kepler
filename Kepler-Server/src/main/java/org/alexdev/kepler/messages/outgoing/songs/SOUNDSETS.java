@@ -23,7 +23,7 @@ public class SOUNDSETS extends MessageComposer {
             int slotId = set.getKey();
             int soundSet = set.getValue();
 
-            response.writeInt(slotId + 1);
+            response.writeInt(slotId);
             response.writeInt(soundSet);
             response.writeInt(9); // 9 samples per set
 

@@ -14,6 +14,7 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class INSERT_SOUND_PACKAGE implements MessageEvent {
     @Override
@@ -32,11 +33,21 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
             return;
         }
 
-        int trackId = -1;
-        Item trackItem = null;
+        Map<Integer, Integer> tracks = SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId());
 
         int soundSetId = reader.readInt();
-        int slotId = reader.readInt();
+        int slotId = 1;//reader.readInt() - 1;
+
+        while (tracks.containsKey(slotId)) {
+            slotId++;
+        }
+
+        if (tracks.containsKey(slotId) || slotId >= 5 || slotId < 0) {
+            return;
+        }
+
+        int trackId = -1;
+        Item trackItem = null;
 
         for (Item item : player.getInventory().getItems()) {
             if (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE_SAMPLE_SET)) {
@@ -52,8 +63,6 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
         player.getInventory().getItems().remove(trackItem);
         ItemDao.deleteItem(trackItem.getId());
 
-        SongMachineDao.addTrack(room.getItemManager().getSoundMachine().getId(), soundSetId, slotId);
-
         List<Integer> handSoundsets = new ArrayList<>();
 
         for (Item item : player.getInventory().getItems()) {
@@ -62,7 +71,9 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
             }
         }
 
-        player.send(new SOUNDSETS(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
+        SongMachineDao.addTrack(room.getItemManager().getSoundMachine().getId(), soundSetId, slotId);
+
+        player.send(new SOUNDSETS( SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
         player.send(new HAND_SOUNDSETS(handSoundsets));
     }
 }

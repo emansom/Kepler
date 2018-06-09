@@ -65,7 +65,7 @@ public class SongMachineDao {
             preparedStatement.setInt(1, soundMachineId);
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
+            while (resultSet.next()) {
                 tracks.put(resultSet.getInt("slot_id"), resultSet.getInt("track_id"));
             }
 
