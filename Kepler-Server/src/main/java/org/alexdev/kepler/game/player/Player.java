@@ -228,10 +228,6 @@ public class Player extends Entity {
             this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
         }
 
-        for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(this.details.getId()))) {
-            room.tryDispose();
-        }
-
         this.loggedIn = false;
     }
 }
