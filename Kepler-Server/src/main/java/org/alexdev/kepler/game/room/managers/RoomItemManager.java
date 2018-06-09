@@ -9,8 +9,7 @@ import java.util.List;
 
 public class RoomItemManager {
     private Room room;
-    private Item jukebox;
-    private Item traxMachine;
+    private Item soundMachine;
 
     public RoomItemManager(Room room) {
         this.room = room;
@@ -93,40 +92,21 @@ public class RoomItemManager {
 
         return items;
     }
-
-    /**
-     * Get the jukebox for this room.
-     *
-     * @return the jukebox instance, else null
-     */
-    public Item getJukebox() {
-        return jukebox;
-    }
-
-    /**
-     * Set the rooms jukebox instance.
-     *
-     * @param jukebox the jukebox
-     */
-    public void setJukebox(Item jukebox) {
-        this.jukebox = jukebox;
-    }
-
     /**
      * Get the rooms' trax machine instance.
      *
      * @return the trax machine
      */
-    public Item getTraxMachine() {
-        return traxMachine;
+    public Item getSoundMachine() {
+        return soundMachine;
     }
 
     /**
      * Set the rooms' trax instance.
      *
-     * @param traxMachine the trax machine instance
+     * @param soundMachine the trax machine instance
      */
-    public void setTraxMachine(Item traxMachine) {
-        this.traxMachine = traxMachine;
+    public void setSoundMachine(Item soundMachine) {
+        this.soundMachine = soundMachine;
     }
 }

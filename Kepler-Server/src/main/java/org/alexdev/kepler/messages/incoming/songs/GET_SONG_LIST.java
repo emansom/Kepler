@@ -1,6 +1,5 @@
 package org.alexdev.kepler.messages.incoming.songs;
 
-import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.SongMachineDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -24,11 +23,12 @@ public class GET_SONG_LIST implements MessageEvent {
             return;
         }
 
-        if (room.getItemManager().getTraxMachine() != null) {
+        if (room.getItemManager().getSoundMachine() == null) {
             return;
         }
 
-        List<Song> songList = SongMachineDao.getSongList(room.getItemManager().getTraxMachine().getId());
+        List<Song> songList = SongMachineDao.getSongList(room.getItemManager().getSoundMachine().getId());
+
         player.send(new SONG_LIST(songList));
     }
 }

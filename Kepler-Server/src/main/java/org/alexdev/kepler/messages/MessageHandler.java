@@ -25,6 +25,8 @@ import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.songs.GET_SONG_LIST;
+import org.alexdev.kepler.messages.incoming.songs.INSERT_SOUND_PACKAGE;
+import org.alexdev.kepler.messages.incoming.songs.NEW_SONG;
 import org.alexdev.kepler.messages.incoming.trade.*;
 import org.alexdev.kepler.messages.incoming.user.*;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -246,6 +248,8 @@ public class MessageHandler {
      */
     private void registerSongPackets() {
         registerEvent(244, new GET_SONG_LIST());
+        registerEvent(239, new NEW_SONG());
+        registerEvent(219, new INSERT_SOUND_PACKAGE());
     }
 
     /**
