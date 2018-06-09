@@ -1,7 +1,9 @@
 package org.alexdev.kepler.game.room.public_rooms;
 
+import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -13,6 +15,8 @@ import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.JUMPINGPLACE_OK;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
 import org.alexdev.kepler.messages.outgoing.user.TICKET_BALANCE;
+
+import java.util.Currency;
 
 public class PoolHandler {
 
@@ -66,7 +70,8 @@ public class PoolHandler {
             player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
             player.send(new JUMPINGPLACE_OK());
 
-            PlayerDao.saveCurrency(player.getDetails());
+            CurrencyDao.decreaseTickets(player.getDetails(), 1);
+            player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
         }
 
         if (item.getDefinition().getSprite().equals("poolBooth")) {

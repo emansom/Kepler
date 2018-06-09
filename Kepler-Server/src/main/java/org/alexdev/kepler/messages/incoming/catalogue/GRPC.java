@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.catalogue;
 
+import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.dao.mysql.TeleporterDao;
@@ -57,10 +58,9 @@ public class GRPC implements MessageEvent {
             }
         }
 
-        player.getDetails().setCredits(player.getDetails().getCredits() - item.getPrice());
+        CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());
         player.send(new CREDIT_BALANCE(player.getDetails()));
 
-        PlayerDao.saveCurrency(player.getDetails());
         player.getInventory().getView("last");
     }
 
