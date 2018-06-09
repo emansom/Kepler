@@ -5,6 +5,8 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.texts.TextsManager;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -98,6 +100,12 @@ public class PLACESTUFF implements MessageEvent {
                     item.getPosition().setRotation(0);
                 }
             }
+        }
+
+        if ((room.getItemManager().getTraxMachine() != null || room.getItemManager().getJukebox() != null) && (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE) || item.hasBehaviour(ItemBehaviour.JUKEBOX))) {
+            // TODO: Find the message ID for the comment with the same warning, instead of using texts file.
+            player.send(new ALERT(TextsManager.getInstance().getValue("room_sound_furni_limit")));
+            return;
         }
 
         room.getMapping().addItem(item);
