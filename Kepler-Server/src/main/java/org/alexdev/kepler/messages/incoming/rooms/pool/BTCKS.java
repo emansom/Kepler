@@ -57,7 +57,6 @@ public class BTCKS implements MessageEvent {
             }
 
             ticketPlayer.send(new TICKET_BALANCE(details.getTickets()));
-            return;
         }
 
         player.getRoomUser().resetRoomTimer();
