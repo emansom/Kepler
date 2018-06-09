@@ -1,4 +1,6 @@
 .inertia.toml
+.secrets
+.kepler-secrets
 .gradle/
 .idea/
 /out/

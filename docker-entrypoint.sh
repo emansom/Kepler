@@ -1,11 +1,22 @@
 #!/bin/bash
 set -e
 
-# Wait for MariaDB
-until mysql -h $MYSQL_HOST -u $MYSQL_USER -p$MYSQL_PASSWORD $MYSQL_DATABASE -e"quit"; do
-    echo "MariaDB is unavailable. Waiting.."
-    sleep 1
-done
+# TODO: validation for all environment variables used
+
+# Define database url for dbmate
+export DATABASE_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:3306/$MYSQL_DATABASE"
+
+# Wait for MariaDB to come online and apply migrations
+dbmate wait && dbmate up
+
+# Configure Kepler
+if [ -z "$KEPLER_PORT" ]; then
+    crudini --set /usr/src/kepler/server.ini Server server.port $KEPLER_PORT
+fi
+
+if [ -z "$KEPLER_RCON_PORT" ]; then
+    crudini --set /usr/src/kepler/server.ini Rcon rcon.port $KEPLER_RCON_PORT
+fi
 
 if [ -z "$MYSQL_HOST" ]; then
     crudini --set /usr/src/kepler/config.ini Database mysql.hostname $MYSQL_HOST

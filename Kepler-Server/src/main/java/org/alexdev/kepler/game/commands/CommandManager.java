@@ -27,6 +27,7 @@ public class CommandManager {
         this.commands.put(new String[] { "uptime", "status" }, new UptimeCommand());
         this.commands.put(new String[] { "reloadcatalog", "refreshcatalog" }, new RefreshCatalogueCommand());
         this.commands.put(new String[] { "poof" }, new PoofCommand());
+        this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
 
         log.info("Loaded {} commands", commands.size());
     }

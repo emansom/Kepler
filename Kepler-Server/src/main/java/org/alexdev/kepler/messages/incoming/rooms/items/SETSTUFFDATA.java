@@ -48,7 +48,7 @@ public class SETSTUFFDATA implements MessageEvent {
                 newData = itemData;
             }
 
-            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_ON_OFF) && (itemData.equals("2") || itemData.equals("1"))) {
+            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_ON_OFF) && (itemData.equals("2") || itemData.equals("1") || itemData.equals("0"))) {
                 newData = itemData;
             }
 
