@@ -21,13 +21,9 @@ public class TeleporterTask implements Runnable {
 
     @Override
     public void run() {
-        this.entity.getRoomUser().setPosition(this.item.getPosition().copy());
+        this.entity.getRoomUser().warp(this.item.getPosition().copy(), true);
         this.entity.getRoomUser().setAuthenticateTelporterId(-1);
 
-        this.room.send(new USER_STATUSES(List.of(this.entity)));
         this.room.send(new BROADCAST_TELEPORTER(this.item, this.entity.getDetails().getName(), false));
-
-        // TODO: Properly add and remove entity from the specific tiles instead of regenerating the entire map.
-        this.room.getMapping().regenerateCollisionMap();
     }
 }

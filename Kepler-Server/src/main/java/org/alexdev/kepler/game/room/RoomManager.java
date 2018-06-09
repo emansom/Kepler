@@ -44,9 +44,10 @@ public class RoomManager {
     }
 
     /**
+     * Check whether the room is active.
      *
-     * @param roomId
-     * @return
+     * @param roomId the room id to check
+     * @return true, is successful
      */
     public boolean hasRoom(int roomId) {
         return this.roomMap.containsKey(roomId);
@@ -89,10 +90,8 @@ public class RoomManager {
         List<Room> roomList = new ArrayList<>();
 
         for (Room room : queryRooms) {
-            Room loadedRoom = this.getRoomById(room.getData().getId());
-
-            if (loadedRoom != null) {
-                roomList.add(loadedRoom);
+            if (this.roomMap.containsKey(room.getId())) {
+                roomList.add(this.getRoomById(room.getData().getId()));
             } else {
                 roomList.add(room);
             }
@@ -104,7 +103,7 @@ public class RoomManager {
     /**
      * Sort the list of rooms by higher populated rooms appearing first.
      *
-     * @param roomList
+     * @param roomList the list of rooms to sort
      */
     public void sortRooms(List<Room> roomList) {
         roomList.sort(Comparator.comparingDouble((Room room) -> room.getData().getTotalVisitorsNow()).reversed());

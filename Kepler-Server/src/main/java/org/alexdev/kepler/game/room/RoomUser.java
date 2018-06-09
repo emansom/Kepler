@@ -476,6 +476,33 @@ public class RoomUser {
     }
 
     /**
+     * Warps a user to a position, with the optional ability trigger an instant update.
+     *
+     * @param position the new position
+     * @param instantUpdate whether the warping should show an instant update on the client
+     */
+    public void warp(Position position, boolean instantUpdate) {
+        RoomTile oldTile = this.getTile();
+
+        if (oldTile != null) {
+            oldTile.removeEntity(this.entity);
+        }
+
+        this.position = position.copy();
+        this.updateNewHeight(position);
+
+        RoomTile newTile = this.getTile();
+
+        if (newTile != null) {
+            newTile.addEntity(this.entity);
+        }
+
+        if (instantUpdate && this.room != null) {
+            this.room.send(new USER_STATUSES(List.of(this.entity)));
+        }
+    }
+
+    /**
      * Contains status.
      *
      * @param status the status
