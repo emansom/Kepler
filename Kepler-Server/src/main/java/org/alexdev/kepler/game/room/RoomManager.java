@@ -90,10 +90,8 @@ public class RoomManager {
         List<Room> roomList = new ArrayList<>();
 
         for (Room room : queryRooms) {
-            Room loadedRoom = this.getRoomById(room.getData().getId());
-
-            if (loadedRoom != null) {
-                roomList.add(loadedRoom);
+            if (this.roomMap.containsKey(room.getId())) {
+                roomList.add(this.getRoomById(room.getData().getId()));
             } else {
                 roomList.add(room);
             }
