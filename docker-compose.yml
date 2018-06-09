@@ -46,6 +46,8 @@ services:
     redis:
         image: redis:4
         restart: always
+        volumes:
+            - redis-data:/data
 
     mariadb:
         image: mariadb:10
@@ -61,3 +63,4 @@ services:
             - "127.0.0.1:3307:3306"
 volumes:
     kepler-data:
+    redis-data:
