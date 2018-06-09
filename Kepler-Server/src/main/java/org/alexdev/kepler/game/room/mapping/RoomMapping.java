@@ -33,6 +33,9 @@ public class RoomMapping {
      * furniture detection.
      */
     public void regenerateCollisionMap() {
+        this.room.getItemManager().setTraxMachine(null);
+        this.room.getItemManager().setJukebox(null);
+
         this.roomModel = this.room.getModel();
         this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
 
@@ -87,6 +90,20 @@ public class RoomMapping {
 
                 if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                     PoolHandler.setupRedirections(this.room, item);
+                }
+
+                // Method to set only one trax machine per room
+                if (this.room.getItemManager().getTraxMachine() == null && this.room.getItemManager().getJukebox() == null) {
+                    if (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE)) {
+                        this.room.getItemManager().setTraxMachine(item);
+                    }
+                }
+
+                // Method to set only one jukebox per room
+                if (this.room.getItemManager().getJukebox() == null && this.room.getItemManager().getTraxMachine() == null) {
+                    if (item.hasBehaviour(ItemBehaviour.JUKEBOX)) {
+                        this.room.getItemManager().setJukebox(item);
+                    }
                 }
             }
         }
