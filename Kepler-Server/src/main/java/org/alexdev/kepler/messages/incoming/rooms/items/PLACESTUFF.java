@@ -102,8 +102,7 @@ public class PLACESTUFF implements MessageEvent {
             }
         }
 
-        if (room.getItemManager().getTraxMachine() != null || room.getItemManager().getJukebox() != null &&
-            (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE) || item.hasBehaviour(ItemBehaviour.JUKEBOX))) {
+        if ((room.getItemManager().getTraxMachine() != null || room.getItemManager().getJukebox() != null) && (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE) || item.hasBehaviour(ItemBehaviour.JUKEBOX))) {
             player.send(new ALERT(TextsManager.getInstance().getValue("room_music_player_limit")));
             return;
         }
