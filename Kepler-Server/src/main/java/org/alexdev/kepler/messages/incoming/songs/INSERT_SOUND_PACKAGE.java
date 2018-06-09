@@ -51,8 +51,12 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
 
         for (Item item : player.getInventory().getItems()) {
             if (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE_SAMPLE_SET)) {
-                trackId = Integer.parseInt(item.getDefinition().getSprite().split("_")[2]);
-                trackItem = item;
+                int songId = Integer.parseInt(item.getDefinition().getSprite().split("_")[2]);
+
+                if (songId == soundSetId) {
+                    trackItem = item;
+                    trackId = songId;
+                }
             }
         }
 
@@ -61,6 +65,8 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
         }
 
         player.getInventory().getItems().remove(trackItem);
+        player.getInventory().getView("last");
+
         ItemDao.deleteItem(trackItem.getId());
 
         List<Integer> handSoundsets = new ArrayList<>();
