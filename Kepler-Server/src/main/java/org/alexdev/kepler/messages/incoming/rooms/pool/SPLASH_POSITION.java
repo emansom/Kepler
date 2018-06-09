@@ -36,11 +36,6 @@ public class SPLASH_POSITION implements MessageEvent {
             return;
         }
 
-        RoomTile tile = player.getRoomUser().getTile();
-
-        if (tile != null) {
-            tile.removeEntity(player);
-        }
 
         String contents = reader.contents();
         String[] data = contents.split(",");
@@ -48,17 +43,9 @@ public class SPLASH_POSITION implements MessageEvent {
         Position destination =
                 new Position(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
 
-        player.getRoomUser().setPosition(destination);
-        player.getRoomUser().updateNewHeight(destination);
         player.getRoomUser().setStatus(StatusType.SWIM, "");
+        player.getRoomUser().warp(destination, true);
 
-        tile = player.getRoomUser().getTile();
-
-        if (tile != null) {
-            tile.addEntity(player);
-        }
-
-        room.send(new USER_STATUSES(List.of(player)));
         room.send(new SHOWPROGRAM(new String[] { "BIGSPLASH", "POSITION", contents,}));
 
         player.getRoomUser().setWalkingAllowed(true);
