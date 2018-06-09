@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -35,6 +36,12 @@ public class SPLASH_POSITION implements MessageEvent {
             return;
         }
 
+        RoomTile tile = player.getRoomUser().getTile();
+
+        if (tile != null) {
+            tile.removeEntity(player);
+        }
+
         String contents = reader.contents();
         String[] data = contents.split(",");
 
@@ -44,6 +51,12 @@ public class SPLASH_POSITION implements MessageEvent {
         player.getRoomUser().setPosition(destination);
         player.getRoomUser().updateNewHeight(destination);
         player.getRoomUser().setStatus(StatusType.SWIM, "");
+
+        tile = player.getRoomUser().getTile();
+
+        if (tile != null) {
+            tile.addEntity(player);
+        }
 
         room.send(new USER_STATUSES(List.of(player)));
         room.send(new SHOWPROGRAM(new String[] { "BIGSPLASH", "POSITION", contents,}));
