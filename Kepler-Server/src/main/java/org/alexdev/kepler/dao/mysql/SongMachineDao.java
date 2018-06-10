@@ -173,6 +173,27 @@ public class SongMachineDao {
         }
     }
 
+    public static void saveSong(int songId, String title, int length, String data) throws SQLException {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE soundmachine_songs SET title = ?, length = ?, data = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setString(1, title);
+            preparedStatement.setInt(2, length);
+            preparedStatement.setString(3, data);
+            preparedStatement.setInt(4, songId);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+            throw e;
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
     public static void deleteSong(int songId) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement deletePlaylist = null;

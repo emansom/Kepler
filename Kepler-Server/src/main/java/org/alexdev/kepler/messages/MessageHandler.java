@@ -255,6 +255,8 @@ public class MessageHandler {
         registerEvent(221, new GET_SONG_INFO());
         registerEvent(245, new GET_PLAY_LIST());
         registerEvent(248, new DELETE_SONG());
+        registerEvent(241, new EDIT_SONG());
+        registerEvent(242, new SAVE_SONG_EDIT());
     }
 
     /**
