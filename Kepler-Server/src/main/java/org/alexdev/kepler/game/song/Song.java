@@ -4,16 +4,18 @@ public class Song {
     private int id;
     private String title;
     private int itemId;
+    private int userId;
     private int length;
     private String data;
     private boolean isBurnt;
 
     public Song() { }
 
-    public Song(int id, String title, int itemId, int length, String data, boolean isBurnt) {
+    public Song(int id, String title, int itemId, int userId, int length, String data, boolean isBurnt) {
         this.id = id;
         this.title = title;
         this.itemId = itemId;
+        this.userId = userId;
         this.length = length;
         this.data = data;
         this.isBurnt = isBurnt;
@@ -41,6 +43,14 @@ public class Song {
 
     public void setItemId(int itemId) {
         this.itemId = itemId;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getLength() {

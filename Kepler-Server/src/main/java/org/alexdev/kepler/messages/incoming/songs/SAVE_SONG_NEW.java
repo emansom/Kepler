@@ -3,11 +3,11 @@ package org.alexdev.kepler.messages.incoming.songs;
 import org.alexdev.kepler.dao.mysql.SongMachineDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.messages.outgoing.songs.HAND_SOUNDSETS;
 import org.alexdev.kepler.messages.outgoing.songs.SONG_NEW;
 import org.alexdev.kepler.messages.outgoing.songs.SOUNDSETS;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.StringUtil;
 
 public class SAVE_SONG_NEW implements MessageEvent {
     @Override
@@ -26,10 +26,8 @@ public class SAVE_SONG_NEW implements MessageEvent {
             return;
         }
 
-        //int userId, int soundMachineId, String title, int length, String data
-
-        String title = reader.readString();
-        String data = reader.readString();
+        String title = StringUtil.filterInput(reader.readString(), true);
+        String data = StringUtil.filterInput(reader.readString(), true);
 
         SongMachineDao.addSong(player.getEntityId(),
                 room.getItemManager().getSoundMachine().getId(),

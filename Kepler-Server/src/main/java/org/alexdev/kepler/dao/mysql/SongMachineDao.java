@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.song.Song;
+import org.alexdev.kepler.game.song.SongPlaylist;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -37,7 +38,7 @@ public class SongMachineDao {
 
             // (int id, String title, int itemId, int length, String data, boolean isBurnt)
             while (resultSet.next()) {
-                songs.add(new Song(resultSet.getInt("id"), resultSet.getString("title"), itemId,
+                songs.add(new Song(resultSet.getInt("id"), resultSet.getString("title"), itemId, resultSet.getInt("user_id"),
                         resultSet.getInt("length"), resultSet.getString("data"), resultSet.getBoolean("burnt")));
             }
 
@@ -51,6 +52,104 @@ public class SongMachineDao {
 
         return songs;
     }
+
+    public static Song getSong(int songId) {
+        Song song = null;
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM soundmachine_songs WHERE id = ?", sqlConnection);
+            preparedStatement.setInt(1, songId);
+            resultSet = preparedStatement.executeQuery();
+
+            // (int id, String title, int itemId, int length, String data, boolean isBurnt)
+            if (resultSet.next()) {
+                song = new Song(resultSet.getInt("id"), resultSet.getString("title"), songId, resultSet.getInt("user_id"),
+                        resultSet.getInt("length"), resultSet.getString("data"), resultSet.getBoolean("burnt"));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return song;
+    }
+
+    public static List<SongPlaylist> getSongPlaylist(int itemId) {
+        List<SongPlaylist> songs = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM soundmachine_playlists WHERE item_id = ?", sqlConnection);
+            preparedStatement.setInt(1, itemId);
+            resultSet = preparedStatement.executeQuery();
+
+            // (int id, String title, int itemId, int length, String data, boolean isBurnt)
+            while (resultSet.next()) {
+                songs.add(new SongPlaylist(itemId, getSong(resultSet.getInt("song_id")), resultSet.getInt("slot_id")));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return songs;
+    }
+
+    public static void addPlaylist(int itemId, int songId, int slotId) throws SQLException {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO soundmachine_playlists (item_id, song_id, slot_id) VALUES (?, ?, ?)", sqlConnection);
+            preparedStatement.setInt(1, itemId);
+            preparedStatement.setInt(2, songId);
+            preparedStatement.setInt(3, slotId);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+            throw e;
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    public static void clearPlaylist(int itemId) throws SQLException {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM soundmachine_playlists WHERE item_id = ?", sqlConnection);
+            preparedStatement.setInt(1, itemId);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+            throw e;
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
 
     public static void addSong(int userId, int soundMachineId, String title, int length, String data) throws SQLException {
         Connection sqlConnection = null;
@@ -70,6 +169,48 @@ public class SongMachineDao {
             throw e;
         } finally {
             Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    public static void deleteSong(int songId) throws SQLException {
+        Connection sqlConnection = null;
+        PreparedStatement deletePlaylist = null;
+        PreparedStatement deleteSong = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+
+            // We disable autocommit to make sure the following queries share the same atomic transaction
+            sqlConnection.setAutoCommit(false);
+
+            deletePlaylist = Storage.getStorage().prepare("DELETE FROM soundmachine_songs WHERE id = ?", sqlConnection);
+            deletePlaylist.setInt(1, songId);
+            deletePlaylist.execute();
+
+
+            deleteSong = Storage.getStorage().prepare("DELETE FROM soundmachine_playlists WHERE song_id = ?", sqlConnection);
+            deleteSong.setInt(1, songId);
+            deleteSong.execute();
+
+        } catch (Exception e) {
+            try {
+                // Rollback these queries
+                sqlConnection.rollback();
+            } catch(SQLException re) {
+                Storage.logError(re);
+            }
+
+            Storage.logError(e);
+        } finally {
+            try {
+                sqlConnection.setAutoCommit(true);
+            } catch (SQLException ce) {
+                Storage.logError(ce);
+            }
+
+            Storage.closeSilently(deletePlaylist);
+            Storage.closeSilently(deleteSong);
             Storage.closeSilently(sqlConnection);
         }
     }

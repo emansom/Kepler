@@ -251,7 +251,10 @@ public class MessageHandler {
         registerEvent(219, new INSERT_SOUND_PACKAGE());
         registerEvent(220, new EJECT_SOUND_PACKAGE());
         registerEvent(240, new SAVE_SONG_NEW());
-        registerEvent(245, new UPDATE_PLAY_LIST());
+        registerEvent(243, new UPDATE_PLAY_LIST());
+        registerEvent(221, new GET_SONG_INFO());
+        registerEvent(245, new GET_PLAY_LIST());
+        registerEvent(248, new DELETE_SONG());
     }
 
     /**
