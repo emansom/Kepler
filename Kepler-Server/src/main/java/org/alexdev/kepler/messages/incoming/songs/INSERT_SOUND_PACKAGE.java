@@ -12,8 +12,6 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class INSERT_SOUND_PACKAGE implements MessageEvent {
@@ -68,18 +66,9 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
         player.getInventory().getView("last");
 
         ItemDao.deleteItem(trackItem.getId());
-
-        List<Integer> handSoundsets = new ArrayList<>();
-
-        for (Item item : player.getInventory().getItems()) {
-            if (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE_SAMPLE_SET)) {
-                handSoundsets.add(Integer.parseInt(item.getDefinition().getSprite().split("_")[2]));
-            }
-        }
-
         SongMachineDao.addTrack(room.getItemManager().getSoundMachine().getId(), soundSetId, slotId);
 
-        player.send(new SOUNDSETS( SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
-        player.send(new HAND_SOUNDSETS(handSoundsets));
+        player.send(new SOUNDSETS(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
+        player.send(new HAND_SOUNDSETS(player.getInventory().getSoundsets()));
     }
 }

@@ -99,4 +99,23 @@ public class SongMachineDao {
             Storage.closeSilently(sqlConnection);
         }
     }
+
+    public static void removeTrack(int soundMachineId, int slotId) throws SQLException {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM soundmachine_tracks WHERE soundmachine_id = ? AND slot_id = ?", sqlConnection);
+            preparedStatement.setInt(1, soundMachineId);
+            preparedStatement.setInt(2, slotId);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+            throw e;
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
 }

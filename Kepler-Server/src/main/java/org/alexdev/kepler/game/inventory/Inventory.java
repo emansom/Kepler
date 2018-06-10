@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.inventory.INVENTORY;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,6 +153,22 @@ public class Inventory {
         }
 
         return null;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Integer> getSoundsets() {
+        List<Integer> handSoundsets = new ArrayList<>();
+
+        for (Item item : player.getInventory().getItems()) {
+            if (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE_SAMPLE_SET)) {
+                handSoundsets.add(Integer.parseInt(item.getDefinition().getSprite().split("_")[2]));
+            }
+        }
+
+        return handSoundsets;
     }
 
     /**
