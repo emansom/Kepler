@@ -720,7 +720,7 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (80, 'carpet_standard*b', '#336666,#336666,#336666', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (81, 'plant_sunflower', '', 1, 1, 1, 'solid'),
 (82, 'plant_rose', '', 1, 1, 1, 'solid'),
-(83, 'tv_luxus', '', 1, 3, 1, 'solid,custom_data_numeric_on_off'),
+(83, 'tv_luxus', '', 1, 3, 1, 'solid,custom_data_on_off'),
 (84, 'bath', '', 1, 2, 1, 'can_sit_on_top,custom_data_numeric_on_off'),
 (85, 'sink', '', 1, 1, 1, 'solid,requires_touching_for_interaction,custom_data_true_false'),
 (86, 'toilet', '', 1, 1, 1.1, 'can_sit_on_top,custom_data_on_off'),
