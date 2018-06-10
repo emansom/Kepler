@@ -22,9 +22,6 @@ ALTER TABLE `rooms_models`
 
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1;
-  
-ALTER TABLE `soundmachine_songs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 -- migrate:down
 
