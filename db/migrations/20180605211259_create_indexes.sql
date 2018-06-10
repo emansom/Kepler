@@ -34,10 +34,6 @@ ALTER TABLE `users`
 
 ALTER TABLE `users_badges`
   ADD KEY `users_badges_users_FK` (`user_id`);
-  
-ALTER TABLE `soundmachine_playlists`
-  ADD KEY `machineid` (`machineid`),
-  ADD KEY `songid` (`songid`);
 
 ALTER TABLE `soundmachine_songs`
   ADD UNIQUE KEY `id` (`id`);

@@ -38,7 +38,7 @@ public class SongMachineDao {
             // (int id, String title, int itemId, int length, String data, boolean isBurnt)
             while (resultSet.next()) {
                 songs.add(new Song(resultSet.getInt("id"), resultSet.getString("title"), itemId,
-                        resultSet.getInt("length"), resultSet.getString("data"), resultSet.getBoolean("bunt")));
+                        resultSet.getInt("length"), resultSet.getString("data"), resultSet.getBoolean("burnt")));
             }
 
         } catch (Exception e) {
@@ -51,6 +51,29 @@ public class SongMachineDao {
 
         return songs;
     }
+
+    public static void addSong(int userId, int soundMachineId, String title, int length, String data) throws SQLException {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO soundmachine_songs (user_id, item_id, title, length, data) VALUES (?, ?, ?, ?, ?)", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, soundMachineId);
+            preparedStatement.setString(3, title);
+            preparedStatement.setInt(4, length);
+            preparedStatement.setString(5, data);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+            throw e;
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
 
     public static Map<Integer, Integer> getTracks(int soundMachineId) {
         Map<Integer, Integer> tracks = new HashMap<>();

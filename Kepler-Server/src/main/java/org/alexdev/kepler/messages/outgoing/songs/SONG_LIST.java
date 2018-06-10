@@ -20,7 +20,7 @@ public class SONG_LIST extends MessageComposer {
         for (Song song : this.songList) {
             response.writeInt(song.getId());
             response.writeInt(song.getLength());
-            response.writeString(song.getData());
+            response.writeString(song.getTitle());
             response.writeBool(song.isBurnt());
         }
     }
