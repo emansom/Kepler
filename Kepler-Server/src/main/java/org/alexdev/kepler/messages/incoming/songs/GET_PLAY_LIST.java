@@ -18,10 +18,6 @@ public class GET_PLAY_LIST implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!room.isOwner(player.getEntityId())) {
-            return;
-        }
-
         if (room.getItemManager().getSoundMachine() == null) {
             return;
         }
