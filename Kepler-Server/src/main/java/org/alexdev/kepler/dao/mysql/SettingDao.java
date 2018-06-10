@@ -7,7 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class SiteDao {
+public class SettingDao {
     public static void updateSetting(String key, int value) {
         updateSetting(key, String.valueOf(value));
     }
@@ -18,7 +18,7 @@ public class SiteDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("UPDATE site_settings SET value = ? WHERE setting = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("UPDATE settings SET value = ? WHERE setting = ?", sqlConnection);
             preparedStatement.setString(1, value);
             preparedStatement.setString(2, key);
             preparedStatement.execute();
