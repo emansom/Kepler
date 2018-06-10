@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.player;
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
+import org.alexdev.kepler.dao.mysql.SiteDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
@@ -71,6 +72,7 @@ public class Player extends Entity {
         this.flushSendQueue();
 
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
+        SiteDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
 
         if (!ServerConfiguration.getBoolean("debug")) {
             PlayerDao.clearTicket(this.details.getId()); // Protect against replay attacks
@@ -221,8 +223,10 @@ public class Player extends Entity {
             return;
         }
 
-        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
         PlayerManager.getInstance().removePlayer(this);
+
+        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
+        SiteDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
 
         if (this.roomUser.getRoom() != null) {
             this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
