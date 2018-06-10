@@ -35,16 +35,5 @@ ALTER TABLE `users`
 ALTER TABLE `users_badges`
   ADD KEY `users_badges_users_FK` (`user_id`);
 
-ALTER TABLE `soundmachine_songs`
-  ADD UNIQUE KEY `id` (`id`);
-
-ALTER TABLE `soundmachine_playlists`
-  ADD KEY `machineid` (`item_id`),
-  ADD KEY `songid` (`song_id`);
-  
-ALTER TABLE `site_settings`
-  ADD UNIQUE KEY `setting` (`setting`);
-COMMIT;
-
 -- migrate:down
 
