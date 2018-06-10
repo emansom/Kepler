@@ -38,6 +38,10 @@ ALTER TABLE `users_badges`
 ALTER TABLE `soundmachine_songs`
   ADD UNIQUE KEY `id` (`id`);
 
+ALTER TABLE `soundmachine_playlists`
+  ADD KEY `machineid` (`item_id`),
+  ADD KEY `songid` (`song_id`);
+
 
 -- migrate:down
 

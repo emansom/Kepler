@@ -1349,9 +1349,9 @@ CREATE TABLE `rooms_rights` (
 --
 
 CREATE TABLE `soundmachine_playlists` (
-  `machineid` int(10) NOT NULL,
-  `songid` int(10) NOT NULL,
-  `pos` int(3) NOT NULL
+  `item_id` int(11) NOT NULL,
+  `song_id` int(11) NOT NULL,
+  `slot_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -1505,8 +1505,8 @@ ALTER TABLE `rooms_models`
 -- Indexes for table `soundmachine_playlists`
 --
 ALTER TABLE `soundmachine_playlists`
-  ADD KEY `machineid` (`machineid`),
-  ADD KEY `songid` (`songid`);
+  ADD KEY `machineid` (`item_id`),
+  ADD KEY `songid` (`song_id`);
 
 --
 -- Indexes for table `soundmachine_songs`
