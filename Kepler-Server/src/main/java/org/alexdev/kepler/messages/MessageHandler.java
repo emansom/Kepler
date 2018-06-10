@@ -24,6 +24,7 @@ import org.alexdev.kepler.messages.incoming.rooms.pool.SPLASH_POSITION;
 import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
+import org.alexdev.kepler.messages.incoming.songs.*;
 import org.alexdev.kepler.messages.incoming.trade.*;
 import org.alexdev.kepler.messages.incoming.user.*;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -57,6 +58,7 @@ public class MessageHandler {
         registerCataloguePackets();
         registerInventoryPackets();
         registerTradePackets();
+        registerSongPackets();
         //if (ServerConfiguration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
         //    log.info("Loaded {} message event handlers", messages.size());
         //}
@@ -237,6 +239,24 @@ public class MessageHandler {
     private void registerInventoryPackets() {
         registerEvent(65, new GETSTRIP());
         registerEvent(66, new FLATPROPBYITEM());
+    }
+
+    /**
+     * Register song packets.
+     */
+    private void registerSongPackets() {
+        registerEvent(244, new GET_SONG_LIST());
+        registerEvent(246, new GET_SONG_LIST());
+        registerEvent(239, new NEW_SONG());
+        registerEvent(219, new INSERT_SOUND_PACKAGE());
+        registerEvent(220, new EJECT_SOUND_PACKAGE());
+        registerEvent(240, new SAVE_SONG_NEW());
+        registerEvent(243, new UPDATE_PLAY_LIST());
+        registerEvent(221, new GET_SONG_INFO());
+        registerEvent(245, new GET_PLAY_LIST());
+        registerEvent(248, new DELETE_SONG());
+        registerEvent(241, new EDIT_SONG());
+        registerEvent(242, new SAVE_SONG_EDIT());
     }
 
     /**

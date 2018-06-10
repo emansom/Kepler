@@ -1345,6 +1345,46 @@ CREATE TABLE `rooms_rights` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `soundmachine_playlists`
+--
+
+CREATE TABLE `soundmachine_playlists` (
+  `item_id` int(11) NOT NULL,
+  `song_id` int(11) NOT NULL,
+  `slot_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `soundmachine_songs`
+--
+
+CREATE TABLE `soundmachine_songs` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `length` int(3) NOT NULL DEFAULT 0,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `burnt` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `soundmachine_tracks`
+--
+
+CREATE TABLE `soundmachine_tracks` (
+  `soundmachine_id` int(11) NOT NULL,
+  `track_id` int(11) NOT NULL,
+  `slot_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
@@ -1369,13 +1409,6 @@ CREATE TABLE `users` (
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `username`, `password`, `figure`, `pool_figure`, `sex`, `motto`, `credits`, `tickets`, `film`, `rank`, `console_motto`, `last_online`, `sso_ticket`, `club_subscribed`, `club_expiration`, `badge`, `badge_active`, `allow_stalking`) VALUES
-(1, 'Alex', '$argon2id$v=19$m=65536,t=2,p=1$KXn7+PTVhPd3ylsY1TQ9Vg$5FOcN7G74pYuy4z9tyM496rlirM8vqKUHjmbIt4k/dA', 'hd-180-1.ch-255-66.lg-280-110.sh-305-62.ha-1012-110.hr-828-61', 'ch=s02/53,51,44', 'M', 'de kepler whey', 99360, 26, 0, 7, 'lol amirite?', 1528036187, '123', 1526277229, 1626277229, '', 0, 1);
 
 -- --------------------------------------------------------
 
@@ -1469,6 +1502,19 @@ ALTER TABLE `rooms_models`
   ADD KEY `id` (`id`);
 
 --
+-- Indexes for table `soundmachine_playlists`
+--
+ALTER TABLE `soundmachine_playlists`
+  ADD KEY `machineid` (`item_id`),
+  ADD KEY `songid` (`song_id`);
+
+--
+-- Indexes for table `soundmachine_songs`
+--
+ALTER TABLE `soundmachine_songs`
+  ADD UNIQUE KEY `id` (`id`);
+
+--
 -- Indexes for table `users`
 --
 ALTER TABLE `users`
@@ -1521,10 +1567,15 @@ ALTER TABLE `rooms_categories`
 ALTER TABLE `rooms_models`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
 --
+-- AUTO_INCREMENT for table `soundmachine_songs`
+--
+ALTER TABLE `soundmachine_songs`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- Constraints for dumped tables
 --

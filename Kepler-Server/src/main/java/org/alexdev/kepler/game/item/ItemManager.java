@@ -30,6 +30,23 @@ public class ItemManager {
     }
 
     /**
+     * Get a item definition by sprite name.
+     *
+     * @param spriteName the name of the sprite to locate the definition
+     * @return the item definition
+     */
+    public ItemDefinition getDefinitionBySprite(String spriteName) {
+        for (ItemDefinition definition : this.itemDefinitionMap.values()) {
+            if (definition.getSprite().equals(spriteName)) {
+                return definition;
+            }
+        }
+
+        return null;
+    }
+
+
+    /**
      * Get the {@link ItemManager} instance
      *
      * @return the item manager instance
