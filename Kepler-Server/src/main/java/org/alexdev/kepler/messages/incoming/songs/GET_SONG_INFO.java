@@ -16,10 +16,6 @@ public class GET_SONG_INFO implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!room.isOwner(player.getEntityId())) {
-            return;
-        }
-
         if (room.getItemManager().getSoundMachine() == null) {
             return;
         }
