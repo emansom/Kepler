@@ -72,7 +72,7 @@ public class Player extends Entity {
         this.flushSendQueue();
 
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
-        SiteDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
+        //SiteDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
 
         if (!ServerConfiguration.getBoolean("debug")) {
             PlayerDao.clearTicket(this.details.getId()); // Protect against replay attacks
@@ -226,7 +226,7 @@ public class Player extends Entity {
         PlayerManager.getInstance().removePlayer(this);
 
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
-        SiteDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
+        //SiteDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
 
         if (this.roomUser.getRoom() != null) {
             this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
