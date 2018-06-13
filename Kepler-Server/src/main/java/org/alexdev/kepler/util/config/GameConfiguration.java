@@ -82,6 +82,14 @@ public class GameConfiguration {
     }
 
     /**
+     * Reset all game configuration values.
+     */
+    public static void reset() {
+        instance = null;
+        GameConfiguration.getInstance();
+    }
+
+    /**
      * Get the instance of {@link GameConfiguration}
      *
      * @return the instance
