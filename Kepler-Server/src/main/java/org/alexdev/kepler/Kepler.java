@@ -48,7 +48,7 @@ public class Kepler {
             LoggingConfiguration.checkLoggingConfig();
 
             ServerConfiguration.load("server.ini");
-            GameConfiguration.load("game.ini");
+            //GameConfiguration.load("game.ini");
 
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
@@ -66,6 +66,7 @@ public class Kepler {
 
             log.info("Setting up game");
 
+            GameConfiguration.getInstance();
             WalkwaysManager.getInstance();
             ItemManager.getInstance();
             CatalogueManager.getInstance();

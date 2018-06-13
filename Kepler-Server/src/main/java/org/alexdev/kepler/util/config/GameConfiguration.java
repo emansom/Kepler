@@ -1,5 +1,7 @@
 package org.alexdev.kepler.util.config;
 
+import org.alexdev.kepler.dao.mysql.SettingsDao;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 
 import java.io.*;
@@ -7,20 +9,26 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GameConfiguration {
-    private static Map<String, String> config = new ConcurrentHashMap<>();
+    private static GameConfiguration instance;
+    private Map<String, String> config;// = new ConcurrentHashMap<>();
 
-    public static void load(String configPath) throws IOError, IOException, ConfigurationException {
-        setConfigurationDefaults();
-        var writer = Configuration.createConfigurationFile(configPath);
+    public GameConfiguration() {
+        this.config = new ConcurrentHashMap<>();
+        this.setConfigurationDefaults();
 
-        if (writer != null) {
-            setConfigurationData(writer);
+        for (var entrySet : this.config.entrySet()) {
+            String value = SettingsDao.getSetting(entrySet.getKey());
+
+            if (value != null) {
+                System.out.println("val: " + value);
+                this.config.put(entrySet.getKey(), value);
+            } else {
+                SettingsDao.newSetting(entrySet.getKey(), entrySet.getValue());
+            }
         }
-
-        config = Configuration.load(configPath);
     }
 
-    private static void setConfigurationDefaults() {
+    private void setConfigurationDefaults() {
         config.put("fuck.aaron", "true");
 
         config.put("welcome.message.enabled", "false");
@@ -34,36 +42,12 @@ public class GameConfiguration {
     }
 
     /**
-     * Writes default server configuration
-     *
-     * @param writer - {@link PrintWriter} the file writer
-     */
-    private static void setConfigurationData(PrintWriter writer) {
-        writer.println("[Game]");
-        writer.println("fuck.aaron=" + config.get("fuck.aaron"));
-        writer.println("");
-        writer.println("welcome.message.enabled=" + config.get("welcome.message.enabled"));
-        writer.println("welcome.message.content=" + config.get("welcome.message.content"));
-        writer.println("");
-        writer.println("# 1 tick = 500ms, 6 is 3 seconds");
-        writer.println("roller.tick.default=" + config.get("roller.tick.default"));
-        writer.println("");
-        writer.println("afk.timer.seconds=" + config.get("afk.timer.seconds"));
-        writer.println("sleep.timer.seconds=" + config.get("sleep.timer.seconds"));
-        writer.println("");
-        writer.println("carry.timer.seconds=" + config.get("carry.timer.seconds"));
-        writer.flush();
-        writer.close();
-    }
-
-
-    /**
      * Get key from configuration and cast to an Boolean
      *
      * @param key the key to use
      * @return value as boolean
      */
-    public static boolean getBoolean(String key) {
+    public boolean getBoolean(String key) {
         String val = config.getOrDefault(key, "false");
 
         if (val.equalsIgnoreCase("true")) {
@@ -84,7 +68,7 @@ public class GameConfiguration {
      * @param key the key to use
      * @return value
      */
-    public static String getString(String key) {
+    public String getString(String key) {
         return config.getOrDefault(key, key);
     }
 
@@ -94,7 +78,20 @@ public class GameConfiguration {
      * @param key the key to use
      * @return value as int
      */
-    public static int getInteger(String key) {
+    public int getInteger(String key) {
         return Integer.parseInt(config.getOrDefault(key, "0"));
+    }
+
+    /**
+     * Get the instance of {@link GameConfiguration}
+     *
+     * @return the instance
+     */
+    public static GameConfiguration getInstance() {
+        if (instance == null) {
+            instance = new GameConfiguration();
+        }
+
+        return instance;
     }
 }

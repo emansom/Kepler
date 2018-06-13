@@ -302,7 +302,7 @@ public class RoomUser {
         this.removeStatus(StatusType.CARRY_DRINK);
         this.removeStatus(StatusType.DANCE);
 
-        this.setStatus(carryStatus, carryId, GameConfiguration.getInteger("carry.timer.seconds"), useStatus, 12, 1);
+        this.setStatus(carryStatus, carryId, GameConfiguration.getInstance().getInteger("carry.timer.seconds"), useStatus, 12, 1);
         this.needsUpdate = true;
     }
 
@@ -443,7 +443,7 @@ public class RoomUser {
      * Set the room timer, make it 10 minutes by default
      */
     public void resetRoomTimer() {
-        this.resetRoomTimer(GameConfiguration.getInteger("afk.timer.seconds"));
+        this.resetRoomTimer(GameConfiguration.getInstance().getInteger("afk.timer.seconds"));
     }
 
     /**
@@ -453,7 +453,7 @@ public class RoomUser {
      */
     public void resetRoomTimer(int afkTimer) {
         this.afkTimer = DateUtil.getCurrentTimeSeconds() + afkTimer;
-        this.sleepTimer = DateUtil.getCurrentTimeSeconds() + GameConfiguration.getInteger("sleep.timer.seconds");
+        this.sleepTimer = DateUtil.getCurrentTimeSeconds() + GameConfiguration.getInstance().getInteger("sleep.timer.seconds");
 
         // If the user was sleeping, remove the sleep and tell the room cycle to update our character
         if (this.containsStatus(StatusType.SLEEP)) {
