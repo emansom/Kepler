@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.mapping;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
@@ -115,6 +116,24 @@ public class RoomTile {
      */
     public double getTileHeight() {
         return tileHeight;
+    }
+
+    /**
+     * Get the current height of the tile, but take away the offset of chairs
+     * and beds so users can sit on them properly.
+     *
+     * @return the interactive tile height
+     */
+    public double getInteractiveTileHeight() {
+        double height = this.tileHeight;
+
+        if (this.highestItem != null) {
+            if (this.highestItem.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || this.highestItem.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
+                height -= this.highestItem.getDefinition().getTopHeight();
+            }
+        }
+
+        return height;
     }
 
     /**

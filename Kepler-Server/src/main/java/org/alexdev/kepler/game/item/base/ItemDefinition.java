@@ -10,7 +10,6 @@ public class ItemDefinition {
     private String sprite;
     private String behaviourData;
     private double topHeight;
-    private double stackHeight;
     private int length;
     private int width;
     private String colour;
@@ -21,7 +20,6 @@ public class ItemDefinition {
         this.behaviourData = "";
         this.colour = "";
         this.topHeight = 0.01;
-        this.stackHeight = 0.01;
         this.length = 1;
         this.width = 1;
         this.behaviourList = new ArrayList<>();
@@ -31,20 +29,19 @@ public class ItemDefinition {
         this.id = id;
         this.sprite = sprite;
         this.behaviourData = behaviourData;
-        this.stackHeight = topHeight;
         this.topHeight = topHeight;
         this.length = length;
         this.width = width;
         this.colour = colour;
         this.behaviourList = parseBehaviour(this.behaviourData);
 
-        if (!this.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+        /* if (!this.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
             this.stackHeight = 0;
         }
 
         if (this.stackHeight == 0) {
             this.stackHeight = 0.001;
-        }
+        }*/
     }
 
     /**
@@ -221,9 +218,5 @@ public class ItemDefinition {
 
     public String getBehaviourData() {
         return behaviourData;
-    }
-
-    public double getStackHeight() {
-        return stackHeight;
     }
 }

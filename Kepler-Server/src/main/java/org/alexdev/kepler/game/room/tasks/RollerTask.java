@@ -98,8 +98,8 @@ public class RollerTask implements Runnable {
 
         if (frontTile.getHighestItem() != null) {
             if (!frontTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
-                if (item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && item.getDefinition().getStackHeight() == frontTile.getHighestItem().getDefinition().getStackHeight()) {
-                    nextHeight -= item.getDefinition().getStackHeight();
+                if (item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && item.getDefinition().getTopHeight() == frontTile.getHighestItem().getDefinition().getTopHeight()) {
+                    nextHeight -= item.getDefinition().getTopHeight();
                 }
             }
         }
@@ -122,7 +122,7 @@ public class RollerTask implements Runnable {
                 }
 
                 if (subtractRollerHeight) {
-                    nextHeight -= roller.getDefinition().getStackHeight();
+                    nextHeight -= roller.getDefinition().getTopHeight();
                 }
             }
         }
@@ -157,7 +157,7 @@ public class RollerTask implements Runnable {
 
         Position front = roller.getPosition().getSquareInFront();
 
-        if (!Pathfinder.isValidStep(this.room, entity, entity.getRoomUser().getPosition(), front, false)) {
+        if (!Pathfinder.isValidStep(this.room, entity, entity.getRoomUser().getPosition(), front, true)) {
             return;
         }
 
@@ -167,7 +167,7 @@ public class RollerTask implements Runnable {
         previousTile.removeEntity(entity);
         nextTile.addEntity(entity);
 
-        double nextHeight = nextTile.getTileHeight();
+        double nextHeight = nextTile.getInteractiveTileHeight();
         double displayNextHeight = nextHeight;
 
         if (entity.getRoomUser().isSittingOnGround()) {
@@ -176,13 +176,13 @@ public class RollerTask implements Runnable {
 
         this.room.sendQueued(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
 
-        if (!entity.getRoomUser().isSittingOnGround()) {
-            entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
-        }
-
         entity.getRoomUser().setNeedsUpdate(true);
         entity.getRoomUser().getPosition().setX(front.getX());
         entity.getRoomUser().getPosition().setY(front.getY());
         entity.getRoomUser().getPosition().setZ(nextHeight);
+
+        if (!entity.getRoomUser().isSittingOnGround()) {
+            entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
+        }
     }
 }

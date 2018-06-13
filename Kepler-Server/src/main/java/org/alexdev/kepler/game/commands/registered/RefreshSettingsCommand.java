@@ -28,9 +28,7 @@ public class RefreshSettingsCommand extends Command {
         }
 
         GameConfiguration.reset();
-
-
-        // TODO: calculate diff between previous calatogue and current and whisper summary of changes
+        
         player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Game settings refreshed."));
     }
 

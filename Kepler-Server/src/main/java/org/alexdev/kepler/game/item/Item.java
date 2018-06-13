@@ -137,7 +137,7 @@ public class Item {
      * @return the total height
      */
     public double getTotalHeight() {
-        return this.position.getZ() + this.definition.getStackHeight();
+        return this.position.getZ() + this.definition.getTopHeight();
     }
 
     /**
