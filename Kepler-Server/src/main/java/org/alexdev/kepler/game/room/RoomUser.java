@@ -176,6 +176,12 @@ public class RoomUser {
      */
     public void invokeItem() {
         boolean needsUpdate = false;
+        double height = this.getTile().getInteractiveTileHeight();
+
+        if (height != this.position.getZ()) {
+            this.position.setZ(height);
+            needsUpdate = true;
+        }
 
         RoomTile tile = this.getTile();
         Item item = null;
