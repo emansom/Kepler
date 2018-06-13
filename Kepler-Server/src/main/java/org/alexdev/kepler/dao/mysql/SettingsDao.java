@@ -11,10 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SettingsDao {
-    public static void updateSetting(String key, int value) {
-        updateSetting(key, String.valueOf(value));
-    }
 
+    /**
+     * Update setting in the database.
+     *
+     * @param key the key used to set the value
+     * @param value the new value to set
+     */
     public static void updateSetting(String key, String value) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
@@ -33,6 +36,12 @@ public class SettingsDao {
         }
     }
 
+    /**
+     * Get a value from the settings table.
+     *
+     * @param key the key used to get the value
+     * @return the value, null if no value was found
+     */
     public static String getSetting(String key) {
         String value = null;
 
@@ -61,7 +70,13 @@ public class SettingsDao {
         return value;
     }
 
-    public static String newSetting(String key, String value) {
+    /**
+     * Create a new setting entry in the database using a key value lookup.
+     *
+     * @param key the key used for the lookup
+     * @param value the value for the key
+     */
+    public static void newSetting(String key, String value) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -78,7 +93,5 @@ public class SettingsDao {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }
-
-        return value;
     }
 }
