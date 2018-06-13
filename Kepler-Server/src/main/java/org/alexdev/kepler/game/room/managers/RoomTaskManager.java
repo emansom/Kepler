@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.room.managers;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.*;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +34,8 @@ public class RoomTaskManager {
         }
 
         if (this.scheduledProcessRoller == null) {
-            this.scheduledProcessRoller = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new RollerTask(room), 0, 3, TimeUnit.SECONDS);
+            int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
+            this.scheduledProcessRoller = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(new RollerTask(room), 0, rollerMillisTask, TimeUnit.MILLISECONDS);
         }
     }
 

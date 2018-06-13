@@ -33,7 +33,7 @@ public class GameConfiguration {
         config.put("welcome.message.enabled", "false");
         config.put("welcome.message.content", "Hello, %username%! And welcome to the Kepler server!");
 
-        config.put("roller.tick.default", "6");
+        config.put("roller.tick.default", "3000");
 
         config.put("afk.timer.seconds", "900");
         config.put("sleep.timer.seconds", "300");
