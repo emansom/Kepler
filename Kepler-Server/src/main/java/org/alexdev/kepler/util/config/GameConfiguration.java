@@ -20,7 +20,6 @@ public class GameConfiguration {
             String value = SettingsDao.getSetting(entrySet.getKey());
 
             if (value != null) {
-                System.out.println("val: " + value);
                 this.config.put(entrySet.getKey(), value);
             } else {
                 SettingsDao.newSetting(entrySet.getKey(), entrySet.getValue());
