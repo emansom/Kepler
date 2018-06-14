@@ -106,9 +106,11 @@ public class RollerTask implements Runnable {
 
         if (frontTile.getHighestItem() != null) {
             if (!frontTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
-                if (item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && item.getDefinition().getTopHeight() == frontTile.getHighestItem().getDefinition().getTopHeight()) {
-                    nextHeight -= item.getDefinition().getTopHeight();
+                if (!frontTile.getHighestItem().isRolling()) {
+                    return false;
                 }
+
+                nextHeight -= item.getDefinition().getTopHeight();
             }
         }
 
