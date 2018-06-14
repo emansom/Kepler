@@ -92,6 +92,21 @@ public class RoomItemManager {
 
         return items;
     }
+
+    public boolean containsItemBehaviour(ItemBehaviour behaviour) {
+        return containsItemBehaviour(this.room.getItems(), behaviour);
+    }
+
+    public static boolean containsItemBehaviour(List<Item> items, ItemBehaviour behaviour) {
+        for (Item item : items) {
+            if (item.hasBehaviour(behaviour)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
     /**
      * Get the rooms' trax machine instance.
      *

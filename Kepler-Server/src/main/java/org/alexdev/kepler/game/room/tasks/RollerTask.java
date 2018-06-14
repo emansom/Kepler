@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
@@ -13,6 +14,7 @@ import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class RollerTask implements Runnable {
     private final Room room;
@@ -64,6 +66,12 @@ public class RollerTask implements Runnable {
         if (itemsToUpdate.size() > 0) {
             this.room.getMapping().regenerateCollisionMap();
             ItemDao.updateItems(itemsToUpdate);
+
+            GameScheduler.getInstance().getSchedulerService().schedule(
+                    new ItemRollingTask(itemsToUpdate, room),
+                    1,
+                    TimeUnit.SECONDS
+            );
         }
     }
 
@@ -132,6 +140,7 @@ public class RollerTask implements Runnable {
         item.getPosition().setX(front.getX());
         item.getPosition().setY(front.getY());
         item.getPosition().setZ(nextHeight);
+        item.setRolling(true);
 
         return true;
     }

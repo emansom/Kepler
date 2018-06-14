@@ -34,6 +34,7 @@ public class Item {
     private String currentProgramValue;
 
     private boolean requiresUpdate;
+    private boolean isRolling;
 
     public Item() {
         this.id = 0;
@@ -436,6 +437,14 @@ public class Item {
 
     public void setRequiresUpdate(boolean requiresUpdate) {
         this.requiresUpdate = requiresUpdate;
+    }
+
+    public boolean isRolling() {
+        return isRolling;
+    }
+
+    public void setRolling(boolean rolling) {
+        isRolling = rolling;
     }
 }
 

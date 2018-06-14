@@ -120,7 +120,9 @@ public class RoomMapping {
             this.room.send(new PLACE_FLOORITEM(item));
         }
 
+        item.setRolling(false);
         item.updateEntities(null);
+
         ItemDao.updateItem(item);
     }
 
@@ -141,6 +143,7 @@ public class RoomMapping {
             this.room.send(new MOVE_FLOORITEM(item));
         }
 
+        item.setRolling(false);
         item.updateEntities(oldPosition);
         ItemDao.updateItem(item);
     }
@@ -167,6 +170,8 @@ public class RoomMapping {
         item.getPosition().setZ(0);
         item.getPosition().setRotation(0);
         item.setRoomId(0);
+        item.setRolling(false);
+
         ItemDao.updateItem(item);
     }
 
