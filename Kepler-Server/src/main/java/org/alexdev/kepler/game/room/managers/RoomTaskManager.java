@@ -37,13 +37,13 @@ public class RoomTaskManager {
             this.processStatus = this.scheduledExecutorService.scheduleAtFixedRate(new StatusTask(room), 0, 1, TimeUnit.SECONDS);
         }
 
-        if (this.room.getItemManager().containsItemBehaviour(ItemBehaviour.ROLLER)) {
-            int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
+        //if (this.room.getItemManager().containsItemBehaviour(ItemBehaviour.ROLLER)) {
+        int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
 
-            if (this.processRoller == null) {
-                this.processRoller = this.scheduledExecutorService.scheduleAtFixedRate(new RollerTask(room), 0, rollerMillisTask, TimeUnit.MILLISECONDS);
-            }
+        if (this.processRoller == null) {
+            this.processRoller = this.scheduledExecutorService.scheduleAtFixedRate(new RollerTask(room), 0, rollerMillisTask, TimeUnit.MILLISECONDS);
         }
+        //}
     }
 
     /**
