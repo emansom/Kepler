@@ -156,6 +156,7 @@ public class RollerTask implements Runnable {
                 }
 
                 if (beginning.equals(roller.getPosition().getSquareInFront())) {
+                    // Fix if a roller loop is filled to the brim, stops stackoverflow exceptions.
                     continue;
                 }
 
