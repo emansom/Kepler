@@ -51,8 +51,8 @@ public class Pathfinder {
         RoomTile fromTile = room.getMapping().getTile(current);
         RoomTile toTile = room.getMapping().getTile(tmp);
 
-        double oldHeight = fromTile.getTileHeight();
-        double newHeight = toTile.getTileHeight();
+        double oldHeight = fromTile.getInteractiveTileHeight();
+        double newHeight = toTile.getInteractiveTileHeight();
 
         if (oldHeight - 4 >= newHeight) {
             return false;
