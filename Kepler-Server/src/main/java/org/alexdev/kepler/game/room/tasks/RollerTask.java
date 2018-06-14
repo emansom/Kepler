@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.managers.RoomItemManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
 import org.alexdev.kepler.util.StringUtil;
@@ -96,45 +97,39 @@ public class RollerTask implements Runnable {
         }
 
         Position front = roller.getPosition().getSquareInFront();
+        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
 
-        if (!RoomTile.isValidTile(this.room, null, front)) {
+        if (frontTile == null) {
             return false;
         }
 
-        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
-        double nextHeight = frontTile.getTileHeight();
-
-        if (frontTile.getHighestItem() != null) {
-            if (!frontTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
-                if (!frontTile.getHighestItem().isRolling()) {
-                    return false;
-                }
-
-                nextHeight -= item.getDefinition().getTopHeight();
+        if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
+            if (!RoomTile.isValidTile(this.room, null, front)) {
+                return false;
             }
         }
 
-        // If this item is stacked, we maintain its stack height
-        if (item.getItemBelow() != null) {
-            if (!item.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
-                nextHeight = item.getPosition().getZ();
+        boolean subtractRollerHeight = true;
+        double nextHeight = item.getPosition().getZ();
 
-                // If the next tile/front tile is not a roller, we need to adjust the sliding so the stacked items
-                // don't float, so we subtract the stack height of the roller
-                boolean subtractRollerHeight = false;
+        if (frontTile.getHighestItem() != null) {
+            for (Item frontItem : frontTile.getItems()) {
+                if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    Position frontPosition = frontItem.getPosition().getSquareInFront();
 
-                if (frontTile.getHighestItem() != null) {
-                    if (!frontTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
-                        subtractRollerHeight = true;
+                    if (frontPosition.equals(item.getPosition())) {
+                        if (frontTile.getItems().size() > 1) {
+                            return false;
+                        }
                     }
-                } else {
-                    subtractRollerHeight = true;
                 }
 
-                if (subtractRollerHeight) {
-                    nextHeight -= roller.getDefinition().getTopHeight();
-                }
+                subtractRollerHeight = false;
             }
+        }
+
+        if (subtractRollerHeight) {
+            nextHeight -= roller.getDefinition().getTopHeight();
         }
 
         this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
@@ -167,18 +162,46 @@ public class RollerTask implements Runnable {
         }
 
         Position front = roller.getPosition().getSquareInFront();
+        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
 
-        if (!Pathfinder.isValidStep(this.room, entity, entity.getRoomUser().getPosition(), front, false)) {
+        if (frontTile == null) {
             return;
         }
 
-        RoomTile nextTile = this.room.getMapping().getTile(front.getX(), front.getY());
+        if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
+            if (!RoomTile.isValidTile(this.room, entity, front)) {
+                return;
+            }
+        }
+
+        boolean subtractRollerHeight = true;
+        double nextHeight = entity.getRoomUser().getPosition().getZ();
+
+        if (frontTile.getHighestItem() != null) {
+            for (Item frontItem : frontTile.getItems()) {
+                if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    Position frontPosition = frontItem.getPosition().getSquareInFront();
+
+                    if (frontPosition.equals(entity.getRoomUser().getPosition())) {
+                        if (frontTile.getItems().size() > 1) {
+                            return;
+                        }
+                    }
+                }
+
+                subtractRollerHeight = false;
+            }
+        }
+
+        if (subtractRollerHeight) {
+            nextHeight -= roller.getDefinition().getTopHeight();
+        }
+
         RoomTile previousTile = this.room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
 
         previousTile.removeEntity(entity);
-        nextTile.addEntity(entity);
+        frontTile.addEntity(entity);
 
-        double nextHeight = nextTile.getInteractiveTileHeight();
         double displayNextHeight = nextHeight;
 
         if (entity.getRoomUser().isSittingOnGround()) {
