@@ -56,22 +56,11 @@ public class RollerTask implements Runnable {
 
                 item.setRolling(false);
 
-                if (this.processItem(roller, item, false, roller.getPosition())) {
+                if (this.processItem(roller, item, true, roller.getPosition())) {
                     blacklist.add(item);
                     itemsToUpdate.put(item, roller);
                 }
             }
-        }
-
-        for (var set : itemsToUpdate.entrySet()) {
-            Item item = set.getKey();
-            Item roller = set.getValue();
-
-            if (!item.isRolling()) {
-                continue;
-            }
-
-            this.processItem(roller, item, true, roller.getPosition());
         }
 
         if (blacklist.size() > 0) {
