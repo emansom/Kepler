@@ -296,6 +296,10 @@ public class Item {
      * @return true, if successful
      */
     private boolean canPlaceOnTop(Item item, Item tileItem) {
+        if (tileItem.isRolling) {
+            return true;
+        }
+
         // Can't place items on solid objects
         if (tileItem.hasBehaviour(ItemBehaviour.SOLID) && !tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
             return false;
