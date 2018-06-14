@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.tasks;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
@@ -14,7 +15,9 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class RollerTask implements Runnable {
@@ -26,53 +29,68 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-        List<Item> itemsToUpdate = new ArrayList<>();
-        List<Object> blacklist = new ArrayList<>();
+        try {
+            Map<Item, Item> itemsToUpdate = new HashMap<>();
+            List<Object> blacklist = new ArrayList<>();
 
-        for (Item roller : this.room.getItems()) {
-            if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
-                continue;
-            }
-
-            List<Entity> entities = roller.getTile().getEntities();
-            List<Item> items = roller.getTile().getItems();
-
-            // Process items on rollers
-            for (Item item : items) {
-                if (blacklist.contains(item)) {
+            for (Item roller : this.room.getItems()) {
+                if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
                     continue;
                 }
 
-                if (this.processItem(roller, item)) {
-                    itemsToUpdate.add(item);
-                    blacklist.add(item);
+                List<Entity> entities = roller.getTile().getEntities();
+                List<Item> items = roller.getTile().getItems();
+
+                // Process items on rollers
+                for (Item item : items) {
+                    if (item.getId() == roller.getId()) {
+                        continue;
+                    }
+
+                    if (item.getPosition().getZ() < roller.getPosition().getZ()) {
+                        continue;
+                    }
+
+                    if (blacklist.contains(item)) {
+                        continue;
+                    }
+
+                    item.setRolling(false);
+
+                    if (this.processItem(roller, item, false, roller.getPosition())) {
+                        blacklist.add(item);
+                        itemsToUpdate.put(item, roller);
+                    }
                 }
             }
 
-            // Process entities on rollers
-            for (Entity entity : entities) {
-                if (blacklist.contains(entity)) {
+            for (var set : itemsToUpdate.entrySet()) {
+                Item item = set.getKey();
+                Item roller = set.getValue();
+
+                if (!item.isRolling()) {
                     continue;
                 }
 
-                this.processEntity(roller, entity);
-                blacklist.add(entity);
+                this.processItem(roller, item, true, roller.getPosition());
             }
-        }
 
-        if (blacklist.size() > 0) {
-            this.room.flushQueued();
-        }
+            if (blacklist.size() > 0) {
+                this.room.flushQueued();
+            }
 
-        if (itemsToUpdate.size() > 0) {
-            this.room.getMapping().regenerateCollisionMap();
-            ItemDao.updateItems(itemsToUpdate);
+            if (itemsToUpdate.size() > 0) {
+                this.room.getMapping().regenerateCollisionMap();
+                ItemDao.updateItems(itemsToUpdate.keySet());
 
-            GameScheduler.getInstance().getSchedulerService().schedule(
-                    new ItemRollingTask(itemsToUpdate, room),
-                    900,
-                    TimeUnit.MILLISECONDS
-            );
+                GameScheduler.getInstance().getSchedulerService().schedule(
+                        new ItemRollingTask(itemsToUpdate.keySet(), room),
+                        900,
+                        TimeUnit.MILLISECONDS
+                );
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -83,19 +101,7 @@ public class RollerTask implements Runnable {
      * @param item the item being rolled
      * @return true, if rolled
      */
-    private boolean processItem(Item roller, Item item) {
-        if (roller == null) {
-            return false;
-        }
-
-        if (item.getId() == roller.getId()) {
-            return false;
-        }
-
-        if (item.getPosition().getZ() < roller.getPosition().getZ()) {
-            return false;
-        }
-
+    private boolean processItem(Item roller, Item item, boolean doMove, Position beginning) {
         Position front = roller.getPosition().getSquareInFront();
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
 
@@ -107,49 +113,72 @@ public class RollerTask implements Runnable {
             return false;
         }
 
-        if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
-            if (!RoomTile.isValidTile(this.room, null, front)) {
-                return false; // Cancel rolling into invalid tile, if the tile isn't a roller tile.
-            }
 
+        if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
             if (frontTile.getEntities().size() > 0 && !item.isWalkable()) {
                 return false; // Don't allow a non-walkable item to roll into an entity
+            }
+
+            if (!RoomTile.isValidTile(this.room, null, front)) {
+                return false; // Cancel rolling into invalid tile, if the tile isn't a roller tile.
             }
         }
 
         boolean subtractRollerHeight = true;
         double nextHeight = item.getPosition().getZ();
 
-        if (frontTile.getHighestItem() != null) {
-            for (Item frontItem : frontTile.getItems()) {
-                if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                    Position frontPosition = frontItem.getPosition().getSquareInFront();
+        Item frontRoller = null;
 
-                    // Don't roll an item into the next roller, if the next roller is facing towards the roller
-                    // it just rolled from.
-                    if (frontPosition.equals(item.getPosition())) {
-                        if (frontTile.getItems().size() > 1) {
-                            return false;
-                        }
-                    }
-                }
-
-                // We know the next tile contains a roller, so we don't subtract the roller height
-                subtractRollerHeight = false;
+        for (Item frontItem : frontTile.getItems()) {
+            if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                frontRoller = frontItem;
+                break;
             }
         }
 
-        if (subtractRollerHeight) {
-            nextHeight -= roller.getDefinition().getTopHeight();
+        if (frontRoller != null) {
+            Position frontPosition = frontRoller.getPosition().getSquareInFront();
+
+            // Don't roll an item into the next roller, if the next roller is facing towards the roller
+            // it just rolled from.
+            if (frontPosition.equals(item.getPosition())) {
+                if (frontTile.getItems().size() > 1) {
+                    return false;
+                }
+            }
+
+            // We know the next tile contains a roller, so we don't subtract the roller height
+            subtractRollerHeight = false;
+
+            for (Item frontItem : frontTile.getItems()) {
+                if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
+                if (beginning.equals(roller.getPosition().getSquareInFront())) {
+                    continue;
+                }
+
+                if (!processItem(frontRoller, frontItem, false, beginning)) {
+                    return false;
+
+                }
+            }
         }
 
-        this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+        if (doMove) {
+            if (subtractRollerHeight) {
+                nextHeight -= roller.getDefinition().getTopHeight();
+            }
 
-        item.getPosition().setX(front.getX());
-        item.getPosition().setY(front.getY());
-        item.getPosition().setZ(nextHeight);
+            this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+
+            item.getPosition().setX(front.getX());
+            item.getPosition().setY(front.getY());
+            item.getPosition().setZ(nextHeight);
+        }
+
         item.setRolling(true);
-
         return true;
     }
 
