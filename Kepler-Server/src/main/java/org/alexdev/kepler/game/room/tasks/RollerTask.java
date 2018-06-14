@@ -29,68 +29,64 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-        try {
-            Map<Item, Item> itemsToUpdate = new HashMap<>();
-            List<Object> blacklist = new ArrayList<>();
+        Map<Item, Item> itemsToUpdate = new HashMap<>();
+        List<Object> blacklist = new ArrayList<>();
 
-            for (Item roller : this.room.getItems()) {
-                if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
+        for (Item roller : this.room.getItems()) {
+            if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
+                continue;
+            }
+
+            List<Entity> entities = roller.getTile().getEntities();
+            List<Item> items = roller.getTile().getItems();
+
+            // Process items on rollers
+            for (Item item : items) {
+                if (item.getId() == roller.getId()) {
                     continue;
                 }
 
-                List<Entity> entities = roller.getTile().getEntities();
-                List<Item> items = roller.getTile().getItems();
-
-                // Process items on rollers
-                for (Item item : items) {
-                    if (item.getId() == roller.getId()) {
-                        continue;
-                    }
-
-                    if (item.getPosition().getZ() < roller.getPosition().getZ()) {
-                        continue;
-                    }
-
-                    if (blacklist.contains(item)) {
-                        continue;
-                    }
-
-                    item.setRolling(false);
-
-                    if (this.processItem(roller, item, false, roller.getPosition())) {
-                        blacklist.add(item);
-                        itemsToUpdate.put(item, roller);
-                    }
-                }
-            }
-
-            for (var set : itemsToUpdate.entrySet()) {
-                Item item = set.getKey();
-                Item roller = set.getValue();
-
-                if (!item.isRolling()) {
+                if (item.getPosition().getZ() < roller.getPosition().getZ()) {
                     continue;
                 }
 
-                this.processItem(roller, item, true, roller.getPosition());
+                if (blacklist.contains(item)) {
+                    continue;
+                }
+
+                item.setRolling(false);
+
+                if (this.processItem(roller, item, false, roller.getPosition())) {
+                    blacklist.add(item);
+                    itemsToUpdate.put(item, roller);
+                }
+            }
+        }
+
+        for (var set : itemsToUpdate.entrySet()) {
+            Item item = set.getKey();
+            Item roller = set.getValue();
+
+            if (!item.isRolling()) {
+                continue;
             }
 
-            if (blacklist.size() > 0) {
-                this.room.flushQueued();
-            }
+            this.processItem(roller, item, true, roller.getPosition());
+        }
 
-            if (itemsToUpdate.size() > 0) {
-                this.room.getMapping().regenerateCollisionMap();
-                ItemDao.updateItems(itemsToUpdate.keySet());
+        if (blacklist.size() > 0) {
+            this.room.flushQueued();
+        }
 
-                GameScheduler.getInstance().getSchedulerService().schedule(
-                        new ItemRollingTask(itemsToUpdate.keySet(), room),
-                        900,
-                        TimeUnit.MILLISECONDS
-                );
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (itemsToUpdate.size() > 0) {
+            this.room.getMapping().regenerateCollisionMap();
+            ItemDao.updateItems(itemsToUpdate.keySet());
+
+            GameScheduler.getInstance().getSchedulerService().schedule(
+                    new ItemRollingTask(itemsToUpdate.keySet(), room),
+                    900,
+                    TimeUnit.MILLISECONDS
+            );
         }
     }
 
@@ -140,7 +136,7 @@ public class RollerTask implements Runnable {
             Position frontPosition = frontRoller.getPosition().getSquareInFront();
 
             // Don't roll an item into the next roller, if the next roller is facing towards the roller
-            // it just rolled from.
+            // it just rolled from, and the next roller has an item on it.
             if (frontPosition.equals(item.getPosition())) {
                 if (frontTile.getItems().size() > 1) {
                     return false;
