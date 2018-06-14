@@ -18,8 +18,7 @@ public class ItemRollingTask implements Runnable {
     public void run() {
         for (Item item : this.rollingItems) {
             if (item.isRolling()) {
-                System.out.println("Set rolling: " + item.getDefinition().getSprite());
-                item.setRolling(true);
+                item.setRolling(false);
             }
         }
     }

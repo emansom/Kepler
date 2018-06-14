@@ -69,8 +69,8 @@ public class RollerTask implements Runnable {
 
             GameScheduler.getInstance().getSchedulerService().schedule(
                     new ItemRollingTask(itemsToUpdate, room),
-                    1,
-                    TimeUnit.SECONDS
+                    900,
+                    TimeUnit.MILLISECONDS
             );
         }
     }
