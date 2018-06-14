@@ -103,9 +103,17 @@ public class RollerTask implements Runnable {
             return false;
         }
 
+        if (front.equals(this.room.getModel().getDoorLocation())) {
+            return false;
+        }
+
         if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
             if (!RoomTile.isValidTile(this.room, null, front)) {
-                return false;
+                return false; // Cancel rolling into invalid tile, if the tile isn't a roller tile.
+            }
+
+            if (frontTile.getEntities().size() > 0 && !item.isWalkable()) {
+                return false; // Don't allow a non-walkable item to roll into an entity
             }
         }
 
@@ -117,6 +125,8 @@ public class RollerTask implements Runnable {
                 if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                     Position frontPosition = frontItem.getPosition().getSquareInFront();
 
+                    // Don't roll an item into the next roller, if the next roller is facing towards the roller
+                    // it just rolled from.
                     if (frontPosition.equals(item.getPosition())) {
                         if (frontTile.getItems().size() > 1) {
                             return false;
@@ -124,6 +134,7 @@ public class RollerTask implements Runnable {
                     }
                 }
 
+                // We know the next tile contains a roller, so we don't subtract the roller height
                 subtractRollerHeight = false;
             }
         }
@@ -162,15 +173,19 @@ public class RollerTask implements Runnable {
         }
 
         Position front = roller.getPosition().getSquareInFront();
-        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
+        RoomTile frontTile = this.room.getMapping().getTile(front);
 
         if (frontTile == null) {
             return;
         }
 
+        if (front.equals(this.room.getModel().getDoorLocation())) {
+            return;
+        }
+
         if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
             if (!RoomTile.isValidTile(this.room, entity, front)) {
-                return;
+                return; // Cancel rolling into invalid tile, if the tile isn't a roller tile.
             }
         }
 
@@ -182,6 +197,8 @@ public class RollerTask implements Runnable {
                 if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                     Position frontPosition = frontItem.getPosition().getSquareInFront();
 
+                    // Don't roll an item into the next roller, if the next roller is facing towards the roller
+                    // it just rolled from.
                     if (frontPosition.equals(entity.getRoomUser().getPosition())) {
                         if (frontTile.getItems().size() > 1) {
                             return;
@@ -189,6 +206,7 @@ public class RollerTask implements Runnable {
                     }
                 }
 
+                // We know the next tile contains a roller, so we don't subtract the roller height
                 subtractRollerHeight = false;
             }
         }
