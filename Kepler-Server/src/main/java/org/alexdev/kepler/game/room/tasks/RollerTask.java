@@ -151,18 +151,19 @@ public class RollerTask implements Runnable {
             subtractRollerHeight = false;
 
             for (Item frontItem : frontTile.getItems()) {
+                // Don't check against the roller in the next tile, because it never moves.
                 if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                     continue;
                 }
 
+                // Fix if a roller is in a circle, and is filled to the brim, stops stackoverflow exceptions.
                 if (beginning.equals(roller.getPosition().getSquareInFront())) {
-                    // Fix if a roller loop is filled to the brim, stops stackoverflow exceptions.
                     continue;
                 }
 
+                // If the item in front can't roll, then this item can't roll either.
                 if (!processItem(frontRoller, frontItem, false, beginning)) {
                     return false;
-
                 }
             }
         }
