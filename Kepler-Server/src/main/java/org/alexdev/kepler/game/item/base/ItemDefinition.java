@@ -35,9 +35,9 @@ public class ItemDefinition {
         this.colour = colour;
         this.behaviourList = parseBehaviour(this.behaviourData);
 
-        /* if (!this.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
-            this.stackHeight = 0;
-        }
+         if (!this.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+            this.topHeight = 0.001;
+        }/*
 
         if (this.stackHeight == 0) {
             this.stackHeight = 0.001;
