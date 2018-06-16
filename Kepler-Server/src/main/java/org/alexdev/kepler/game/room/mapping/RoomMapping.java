@@ -18,6 +18,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_WALLITEM;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.zip.CheckedOutputStream;
 
 public class RoomMapping {
     private Room room;
@@ -190,6 +191,28 @@ public class RoomMapping {
 
         if (!isRotation) {
             item.getPosition().setZ(tile.getTileHeight());
+
+            // Allow to place underneath a rolling item if there's a considerable gap
+            for (Item itemRolling : tile.getItems()) {
+                 if (!itemRolling.isRolling()) {
+                    continue;
+                }
+
+                if (itemRolling.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                    continue;
+                }
+
+                if (itemRolling.getItemBelow() != null && itemRolling.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
+                     if (itemRolling.getPosition().getZ() - itemRolling.getItemBelow().getPosition().getZ() >= 0.5) {
+                         item.getPosition().setZ(
+                                 itemRolling.getItemBelow().getPosition().getZ() +
+                                 itemRolling.getItemBelow().getDefinition().getTopHeight()
+                         );
+
+                     }
+                    break;
+                }
+            }
         }
 
         if (item.getPosition().getZ() > 8) {

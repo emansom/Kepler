@@ -245,8 +245,33 @@ public class Item {
      * @return true, if successful
      */
     public boolean isValidMove(Item item, Room room, int x, int y, int rotation) {
+        RoomTile tile = room.getMapping().getTile(x, y);
+
+        if (tile == null) {
+            return false;
+        }
+
+        for (Item rollingItem : tile.getItems()) {
+            if (rollingItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                continue;
+            }
+
+            if (rollingItem.getId() == item.getId()) {
+                continue;
+            }
+
+            if (rollingItem.isRolling()) {
+                if (rollingItem.getItemBelow() != null && rollingItem.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
+                    if (rollingItem.getPosition().getZ() - rollingItem.getItemBelow().getPosition().getZ() >= 0.5) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
-            RoomTile tile = room.getMapping().getTile(position);
+            tile = room.getMapping().getTile(position);
 
             if (tile == null) {
                 return false;
@@ -297,7 +322,7 @@ public class Item {
      */
     private boolean canPlaceOnTop(Item item, Item tileItem) {
         if (tileItem.isRolling) {
-            return true;
+            //return true;
         }
 
         // Can't place items on solid objects
