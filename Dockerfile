@@ -6,6 +6,7 @@ ENV GOPATH /usr/src/golang
 ENV PATH $GOPATH/bin:$PATH
 
 # Install Kepler dependencies
+# TODO: install latest version of gradle
 RUN apt-get update && apt-get install -y --no-install-recommends \
       build-essential \
       golang-go \
