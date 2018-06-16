@@ -156,8 +156,9 @@ public class Inventory {
     }
 
     /**
+     * Get all soundset track IDs within the inventory.
      *
-     * @return
+     * @return the list of soundsets
      */
     public List<Integer> getSoundsets() {
         List<Integer> handSoundsets = new ArrayList<>();

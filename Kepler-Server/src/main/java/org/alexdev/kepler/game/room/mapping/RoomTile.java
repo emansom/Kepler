@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.mapping;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
@@ -23,6 +24,45 @@ public class RoomTile {
         this.position = position;
         this.entities = new CopyOnWriteArrayList<>();
         this.items = new CopyOnWriteArrayList<>();
+    }
+
+    /**
+     * Gets if the tile was valid.
+     *
+     * @param entity the entity checking
+     * @param position the position of the tile
+     * @return true, if successful
+     */
+    public static boolean isRollerValidTile(Room room, Entity entity, Position position) {
+        if (room == null) {
+            return false;
+        }
+
+        RoomTile tile = room.getMapping().getTile(position);
+
+        if (tile == null) {
+            return false;
+        }
+
+        if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
+            if (entity != null) {
+                if (!tile.getHighestItem().isRolling()) {
+                    return false;
+                }
+
+                return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
+            } else {
+                return false;
+            }
+        }
+
+        if (entity != null) {
+            if (tile.getEntities().size() > 0) {
+                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
+            }
+        }
+
+        return room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.OPEN;
     }
 
     /**
@@ -64,7 +104,7 @@ public class RoomTile {
      * Checks if current tile touches target tile
      */
     public boolean touches(RoomTile targetTile) {
-        return this.position.getDistanceSquared(targetTile.getPosition()) == 1;
+        return this.position.getDistanceSquared(targetTile.getPosition()) <= 2;
     }
 
     /**
@@ -115,6 +155,24 @@ public class RoomTile {
      */
     public double getTileHeight() {
         return tileHeight;
+    }
+
+    /**
+     * Get the current height of the tile, but take away the offset of chairs
+     * and beds so users can sit on them properly.
+     *
+     * @return the interactive tile height
+     */
+    public double getInteractiveTileHeight() {
+        double height = this.tileHeight;
+
+        if (this.highestItem != null) {
+            if (this.highestItem.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || this.highestItem.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
+                height -= this.highestItem.getDefinition().getTopHeight();
+            }
+        }
+
+        return height;
     }
 
     /**

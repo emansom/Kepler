@@ -2,7 +2,7 @@ package org.alexdev.kepler.game.player;
 
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
-import org.alexdev.kepler.dao.mysql.SettingDao;
+
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
@@ -60,8 +60,8 @@ public class Player extends Entity {
         this.sendQueued(new LOGIN());
         this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
 
-        if (GameConfiguration.getBoolean("welcome.message.enabled")) {
-            String alertMessage = GameConfiguration.getString("welcome.message.content");
+        if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
+            String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
             alertMessage = alertMessage.replace("%username%", this.details.getName());
 
             this.sendQueued(new ALERT(alertMessage));
@@ -225,7 +225,6 @@ public class Player extends Entity {
         }
 
         PlayerManager.getInstance().removePlayer(this);
-
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
 
         if (this.roomUser.getRoom() != null) {

@@ -8,10 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ItemDao {
     
@@ -307,7 +304,7 @@ public class ItemDao {
      *
      * @param items the list of items
      */
-    public static void updateItems(List<Item> items) {
+    public static void updateItems(Collection<Item> items) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
