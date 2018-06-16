@@ -291,6 +291,26 @@ CREATE TABLE `settings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `site_menu`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `site_menu` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `parent_id` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `order_id` tinyint(3) unsigned NOT NULL,
+  `caption` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `controller` varchar(70) NOT NULL,
+  `action` varchar(70) NOT NULL,
+  `icon` varchar(70) NOT NULL,
+  `visibility` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `soundmachine_playlists`
 --
 
@@ -365,7 +385,7 @@ CREATE TABLE `users` (
   `sound_enabled` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -450,6 +470,7 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20180605211259'),
   ('20180605211518'),
   ('20180605211722'),
+  ('20180606130528'),
   ('20180606163724'),
   ('20180606171138'),
   ('20180609193613'),
@@ -457,5 +478,6 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20180609193627'),
   ('20180610045026'),
   ('20180610071051'),
+  ('20180610084935'),
   ('20180610105026');
 UNLOCK TABLES;
