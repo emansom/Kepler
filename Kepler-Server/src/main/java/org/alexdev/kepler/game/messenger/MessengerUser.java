@@ -23,7 +23,7 @@ public class MessengerUser {
 
         response.writeInt(details.getId());
         response.writeString(details.getName());
-        response.writeBool(details.getSex().toLowerCase().equals("m"));
+        response.writeBool(Character.toLowerCase(details.getSex()) == 'm');
         response.writeString(details.getConsoleMotto());
 
         Player player = PlayerManager.getInstance().getPlayerById(details.getId());

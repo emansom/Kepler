@@ -1,5 +1,9 @@
 package org.alexdev.kepler.game.player;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import java.text.Normalizer;
 import java.util.List;
 
 public class PlayerDetails {
@@ -11,7 +15,7 @@ public class PlayerDetails {
     private int credits;
     private String motto;
     private String consoleMotto;
-    private String sex;
+    private char sex;
     private int tickets;
     private int film;
     private int rank;
@@ -22,6 +26,7 @@ public class PlayerDetails {
     private boolean showBadge;
     private List<String> badges;
     private boolean allowStalking;
+    private boolean soundEnabled;
 
     public PlayerDetails() { }
 
@@ -47,27 +52,43 @@ public class PlayerDetails {
      * @param showBadge whether the badge is shown or not
      * @param badges An array of strings of badges
      * @param allowStalking allow stalking/following
+     * @param soundEnabled allow playing music from soundmachines
      */
-    public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking) {
+    public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking, boolean soundEnabled) {
         this.id = id;
-        this.username = username;
-        this.password = password;
-        this.figure = figure;
-        this.poolFigure = poolFigure;
+        // TODO: handle special habbo-related alt codes in username
+        this.username = Normalizer.normalize(username, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+        this.password = Normalizer.normalize(password, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+
+        // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
+        this.figure = Normalizer.normalize(figure, Normalizer.Form.NFD).replaceAll("[^\\p{Alnum}-.]", "");
+
+        // Format: ch=s02/238,238,238
+        this.poolFigure = Normalizer.normalize(poolFigure, Normalizer.Form.NFD).replaceAll("[^\\p{Alnum}=,/]", "");
+
+        // TODO: handle special habbo-related alt codes in motto and consoleMotto
+        this.motto = Normalizer.normalize(motto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+        this.consoleMotto =  Normalizer.normalize(consoleMotto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+
+        this.sex = sex.toLowerCase().equals("f") ? 'F' : 'M';
+
         this.credits = credits;
-        this.motto = motto;
-        this.consoleMotto = consoleMotto;
-        this.sex = sex;
         this.tickets = tickets;
         this.film = film;
         this.rank = rank;
+
         this.lastOnline = lastOnline;
+
         this.clubSubscribed = clubSubscribed;
         this.clubExpiration = clubExpiration;
+
+        // TODO: check if length is 3 and only contains Alphanumeric characters, else set to empty string and log warning
         this.currentBadge = currentBadge;
-        this.showBadge = showBadge;
         this.badges = badges;
+
+        this.showBadge = showBadge;
         this.allowStalking = allowStalking;
+        this.soundEnabled = soundEnabled;
     }
 
     public int getId() {
@@ -118,11 +139,11 @@ public class PlayerDetails {
         this.consoleMotto = consoleMotto;
     }
 
-    public String getSex() {
+    public char getSex() {
         return sex;
     }
 
-    public void setSex(String sex) {
+    public void setSex(char sex) {
         this.sex = sex;
     }
 
@@ -202,7 +223,15 @@ public class PlayerDetails {
         return allowStalking;
     }
 
-    public void setAllowStalking() {
+    public void setAllowStalking(boolean allowStalking) {
         this.allowStalking = allowStalking;
+    }
+
+    public boolean getSoundSetting() {
+        return soundEnabled;
+    }
+
+    public void setSoundSetting(boolean soundEnabled) {
+        this.soundEnabled = soundEnabled;
     }
 }

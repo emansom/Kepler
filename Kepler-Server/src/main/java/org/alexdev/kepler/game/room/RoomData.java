@@ -1,7 +1,10 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +43,9 @@ public class RoomData {
             this.ownerName = "";
         }
         this.categoryId = category;
-        this.name = name;
-        this.description = description;
+        // TODO: handle special habbo-related alt codes in regex for name and description
+        this.name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+        this.description = Normalizer.normalize(description, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
         this.model = model;
         this.ccts = ccts;
         this.wallpaper = wallpaper;

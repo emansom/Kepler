@@ -59,9 +59,6 @@ public class MessageHandler {
         registerInventoryPackets();
         registerTradePackets();
         registerSongPackets();
-        //if (ServerConfiguration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
-        //    log.info("Loaded {} message event handlers", messages.size());
-        //}
     }
 
     /**
