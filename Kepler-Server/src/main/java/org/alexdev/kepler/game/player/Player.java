@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.player;
 
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
@@ -12,6 +13,7 @@ import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.util.DateUtil;
@@ -68,10 +70,9 @@ public class Player extends Entity {
         this.flushSendQueue();
 
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
-        //SettingsDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
 
         if (!ServerConfiguration.getBoolean("debug")) {
-            PlayerDao.clearTicket(this.details.getId()); // Protect against replay attacks
+            PlayerDao.clearSSOTicket(this.details.getId()); // Protect against replay attacks
         }
 
     }
@@ -82,12 +83,16 @@ public class Player extends Entity {
     public void refreshAppearance() {
         var newDetails = PlayerDao.getDetails(this.details.getId());
 
+        // Reload figure, gender and motto
         this.details.setFigure(newDetails.getFigure());
         this.details.setSex(newDetails.getSex());
         this.details.setMotto(newDetails.getMotto());
 
-        var room = this.getRoom();
+        // Send refresh to user
+        this.send(new USER_OBJECT(this.details));
 
+        // Send refresh to room if inside room
+        var room = this.getRoom();
         if (room != null) {
             room.send(new FIGURE_CHANGE(this.roomUser.getInstanceId(), this.details));
         }
@@ -221,7 +226,6 @@ public class Player extends Entity {
 
         PlayerManager.getInstance().removePlayer(this);
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
-        //SettingsDao.updateSetting("users_online", PlayerManager.getInstance().getPlayers().size());
 
         if (this.roomUser.getRoom() != null) {
             this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);

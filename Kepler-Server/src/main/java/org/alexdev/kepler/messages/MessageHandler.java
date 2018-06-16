@@ -59,9 +59,6 @@ public class MessageHandler {
         registerInventoryPackets();
         registerTradePackets();
         registerSongPackets();
-        //if (ServerConfiguration.getInstance().getServerConfig().getInteractor("Logging", "log.items.loaded", Boolean.class)) {
-        //    log.info("Loaded {} message event handlers", messages.size());
-        //}
     }
 
     /**
@@ -80,6 +77,7 @@ public class MessageHandler {
     private void registerUserPackets() {
         registerEvent(7, new GET_INFO());
         registerEvent(8, new GET_CREDITS());
+        registerEvent(228, new GET_SOUND_SETTING());
         registerEvent(196, new PONG());
         //registerEvent(315, new TEST_LATENCY());
     }
@@ -129,6 +127,7 @@ public class MessageHandler {
         registerEvent(94, new WAVE());
         registerEvent(93, new DANCE());
         registerEvent(88, new STOP());
+        registerEvent(229, new SET_SOUND_SETTING());
     }
 
 

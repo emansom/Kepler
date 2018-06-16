@@ -15,6 +15,7 @@ import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.server.netty.NettyServer;
+import org.alexdev.kepler.server.rcon.RconServer;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.alexdev.kepler.util.DateUtil;
@@ -31,10 +32,13 @@ public class Kepler {
 
     private static String serverIP;
     private static int serverPort;
+    private static String rconIP;
+    private static int rconPort;
 
     private static boolean isShutdown;
     
     private static NettyServer server;
+    private static RconServer rcon;
     private static Logger log;
 
     /**
@@ -80,6 +84,7 @@ public class Kepler {
             MessageHandler.getInstance();
             TextsManager.getInstance();
 
+
             // Get the server variables for the socket to listen on
             serverIP = ServerConfiguration.getString("server.bind");
             serverPort = ServerConfiguration.getInteger("server.port");
@@ -102,6 +107,23 @@ public class Kepler {
             server.createSocket();
             server.bind();
 
+
+            rconIP = ServerConfiguration.getString("rcon.bind");
+            rconPort = ServerConfiguration.getInteger("rcon.port");
+
+            // Validate an IPv4 or IPv6 address
+            if (!validator.isValid(rconIP)) {
+                log.error("%s is not a valid IP", rconIP);
+                return;
+            }
+
+            // getByName parses IPv6, IPv4 and DNS all in one go
+            rconIP = InetAddress.getByName(rconIP).getHostAddress();
+
+            rcon = new RconServer(rconIP, rconPort);
+            rcon.listen();
+
+
             Runtime.getRuntime().addShutdownHook(new Thread(() -> dispose()));
 
         } catch (Exception e) {
@@ -110,15 +132,22 @@ public class Kepler {
     }
 
     private static void dispose() {
-        log.info("Shutting down server!");
-        isShutdown = true;
+        try {
 
-        // TODO: all the managers
-        PlayerManager.getInstance().dispose();
+            log.info("Shutting down server!");
+            isShutdown = true;
 
-        // Stop listening
-        getServer().getWorkerGroup().shutdownGracefully();
-        getServer().getBossGroup().shutdownGracefully();
+            // TODO: all the managers
+            PlayerManager.getInstance().dispose();
+
+            // Stop listening
+            server.getWorkerGroup().shutdownGracefully();
+            server.getBossGroup().shutdownGracefully();
+
+            rcon.dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -128,6 +157,15 @@ public class Kepler {
      */
     public static NettyServer getServer() {
         return server;
+    }
+
+    /**
+     * Returns the interface to the server handler
+     *
+     * @return {@link NettyServer} interface
+     */
+    public static RconServer getRcon() {
+        return rcon;
     }
 
     /**
@@ -144,6 +182,22 @@ public class Kepler {
      */
     public static int getServerPort() {
         return serverPort;
+    }
+
+    /**
+     * Gets the rcon IPv4 IP address it is currently (or attempting to) listen on
+     * @return IP as string
+     */
+    public static String getRconIP() {
+        return rconIP;
+    }
+
+    /**
+     * Gets the rcon port it is currently (or attempting to) listen on
+     * @return string of IP
+     */
+    public static int getRconPort() {
+        return rconPort;
     }
 
     /**

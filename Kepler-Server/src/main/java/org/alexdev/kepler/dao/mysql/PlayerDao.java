@@ -137,7 +137,7 @@ public class PlayerDao {
      *
      * @param userId ID of user
      */
-    public static void clearTicket(int userId) {
+    public static void clearSSOTicket(int userId) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -248,6 +248,30 @@ public class PlayerDao {
     }
 
     /**
+     * Update sound setting.
+     *
+     * @param details the details of the user
+     */
+    public static void saveSoundSetting(PlayerDetails details) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET sound_enabled = ? WHERE id = ?", sqlConnection);
+            preparedStatement.setBoolean(1, details.getSoundSetting());
+            preparedStatement.setInt(2, details.getId());
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
      * Update details.
      *
      * @param details the player details to save
@@ -261,7 +285,7 @@ public class PlayerDao {
             preparedStatement = Storage.getStorage().prepare("UPDATE users SET figure = ?, pool_figure = ?, sex = ?, rank = ? WHERE id = ?", sqlConnection);
             preparedStatement.setString(1, details.getFigure());
             preparedStatement.setString(2, details.getPoolFigure());
-            preparedStatement.setString(3, details.getSex());
+            preparedStatement.setString(3, Character.toString(details.getSex()));
             preparedStatement.setInt(4, details.getRank());
             preparedStatement.setInt(5, details.getId());
             preparedStatement.execute();
@@ -448,6 +472,6 @@ public class PlayerDao {
                 row.getString("motto"), row.getString("console_motto"), row.getString("sex"),
                 row.getInt("tickets"), row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
-                row.getBoolean("badge_active"), PlayerDao.getBadges(row.getInt("id")), row.getBoolean("allow_stalking"));
+                row.getBoolean("badge_active"), PlayerDao.getBadges(row.getInt("id")), row.getBoolean("allow_stalking"), row.getBoolean("sound_enabled"));
     }
 }

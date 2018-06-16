@@ -40,21 +40,21 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/server.ini Rcon rcon.bind 0.0.0.0 && \
     crudini --set /usr/src/kepler/server.ini Rcon rcon.port 12309 && \
     crudini --set /usr/src/kepler/server.ini Database mysql.hostname mariadb && \
+    crudini --set /usr/src/kepler/server.ini Database mysql.port 3306 && \
     crudini --set /usr/src/kepler/server.ini Database mysql.username kepler && \
     crudini --set /usr/src/kepler/server.ini Database mysql.password verysecret && \
     crudini --set /usr/src/kepler/server.ini Database mysql.database kepler && \
     crudini --set /usr/src/kepler/server.ini Logging log.connections true && \
-    crudini --set /usr/src/kepler/server.ini Logging log.sent.packets true && \
-    crudini --set /usr/src/kepler/server.ini Logging log.received.packets true && \
-    crudini --set /usr/src/kepler/server.ini Logging log.items.loaded true && \
+    crudini --set /usr/src/kepler/server.ini Logging log.sent.packets false && \
+    crudini --set /usr/src/kepler/server.ini Logging log.received.packets false && \
     crudini --set /usr/src/kepler/game.ini Game roller.tick.default 6 && \
-    crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds 900 && \
+    crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds 1800 && \
     crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds 300 && \
     crudini --set /usr/src/kepler/game.ini Game carry.timer.seconds 300 && \
     crudini --set /usr/src/kepler/game.ini Game fuck.aaron true && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled false && \
     crudini --set /usr/src/kepler/game.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
-    crudini --set /usr/src/kepler/server.ini Console debug true && \
+    crudini --set /usr/src/kepler/server.ini Console debug false && \
     cat /usr/src/kepler/server.ini && \
     cat /usr/src/kepler/game.ini && \
     chown kepler:kepler /usr/src/kepler/server.ini && \

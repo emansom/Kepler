@@ -30,15 +30,16 @@ public class ServerConfiguration {
         config.put("rcon.bind", "127.0.0.1");
         config.put("rcon.port", "12309");
 
+        config.put("log.connections", "true");
         config.put("log.sent.packets", "false");
         config.put("log.received.packets", "false");
 
         config.put("mysql.hostname", "127.0.0.1");
+        config.put("mysql.port", "3306");
         config.put("mysql.username", "kepler");
         config.put("mysql.password", "verysecret");
         config.put("mysql.database", "kepler");
 
-/*        config.put("sso.tickets.enabled", "true");
         config.put("fuck.aaron", "true");
 
         config.put("welcome.message.enabled", "true");
@@ -47,7 +48,7 @@ public class ServerConfiguration {
         config.put("roller.tick.default", "6");
 
         config.put("afk.timer.seconds", "900");
-        config.put("sleep.timer.seconds", "300");*/
+        config.put("sleep.timer.seconds", "300");
 
         config.put("debug", "false");
     }

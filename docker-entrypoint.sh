@@ -22,6 +22,10 @@ if [ -z "$MYSQL_HOST" ]; then
     crudini --set /usr/src/kepler/config.ini Database mysql.hostname $MYSQL_HOST
 fi
 
+if [ -z "$MYSQL_PORT" ]; then
+    crudini --set /usr/src/kepler/config.ini Database mysql.port $MYSQL_PORT
+fi
+
 if [ -z "$MYSQL_USER" ]; then
     crudini --set /usr/src/kepler/config.ini Database mysql.username $MYSQL_USER
 fi

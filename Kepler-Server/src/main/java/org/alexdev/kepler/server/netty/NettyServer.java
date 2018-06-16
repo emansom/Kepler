@@ -31,7 +31,7 @@ public class NettyServer  {
 	final private static Logger log = LoggerFactory.getLogger(NettyServer.class);
 
     private final String ip;
-    private final Integer port;
+    private final int port;
 
     private DefaultChannelGroup channels;
     private ServerBootstrap bootstrap;
@@ -40,7 +40,7 @@ public class NettyServer  {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
 
-    public NettyServer(String ip, Integer port) {
+    public NettyServer(String ip, int port) {
         this.ip = ip;
         this.port = port;
         this.channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);

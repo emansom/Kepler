@@ -21,11 +21,11 @@ public class Storage {
     private static Storage storage;
     private static Logger log = LoggerFactory.getLogger(Storage.class);
     
-    private Storage(String host, String username, String password, String db) {
+    private Storage(String host, int port, String username, String password, String db) {
         try {
             HikariConfig config = new HikariConfig();
             config.setDriverClassName("org.mariadb.jdbc.Driver");
-            config.setJdbcUrl("jdbc:mariadb://" + host + ":3306/" + db);
+            config.setJdbcUrl("jdbc:mariadb://" + host + ":"  + port + "/" + db);
             config.setUsername(username);
             config.setPassword(password);
             
@@ -64,6 +64,7 @@ public class Storage {
         Storage.getLogger().info("Connecting to MySQL server");
 
         storage = new Storage(ServerConfiguration.getString("mysql.hostname"),
+                ServerConfiguration.getInteger("mysql.port"),
                 ServerConfiguration.getString("mysql.username"),
                 ServerConfiguration.getString("mysql.password"),
                 ServerConfiguration.getString("mysql.database"));
