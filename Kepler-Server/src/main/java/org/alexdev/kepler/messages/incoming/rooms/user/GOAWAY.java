@@ -23,7 +23,12 @@ public class GOAWAY implements MessageEvent {
             return;
         }
 
-        // Walk to door
+        // Attempt to walk to the door
         player.getRoomUser().walkTo(doorPos.getX(), doorPos.getY());
+
+        // If user isn't walking, leave immediately
+        if (!player.getRoomUser().isWalking()) {
+            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, true);
+        }
     }
 }
