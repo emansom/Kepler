@@ -273,8 +273,66 @@ CREATE TABLE `rooms_rights` (
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `schema_migrations` (
-  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `version` varchar(255) NOT NULL,
   PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `settings`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `settings` (
+  `setting` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `value` varchar(200) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT ''
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `soundmachine_playlists`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `soundmachine_playlists` (
+  `item_id` int(11) NOT NULL,
+  `song_id` int(11) NOT NULL,
+  `slot_id` int(11) NOT NULL,
+  KEY `machineid` (`item_id`),
+  KEY `songid` (`song_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `soundmachine_songs`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `soundmachine_songs` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT 0,
+  `title` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `item_id` int(11) NOT NULL,
+  `length` int(3) NOT NULL DEFAULT 0,
+  `data` text COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `burnt` tinyint(1) NOT NULL DEFAULT 0,
+  UNIQUE KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `soundmachine_tracks`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `soundmachine_tracks` (
+  `soundmachine_id` int(11) NOT NULL,
+  `track_id` int(11) NOT NULL,
+  `slot_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -298,15 +356,16 @@ CREATE TABLE `users` (
   `rank` tinyint(1) unsigned NOT NULL DEFAULT 1,
   `console_motto` varchar(100) NOT NULL DEFAULT 'I''m a new user!',
   `last_online` int(11) NOT NULL DEFAULT 0,
-  `sso_ticket` varchar(255) NOT NULL,
+  `sso_ticket` varchar(255) NOT NULL DEFAULT '',
   `club_subscribed` bigint(11) NOT NULL DEFAULT 0,
   `club_expiration` bigint(11) NOT NULL DEFAULT 0,
   `badge` char(3) NOT NULL DEFAULT '',
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
+  `sound_enabled` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -390,5 +449,13 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20180605211154'),
   ('20180605211259'),
   ('20180605211518'),
-  ('20180605211722');
+  ('20180605211722'),
+  ('20180606163724'),
+  ('20180606171138'),
+  ('20180609193613'),
+  ('20180609193620'),
+  ('20180609193627'),
+  ('20180610045026'),
+  ('20180610071051'),
+  ('20180610105026');
 UNLOCK TABLES;
