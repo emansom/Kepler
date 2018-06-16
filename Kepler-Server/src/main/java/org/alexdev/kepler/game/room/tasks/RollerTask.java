@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.tasks;
 
+import com.goterl.lazycode.lazysodium.interfaces.Hash;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
@@ -16,7 +17,6 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class RollerTask implements Runnable {
@@ -28,7 +28,9 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-        Map<Item, Item> itemsToUpdate = new HashMap<>();
+        HashMap<Item, Item> updateItems = new HashMap<>();
+
+        List<Item> itemsToUpdate = new ArrayList<>();
         List<Object> blacklist = new ArrayList<>();
 
         for (Item roller : this.room.getItems()) {
@@ -41,39 +43,44 @@ public class RollerTask implements Runnable {
 
             // Process items on rollers
             for (Item item : items) {
-                if (item.getId() == roller.getId()) {
-                    continue;
-                }
-
-                if (item.getPosition().getZ() < roller.getPosition().getZ()) {
-                    continue;
-                }
-
                 if (blacklist.contains(item)) {
                     continue;
                 }
 
-                item.setRolling(false);
-
-                if (this.processItem(roller, item, true, roller.getPosition())) {
+                if (this.processItem(roller, item, false)) {
+                    itemsToUpdate.add(item);
                     blacklist.add(item);
-                    itemsToUpdate.put(item, roller);
+                    updateItems.put(item, roller);
                 }
+            }
+
+            // Process entities on rollers
+            for (Entity entity : entities) {
+                if (blacklist.contains(entity)) {
+                    continue;
+                }
+
+                this.processEntity(roller, entity);
+                blacklist.add(entity);
             }
         }
 
+        for (var set : updateItems.entrySet()) {
+            this.processItem(set.getValue(), set.getKey(), true);
+        }
+
         if (blacklist.size() > 0) {
-            this.room.flushQueued();
+            //this.room.flushQueued();
         }
 
         if (itemsToUpdate.size() > 0) {
             this.room.getMapping().regenerateCollisionMap();
-            ItemDao.updateItems(itemsToUpdate.keySet());
+            ItemDao.updateItems(itemsToUpdate);
 
             GameScheduler.getInstance().getSchedulerService().schedule(
-                    new ItemRollingTask(itemsToUpdate.keySet(), room),
-                    900,
-                    TimeUnit.MILLISECONDS
+                    new ItemRollingTask(itemsToUpdate, room),
+                    1,
+                    TimeUnit.SECONDS
             );
         }
     }
@@ -85,7 +92,19 @@ public class RollerTask implements Runnable {
      * @param item the item being rolled
      * @return true, if rolled
      */
-    private boolean processItem(Item roller, Item item, boolean doMove, Position beginning) {
+    private boolean processItem(Item roller, Item item, boolean doMove) {
+        if (roller == null) {
+            return false;
+        }
+
+        if (item.getId() == roller.getId()) {
+            return false;
+        }
+
+        if (item.getPosition().getZ() < roller.getPosition().getZ()) {
+            return false;
+        }
+
         Position front = roller.getPosition().getSquareInFront();
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
 
@@ -93,78 +112,90 @@ public class RollerTask implements Runnable {
             return false;
         }
 
-        if (front.equals(this.room.getModel().getDoorLocation())) {
+        if (frontTile.getEntities().size() > 0) {
             return false;
         }
 
-
-        if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
-            if (frontTile.getEntities().size() > 0 && !item.isWalkable()) {
-                return false; // Don't allow a non-walkable item to roll into an entity
-            }
-
-            if (!RoomTile.isValidTile(this.room, null, front)) {
-                return false; // Cancel rolling into invalid tile, if the tile isn't a roller tile.
-            }
-        }
-
+        double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
         boolean subtractRollerHeight = true;
-        double nextHeight = item.getPosition().getZ();
 
-        Item frontRoller = null;
-
-        for (Item frontItem : frontTile.getItems()) {
-            if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                frontRoller = frontItem;
-                break;
-            }
+        if (frontTile.getEntities().size() > 0) {
+            return false;
         }
 
-        if (frontRoller != null) {
-            Position frontPosition = frontRoller.getPosition().getSquareInFront();
-
-            // Don't roll an item into the next roller, if the next roller is facing towards the roller
-            // it just rolled from, and the next roller has an item on it.
-            if (frontPosition.equals(item.getPosition())) {
-                if (frontTile.getItems().size() > 1) {
-                    return false;
-                }
-            }
-
-            // We know the next tile contains a roller, so we don't subtract the roller height
-            subtractRollerHeight = false;
+        if (frontTile.getHighestItem() != null) {
+            Item frontRoller = null;
 
             for (Item frontItem : frontTile.getItems()) {
-                // Don't check against the roller in the next tile, because it never moves.
+                if (!frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
+                frontRoller = frontItem;
+            }
+
+            if (frontRoller != null) {
+                subtractRollerHeight = false;
+
+                for (Item frontItem : frontTile.getItems()) {
+                    if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
+                        continue;
+                    }
+
+                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                        Position frontPosition = frontRoller.getPosition().getSquareInFront();
+
+                        // Don't roll an item into the next roller, if the next roller is facing towards the roller
+                        // it just rolled from, and the next roller has an item on it.
+                        if (frontPosition.equals(item.getPosition())) {
+                            if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
+                                return false;
+
+                            }
+                        }
+                    }/* else {
+                        if (frontItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                            frontItem.setOverrideRolling(true);
+                            nextHeight += frontItem.getDefinition().getTopHeight();
+                        } else {
+                            return false;
+                        }
+                    }*/
+                }
+            }
+        }
+
+        if (subtractRollerHeight) {
+            nextHeight -= roller.getDefinition().getTopHeight();
+        }
+
+        if (RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.CAN_STACK_ON_TOP)) {
+            for (Item frontItem : frontTile.getItems()) {
                 if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                     continue;
                 }
 
-                // Fix if a roller is in a circle, and is filled to the brim, stops stackoverflow exceptions.
-                if (beginning.equals(roller.getPosition().getSquareInFront())) {
-                    continue;
-                }
+                if (frontItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
 
-                // If the item in front can't roll, then this item can't roll either.
-                if (!processItem(frontRoller, frontItem, false, beginning)) {
-                    return false;
+                    System.out.println("Locked: " + frontItem.getDefinition().getSprite());
+                    frontItem.setLock(true);
                 }
             }
         }
 
-        if (doMove) {
-            if (subtractRollerHeight) {
-                nextHeight -= roller.getDefinition().getTopHeight();
+            if (doMove) {
+                if (!item.isLock()) {
+                    this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+
+                    item.getPosition().setX(front.getX());
+                    item.getPosition().setY(front.getY());
+                    item.getPosition().setZ(nextHeight);
+                }
+                item.setLock(false);
             }
-
-            this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
-
-            item.getPosition().setX(front.getX());
-            item.getPosition().setY(front.getY());
-            item.getPosition().setZ(nextHeight);
-        }
 
         item.setRolling(true);
+
         return true;
     }
 
@@ -188,54 +219,52 @@ public class RollerTask implements Runnable {
         }
 
         Position front = roller.getPosition().getSquareInFront();
-        RoomTile frontTile = this.room.getMapping().getTile(front);
 
-        if (frontTile == null) {
+        if (!Pathfinder.isValidStep(this.room, entity, entity.getRoomUser().getPosition(), front, true)) {
             return;
         }
 
-        if (front.equals(this.room.getModel().getDoorLocation())) {
-            return;
-        }
+        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
+        RoomTile previousTile = this.room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
 
-        if (!(RoomItemManager.containsItemBehaviour(frontTile.getItems(), ItemBehaviour.ROLLER))) {
-            if (!RoomTile.isValidTile(this.room, entity, front)) {
-                return; // Cancel rolling into invalid tile, if the tile isn't a roller tile.
-            }
-        }
-
-        boolean subtractRollerHeight = true;
-        double nextHeight = entity.getRoomUser().getPosition().getZ();
+        double nextHeight = frontTile.getInteractiveTileHeight();
+        double displayNextHeight = nextHeight;
 
         if (frontTile.getHighestItem() != null) {
+            Item frontRoller = null;
+
             for (Item frontItem : frontTile.getItems()) {
-                if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                    Position frontPosition = frontItem.getPosition().getSquareInFront();
+                if (!frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
+                frontRoller = frontItem;
+            }
+
+            if (frontRoller != null) {
+
+                for (Item frontItem : frontTile.getItems()) {
+                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                        continue;
+                    }
+
+                    if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
+                        continue;
+                    }
+
+                    Position frontPosition = frontRoller.getPosition().getSquareInFront();
 
                     // Don't roll an item into the next roller, if the next roller is facing towards the roller
-                    // it just rolled from.
+                    // it just rolled from, and the next roller has an item on it.
                     if (frontPosition.equals(entity.getRoomUser().getPosition())) {
-                        if (frontTile.getItems().size() > 1) {
+                        if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
                             return;
+
                         }
                     }
                 }
-
-                // We know the next tile contains a roller, so we don't subtract the roller height
-                subtractRollerHeight = false;
             }
         }
-
-        if (subtractRollerHeight) {
-            nextHeight -= roller.getDefinition().getTopHeight();
-        }
-
-        RoomTile previousTile = this.room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
-
-        previousTile.removeEntity(entity);
-        frontTile.addEntity(entity);
-
-        double displayNextHeight = nextHeight;
 
         if (entity.getRoomUser().isSittingOnGround()) {
             displayNextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
@@ -251,5 +280,8 @@ public class RollerTask implements Runnable {
         entity.getRoomUser().getPosition().setX(front.getX());
         entity.getRoomUser().getPosition().setY(front.getY());
         entity.getRoomUser().getPosition().setZ(nextHeight);
+
+        previousTile.removeEntity(entity);
+        frontTile.addEntity(entity);
     }
 }

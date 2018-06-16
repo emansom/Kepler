@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 
 public class RconServer {
-    final private static Logger log = LoggerFactory.getLogger(NettyServer.class);
+    final private static Logger log = LoggerFactory.getLogger(RconServer.class);
 
     private String ip;
     private int port;
