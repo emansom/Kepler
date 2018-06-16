@@ -106,6 +106,10 @@ public class RollerTask implements Runnable {
 
         boolean subtractRollerHeight = true;
 
+        if (frontTile.getEntities().size() > 0) {
+            return false;
+        }
+
         if (frontTile.getHighestItem() != null) {
             Item frontRoller = null;
 
@@ -134,7 +138,7 @@ public class RollerTask implements Runnable {
                     // Don't roll an item into the next roller, if the next roller is facing towards the roller
                     // it just rolled from, and the next roller has an item on it.
                     if (frontPosition.equals(item.getPosition())) {
-                        if (frontTile.getItems().size() > 1) {
+                        if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
                             return false;
 
                         }
@@ -182,14 +186,47 @@ public class RollerTask implements Runnable {
             return;
         }
 
-        RoomTile nextTile = this.room.getMapping().getTile(front.getX(), front.getY());
+        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
         RoomTile previousTile = this.room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
 
-        previousTile.removeEntity(entity);
-        nextTile.addEntity(entity);
-
-        double nextHeight = nextTile.getInteractiveTileHeight();
+        double nextHeight = frontTile.getInteractiveTileHeight();
         double displayNextHeight = nextHeight;
+
+        if (frontTile.getHighestItem() != null) {
+            Item frontRoller = null;
+
+            for (Item frontItem : frontTile.getItems()) {
+                if (!frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
+                frontRoller = frontItem;
+            }
+
+            if (frontRoller != null) {
+
+                for (Item frontItem : frontTile.getItems()) {
+                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                        continue;
+                    }
+
+                    if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
+                        continue;
+                    }
+
+                    Position frontPosition = frontRoller.getPosition().getSquareInFront();
+
+                    // Don't roll an item into the next roller, if the next roller is facing towards the roller
+                    // it just rolled from, and the next roller has an item on it.
+                    if (frontPosition.equals(entity.getRoomUser().getPosition())) {
+                        if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
+                            return;
+
+                        }
+                    }
+                }
+            }
+        }
 
         if (entity.getRoomUser().isSittingOnGround()) {
             displayNextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
@@ -205,5 +242,8 @@ public class RollerTask implements Runnable {
         entity.getRoomUser().getPosition().setX(front.getX());
         entity.getRoomUser().getPosition().setY(front.getY());
         entity.getRoomUser().getPosition().setZ(nextHeight);
+
+        previousTile.removeEntity(entity);
+        frontTile.addEntity(entity);
     }
 }
