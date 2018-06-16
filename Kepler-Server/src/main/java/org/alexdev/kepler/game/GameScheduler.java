@@ -2,6 +2,7 @@ package org.alexdev.kepler.game;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.util.DateUtil;
 import org.slf4j.Logger;
@@ -45,7 +46,19 @@ public class GameScheduler implements Runnable {
                 }
 
                 if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
-                    player.getRoom().getEntityManager().leaveRoom(player, true);
+                    Room room = player.getRoomUser().getRoom();
+
+                    var curPos = player.getRoomUser().getPosition();
+                    var doorPos = room.getModel().getDoorLocation();
+
+                    // If we're standing in the door, immediately leave room
+                    if (curPos.equals(doorPos)) {
+                        room.getEntityManager().leaveRoom(player, true);
+                        return;
+                    }
+
+                    // Walk to door
+                    player.getRoomUser().walkTo(doorPos.getX(), doorPos.getY());
                 }
             }
         }
