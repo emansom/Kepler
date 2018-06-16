@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.room.tasks;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
