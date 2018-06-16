@@ -1,7 +1,7 @@
 version: '3.2'
 services:
     kepler:
-        image: ewout/kepler:0.0.9
+        image: ewout/kepler:0.1.1
         restart: always
         environment:
             MYSQL_HOST: mariadb
@@ -21,7 +21,7 @@ services:
             - "12321:12321"
 
     matcha:
-        image: ewout/matcha:0.0.6
+        image: ewout/matcha:0.1.0
         restart: always
         environment:
             MYSQL_HOST: mariadb

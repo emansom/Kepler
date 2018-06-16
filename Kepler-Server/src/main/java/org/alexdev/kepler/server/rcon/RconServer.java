@@ -3,7 +3,6 @@ package org.alexdev.kepler.server.rcon;
 import io.grpc.Server;
 
 import io.grpc.netty.NettyServerBuilder;
-import io.grpc.protobuf.services.ProtoReflectionService;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +24,6 @@ public class RconServer {
 
     public void listen() throws IOException {
         this.server = NettyServerBuilder.forAddress(new InetSocketAddress(this.ip, this.port))
-                .addService(ProtoReflectionService.newInstance())
                 .addService(new RconImpl())
                 .build()
                 .start();
