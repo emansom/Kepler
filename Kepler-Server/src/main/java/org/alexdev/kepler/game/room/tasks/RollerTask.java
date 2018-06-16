@@ -96,14 +96,18 @@ public class RollerTask implements Runnable {
         }
 
         Position front = roller.getPosition().getSquareInFront();
+        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
 
-        if (!RoomTile.isValidTile(this.room, null, front)) {
+        if (frontTile == null) {
             return false;
         }
 
-        RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
-        double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
+        if (frontTile.getEntities().size() > 0) {
+            return false;
+        }
 
+
+        double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
         boolean subtractRollerHeight = true;
 
         if (frontTile.getEntities().size() > 0) {
@@ -125,24 +129,29 @@ public class RollerTask implements Runnable {
                 subtractRollerHeight = false;
 
                 for (Item frontItem : frontTile.getItems()) {
-                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                        continue;
-                    }
-
                     if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
                         continue;
                     }
 
-                    Position frontPosition = frontRoller.getPosition().getSquareInFront();
+                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                        Position frontPosition = frontRoller.getPosition().getSquareInFront();
 
-                    // Don't roll an item into the next roller, if the next roller is facing towards the roller
-                    // it just rolled from, and the next roller has an item on it.
-                    if (frontPosition.equals(item.getPosition())) {
-                        if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
-                            return false;
+                        // Don't roll an item into the next roller, if the next roller is facing towards the roller
+                        // it just rolled from, and the next roller has an item on it.
+                        if (frontPosition.equals(item.getPosition())) {
+                            if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
+                                return false;
 
+                            }
                         }
-                    }
+                    }/* else {
+                        if (frontItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                            frontItem.setOverrideRolling(true);
+                            nextHeight += frontItem.getDefinition().getTopHeight();
+                        } else {
+                            return false;
+                        }
+                    }*/
                 }
             }
         }
