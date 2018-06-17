@@ -10,9 +10,9 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
-import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -36,8 +36,11 @@ public class RollerTask implements Runnable {
             List<Entity> entities = roller.getTile().getEntities();
             List<Item> items = roller.getTile().getItems();
 
+            List<Item> shallowCopy = items.subList(0, items.size());
+            Collections.reverse(shallowCopy);
+
             // Process items on rollers
-            for (Item item : items) {
+            for (Item item : shallowCopy) {
                 if (blacklist.contains(item)) {
                     continue;
                 }
@@ -95,6 +98,11 @@ public class RollerTask implements Runnable {
             return false;
         }
 
+        if (item.isStopRoll()) {
+            item.setStopRoll(false);
+            return false;
+        }
+
         Position front = roller.getPosition().getSquareInFront();
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
 
@@ -105,7 +113,6 @@ public class RollerTask implements Runnable {
         if (frontTile.getEntities().size() > 0) {
             return false;
         }
-
 
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
         boolean subtractRollerHeight = true;
@@ -144,14 +151,14 @@ public class RollerTask implements Runnable {
 
                             }
                         }
-                    }/* else {
+                    } else {
                         if (frontItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
-                            frontItem.setOverrideRolling(true);
+                            frontItem.setStopRoll(true);
                             nextHeight += frontItem.getDefinition().getTopHeight();
                         } else {
                             return false;
                         }
-                    }*/
+                    }
                 }
             }
         }

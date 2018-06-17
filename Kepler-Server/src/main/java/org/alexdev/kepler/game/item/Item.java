@@ -35,6 +35,7 @@ public class Item {
 
     private boolean requiresUpdate;
     private boolean isRolling;
+    private boolean stopRoll;
 
     public Item() {
         this.id = 0;
@@ -474,6 +475,14 @@ public class Item {
 
     public void setRolling(boolean rolling) {
         isRolling = rolling;
+    }
+
+    public boolean isStopRoll() {
+        return stopRoll;
+    }
+
+    public void setStopRoll(boolean stopRoll) {
+        this.stopRoll = stopRoll;
     }
 }
 
