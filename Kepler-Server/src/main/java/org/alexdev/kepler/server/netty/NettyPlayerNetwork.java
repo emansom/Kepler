@@ -24,7 +24,7 @@ public class NettyPlayerNetwork {
     }
 
     public void enqueue(MessageComposer response) {
-        channel.write(response).syncUninterruptibly();
+        channel.write(response);
     }
 
     public void flush() {
