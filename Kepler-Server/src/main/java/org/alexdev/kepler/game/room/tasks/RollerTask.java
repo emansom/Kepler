@@ -36,11 +36,11 @@ public class RollerTask implements Runnable {
             List<Entity> entities = roller.getTile().getEntities();
             List<Item> items = roller.getTile().getItems();
 
-            List<Item> shallowCopy = items.subList(0, items.size());
-            Collections.reverse(shallowCopy);
+            //<Item> shallowCopy = items.subList(0, items.size());
+            //Collections.reverse(shallowCopy);
 
             // Process items on rollers
-            for (Item item : shallowCopy) {
+            for (Item item : items) {
                 if (blacklist.contains(item)) {
                     continue;
                 }
@@ -205,7 +205,7 @@ public class RollerTask implements Runnable {
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
         RoomTile previousTile = this.room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
 
-        double nextHeight = frontTile.getInteractiveTileHeight();
+        double nextHeight = roller.getTile().getInteractiveTileHeight();
         double displayNextHeight = nextHeight;
 
         if (frontTile.getHighestItem() != null) {
@@ -230,15 +230,19 @@ public class RollerTask implements Runnable {
                         continue;
                     }
 
-                    Position frontPosition = frontRoller.getPosition().getSquareInFront();
+                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                        Position frontPosition = frontRoller.getPosition().getSquareInFront();
 
-                    // Don't roll an item into the next roller, if the next roller is facing towards the roller
-                    // it just rolled from, and the next roller has an item on it.
-                    if (frontPosition.equals(entity.getRoomUser().getPosition())) {
-                        if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
-                            return;
+                        // Don't roll an item into the next roller, if the next roller is facing towards the roller
+                        // it just rolled from, and the next roller has an item on it.
+                        if (frontPosition.equals(entity.getRoomUser().getPosition())) {
+                            if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
+                                return;
 
+                            }
                         }
+                    } else {
+                        return;
                     }
                 }
             }
