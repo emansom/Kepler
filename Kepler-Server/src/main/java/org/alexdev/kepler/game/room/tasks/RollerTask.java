@@ -112,7 +112,13 @@ public class RollerTask implements Runnable {
         }
 
         if (frontTile.getEntities().size() > 0) {
-            return false;
+            for (Entity entity : frontTile.getEntities()) {
+                if (entity.getRoomUser().isWalking()) {
+                    continue;
+                }
+
+                return false;
+            }
         }
 
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
@@ -150,6 +156,10 @@ public class RollerTask implements Runnable {
                         }
                     } else {
                         if (frontItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                            if (item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                                return false;
+                            }
+
                             frontItem.setStopRoll(true);
                             nextHeight += frontItem.getDefinition().getTopHeight();
                         } else {
