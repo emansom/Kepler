@@ -67,10 +67,6 @@ public class RollerTask implements Runnable {
             this.processItem(set.getValue(), set.getKey(), true);
         }
 
-        if (blacklist.size() > 0) {
-            this.room.flushQueued();
-        }
-
         if (itemsToUpdate.size() > 0) {
             this.room.getMapping().regenerateCollisionMap();
             ItemDao.updateItems(itemsToUpdate);
@@ -169,7 +165,7 @@ public class RollerTask implements Runnable {
         }
 
         if (doMove) {
-            this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+            this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
 
             item.getPosition().setX(front.getX());
             item.getPosition().setY(front.getY());
@@ -259,7 +255,7 @@ public class RollerTask implements Runnable {
             entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
         }
 
-        this.room.sendQueued(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
+        this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
 
         entity.getRoomUser().setNeedsUpdate(true);
         entity.getRoomUser().getPosition().setX(front.getX());
