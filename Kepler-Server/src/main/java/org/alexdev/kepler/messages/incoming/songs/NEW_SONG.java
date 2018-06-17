@@ -25,6 +25,9 @@ public class NEW_SONG implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         player.send(new SOUNDSETS(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
         player.send(new HAND_SOUNDSETS(player.getInventory().getSoundsets()));
     }

@@ -26,6 +26,9 @@ public class SAVE_SONG_NEW implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         String title = StringUtil.filterInput(reader.readString(), true);
         String data = StringUtil.filterInput(reader.readString(), true);
 

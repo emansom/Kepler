@@ -30,6 +30,9 @@ public class UPDATE_PLAY_LIST implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         SongMachineDao.clearPlaylist(room.getItemManager().getSoundMachine().getId());
 
         for (int i = 0; i < amount; i++) {

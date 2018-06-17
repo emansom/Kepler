@@ -26,6 +26,9 @@ public class EDIT_SONG implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         int songId = reader.readInt();
 
         player.send(new SONG_INFO(SongMachineDao.getSong(songId)));

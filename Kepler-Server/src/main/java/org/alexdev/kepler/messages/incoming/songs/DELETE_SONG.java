@@ -25,6 +25,9 @@ public class DELETE_SONG implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         int songId = reader.readInt();
 
         SongMachineDao.deleteSong(songId);

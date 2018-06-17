@@ -32,6 +32,9 @@ public class SAVE_SONG_EDIT implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         int songId = reader.readInt();
         String title = StringUtil.filterInput(reader.readString(), true);
         String data = StringUtil.filterInput(reader.readString(), true);

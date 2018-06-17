@@ -31,6 +31,9 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         Map<Integer, Integer> tracks = SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId());
 
         int soundSetId = reader.readInt();
