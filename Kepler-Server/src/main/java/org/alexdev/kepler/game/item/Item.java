@@ -35,7 +35,7 @@ public class Item {
 
     private boolean requiresUpdate;
     private boolean isRolling;
-    private boolean lock;
+    private boolean stopRoll;
 
     public Item() {
         this.id = 0;
@@ -322,8 +322,8 @@ public class Item {
      * @return true, if successful
      */
     private boolean canPlaceOnTop(Item item, Item tileItem) {
-        if (!item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && tileItem.isRolling) {
-            return true;
+        if (tileItem.isRolling) {
+            //return true;
         }
 
         // Can't place items on solid objects
@@ -477,12 +477,12 @@ public class Item {
         isRolling = rolling;
     }
 
-    public boolean isLock() {
-        return lock;
+    public boolean isStopRoll() {
+        return stopRoll;
     }
 
-    public void setLock(boolean lock) {
-        this.lock = lock;
+    public void setStopRoll(boolean stopRoll) {
+        this.stopRoll = stopRoll;
     }
 }
 
