@@ -84,4 +84,21 @@ public class RconImpl extends RconImplBase {
         responseObserver.onNext(reply);
         responseObserver.onCompleted();
     }
+
+    /**
+     * Create a starter room
+     *
+     * @param request StarterRoomRequest
+     * @param responseObserver Response
+     */
+    @Override
+    public void createStarterRoom(StarterRoomRequest request, StreamObserver<Response> responseObserver) {
+        // TODO: implement
+        // use switch on request.getTheme(), checking for e.g. StarterRoomRequest.ORANGE
+
+        Response reply = Response.newBuilder().setOk(true).build();
+
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+    }
 }

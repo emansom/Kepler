@@ -54,7 +54,7 @@ dependencies {
 
     testCompile "io.grpc:grpc-testing:${grpcVersion}"
 
-    compile name: 'RetroRCON-1.0'
+    compile name: 'RetroRCON-1.1'
 }
 
 apply plugin: 'idea'
