@@ -48,13 +48,6 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/server.ini Logging log.connections true && \
     crudini --set /usr/src/kepler/server.ini Logging log.sent.packets false && \
     crudini --set /usr/src/kepler/server.ini Logging log.received.packets false && \
-    crudini --set /usr/src/kepler/game.ini Game roller.tick.default 6 && \
-    crudini --set /usr/src/kepler/game.ini Game afk.timer.seconds 1800 && \
-    crudini --set /usr/src/kepler/game.ini Game sleep.timer.seconds 300 && \
-    crudini --set /usr/src/kepler/game.ini Game carry.timer.seconds 300 && \
-    crudini --set /usr/src/kepler/game.ini Game fuck.aaron true && \
-    crudini --set /usr/src/kepler/game.ini Game welcome.message.enabled false && \
-    crudini --set /usr/src/kepler/game.ini Game welcome.message.content 'Hello, %username%! And welcome to the Kepler server!' && \
     crudini --set /usr/src/kepler/server.ini Console debug false && \
     cat /usr/src/kepler/server.ini && \
     cat /usr/src/kepler/game.ini && \
