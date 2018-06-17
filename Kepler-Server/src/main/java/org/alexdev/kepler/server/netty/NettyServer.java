@@ -78,6 +78,12 @@ public class NettyServer  {
         return false;
     }
 
+    public void dispose() throws InterruptedException {
+        // Shutdown gracefully
+        this.workerGroup.shutdownGracefully().sync();
+        this.bossGroup.shutdownGracefully().sync();
+    }
+
     public String getIp() {
         return ip;
     }
