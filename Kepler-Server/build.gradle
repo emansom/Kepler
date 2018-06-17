@@ -74,7 +74,7 @@ task fatJar(type: Jar) {
     with jar
 }
 
-// Create fat jar with no libraries inside of it.
+// Create slim jar with no libraries inside of it.
 task slimJar(type: Jar) {
     manifest {
         attributes (
