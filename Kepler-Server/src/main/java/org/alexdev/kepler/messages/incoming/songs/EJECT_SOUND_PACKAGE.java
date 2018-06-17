@@ -31,6 +31,9 @@ public class EJECT_SOUND_PACKAGE implements MessageEvent {
             return;
         }
 
+        // We don't want a user to get kicked when making cool beats
+        player.getRoomUser().resetRoomTimer();
+
         int slotId = reader.readInt();
         Map<Integer, Integer> tracks = SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId());
 
@@ -53,5 +56,7 @@ public class EJECT_SOUND_PACKAGE implements MessageEvent {
 
         player.send(new SOUNDSETS(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
         player.send(new HAND_SOUNDSETS(player.getInventory().getSoundsets()));
+
+        // TODO: resend song with removed sounds from soundset (check first if client maybe requests from other packet)
     }
 }

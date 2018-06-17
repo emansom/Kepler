@@ -140,10 +140,7 @@ public class Kepler {
             // TODO: all the managers
             PlayerManager.getInstance().dispose();
 
-            // Stop listening
-            server.getWorkerGroup().shutdownGracefully();
-            server.getBossGroup().shutdownGracefully();
-
+            server.dispose();
             rcon.dispose();
         } catch (Exception e) {
             e.printStackTrace();
