@@ -22,7 +22,7 @@ services:
             - "12321:12321"
 
     matcha:
-        image: ewout/matcha:0.1.2
+        image: ewout/matcha:0.1.3
         restart: always
         environment:
             MYSQL_HOST: mariadb
