@@ -4,6 +4,7 @@ import com.google.protobuf.Empty;
 
 import io.grpc.stub.StreamObserver;
 import com.github.emansom.retrorcon.*;
+import com.github.emansom.retrorcon.StarterRoomRequest.StarterRoomTheme;
 import com.github.emansom.retrorcon.RconGrpc.RconImplBase;
 import org.alexdev.kepler.Kepler;
 import org.alexdev.kepler.game.player.Player;
@@ -78,6 +79,23 @@ public class RconImpl extends RconImplBase {
         if (user != null) {
             user.refreshAppearance();
         }
+
+        Response reply = Response.newBuilder().setOk(true).build();
+
+        responseObserver.onNext(reply);
+        responseObserver.onCompleted();
+    }
+
+    /**
+     * Create a starter room
+     *
+     * @param request StarterRoomRequest
+     * @param responseObserver Response
+     */
+    @Override
+    public void createStarterRoom(StarterRoomRequest request, StreamObserver<Response> responseObserver) {
+        // TODO: implement
+        // use switch on request.getTheme(), checking for e.g. StarterRoomTheme.ORANGE
 
         Response reply = Response.newBuilder().setOk(true).build();
 

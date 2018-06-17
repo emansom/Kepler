@@ -14,6 +14,9 @@ import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
 import org.alexdev.kepler.messages.incoming.rooms.badges.GETAVAILABLEBADGES;
 import org.alexdev.kepler.messages.incoming.rooms.badges.SETBADGE;
+import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_CHANGE_STATE;
+import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_GET_PRESETS;
+import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_SET_PRESET;
 import org.alexdev.kepler.messages.incoming.rooms.items.*;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.ASSIGNRIGHTS;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVEALLRIGHTS;
@@ -171,6 +174,9 @@ public class MessageHandler {
         registerEvent(28, new GETDOORFLAT());
         registerEvent(82, new DOORGOIN());
         registerEvent(54, new GOVIADOOR());
+        registerEvent(341, new MSG_ROOMDIMMER_GET_PRESETS());
+        registerEvent(342, new MSG_ROOMDIMMER_SET_PRESET());
+        registerEvent(343, new MSG_ROOMDIMMER_CHANGE_STATE());
     }
 
     /**
