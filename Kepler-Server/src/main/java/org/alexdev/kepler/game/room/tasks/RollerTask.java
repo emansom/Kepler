@@ -64,11 +64,7 @@ public class RollerTask implements Runnable {
         }
 
         for (var set : itemsRolling.entrySet()) {
-            this.processItem(set.getValue(), set.getKey(), true);
-        }
-
-        if (blacklist.size() > 0) {
-            this.room.flushQueued();
+            //this.processItem(set.getValue(), set.getKey(), true);
         }
 
         if (itemsToUpdate.size() > 0) {
@@ -103,7 +99,7 @@ public class RollerTask implements Runnable {
             return false;
         }
 
-        if (doMove && item.isStopRoll()) {
+        if (/*doMove && */item.isStopRoll()) {
             item.setStopRoll(false);
             return false;
         }
@@ -168,13 +164,13 @@ public class RollerTask implements Runnable {
             nextHeight -= roller.getDefinition().getTopHeight();
         }
 
-        if (doMove) {
-            this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+        //if (doMove) {
+            this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
 
             item.getPosition().setX(front.getX());
             item.getPosition().setY(front.getY());
             item.getPosition().setZ(nextHeight);
-        }
+        //}
 
         item.setRolling(true);
         return true;
@@ -259,7 +255,7 @@ public class RollerTask implements Runnable {
             entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
         }
 
-        this.room.sendQueued(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
+        this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
 
         entity.getRoomUser().setNeedsUpdate(true);
         entity.getRoomUser().getPosition().setX(front.getX());
