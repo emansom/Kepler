@@ -64,7 +64,7 @@ public class RollerTask implements Runnable {
         }
 
         for (var set : itemsRolling.entrySet()) {
-            this.processItem(set.getValue(), set.getKey(), true);
+            //this.processItem(set.getValue(), set.getKey(), true);
         }
 
         if (itemsToUpdate.size() > 0) {
@@ -99,7 +99,7 @@ public class RollerTask implements Runnable {
             return false;
         }
 
-        if (doMove && item.isStopRoll()) {
+        if (/*doMove && */item.isStopRoll()) {
             item.setStopRoll(false);
             return false;
         }
@@ -164,13 +164,13 @@ public class RollerTask implements Runnable {
             nextHeight -= roller.getDefinition().getTopHeight();
         }
 
-        if (doMove) {
+        //if (doMove) {
             this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
 
             item.getPosition().setX(front.getX());
             item.getPosition().setY(front.getY());
             item.getPosition().setZ(nextHeight);
-        }
+        //}
 
         item.setRolling(true);
         return true;
