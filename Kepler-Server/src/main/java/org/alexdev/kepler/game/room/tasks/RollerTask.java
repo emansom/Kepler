@@ -11,9 +11,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class RollerTask implements Runnable {
@@ -25,6 +23,8 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
+        Map<Item, Item> itemsRolling = new HashMap<>();
+
         List<Item> itemsToUpdate = new ArrayList<>();
         List<Object> blacklist = new ArrayList<>();
 
@@ -45,9 +45,10 @@ public class RollerTask implements Runnable {
                     continue;
                 }
 
-                if (this.processItem(roller, item)) {
+                if (this.processItem(roller, item, false)) {
                     itemsToUpdate.add(item);
                     blacklist.add(item);
+                    itemsRolling.put(item, roller);
                 }
             }
 
@@ -60,6 +61,10 @@ public class RollerTask implements Runnable {
                 this.processEntity(roller, entity);
                 blacklist.add(entity);
             }
+        }
+
+        for (var set : itemsRolling.entrySet()) {
+            this.processItem(set.getValue(), set.getKey(), true);
         }
 
         if (blacklist.size() > 0) {
@@ -85,7 +90,7 @@ public class RollerTask implements Runnable {
      * @param item the item being rolled
      * @return true, if rolled
      */
-    private boolean processItem(Item roller, Item item) {
+    private boolean processItem(Item roller, Item item, boolean doMove) {
         if (roller == null) {
             return false;
         }
@@ -98,7 +103,7 @@ public class RollerTask implements Runnable {
             return false;
         }
 
-        if (item.isStopRoll()) {
+        if (doMove && item.isStopRoll()) {
             item.setStopRoll(false);
             return false;
         }
@@ -116,10 +121,6 @@ public class RollerTask implements Runnable {
 
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
         boolean subtractRollerHeight = true;
-
-        if (frontTile.getEntities().size() > 0) {
-            return false;
-        }
 
         if (frontTile.getHighestItem() != null) {
             Item frontRoller = null;
@@ -167,13 +168,15 @@ public class RollerTask implements Runnable {
             nextHeight -= roller.getDefinition().getTopHeight();
         }
 
-        this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+        if (doMove) {
+            this.room.sendQueued(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
 
-        item.getPosition().setX(front.getX());
-        item.getPosition().setY(front.getY());
-        item.getPosition().setZ(nextHeight);
+            item.getPosition().setX(front.getX());
+            item.getPosition().setY(front.getY());
+            item.getPosition().setZ(nextHeight);
+        }
+
         item.setRolling(true);
-
         return true;
     }
 
