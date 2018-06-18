@@ -1,3 +1,12 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Jun 18, 2018 at 04:13 PM
+-- Server version: 10.3.7-MariaDB
+-- PHP Version: 7.2.6
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -1123,7 +1132,7 @@ CREATE TABLE `rooms` (
   `password` varchar(255) DEFAULT '',
   `visitors_now` int(11) DEFAULT 0,
   `visitors_max` int(11) DEFAULT 25
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 
 --
 -- Dumping data for table `rooms`
@@ -1418,7 +1427,8 @@ CREATE TABLE `users` (
   `club_expiration` bigint(11) NOT NULL DEFAULT 0,
   `badge` char(3) NOT NULL DEFAULT '',
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
-  `allow_stalking` tinyint(1) NOT NULL DEFAULT 1
+  `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
+  `sound_enabled` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
