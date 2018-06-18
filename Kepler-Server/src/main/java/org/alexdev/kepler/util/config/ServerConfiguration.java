@@ -69,6 +69,7 @@ public class ServerConfiguration {
         writer.println("");
         writer.println("[Database]");
         writer.println("mysql.hostname=" + config.get("mysql.hostname"));
+        writer.println("mysql.port=" + config.get("mysql.port"));
         writer.println("mysql.username=" + config.get("mysql.username"));
         writer.println("mysql.password=" + config.get("mysql.password"));
         writer.println("mysql.database=" + config.get("mysql.database"));
