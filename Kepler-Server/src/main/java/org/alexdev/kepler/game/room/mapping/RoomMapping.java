@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.mapping;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
+import org.alexdev.kepler.dao.mysql.MoodlightDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
@@ -14,6 +15,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_WALLITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_WALLITEM;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -35,6 +37,7 @@ public class RoomMapping {
      */
     public void regenerateCollisionMap() {
         this.room.getItemManager().setSoundMachine(null);
+        this.room.getItemManager().setMoodlight(null);
 
         this.roomModel = this.room.getModel();
         this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
@@ -93,10 +96,19 @@ public class RoomMapping {
                 }
 
                 // Method to set only one jukebox per room
-                if (this.room.getItemManager().getSoundMachine() == null && this.room.getItemManager().getSoundMachine() == null) {
+                if (this.room.getItemManager().getSoundMachine() == null) {
                     if (item.hasBehaviour(ItemBehaviour.JUKEBOX) || item.hasBehaviour(ItemBehaviour.SOUND_MACHINE)) {
                         this.room.getItemManager().setSoundMachine(item);
                     }
+                }
+            }
+        }
+
+        // Method to set only one moodlight per room
+        for (Item item : this.room.getItemManager().getWallItems()) {
+            if (this.room.getItemManager().getMoodlight() == null) {
+                if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
+                    this.room.getItemManager().setMoodlight(item);
                 }
             }
         }
@@ -114,6 +126,10 @@ public class RoomMapping {
 
         if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.room.send(new PLACE_WALLITEM(item));
+
+            if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
+                this.room.getItemManager().setMoodlight(item);
+            }
         } else {
             this.handleItemAdjustment(item, false);
             this.regenerateCollisionMap();
@@ -160,6 +176,13 @@ public class RoomMapping {
 
         if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.room.send(new REMOVE_WALLITEM(item));
+
+            if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
+                item.setCustomData("");
+                this.room.getItemManager().setMoodlight(null);
+                MoodlightDao.deletePresets(item.getId());
+            }
+
         } else {
             this.regenerateCollisionMap();
             this.room.send(new REMOVE_FLOORITEM(item));

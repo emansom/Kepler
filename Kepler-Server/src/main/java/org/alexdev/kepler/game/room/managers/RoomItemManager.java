@@ -10,6 +10,7 @@ import java.util.List;
 public class RoomItemManager {
     private Room room;
     private Item soundMachine;
+    private Item moodlight;
 
     public RoomItemManager(Room room) {
         this.room = room;
@@ -123,5 +124,23 @@ public class RoomItemManager {
      */
     public void setSoundMachine(Item soundMachine) {
         this.soundMachine = soundMachine;
+    }
+
+    /**
+     * Get the rooms' moodlight instance.
+     *
+     * @return the moodlight
+     */
+    public Item getMoodlight() {
+        return moodlight;
+    }
+
+    /**
+     * Set the moodlight instance.
+     *
+     * @param moodlight the moodlight instance
+     */
+    public void setMoodlight(Item moodlight) {
+        this.moodlight = moodlight;
     }
 }

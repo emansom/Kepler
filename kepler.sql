@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 18, 2018 at 04:13 PM
+-- Generation Time: Jun 21, 2018 at 01:07 PM
 -- Server version: 10.3.7-MariaDB
 -- PHP Version: 7.2.6
 
@@ -1006,6 +1006,20 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `items_moodlight_presets`
+--
+
+CREATE TABLE `items_moodlight_presets` (
+  `item_id` int(11) NOT NULL,
+  `current_preset` int(11) NOT NULL DEFAULT 1,
+  `preset_1` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '1,#000000,255',
+  `preset_2` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '1,#000000,255',
+  `preset_3` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '1,#000000,255'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `items_teleporter_links`
 --
 
@@ -1489,6 +1503,12 @@ ALTER TABLE `items_definitions`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `items_moodlight_presets`
+--
+ALTER TABLE `items_moodlight_presets`
+  ADD PRIMARY KEY (`item_id`);
+
+--
 -- Indexes for table `items_teleporter_links`
 --
 ALTER TABLE `items_teleporter_links`
@@ -1521,6 +1541,12 @@ ALTER TABLE `rooms_categories`
 ALTER TABLE `rooms_models`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`setting`);
 
 --
 -- Indexes for table `soundmachine_playlists`
