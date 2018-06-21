@@ -1,4 +1,10 @@
 apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+mainClassName = 'org.alexdev.kepler.Kepler'
+sourceCompatibility = "1.10"
+targetCompatibility = "1.10"
 
 repositories {
     flatDir {
@@ -42,27 +48,8 @@ dependencies {
 
     compile "com.goterl.lazycode:lazysodium-java:2.2.0"
 
-    compile "com.google.api.grpc:proto-google-common-protos:1.0.0"
-    compile "io.grpc:grpc-alts:${grpcVersion}"
-    compile "io.grpc:grpc-netty:${grpcVersion}"
-    compile "io.grpc:grpc-protobuf:${grpcVersion}"
-    compile "io.grpc:grpc-stub:${grpcVersion}"
-    compile "io.grpc:grpc-services:${grpcVersion}"
-    compileOnly "javax.annotation:javax.annotation-api:1.2"
-
-    compile "com.google.protobuf:protobuf-java-util:${protobufVersion}"
-
-    testCompile "io.grpc:grpc-testing:${grpcVersion}"
-
     compile name: 'RetroRCON-1.1'
 }
-
-apply plugin: 'idea'
-apply plugin: 'application'
-
-mainClassName = 'org.alexdev.kepler.Kepler'
-sourceCompatibility = "1.10"
-targetCompatibility = "1.10"
 
 // Create fat jar with libraries inside of it.
 task fatJar(type: Jar) {
@@ -71,19 +58,6 @@ task fatJar(type: Jar) {
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
-// Create slim jar with no libraries inside of it.
-task slimJar(type: Jar) {
-    manifest {
-        attributes (
-                'Main-Class': mainClassName,
-                "Class-Path": '. dependency-jars/' + configurations.compile.collect {
-                    it.getName()
-                }.join(' dependency-jars/')
-        )
-    }
     with jar
 }
 
