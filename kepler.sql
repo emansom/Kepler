@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 21, 2018 at 01:07 PM
+-- Generation Time: Jun 21, 2018 at 01:09 PM
 -- Server version: 10.3.7-MariaDB
 -- PHP Version: 7.2.6
 
@@ -1015,7 +1015,7 @@ CREATE TABLE `items_moodlight_presets` (
   `preset_1` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '1,#000000,255',
   `preset_2` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '1,#000000,255',
   `preset_3` varchar(50) CHARACTER SET utf8mb4 NOT NULL DEFAULT '1,#000000,255'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
