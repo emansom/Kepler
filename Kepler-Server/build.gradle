@@ -1,4 +1,8 @@
 apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+mainClassName = 'org.alexdev.kepler.Kepler'
 
 repositories {
     flatDir {
@@ -9,6 +13,9 @@ repositories {
     }
     mavenCentral()
 }
+
+sourceCompatibility = "1.10"
+targetCompatibility = "1.10"
 
 def grpcVersion = '1.12.0'
 def protobufVersion = '3.5.1'
@@ -57,13 +64,6 @@ dependencies {
     compile name: 'RetroRCON-1.1'
 }
 
-apply plugin: 'idea'
-apply plugin: 'application'
-
-mainClassName = 'org.alexdev.kepler.Kepler'
-sourceCompatibility = "1.10"
-targetCompatibility = "1.10"
-
 // Create fat jar with libraries inside of it.
 task fatJar(type: Jar) {
     manifest {
@@ -71,19 +71,6 @@ task fatJar(type: Jar) {
     }
     baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-}
-
-// Create slim jar with no libraries inside of it.
-task slimJar(type: Jar) {
-    manifest {
-        attributes (
-                'Main-Class': mainClassName,
-                "Class-Path": '. dependency-jars/' + configurations.compile.collect {
-                    it.getName()
-                }.join(' dependency-jars/')
-        )
-    }
     with jar
 }
 
