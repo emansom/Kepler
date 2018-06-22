@@ -23,7 +23,6 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-        Map<Item, Item> itemsRolling = new HashMap<>();
 
         List<Item> itemsToUpdate = new ArrayList<>();
         List<Object> blacklist = new ArrayList<>();
@@ -36,9 +35,6 @@ public class RollerTask implements Runnable {
             List<Entity> entities = roller.getTile().getEntities();
             List<Item> items = roller.getTile().getItems();
 
-            //<Item> shallowCopy = items.subList(0, items.size());
-            //Collections.reverse(shallowCopy);
-
             // Process items on rollers
             for (Item item : items) {
                 if (blacklist.contains(item)) {
@@ -48,7 +44,6 @@ public class RollerTask implements Runnable {
                 if (this.processItem(roller, item, false)) {
                     itemsToUpdate.add(item);
                     blacklist.add(item);
-                    itemsRolling.put(item, roller);
                 }
             }
 
@@ -61,10 +56,6 @@ public class RollerTask implements Runnable {
                 this.processEntity(roller, entity);
                 blacklist.add(entity);
             }
-        }
-
-        for (var set : itemsRolling.entrySet()) {
-            //this.processItem(set.getValue(), set.getKey(), true);
         }
 
         if (itemsToUpdate.size() > 0) {
@@ -214,7 +205,7 @@ public class RollerTask implements Runnable {
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
         RoomTile previousTile = this.room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
 
-        double nextHeight = roller.getTile().getInteractiveTileHeight();
+        double nextHeight = frontTile.getInteractiveTileHeight();
         double displayNextHeight = nextHeight;
 
         if (frontTile.getHighestItem() != null) {
@@ -229,7 +220,6 @@ public class RollerTask implements Runnable {
             }
 
             if (frontRoller != null) {
-
                 for (Item frontItem : frontTile.getItems()) {
                     if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                         continue;
