@@ -35,11 +35,7 @@ public class MSG_ROOMDIMMER_SET_PRESET implements MessageEvent {
         String presetColour = reader.readString();
         int presetStrength = reader.readInt();
 
-        System.out.println("preset id: " + presetId);
-
         Pair<Integer, ArrayList<String>> presetData = MoodlightDao.getPresets(item.getId());
-
-        int currentPreset = presetData.getLeft();
         List<String> presets = presetData.getRight();
 
         presets.set(presetId - 1, backgroundState + "," + presetColour + "," + presetStrength);
