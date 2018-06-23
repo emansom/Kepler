@@ -178,9 +178,8 @@ public class RoomMapping {
             this.room.send(new REMOVE_WALLITEM(item));
 
             if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
-                item.setCustomData("");
+                item.setCustomData(""); // Turn off roomdimmer.
                 this.room.getItemManager().setMoodlight(null);
-                MoodlightDao.deletePresets(item.getId());
             }
 
         } else {
