@@ -15,6 +15,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_WALLITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_WALLITEM;
+import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -252,8 +253,8 @@ public class RoomMapping {
             }
         }
 
-        if (item.getPosition().getZ() > 8) {
-            item.getPosition().setZ(8);
+        if (item.getPosition().getZ() > GameConfiguration.getInstance().getInteger("stack.height.limit")) {
+            item.getPosition().setZ(GameConfiguration.getInstance().getInteger("stack.height.limit"));
         }
     }
 

@@ -38,6 +38,8 @@ public class GameConfiguration {
         config.put("afk.timer.seconds", "900");
         config.put("sleep.timer.seconds", "300");
         config.put("carry.timer.seconds", "300");
+
+        config.put("stack.height.limit", "8");
     }
 
     /**
