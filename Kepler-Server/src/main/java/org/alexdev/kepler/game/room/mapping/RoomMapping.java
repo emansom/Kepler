@@ -189,6 +189,12 @@ public class RoomMapping {
                 this.room.getItemManager().setMoodlight(null);
             }
 
+            if (item.hasBehaviour(ItemBehaviour.DICE) ||
+                item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
+                item.setRequiresUpdate(false);
+                item.setCustomData("");
+            }
+
         } else {
             this.regenerateCollisionMap();
             this.room.send(new REMOVE_FLOORITEM(item));
