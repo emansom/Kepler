@@ -54,27 +54,23 @@ public class Player extends Entity {
         PlayerManager.getInstance().disconnectSession(this.details.getId()); // Kill other sessions with same id
         PlayerManager.getInstance().addPlayer(this); // Add new connection
 
-        this.messenger = new Messenger(this);
-        this.inventory = new Inventory(this);
-
-        this.sendQueued(new LOGIN());
-        this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
-
-        if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
-            String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
-            alertMessage = alertMessage.replace("%username%", this.details.getName());
-
-            this.sendQueued(new ALERT(alertMessage));
-        }
-
-        this.flushSendQueue();
-
         PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
 
         if (!ServerConfiguration.getBoolean("debug")) {
             PlayerDao.clearSSOTicket(this.details.getId()); // Protect against replay attacks
         }
 
+        this.messenger = new Messenger(this);
+        this.inventory = new Inventory(this);
+
+        this.send(new LOGIN());
+        this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+
+        if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
+            String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
+            alertMessage = alertMessage.replace("%username%", this.details.getName());
+            this.send(new ALERT(alertMessage));
+        }
     }
 
     /**
@@ -116,22 +112,6 @@ public class Player extends Entity {
      */
     public void send(MessageComposer response) {
         this.network.send(response);
-    }
-
-    /**
-     * Defer a response to the player
-     *
-     * @param response the response
-     */
-    public void sendQueued(MessageComposer response) {
-        this.network.enqueue(response);
-    }
-
-    /**
-     * Flush send queue
-     */
-    public void flushSendQueue() {
-        this.network.flush();
     }
 
     /**
