@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Item {
+    public static final String DEFAULT_ROOMDIMMER_CUSTOM_DATA = "1,1,1,#000000,255";
+
     private int id;
     private int ownerId;
     private int roomId;

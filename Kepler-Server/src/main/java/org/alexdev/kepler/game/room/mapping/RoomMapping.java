@@ -178,7 +178,14 @@ public class RoomMapping {
             this.room.send(new REMOVE_WALLITEM(item));
 
             if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
-                item.setCustomData(""); // Turn off roomdimmer.
+                if (item.getCustomData().isEmpty()) {
+                    item.setCustomData(Item.DEFAULT_ROOMDIMMER_CUSTOM_DATA);
+                }
+
+                if (item.getCustomData().charAt(0) == '2') { // Roomdimmer is enabled, turn it off.
+                    item.setCustomData("1" + item.getCustomData().substring(1));
+                }
+
                 this.room.getItemManager().setMoodlight(null);
             }
 
