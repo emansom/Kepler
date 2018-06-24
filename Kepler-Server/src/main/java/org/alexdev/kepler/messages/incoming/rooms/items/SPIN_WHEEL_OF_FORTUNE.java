@@ -52,8 +52,12 @@ public class SPIN_WHEEL_OF_FORTUNE implements MessageEvent {
         item.setCustomData("-1");
         item.updateStatus();
 
-        item.setRequiresUpdate(true);
+        // Don't allow another request if the wheel of fortune is already in progress of updating
+        if (item.getRequiresUpdate()) {
+            return;
+        }
 
+        item.setRequiresUpdate(true);
         GameScheduler.getInstance().getSchedulerService().schedule(new FortuneTask(item), 4250, TimeUnit.MILLISECONDS);
     }
 }

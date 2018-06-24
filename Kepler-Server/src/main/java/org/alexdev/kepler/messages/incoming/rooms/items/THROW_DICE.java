@@ -72,8 +72,12 @@ public class THROW_DICE implements MessageEvent {
         item.setCustomData("-1");
         item.updateStatus();
 
-        item.setRequiresUpdate(true);
+        // Don't allow another request if the dice is already in progress of updating
+        if (item.getRequiresUpdate()) {
+            return;
+        }
 
+        item.setRequiresUpdate(true);
         GameScheduler.getInstance().getSchedulerService().schedule(new DiceTask(item), 2, TimeUnit.SECONDS);
     }
 }
