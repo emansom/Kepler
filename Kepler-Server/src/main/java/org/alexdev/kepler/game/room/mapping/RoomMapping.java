@@ -190,12 +190,6 @@ public class RoomMapping {
                 this.room.getItemManager().setMoodlight(null);
             }
 
-            if (item.hasBehaviour(ItemBehaviour.DICE) ||
-                item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
-                item.setRequiresUpdate(false);
-                item.setCustomData("");
-            }
-
         } else {
             this.regenerateCollisionMap();
             this.room.send(new REMOVE_FLOORITEM(item));
@@ -210,7 +204,8 @@ public class RoomMapping {
         item.setRoomId(0);
         item.setRolling(false);
         item.setStopRoll(false);
-
+        item.setRequiresUpdate(false);
+        
         ItemDao.updateItem(item);
     }
 
