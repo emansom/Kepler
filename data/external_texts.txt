@@ -1,4 +1,5 @@
 player.commands.no.args=You have not supplied any arguments!
+roomdimmer_furni_limit=You can only have one roomdimmer per room
 furni_glass_table*7_desc=Habbo Club
 nav_public_helptext_hd=Public Spaces
 furni_glass_table*8_desc=Translucent beauty

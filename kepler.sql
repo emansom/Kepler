@@ -1,3 +1,12 @@
+-- phpMyAdmin SQL Dump
+-- version 4.8.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: localhost
+-- Generation Time: Jun 21, 2018 at 01:09 PM
+-- Server version: 10.3.7-MariaDB
+-- PHP Version: 7.2.6
+
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
 START TRANSACTION;
@@ -997,6 +1006,20 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `items_moodlight_presets`
+--
+
+CREATE TABLE `items_moodlight_presets` (
+  `item_id` int(11) NOT NULL,
+  `current_preset` int(11) NOT NULL DEFAULT 1,
+  `preset_1` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255',
+  `preset_2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255',
+  `preset_3` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `items_teleporter_links`
 --
 
@@ -1123,7 +1146,7 @@ CREATE TABLE `rooms` (
   `password` varchar(255) DEFAULT '',
   `visitors_now` int(11) DEFAULT 0,
   `visitors_max` int(11) DEFAULT 25
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
 
 --
 -- Dumping data for table `rooms`
@@ -1418,7 +1441,8 @@ CREATE TABLE `users` (
   `club_expiration` bigint(11) NOT NULL DEFAULT 0,
   `badge` char(3) NOT NULL DEFAULT '',
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
-  `allow_stalking` tinyint(1) NOT NULL DEFAULT 1
+  `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
+  `sound_enabled` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -1479,6 +1503,12 @@ ALTER TABLE `items_definitions`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `items_moodlight_presets`
+--
+ALTER TABLE `items_moodlight_presets`
+  ADD PRIMARY KEY (`item_id`);
+
+--
 -- Indexes for table `items_teleporter_links`
 --
 ALTER TABLE `items_teleporter_links`
@@ -1511,6 +1541,12 @@ ALTER TABLE `rooms_categories`
 ALTER TABLE `rooms_models`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
+
+--
+-- Indexes for table `settings`
+--
+ALTER TABLE `settings`
+  ADD PRIMARY KEY (`setting`);
 
 --
 -- Indexes for table `soundmachine_playlists`

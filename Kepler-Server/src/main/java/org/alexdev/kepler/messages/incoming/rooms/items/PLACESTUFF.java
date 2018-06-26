@@ -103,8 +103,12 @@ public class PLACESTUFF implements MessageEvent {
         }
 
         if (room.getItemManager().getSoundMachine() != null && (item.hasBehaviour(ItemBehaviour.SOUND_MACHINE) || item.hasBehaviour(ItemBehaviour.JUKEBOX))) {
-            // TODO: Find the message ID for the comment with the same warning, instead of using texts file.
             player.send(new ALERT(TextsManager.getInstance().getValue("room_sound_furni_limit")));
+            return;
+        }
+
+        if (room.getItemManager().getMoodlight() != null && (item.hasBehaviour(ItemBehaviour.ROOMDIMMER))) {
+            player.send(new ALERT(TextsManager.getInstance().getValue("roomdimmer_furni_limit")));
             return;
         }
 

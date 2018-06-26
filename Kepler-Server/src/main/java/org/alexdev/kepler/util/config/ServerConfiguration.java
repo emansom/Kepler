@@ -40,16 +40,6 @@ public class ServerConfiguration {
         config.put("mysql.password", "verysecret");
         config.put("mysql.database", "kepler");
 
-        config.put("fuck.aaron", "true");
-
-        config.put("welcome.message.enabled", "true");
-        config.put("welcome.message.content", "Hello, %username%! And welcome to the Kepler server!");
-
-        config.put("roller.tick.default", "6");
-
-        config.put("afk.timer.seconds", "900");
-        config.put("sleep.timer.seconds", "300");
-
         config.put("debug", "false");
     }
 
@@ -69,6 +59,7 @@ public class ServerConfiguration {
         writer.println("");
         writer.println("[Database]");
         writer.println("mysql.hostname=" + config.get("mysql.hostname"));
+        writer.println("mysql.port=" + config.get("mysql.port"));
         writer.println("mysql.username=" + config.get("mysql.username"));
         writer.println("mysql.password=" + config.get("mysql.password"));
         writer.println("mysql.database=" + config.get("mysql.database"));
@@ -76,19 +67,6 @@ public class ServerConfiguration {
         writer.println("[Logging]");
         writer.println("log.received.packets=" + config.get("log.received.packets"));
         writer.println("log.sent.packets=" + config.get("log.sent.packets"));
-        /*writer.println("");
-        writer.println("[Game]");
-        writer.println("sso.tickets.enabled=" + config.get("sso.tickets.enabled"));
-        writer.println("fuck.aaron=true" + config.get("fuck.aaron"));
-        writer.println("");
-        writer.println("welcome.message.enabled=" + config.get("welcome.message.enabled"));
-        writer.println("welcome.message.content=" + config.get("welcome.message.content"));
-        writer.println("");
-        writer.println("# 1 tick = 500ms, 6 is 3 seconds");
-        writer.println("roller.tick.default=" + config.get("roller.tick.default"));
-        writer.println("");
-        writer.println("afk.timer.seconds=" + config.get("afk.timer.seconds"));
-        writer.println("sleep.timer.seconds=" + config.get("sleep.timer.seconds"));*/
         writer.println("");
         writer.println("[Console]");
         writer.println("debug=" + config.get("debug"));

@@ -10,6 +10,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -23,7 +24,6 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-        Map<Item, Item> itemsRolling = new HashMap<>();
 
         List<Item> itemsToUpdate = new ArrayList<>();
         List<Object> blacklist = new ArrayList<>();
@@ -36,9 +36,6 @@ public class RollerTask implements Runnable {
             List<Entity> entities = roller.getTile().getEntities();
             List<Item> items = roller.getTile().getItems();
 
-            //<Item> shallowCopy = items.subList(0, items.size());
-            //Collections.reverse(shallowCopy);
-
             // Process items on rollers
             for (Item item : items) {
                 if (blacklist.contains(item)) {
@@ -48,7 +45,6 @@ public class RollerTask implements Runnable {
                 if (this.processItem(roller, item, false)) {
                     itemsToUpdate.add(item);
                     blacklist.add(item);
-                    itemsRolling.put(item, roller);
                 }
             }
 
@@ -61,10 +57,6 @@ public class RollerTask implements Runnable {
                 this.processEntity(roller, entity);
                 blacklist.add(entity);
             }
-        }
-
-        for (var set : itemsRolling.entrySet()) {
-            //this.processItem(set.getValue(), set.getKey(), true);
         }
 
         if (itemsToUpdate.size() > 0) {
@@ -174,6 +166,10 @@ public class RollerTask implements Runnable {
             nextHeight -= roller.getDefinition().getTopHeight();
         }
 
+        if (nextHeight > GameConfiguration.getInstance().getInteger("stack.height.limit")) {
+            nextHeight = GameConfiguration.getInstance().getInteger("stack.height.limit");
+        }
+
         //if (doMove) {
             this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
 
@@ -214,7 +210,7 @@ public class RollerTask implements Runnable {
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
         RoomTile previousTile = this.room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
 
-        double nextHeight = roller.getTile().getInteractiveTileHeight();
+        double nextHeight = frontTile.getInteractiveTileHeight();
         double displayNextHeight = nextHeight;
 
         if (frontTile.getHighestItem() != null) {
@@ -229,7 +225,6 @@ public class RollerTask implements Runnable {
             }
 
             if (frontRoller != null) {
-
                 for (Item frontItem : frontTile.getItems()) {
                     if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                         continue;
@@ -261,16 +256,17 @@ public class RollerTask implements Runnable {
             displayNextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
         }
 
+        this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
+
+        entity.getRoomUser().getPosition().setX(front.getX());
+        entity.getRoomUser().getPosition().setY(front.getY());
+        entity.getRoomUser().getPosition().setZ(nextHeight);
+
         if (!entity.getRoomUser().isSittingOnGround()) {
             entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
         }
 
-        this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
-
         entity.getRoomUser().setNeedsUpdate(true);
-        entity.getRoomUser().getPosition().setX(front.getX());
-        entity.getRoomUser().getPosition().setY(front.getY());
-        entity.getRoomUser().getPosition().setZ(nextHeight);
 
         previousTile.removeEntity(entity);
         frontTile.addEntity(entity);

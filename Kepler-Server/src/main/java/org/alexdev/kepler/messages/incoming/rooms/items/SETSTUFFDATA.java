@@ -32,7 +32,7 @@ public class SETSTUFFDATA implements MessageEvent {
             return;
         }
 
-        if (item.hasBehaviour(ItemBehaviour.DICE) || item.hasBehaviour(ItemBehaviour.PRIZE_TROPHY) || item.hasBehaviour(ItemBehaviour.POST_IT) || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
+        if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER) || item.hasBehaviour(ItemBehaviour.DICE) || item.hasBehaviour(ItemBehaviour.PRIZE_TROPHY) || item.hasBehaviour(ItemBehaviour.POST_IT) || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 

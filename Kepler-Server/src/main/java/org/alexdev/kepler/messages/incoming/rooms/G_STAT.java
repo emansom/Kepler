@@ -38,7 +38,7 @@ public class G_STAT implements MessageEvent {
                     player.send(new UPDATE_ITEM(item));
                 }
 
-                // Dices use a seperate packet for rolling animation
+                // Dices use a separate packet for rolling animation
                 if (item.hasBehaviour(ItemBehaviour.DICE)) {
                     player.send(new DICE_VALUE(item.getId(), true, 0));
                 }

@@ -89,6 +89,10 @@ public class GRPC implements MessageEvent {
 
                 customData += StringUtil.filterInput(extraData, true);
             }
+
+            if (def.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
+                customData = Item.DEFAULT_ROOMDIMMER_CUSTOM_DATA;
+            }
         }
 
         Item item = new Item();

@@ -124,6 +124,18 @@ public class Pathfinder {
             }
         }
 
+        // Can't walk diagonal between two non-walkable tiles.
+        if (current.getX() != tmp.getX() &&
+            current.getY() != tmp.getY()) {
+
+            boolean firstValidTile = RoomTile.isValidTile(room, entity, new Position(tmp.getX(), current.getY()));
+            boolean secondValidTile = RoomTile.isValidTile(room, entity, new Position(current.getX(), tmp.getY()));
+
+            if (!firstValidTile && !secondValidTile) {
+                return false;
+            }
+        }
+
         // Avoid walking into furniture unless it's their last location
         if (!current.equals(room.getModel().getDoorLocation())) {
             if (toItem != null) {

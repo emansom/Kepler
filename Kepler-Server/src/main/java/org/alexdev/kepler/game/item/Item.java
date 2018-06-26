@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Item {
+    public static final String DEFAULT_ROOMDIMMER_CUSTOM_DATA = "1,1,1,#000000,255";
+
     private int id;
     private int ownerId;
     private int roomId;
@@ -263,6 +265,8 @@ public class Item {
 
             if (rollingItem.isRolling()) {
                 if (rollingItem.getItemBelow() != null && rollingItem.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
+                    // If the item is rolling and there's a 0.5 gap of height underneath it or more, then you can place
+                    // an item below it.
                     if (rollingItem.getPosition().getZ() - rollingItem.getItemBelow().getPosition().getZ() >= 0.5) {
                         return true;
                     }

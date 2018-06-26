@@ -1,19 +1,16 @@
 package org.alexdev.kepler.util.config;
 
 import org.alexdev.kepler.dao.mysql.SettingsDao;
-import org.alexdev.kepler.game.room.RoomManager;
-import org.apache.commons.configuration2.ex.ConfigurationException;
 
-import java.io.*;
+import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class GameConfiguration {
     private static GameConfiguration instance;
-    private Map<String, String> config;// = new ConcurrentHashMap<>();
+    private Map<String, String> config;
 
     public GameConfiguration() {
-        this.config = new ConcurrentHashMap<>();
+        this.config = new LinkedHashMap<>();
         this.setConfigurationDefaults();
 
         for (var entrySet : this.config.entrySet()) {
@@ -38,6 +35,8 @@ public class GameConfiguration {
         config.put("afk.timer.seconds", "900");
         config.put("sleep.timer.seconds", "300");
         config.put("carry.timer.seconds", "300");
+
+        config.put("stack.height.limit", "8");
     }
 
     /**
