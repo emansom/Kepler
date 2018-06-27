@@ -258,14 +258,13 @@ public class RollerTask implements Runnable {
 
         this.room.send(new SLIDE_OBJECT(entity, front, roller.getId(), displayNextHeight));
 
-        entity.getRoomUser().getPosition().setX(front.getX());
-        entity.getRoomUser().getPosition().setY(front.getY());
-        entity.getRoomUser().getPosition().setZ(nextHeight);
-
         if (!entity.getRoomUser().isSittingOnGround()) {
             entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
         }
 
+        entity.getRoomUser().getPosition().setX(front.getX());
+        entity.getRoomUser().getPosition().setY(front.getY());
+        entity.getRoomUser().getPosition().setZ(nextHeight);
         entity.getRoomUser().setNeedsUpdate(true);
 
         previousTile.removeEntity(entity);
