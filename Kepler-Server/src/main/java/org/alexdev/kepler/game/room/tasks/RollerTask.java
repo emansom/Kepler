@@ -159,6 +159,10 @@ public class RollerTask implements Runnable {
                         }
                     }
                 }
+            } else {
+                if (!RoomTile.isValidTile(this.room, null, frontTile.getPosition())) {
+                    return false;
+                }
             }
         }
 
