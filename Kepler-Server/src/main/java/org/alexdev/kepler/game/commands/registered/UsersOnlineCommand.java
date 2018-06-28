@@ -49,13 +49,15 @@ public class UsersOnlineCommand extends Command {
             }
         }
 
-        sb.append("\n").append("\nPage numbers: 0 - ").append(pageNumber);
+        if (paginatedPlayers.size() > 0) {
+            sb.append("\n").append("\nPage numbers: 0 - ").append(pageNumber);
+        }
 
         session.send(new ALERT(sb.toString()));
     }
 
     @Override
     public String getDescription() {
-        return "Get the uptime and status of the server";
+        return "Get the list of players currently online";
     }
 }
