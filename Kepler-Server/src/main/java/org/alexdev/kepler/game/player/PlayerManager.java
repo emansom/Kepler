@@ -117,8 +117,8 @@ public class PlayerManager {
      *
      * @return the collection of players
      */
-    public Collection<Player> getPlayers() {
-        return this.playerIdMap.values();
+    public List<Player> getPlayers() {
+        return new ArrayList<>(this.playerIdMap.values());
     }
 
     /**
