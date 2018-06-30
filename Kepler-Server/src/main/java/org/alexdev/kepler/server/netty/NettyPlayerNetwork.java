@@ -20,7 +20,7 @@ public class NettyPlayerNetwork {
     }
 
     public void send(MessageComposer response) {
-        channel.writeAndFlush(response).syncUninterruptibly();
+        channel.writeAndFlush(response);
     }
 
     public int getConnectionId() {
