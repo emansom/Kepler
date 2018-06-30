@@ -6,15 +6,16 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.inventory.INVENTORY;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
+import org.alexdev.kepler.util.StringUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Inventory {
     private Player player;
+
     private List<Item> items;
+    private LinkedHashMap<Integer, List<Item>> paginatedItems;
+
     private int handStripPageIndex;
 
     public Inventory(Player player) {
@@ -28,6 +29,11 @@ public class Inventory {
     private void initialise() {
         this.handStripPageIndex = 0;
         this.items = ItemDao.getInventory(this.player.getDetails().getId());
+        this.refreshPagination();
+    }
+
+    private void refreshPagination() {
+        this.paginatedItems = StringUtil.paginate(this.items, 9);
     }
 
     /**
@@ -36,9 +42,10 @@ public class Inventory {
      * @param stripView the view type
      */
     public void getView(String stripView) {
+        this.refreshPagination();
         this.changeView(stripView);
 
-        Map<Integer, Item> casts = this.getCasts(null, this.items.size());
+        Map<Integer, Item> casts = this.getCasts();
         this.player.send(new INVENTORY(this, casts));
     }
 
@@ -46,33 +53,13 @@ public class Inventory {
      * Get the inventory casts for opening hand.
      * Credits to Woodpecker v3 for this, thanks Nillus yet again. <3
      */
-    private Map<Integer,Item> getCasts(Map<Integer,Item> casts, int endId) {
-        int startId = 0;
+    private Map<Integer,Item> getCasts() {
+        Map<Integer, Item> casts = new HashMap<>();
 
-        if (casts == null) {
-            casts = new HashMap<>();
+        int stripSlotId = (this.handStripPageIndex * 9);
 
-            if (this.handStripPageIndex == 255) {
-                this.handStripPageIndex = ((endId - 1) / 9);
-            }
-        }
-
-        if (endId > 0) {
-            startId = this.handStripPageIndex * 9;
-
-            if (endId > (startId + 9)) {
-                endId = startId + 9;
-            }
-
-            if (startId >= endId) {
-                this.handStripPageIndex--;
-                getCasts(casts, endId);
-            }
-
-            for (int stripSlotId = startId; stripSlotId < endId; stripSlotId++) {
-                Item item = this.items.get(stripSlotId);
-                casts.put(stripSlotId, item);
-            }
+        for (Item item : this.paginatedItems.get(this.handStripPageIndex)) {
+            casts.put(stripSlotId++, item);
         }
 
         return casts;
@@ -93,13 +80,15 @@ public class Inventory {
         }
 
         if (stripView.equals("prev")) {
-            if (this.handStripPageIndex > 0) {
-                this.handStripPageIndex--;
-            }
+            this.handStripPageIndex--;
         }
 
         if (stripView.equals("last")) {
-            this.handStripPageIndex++;
+            this.handStripPageIndex = this.paginatedItems.size();
+        }
+
+        if (!this.paginatedItems.containsKey(this.handStripPageIndex)) {
+            this.handStripPageIndex = 0;
         }
     }
 
