@@ -76,7 +76,6 @@ public class EntityTask implements Runnable {
                 }
 
                 // Leave room if the tile is the door and we are in a flat
-                // TODO: disable if in public room with teleporting tiles
                 if (next.equals(roomUser.getRoom().getModel().getDoorLocation())) {
                     roomUser.getRoom().getEntityManager().leaveRoom(entity, true);
                     return;
