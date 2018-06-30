@@ -42,7 +42,7 @@ public class RollerTask implements Runnable {
                     continue;
                 }
 
-                if (this.processItem(roller, item, false)) {
+                if (this.processItem(roller, item)) {
                     itemsToUpdate.add(item);
                     blacklist.add(item);
                 }
@@ -78,7 +78,7 @@ public class RollerTask implements Runnable {
      * @param item the item being rolled
      * @return true, if rolled
      */
-    private boolean processItem(Item roller, Item item, boolean doMove) {
+    private boolean processItem(Item roller, Item item) {
         if (roller == null) {
             return false;
         }
@@ -91,7 +91,7 @@ public class RollerTask implements Runnable {
             return false;
         }
 
-        if (/*doMove && */item.isStopRoll()) {
+        if (item.isStopRoll()) {
             item.setStopRoll(false);
             return false;
         }
@@ -174,13 +174,11 @@ public class RollerTask implements Runnable {
             nextHeight = GameConfiguration.getInstance().getInteger("stack.height.limit");
         }
 
-        //if (doMove) {
-            this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
+        this.room.send(new SLIDE_OBJECT(item, front, roller.getId(), nextHeight));
 
-            item.getPosition().setX(front.getX());
-            item.getPosition().setY(front.getY());
-            item.getPosition().setZ(nextHeight);
-        //}
+        item.getPosition().setX(front.getX());
+        item.getPosition().setY(front.getY());
+        item.getPosition().setZ(nextHeight);
 
         item.setRolling(true);
         return true;
