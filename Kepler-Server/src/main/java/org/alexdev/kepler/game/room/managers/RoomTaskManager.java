@@ -1,11 +1,14 @@
 package org.alexdev.kepler.game.room.managers;
 
+import com.goterl.lazycode.lazysodium.interfaces.Hash;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.*;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.apache.commons.lang3.tuple.Pair;
 
+import java.util.HashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -17,9 +20,11 @@ public class RoomTaskManager {
     private ScheduledFuture<?> processEntity;
     private ScheduledFuture<?> processStatus;
     private ScheduledFuture<?> processRoller;
+    private HashMap<String, Pair<ScheduledFuture<?>, Runnable>> processCustomTasks;
 
     public RoomTaskManager(Room room) {
         this.room = room;
+        this.processCustomTasks = new HashMap<>();
         this.scheduledExecutorService = GameScheduler.getInstance().getSchedulerService();
     }
 
@@ -64,5 +69,33 @@ public class RoomTaskManager {
             this.processRoller.cancel(false);
             this.processRoller = null;
         }
+
+        for (var tasksKvp : this.processCustomTasks.entrySet()) {
+            tasksKvp.getValue().getLeft().cancel(false);
+        }
+
+        this.processCustomTasks.clear();
+    }
+
+    /**
+     * Schedule a custom task.
+     *
+     * @param taskName the task name identifier
+     * @param runnableTask the runnable task instance
+     * @param interval the interval of the task
+     * @param timeUnit the time unit of the interval
+     */
+    public void scheduleCustomTask(String taskName, Runnable runnableTask, int interval, TimeUnit timeUnit) {
+        if (processCustomTasks.containsKey(taskName)) {
+            this.processCustomTasks.get(taskName).getLeft().cancel(false);
+            this.processCustomTasks.remove(taskName);
+        }
+
+        var future = this.scheduledExecutorService.scheduleAtFixedRate(runnableTask, 0, interval, timeUnit);
+
+        this.processCustomTasks.put(taskName, Pair.of(
+                future,
+                runnableTask
+        ));
     }
 }
