@@ -37,6 +37,7 @@ public class GameConfiguration {
         config.put("carry.timer.seconds", "300");
 
         config.put("stack.height.limit", "8");
+        config.put("roomdimmer.scripting.allowed", "false");
     }
 
     /**
