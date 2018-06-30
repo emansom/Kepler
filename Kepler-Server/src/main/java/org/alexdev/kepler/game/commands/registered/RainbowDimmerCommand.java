@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.RainbowTask;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.util.StringUtil;
 
 import java.util.concurrent.TimeUnit;
 
@@ -35,6 +36,21 @@ public class RainbowDimmerCommand extends Command {
             return;
         }
 
+        int tickInterval = 5;
+
+        if (args.length == 1) {
+            if (!StringUtil.isNumber(args[0])) {
+                player.send(new ALERT("Please specify the amount of seconds inbetween the colours changing as a number"));
+                return;
+            } else {
+                tickInterval = Integer.parseInt(args[0]);
+            }
+        }
+
+        if (tickInterval < 1) {
+            tickInterval = 1;
+        }
+
         Item moodlight = room.getItemManager().getMoodlight();
 
         if (moodlight == null) {
@@ -43,11 +59,11 @@ public class RainbowDimmerCommand extends Command {
         }
 
         RainbowTask rainbowTask = new RainbowTask(room);
-        room.getTaskManager().scheduleCustomTask("RainbowTask", rainbowTask, 1, TimeUnit.SECONDS);
+        room.getTaskManager().scheduleCustomTask("RainbowTask", rainbowTask, tickInterval, TimeUnit.SECONDS);
     }
 
     @Override
     public String getDescription() {
-        return "Cycles through the rainbow in your very own room!";
+        return "<seconds> - Cycles through the rainbow in your very own room!";
     }
 }

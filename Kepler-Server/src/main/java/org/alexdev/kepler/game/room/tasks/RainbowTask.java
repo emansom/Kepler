@@ -28,7 +28,7 @@ public class RainbowTask implements Runnable {
         if (HEX_COLOURS == null) {
             HEX_COLOURS = new LinkedHashMap<>();
 
-            double frequency = 0.3;
+            double frequency = 0.5;
 
             for (var i = 0; i < 32; ++i) {
                 double red = Math.sin(frequency*i + 0) * 127 + 128;
