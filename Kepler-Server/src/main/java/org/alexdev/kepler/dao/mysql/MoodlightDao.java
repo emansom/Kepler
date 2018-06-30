@@ -25,7 +25,8 @@ public class MoodlightDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT item_id FROM items_moodlight_presets", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT item_id FROM items_moodlight_presets WHERE item_id = ?", sqlConnection);
+            preparedStatement.setInt(1, itemId);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {

@@ -28,6 +28,6 @@ public class ADDSTRIPITEM implements MessageEvent {
         room.getMapping().removeItem(item);
 
         player.getInventory().getItems().add(item);
-        player.getInventory().getView("update");
+        player.getInventory().getView("last");
     }
 }

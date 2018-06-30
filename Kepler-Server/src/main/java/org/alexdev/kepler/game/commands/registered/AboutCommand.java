@@ -20,7 +20,7 @@ public class AboutCommand extends Command {
         }
 
         Player player = (Player)entity;
-        player.send(new ALERT("Kepler server\n\nContributors:\n - Hoshiko\n - Leon\n - Romuald\n - Glaceon\n\nMade by Quackster"));
+        player.send(new ALERT("Kepler server\n\nContributors:\n - Hoshiko\n - Ascii\n - Leon\n - Romuald\n - Glaceon\n\nMade by Quackster"));
     }
 
     @Override

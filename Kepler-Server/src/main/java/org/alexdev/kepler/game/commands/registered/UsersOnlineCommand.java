@@ -1,16 +1,14 @@
 package org.alexdev.kepler.game.commands.registered;
 
-import org.alexdev.kepler.Kepler;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
-import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 
-import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class UsersOnlineCommand extends Command {
@@ -35,12 +33,12 @@ public class UsersOnlineCommand extends Command {
         Player session = (Player) entity;
 
         List<Player> players = PlayerManager.getInstance().getPlayers();
-        List<List<Player>> paginatedPlayers = StringUtil.paginate(players, maxPlayersPerPage);
+        LinkedHashMap<Integer, List<Player>> paginatedPlayers = StringUtil.paginate(players, maxPlayersPerPage);
 
         StringBuilder sb = new StringBuilder()
                 .append("Users online: ").append(players.size()).append("\n");
 
-        if (pageNumber >= paginatedPlayers.size()) {
+        if (paginatedPlayers.containsKey(pageNumber)) {
             List<Player> playerList = paginatedPlayers.get(pageNumber);
 
             for (Player player : playerList) {
@@ -48,8 +46,8 @@ public class UsersOnlineCommand extends Command {
                 sb.append(player.getDetails().getName());
             }
         }
-
-        if (paginatedPlayers.size() > 0) {
+        
+        if (paginatedPlayers.size() > 1) {
             sb.append("\n").append("\nPage numbers: 0 - ").append(pageNumber);
         }
 

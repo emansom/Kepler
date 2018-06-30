@@ -3,6 +3,7 @@ package org.alexdev.kepler.util;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class StringUtil {
@@ -87,7 +88,8 @@ public class StringUtil {
      * @param chunkSize the chunk size
      * @return the list
      */
-    public static <T> List<List<T>> paginate(List<T> originalList, int chunkSize) {
+    public static <T> LinkedHashMap<Integer, List<T>> paginate(List<T> originalList, int chunkSize) {
+        LinkedHashMap<Integer, List<T>> chunks = new LinkedHashMap<>();
         List<List<T>> listOfChunks = new ArrayList<>();
 
         for (int i = 0; i < originalList.size() / chunkSize; i++) {
@@ -98,7 +100,11 @@ public class StringUtil {
             listOfChunks.add(originalList.subList(originalList.size() - originalList.size() % chunkSize, originalList.size()));
         }
 
-        return listOfChunks;
+        for (int i = 0; i < listOfChunks.size(); i++) {
+            chunks.put(i, listOfChunks.get(i));
+        }
+
+        return chunks;
     }
     
     /**

@@ -194,6 +194,8 @@ public class RoomEntityManager {
             return;
         }
 
+        this.room.getEntities().remove(entity);
+
         if (entity.getType() == EntityType.PLAYER) {
             PoolHandler.disconnect((Player) entity);
         }
@@ -204,16 +206,14 @@ public class RoomEntityManager {
             tile.removeEntity(entity);
         }
 
-        this.room.getEntities().remove(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
-
         this.room.send(new LOGOUT(entity.getRoomUser().getInstanceId()));
         this.room.tryDispose();
 
         entity.getRoomUser().reset();
 
         // From this point onwards we send packets for the user to leave
-        if (entity.getType() !=  EntityType.PLAYER) {
+        if (entity.getType() != EntityType.PLAYER) {
             return;
         }
 

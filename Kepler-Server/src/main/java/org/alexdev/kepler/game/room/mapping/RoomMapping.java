@@ -286,6 +286,10 @@ public class RoomMapping {
             return null;
         }
 
+        if (this.roomModel.getTileState(x, y) == RoomTileState.CLOSED) {
+            return null;
+        }
+
         return this.roomMap[x][y];
     }
 }
