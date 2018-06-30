@@ -24,9 +24,8 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-
-        List<Item> itemsToUpdate = new ArrayList<>();
-        List<Object> blacklist = new ArrayList<>();
+        List<Item> itemsRolling = new ArrayList<>();
+        List<Entity> entitiesRolling = new ArrayList<>();
 
         for (Item roller : this.room.getItems()) {
             if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
@@ -38,33 +37,33 @@ public class RollerTask implements Runnable {
 
             // Process items on rollers
             for (Item item : items) {
-                if (blacklist.contains(item)) {
+                if (itemsRolling.contains(item)) {
                     continue;
                 }
 
                 if (this.processItem(roller, item)) {
-                    itemsToUpdate.add(item);
-                    blacklist.add(item);
+                    itemsRolling.add(item);
                 }
             }
 
             // Process entities on rollers
             for (Entity entity : entities) {
-                if (blacklist.contains(entity)) {
+                if (entitiesRolling.contains(entity)) {
                     continue;
                 }
 
-                this.processEntity(roller, entity);
-                blacklist.add(entity);
+                if (this.processEntity(roller, entity)) {
+                    entitiesRolling.add(entity);
+                }
             }
         }
 
-        if (itemsToUpdate.size() > 0) {
+        if (itemsRolling.size() > 0) {
             this.room.getMapping().regenerateCollisionMap();
-            ItemDao.updateItems(itemsToUpdate);
+            ItemDao.updateItems(itemsRolling);
 
             GameScheduler.getInstance().getSchedulerService().schedule(
-                    new ItemRollingTask(itemsToUpdate, room),
+                    new ItemRollingTask(itemsRolling, room),
                     1,
                     TimeUnit.SECONDS
             );
@@ -190,23 +189,23 @@ public class RollerTask implements Runnable {
      * @param roller the roller being used
      * @param entity the entity being rolled
      */
-    private void processEntity(Item roller, Entity entity) {
+    private boolean processEntity(Item roller, Entity entity) {
         if (entity.getRoomUser().isWalking()) {
-            return; // Don't roll user if they're working.
+            return false; // Don't roll user if they're working.
         }
 
         if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
-            return; // Don't roll users who aren't on this tile.
+            return false; // Don't roll users who aren't on this tile.
         }
 
         if (entity.getRoomUser().getPosition().getZ() < roller.getPosition().getZ()) {
-            return; // Don't roll user if they're below the roller
+            return false; // Don't roll user if they're below the roller
         }
 
         Position front = roller.getPosition().getSquareInFront();
 
         if (!Pathfinder.isValidStep(this.room, entity, entity.getRoomUser().getPosition(), front, true)) {
-            return;
+            return false;
         }
 
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
@@ -243,12 +242,12 @@ public class RollerTask implements Runnable {
                         // it just rolled from, and the next roller has an item on it.
                         if (frontPosition.equals(entity.getRoomUser().getPosition())) {
                             if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
-                                return;
+                                return false;
 
                             }
                         }
                     } else {
-                        return;
+                        return false;
                     }
                 }
             }
@@ -271,5 +270,7 @@ public class RollerTask implements Runnable {
 
         previousTile.removeEntity(entity);
         frontTile.addEntity(entity);
+
+        return true;
     }
 }
