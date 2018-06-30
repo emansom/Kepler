@@ -40,13 +40,15 @@ public class UsersOnlineCommand extends Command {
         StringBuilder sb = new StringBuilder()
                 .append("Users online: ").append(players.size()).append("\n");
 
-        List<Player> playerList = paginatedPlayers.get(pageNumber);
+        if (paginatedPlayers.size() >= pageNumber) {
+            List<Player> playerList = paginatedPlayers.get(pageNumber);
 
-        for (Player player : playerList) {
-            sb.append("\n - ");
-            sb.append(player.getDetails().getName());
+            for (Player player : playerList) {
+                sb.append("\n - ");
+                sb.append(player.getDetails().getName());
+            }
         }
-
+        
         if (paginatedPlayers.size() > 0) {
             sb.append("\n").append("\nPage numbers: 0 - ").append(pageNumber);
         }
