@@ -84,7 +84,7 @@ public class Inventory {
         }
 
         if (stripView.equals("last")) {
-            this.handStripPageIndex = this.paginatedItems.size();
+            this.handStripPageIndex = this.paginatedItems.size() - 1;
         }
 
         if (!this.paginatedItems.containsKey(this.handStripPageIndex)) {
