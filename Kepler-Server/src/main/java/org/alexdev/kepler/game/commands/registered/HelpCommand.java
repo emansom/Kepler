@@ -15,7 +15,7 @@ public class HelpCommand extends Command {
     @Override
     public void handleCommand(Entity entity, String message, String[] args) {
         StringBuilder about = new StringBuilder();
-        about.append("Commands:<br>");
+        about.append("Commands ('<' and '>' are optional parameters):<br>");
 
         for (var set : CommandManager.getInstance().getCommands().entrySet()) {
             if (!CommandManager.getInstance().hasCommandPermission(entity, set.getValue())) {
