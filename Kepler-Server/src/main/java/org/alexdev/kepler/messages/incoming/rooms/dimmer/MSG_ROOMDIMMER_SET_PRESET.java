@@ -39,7 +39,7 @@ public class MSG_ROOMDIMMER_SET_PRESET implements MessageEvent {
         int presetStrength = reader.readInt();
 
         // Make sure presetColour is a valid hex colour
-        Pattern colorPattern = Pattern.compile("#([0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})");
+        Pattern colorPattern = Pattern.compile("#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})");
 
         if (!colorPattern.matcher(presetColour).matches()) {
             return; // Not a hex color
