@@ -191,7 +191,10 @@ public class Player extends Entity {
      * Get rid of the player from the server.
      */
     public void kickFromServer() {
-        this.network.close();
+        try {
+            this.network.close();
+        } catch (Exception ex) { }
+
         this.dispose();
     }
 
@@ -204,12 +207,13 @@ public class Player extends Entity {
             return;
         }
 
-        PlayerManager.getInstance().removePlayer(this);
-        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
 
         if (this.roomUser.getRoom() != null) {
             this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
         }
+
+        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
+        PlayerManager.getInstance().removePlayer(this);
 
         this.loggedIn = false;
     }
