@@ -199,6 +199,8 @@ public class RoomUser {
         }
 
         if (item != null) {
+            int headRotation = this.position.getHeadRotation();
+
             if (item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
                 this.removeStatus(StatusType.DANCE);
                 this.position.setRotation(item.getPosition().getRotation());
@@ -211,6 +213,10 @@ public class RoomUser {
                 this.position.setRotation(item.getPosition().getRotation());
                 this.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
+            }
+
+            if (needsUpdate && this.getLookTimer() > -1) {
+                this.position.setHeadRotation(headRotation);
             }
 
             if (item.getDefinition().getSprite().equals("poolBooth") ||
