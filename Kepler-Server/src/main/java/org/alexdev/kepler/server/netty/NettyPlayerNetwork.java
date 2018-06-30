@@ -23,6 +23,14 @@ public class NettyPlayerNetwork {
         channel.writeAndFlush(response);
     }
 
+    public void sendQueued(MessageComposer response) {
+        channel.write(response);
+    }
+
+    public void flush() {
+        channel.flush();
+    }
+
     public int getConnectionId() {
         return connectionId;
     }

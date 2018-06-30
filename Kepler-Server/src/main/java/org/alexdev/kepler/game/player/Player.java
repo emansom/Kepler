@@ -63,14 +63,16 @@ public class Player extends Entity {
         this.messenger = new Messenger(this);
         this.inventory = new Inventory(this);
 
-        this.send(new LOGIN());
-        this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+        this.sendQueued(new LOGIN());
+        this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
 
         if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
             String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
             alertMessage = alertMessage.replace("%username%", this.details.getName());
-            this.send(new ALERT(alertMessage));
+            this.sendQueued(new ALERT(alertMessage));
         }
+
+        this.flush();
     }
 
     /**
@@ -112,6 +114,22 @@ public class Player extends Entity {
      */
     public void send(MessageComposer response) {
         this.network.send(response);
+    }
+
+    /**
+     * Send a queued response to the player
+     *
+     * @param response the response
+     */
+    public void sendQueued(MessageComposer response) {
+        this.network.sendQueued(response);
+    }
+
+    /**
+     * Flush queue
+     */
+    public void flush() {
+        this.network.flush();
     }
 
     /**
