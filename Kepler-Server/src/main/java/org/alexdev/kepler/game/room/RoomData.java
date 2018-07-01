@@ -44,8 +44,8 @@ public class RoomData {
         }
         this.categoryId = category;
         // TODO: disallow certain UTF-8 control characters used for protocol
-        this.name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}\\p{Cntrl}]", "");
-        this.description = Normalizer.normalize(description, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}\\p{Cntrl}]", "");
+        this.name = StringUtil.filterInput(name, true);
+        this.description = StringUtil.filterInput(name, true);
         this.model = model;
         this.ccts = ccts;
         this.wallpaper = wallpaper;
