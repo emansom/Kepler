@@ -15,17 +15,13 @@ import java.util.concurrent.TimeUnit;
 
 public class RoomTaskManager {
     private Room room;
-    private ScheduledExecutorService scheduledExecutorService;
-
-    private ScheduledFuture<?> processEntity;
-    private ScheduledFuture<?> processStatus;
-    private ScheduledFuture<?> processRoller;
-    private HashMap<String, Pair<ScheduledFuture<?>, Runnable>> processCustomTasks;
+    private ScheduledExecutorService executorService;
+    private HashMap<String, Pair<ScheduledFuture<?>, Runnable>> processTasks;
 
     public RoomTaskManager(Room room) {
         this.room = room;
-        this.processCustomTasks = new HashMap<>();
-        this.scheduledExecutorService = GameScheduler.getInstance().getSchedulerService();
+        this.processTasks = new HashMap<>();
+        this.executorService = GameScheduler.getInstance().getSchedulerService();
     }
 
     /**
@@ -33,48 +29,22 @@ public class RoomTaskManager {
      * in the room.
      */
     public void startTasks() {
-        // TODO: create scheduler service per room instance so performance of this room won't affect others
-        if (this.processEntity == null) {
-            this.processEntity = this.scheduledExecutorService.scheduleAtFixedRate(new EntityTask(room), 0, 500, TimeUnit.MILLISECONDS);
-        }
-
-        if (this.processStatus == null) {
-            this.processStatus = this.scheduledExecutorService.scheduleAtFixedRate(new StatusTask(room), 0, 1, TimeUnit.SECONDS);
-        }
-
-        //if (this.room.getItemManager().containsItemBehaviour(ItemBehaviour.ROLLER)) {
         int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
 
-        if (this.processRoller == null) {
-            this.processRoller = this.scheduledExecutorService.scheduleAtFixedRate(new RollerTask(room), 0, rollerMillisTask, TimeUnit.MILLISECONDS);
-        }
-        //}
+        this.scheduleCustomTask("EntityTask", new EntityTask(this.room), 500, TimeUnit.MILLISECONDS);
+        this.scheduleCustomTask("StatusTask", new StatusTask(this.room), 1, TimeUnit.SECONDS);
+        this.scheduleCustomTask("RollerTask", new RollerTask(this.room), rollerMillisTask, TimeUnit.MILLISECONDS);
     }
 
     /**
      * Stop tasks, called when there's no players in the room.
      */
     public void stopTasks() {
-        if (this.processEntity != null) {
-            this.processEntity.cancel(false);
-            this.processEntity = null;
-        }
-
-        if (this.processStatus != null) {
-            this.processStatus.cancel(false);
-            this.processStatus = null;
-        }
-
-        if (this.processRoller != null) {
-            this.processRoller.cancel(false);
-            this.processRoller = null;
-        }
-
-        for (var tasksKvp : this.processCustomTasks.entrySet()) {
+        for (var tasksKvp : this.processTasks.entrySet()) {
             tasksKvp.getValue().getLeft().cancel(false);
         }
 
-        this.processCustomTasks.clear();
+        this.processTasks.clear();
     }
 
     /**
@@ -86,14 +56,10 @@ public class RoomTaskManager {
      * @param timeUnit the time unit of the interval
      */
     public void scheduleCustomTask(String taskName, Runnable runnableTask, int interval, TimeUnit timeUnit) {
-        if (processCustomTasks.containsKey(taskName)) {
-            this.processCustomTasks.get(taskName).getLeft().cancel(false);
-            this.processCustomTasks.remove(taskName);
-        }
+        this.cancelCustomTask(taskName);
 
-        var future = this.scheduledExecutorService.scheduleAtFixedRate(runnableTask, 0, interval, timeUnit);
-
-        this.processCustomTasks.put(taskName, Pair.of(
+        var future = this.executorService.scheduleAtFixedRate(runnableTask, 0, interval, timeUnit);
+        this.processTasks.put(taskName, Pair.of(
                 future,
                 runnableTask
         ));
@@ -105,9 +71,19 @@ public class RoomTaskManager {
      * @param taskName the name of the task to cancel
      */
     public void cancelCustomTask(String taskName) {
-        if (processCustomTasks.containsKey(taskName)) {
-            this.processCustomTasks.get(taskName).getLeft().cancel(false);
-            this.processCustomTasks.remove(taskName);
+        if (this.processTasks.containsKey(taskName)) {
+            this.processTasks.get(taskName).getLeft().cancel(false);
+            this.processTasks.remove(taskName);
         }
+    }
+
+    /**
+     * Get if the task is registered.
+     *
+     * @param taskName the task name to check for
+     * @return true, if successful
+     */
+    public boolean hasCustomTask(String taskName) {
+        return this.processTasks.containsKey(taskName);
     }
 }
