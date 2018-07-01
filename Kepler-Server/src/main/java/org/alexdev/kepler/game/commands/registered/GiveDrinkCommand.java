@@ -31,7 +31,7 @@ public class GiveDrinkCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
@@ -39,7 +39,7 @@ public class GiveDrinkCommand extends Command {
 
         if (targetUser == null ||
                 targetUser.getRoomUser().getRoom() == null ||
-                targetUser.getRoom().getId() != player.getRoom().getId()) {
+                targetUser.getRoomUser().getRoom().getId() != player.getRoomUser().getRoom().getId()) {
             player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Could not find user: " + args[0]));
             return;
         }

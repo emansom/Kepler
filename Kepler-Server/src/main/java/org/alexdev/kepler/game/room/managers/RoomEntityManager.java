@@ -88,8 +88,8 @@ public class RoomEntityManager {
      * @param destination the (optional) destination to take the user to when they enter
      */
     public void enterRoom(Entity entity, Position destination) {
-        if (entity.getRoom() != null) {
-            entity.getRoom().getEntityManager().leaveRoom(entity, false);
+        if (entity.getRoomUser().getRoom() != null) {
+            entity.getRoomUser().getRoom().getEntityManager().leaveRoom(entity, false);
         }
 
         // If the room is not loaded, add room, as we intend to join it.

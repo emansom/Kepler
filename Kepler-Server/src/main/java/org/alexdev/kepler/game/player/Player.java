@@ -90,7 +90,7 @@ public class Player extends Entity {
         this.send(new USER_OBJECT(this.details));
 
         // Send refresh to room if inside room
-        var room = this.getRoom();
+        var room = this.roomUser.getRoom();
         if (room != null) {
             room.send(new FIGURE_CHANGE(this.roomUser.getInstanceId(), this.details));
         }

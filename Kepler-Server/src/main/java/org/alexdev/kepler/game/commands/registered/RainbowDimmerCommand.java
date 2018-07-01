@@ -26,11 +26,11 @@ public class RainbowDimmerCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
-        Room room = player.getRoom();
+        Room room = player.getRoomUser().getRoom();
 
         if (!room.isOwner(player.getEntityId())) {
             return;

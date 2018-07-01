@@ -66,12 +66,12 @@ public class Pathfinder {
         Item toItem = toTile.getHighestItem();
 
         // Only check these below if the user is in a pool room.
-        if (entity.getRoom().getModel().getName().startsWith("pool_")) {
+        if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_")) {
 
             // Let people to walk to the next tile if they were on a previous tile
             // in the diving deck
             if (fromItem != null && toItem != null) {
-                if (entity.getRoom().getModel().getName().equals("pool_b")) {
+                if (entity.getRoomUser().getRoom().getModel().getName().equals("pool_b")) {
                     if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
                             toItem.getDefinition().getSprite().equals("queue_tile2")) {
                         return true;
@@ -112,7 +112,7 @@ public class Pathfinder {
 
                 // Don't allow people to enter the queue from any coordinate, and don't allow
                 // if they don't have a ticket or have swimmers.
-                if (entity.getRoom().getModel().getName().equals("pool_b") &&
+                if (entity.getRoomUser().getRoom().getModel().getName().equals("pool_b") &&
                     toItem.getDefinition().getSprite().equals("queue_tile2")) {
 
                     if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
@@ -171,7 +171,7 @@ public class Pathfinder {
      * @return the linked list
      */
     private static LinkedList<Position> makePath(Entity entity, int x, int y) {
-        if (!RoomTile.isValidTile(entity.getRoom(), entity, new Position(x, y))) {
+        if (!RoomTile.isValidTile(entity.getRoomUser().getRoom(), entity, new Position(x, y))) {
             return new LinkedList<>();
         }
 
@@ -199,7 +199,7 @@ public class Pathfinder {
     private static PathfinderNode makePathReversed(Entity entity, int X, int Y) {
         LinkedList<PathfinderNode> openList = new LinkedList<>();
 
-        PathfinderNode[][] map = new PathfinderNode[entity.getRoom().getModel().getMapSizeX()][entity.getRoom().getModel().getMapSizeY()];
+        PathfinderNode[][] map = new PathfinderNode[entity.getRoomUser().getRoom().getModel().getMapSizeX()][entity.getRoomUser().getRoom().getModel().getMapSizeY()];
         PathfinderNode node;
         Position tmp;
 

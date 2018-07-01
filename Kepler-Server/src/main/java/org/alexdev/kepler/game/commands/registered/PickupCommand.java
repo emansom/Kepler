@@ -27,17 +27,17 @@ public class PickupCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
-        if (!player.getRoom().isOwner(player.getEntityId())) {
+        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId())) {
             return;
         }
 
         List<Item> itemsToUpdate = new ArrayList<>();
 
-        for (Item item : player.getRoom().getItems()) {
+        for (Item item : player.getRoomUser().getRoom().getItems()) {
             if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 continue; // Cannot pick up public room furniture.
             }
@@ -49,7 +49,7 @@ public class PickupCommand extends Command {
             item.setOwnerId(player.getEntityId());
 
             player.getInventory().getItems().add(item);
-            player.getRoom().getMapping().removeItem(item);
+            player.getRoomUser().getRoom().getMapping().removeItem(item);
         }
 
         ItemDao.updateItems(itemsToUpdate);

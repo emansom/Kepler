@@ -26,8 +26,8 @@ public class SETBADGE implements MessageEvent {
         player.getDetails().setShowBadge(showBadge);
 
         // Notify room
-        if (player.getRoom() != null) {
-            player.getRoom().send(new USER_BADGE(player.getRoomUser().getInstanceId(), player.getDetails()));
+        if (player.getRoomUser().getRoom() != null) {
+            player.getRoomUser().getRoom().send(new USER_BADGE(player.getRoomUser().getInstanceId(), player.getDetails()));
         }
 
         // Persist to database

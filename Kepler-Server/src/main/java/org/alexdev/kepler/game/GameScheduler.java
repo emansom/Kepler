@@ -36,7 +36,7 @@ public class GameScheduler implements Runnable {
         this.tickRate.incrementAndGet();
 
         for (Player player : PlayerManager.getInstance().getPlayers()) {
-            if (player.getRoom() != null) {
+            if (player.getRoomUser().getRoom() != null) {
 
                 if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
                     if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
