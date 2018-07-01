@@ -25,7 +25,7 @@ public class CommandManager {
         this.commands.put(new String[] { "givedrink"}, new GiveDrinkCommand());
         this.commands.put(new String[] { "sit" }, new SitCommand());
         this.commands.put(new String[] { "uptime", "status" }, new UptimeCommand());
-        this.commands.put(new String[] { "poof" }, new PoofCommand());
+        this.commands.put(new String[] { "poof", "update" }, new PoofCommand());
         this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
         this.commands.put(new String[] { "pickall" }, new PickupCommand());
         this.commands.put(new String[] { "usersonline", "whosonline" }, new UsersOnlineCommand());
