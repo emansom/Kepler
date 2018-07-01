@@ -49,6 +49,7 @@ public class RainbowTask implements Runnable {
         Item moodlight = this.room.getItemManager().getMoodlight();
 
         if (moodlight == null) {
+            this.room.getTaskManager().cancelCustomTask("RainbowTask");
             return;
         }
 

@@ -98,4 +98,16 @@ public class RoomTaskManager {
                 runnableTask
         ));
     }
+
+    /**
+     * Cancels a custom task by task name.
+     *
+     * @param taskName the name of the task to cancel
+     */
+    public void cancelCustomTask(String taskName) {
+        if (processCustomTasks.containsKey(taskName)) {
+            this.processCustomTasks.get(taskName).getLeft().cancel(false);
+            this.processCustomTasks.remove(taskName);
+        }
+    }
 }
