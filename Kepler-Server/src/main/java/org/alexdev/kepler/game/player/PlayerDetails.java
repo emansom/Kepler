@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.player;
 
+import org.alexdev.kepler.util.StringUtil;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -9,7 +10,6 @@ import java.util.List;
 public class PlayerDetails {
     private int id;
     private String username;
-    private String password;
     private String figure;
     private String poolFigure;
     private int credits;
@@ -35,7 +35,6 @@ public class PlayerDetails {
      *
      * @param id the id to add
      * @param username the username
-     * @param password the password
      * @param figure the figure
      * @param poolFigure the pool figure
      * @param credits the credits
@@ -54,21 +53,19 @@ public class PlayerDetails {
      * @param allowStalking allow stalking/following
      * @param soundEnabled allow playing music from soundmachines
      */
-    public void fill(int id, String username, String password, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking, boolean soundEnabled) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking, boolean soundEnabled) {
         this.id = id;
-        // TODO: handle special habbo-related alt codes in username
-        this.username = Normalizer.normalize(username, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
-        this.password = Normalizer.normalize(password, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+
+        this.username = StringUtil.filterInput(username, true);
 
         // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
-        this.figure = Normalizer.normalize(figure, Normalizer.Form.NFD).replaceAll("[^\\p{Alnum}-.]", "");
+        this.figure = StringUtil.filterInput(figure, true);
 
         // Format: ch=s02/238,238,238
-        this.poolFigure = Normalizer.normalize(poolFigure, Normalizer.Form.NFD).replaceAll("[^\\p{Alnum}=,/]", "");
+        this.poolFigure = StringUtil.filterInput(poolFigure, true);
 
-        // TODO: handle special habbo-related alt codes in motto and consoleMotto
-        this.motto = Normalizer.normalize(motto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
-        this.consoleMotto =  Normalizer.normalize(consoleMotto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+        this.motto = StringUtil.filterInput(motto, true);
+        this.consoleMotto = StringUtil.filterInput(consoleMotto, true);
 
         this.sex = sex.toLowerCase().equals("f") ? 'F' : 'M';
 
