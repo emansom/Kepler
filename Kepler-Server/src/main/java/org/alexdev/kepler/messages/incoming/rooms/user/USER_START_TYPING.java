@@ -9,7 +9,7 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class USER_START_TYPING implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        Room room = player.getRoom();
+        Room room = player.getRoomUser().getRoom();
 
         if (room == null || player.getRoomUser().isTyping()) {
             return;

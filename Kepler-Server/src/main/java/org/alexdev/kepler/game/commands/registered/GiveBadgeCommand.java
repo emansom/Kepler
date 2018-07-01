@@ -39,7 +39,7 @@ public class GiveBadgeCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
@@ -106,7 +106,7 @@ public class GiveBadgeCommand extends Command {
         // Send badges to user
         targetUser.send(new AVAILABLE_BADGES(targetDetails));
 
-        Room targetRoom = targetUser.getRoom();
+        Room targetRoom = targetUser.getRoomUser().getRoom();
 
         // Let other room users know something changed if targetUser is inside a room
         if (targetRoom != null) {

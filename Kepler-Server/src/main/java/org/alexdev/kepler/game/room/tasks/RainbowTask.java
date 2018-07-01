@@ -1,22 +1,10 @@
 package org.alexdev.kepler.game.room.tasks;
 
-import org.alexdev.kepler.dao.mysql.ItemDao;
-import org.alexdev.kepler.game.GameScheduler;
-import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.pathfinder.Pathfinder;
-import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
-import org.alexdev.kepler.util.config.GameConfiguration;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class RainbowTask implements Runnable {
     private final Room room;
@@ -49,6 +37,7 @@ public class RainbowTask implements Runnable {
         Item moodlight = this.room.getItemManager().getMoodlight();
 
         if (moodlight == null) {
+            this.room.getTaskManager().cancelTask("RainbowTask");
             return;
         }
 

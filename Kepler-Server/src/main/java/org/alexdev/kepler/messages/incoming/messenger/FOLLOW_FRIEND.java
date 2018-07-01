@@ -41,7 +41,7 @@ public class FOLLOW_FRIEND implements MessageEvent {
             return;
         }
 
-        if (friend.getRoom() == null) {
+        if (friend.getRoomUser().getRoom() == null) {
             player.send(new FOLLOW_ERROR(FollowErrors.ON_HOTELVIEW.getErrorId())); // Friend is on hotelview
             return;
         }
@@ -52,8 +52,8 @@ public class FOLLOW_FRIEND implements MessageEvent {
             return;
         }
 
-        boolean isPublic = friend.getRoom().isPublicRoom();
-        int roomId = friend.getRoom().getId();
+        boolean isPublic = friend.getRoomUser().getRoom().isPublicRoom();
+        int roomId = friend.getRoomUser().getRoom().getId();
 
         player.send(new FOLLOW_REQUEST(isPublic, roomId));
     }

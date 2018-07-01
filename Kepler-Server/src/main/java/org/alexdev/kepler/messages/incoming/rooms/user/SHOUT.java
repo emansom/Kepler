@@ -13,7 +13,7 @@ import org.alexdev.kepler.util.StringUtil;
 public class SHOUT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        Room room = player.getRoom();
+        Room room = player.getRoomUser().getRoom();
 
         if (room == null) {
             return;

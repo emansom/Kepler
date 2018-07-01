@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,19 +27,17 @@ public class PickupCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
-            System.out.println("lol 123");
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
-        if (!player.getRoom().isOwner(player.getEntityId())) {
-            System.out.println("lol 123 4");
+        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId())) {
             return;
         }
 
         List<Item> itemsToUpdate = new ArrayList<>();
 
-        for (Item item : player.getRoom().getItems()) {
+        for (Item item : player.getRoomUser().getRoom().getItems()) {
             if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 continue; // Cannot pick up public room furniture.
             }
@@ -50,13 +49,13 @@ public class PickupCommand extends Command {
             item.setOwnerId(player.getEntityId());
 
             player.getInventory().getItems().add(item);
-            player.getRoom().getMapping().removeItem(item);
+            player.getRoomUser().getRoom().getMapping().removeItem(item);
         }
 
         ItemDao.updateItems(itemsToUpdate);
 
         player.getInventory().getView("last");
-        player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "All furniture items have been picked up"));
+        player.send(new ALERT("All furniture items have been picked up"));
     }
 
     @Override

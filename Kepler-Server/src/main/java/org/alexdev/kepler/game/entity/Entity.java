@@ -48,13 +48,4 @@ public abstract class Entity {
      * Dispose.
      */
     public abstract void dispose();
-
-    /**
-     * Gets the room.
-     *
-     * @return the room
-     */
-    public Room getRoom() {
-        return getRoomUser().getRoom();
-    }
 }

@@ -25,14 +25,13 @@ public class SitCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
         if (player.getRoomUser().containsStatus(StatusType.SIT)) {
             return;
         }
-
 
         double height = 0.5;
         int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;

@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.RainbowTask;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -26,11 +27,11 @@ public class RainbowDimmerCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
-        Room room = player.getRoom();
+        Room room = player.getRoomUser().getRoom();
 
         if (!room.isOwner(player.getEntityId())) {
             return;
@@ -58,8 +59,14 @@ public class RainbowDimmerCommand extends Command {
             return;
         }
 
-        RainbowTask rainbowTask = new RainbowTask(room);
-        room.getTaskManager().scheduleCustomTask("RainbowTask", rainbowTask, tickInterval, TimeUnit.SECONDS);
+        if (room.getTaskManager().hasTask("RainbowTask")) {
+            room.getTaskManager().cancelTask("RainbowTask");
+            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Rainbow room dimmer cycle has stopped"));
+        } else {
+            RainbowTask rainbowTask = new RainbowTask(room);
+            room.getTaskManager().scheduleTask("RainbowTask", rainbowTask, tickInterval, TimeUnit.SECONDS);
+            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Rainbow room dimmer cycle has started"));
+        }
     }
 
     @Override

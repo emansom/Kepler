@@ -32,8 +32,8 @@ public class MessengerUser {
         response.writeBool(isOnline);
 
         if (isOnline) {
-            if (player.getRoom() != null) {
-                Room room = player.getRoom();
+            if (player.getRoomUser().getRoom() != null) {
+                Room room = player.getRoomUser().getRoom();
 
                 if (room.getData().getOwnerId() > 0) {
                     response.writeString("Floor1a");

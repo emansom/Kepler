@@ -22,7 +22,7 @@ public class RefreshCatalogueCommand extends Command {
 
         Player player = (Player) entity;
 
-        if (player.getRoom() == null) {
+        if (player.getRoomUser().getRoom() == null) {
             return;
         }
 
@@ -32,9 +32,7 @@ public class RefreshCatalogueCommand extends Command {
         // Reload the catalogue manager (catalogue_pages, catalogue_packages and catalogue_items tables)
         CatalogueManager.reset();
 
-
         // TODO: calculate diff between previous calatogue and current and whisper summary of changes
-
         player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Catalogue refreshed."));
     }
 
