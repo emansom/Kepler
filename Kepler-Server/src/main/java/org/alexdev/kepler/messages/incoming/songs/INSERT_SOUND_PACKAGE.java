@@ -57,6 +57,7 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
                 if (songId == soundSetId) {
                     trackItem = item;
                     trackId = songId;
+                    break;
                 }
             }
         }
