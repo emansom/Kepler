@@ -43,9 +43,9 @@ public class RoomData {
             this.ownerName = "";
         }
         this.categoryId = category;
-        // TODO: handle special habbo-related alt codes in regex for name and description
-        this.name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
-        this.description = Normalizer.normalize(description, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+        // TODO: disallow certain UTF-8 control characters used for protocol
+        this.name = Normalizer.normalize(name, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}\\p{Cntrl}]", "");
+        this.description = Normalizer.normalize(description, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}\\p{Cntrl}]", "");
         this.model = model;
         this.ccts = ccts;
         this.wallpaper = wallpaper;

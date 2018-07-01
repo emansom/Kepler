@@ -66,9 +66,9 @@ public class PlayerDetails {
         // Format: ch=s02/238,238,238
         this.poolFigure = Normalizer.normalize(poolFigure, Normalizer.Form.NFD).replaceAll("[^\\p{Alnum}=,/]", "");
 
-        // TODO: handle special habbo-related alt codes in motto and consoleMotto
-        this.motto = Normalizer.normalize(motto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
-        this.consoleMotto =  Normalizer.normalize(consoleMotto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}]", "");
+        // TODO: disallow certain UTF-8 control characters used for protocol
+        this.motto = Normalizer.normalize(motto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}\\p{Cntrl}]", "");
+        this.consoleMotto =  Normalizer.normalize(consoleMotto, Normalizer.Form.NFD).replaceAll("[^\\p{Graph}\\p{Space}\\p{Cntrl}]", "");
 
         this.sex = sex.toLowerCase().equals("f") ? 'F' : 'M';
 
