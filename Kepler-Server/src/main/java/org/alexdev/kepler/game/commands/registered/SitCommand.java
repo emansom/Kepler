@@ -33,7 +33,6 @@ public class SitCommand extends Command {
             return;
         }
 
-
         double height = 0.5;
         int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
 
