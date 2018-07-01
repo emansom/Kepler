@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +28,10 @@ public class PickupCommand extends Command {
         Player player = (Player) entity;
 
         if (player.getRoom() == null) {
-            System.out.println("lol 123");
             return;
         }
 
         if (!player.getRoom().isOwner(player.getEntityId())) {
-            System.out.println("lol 123 4");
             return;
         }
 
@@ -56,7 +55,7 @@ public class PickupCommand extends Command {
         ItemDao.updateItems(itemsToUpdate);
 
         player.getInventory().getView("last");
-        player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "All furniture items have been picked up"));
+        player.send(new ALERT("All furniture items have been picked up"));
     }
 
     @Override

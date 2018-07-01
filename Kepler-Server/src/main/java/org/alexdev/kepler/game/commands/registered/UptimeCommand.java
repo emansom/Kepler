@@ -56,7 +56,7 @@ public class UptimeCommand extends Command {
             msg.append("memory usage: " + memoryUsage + " MB\r");
             msg.append("JVM: " + System.getProperty("java.vm.name") + " " + System.getProperty("java.vm.version") + "\r");
             msg.append("OS: " + System.getProperty("os.name"));
-            
+
             UPTIME_COMMAND_EXPIRY = DateUtil.getCurrentTimeSeconds() + UPTIME_COMMAND_INTERVAL_SECONDS;
             UPTIME_STATUS_STRING = msg.toString();
         }
