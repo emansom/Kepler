@@ -5,6 +5,7 @@ import org.alexdev.kepler.dao.mysql.MoodlightDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -61,7 +62,10 @@ public class MSG_ROOMDIMMER_SET_PRESET implements MessageEvent {
         }
 
         // Cancel RainbowTask because the operator decided to use their own moodlight settings.
-        room.getTaskManager().cancelTask("RainbowTask");
+        if (room.getTaskManager().hasTask("RainbowTask")) {
+            room.getTaskManager().cancelTask("RainbowTask");
+            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Rainbow room dimmer cycle has stopped"));
+        }
 
         Pair<Integer, ArrayList<String>> presetData = MoodlightDao.getPresets(item.getId());
         List<String> presets = presetData.getRight();
