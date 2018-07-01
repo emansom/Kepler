@@ -25,15 +25,14 @@ public class RoomTaskManager {
     }
 
     /**
-     * Start all needed room tasks, called when there's at least 1 player
-     * in the room.
+     * Start all needed room tasks, called when there's at least 1 player in the room.
      */
     public void startTasks() {
         int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
 
-        this.scheduleCustomTask("EntityTask", new EntityTask(this.room), 500, TimeUnit.MILLISECONDS);
-        this.scheduleCustomTask("StatusTask", new StatusTask(this.room), 1, TimeUnit.SECONDS);
-        this.scheduleCustomTask("RollerTask", new RollerTask(this.room), rollerMillisTask, TimeUnit.MILLISECONDS);
+        this.scheduleTask("EntityTask", new EntityTask(this.room), 500, TimeUnit.MILLISECONDS);
+        this.scheduleTask("StatusTask", new StatusTask(this.room), 1, TimeUnit.SECONDS);
+        this.scheduleTask("RollerTask", new RollerTask(this.room), rollerMillisTask, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -55,8 +54,8 @@ public class RoomTaskManager {
      * @param interval the interval of the task
      * @param timeUnit the time unit of the interval
      */
-    public void scheduleCustomTask(String taskName, Runnable runnableTask, int interval, TimeUnit timeUnit) {
-        this.cancelCustomTask(taskName);
+    public void scheduleTask(String taskName, Runnable runnableTask, int interval, TimeUnit timeUnit) {
+        this.cancelTask(taskName);
 
         var future = this.executorService.scheduleAtFixedRate(runnableTask, 0, interval, timeUnit);
         this.processTasks.put(taskName, Pair.of(
@@ -70,7 +69,7 @@ public class RoomTaskManager {
      *
      * @param taskName the name of the task to cancel
      */
-    public void cancelCustomTask(String taskName) {
+    public void cancelTask(String taskName) {
         if (this.processTasks.containsKey(taskName)) {
             this.processTasks.get(taskName).getLeft().cancel(false);
             this.processTasks.remove(taskName);
@@ -83,7 +82,7 @@ public class RoomTaskManager {
      * @param taskName the task name to check for
      * @return true, if successful
      */
-    public boolean hasCustomTask(String taskName) {
+    public boolean hasTask(String taskName) {
         return this.processTasks.containsKey(taskName);
     }
 }

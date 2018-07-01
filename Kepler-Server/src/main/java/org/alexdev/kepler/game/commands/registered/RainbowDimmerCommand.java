@@ -59,7 +59,7 @@ public class RainbowDimmerCommand extends Command {
         }
 
         RainbowTask rainbowTask = new RainbowTask(room);
-        room.getTaskManager().scheduleCustomTask("RainbowTask", rainbowTask, tickInterval, TimeUnit.SECONDS);
+        room.getTaskManager().scheduleTask("RainbowTask", rainbowTask, tickInterval, TimeUnit.SECONDS);
     }
 
     @Override
