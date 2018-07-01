@@ -55,7 +55,7 @@ public class RainbowDimmerCommand extends Command {
         Item moodlight = room.getItemManager().getMoodlight();
 
         if (moodlight == null) {
-            player.send(new ALERT("This command requires a roomdimmer placed for it to work"));
+            player.send(new ALERT("This command requires a moodlight placed for it to work"));
             return;
         }
 
