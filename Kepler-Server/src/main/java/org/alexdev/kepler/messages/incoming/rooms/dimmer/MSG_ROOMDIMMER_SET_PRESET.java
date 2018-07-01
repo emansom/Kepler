@@ -60,6 +60,9 @@ public class MSG_ROOMDIMMER_SET_PRESET implements MessageEvent {
             }
         }
 
+        // Cancel RainbowTask because the operator decided to use their own moodlight settings.
+        room.getTaskManager().cancelTask("RainbowTask");
+
         Pair<Integer, ArrayList<String>> presetData = MoodlightDao.getPresets(item.getId());
         List<String> presets = presetData.getRight();
 
