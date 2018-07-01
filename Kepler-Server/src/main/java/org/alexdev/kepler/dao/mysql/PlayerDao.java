@@ -467,11 +467,12 @@ public class PlayerDao {
             return;
         }
 
-        details.fill(row.getInt("id"), row.getString("username"), row.getString("password"),
-                row.getString("figure"), row.getString("pool_figure"), row.getInt("credits"),
-                row.getString("motto"), row.getString("console_motto"), row.getString("sex"),
-                row.getInt("tickets"), row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
+        details.fill(row.getInt("id"), row.getString("username"), row.getString("figure"),
+                row.getString("pool_figure"), row.getInt("credits"), row.getString("motto"),
+                row.getString("console_motto"), row.getString("sex"), row.getInt("tickets"),
+                row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
-                row.getBoolean("badge_active"), PlayerDao.getBadges(row.getInt("id")), row.getBoolean("allow_stalking"), row.getBoolean("sound_enabled"));
+                row.getBoolean("badge_active"), PlayerDao.getBadges(row.getInt("id")), row.getBoolean("allow_stalking"),
+                row.getBoolean("sound_enabled"));
     }
 }
