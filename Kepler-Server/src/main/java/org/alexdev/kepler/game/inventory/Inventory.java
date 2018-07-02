@@ -11,11 +11,12 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.*;
 
 public class Inventory {
+    private static final int MAX_ITEMS_PER_PAGE = 9;
+
     private Player player;
-
     private List<Item> items;
-    private LinkedHashMap<Integer, List<Item>> paginatedItems;
 
+    private LinkedHashMap<Integer, List<Item>> paginatedItems;
     private int handStripPageIndex;
 
     public Inventory(Player player) {
@@ -33,7 +34,7 @@ public class Inventory {
     }
 
     private void refreshPagination() {
-        this.paginatedItems = StringUtil.paginate(this.items, 9);
+        this.paginatedItems = StringUtil.paginate(this.items, MAX_ITEMS_PER_PAGE);
     }
 
     /**
@@ -54,9 +55,9 @@ public class Inventory {
      * Credits to Woodpecker v3 for this, thanks Nillus yet again. <3
      */
     private Map<Integer,Item> getCasts() {
-        Map<Integer, Item> casts = new HashMap<>();
+        Map<Integer, Item> casts = new LinkedHashMap<>();
 
-        int stripSlotId = (this.handStripPageIndex * 9);
+        int stripSlotId = (this.handStripPageIndex * MAX_ITEMS_PER_PAGE);
 
         for (Item item : this.paginatedItems.get(this.handStripPageIndex)) {
             casts.put(stripSlotId++, item);
