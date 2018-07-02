@@ -21,13 +21,6 @@ public class Inventory {
 
     public Inventory(Player player) {
         this.player = player;
-        this.initialise();
-    }
-
-    /**
-     * Load inventory items for the user
-     */
-    private void initialise() {
         this.handStripPageIndex = 0;
         this.items = ItemDao.getInventory(this.player.getDetails().getId());
         this.refreshPagination();
