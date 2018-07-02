@@ -21,12 +21,12 @@ public class DiceTask implements Runnable {
 
         int randomNumber = ThreadLocalRandom.current().nextInt(1, 7); // between 1 and 6
 
-        dice.getRoom().send(new DICE_VALUE(dice.getId(), false, randomNumber));
+        this.dice.getRoom().send(new DICE_VALUE(this.dice.getId(), false, randomNumber));
 
-        dice.setCustomData(Integer.toString(randomNumber));
-        dice.updateStatus();
-        dice.setRequiresUpdate(false);
+        this.dice.setCustomData(Integer.toString(randomNumber));
+        this.dice.updateStatus();
+        this.dice.setRequiresUpdate(false);
 
-        ItemDao.updateItem(dice);
+        ItemDao.updateItem(this.dice);
     }
 }

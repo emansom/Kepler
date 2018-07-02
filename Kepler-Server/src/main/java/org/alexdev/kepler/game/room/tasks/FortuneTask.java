@@ -20,10 +20,10 @@ public class FortuneTask implements Runnable {
         // Set random number that gets picked up by the FortuneTask
         int randomNumber = ThreadLocalRandom.current().nextInt(1, 11); // between 1 and 10
 
-        fortune.setCustomData(Integer.toString(randomNumber));
-        fortune.updateStatus();
-        fortune.setRequiresUpdate(false);
+        this.fortune.setCustomData(Integer.toString(randomNumber));
+        this.fortune.updateStatus();
+        this.fortune.setRequiresUpdate(false);
 
-        ItemDao.updateItem(fortune);
+        ItemDao.updateItem(this.fortune);
     }
 }
