@@ -45,7 +45,6 @@ public class Inventory {
 
     /**
      * Get the inventory casts for opening hand.
-     * Credits to Woodpecker v3 for this, thanks Nillus yet again. <3
      */
     private Map<Integer,Item> getCasts() {
         Map<Integer, Item> casts = new LinkedHashMap<>();
