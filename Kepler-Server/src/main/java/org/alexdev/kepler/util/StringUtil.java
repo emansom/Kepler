@@ -32,6 +32,7 @@ public class StringUtil {
      * @return the string
      */
     public static String filterInput(String input, boolean filerNewline) {
+        input = input.replace((char)1, ' ');
         input = input.replace((char)2, ' ');
         input = input.replace((char)9, ' ');
         input = input.replace((char)10, ' ');
