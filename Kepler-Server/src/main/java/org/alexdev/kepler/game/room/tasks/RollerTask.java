@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.ItemRollingData;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -146,6 +147,7 @@ public class RollerTask implements Runnable {
                             }
                         }
                     } else {
+                        return false;/* else {
                         if (frontItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
                             if (item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
                                 return false;
@@ -156,6 +158,7 @@ public class RollerTask implements Runnable {
                         } else {
                             return false;
                         }
+                    }*/
                     }
                 }
             } else {
@@ -178,8 +181,7 @@ public class RollerTask implements Runnable {
         item.getPosition().setX(front.getX());
         item.getPosition().setY(front.getY());
         item.getPosition().setZ(nextHeight);
-
-        item.setRolling(true);
+        item.setRollingData(new ItemRollingData(roller));
         return true;
     }
 

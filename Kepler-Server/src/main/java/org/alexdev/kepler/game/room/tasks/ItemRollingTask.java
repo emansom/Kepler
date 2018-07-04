@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
 
 import java.util.Collection;
 import java.util.List;
@@ -18,9 +19,16 @@ public class ItemRollingTask implements Runnable {
     @Override
     public void run() {
         for (Item item : this.rollingItems) {
-            if (item.isRolling()) {
-                item.setRolling(false);
+            if (item.getRollingData() == null) {
+                continue;
             }
+
+            if (item.getRollingData().getHeightUpdate() > 0) {
+                item.getPosition().setZ(item.getPosition().getZ() + item.getRollingData().getHeightUpdate());
+                item.getRoom().send(new MOVE_FLOORITEM(item));
+            }
+
+            item.setRollingData(null);
         }
     }
 }

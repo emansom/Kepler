@@ -46,7 +46,7 @@ public class RoomTile {
 
         if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
             if (entity != null) {
-                if (!tile.getHighestItem().isRolling()) {
+                if (tile.getHighestItem().getRollingData() != null) {
                     return false;
                 }
 

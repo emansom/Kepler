@@ -138,7 +138,7 @@ public class RoomMapping {
             this.room.send(new PLACE_FLOORITEM(item));
         }
 
-        item.setRolling(false);
+        item.setRollingData(null);
         item.updateEntities(null);
 
         ItemDao.updateItem(item);
@@ -161,7 +161,7 @@ public class RoomMapping {
             this.room.send(new MOVE_FLOORITEM(item));
         }
 
-        item.setRolling(false);
+        item.setRollingData(null);
         item.setStopRoll(false);
         item.updateEntities(oldPosition);
         ItemDao.updateItem(item);
@@ -206,7 +206,7 @@ public class RoomMapping {
         item.getPosition().setZ(0);
         item.getPosition().setRotation(0);
         item.setRoomId(0);
-        item.setRolling(false);
+        item.setRollingData(null);
         item.setStopRoll(false);
 
         ItemDao.updateItem(item);
@@ -226,28 +226,48 @@ public class RoomMapping {
         }
 
         if (!isRotation) {
-            item.getPosition().setZ(tile.getTileHeight());
+            Item roller = null;
+            item.getPosition().setZ(tile.getInteractiveTileHeight());
 
-            // Allow to place underneath a rolling item if there's a considerable gap
-            for (Item itemRolling : tile.getItems()) {
-                 if (!itemRolling.isRolling()) {
+            for (Item rollingItem : tile.getItems()) {
+                if (rollingItem.getRollingData() == null) {
                     continue;
                 }
 
-                if (itemRolling.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                if (rollingItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
                     continue;
                 }
 
-                if (itemRolling.getItemBelow() != null && itemRolling.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
-                     if (itemRolling.getPosition().getZ() - itemRolling.getItemBelow().getPosition().getZ() >= 0.5) {
-                         item.getPosition().setZ(
-                                 itemRolling.getItemBelow().getPosition().getZ() +
-                                 itemRolling.getItemBelow().getDefinition().getTopHeight()
-                         );
+                /*Item itemBelow = rollingItem.getItemBelow();
 
-                     }
-                    break;
+                if (itemBelow != null) {
+                    if (itemBelow.getId() == item.getId()) {
+                        itemBelow = item.getItemBelow();
+                    }
                 }
+
+                // If the item is rolling, and the item below is the roller it's rolling on.
+                if (itemBelow != null
+                        && itemBelow.hasBehaviour(ItemBehaviour.ROLLER)
+                        && rollingItem.getItemBelow().getId() == rollingItem.getRollingData().getRoller().getId()) {
+
+                    if (rollingItem.getPosition().getZ() - rollingItem.getItemBelow().getPosition().getZ() >= 0.5) {
+                        System.out.println("test...");
+                        continue;
+                    }
+                }*/
+
+                if (rollingItem.getRollingData().getHeightUpdate() > 0) {
+                    continue;
+                }
+
+                roller = rollingItem.getRollingData().getRoller();
+                rollingItem.getRollingData().setHeightUpdate(item.getDefinition().getTopHeight());
+            }
+
+            if (roller != null) {
+                System.out.println("test...");
+                item.getPosition().setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
             }
         }
 
