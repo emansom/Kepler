@@ -266,7 +266,6 @@ public class RoomMapping {
             }
 
             if (roller != null) {
-                System.out.println("test...");
                 item.getPosition().setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
             }
         }
