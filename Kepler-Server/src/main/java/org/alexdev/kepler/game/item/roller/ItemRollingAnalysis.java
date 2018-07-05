@@ -10,7 +10,7 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
     }
 
     @Override
-    public boolean doRoll(Item item, Position nextPosition) {
-        return false;
+    public void doRoll(Item item, Position nextPosition) {
+        
     }
 }
