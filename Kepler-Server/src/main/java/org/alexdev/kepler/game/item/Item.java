@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.TeleporterDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -36,7 +37,7 @@ public class Item {
     private String currentProgramValue;
 
     private boolean requiresUpdate;
-    private ItemRollingData rollingData;
+    private RollingData rollingData;
 
     public Item() {
         this.id = 0;
@@ -460,11 +461,11 @@ public class Item {
         this.requiresUpdate = requiresUpdate;
     }
 
-    public ItemRollingData getRollingData() {
+    public RollingData getRollingData() {
         return rollingData;
     }
 
-    public void setRollingData(ItemRollingData rollingData) {
+    public void setRollingData(RollingData rollingData) {
         this.rollingData = rollingData;
     }
 }

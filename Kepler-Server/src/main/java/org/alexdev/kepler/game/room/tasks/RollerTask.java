@@ -1,10 +1,13 @@
 package org.alexdev.kepler.game.room.tasks;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.ItemRollingData;
+import org.alexdev.kepler.game.item.roller.EntityRollingAnalysis;
+import org.alexdev.kepler.game.item.roller.ItemRollingAnalysis;
+import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -25,46 +28,60 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-        List<Item> itemsRolling = new ArrayList<>();
-        List<Entity> entitiesRolling = new ArrayList<>();
+        Map<Item, Position> itemsRolling = new LinkedHashMap<>();
+        Map<Entity, Position> entitiesRolling = new LinkedHashMap<>();
+
+        ItemRollingAnalysis itemRollingAnalysis = new ItemRollingAnalysis();
+        EntityRollingAnalysis entityRollingAnalysis = new EntityRollingAnalysis();
 
         for (Item roller : this.room.getItems()) {
             if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
                 continue;
             }
 
-            List<Entity> entities = roller.getTile().getEntities();
-            List<Item> items = roller.getTile().getItems();
-
             // Process items on rollers
-            for (Item item : items) {
-                if (itemsRolling.contains(item)) {
+            for (Item item : roller.getTile().getItems()) {
+                if (itemsRolling.containsKey(item)) {
                     continue;
                 }
 
-                if (this.processItem(roller, item)) {
-                    itemsRolling.add(item);
+                Position nextPosition = itemRollingAnalysis.canRoll(item, roller);
+
+                if (nextPosition != null) {
+                    itemsRolling.put(item, nextPosition);
                 }
             }
 
             // Process entities on rollers
-            for (Entity entity : entities) {
-                if (entitiesRolling.contains(entity)) {
+            for (Entity entity : roller.getTile().getEntities()) {
+                if (entitiesRolling.containsKey(entity)) {
                     continue;
                 }
 
-                if (this.processEntity(roller, entity)) {
-                    entitiesRolling.add(entity);
+                Position nextPosition = entityRollingAnalysis.canRoll(entity, roller);
+
+                if (nextPosition != null) {
+                    entitiesRolling.put(entity, nextPosition);
                 }
             }
         }
 
+        // Perform roll animation for item
+        for (var kvp : itemsRolling.entrySet()) {
+            itemRollingAnalysis.doRoll(kvp.getKey(), kvp.getValue());
+        }
+
+        // Perform roll animation for entity
+        for (var kvp : entitiesRolling.entrySet()) {
+            entityRollingAnalysis.doRoll(kvp.getKey(), kvp.getValue());
+        }
+
         if (itemsRolling.size() > 0) {
             this.room.getMapping().regenerateCollisionMap();
-            ItemDao.updateItems(itemsRolling);
+            ItemDao.updateItems(itemsRolling.keySet());
 
             GameScheduler.getInstance().getSchedulerService().schedule(
-                    new ItemRollingTask(itemsRolling, room),
+                    new ItemRollingTask(itemsRolling.keySet(), room),
                     1,
                     TimeUnit.SECONDS
             );
@@ -176,7 +193,7 @@ public class RollerTask implements Runnable {
         item.getPosition().setX(front.getX());
         item.getPosition().setY(front.getY());
         item.getPosition().setZ(nextHeight);
-        item.setRollingData(new ItemRollingData(roller));
+        item.setRollingData(new RollingData(roller));
         return true;
     }
 

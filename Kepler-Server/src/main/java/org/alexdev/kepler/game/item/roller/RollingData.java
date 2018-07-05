@@ -1,10 +1,12 @@
-package org.alexdev.kepler.game.item;
+package org.alexdev.kepler.game.item.roller;
 
-public class ItemRollingData {
+import org.alexdev.kepler.game.item.Item;
+
+public class RollingData {
     private Item roller;
     private double heightUpdate;
 
-    public ItemRollingData(Item roller) {
+    public RollingData(Item roller) {
         this.roller = roller;
         this.heightUpdate = -1;
     }
