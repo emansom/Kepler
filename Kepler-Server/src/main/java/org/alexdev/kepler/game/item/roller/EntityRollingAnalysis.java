@@ -31,7 +31,9 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         }
 
         RoomTile frontTile = room.getMapping().getTile(front.getX(), front.getY());
-        double nextHeight = frontTile.getInteractiveTileHeight();
+
+        double nextHeight = entity.getRoomUser().getPosition().getZ();
+        boolean subtractRollerHeight = true;
 
         if (frontTile.getHighestItem() != null) {
             Item frontRoller = null;
@@ -45,6 +47,8 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             }
 
             if (frontRoller != null) {
+                subtractRollerHeight = false;
+
                 for (Item frontItem : frontTile.getItems()) {
                     if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                         continue;
@@ -70,6 +74,10 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                     }
                 }
             }
+        }
+
+        if (subtractRollerHeight) {
+            nextHeight -= roller.getDefinition().getTopHeight();
         }
 
         return new Position(front.getX(), front.getY(), nextHeight);
