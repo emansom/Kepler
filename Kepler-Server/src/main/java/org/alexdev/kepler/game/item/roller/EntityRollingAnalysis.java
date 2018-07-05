@@ -66,9 +66,9 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                             }
                         }
                     } else {
+                        return null;
                     }
                 }
-                        return null;
             }
         }
 
