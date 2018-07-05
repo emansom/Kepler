@@ -91,11 +91,6 @@ public class RollerTask implements Runnable {
             return false;
         }
 
-        if (item.isStopRoll()) {
-            item.setStopRoll(false);
-            return false;
-        }
-
         Position front = roller.getPosition().getSquareInFront();
         RoomTile frontTile = this.room.getMapping().getTile(front.getX(), front.getY());
 

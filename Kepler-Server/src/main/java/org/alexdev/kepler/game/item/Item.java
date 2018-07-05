@@ -36,7 +36,6 @@ public class Item {
     private String currentProgramValue;
 
     private boolean requiresUpdate;
-    private boolean stopRoll;
     private ItemRollingData rollingData;
 
     public Item() {
@@ -467,14 +466,6 @@ public class Item {
 
     public void setRollingData(ItemRollingData rollingData) {
         this.rollingData = rollingData;
-    }
-
-    public boolean isStopRoll() {
-        return stopRoll;
-    }
-
-    public void setStopRoll(boolean stopRoll) {
-        this.stopRoll = stopRoll;
     }
 }
 

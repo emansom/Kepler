@@ -162,7 +162,6 @@ public class RoomMapping {
         }
 
         item.setRollingData(null);
-        item.setStopRoll(false);
         item.updateEntities(oldPosition);
         ItemDao.updateItem(item);
     }
@@ -207,7 +206,6 @@ public class RoomMapping {
         item.getPosition().setRotation(0);
         item.setRoomId(0);
         item.setRollingData(null);
-        item.setStopRoll(false);
 
         ItemDao.updateItem(item);
     }
