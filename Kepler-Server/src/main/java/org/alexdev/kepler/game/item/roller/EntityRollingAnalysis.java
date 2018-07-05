@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
 
@@ -92,6 +93,14 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         if (entity.getRoomUser().isSittingOnGround()) {
             displayNextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
+        }
+
+        if (entity.getRoomUser().containsStatus(StatusType.SIT)) {
+            double sitHeight = Double.parseDouble(entity.getRoomUser().getStatuses().get(StatusType.SIT.getStatusCode()).getValue());
+
+            if (sitHeight > 1.0) {
+                displayNextHeight += (sitHeight - 1.0); // Add new height offset found.
+            }
         }
 
         room.send(new SLIDE_OBJECT(entity, nextPosition, roller.getId(), displayNextHeight));
