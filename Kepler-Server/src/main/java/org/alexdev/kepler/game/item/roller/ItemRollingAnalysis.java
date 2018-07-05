@@ -12,7 +12,6 @@ import org.alexdev.kepler.util.config.GameConfiguration;
 public class ItemRollingAnalysis implements RollingAnalysis<Item> {
     @Override
     public Position canRoll(Item item, Item roller, Room room) {
-
         if (roller == null) {
             return null;
         }

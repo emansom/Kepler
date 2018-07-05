@@ -39,19 +39,6 @@ public class RollerTask implements Runnable {
                 continue;
             }
 
-            // Process items on rollers
-            for (Item item : roller.getTile().getItems()) {
-                if (itemsRolling.containsKey(item)) {
-                    continue;
-                }
-
-                Position nextPosition = itemRollingAnalysis.canRoll(item, roller, this.room);
-
-                if (nextPosition != null) {
-                    itemsRolling.put(item, Pair.of(roller, nextPosition));
-                }
-            }
-
             // Process entities on rollers
             for (Entity entity : roller.getTile().getEntities()) {
                 if (entitiesRolling.containsKey(entity)) {
@@ -62,6 +49,19 @@ public class RollerTask implements Runnable {
 
                 if (nextPosition != null) {
                     entitiesRolling.put(entity, Pair.of(roller, nextPosition));
+                }
+            }
+
+            // Process items on rollers
+            for (Item item : roller.getTile().getItems()) {
+                if (itemsRolling.containsKey(item)) {
+                    continue;
+                }
+
+                Position nextPosition = itemRollingAnalysis.canRoll(item, roller, this.room);
+
+                if (nextPosition != null) {
+                    itemsRolling.put(item, Pair.of(roller, nextPosition));
                 }
             }
         }
