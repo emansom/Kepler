@@ -25,7 +25,7 @@ public class ItemRollingTask implements Runnable {
 
             if (item.getRollingData().getHeightUpdate() > 0) {
                 item.getPosition().setZ(item.getPosition().getZ() + item.getRollingData().getHeightUpdate());
-                item.getRoom().send(new MOVE_FLOORITEM(item));
+                this.room.send(new MOVE_FLOORITEM(item));
             }
 
             item.setRollingData(null);
