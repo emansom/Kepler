@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.TeleporterDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -36,8 +37,7 @@ public class Item {
     private String currentProgramValue;
 
     private boolean requiresUpdate;
-    private boolean isRolling;
-    private boolean stopRoll;
+    private RollingData rollingData;
 
     public Item() {
         this.id = 0;
@@ -48,20 +48,8 @@ public class Item {
         this.currentProgram = "";
         this.currentProgramValue = "";
         this.requiresUpdate = false;
+        this.rollingData = null;
     }
-
-    /*
-    id
-            item.setOwnerId(resultSet.getInt("user_id"));
-        item.setRoomId(resultSet.getInt("room_id"));
-        item.setDefinitionId(resultSet.getInt("definition_id"));
-        item.getPosition().setX(resultSet.getInt("x"));
-        item.getPosition().setY(resultSet.getInt("y"));
-        item.getPosition().setZ(resultSet.getDouble("z"));
-        item.getPosition().setRotation(resultSet.getInt("rotation"));
-        item.setWallPosition(resultSet.getString("wall_position"));
-        item.setCustomData(resultSet.getString("custom_data"));
-     */
 
     public void fill(int id, int ownerId, int roomId, int definitionId, int X, int Y, double Z, int rotation, String wallPosition, String customData) {
         this.id = id;
@@ -71,6 +59,7 @@ public class Item {
         this.position = new Position(X, Y, Z, rotation, rotation);
         this.wallPosition = wallPosition;
         this.customData = customData;
+        this.rollingData = null;
 
         if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             this.teleporterId = TeleporterDao.getTeleporterId(this.id);
@@ -254,7 +243,7 @@ public class Item {
             return false;
         }
 
-        for (Item rollingItem : tile.getItems()) {
+        /*for (Item rollingItem : tile.getItems()) {
             if (rollingItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
                 continue;
             }
@@ -272,8 +261,7 @@ public class Item {
                     }
                 }
             }
-        }
-
+        }*/
 
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
             tile = room.getMapping().getTile(position);
@@ -326,8 +314,8 @@ public class Item {
      * @return true, if successful
      */
     private boolean canPlaceOnTop(Item item, Item tileItem) {
-        if (tileItem.isRolling) {
-            //return true;
+        if (tileItem.rollingData != null) {
+            return true;
         }
 
         // Can't place items on solid objects
@@ -473,20 +461,12 @@ public class Item {
         this.requiresUpdate = requiresUpdate;
     }
 
-    public boolean isRolling() {
-        return isRolling;
+    public RollingData getRollingData() {
+        return rollingData;
     }
 
-    public void setRolling(boolean rolling) {
-        isRolling = rolling;
-    }
-
-    public boolean isStopRoll() {
-        return stopRoll;
-    }
-
-    public void setStopRoll(boolean stopRoll) {
-        this.stopRoll = stopRoll;
+    public void setRollingData(RollingData rollingData) {
+        this.rollingData = rollingData;
     }
 }
 
