@@ -25,7 +25,7 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
         }
 
         Position front = roller.getPosition().getSquareInFront();
-        RoomTile frontTile = room.getMapping().getTile(front.getX(), front.getY());
+        RoomTile frontTile = room.getMapping().getTile(front);
 
         if (frontTile == null) {
             return null;

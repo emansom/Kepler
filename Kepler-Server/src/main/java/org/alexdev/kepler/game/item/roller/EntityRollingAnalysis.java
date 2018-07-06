@@ -31,7 +31,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null;
         }
 
-        RoomTile frontTile = room.getMapping().getTile(front.getX(), front.getY());
+        RoomTile frontTile = room.getMapping().getTile(front);
 
         double nextHeight = entity.getRoomUser().getPosition().getZ();
         boolean subtractRollerHeight = true;
