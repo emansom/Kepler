@@ -15,6 +15,10 @@ public class NettyPlayerNetwork {
         this.connectionId = connectionId;
     }
 
+    public Channel getChannel() {
+        return channel;
+    }
+
     public void close() {
         channel.close();
     }
