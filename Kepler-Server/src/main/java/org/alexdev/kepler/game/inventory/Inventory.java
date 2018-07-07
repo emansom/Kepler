@@ -23,6 +23,7 @@ public class Inventory {
         this.player = player;
         this.handStripPageIndex = 0;
         this.items = ItemDao.getInventory(this.player.getDetails().getId());
+        this.paginatedItems = new LinkedHashMap<>();
         this.refreshPagination();
     }
 
@@ -49,10 +50,12 @@ public class Inventory {
     private Map<Integer,Item> getCasts() {
         Map<Integer, Item> casts = new LinkedHashMap<>();
 
-        int stripSlotId = (this.handStripPageIndex * MAX_ITEMS_PER_PAGE);
+        if (this.paginatedItems.containsKey(this.handStripPageIndex)) {
+            int stripSlotId = (this.handStripPageIndex * MAX_ITEMS_PER_PAGE);
 
-        for (Item item : this.paginatedItems.get(this.handStripPageIndex)) {
-            casts.put(stripSlotId++, item);
+            for (Item item : this.paginatedItems.get(this.handStripPageIndex)) {
+                casts.put(stripSlotId++, item);
+            }
         }
 
         return casts;
