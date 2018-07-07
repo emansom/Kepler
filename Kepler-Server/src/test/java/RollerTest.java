@@ -47,7 +47,7 @@ public class RollerTest extends TestCase {
         item.setDefinitionId(ItemManager.getInstance().getDefinitionBySprite("queue_tile1*6").getId());
         item.setPosition(new Position(6, 3, 0));
 
-        this.room.getItems().add(item);
+        this.room.getMapping().addItem(item);
         this.player.getRoomUser().walkTo(6, 3);
 
         try {
