@@ -58,6 +58,12 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
             if (frontRoller != null) {
                 subtractRollerHeight = false;
 
+                if (frontRoller.getPosition().getZ() != roller.getPosition().getZ()) {
+                    if (Math.abs(frontRoller.getPosition().getZ() - roller.getPosition().getZ()) > 0.1) {
+                        return null; // Don't roll if the height of the roller is different by >0.1
+                    }
+                }
+
                 for (Item frontItem : frontTile.getItems()) {
                     if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
                         continue;
