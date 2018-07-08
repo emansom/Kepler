@@ -1,10 +1,15 @@
 package org.alexdev.kepler.dao.mysql;
 
+import com.goterl.lazycode.lazysodium.SodiumJava;
+import com.goterl.lazycode.lazysodium.interfaces.PwHash;
+
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
-import org.mindrot.jbcrypt.BCrypt;
 
+import com.goterl.lazycode.lazysodium.LazySodiumJava;
+
+import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -107,12 +112,13 @@ public class PlayerDao {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                String hashedPassword = resultSet.getString("password");
-                //String hashed = BCrypt.hashpw(password, BCrypt.gensalt()); // default gen salt is 10
+                byte[] hashedPassword = resultSet.getString("password").getBytes(StandardCharsets.UTF_8);
+                byte[] pass = password.getBytes(StandardCharsets.UTF_8);
 
-                if (BCrypt.checkpw(password, hashedPassword)) {
-                    success = true;
-                }
+                var sodium = new LazySodiumJava(new SodiumJava());
+
+                PwHash.Native pwHash = (PwHash.Native) sodium;
+                success = pwHash.cryptoPwHashStrVerify(hashedPassword, pass, pass.length);
 
                 if (success) {
                     fill(player.getDetails(), resultSet);
