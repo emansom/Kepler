@@ -8,9 +8,7 @@ repositories {
     flatDir {
         dirs 'libs'
     }
-    maven {
-        url  "https://dl.bintray.com/terl/lazysodium-maven"
-    }
+
     mavenCentral()
 }
 
@@ -23,6 +21,9 @@ def protocVersion = '3.5.1-1'
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    // https://mvnrepository.com/artifact/org.mindrot/jbcrypt
+    compile group: 'org.mindrot', name: 'jbcrypt', version: '0.3m'
 
     // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
     compile group: 'com.zaxxer', name: 'HikariCP', version: '2.7.1'
@@ -47,8 +48,6 @@ dependencies {
 
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
-
-    compile "com.goterl.lazycode:lazysodium-java:2.2.0"
 
     compile "com.google.api.grpc:proto-google-common-protos:1.0.0"
     compile "io.grpc:grpc-alts:${grpcVersion}"
