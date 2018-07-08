@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 21, 2018 at 01:09 PM
--- Server version: 10.3.7-MariaDB
--- PHP Version: 7.2.6
+-- Host: 127.0.0.1
+-- Generation Time: Jul 08, 2018 at 02:54 AM
+-- Server version: 10.2.15-MariaDB
+-- PHP Version: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `kepler`
+-- Database: `dev`
 --
 
 -- --------------------------------------------------------
@@ -120,13 +120,13 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (72, 'industrialfan', 10, 12, 5, 247, 0, NULL, NULL, 0),
 (73, 'deal_soundmachine1', 11, 1, 10, 0, 0, 'Soundmachine starterset', 'Gray soundmachine with Duck Funk sampleset', 1),
 (74, 'soundset1', 11, 2, 3, 239, 0, NULL, NULL, 0),
-(75, 'soundset2', 11, 3, 3, 240, 0, NULL, NULL, 0),
-(76, 'soundset4', 11, 5, 3, 240, 0, '', '', 0),
-(77, 'soundset5', 11, 6, 3, 240, 0, '', '', 0),
+(75, 'soundset2', 11, 9, 3, 358, 0, '', '', 0),
+(76, 'soundset4', 11, 9, 3, 359, 0, '', '', 0),
+(77, 'soundset5', 11, 9, 3, 360, 0, '', '', 0),
 (78, 'soundset3', 11, 4, 3, 240, 0, '', '', 0),
-(79, 'soundset6', 11, 7, 3, 241, 0, '', '', 0),
-(80, 'soundset7', 11, 8, 3, 242, 0, '', '', 0),
-(81, 'soundset9', 11, 10, 3, 243, 0, '', '', 0),
+(79, 'soundset6', 11, 9, 3, 241, 0, '', '', 0),
+(80, 'soundset7', 11, 9, 3, 242, 0, '', '', 0),
+(81, 'soundset9', 11, 9, 3, 356, 0, '', '', 0),
 (82, 'soundset8', 11, 9, 3, 243, 0, '', '', 0),
 (83, 'candy_bar', 12, 1, 3, 198, 0, NULL, NULL, 0),
 (84, 'candy_corner', 12, 2, 3, 199, 0, NULL, NULL, 0),
@@ -501,7 +501,62 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (453, 'roomdimmer', 19, 0, 12, 352, 0, NULL, NULL, 0),
 (454, 'jukebox', 11, 0, 3, 353, 0, NULL, NULL, 0),
 (455, 'jukebox_ptv', 11, 0, 8, 354, 0, NULL, NULL, 0),
-(456, 'carpet_soft_tut', 23, 0, 1, 355, 0, NULL, NULL, 0);
+(456, 'carpet_soft_tut', 23, 0, 1, 355, 0, NULL, NULL, 0),
+(458, 'soundset10', 11, 9, 3, 357, 0, '', '', 0),
+(459, 'soundset11', 11, 9, 3, 361, 0, '', '', 0),
+(460, 'soundset12', 11, 9, 3, 362, 0, '', '', 0),
+(461, 'soundset13', 11, 9, 3, 363, 0, '', '', 0),
+(462, 'soundset14', 11, 9, 3, 364, 0, '', '', 0),
+(463, 'soundset15', 11, 9, 3, 365, 0, '', '', 0),
+(464, 'soundset16', 11, 9, 3, 366, 0, '', '', 0),
+(465, 'soundset17', 11, 9, 3, 367, 0, '', '', 0),
+(466, 'soundset18', 11, 9, 3, 368, 0, '', '', 0),
+(467, 'soundset19', 11, 9, 3, 369, 0, '', '', 0),
+(468, 'soundset20', 11, 9, 3, 370, 0, '', '', 0),
+(469, 'soundset21', 11, 9, 3, 371, 0, '', '', 0),
+(470, 'soundset21', 11, 9, 3, 372, 0, '', '', 0),
+(471, 'soundset23', 11, 9, 3, 373, 0, '', '', 0),
+(472, 'soundset24', 11, 9, 3, 374, 0, '', '', 0),
+(473, 'soundset25', 11, 9, 3, 375, 0, '', '', 0),
+(474, 'soundset26', 11, 9, 3, 376, 0, '', '', 0),
+(475, 'soundset27', 11, 9, 3, 377, 0, '', '', 0),
+(476, 'soundset28', 11, 9, 3, 378, 0, '', '', 0),
+(477, 'soundset29', 11, 9, 3, 379, 0, '', '', 0),
+(478, 'soundset30', 11, 9, 3, 380, 0, '', '', 0),
+(479, 'soundset31', 11, 9, 3, 381, 0, '', '', 0),
+(480, 'soundset32', 11, 9, 3, 382, 0, '', '', 0),
+(481, 'soundset33', 11, 9, 3, 383, 0, '', '', 0),
+(482, 'soundset34', 11, 9, 3, 384, 0, '', '', 0),
+(483, 'soundset35', 11, 9, 3, 385, 0, '', '', 0),
+(484, 'soundset36', 11, 9, 3, 386, 0, '', '', 0),
+(485, 'soundset37', 11, 9, 3, 387, 0, '', '', 0),
+(486, 'soundset38', 11, 9, 3, 388, 0, '', '', 0),
+(487, 'soundset39', 11, 9, 3, 389, 0, '', '', 0),
+(488, 'soundset40', 11, 9, 3, 390, 0, '', '', 0),
+(489, 'soundset41', 11, 9, 3, 391, 0, '', '', 0),
+(490, 'soundset42', 11, 9, 3, 392, 0, '', '', 0),
+(491, 'soundset43', 11, 9, 3, 393, 0, '', '', 0),
+(492, 'soundset44', 11, 9, 3, 394, 0, '', '', 0),
+(493, 'soundset45', 11, 9, 3, 395, 0, '', '', 0),
+(494, 'soundset46', 11, 9, 3, 396, 0, '', '', 0),
+(495, 'soundset47', 11, 9, 3, 397, 0, '', '', 0),
+(496, 'soundset48', 11, 9, 3, 398, 0, '', '', 0),
+(497, 'soundset49', 11, 9, 3, 399, 0, '', '', 0),
+(498, 'soundset50', 11, 9, 3, 400, 0, '', '', 0),
+(499, 'soundset51', 11, 9, 3, 401, 0, '', '', 0),
+(500, 'soundset52', 11, 9, 3, 402, 0, '', '', 0),
+(501, 'soundset53', 11, 9, 3, 403, 0, '', '', 0),
+(502, 'soundset54', 11, 9, 3, 404, 0, '', '', 0),
+(503, 'soundset55', 11, 9, 3, 405, 0, '', '', 0),
+(504, 'soundset56', 11, 9, 3, 406, 0, '', '', 0),
+(505, 'soundset57', 11, 9, 3, 407, 0, '', '', 0),
+(506, 'soundset58', 11, 9, 3, 408, 0, '', '', 0),
+(507, 'soundset59', 11, 9, 3, 409, 0, '', '', 0),
+(508, 'soundset60', 11, 9, 3, 410, 0, '', '', 0),
+(509, 'soundset61', 11, 9, 3, 411, 0, '', '', 0),
+(510, 'soundset62', 11, 9, 3, 412, 0, '', '', 0),
+(511, 'soundset63', 11, 9, 3, 413, 0, '', '', 0),
+(512, 'soundset64', 11, 9, 3, 414, 0, '', '', 0);
 
 -- --------------------------------------------------------
 
@@ -1001,7 +1056,66 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (352, 'roomdimmer', '', 1, 1, 1, 'wall_item,roomdimmer'),
 (353, 'jukebox*1', '', 1, 1, 1, 'solid,jukebox'),
 (354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox'),
-(355, 'carpet_soft_tut', '', 1, 1, 0, 'can_stand_on_top,can_stack_on_top');
+(355, 'carpet_soft_tut', '', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(356, 'sound_set_9', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(357, 'sound_set_10', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(358, 'sound_set_2', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(359, 'sound_set_4', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(360, 'sound_set_5', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(361, 'sound_set_11', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(362, 'sound_set_12', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(363, 'sound_set_13', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(364, 'sound_set_14', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(365, 'sound_set_15', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(366, 'sound_set_16', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(367, 'sound_set_17', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(368, 'sound_set_18', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(369, 'sound_set_19', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(370, 'sound_set_20', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(371, 'sound_set_21', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(372, 'sound_set_22', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(373, 'sound_set_23', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(374, 'sound_set_24', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(375, 'sound_set_25', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(376, 'sound_set_26', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(377, 'sound_set_27', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(378, 'sound_set_28', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(379, 'sound_set_29', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(380, 'sound_set_30', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(381, 'sound_set_31', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(382, 'sound_set_32', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(383, 'sound_set_33', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(384, 'sound_set_34', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(385, 'sound_set_35', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(386, 'sound_set_36', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(387, 'sound_set_37', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(388, 'sound_set_38', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(389, 'sound_set_39', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(390, 'sound_set_40', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(391, 'sound_set_41', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(392, 'sound_set_42', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(393, 'sound_set_43', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(394, 'sound_set_44', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(395, 'sound_set_45', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(396, 'sound_set_46', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(397, 'sound_set_47', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(398, 'sound_set_48', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(399, 'sound_set_49', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(400, 'sound_set_50', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(401, 'sound_set_51', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(402, 'sound_set_52', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(403, 'sound_set_53', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(404, 'sound_set_54', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(405, 'sound_set_55', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(406, 'sound_set_56', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(407, 'sound_set_57', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(408, 'sound_set_58', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(409, 'sound_set_59', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(410, 'sound_set_60', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(411, 'sound_set_61', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(412, 'sound_set_62', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(413, 'sound_set_63', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(414, 'sound_set_64', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set');
 
 -- --------------------------------------------------------
 
@@ -1146,7 +1260,7 @@ CREATE TABLE `rooms` (
   `password` varchar(255) DEFAULT '',
   `visitors_now` int(11) DEFAULT 0,
   `visitors_max` int(11) DEFAULT 25
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `rooms`
@@ -1368,6 +1482,16 @@ CREATE TABLE `rooms_rights` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `schema_migrations`
+--
+
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `settings`
 --
 
@@ -1543,6 +1667,12 @@ ALTER TABLE `rooms_models`
   ADD KEY `id` (`id`);
 
 --
+-- Indexes for table `schema_migrations`
+--
+ALTER TABLE `schema_migrations`
+  ADD PRIMARY KEY (`version`);
+
+--
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
@@ -1582,56 +1712,47 @@ ALTER TABLE `users_badges`
 -- AUTO_INCREMENT for table `catalogue_items`
 --
 ALTER TABLE `catalogue_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=457;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=513;
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=356;
-
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=415;
 --
 -- AUTO_INCREMENT for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1056;
-
 --
 -- AUTO_INCREMENT for table `rooms_categories`
 --
 ALTER TABLE `rooms_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
-
 --
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
-
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`
 --
 ALTER TABLE `soundmachine_songs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- Constraints for dumped tables
 --

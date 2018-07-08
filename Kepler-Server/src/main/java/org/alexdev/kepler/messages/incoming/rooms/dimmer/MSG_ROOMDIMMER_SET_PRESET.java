@@ -24,6 +24,11 @@ public class MSG_ROOMDIMMER_SET_PRESET implements MessageEvent {
         }
 
         Room room = player.getRoomUser().getRoom();
+
+        if (!room.hasRights(player.getDetails().getId())) {
+            return;
+        }
+
         Item item = room.getItemManager().getMoodlight();
 
         if (item == null) {

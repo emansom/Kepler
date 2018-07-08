@@ -219,6 +219,36 @@ public class ItemDao {
     }
 
     /**
+     * Delete an entire list of items at once.
+     *
+     * @param items the list of items
+     */
+    public static void deleteItems(Collection<Item> items) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM items WHERE id = ?", sqlConnection);
+            sqlConnection.setAutoCommit(false);
+
+            for (Item item : items) {
+                preparedStatement.setInt(1, item.getId());
+                preparedStatement.addBatch();
+            }
+
+            preparedStatement.executeBatch();
+            sqlConnection.setAutoCommit(true);
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
      * Redeem credit furniture atomicly
      *
      * @param amount credit amount to increase by

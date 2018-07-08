@@ -31,7 +31,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null;
         }
 
-        RoomTile frontTile = room.getMapping().getTile(front.getX(), front.getY());
+        RoomTile frontTile = room.getMapping().getTile(front);
 
         double nextHeight = entity.getRoomUser().getPosition().getZ();
         boolean subtractRollerHeight = true;
@@ -48,7 +48,13 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             }
 
             if (frontRoller != null) {
-                subtractRollerHeight = false;
+                subtractRollerHeight = false; // Since we know there's a roller, don't subtract the height.
+
+                if (frontRoller.getPosition().getZ() != roller.getPosition().getZ()) {
+                    if (Math.abs(frontRoller.getPosition().getZ() - roller.getPosition().getZ()) > 0.1) {
+                        return null; // Don't roll if the height of the roller is different by >0.1
+                    }
+                }
 
                 for (Item frontItem : frontTile.getItems()) {
                     if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
@@ -86,15 +92,17 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
     @Override
     public void doRoll(Entity entity, Item roller, Room room, Position nextPosition) {
-        RoomTile previousTile = room.getMapping().getTile(entity.getRoomUser().getPosition().getX(), entity.getRoomUser().getPosition().getY());
+        RoomTile previousTile = room.getMapping().getTile(entity.getRoomUser().getPosition());
         RoomTile nextTile = room.getMapping().getTile(nextPosition);
 
+        // The next height but what the client sees.
         double displayNextHeight = nextPosition.getZ();
 
         if (entity.getRoomUser().isSittingOnGround()) {
-            displayNextHeight -= 0.5; // Take away sit offset because yeah, weird stuff.
+            displayNextHeight -= 0.5; // Take away sit offset when sitting on ground, because yeah, weird stuff.
         }
 
+        // Fix bounce for sitting on chairs if the chair top height is higher 1.0
         if (entity.getRoomUser().containsStatus(StatusType.SIT)) {
             double sitHeight = Double.parseDouble(entity.getRoomUser().getStatuses().get(StatusType.SIT.getStatusCode()).getValue());
 

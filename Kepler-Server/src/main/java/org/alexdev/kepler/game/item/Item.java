@@ -314,6 +314,12 @@ public class Item {
      * @return true, if successful
      */
     private boolean canPlaceOnTop(Item item, Item tileItem) {
+        // Don't allow putting rollers on top of stackable objects
+        if (item.hasBehaviour(ItemBehaviour.ROLLER) && tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+            return false;
+        }
+
+        // If the item is rolling, we can place on the square
         if (tileItem.rollingData != null) {
             return true;
         }

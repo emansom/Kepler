@@ -26,7 +26,6 @@ public class HelpCommand extends Command {
             about.append(":").append(String.join("/", set.getKey()));
 
             if (command.getArguments().length > 0) {
-                // TODO: loop through get arguments instead of this hack
                 if (command.getArguments().length > 1) {
                     about.append(" [").append(String.join("] [", command.getArguments())).append("]");
                 } else {

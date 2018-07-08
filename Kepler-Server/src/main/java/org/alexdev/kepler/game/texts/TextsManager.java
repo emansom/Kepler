@@ -29,7 +29,7 @@ public class TextsManager {
             INIConfiguration ini = new INIConfiguration();
 
             BufferedReader reader = Files.newBufferedReader(
-                    Paths.get("data", "external_texts.txt"),
+                    Paths.get("tools", "gamedata", "external_texts.txt"),
                     StandardCharsets.ISO_8859_1);
 
             ini.read(reader);

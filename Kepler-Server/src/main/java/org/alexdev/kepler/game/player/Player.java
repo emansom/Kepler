@@ -113,6 +113,10 @@ public class Player extends Entity {
      * @param response the response
      */
     public void send(MessageComposer response) {
+        if (this.network.getChannel() == null) {
+            return;
+        }
+
         this.network.send(response);
     }
 
@@ -122,6 +126,10 @@ public class Player extends Entity {
      * @param response the response
      */
     public void sendQueued(MessageComposer response) {
+        if (this.network.getChannel() == null) {
+            return;
+        }
+
         this.network.sendQueued(response);
     }
 
@@ -129,6 +137,10 @@ public class Player extends Entity {
      * Flush queue
      */
     public void flush() {
+        if (this.network.getChannel() == null) {
+            return;
+        }
+
         this.network.flush();
     }
 
