@@ -25,8 +25,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && go get -u github.com/amacneil/dbmate
 
 COPY Kepler-Server/ /usr/src/kepler/Kepler-Server/
-COPY db/ /usr/src/kepler/db/
-COPY data/ /usr/src/kepler/data/
+COPY tools/db/ /usr/src/kepler/db/
+COPY tools/data/ /usr/src/kepler/data/
 COPY settings.gradle /usr/src/kepler
 COPY kepler.sql /usr/src/kepler
 
