@@ -3,13 +3,14 @@ package org.alexdev.kepler.game.item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 
 import java.io.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemPublicParser {
     public static List<Item> getPublicItems(String modelId) {
         List<Item> items = new ArrayList<>();
-        File file = new File("data" + File.separator + "public_items" + File.separator + modelId + ".dat");
+        File file = Paths.get("tools", "gamedata", "public_items", modelId + ".dat").toFile();
 
         if (!file.exists()) {
             return items;
