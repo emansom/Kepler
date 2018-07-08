@@ -25,11 +25,11 @@ public class NavigatorCategory {
     public int getCurrentVisitors() {
         int currentVisitors = 0;
 
-            for (Room room : RoomManager.getInstance().getRooms()) {
-                if (room.getData().getCategoryId() == this.id) {
-                    currentVisitors += room.getData().getVisitorsNow();
-                }
+        for (Room room : RoomManager.getInstance().getRooms()) {
+            if (room.getData().getCategoryId() == this.id) {
+                currentVisitors += room.getData().getVisitorsNow();
             }
+        }
 
         return currentVisitors;
     }
