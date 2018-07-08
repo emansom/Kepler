@@ -111,8 +111,8 @@ public class MessengerDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT id FROM users WHERE username LIKE ? LIMIT 30", sqlConnection);
-            preparedStatement.setString(1, query + "%");
+            preparedStatement = Storage.getStorage().prepare("SELECT id FROM users WHERE username = ? LIMIT 30", sqlConnection);
+            preparedStatement.setString(1, query);
 
             resultSet = preparedStatement.executeQuery();
 
