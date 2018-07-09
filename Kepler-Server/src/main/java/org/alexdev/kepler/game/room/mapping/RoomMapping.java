@@ -235,6 +235,10 @@ public class RoomMapping {
                     continue;
                 }
 
+                if (rollingItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
                 /*Item itemBelow = rollingItem.getItemBelow();
 
                 if (itemBelow != null) {
