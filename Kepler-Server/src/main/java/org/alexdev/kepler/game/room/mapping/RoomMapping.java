@@ -231,6 +231,10 @@ public class RoomMapping {
                     continue;
                 }
 
+                if (rollingItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
                 if (rollingItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
                     continue;
                 }
