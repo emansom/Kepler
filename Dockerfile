@@ -27,7 +27,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY Kepler-Server/ /usr/src/kepler/Kepler-Server/
 COPY tools/ /usr/src/kepler/tools/
 COPY settings.gradle /usr/src/kepler
-COPY kepler.sql /usr/src/kepler
 
 RUN cd /usr/src/kepler && \
     gradle build fatJar && \
