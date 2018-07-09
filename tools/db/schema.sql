@@ -107,6 +107,22 @@ CREATE TABLE `items_definitions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `items_moodlight_presets`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `items_moodlight_presets` (
+  `item_id` int(11) NOT NULL,
+  `current_preset` int(11) NOT NULL DEFAULT 1,
+  `preset_1` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255',
+  `preset_2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255',
+  `preset_3` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255',
+  PRIMARY KEY (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `items_teleporter_links`
 --
 
@@ -209,7 +225,7 @@ CREATE TABLE `rooms` (
   `visitors_max` int(11) DEFAULT 25,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1056 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=1057 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -291,6 +307,26 @@ CREATE TABLE `settings` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `site_menu`
+--
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `site_menu` (
+  `id` tinyint(4) NOT NULL AUTO_INCREMENT,
+  `parent_id` tinyint(3) unsigned NOT NULL DEFAULT 0,
+  `order_id` tinyint(3) unsigned NOT NULL,
+  `caption` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `controller` varchar(70) NOT NULL,
+  `action` varchar(70) NOT NULL,
+  `icon` varchar(70) NOT NULL,
+  `visibility` tinyint(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=18 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `soundmachine_playlists`
 --
 
@@ -365,7 +401,7 @@ CREATE TABLE `users` (
   `sound_enabled` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -408,7 +444,7 @@ CREATE TABLE `users_room_votes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping routines for database 'kepler_test'
+-- Dumping routines for database 'kepler'
 --
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -450,6 +486,7 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20180605211259'),
   ('20180605211518'),
   ('20180605211722'),
+  ('20180606130528'),
   ('20180606163724'),
   ('20180606171138'),
   ('20180609193613'),
@@ -459,5 +496,7 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20180610071051'),
   ('20180610084935'),
   ('20180610105026'),
-  ('20180616170631');
+  ('20180616170631'),
+  ('20180622105649'),
+  ('20180709204129');
 UNLOCK TABLES;
