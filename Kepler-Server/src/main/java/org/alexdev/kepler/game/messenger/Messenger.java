@@ -4,12 +4,13 @@ import org.alexdev.kepler.dao.mysql.MessengerDao;
 import org.alexdev.kepler.game.player.Player;
 
 import java.util.List;
+import java.util.Map;
 
 public class Messenger {
     private Player player;
     private List<MessengerUser> friends;
     private List<MessengerUser> requests;
-    private List<MessengerMessage> offlineMessages;
+    private Map<Integer, MessengerMessage> offlineMessages;
 
     public Messenger(Player player) {
         this.player = player;
@@ -75,7 +76,7 @@ public class Messenger {
      *
      * @return the list of offline messages
      */
-    public List<MessengerMessage> getOfflineMessages() {
+    public Map<Integer, MessengerMessage> getOfflineMessages() {
         return offlineMessages;
     }
 

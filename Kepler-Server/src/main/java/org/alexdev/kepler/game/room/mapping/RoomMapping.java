@@ -122,6 +122,8 @@ public class RoomMapping {
     public void addItem(Item item) {
         item.setRoomId(this.room.getId());
         item.setOwnerId(this.room.getData().getOwnerId());
+        item.setRollingData(null);
+
         this.room.getItems().add(item);
 
         if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
@@ -137,9 +139,7 @@ public class RoomMapping {
             this.room.send(new PLACE_FLOORITEM(item));
         }
 
-        item.setRollingData(null);
         item.updateEntities(null);
-
         ItemDao.updateItem(item);
     }
 
@@ -152,6 +152,7 @@ public class RoomMapping {
      */
     public void moveItem(Item item, boolean isRotation, Position oldPosition) {
         item.setRoomId(this.room.getId());
+        item.setRollingData(null);
 
         if (!item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.handleItemAdjustment(item, isRotation);
@@ -160,7 +161,6 @@ public class RoomMapping {
             this.room.send(new MOVE_FLOORITEM(item));
         }
 
-        item.setRollingData(null);
         item.updateEntities(oldPosition);
         ItemDao.updateItem(item);
     }
@@ -228,6 +228,10 @@ public class RoomMapping {
 
             for (Item rollingItem : tile.getItems()) {
                 if (rollingItem.getRollingData() == null) {
+                    continue;
+                }
+
+                if (rollingItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                     continue;
                 }
 
