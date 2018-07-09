@@ -107,10 +107,9 @@ public class RoomMapping {
 
         // Method to set only one moodlight per room
         for (Item item : this.room.getItemManager().getWallItems()) {
-            if (this.room.getItemManager().getMoodlight() == null) {
-                if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
-                    this.room.getItemManager().setMoodlight(item);
-                }
+            if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
+                this.room.getItemManager().setMoodlight(item);
+                break;
             }
         }
     }
