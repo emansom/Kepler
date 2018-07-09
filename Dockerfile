@@ -29,7 +29,7 @@ COPY tools/ /usr/src/kepler/tools/
 COPY settings.gradle /usr/src/kepler
 
 RUN cd /usr/src/kepler && \
-    gradle build fatJar && \
+    gradle build -x test fatJar && \
     cd
 
 RUN touch /usr/src/kepler/game.ini && \
