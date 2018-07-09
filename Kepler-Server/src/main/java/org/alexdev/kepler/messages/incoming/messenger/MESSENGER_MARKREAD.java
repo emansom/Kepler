@@ -10,6 +10,8 @@ public class MESSENGER_MARKREAD implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         int messageId = reader.readInt();
+
         MessengerDao.markMessageRead(messageId);
+        player.getMessenger().getOfflineMessages().remove(messageId);
     }
 }
