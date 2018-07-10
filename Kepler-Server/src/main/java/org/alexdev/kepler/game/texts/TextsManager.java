@@ -74,6 +74,14 @@ public class TextsManager {
     }
 
     /**
+     * Reload the texts manager
+     */
+    public static void reset() {
+        instance = null;
+        TextsManager.getInstance();
+    }
+
+    /**
      * Get the {@link TextsManager} instance
      *
      * @return the item manager instance
