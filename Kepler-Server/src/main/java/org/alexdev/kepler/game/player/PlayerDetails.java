@@ -70,7 +70,7 @@ public class PlayerDetails {
         this.clubSubscribed = clubSubscribed;
         this.clubExpiration = clubExpiration;
 
-        if (StringUtil.isAlphaNumeric(currentBadge) || currentBadge.length() > 3 /*Should badge code check be equals 3 characters?*/) {
+        if (!StringUtil.isAlphaNumeric(currentBadge) || currentBadge.length() > 3 /*Should badge code check be equals 3 characters?*/) {
             currentBadge = ""; // TODO: Log warning
         }
 
