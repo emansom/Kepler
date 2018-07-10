@@ -91,7 +91,7 @@ public class EntityTask implements Runnable {
                 roomUser.removeStatus(StatusType.SIT);
 
                 int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
-                double height = this.room.getMapping().getTile(next).getInteractiveTileHeight();
+                double height = this.room.getMapping().getTile(next).getWalkingHeight();
 
                 roomUser.getPosition().setRotation(rotation);
                 roomUser.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));

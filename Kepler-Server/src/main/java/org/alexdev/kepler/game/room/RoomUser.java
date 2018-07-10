@@ -176,7 +176,7 @@ public class RoomUser {
      */
     public void invokeItem() {
         boolean needsUpdate = false;
-        double height = this.getTile().getInteractiveTileHeight();
+        double height = this.getTile().getWalkingHeight();
 
         if (height != this.position.getZ()) {
             this.position.setZ(height);
@@ -436,7 +436,7 @@ public class RoomUser {
      * Update new height.
      */
     public void updateNewHeight(Position position) {
-        double height = this.room.getMapping().getTile(position).getInteractiveTileHeight();
+        double height = this.room.getMapping().getTile(position).getWalkingHeight();
         double oldHeight = this.position.getZ();
 
         if (height != oldHeight) {
