@@ -4545,4 +4545,4 @@ furni_sound_set_19_desc=Shake your body!
 gs_error_10=The hotel is closed or about to close. We look forward to welcoming you back tomorrow at (ADD LOCAL OPENING TIME).
 furni_sound_set_16_desc=Ferry, ferry good!
 poster_1338_name=Pedobear Seal of Approval
-poster_1338_desc=What do a pedophile and a clock have in common? Neither go past 12.
+poster_1338_desc=If her age on the clock she ready for the cock
