@@ -31,7 +31,6 @@ public class RefreshTextsCommand extends Command {
         // Reload the texts manager (used for item names and descriptions, etc)
         TextsManager.reset();
 
-        // TODO: calculate diff between previous calatogue and current and whisper summary of changes
         player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Texts refreshed."));
     }
 
