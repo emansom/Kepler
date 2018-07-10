@@ -1,5 +1,6 @@
 package org.alexdev.kepler.util.config;
 
+import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.SettingsDao;
 
 import java.util.LinkedHashMap;
@@ -38,6 +39,10 @@ public class GameConfiguration {
 
         config.put("stack.height.limit", "8");
         config.put("roomdimmer.scripting.allowed", "false");
+
+        config.put("credits.scheduler.timeunit", "MINUTES");
+        config.put("credits.scheduler.interval", "15");
+        config.put("credits.scheduler.amount", "20");
     }
 
     /**
