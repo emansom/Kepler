@@ -4,3 +4,4 @@ UPDATE catalogue_items SET definition_id = 415 WHERE sale_code = 'poster_pedobea
 
 -- migrate:down
 DELETE FROM items_definitions WHERE sprite = 'pedowall';
+UPDATE catalogue_items SET definition_id = 251 WHERE sale_code = 'poster_pedobear';
