@@ -270,10 +270,6 @@ public class Item {
                 return false;
             }
 
-            if (room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.CLOSED) {
-                return false;
-            }
-
             Item highestItem = tile.getHighestItem();
 
             if (highestItem != null && highestItem.getId() != item.getId()) {
