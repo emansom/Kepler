@@ -163,7 +163,7 @@ public class RoomTile {
      *
      * @return the interactive tile height
      */
-    public double getInteractiveTileHeight() {
+    public double getWalkingHeight() {
         double height = this.tileHeight;
 
         if (this.highestItem != null) {
