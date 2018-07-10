@@ -44,17 +44,26 @@ public class MSG_ROOMDIMMER_SET_PRESET implements MessageEvent {
         String presetColour = reader.readString();
         int presetStrength = reader.readInt();
 
-        // Only check if roomdimmer scripting is allowed
-        if (presetId > 3 || presetId < 1 || backgroundState > 2 || backgroundState < 1 ||
-                (presetColour.equals("#74F5F5") &&
-                        presetColour.equals("#0053F7") &&
-                        presetColour.equals("#E759DE") &&
-                        presetColour.equals("#EA4532") &&
-                        presetColour.equals("#F2F851") &&
-                        presetColour.equals("#82F349") &&
-                        presetColour.equals("#000000")
-                        || presetStrength > 255 || presetStrength < 77)) {
-            return; // Nope, no scripting room dimmers allowed here!
+        // Make sure presetColour is a valid hex colour
+        Pattern colorPattern = Pattern.compile("#([A-Fa-f0-9]{3}|[A-Fa-f0-9]{6}|[A-Fa-f0-9]{8})");
+
+        if (!colorPattern.matcher(presetColour).matches()) {
+            return; // Not a hex color
+        }
+
+        if (!GameConfiguration.getInstance().getBoolean("roomdimmer.scripting.allowed")) {
+            // Only check if roomdimmer scripting is allowed
+            if (presetId > 3 || presetId < 1 || backgroundState > 2 || backgroundState < 1 ||
+                    (presetColour.equals("#74F5F5") &&
+                            presetColour.equals("#0053F7") &&
+                            presetColour.equals("#E759DE") &&
+                            presetColour.equals("#EA4532") &&
+                            presetColour.equals("#F2F851") &&
+                            presetColour.equals("#82F349") &&
+                            presetColour.equals("#000000")
+                            || presetStrength > 255 || presetStrength < 77)) {
+                return; // Nope, no scripting room dimmers allowed here!
+            }
         }
 
         // Cancel RainbowTask because the operator decided to use their own moodlight settings.
