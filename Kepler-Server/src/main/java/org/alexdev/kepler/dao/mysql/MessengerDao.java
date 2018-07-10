@@ -10,9 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 public class MessengerDao {
 
@@ -289,8 +287,8 @@ public class MessengerDao {
      * @param userId the id of the user to get the offline messages for
      * @return the list of messages
      */
-    public static List<MessengerMessage> getUnreadMessages(int userId) {
-        List<MessengerMessage> messages = new ArrayList<>();
+    public static Map<Integer, MessengerMessage> getUnreadMessages(int userId) {
+        Map<Integer, MessengerMessage> messages = new HashMap<>();
 
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
@@ -303,7 +301,7 @@ public class MessengerDao {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                messages.add(new MessengerMessage(
+                messages.put(resultSet.getInt("id"), new MessengerMessage(
                         resultSet.getInt("id"), resultSet.getInt("receiver_id"), resultSet.getInt("sender_id"),
                         resultSet.getLong("date"), resultSet.getString("body")));
 

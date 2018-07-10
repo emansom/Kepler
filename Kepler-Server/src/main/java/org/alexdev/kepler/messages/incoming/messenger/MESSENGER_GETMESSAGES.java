@@ -9,7 +9,7 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class MESSENGER_GETMESSAGES implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        for (MessengerMessage offlineMessage : player.getMessenger().getOfflineMessages()) {
+        for (MessengerMessage offlineMessage : player.getMessenger().getOfflineMessages().values()) {
             player.send(new MESSENGER_MSG(offlineMessage));
         }
     }
