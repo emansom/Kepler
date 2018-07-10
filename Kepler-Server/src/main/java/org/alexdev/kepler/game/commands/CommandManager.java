@@ -32,6 +32,7 @@ public class CommandManager {
         this.commands.put(new String[] { "rgb", "rainbow" }, new RainbowDimmerCommand());
         this.commands.put(new String[] { "reloadcatalog", "refreshcatalog" }, new RefreshCatalogueCommand());
         this.commands.put(new String[] { "reloadsettings", "refreshsettings" }, new RefreshSettingsCommand());
+        this.commands.put(new String[] { "reloadtexts", "refreshtexts" }, new RefreshTextsCommand());
 
         log.info("Loaded {} commands", commands.size());
     }

@@ -103,12 +103,15 @@ public class PlayerManager {
             return;
         }
 
-        player.kickFromServer();
+        player.kickFromServer(true);
     }
 
+    /**
+     * Close and dispose all users.
+     */
     public void dispose() {
         for (Player player : this.getPlayers()) {
-            player.kickFromServer();
+            player.kickFromServer(true);
         }
     }
 

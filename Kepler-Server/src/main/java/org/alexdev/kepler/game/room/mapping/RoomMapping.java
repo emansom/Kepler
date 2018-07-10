@@ -1,7 +1,6 @@
 package org.alexdev.kepler.game.room.mapping;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
-import org.alexdev.kepler.dao.mysql.MoodlightDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
@@ -16,12 +15,10 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_WALLITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_WALLITEM;
 import org.alexdev.kepler.util.config.GameConfiguration;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.zip.CheckedOutputStream;
 
 public class RoomMapping {
     private Room room;
@@ -224,7 +221,7 @@ public class RoomMapping {
 
         if (!isRotation) {
             Item roller = null;
-            item.getPosition().setZ(tile.getInteractiveTileHeight());
+            item.getPosition().setZ(tile.getWalkingHeight());
 
             for (Item rollingItem : tile.getItems()) {
                 if (rollingItem.getRollingData() == null) {
