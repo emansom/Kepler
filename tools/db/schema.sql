@@ -103,7 +103,7 @@ CREATE TABLE `items_definitions` (
   `top_height` double DEFAULT NULL,
   `behaviour` varchar(255) DEFAULT NULL,
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=415 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=416 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -498,5 +498,5 @@ INSERT INTO `schema_migrations` (version) VALUES
   ('20180610105026'),
   ('20180616170631'),
   ('20180622105649'),
-  ('20180709204129');
+  ('20180710085729');
 UNLOCK TABLES;
