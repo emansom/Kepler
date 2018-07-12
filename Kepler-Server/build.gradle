@@ -48,7 +48,7 @@ dependencies {
     // https://mvnrepository.com/artifact/commons-validator/commons-validator
     compile group: 'commons-validator', name: 'commons-validator', version: '1.6'
 
-    compile "com.goterl.lazycode:lazysodium-java:2.2.0"
+    compile "com.goterl.lazycode:lazysodium-java:2.5.0"
 
     compile "com.google.api.grpc:proto-google-common-protos:1.0.0"
     compile "io.grpc:grpc-alts:${grpcVersion}"
