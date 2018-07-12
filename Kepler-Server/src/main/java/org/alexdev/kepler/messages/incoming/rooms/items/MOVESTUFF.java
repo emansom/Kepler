@@ -42,16 +42,9 @@ public class MOVESTUFF implements MessageEvent {
 
         Position oldPosition = item.getPosition().copy();
 
-        if (oldPosition.getX() == x &&
+        if ((oldPosition.getX() == x &&
             oldPosition.getY() == y &&
-            oldPosition.getRotation() == rotation) {
-            // Send item update even though we cancelled, otherwise the client will be confused.
-            player.send(new MOVE_FLOORITEM(item));
-            return;
-        }
-
-
-        if (!item.isValidMove(item, room, x, y, rotation)) {
+            oldPosition.getRotation() == rotation) || item.isValidMove(item, room, x, y, rotation)) {
             // Send item update even though we cancelled, otherwise the client will be confused.
             player.send(new MOVE_FLOORITEM(item));
             return;
