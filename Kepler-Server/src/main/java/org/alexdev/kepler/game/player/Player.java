@@ -93,6 +93,7 @@ public class Player extends Entity {
 
         // Send refresh to room if inside room
         var room = this.roomUser.getRoom();
+
         if (room != null) {
             room.send(new FIGURE_CHANGE(this.roomUser.getInstanceId(), this.details));
         }
@@ -229,7 +230,7 @@ public class Player extends Entity {
             if (closeSocket) {
                 this.network.close();
             }
-        } catch (Exception ex) { }
+        } catch (Exception ignored) { }
 
     }
 
