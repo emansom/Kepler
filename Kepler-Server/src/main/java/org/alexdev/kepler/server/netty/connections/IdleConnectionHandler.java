@@ -30,7 +30,7 @@ public class IdleConnectionHandler extends ChannelDuplexHandler {
                         logger.info("Connection {} has timed out", player.getNetwork().getConnectionId());
                     }
 
-                    player.kickFromServer(false);
+                    player.kickFromServer(true);
                 }
             }
         }

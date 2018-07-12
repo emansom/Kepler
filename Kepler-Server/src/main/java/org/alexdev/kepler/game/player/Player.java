@@ -33,6 +33,7 @@ public class Player extends Entity {
     private Inventory inventory;
 
     private boolean loggedIn;
+    private boolean disconnected;
     private boolean pingOK;
 
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
@@ -41,6 +42,7 @@ public class Player extends Entity {
         this.roomUser = new RoomUser(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
         this.pingOK = true;
+        this.disconnected = false;
     }
 
     /**
@@ -113,7 +115,7 @@ public class Player extends Entity {
      * @param response the response
      */
     public void send(MessageComposer response) {
-        if (this.network.getChannel() == null) {
+        if (this.disconnected) {
             return;
         }
 
@@ -126,7 +128,7 @@ public class Player extends Entity {
      * @param response the response
      */
     public void sendQueued(MessageComposer response) {
-        if (this.network.getChannel() == null) {
+        if (this.disconnected) {
             return;
         }
 
@@ -137,7 +139,7 @@ public class Player extends Entity {
      * Flush queue
      */
     public void flush() {
-        if (this.network.getChannel() == null) {
+        if (this.disconnected) {
             return;
         }
 
@@ -236,18 +238,16 @@ public class Player extends Entity {
      */
     @Override
     public void dispose() {
-        if (!this.loggedIn) {
-            return;
+        if (this.loggedIn) {
+            if (this.roomUser.getRoom() != null) {
+                this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
+            }
+
+            PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
+            PlayerManager.getInstance().removePlayer(this);
         }
 
-
-        if (this.roomUser.getRoom() != null) {
-            this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
-        }
-
-        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
-        PlayerManager.getInstance().removePlayer(this);
-
+        this.disconnected = true;
         this.loggedIn = false;
     }
 }
