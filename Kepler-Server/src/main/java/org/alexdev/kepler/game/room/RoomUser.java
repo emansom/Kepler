@@ -279,7 +279,7 @@ public class RoomUser {
         }
 
         // Not a valid drink ID
-        if (carryId == 0 || carryId > 25) {
+        if (carryId <= 0 || carryId > 25) {
             return;
         }
 
@@ -423,6 +423,14 @@ public class RoomUser {
      * Force room user to wave
      */
     public void wave() {
+        if (this.containsStatus(StatusType.WAVE)) {
+            return;
+        }
+
+        if (this.containsStatus(StatusType.DANCE)) {
+            this.removeStatus(StatusType.DANCE);
+        }
+
         this.setStatus(StatusType.WAVE, "");
 
         if (!this.entity.getRoomUser().isWalking()) {
