@@ -43,7 +43,6 @@ public class RoomData {
             this.ownerName = "";
         }
         this.categoryId = category;
-        // TODO: disallow certain UTF-8 control characters used for protocol
         this.name = StringUtil.filterInput(name, true);
         this.description = StringUtil.filterInput(name, true);
         this.model = model;
