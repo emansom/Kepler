@@ -279,7 +279,7 @@ public class RoomUser {
         }
 
         // Not a valid drink ID
-        if (carryId < 0 || carryId > 25) {
+        if (carryId <= 0 || carryId > 25) {
             return;
         }
 
