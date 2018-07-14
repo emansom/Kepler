@@ -156,7 +156,22 @@ public class Item {
         }
 
         if (this.hasBehaviour(ItemBehaviour.DOOR)) {
-            return this.customData.equals("O");
+            return this.isGateOpen();
+        }
+
+        return false;
+    }
+
+    public boolean isGateOpen() {
+        /*                    RoomTile tile = item.getTile();
+
+                    // Make all entities walk out of gate when it's closed
+                    if (tile.getEntities().size() > 0) {*/
+
+        if (this.hasBehaviour(ItemBehaviour.DOOR)) {
+            if (this.customData.equals("O")) {
+                return true;
+            }
         }
 
         return false;
