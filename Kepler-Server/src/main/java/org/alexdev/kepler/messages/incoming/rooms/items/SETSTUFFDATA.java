@@ -51,6 +51,8 @@ public class SETSTUFFDATA implements MessageEvent {
 
         if (item.getDefinition().hasBehaviour(ItemBehaviour.DOOR)) {
             if (itemData.equals("O") || itemData.equals("C")) {
+                newData = itemData;
+
                 if (itemData.equals("C")) {
                     RoomTile tile = item.getTile();
 
@@ -61,12 +63,11 @@ public class SETSTUFFDATA implements MessageEvent {
                                 continue;
                             }
 
-                            entity.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
+                            return;
+                            //entity.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
                         }
                     }
                 }
-
-                newData = itemData;
             }
         } else {
             if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE) && (itemData.equals("TRUE") || itemData.equals("FALSE"))) {
