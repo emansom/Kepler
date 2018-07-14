@@ -38,7 +38,9 @@ public class ItemDefinition {
         this.behaviourList = parseBehaviour(this.behaviourData);
 
         // If the item is a gate (checked below) then the top height is set to 0 so the item can be walked in
-        if (this.behaviourList.contains(ItemBehaviour.DOOR)) {
+        if (!this.behaviourList.contains(ItemBehaviour.CAN_SIT_ON_TOP)
+                && !this.behaviourList.contains(ItemBehaviour.CAN_LAY_ON_TOP)
+                && !this.behaviourList.contains(ItemBehaviour.CAN_STACK_ON_TOP)) {
             this.topHeight = 0;
         }
 
