@@ -85,6 +85,12 @@ public class RoomMapping {
 
                     RoomTile affectedTile = this.getTile(position);
 
+                    if (affectedTile.getHighestItem() != null) {
+                        if (affectedTile.getWalkingHeight() > item.getTotalHeight()) {
+                            continue;
+                        }
+                    }
+
                     affectedTile.setTileHeight(item.getTotalHeight());
                     affectedTile.setHighestItem(item);
                 }
