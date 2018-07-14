@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.item;
 
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.item.base.ItemDefinition;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -28,6 +29,7 @@ public class ItemPublicParser {
                 item.setId(id--);
                 item.getDefinition().addBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT);
                 item.getDefinition().setSprite(data[1]);
+                item.getDefinition().setTopHeight(ItemDefinition.DEFAULT_TOP_HEIGHT);
 
                 item.setCustomData(data[0]);
                 item.getPosition().setX(Integer.parseInt(data[2]));

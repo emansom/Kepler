@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ItemDefinition {
+    public static final double DEFAULT_TOP_HEIGHT = 0.001;
+
     private int id;
     private String sprite;
     private String behaviourData;
@@ -43,7 +45,7 @@ public class ItemDefinition {
         // If the top height 0, then make it 0.001 to make it taller than the default room tile, that the
         // furni collision map can be generated.
         if (this.topHeight == 0) {
-            this.topHeight = 0.001;
+            this.topHeight = DEFAULT_TOP_HEIGHT;
         }
     }
 
