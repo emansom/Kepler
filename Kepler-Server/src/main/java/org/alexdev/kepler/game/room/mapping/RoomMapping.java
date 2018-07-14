@@ -85,6 +85,7 @@ public class RoomMapping {
 
                     RoomTile affectedTile = this.getTile(position);
 
+                    // If there's an item in the affected tiles that has a higher height, then don't override it.
                     if (affectedTile.getHighestItem() != null) {
                         if (affectedTile.getWalkingHeight() > item.getTotalHeight()) {
                             continue;
