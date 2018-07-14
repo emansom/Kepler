@@ -35,10 +35,13 @@ public class ItemDefinition {
         this.colour = colour;
         this.behaviourList = parseBehaviour(this.behaviourData);
 
+        // If the item is a gate (checked below) then the top height is set to 0 so the item can be walked in
         if (this.behaviourList.contains(ItemBehaviour.DOOR)) {
             this.topHeight = 0;
         }
 
+        // If the top height 0, then make it 0.001 to make it taller than the default room tile, that the
+        // furni collision map can be generated.
         if (this.topHeight == 0) {
             this.topHeight = 0.001;
         }
