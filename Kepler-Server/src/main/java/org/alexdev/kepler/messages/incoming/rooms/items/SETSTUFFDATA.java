@@ -1,11 +1,13 @@
 package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
+import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -32,7 +34,11 @@ public class SETSTUFFDATA implements MessageEvent {
             return;
         }
 
-        if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER) || item.hasBehaviour(ItemBehaviour.DICE) || item.hasBehaviour(ItemBehaviour.PRIZE_TROPHY) || item.hasBehaviour(ItemBehaviour.POST_IT) || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
+        if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)
+                || item.hasBehaviour(ItemBehaviour.DICE)
+                || item.hasBehaviour(ItemBehaviour.PRIZE_TROPHY)
+                || item.hasBehaviour(ItemBehaviour.POST_IT)
+                || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 
@@ -45,6 +51,21 @@ public class SETSTUFFDATA implements MessageEvent {
 
         if (item.getDefinition().hasBehaviour(ItemBehaviour.DOOR)) {
             if (itemData.equals("O") || itemData.equals("C")) {
+                if (itemData.equals("C")) {
+                    RoomTile tile = item.getTile();
+
+                    // Make all entities walk out of gate when it's closed
+                    if (tile.getEntities().size() > 0) {
+                        for (Entity entity : tile.getEntities()) {
+                            if (entity.getRoomUser().isWalking()) {
+                                continue;
+                            }
+
+                            entity.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
+                        }
+                    }
+                }
+
                 newData = itemData;
             }
         } else {

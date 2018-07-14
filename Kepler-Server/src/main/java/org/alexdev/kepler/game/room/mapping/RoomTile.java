@@ -93,7 +93,7 @@ public class RoomTile {
 
         if (entity != null) {
             if (tile.getEntities().size() > 0) {
-                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
+                return tile.containsEntity(entity) || (tile.getHighestItem() != null && tile.getHighestItem().isGateOpen()); // Allow walk if you exist already in the tile
             }
         }
 
