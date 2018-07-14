@@ -7,7 +7,7 @@ set -e
 export DATABASE_URL="mysql://$MYSQL_USER:$MYSQL_PASSWORD@$MYSQL_HOST:3306/$MYSQL_DATABASE"
 
 # Wait for MariaDB to come online and apply migrations
-dbmate wait && dbmate up
+dbmate wait && dbmate --migrations-dir tools/db/migrations up
 
 # Configure Kepler
 if [ -z "$KEPLER_PORT" ]; then

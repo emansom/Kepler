@@ -25,13 +25,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && go get -u github.com/amacneil/dbmate
 
 COPY Kepler-Server/ /usr/src/kepler/Kepler-Server/
-COPY db/ /usr/src/kepler/db/
-COPY data/ /usr/src/kepler/data/
+COPY tools/ /usr/src/kepler/tools/
 COPY settings.gradle /usr/src/kepler
-COPY kepler.sql /usr/src/kepler
 
 RUN cd /usr/src/kepler && \
-    gradle build fatJar && \
+    gradle build -x test fatJar && \
     cd
 
 RUN touch /usr/src/kepler/game.ini && \
