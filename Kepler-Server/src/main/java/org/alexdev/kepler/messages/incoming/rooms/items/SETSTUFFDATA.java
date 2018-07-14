@@ -63,6 +63,7 @@ public class SETSTUFFDATA implements MessageEvent {
                                 continue;
                             }
 
+                            // Can't close gate if there's a user on the tile
                             return;
                             //entity.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
                         }
