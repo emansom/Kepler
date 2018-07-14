@@ -70,6 +70,7 @@ public class EntityTask implements Runnable {
 
                 // Tile was invalid after we started walking, so lets try again!
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
+                    entity.getRoomUser().getPath().clear();
                     roomUser.walkTo(goal.getX(), goal.getY());
                     this.processEntity(entity);
                     return;
