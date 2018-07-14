@@ -34,6 +34,14 @@ public class ItemDefinition {
         this.width = width;
         this.colour = colour;
         this.behaviourList = parseBehaviour(this.behaviourData);
+
+        if (this.behaviourList.contains(ItemBehaviour.DOOR)) {
+            this.topHeight = 0;
+        }
+
+        if (this.topHeight == 0) {
+            this.topHeight = 0.001;
+        }
     }
 
     /**
