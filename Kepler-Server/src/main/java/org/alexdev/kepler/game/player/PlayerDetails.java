@@ -84,17 +84,13 @@ public class PlayerDetails {
     }
 
     public boolean hasHabboClub() {
-        int totalDays = 0;
-
         if (this.clubExpiration != 0) {
-            totalDays = (int) ((this.clubExpiration - DateUtil.getCurrentTimeSeconds()) / 60 / 60 / 24);
-
-            if (totalDays < 0) {
-                totalDays = 0;
+            if (DateUtil.getCurrentTimeSeconds() < this.clubExpiration) {
+                return true;
             }
         }
 
-        return totalDays > 0;
+        return false;
     }
 
     public int getId() {

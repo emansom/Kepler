@@ -53,6 +53,7 @@ public class FuserightsManager {
      *
      * @param fuse the fuse to check against
      * @param minimumRank the rank to check with
+     * @param hasHabboClub whether or not we have Habbo club, check permissions.
      * @return true, if successful
      */
     public boolean hasFuseright(String fuse, int minimumRank, boolean hasHabboClub) {
