@@ -31,6 +31,7 @@ public class GET_CLUB implements MessageEvent {
                 sinceMonths = (int) (now - player.getDetails().getClubSubscribed()) / 60 / 60 / 24 / 31;
             }
         } else {
+            // If the database still thinks we have Habbo club, better reset it back to 0.
             if (player.getDetails().getClubExpiration() > 0) {
                 player.getDetails().setClubSubscribed(0);
                 player.getDetails().setClubExpiration(0);
