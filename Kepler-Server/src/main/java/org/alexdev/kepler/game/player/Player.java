@@ -90,6 +90,10 @@ public class Player extends Entity {
                 this.refreshFuserights();
                 PlayerDao.saveSubscription(this.details);
             }
+        } else {
+            if (!this.details.getBadges().contains("HC1")) {
+                this.details.getBadges().add("HC1");
+            }
         }
 
         ClubSubscription.refreshSubscription(this);

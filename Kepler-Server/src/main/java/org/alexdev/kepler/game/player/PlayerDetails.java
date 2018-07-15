@@ -214,13 +214,7 @@ public class PlayerDetails {
     }
 
     public List<String> getBadges() {
-        List<String> badges = this.badges;
-
-        if (this.hasHabboClub()) {
-            badges.add("HC1");
-        }
-
-        return badges;
+        return this.badges;
     }
 
     public void setBadges(List<String> badges) {
