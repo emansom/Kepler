@@ -124,6 +124,20 @@ public class Player extends Entity {
     }
 
     /**
+     * Send a object to the player
+     *
+     * @param object the object to send
+     */
+    public void sendObject(Object object) {
+        if (this.disconnected) {
+            return;
+        }
+
+        this.network.send(object);
+    }
+
+
+    /**
      * Send a queued response to the player
      *
      * @param response the response

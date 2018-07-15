@@ -33,6 +33,7 @@ public class CommandManager {
         this.commands.put(new String[] { "reloadcatalog", "refreshcatalog" }, new RefreshCatalogueCommand());
         this.commands.put(new String[] { "reloadsettings", "refreshsettings" }, new RefreshSettingsCommand());
         this.commands.put(new String[] { "reloadtexts", "refreshtexts" }, new RefreshTextsCommand());
+        this.commands.put(new String[] { "packet" }, new PacketTestCommand());
 
         log.info("Loaded {} commands", commands.size());
     }
