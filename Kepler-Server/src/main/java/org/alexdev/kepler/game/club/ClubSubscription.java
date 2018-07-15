@@ -8,6 +8,11 @@ import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 
 public class ClubSubscription {
+
+    /**
+     * Refresh the club scription for player.
+     * @param player the player to refresh the subscription for
+     */
     public static void refreshSubscription(Player player) {
         long now = DateUtil.getCurrentTimeSeconds();
 
@@ -34,6 +39,14 @@ public class ClubSubscription {
         player.send(new CLUB_INFO(remainingDaysThisMonth, sinceMonths, prepaidMonths));
     }
 
+    /**
+     * Subscribe to Habbo club with credits and days indicated, if 0 days, the function will not proceed.
+     * If the credits amount is 0 or less then no credits will be charged.
+     *
+     * @param player the player to subscribe to club
+     * @param days the amount of days to subscribe for
+     * @param credits the amount of credits cost
+     */
     public static void subscribeClub(Player player, int days, int credits) {
         if (days <= 0) {
             return;

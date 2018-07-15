@@ -81,8 +81,8 @@ public class Player extends Entity {
      * Refresh club for player.
      */
     public void refreshClub() {
-        // If the database still thinks we have Habbo club, better reset it back to 0.
         if (!this.details.hasHabboClub()) {
+            // If the database still thinks we have Habbo club even after it expired, reset it back to 0.
             if (this.details.getClubExpiration() > 0) {
                 this.details.setClubSubscribed(0);
                 this.details.setClubExpiration(0);
