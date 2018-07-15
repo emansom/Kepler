@@ -104,7 +104,8 @@ public class Player extends Entity {
     public void refreshFuserights() {
         this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
                 this.details.hasHabboClub(),
-                this.details.getRank())));
+                this.details.getRank()))
+        );
     }
 
     /**
