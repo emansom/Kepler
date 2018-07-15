@@ -321,7 +321,10 @@ public class RoomUser {
     public void showChat(String message, boolean isShout) {
         if (message.contains("o/")) {
             this.wave();
-            return;
+
+            if (message.equals("o/")) {
+                return; // Don't move mouth if it's just a wave
+            }
         }
 
         String[] words = message.split(" ");
@@ -380,7 +383,12 @@ public class RoomUser {
         List<Player> players;
 
         if (isShout) {
-            players = this.room.getEntityManager().getPlayers();
+            players = new ArrayList<>(this.room.getEntityManager().getPlayers());
+
+            if (this.entity.getType() == EntityType.PLAYER) {
+                Player player = (Player)this.entity;
+                players.remove(player);
+            }
         } else {
             players = new ArrayList<>();
 
