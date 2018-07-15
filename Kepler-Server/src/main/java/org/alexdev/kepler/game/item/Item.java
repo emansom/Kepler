@@ -163,15 +163,8 @@ public class Item {
     }
 
     public boolean isGateOpen() {
-        /*                    RoomTile tile = item.getTile();
-
-                    // Make all entities walk out of gate when it's closed
-                    if (tile.getEntities().size() > 0) {*/
-
         if (this.hasBehaviour(ItemBehaviour.DOOR)) {
-            if (this.customData.equals("O")) {
-                return true;
-            }
+            return this.customData.equals("O");
         }
 
         return false;
@@ -287,6 +280,13 @@ public class Item {
 
             if (room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.CLOSED) {
                 return false;
+            }
+
+
+            if (tile.getEntities().size() > 0) {
+                if (!item.isWalkable()) {
+                    return false;
+                }
             }
 
             Item highestItem = tile.getHighestItem();
