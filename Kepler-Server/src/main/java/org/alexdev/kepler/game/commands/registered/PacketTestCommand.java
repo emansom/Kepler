@@ -33,6 +33,6 @@ public class PacketTestCommand extends Command {
 
     @Override
     public String getDescription() {
-        return null;
+        return "Tests a Habbo client-sided packet";
     }
 }
