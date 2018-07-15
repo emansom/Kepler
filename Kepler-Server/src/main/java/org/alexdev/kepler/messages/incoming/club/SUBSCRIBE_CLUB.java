@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.club;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.ClubScription;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -39,34 +40,6 @@ public class SUBSCRIBE_CLUB implements MessageEvent {
             }
         }
 
-        if (days > 0) {
-            if (player.getDetails().getCredits() < credits) {
-                return;
-            }
-
-            long now = DateUtil.getCurrentTimeSeconds();
-
-            long daysInSeconds = 24 * 60 * 60;
-            long secondsToAdd = (daysInSeconds * days);
-
-            if (player.getDetails().getClubSubscribed() == 0) {
-                player.getDetails().setClubSubscribed(now);
-            }
-
-            if (player.getDetails().getClubExpiration() - now <= 0) {
-                player.getDetails().setClubExpiration(now + secondsToAdd + 1);
-            } else {
-                player.getDetails().setClubExpiration(player.getDetails().getClubExpiration() + secondsToAdd);
-            }
-
-
-            player.refreshClub();
-            player.refreshFuserights();
-
-            PlayerDao.saveSubscription(player.getDetails());
-            CurrencyDao.decreaseCredits(player.getDetails(), credits);
-
-            player.send(new CREDIT_BALANCE(player.getDetails()));
-        }
+        ClubScription.subscribeClub(player, days, credits);
     }
 }

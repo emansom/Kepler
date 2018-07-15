@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.player;
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 
+import org.alexdev.kepler.game.ClubScription;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
@@ -83,12 +84,18 @@ public class Player extends Entity {
      * Refresh club for player.
      */
     public void refreshClub() {
-        MessageEvent clubStatus = new GET_CLUB();
-        try {
-            clubStatus.handle(this, null);
-        } catch (Exception ex) {
-            Log.getErrorLogger().error("Error when getting club status: ", ex);
+        // If the database still thinks we have Habbo club, better reset it back to 0.
+        if (!this.details.hasHabboClub()) {
+            if (this.details.getClubExpiration() > 0) {
+                this.details.setClubSubscribed(0);
+                this.details.setClubExpiration(0);
+
+                this.refreshFuserights();
+                PlayerDao.saveSubscription(this.details);
+            }
         }
+
+        ClubScription.refreshSubscription(this);
     }
 
     /**
