@@ -74,7 +74,8 @@ public class Player extends Entity {
         if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
             String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
             alertMessage = alertMessage.replace("%username%", this.details.getName());
-            this.sendQueued(new ALERT(alertMessage));
+
+            this.send(new ALERT(alertMessage));
         }
     }
 

@@ -67,9 +67,7 @@ public class Pathfinder {
 
         // Only check these below if the user is in a pool room.
         if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_")) {
-
-            // Let people to walk to the next tile if they were on a previous tile
-            // in the diving deck
+            // Let people to walk to the next tile if they were on a previous tile in the diving deck
             if (fromItem != null && toItem != null) {
                 if (entity.getRoomUser().getRoom().getModel().getName().equals("pool_b")) {
                     if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
@@ -142,7 +140,8 @@ public class Pathfinder {
                 if (isFinalMove) {
                     return toItem.isWalkable();
                 } else {
-                    return toItem.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP) || (toItem.hasBehaviour(ItemBehaviour.DOOR) && toItem.getCustomData().equals("O"));
+                    return toItem.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP)
+                            || (toItem.hasBehaviour(ItemBehaviour.DOOR) && toItem.getCustomData().equals("O"));
                 }
             }
         }
