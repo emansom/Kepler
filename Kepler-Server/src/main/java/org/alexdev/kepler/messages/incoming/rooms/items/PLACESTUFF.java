@@ -52,6 +52,11 @@ public class PLACESTUFF implements MessageEvent {
                 ItemDao.newItem(sticky);
                 room.getMapping().addItem(sticky);
 
+                // Set custom data as 1 for 1 sticky, if for some reason they have no number for the post-it.
+                if (!StringUtil.isNumber(item.getCustomData())) {
+                    item.setCustomData("1");
+                }
+
                 if (StringUtil.isNumber(item.getCustomData())) {
                     int totalStickies = Integer.parseInt(item.getCustomData()) - 1;
 
