@@ -66,7 +66,9 @@ public class Player extends Entity {
         this.inventory = new Inventory(this);
 
         this.sendQueued(new LOGIN());
-        this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+        this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
+                this.details.hasHabboClub(),
+                this.details.getRank())));
 
         if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
             String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
@@ -107,7 +109,9 @@ public class Player extends Entity {
      */
     @Override
     public boolean hasFuse(String fuse) {
-        return FuserightsManager.getInstance().hasFuseright(fuse, this.details.getRank());
+        return FuserightsManager.getInstance().hasFuseright(fuse,
+                this.details.getRank(),
+                this.details.hasHabboClub());
     }
 
     /**
@@ -122,6 +126,20 @@ public class Player extends Entity {
 
         this.network.send(response);
     }
+
+    /**
+     * Send a object to the player
+     *
+     * @param object the object to send
+     */
+    public void sendObject(Object object) {
+        if (this.disconnected) {
+            return;
+        }
+
+        this.network.send(object);
+    }
+
 
     /**
      * Send a queued response to the player

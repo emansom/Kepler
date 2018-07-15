@@ -82,6 +82,7 @@ public class MessageHandler {
         registerEvent(8, new GET_CREDITS());
         registerEvent(228, new GET_SOUND_SETTING());
         registerEvent(196, new PONG());
+        registerEvent(26, new GET_CLUB());
         //registerEvent(315, new TEST_LATENCY());
     }
 
