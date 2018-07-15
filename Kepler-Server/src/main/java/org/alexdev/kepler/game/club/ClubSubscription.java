@@ -7,7 +7,7 @@ import org.alexdev.kepler.messages.outgoing.user.CLUB_INFO;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 
-public class ClubScription {
+public class ClubSubscription {
     public static void refreshSubscription(Player player) {
         long now = DateUtil.getCurrentTimeSeconds();
 

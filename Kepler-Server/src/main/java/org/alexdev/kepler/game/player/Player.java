@@ -3,7 +3,7 @@ package org.alexdev.kepler.game.player;
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 
-import org.alexdev.kepler.game.club.ClubScription;
+import org.alexdev.kepler.game.club.ClubSubscription;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
@@ -92,7 +92,7 @@ public class Player extends Entity {
             }
         }
 
-        ClubScription.refreshSubscription(this);
+        ClubSubscription.refreshSubscription(this);
     }
 
     /**
