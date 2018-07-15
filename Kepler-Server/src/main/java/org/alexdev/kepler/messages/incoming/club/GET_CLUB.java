@@ -1,5 +1,6 @@
-package org.alexdev.kepler.messages.incoming.user;
+package org.alexdev.kepler.messages.incoming.club;
 
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.user.CLUB_INFO;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -8,7 +9,7 @@ import org.alexdev.kepler.util.DateUtil;
 
 public class GET_CLUB implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) throws Exception {
+    public void handle(Player player, NettyRequest reader) {
         long now = DateUtil.getCurrentTimeSeconds();
 
         int sinceMonths = 0;
@@ -33,6 +34,9 @@ public class GET_CLUB implements MessageEvent {
             if (player.getDetails().getClubExpiration() > 0) {
                 player.getDetails().setClubSubscribed(0);
                 player.getDetails().setClubExpiration(0);
+
+                player.refreshFuserights();
+                PlayerDao.saveSubscription(player.getDetails());
             }
         }
 

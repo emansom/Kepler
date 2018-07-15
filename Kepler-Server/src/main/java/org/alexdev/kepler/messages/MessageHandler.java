@@ -3,6 +3,8 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.club.GET_CLUB;
+import org.alexdev.kepler.messages.incoming.club.SUBSCRIBE_CLUB;
 import org.alexdev.kepler.messages.incoming.inventory.GETSTRIP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
 import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
@@ -83,6 +85,7 @@ public class MessageHandler {
         registerEvent(228, new GET_SOUND_SETTING());
         registerEvent(196, new PONG());
         registerEvent(26, new GET_CLUB());
+        registerEvent(190, new SUBSCRIBE_CLUB());
         //registerEvent(315, new TEST_LATENCY());
     }
 

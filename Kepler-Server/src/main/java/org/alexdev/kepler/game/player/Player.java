@@ -9,12 +9,15 @@ import org.alexdev.kepler.game.inventory.Inventory;
 import org.alexdev.kepler.game.messenger.Messenger;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.club.GET_CLUB;
 import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 import org.alexdev.kepler.messages.types.MessageComposer;
+import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -65,18 +68,35 @@ public class Player extends Entity {
         this.messenger = new Messenger(this);
         this.inventory = new Inventory(this);
 
-        this.sendQueued(new LOGIN());
-        this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
-                this.details.hasHabboClub(),
-                this.details.getRank())));
+        this.send(new LOGIN());
+        this.refreshFuserights();
 
         if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
             String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
             alertMessage = alertMessage.replace("%username%", this.details.getName());
             this.sendQueued(new ALERT(alertMessage));
         }
+    }
 
-        this.flush();
+    /**
+     * Refresh club for player.
+     */
+    public void refreshClub() {
+        MessageEvent clubStatus = new GET_CLUB();
+        try {
+            clubStatus.handle(this, null);
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("Error when getting club status: ", ex);
+        }
+    }
+
+    /**
+     * Send fuseright permissions for player.
+     */
+    public void refreshFuserights() {
+        this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
+                this.details.hasHabboClub(),
+                this.details.getRank())));
     }
 
     /**
