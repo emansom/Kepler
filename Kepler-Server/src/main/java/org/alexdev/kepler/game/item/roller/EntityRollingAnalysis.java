@@ -14,7 +14,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
     @Override
     public Position canRoll(Entity entity, Item roller, Room room) {
         if (entity.getRoomUser().isWalking()) {
-            return null; // Don't roll user if they're working.
+            return null; // Don't roll user if they're walking.
         }
 
         if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
