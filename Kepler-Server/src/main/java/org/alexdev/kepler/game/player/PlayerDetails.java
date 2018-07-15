@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.player;
 
+import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.LoggingConfiguration;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -29,30 +30,31 @@ public class PlayerDetails {
     private boolean allowStalking;
     private boolean soundEnabled;
 
-    public PlayerDetails() { }
+    public PlayerDetails() {
+    }
 
     /**
      * Fill the player data for the entity.
      *
-     * @param id the id to add
-     * @param username the username
-     * @param figure the figure
-     * @param poolFigure the pool figure
-     * @param credits the credits
-     * @param motto the motto
-     * @param consoleMotto the console motto
-     * @param sex the sex
-     * @param tickets the tickets
-     * @param film the film
-     * @param rank the rank
-     * @param lastOnline the last time they were online in a unix timestamp
+     * @param id             the id to add
+     * @param username       the username
+     * @param figure         the figure
+     * @param poolFigure     the pool figure
+     * @param credits        the credits
+     * @param motto          the motto
+     * @param consoleMotto   the console motto
+     * @param sex            the sex
+     * @param tickets        the tickets
+     * @param film           the film
+     * @param rank           the rank
+     * @param lastOnline     the last time they were online in a unix timestamp
      * @param clubSubscribed the club subscribed date in a unix timestamp
      * @param clubExpiration the club expiration date in a unix timestamp
-     * @param currentBadge the current badge
-     * @param showBadge whether the badge is shown or not
-     * @param badges An array of strings of badges
-     * @param allowStalking allow stalking/following
-     * @param soundEnabled allow playing music from soundmachines
+     * @param currentBadge   the current badge
+     * @param showBadge      whether the badge is shown or not
+     * @param badges         An array of strings of badges
+     * @param allowStalking  allow stalking/following
+     * @param soundEnabled   allow playing music from soundmachines
      */
     public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking, boolean soundEnabled) {
         this.id = id;
@@ -79,6 +81,20 @@ public class PlayerDetails {
         this.showBadge = showBadge;
         this.allowStalking = allowStalking;
         this.soundEnabled = soundEnabled;
+    }
+
+    public boolean hasHabboClub() {
+        int totalDays = 0;
+
+        if (this.clubExpiration != 0) {
+            totalDays = (int) ((this.clubExpiration - DateUtil.getCurrentTimeSeconds()) / 60 / 60 / 24);
+
+            if (totalDays < 0) {
+                totalDays = 0;
+            }
+        }
+
+        return totalDays > 0;
     }
 
     public int getId() {
