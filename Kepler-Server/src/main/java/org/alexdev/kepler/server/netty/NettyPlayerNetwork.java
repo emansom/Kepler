@@ -23,7 +23,7 @@ public class NettyPlayerNetwork {
         channel.close();
     }
 
-    public void send(MessageComposer response) {
+    public void send(Object response) {
         channel.writeAndFlush(response).syncUninterruptibly();
     }
 

@@ -25,6 +25,11 @@ public class ADDSTRIPITEM implements MessageEvent {
         int itemId = Integer.parseInt(data[2]);
 
         Item item = room.getItemManager().getById(itemId);
+
+        if (item == null) {
+            return;
+        }
+
         room.getMapping().removeItem(item);
 
         player.getInventory().getItems().add(item);

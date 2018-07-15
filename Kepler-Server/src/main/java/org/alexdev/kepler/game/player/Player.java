@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.player;
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 
+import org.alexdev.kepler.game.club.ClubSubscription;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
@@ -65,16 +66,43 @@ public class Player extends Entity {
         this.messenger = new Messenger(this);
         this.inventory = new Inventory(this);
 
-        this.sendQueued(new LOGIN());
-        this.sendQueued(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(this.details.getRank())));
+        this.send(new LOGIN());
+        this.refreshFuserights();
 
         if (GameConfiguration.getInstance().getBoolean("welcome.message.enabled")) {
             String alertMessage = GameConfiguration.getInstance().getString("welcome.message.content");
             alertMessage = alertMessage.replace("%username%", this.details.getName());
-            this.sendQueued(new ALERT(alertMessage));
+
+            this.send(new ALERT(alertMessage));
+        }
+    }
+
+    /**
+     * Refresh club for player.
+     */
+    public void refreshClub() {
+        if (!this.details.hasHabboClub()) {
+            // If the database still thinks we have Habbo club even after it expired, reset it back to 0.
+            if (this.details.getClubExpiration() > 0) {
+                this.details.setClubSubscribed(0);
+                this.details.setClubExpiration(0);
+
+                this.refreshFuserights();
+                PlayerDao.saveSubscription(this.details);
+            }
         }
 
-        this.flush();
+        ClubSubscription.refreshSubscription(this);
+    }
+
+    /**
+     * Send fuseright permissions for player.
+     */
+    public void refreshFuserights() {
+        this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
+                this.details.hasHabboClub(),
+                this.details.getRank()))
+        );
     }
 
     /**
@@ -107,7 +135,9 @@ public class Player extends Entity {
      */
     @Override
     public boolean hasFuse(String fuse) {
-        return FuserightsManager.getInstance().hasFuseright(fuse, this.details.getRank());
+        return FuserightsManager.getInstance().hasFuseright(fuse,
+                this.details.getRank(),
+                this.details.hasHabboClub());
     }
 
     /**
@@ -122,6 +152,20 @@ public class Player extends Entity {
 
         this.network.send(response);
     }
+
+    /**
+     * Send a object to the player
+     *
+     * @param object the object to send
+     */
+    public void sendObject(Object object) {
+        if (this.disconnected) {
+            return;
+        }
+
+        this.network.send(object);
+    }
+
 
     /**
      * Send a queued response to the player
