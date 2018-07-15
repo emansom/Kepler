@@ -1,5 +1,5 @@
 -- migrate:up
-UPDATE users credits = credits + 25 WHERE rank = 2;
+UPDATE users SET credits = credits + 25 WHERE rank = 2;
 UPDATE users SET rank = 1 WHERE rank = 2;
 UPDATE users SET rank = 2 WHERE rank = 3;
 UPDATE users SET rank = 3 WHERE rank = 4;
