@@ -4,13 +4,11 @@ import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.messages.outgoing.user.ALERT;
 
-public class AboutCommand extends Command {
-
+public class PacketTestCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add("fuse_administrator_access");
     }
 
     @Override
@@ -19,12 +17,22 @@ public class AboutCommand extends Command {
             return;
         }
 
-        Player player = (Player)entity;
-        player.send(new ALERT("Project Kepler\n\nContributors:\n - Hoshiko\n - Ascii\n - Lightbulb\n - Leon\n - Romuald\n - Glaceon\n\nMade by Quackster from RaGEZONE"));
+        Player player = (Player) entity;
+
+        String packet = String.join(" ", args);
+
+        for (int i = 0; i < 14; i++) {
+            packet = packet.replace("{" + i + "}", Character.toString((char)i));
+        }
+
+        // Add ending packet suffix
+        packet += Character.toString((char)1);
+
+        player.sendObject(packet);
     }
 
     @Override
     public String getDescription() {
-        return "Information about the software powering this retro";
+        return "Tests a Habbo client-sided packet";
     }
 }
