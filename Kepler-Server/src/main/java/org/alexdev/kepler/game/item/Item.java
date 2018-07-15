@@ -152,7 +152,7 @@ public class Item {
         }
 
         if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
-            return this.customData.contains("TRUE");
+            return this.customData.equals("TRUE");
         }
 
         if (this.hasBehaviour(ItemBehaviour.DOOR)) {
