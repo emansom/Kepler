@@ -86,6 +86,7 @@ public class Player extends Entity {
             if (this.details.getClubExpiration() > 0) {
                 this.details.setClubSubscribed(0);
                 this.details.setClubExpiration(0);
+                this.details.getBadges().remove("HC1"); // If their HC ran out, remove badge.
 
                 this.refreshFuserights();
                 PlayerDao.saveSubscription(this.details);
