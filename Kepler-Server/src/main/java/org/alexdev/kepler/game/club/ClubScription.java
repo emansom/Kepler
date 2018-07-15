@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game;
+package org.alexdev.kepler.game.club;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
