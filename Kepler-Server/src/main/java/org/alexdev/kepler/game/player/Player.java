@@ -171,6 +171,31 @@ public class Player extends Entity {
         this.network.send(object);
     }
 
+
+    /**
+     * Send a queued response to the player
+     *
+     * @param response the response
+     */
+    public void sendQueued(MessageComposer response) {
+        if (this.disconnected) {
+            return;
+        }
+
+        this.network.sendQueued(response);
+    }
+
+    /**
+     * Flush queue
+     */
+    public void flush() {
+        if (this.disconnected) {
+            return;
+        }
+
+        this.network.flush();
+    }
+
     /**
      * Get the messenger instance for the player
      *
