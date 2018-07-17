@@ -81,12 +81,13 @@ public class Player extends Entity {
      * Refresh club for player.
      */
     public void refreshClub() {
-        if (!this.details.hasHabboClub()) {
+        if (!this.details.hasClubSubscription()) {
             // If the database still thinks we have Habbo club even after it expired, reset it back to 0.
             if (this.details.getClubExpiration() > 0) {
-                this.details.setClubSubscribed(0);
+                this.details.setFirstClubSubscription(0);
                 this.details.setClubExpiration(0);
                 this.details.getBadges().remove("HC1"); // If their HC ran out, remove badge.
+                this.details.getBadges().remove("HC2"); // No gold badge when not subscribed.
 
                 this.refreshFuserights();
                 PlayerDao.saveSubscription(this.details);
@@ -94,6 +95,12 @@ public class Player extends Entity {
         } else {
             if (!this.details.getBadges().contains("HC1")) {
                 this.details.getBadges().add("HC1");
+            }
+
+            if (this.details.hasGoldClubSubscription()) {
+                if (!this.details.getBadges().contains("HC2")) {
+                    this.details.getBadges().add("HC2");
+                }
             }
         }
 
@@ -105,7 +112,7 @@ public class Player extends Entity {
      */
     public void refreshFuserights() {
         this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
-                this.details.hasHabboClub(),
+                this.details.hasClubSubscription(),
                 this.details.getRank()))
         );
     }
@@ -142,7 +149,7 @@ public class Player extends Entity {
     public boolean hasFuse(String fuse) {
         return FuserightsManager.getInstance().hasFuseright(fuse,
                 this.details.getRank(),
-                this.details.hasHabboClub());
+                this.details.hasClubSubscription());
     }
 
     /**

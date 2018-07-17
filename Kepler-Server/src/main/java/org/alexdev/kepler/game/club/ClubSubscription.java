@@ -31,8 +31,8 @@ public class ClubSubscription {
             remainingDaysThisMonth = ((totalDays - 1) % 31) + 1;
             prepaidMonths = (totalDays - remainingDaysThisMonth) / 31;
 
-            if (player.getDetails().getClubSubscribed() > 0) {
-                sinceMonths = (int) (now - player.getDetails().getClubSubscribed()) / 60 / 60 / 24 / 31;
+            if (player.getDetails().getFirstClubSubscription() > 0) {
+                sinceMonths = (int) (now - player.getDetails().getFirstClubSubscription()) / 60 / 60 / 24 / 31;
             }
         }
 
@@ -61,8 +61,8 @@ public class ClubSubscription {
         long daysInSeconds = 24 * 60 * 60;
         long secondsToAdd = (daysInSeconds * days);
 
-        if (player.getDetails().getClubSubscribed() == 0) {
-            player.getDetails().setClubSubscribed(now);
+        if (player.getDetails().getFirstClubSubscription() == 0) {
+            player.getDetails().setFirstClubSubscription(now);
         }
 
         if (player.getDetails().getClubExpiration() - now <= 0) {
