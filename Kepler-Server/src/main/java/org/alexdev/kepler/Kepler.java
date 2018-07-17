@@ -54,7 +54,6 @@ public class Kepler {
         try {
             LoggingConfiguration.checkLoggingConfig();
             ServerConfiguration.load("server.ini");
-            //GameConfiguration.load("game.ini");
 
             /*byte[] pw = "lol".getBytes(StandardCharsets.UTF_8);
             byte[] outputHash = new byte[PwHash.STR_BYTES];
@@ -64,8 +63,8 @@ public class Kepler {
                     outputHash,
                     pw,
                     pw.length,
-                    PwHash.OPSLIMIT_MIN,
-                    PwHash.MEMLIMIT_MIN
+                    PwHash.OPSLIMIT_INTERACTIVE,
+                    PwHash.MEMLIMIT_INTERACTIVE
             );
 
             System.out.println(new String(outputHash));*/
