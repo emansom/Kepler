@@ -26,7 +26,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         Player player = new Player(new NettyPlayerNetwork(ctx.channel(), this.server.getConnectionIds().getAndIncrement()));
         ctx.channel().attr(Player.PLAYER_KEY).set(player);
 
-        if (!server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
+        if (!this.server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
             ctx.disconnect();
             return;
         }
@@ -79,7 +79,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
                 return;
             }
 
-            ctx.flush();
+            player.getNetwork().flush();
         } catch (Exception ex) {
             Log.getErrorLogger().error("Exception occurred handling channelReadComplete: ", ex);
         }

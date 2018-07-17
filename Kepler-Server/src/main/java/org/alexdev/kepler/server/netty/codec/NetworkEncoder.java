@@ -17,7 +17,7 @@ public class NetworkEncoder extends MessageToMessageEncoder<Object> {
 
     @Override
     protected void encode(ChannelHandlerContext ctx, Object obj, List<Object> out) throws Exception {
-        ByteBuf buffer = ctx.alloc().buffer(); // TODO: initial capacity calculation
+        ByteBuf buffer = ctx.alloc().buffer();
 
         if (obj instanceof MessageComposer) {
             MessageComposer msg = (MessageComposer) obj;
