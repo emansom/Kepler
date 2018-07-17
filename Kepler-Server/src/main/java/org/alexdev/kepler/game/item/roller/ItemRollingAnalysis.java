@@ -33,6 +33,14 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
 
         if (frontTile.getEntities().size() > 0) {
             for (Entity entity : frontTile.getEntities()) {
+                if (entity.getRoomUser().getRoom() == null) {
+                    continue;
+                }
+
+                if (!entity.getRoomUser().getPosition().equals(front)) {
+                    continue;
+                }
+
                 if (entity.getRoomUser().isWalking()) {
 
                     // Don't roll if the users goal is the same as the front tile
