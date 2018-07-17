@@ -1,7 +1,9 @@
 package org.alexdev.kepler;
 
+import com.goterl.lazycode.lazysodium.interfaces.PwHash;
 import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.dao.Storage;
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.commands.CommandManager;
@@ -25,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.net.InetAddress;
+import java.nio.charset.StandardCharsets;
 
 public class Kepler {
 
@@ -50,9 +53,21 @@ public class Kepler {
 
         try {
             LoggingConfiguration.checkLoggingConfig();
-
             ServerConfiguration.load("server.ini");
-            //GameConfiguration.load("game.ini");
+
+            /*byte[] pw = "lol".getBytes(StandardCharsets.UTF_8);
+            byte[] outputHash = new byte[PwHash.STR_BYTES];
+            PwHash.Native pwHash = (PwHash.Native) PlayerDao.LIB_SODIUM;
+
+            boolean success = pwHash.cryptoPwHashStr(
+                    outputHash,
+                    pw,
+                    pw.length,
+                    PwHash.OPSLIMIT_INTERACTIVE,
+                    PwHash.MEMLIMIT_INTERACTIVE
+            );
+
+            System.out.println(new String(outputHash));*/
 
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);

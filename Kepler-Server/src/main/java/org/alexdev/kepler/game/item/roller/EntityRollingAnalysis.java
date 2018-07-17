@@ -104,7 +104,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         // Fix bounce for sitting on chairs if the chair top height is higher 1.0
         if (entity.getRoomUser().containsStatus(StatusType.SIT)) {
-            double sitHeight = Double.parseDouble(entity.getRoomUser().getStatuses().get(StatusType.SIT.getStatusCode()).getValue());
+            double sitHeight = Double.parseDouble(entity.getRoomUser().getStatus(StatusType.SIT).getValue());
 
             if (sitHeight > 1.0) {
                 displayNextHeight += (sitHeight - 1.0); // Add new height offset found.

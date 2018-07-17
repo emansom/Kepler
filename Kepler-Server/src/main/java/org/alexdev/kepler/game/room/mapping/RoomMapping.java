@@ -227,7 +227,7 @@ public class RoomMapping {
         }
 
         if (!isRotation) {
-            Item roller = null;
+            Item roller = null, topRollingItem = null;
             item.getPosition().setZ(tile.getWalkingHeight());
 
             for (Item rollingItem : tile.getItems()) {
@@ -266,12 +266,15 @@ public class RoomMapping {
                     continue;
                 }
 
-                roller = rollingItem.getRollingData().getRoller();
-                rollingItem.getRollingData().setHeightUpdate(item.getDefinition().getTopHeight());
+                if (rollingItem.getId() == tile.getHighestItem().getId()) {
+                    roller = rollingItem.getRollingData().getRoller();
+                    rollingItem.getRollingData().setHeightUpdate(item.getDefinition().getTopHeight());
+                    topRollingItem = rollingItem;
+                }
             }
 
             if (roller != null) {
-                item.getPosition().setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
+                item.getPosition().setZ(topRollingItem.getPosition().getZ());// + roller.getDefinition().getTopHeight());
             }
         }
 

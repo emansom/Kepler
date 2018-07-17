@@ -34,6 +34,12 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
         if (frontTile.getEntities().size() > 0) {
             for (Entity entity : frontTile.getEntities()) {
                 if (entity.getRoomUser().isWalking()) {
+
+                    // Don't roll if the users goal is the same as the front tile
+                    if (entity.getRoomUser().getGoal().equals(frontTile.getPosition())) {
+                        return null;
+                    }
+
                     continue;
                 }
 
@@ -66,6 +72,10 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
 
                 for (Item frontItem : frontTile.getItems()) {
                     if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
+                        continue;
+                    }
+
+                    if (frontItem.getId() == item.getId()) {
                         continue;
                     }
 
@@ -115,6 +125,7 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
     
     @Override
     public void doRoll(Item item, Item roller, Room room, Position nextPosition) {
+        room.getMapping().getTile(nextPosition).setHighestItem(item);
         room.send(new SLIDE_OBJECT(item, nextPosition, roller.getId(), nextPosition.getZ()));
 
         item.getPosition().setX(nextPosition.getX());

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayerDao {
+    public static final LazySodiumJava LIB_SODIUM = new LazySodiumJava(new SodiumJava());
 
     /**
      * Gets the details.
@@ -115,9 +116,7 @@ public class PlayerDao {
                 byte[] hashedPassword = resultSet.getString("password").getBytes(StandardCharsets.UTF_8);
                 byte[] pass = password.getBytes(StandardCharsets.UTF_8);
 
-                var sodium = new LazySodiumJava(new SodiumJava());
-
-                PwHash.Native pwHash = (PwHash.Native) sodium;
+                PwHash.Native pwHash = (PwHash.Native) LIB_SODIUM;
                 success = pwHash.cryptoPwHashStrVerify(hashedPassword, pass, pass.length);
 
                 if (success) {
