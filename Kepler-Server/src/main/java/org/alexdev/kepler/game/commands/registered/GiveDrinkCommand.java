@@ -40,12 +40,12 @@ public class GiveDrinkCommand extends Command {
         if (targetUser == null ||
                 targetUser.getRoomUser().getRoom() == null ||
                 targetUser.getRoomUser().getRoom().getId() != player.getRoomUser().getRoom().getId()) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Could not find user: " + args[0]));
+            player.send(new ALERT("Could not find user: " + args[0]));
             return;
         }
 
         if (!player.getRoomUser().containsStatus(StatusType.CARRY_DRINK) && !player.getRoomUser().containsStatus(StatusType.CARRY_FOOD)) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "You are not carrying any food or drinks to give."));
+            player.send(new ALERT("You are not carrying any food or drinks to give."));
             return;
         }
 
