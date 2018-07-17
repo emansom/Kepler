@@ -236,6 +236,15 @@ public class Player extends Entity {
     }
 
     /**
+     * Get if the socket has been disconnected.
+     *
+     * @return true, if it has
+     */
+    public boolean isDisconnected() {
+        return disconnected;
+    }
+
+    /**
      * Set if the connection has timed out or not.
      *
      * @param pingOK the value to determine of the connection has timed out

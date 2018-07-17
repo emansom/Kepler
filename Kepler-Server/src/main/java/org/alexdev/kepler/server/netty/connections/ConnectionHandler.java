@@ -72,7 +72,17 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
     @Override
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
+        try {
+            Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
+
+            if (player.isDisconnected()) {
+                return;
+            }
+
+            ctx.flush();
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("Exception occurred handling channelReadComplete: ", ex);
+        }
     }
 
     @Override
