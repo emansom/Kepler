@@ -209,7 +209,11 @@ public class RoomUser {
             }
 
             if (item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
+                this.removeStatus(StatusType.CARRY_ITEM);
+                this.removeStatus(StatusType.CARRY_FOOD);
+                this.removeStatus(StatusType.CARRY_DRINK);
                 this.removeStatus(StatusType.DANCE);
+
                 this.position.setRotation(item.getPosition().getRotation());
                 this.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
                 needsUpdate = true;
