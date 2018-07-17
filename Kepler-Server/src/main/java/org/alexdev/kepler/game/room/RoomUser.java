@@ -603,6 +603,21 @@ public class RoomUser {
         return false;
     }
 
+    /**
+     * Get the status by status type.
+     *
+     * @param statusType the status type
+     * @return the room user status instance
+     */
+    public RoomUserStatus getStatus(StatusType statusType) {
+        if (this.statuses.containsKey(statusType.getStatusCode())) {
+            return this.statuses.get(statusType.getStatusCode());
+        }
+
+        return null;
+    }
+
+
     public Entity getEntity() {
         return entity;
     }

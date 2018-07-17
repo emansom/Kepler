@@ -22,7 +22,7 @@ public class EntityTask implements Runnable {
 
     @Override
     public void run() {
-        if (this.room.getEntities().size() == 0) {
+        if (this.room.getEntities().isEmpty()) {
             return;
         }
 

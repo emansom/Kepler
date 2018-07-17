@@ -52,17 +52,18 @@ public class GiveDrinkCommand extends Command {
         RoomUserStatus status = null;
 
         if (player.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
-            status = player.getRoomUser().getStatuses().get(StatusType.CARRY_DRINK.getStatusCode());
+            status = player.getRoomUser().getStatus(StatusType.CARRY_DRINK);
         }
 
         if (player.getRoomUser().containsStatus(StatusType.CARRY_FOOD)) {
-            status = player.getRoomUser().getStatuses().get(StatusType.CARRY_FOOD.getStatusCode());
+            status = player.getRoomUser().getStatus(StatusType.CARRY_FOOD);//.getStatuses().get(StatusType.CARRY_FOOD.getStatusCode());
         }
 
         if (status != null) {
             // Give drink to user if they're not already having a drink or food, and they're not dancing
             if (!targetUser.getRoomUser().containsStatus(StatusType.CARRY_FOOD) &&
                 !targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
+
                 if (!targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
                     int carryID = Integer.parseInt(status.getValue());
                     targetUser.getRoomUser().carryItem(carryID, null);
