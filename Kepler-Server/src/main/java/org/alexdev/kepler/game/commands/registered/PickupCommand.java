@@ -50,7 +50,7 @@ public class PickupCommand extends Command {
             item.setOwnerId(player.getEntityId());
             player.getRoomUser().getRoom().getMapping().removeItem(item);
 
-            if (!item.hasBehaviour(ItemBehaviour.POST_IT)) {
+            if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
                 ItemDao.deleteItem(item.getId());
             } else {
                 player.getInventory().getItems().add(item);
