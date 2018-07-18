@@ -17,6 +17,7 @@ public class FuserightsManager {
         this.habboClubFuses = new ArrayList<>();
         this.habboClubFuses.add("fuse_extended_buddylist");
         this.habboClubFuses.add("fuse_habbo_chooser");
+        this.habboClubFuses.add("fuse_furni_chooser");
         this.habboClubFuses.add("fuse_room_queue_club");
         this.habboClubFuses.add("fuse_room_priority_access");
         this.habboClubFuses.add("fuse_priority_access");
