@@ -42,9 +42,19 @@ public class SETSTUFFDATA implements MessageEvent {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 
-        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) &&
-                !room.hasRights(player.getEntityId())) {
+        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) && !room.hasRights(player.getEntityId())) {
             return;
+        }
+
+
+        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_TOUCHING_FOR_INTERACTION)) {
+            if (!item.getTile().touches(player.getRoomUser().getTile())) {
+                player.getRoomUser().walkTo(
+                        item.getPosition().getSquareInFront().getX(),
+                        item.getPosition().getSquareInFront().getY()
+                );
+                return;
+            }
         }
 
         String newData = null;
@@ -90,6 +100,8 @@ public class SETSTUFFDATA implements MessageEvent {
                     if (stateId >= 0 && stateId <= 99) {
                         newData = itemData;
                     }
+                } else {
+                    newData = itemData;
                 }
             }
         }
