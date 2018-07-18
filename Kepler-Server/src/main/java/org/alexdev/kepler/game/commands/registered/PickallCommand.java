@@ -13,7 +13,7 @@ import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PickupCommand extends Command {
+public class PickallCommand extends Command {
     @Override
     public void addPermissions() {
         this.permissions.add("default");
