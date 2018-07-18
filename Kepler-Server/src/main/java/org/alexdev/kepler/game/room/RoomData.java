@@ -44,7 +44,7 @@ public class RoomData {
         }
         this.categoryId = category;
         this.name = StringUtil.filterInput(name, true);
-        this.description = StringUtil.filterInput(name, true);
+        this.description = StringUtil.filterInput(description, true);
         this.model = model;
         this.ccts = ccts;
         this.wallpaper = wallpaper;
