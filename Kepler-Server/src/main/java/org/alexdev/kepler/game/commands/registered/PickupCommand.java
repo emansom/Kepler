@@ -47,15 +47,16 @@ public class PickupCommand extends Command {
         }
 
         for (Item item : itemsToUpdate) {
-            item.setOwnerId(player.getEntityId());
-            player.getRoomUser().getRoom().getMapping().removeItem(item);
-
             if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
-                ItemDao.deleteItem(item.getId());
-            } else {
-                player.getInventory().getItems().add(item);
-                itemsToAdd.add(item);
+                continue;
             }
+
+            item.setOwnerId(player.getEntityId());
+
+            player.getRoomUser().getRoom().getMapping().removeItem(item);
+            player.getInventory().getItems().add(item);
+
+            itemsToAdd.add(item);
         }
 
         ItemDao.updateItems(itemsToAdd);
