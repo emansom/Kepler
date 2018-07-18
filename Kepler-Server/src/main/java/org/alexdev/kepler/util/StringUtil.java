@@ -1,6 +1,7 @@
 package org.alexdev.kepler.util;
 
 import java.security.SecureRandom;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -20,7 +21,7 @@ public class StringUtil {
      * @param param the param
      * @return true, if is null or empty
      */
-    public static boolean isNullOrEmpty(String param) { 
+    public static boolean isNullOrEmpty(String param) {
         return param == null || param.trim().length() == 0;
     }
 
@@ -42,6 +43,7 @@ public class StringUtil {
             input = input.replace((char)13, ' ');
         }
 
+        input = Normalizer.normalize(input, Normalizer.Form.NFD);
         return input;
     }
 
@@ -80,7 +82,7 @@ public class StringUtil {
         return caption.replaceAll("[^A-Za-z0-9]", "");
     }
 
-    
+
     /**
      * Paginate a list of items.
      *
@@ -107,7 +109,7 @@ public class StringUtil {
 
         return chunks;
     }
-    
+
     /**
      * Round to two decimal places.
      *
@@ -117,7 +119,7 @@ public class StringUtil {
     public static double format(double decimal) {
         return Math.round(decimal * 100.0) / 100.0;
     }
-    
+
     /**
      * Split.
      *
