@@ -2,12 +2,9 @@ package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
-import org.alexdev.kepler.util.config.LoggingConfiguration;
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import java.text.Normalizer;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerDetails {
     private int id;
@@ -22,7 +19,7 @@ public class PlayerDetails {
     private int film;
     private int rank;
     private long lastOnline;
-    private long clubSubscribed;
+    private long firstClubSubscription;
     private long clubExpiration;
     private String currentBadge;
     private boolean showBadge;
@@ -48,7 +45,7 @@ public class PlayerDetails {
      * @param film           the film
      * @param rank           the rank
      * @param lastOnline     the last time they were online in a unix timestamp
-     * @param clubSubscribed the club subscribed date in a unix timestamp
+     * @param firstClubSubscription the club subscribed date in a unix timestamp
      * @param clubExpiration the club expiration date in a unix timestamp
      * @param currentBadge   the current badge
      * @param showBadge      whether the badge is shown or not
@@ -56,7 +53,7 @@ public class PlayerDetails {
      * @param allowStalking  allow stalking/following
      * @param soundEnabled   allow playing music from soundmachines
      */
-    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long clubSubscribed, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking, boolean soundEnabled) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking, boolean soundEnabled) {
         this.id = id;
         this.username = StringUtil.filterInput(username, true);
         this.figure = StringUtil.filterInput(figure, true); // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
@@ -69,7 +66,7 @@ public class PlayerDetails {
         this.film = film;
         this.rank = rank;
         this.lastOnline = lastOnline;
-        this.clubSubscribed = clubSubscribed;
+        this.firstClubSubscription = firstClubSubscription;
         this.clubExpiration = clubExpiration;
 
         if (!StringUtil.isAlphaNumeric(currentBadge) || currentBadge.length() != 3) {
@@ -83,7 +80,7 @@ public class PlayerDetails {
         this.soundEnabled = soundEnabled;
     }
 
-    public boolean hasHabboClub() {
+    public boolean hasClubSubscription() {
         if (this.clubExpiration != 0) {
             if (DateUtil.getCurrentTimeSeconds() < this.clubExpiration) {
                 return true;
@@ -91,6 +88,14 @@ public class PlayerDetails {
         }
 
         return false;
+    }
+
+    public boolean hasGoldClubSubscription() {
+        int sinceMonths = (int) (DateUtil.getCurrentTimeSeconds() - this.firstClubSubscription) / 60 / 60 / 24 / 31;
+
+        // We are deemed a 'Gold' Club member if the user has been a club subscriber for a year
+        // According to the HabboX wiki the badge is to be received on the first day of the 13th subscribed month
+        return this.hasClubSubscription() && sinceMonths > 12;
     }
 
     public int getId() {
@@ -181,12 +186,12 @@ public class PlayerDetails {
         this.lastOnline = lastOnline;
     }
 
-    public long getClubSubscribed() {
-        return clubSubscribed;
+    public long getFirstClubSubscription() {
+        return firstClubSubscription;
     }
 
-    public void setClubSubscribed(long clubSubscribed) {
-        this.clubSubscribed = clubSubscribed;
+    public void setFirstClubSubscription(long firstClubSubscription) {
+        this.firstClubSubscription = firstClubSubscription;
     }
 
     public long getClubExpiration() {

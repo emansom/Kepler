@@ -339,7 +339,7 @@ public class PlayerDao {
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("UPDATE users SET club_subscribed = ?, club_expiration = ? WHERE id = ?", sqlConnection);
-            preparedStatement.setLong(1, details.getClubSubscribed());
+            preparedStatement.setLong(1, details.getFirstClubSubscription());
             preparedStatement.setLong(2, details.getClubExpiration());
             preparedStatement.setInt(3, details.getId());
             preparedStatement.execute();

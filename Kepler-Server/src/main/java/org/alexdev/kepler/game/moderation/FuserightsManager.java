@@ -16,11 +16,15 @@ public class FuserightsManager {
         this.fuserights = FuserightsDao.getFuserights();
         this.habboClubFuses = new ArrayList<>();
         this.habboClubFuses.add("fuse_extended_buddylist");
-        this.habboClubFuses.add("fuse_habbo_choser");
+        this.habboClubFuses.add("fuse_habbo_chooser");
+        this.habboClubFuses.add("fuse_furni_chooser");
         this.habboClubFuses.add("fuse_room_queue_club");
         this.habboClubFuses.add("fuse_room_priority_access");
+        this.habboClubFuses.add("fuse_priority_access");
         this.habboClubFuses.add("fuse_use_special_room_layouts");
         this.habboClubFuses.add("fuse_use_club_dance");
+        this.habboClubFuses.add("fuse_use_club_badge");
+        this.habboClubFuses.add("fuse_use_club_outfits");
     }
 
     /**
