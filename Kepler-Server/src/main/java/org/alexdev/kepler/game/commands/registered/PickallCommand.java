@@ -13,7 +13,7 @@ import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PickupCommand extends Command {
+public class PickallCommand extends Command {
     @Override
     public void addPermissions() {
         this.permissions.add("default");
@@ -34,7 +34,7 @@ public class PickupCommand extends Command {
         if (!player.getRoomUser().getRoom().isOwner(player.getEntityId())) {
             return;
         }
-
+        
         List<Item> itemsToPickup = new ArrayList<>();
 
         for (Item item : player.getRoomUser().getRoom().getItems()) {
@@ -47,9 +47,12 @@ public class PickupCommand extends Command {
 
         for (Item item : itemsToPickup) {
             item.setOwnerId(player.getEntityId());
+
             player.getRoomUser().getRoom().getMapping().removeItem(item);
             player.getInventory().getItems().add(item);
         }
+
+        ItemDao.updateItems(itemsToPickup);
 
         player.getInventory().getView("last");
         player.send(new ALERT("All furniture items have been picked up"));

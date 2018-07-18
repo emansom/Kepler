@@ -19,23 +19,20 @@ public class FuserightsManager {
         this.habboClubFuses.add("fuse_habbo_chooser");
         this.habboClubFuses.add("fuse_furni_chooser");
         this.habboClubFuses.add("fuse_room_queue_club");
-        this.habboClubFuses.add("fuse_room_priority_access");
         this.habboClubFuses.add("fuse_priority_access");
         this.habboClubFuses.add("fuse_use_special_room_layouts");
         this.habboClubFuses.add("fuse_use_club_dance");
-        this.habboClubFuses.add("fuse_use_club_badge");
         this.habboClubFuses.add("fuse_use_club_outfits");
     }
 
     /**
      * Get the available fuserights for user.
      *
-     *
-     * @param hasHabboClub whether or not the user has Habbo club
+     * @param hasClubMembership whether or not the user has Habbo club
      * @param minimumRank the minimum rank to see the fuseright
      * @return the lsit of fuserights
      */
-    public List<String> getAvailableFuserights(boolean hasHabboClub, int minimumRank) {
+    public List<String> getAvailableFuserights(boolean hasClubMembership, int minimumRank) {
         List<String> fuses = new ArrayList<>();
 
         for (var kvp : this.fuserights.entrySet()) {
@@ -45,7 +42,7 @@ public class FuserightsManager {
         }
 
         // If we have habbo club, add the habbo club fuserights...
-        if (hasHabboClub) {
+        if (hasClubMembership) {
             fuses.addAll(this.habboClubFuses);
         }
 
@@ -57,11 +54,11 @@ public class FuserightsManager {
      *
      * @param fuse the fuse to check against
      * @param minimumRank the rank to check with
-     * @param hasHabboClub whether or not we have Habbo club, check permissions.
+     * @param hasClubMembership whether or not we have Habbo club, check permissions.
      * @return true, if successful
      */
-    public boolean hasFuseright(String fuse, int minimumRank, boolean hasHabboClub) {
-        if (hasHabboClub && this.habboClubFuses.contains(fuse)) { // If we have habbo club, check for habbo club fuserights...
+    public boolean hasFuseright(String fuse, int minimumRank, boolean hasClubMembership) {
+        if (hasClubMembership && this.habboClubFuses.contains(fuse)) { // If we have habbo club, check for habbo club fuserights...
             return true;
         }
 
