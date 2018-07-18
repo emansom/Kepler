@@ -35,7 +35,7 @@ public class PickupCommand extends Command {
             return;
         }
 
-        List<Item> itemsToDelete = new ArrayList<>();
+        List<Item> itemsToAdd = new ArrayList<>();
         List<Item> itemsToUpdate = new ArrayList<>();
 
         for (Item item : player.getRoomUser().getRoom().getItems()) {
@@ -54,11 +54,11 @@ public class PickupCommand extends Command {
                 ItemDao.deleteItem(item.getId());
             } else {
                 player.getInventory().getItems().add(item);
-                itemsToDelete.add(item);
+                itemsToAdd.add(item);
             }
         }
 
-        ItemDao.updateItems(itemsToDelete);
+        ItemDao.updateItems(itemsToAdd);
 
         player.getInventory().getView("last");
         player.send(new ALERT("All furniture items have been picked up"));
