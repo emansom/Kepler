@@ -35,30 +35,21 @@ public class PickupCommand extends Command {
             return;
         }
 
-        List<Item> itemsToDelete = new ArrayList<>();
-        List<Item> itemsToUpdate = new ArrayList<>();
+        List<Item> itemsToPickup = new ArrayList<>();
 
         for (Item item : player.getRoomUser().getRoom().getItems()) {
             if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 continue; // Cannot pick up public room furniture.
             }
 
-            itemsToUpdate.add(item);
+            itemsToPickup.add(item);
         }
 
-        for (Item item : itemsToUpdate) {
+        for (Item item : itemsToPickup) {
             item.setOwnerId(player.getEntityId());
             player.getRoomUser().getRoom().getMapping().removeItem(item);
-
-            if (!item.hasBehaviour(ItemBehaviour.POST_IT)) {
-                ItemDao.deleteItem(item.getId());
-            } else {
-                player.getInventory().getItems().add(item);
-                itemsToDelete.add(item);
-            }
+            player.getInventory().getItems().add(item);
         }
-
-        ItemDao.updateItems(itemsToDelete);
 
         player.getInventory().getView("last");
         player.send(new ALERT("All furniture items have been picked up"));
