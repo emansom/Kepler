@@ -71,7 +71,7 @@ public class SETSTUFFDATA implements MessageEvent {
                 }
             }
         } else {
-            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE) && (itemData.equals("TRUE") || itemData.equals("FALSE"))) {
+            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE) && (itemData.equals("TRUE") || itemData.equals("FALSE") || itemData.equals("I") || itemData.equals("H"))) {
                 newData = itemData;
             }
 
