@@ -168,6 +168,7 @@ public class MessageHandler {
         registerEvent(67, new ADDSTRIPITEM());
         registerEvent(83, new G_IDATA());
         registerEvent(84, new SETITEMDATA());
+        registerEvent(214, new SETITEMSTATE());
         registerEvent(85, new REMOVEITEM());
         registerEvent(74, new SETSTUFFDATA());
         registerEvent(183, new CONVERT_FURNI_TO_CREDITS());
