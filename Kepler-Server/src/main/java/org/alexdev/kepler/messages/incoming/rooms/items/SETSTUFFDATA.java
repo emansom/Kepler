@@ -38,7 +38,8 @@ public class SETSTUFFDATA implements MessageEvent {
                 || item.hasBehaviour(ItemBehaviour.DICE)
                 || item.hasBehaviour(ItemBehaviour.PRIZE_TROPHY)
                 || item.hasBehaviour(ItemBehaviour.POST_IT)
-                || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
+                || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)
+                || item.hasBehaviour(ItemBehaviour.SOUND_MACHINE_SAMPLE_SET)) {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 
