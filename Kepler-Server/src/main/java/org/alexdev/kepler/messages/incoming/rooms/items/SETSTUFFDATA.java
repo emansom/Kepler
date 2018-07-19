@@ -52,7 +52,7 @@ public class SETSTUFFDATA implements MessageEvent {
         }
 
 
-        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_TOUCHING_FOR_INTERACTION)) {
+        if (item.hasBehaviour(ItemBehaviour.REQUIRES_TOUCHING_FOR_INTERACTION) || item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             if (!item.getTile().touches(player.getRoomUser().getTile())) {
                 player.getRoomUser().walkTo(
                         item.getPosition().getSquareInFront().getX(),
@@ -65,7 +65,7 @@ public class SETSTUFFDATA implements MessageEvent {
 
         String newData = null;
 
-        if (item.getDefinition().hasBehaviour(ItemBehaviour.DOOR)) {
+        if (item.hasBehaviour(ItemBehaviour.DOOR)) {
             if (itemData.equals("O") || itemData.equals("C")) {
                 newData = itemData;
 
