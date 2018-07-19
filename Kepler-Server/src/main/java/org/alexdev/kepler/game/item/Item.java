@@ -29,6 +29,7 @@ public class Item {
 
     private ItemDefinition definition;
     private Item itemBelow;
+    private Item itemAbove;
 
     private Position position;
     private String wallPosition;
@@ -472,6 +473,14 @@ public class Item {
 
     public void setItemBelow(Item itemBelow) {
         this.itemBelow = itemBelow;
+    }
+
+    public Item getItemAbove() {
+        return itemAbove;
+    }
+
+    public void setItemAbove(Item itemAbove) {
+        this.itemAbove = itemAbove;
     }
 
     public boolean getRequiresUpdate() {

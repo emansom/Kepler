@@ -33,8 +33,13 @@ public class HelpCommand extends Command {
                 }
             }
 
-            about.append(" - ").append(command.getDescription()).append("<br>");
+            about.append(" - ").append(command.getDescription()).append("\r\n");
         }
+
+        // Add client-side commands to list
+        about.append(":chooser - List users in current room (club membership required)\r\n");
+        about.append(":furni - List furniture in current room (club membership required)\r\n");
+        about.append(":events - Show current events organised by other users\r\n");
 
         if (entity instanceof Player) {
             Player player = (Player) entity;

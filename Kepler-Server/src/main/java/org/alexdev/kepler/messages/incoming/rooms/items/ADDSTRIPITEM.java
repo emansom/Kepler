@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -30,6 +31,11 @@ public class ADDSTRIPITEM implements MessageEvent {
             return;
         }
 
+        if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
+            return; // The client does not allow picking up post-it's, thus neither will the server
+        }
+
+        item.setOwnerId(player.getEntityId());
         room.getMapping().removeItem(item);
 
         player.getInventory().getItems().add(item);

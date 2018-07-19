@@ -210,12 +210,27 @@ public class RoomTile {
     public Item getItemAbove(Item tileItem) {
         int index = this.items.indexOf(tileItem);
 
-        if (index > -1) {
-            int aboveIndex = index + 1;
+        try {
+            return this.items.get(index + 1);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
 
-            if (this.items.size() >= aboveIndex) {
-                return this.items.get(aboveIndex);
-            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the item below the current item for this tile.
+     *
+     * @return the item below
+     */
+    public Item getItemBelow(Item tileItem) {
+        int index = this.items.indexOf(tileItem);
+
+        try {
+            return this.items.get(index - 1);
+        } catch (ArrayIndexOutOfBoundsException ignored) {
+
         }
 
         return null;
