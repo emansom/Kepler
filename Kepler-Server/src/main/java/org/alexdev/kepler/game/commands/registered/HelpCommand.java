@@ -5,6 +5,10 @@ import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.util.StringUtil;
+
+import java.util.List;
+import java.util.Map;
 
 public class HelpCommand extends Command {
     @Override
@@ -14,16 +18,32 @@ public class HelpCommand extends Command {
 
     @Override
     public void handleCommand(Entity entity, String message, String[] args) {
-        StringBuilder about = new StringBuilder();
-        about.append("Commands ('<' and '>' are optional parameters):<br>");
+        var commands = StringUtil.paginate(CommandManager.getInstance().getCommands(), 10);
 
-        for (var set : CommandManager.getInstance().getCommands().entrySet()) {
-            if (!CommandManager.getInstance().hasCommandPermission(entity, set.getValue())) {
+        int pageId = 1;
+
+        if (args.length > 0 && StringUtil.isNumber(args[0])) {
+            pageId = Integer.parseInt(args[0]);
+        }
+
+        if (!commands.containsKey(pageId - 1)) {
+            pageId = 1;
+        }
+
+        var commandList = commands.get(pageId - 1);
+
+        StringBuilder about = new StringBuilder();
+        about.append("Commands ('<' and '>' are optional parameters):<br>").append("<br>");
+
+        for (var commandSet : commandList) {
+            String[] commandAlias = commandSet.getKey();
+            Command command = commandSet.getValue();
+
+            if (!CommandManager.getInstance().hasCommandPermission(entity, command)) {
                 continue;
             }
 
-            Command command = set.getValue();
-            about.append(":").append(String.join("/", set.getKey()));
+            about.append(":").append(String.join("/", commandAlias));
 
             if (command.getArguments().length > 0) {
                 if (command.getArguments().length > 1) {
@@ -33,13 +53,14 @@ public class HelpCommand extends Command {
                 }
             }
 
-            about.append(" - ").append(command.getDescription()).append("\r\n");
+            about.append(" - ").append(command.getDescription()).append("<br>");
         }
 
-        // Add client-side commands to list
-        about.append(":chooser - List users in current room (club membership required)\r\n");
-        about.append(":furni - List furniture in current room (club membership required)\r\n");
-        about.append(":events - Show current events organised by other users\r\n");
+        about.append("<br>")
+                .append("Page ")
+                .append(pageId)
+                .append(" out of ")
+                .append(commands.size());
 
         if (entity instanceof Player) {
             Player player = (Player) entity;
@@ -49,6 +70,6 @@ public class HelpCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "List available commands";
+        return "<page> - List available commands";
     }
 }

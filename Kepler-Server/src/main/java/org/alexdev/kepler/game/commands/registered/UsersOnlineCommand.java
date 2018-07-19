@@ -23,34 +23,35 @@ public class UsersOnlineCommand extends Command {
             return;
         }
 
-        int pageNumber = 0;
-        int maxPlayersPerPage = 8;
+        int pageNumber = 1;
+        int maxPlayersPerPage = 10;
 
         if (args.length > 0 && StringUtil.isNumber(args[0])) {
             pageNumber = Integer.parseInt(args[0]);
         }
 
-        Player session = (Player) entity;
-
         List<Player> players = PlayerManager.getInstance().getPlayers();
         LinkedHashMap<Integer, List<Player>> paginatedPlayers = StringUtil.paginate(players, maxPlayersPerPage);
 
-        StringBuilder sb = new StringBuilder()
-                .append("Users online: ").append(players.size()).append("\n");
+        if (!paginatedPlayers.containsKey(pageNumber - 1)) {
+            pageNumber = 1;
+        }
 
-        if (paginatedPlayers.containsKey(pageNumber)) {
-            List<Player> playerList = paginatedPlayers.get(pageNumber);
+        Player session = (Player) entity;
+
+        StringBuilder sb = new StringBuilder()
+                .append("Users online: ").append(players.size()).append("<br>");
+
+        if (paginatedPlayers.containsKey(pageNumber - 1)) {
+            List<Player> playerList = paginatedPlayers.get(pageNumber - 1);
 
             for (Player player : playerList) {
                 sb.append("\n - ");
                 sb.append(player.getDetails().getName());
             }
         }
-        
-        if (paginatedPlayers.size() > 1) {
-            sb.append("\n").append("\nPage numbers: 0 - ").append(pageNumber);
-        }
 
+            sb.append("<br>").append("<br>Page ").append(pageNumber).append(" out of ").append(paginatedPlayers.size());
         session.send(new ALERT(sb.toString()));
     }
 
