@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.StringUtil;
 
 public class SETSTUFFDATA implements MessageEvent {
     @Override
@@ -39,12 +40,14 @@ public class SETSTUFFDATA implements MessageEvent {
                 || item.hasBehaviour(ItemBehaviour.DICE)
                 || item.hasBehaviour(ItemBehaviour.PRIZE_TROPHY)
                 || item.hasBehaviour(ItemBehaviour.POST_IT)
+                || item.hasBehaviour(ItemBehaviour.ROLLER)
                 || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)
                 || item.hasBehaviour(ItemBehaviour.SOUND_MACHINE_SAMPLE_SET)) {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 
-        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) && !room.hasRights(player.getEntityId())) {
+        if (item.hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) &&
+                !room.hasRights(player.getEntityId())) {
             return;
         }
 
@@ -78,33 +81,37 @@ public class SETSTUFFDATA implements MessageEvent {
 
                             // Can't close gate if there's a user on the tile
                             return;
-                            //entity.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
                         }
                     }
                 }
             }
         } else {
-            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE) && (itemData.equals("TRUE") || itemData.equals("FALSE") || itemData.equals("I") || itemData.equals("H"))) {
+            if (item.hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE) &&
+                    (itemData.equals("TRUE") || itemData.equals("FALSE") || itemData.equals("I") || itemData.equals("H"))) {
                 newData = itemData;
             }
 
-            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_ON_OFF) && (itemData.equals("2") || itemData.equals("1") || itemData.equals("0"))) {
+            if (item.hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_ON_OFF) &&
+                    (itemData.equals("2") || itemData.equals("1") || itemData.equals("0"))) {
                 newData = itemData;
             }
 
-            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_ON_OFF) && (itemData.equals("ON") || itemData.equals("OFF"))) {
+            if (item.hasBehaviour(ItemBehaviour.CUSTOM_DATA_ON_OFF) &&
+                    (itemData.equals("ON") || itemData.equals("OFF"))) {
                 newData = itemData;
             }
 
-            if (item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_STATE)) {
-                if (!itemData.equals("x")) {
-                    int stateId = Integer.parseInt(itemData);
-
-                    if (stateId >= 0 && stateId <= 99) {
-                        newData = itemData;
-                    }
-                } else {
+            if (item.hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_STATE)) {
+                if (itemData.equals("x")) {
                     newData = itemData;
+                } else {
+                    if (StringUtil.isNumber(itemData)) {
+                        int stateId = Integer.parseInt(itemData);
+
+                        if (stateId >= 0 && stateId <= 99) {
+                            newData = itemData;
+                        }
+                    }
                 }
             }
         }
