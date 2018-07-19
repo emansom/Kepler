@@ -34,32 +34,25 @@ public class PickallCommand extends Command {
         if (!player.getRoomUser().getRoom().isOwner(player.getEntityId())) {
             return;
         }
-
-        List<Item> itemsToAdd = new ArrayList<>();
-        List<Item> itemsToUpdate = new ArrayList<>();
+        
+        List<Item> itemsToPickup = new ArrayList<>();
 
         for (Item item : player.getRoomUser().getRoom().getItems()) {
-            if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
-                continue; // Cannot pick up public room furniture.
+            if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
+                continue; // The client does not allow picking up post-it's, thus neither will the server
             }
 
-            itemsToUpdate.add(item);
+            itemsToPickup.add(item);
         }
 
-        for (Item item : itemsToUpdate) {
-            if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
-                continue;
-            }
-
+        for (Item item : itemsToPickup) {
             item.setOwnerId(player.getEntityId());
 
             player.getRoomUser().getRoom().getMapping().removeItem(item);
             player.getInventory().getItems().add(item);
-
-            itemsToAdd.add(item);
         }
 
-        ItemDao.updateItems(itemsToAdd);
+        ItemDao.updateItems(itemsToPickup);
 
         player.getInventory().getView("last");
         player.send(new ALERT("All furniture items have been picked up"));
