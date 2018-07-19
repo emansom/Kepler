@@ -1,15 +1,18 @@
 package org.alexdev.kepler.game.commands;
 
+import org.alexdev.kepler.game.commands.clientside.ChooserCommand;
+import org.alexdev.kepler.game.commands.clientside.EventsCommand;
+import org.alexdev.kepler.game.commands.clientside.FurniCommand;
 import org.alexdev.kepler.game.commands.registered.*;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 public class CommandManager {
@@ -19,7 +22,7 @@ public class CommandManager {
     private static CommandManager instance;
 
     public CommandManager() {
-        this.commands = new HashMap<>();
+        this.commands = new LinkedHashMap<>();
         this.commands.put(new String[] { "about", "info" }, new AboutCommand());
         this.commands.put(new String[] { "help", "commands" }, new HelpCommand());
         this.commands.put(new String[] { "givedrink"}, new GiveDrinkCommand());
@@ -34,6 +37,11 @@ public class CommandManager {
         this.commands.put(new String[] { "reloadsettings", "refreshsettings" }, new RefreshSettingsCommand());
         this.commands.put(new String[] { "reloadtexts", "refreshtexts" }, new RefreshTextsCommand());
         this.commands.put(new String[] { "packet" }, new PacketTestCommand());
+
+        // Add client-side commands to list
+        this.commands.put(new String[] { "chooser" }, new ChooserCommand());
+        this.commands.put(new String[] { "furni" }, new FurniCommand());
+        this.commands.put(new String[] { "events" }, new EventsCommand());
 
         log.info("Loaded {} commands", commands.size());
     }
@@ -136,8 +144,14 @@ public class CommandManager {
      *
      * @return the commands
      */
-    public Map<String[], Command> getCommands() {
-        return commands;
+    public List<Pair<String[], Command>> getCommands() {
+        List<Pair<String[], Command>> commandList = new ArrayList<>();
+
+        for (var set : this.commands.entrySet()) {
+            commandList.add(Pair.of(set.getKey(), set.getValue()));
+        }
+
+        return commandList;
     }
 
     /**
