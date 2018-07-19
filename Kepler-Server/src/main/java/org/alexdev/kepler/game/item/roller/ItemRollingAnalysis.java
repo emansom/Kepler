@@ -143,8 +143,6 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
         previousTile.setDisableWalking(true);
         nextTile.setDisableWalking(true);
 
-        System.out.println("update tiles...");
-
         room.send(new SLIDE_OBJECT(item, nextPosition, roller.getId(), nextPosition.getZ()));
 
         item.getPosition().setX(nextPosition.getX());
