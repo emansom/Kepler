@@ -72,6 +72,7 @@ public class RoomMapping {
             tile.getItems().add(item);
 
             if (tile.getTileHeight() < item.getTotalHeight()) {
+                item.setItemBelow(tile.getHighestItem());
                 tile.setTileHeight(item.getTotalHeight());
                 tile.setHighestItem(item);
 
@@ -93,46 +94,6 @@ public class RoomMapping {
 
                     affectedTile.setTileHeight(item.getTotalHeight());
                     affectedTile.setHighestItem(item);
-                }
-            }
-        }
-
-        for (Item item : items) {
-            if (!item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
-
-                RoomTile tile = item.getTile();
-
-                if (tile == null) {
-                    continue;
-                }
-
-                item.setItemAbove(tile.getItemAbove(item));
-                item.setItemBelow(tile.getItemBelow(item));
-
-                if (item.getItemAbove() != null) {
-                    System.out.println("Item above: " + item.getItemAbove().getDefinition().getSprite());
-                }
-
-                if (item.getItemBelow() != null) {
-                    System.out.println("Item below: " + item.getItemBelow().getDefinition().getSprite());
-                }
-
-                System.out.println("Item: " + item.getDefinition().getSprite());
-                System.out.println("--------");
-
-                if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
-                    PoolHandler.setupRedirections(this.room, item);
-                }
-
-                // Method to set only one jukebox per room
-                if (this.room.getItemManager().getSoundMachine() == null) {
-                    if (item.hasBehaviour(ItemBehaviour.JUKEBOX) || item.hasBehaviour(ItemBehaviour.SOUND_MACHINE)) {
-                        this.room.getItemManager().setSoundMachine(item);
-                    }
-                }
-            } else {
-                if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
-                    this.room.getItemManager().setMoodlight(item);
                 }
             }
         }
