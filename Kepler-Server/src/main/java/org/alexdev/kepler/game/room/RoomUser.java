@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -95,13 +96,17 @@ public class RoomUser {
         }
     }
 
+    public void walkTo(int X, int Y) {
+        this.walkTo(X, Y, PathfinderSettings.VALID_GOAL_REQUIRED);
+    }
+
     /**
      * Walk to specified position.
      *
      * @param X the x
      * @param Y the y
      */
-    public void walkTo(int X, int Y) {
+    public void walkTo(int X, int Y, PathfinderSettings... args) {
         if (this.room == null) {
             return;
         }
@@ -130,7 +135,7 @@ public class RoomUser {
         this.goal = new Position(X, Y);
         //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
-        LinkedList<Position> path = Pathfinder.makePath(this.entity);
+        LinkedList<Position> path = Pathfinder.makePath(this.entity, args);
 
         if (path.size() > 0) {
             this.path = path;
