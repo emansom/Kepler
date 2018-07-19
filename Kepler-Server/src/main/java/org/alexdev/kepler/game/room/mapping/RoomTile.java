@@ -83,17 +83,21 @@ public class RoomTile {
             return false;
         }
 
+        if (entity != null) {
+            if (tile.getEntities().size() > 0) {
+                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
+            }
+        }
+
         if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
+            if (tile.getHighestItem().isGateOpen()) {
+                return true;
+            }
+
             if (entity != null) {
                 return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
             } else {
                 return false;
-            }
-        }
-
-        if (entity != null) {
-            if (tile.getEntities().size() > 0) {
-                return tile.containsEntity(entity) || (tile.getHighestItem() != null && tile.getHighestItem().isGateOpen()); // Allow walk if you exist already in the tile
             }
         }
 
