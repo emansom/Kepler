@@ -77,7 +77,6 @@ public class RollerTask implements Runnable {
         }
 
         if (itemsRolling.size() > 0) {
-            this.room.getMapping().regenerateCollisionMap();
             ItemDao.updateItems(itemsRolling.keySet());
 
             GameScheduler.getInstance().getSchedulerService().schedule(

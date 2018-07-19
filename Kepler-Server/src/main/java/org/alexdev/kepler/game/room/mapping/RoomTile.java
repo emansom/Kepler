@@ -6,7 +6,6 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -15,6 +14,7 @@ public class RoomTile {
     private Position position;
     private List<Entity> entities;
     private List<Item> items;
+    private boolean disableWalking;
 
     private double tileHeight;
     private Item highestItem;
@@ -41,6 +41,10 @@ public class RoomTile {
         RoomTile tile = room.getMapping().getTile(position);
 
         if (tile == null) {
+            return false;
+        }
+
+        if (tile.hasDisabledWalking()) {
             return false;
         }
 
@@ -214,5 +218,13 @@ public class RoomTile {
      */
     public List<Item> getItems() {
         return items;
+    }
+
+    public boolean hasDisabledWalking() {
+        return disableWalking;
+    }
+
+    public void setDisableWalking(boolean disableWalking) {
+        this.disableWalking = disableWalking;
     }
 }
