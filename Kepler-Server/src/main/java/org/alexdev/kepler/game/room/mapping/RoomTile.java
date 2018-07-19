@@ -222,6 +222,25 @@ public class RoomTile {
     }
 
     /**
+     * Set the item below the current item for this tile.
+     *
+     * @return the item below
+     */
+    public Item getItemBelow(Item tileItem) {
+        int index = this.items.indexOf(tileItem);
+
+        if (index > -1) {
+            int aboveIndex = index - 1;
+
+            if (this.items.size() >= aboveIndex) {
+                return this.items.get(aboveIndex);
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get list of entities on this tile.
      *
      * @return the list of entities
