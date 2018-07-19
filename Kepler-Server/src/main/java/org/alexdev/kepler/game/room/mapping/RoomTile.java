@@ -33,45 +33,6 @@ public class RoomTile {
      * @param position the position of the tile
      * @return true, if successful
      */
-    public static boolean isRollerValidTile(Room room, Entity entity, Position position) {
-        if (room == null) {
-            return false;
-        }
-
-        RoomTile tile = room.getMapping().getTile(position);
-
-        if (tile == null) {
-            return false;
-        }
-
-        if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
-            if (entity != null) {
-                if (tile.getHighestItem().getRollingData() != null) {
-                    return false;
-                }
-
-                return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
-            } else {
-                return false;
-            }
-        }
-
-        if (entity != null) {
-            if (tile.getEntities().size() > 0) {
-                return tile.containsEntity(entity); // Allow walk if you exist already in the tile
-            }
-        }
-
-        return room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.OPEN;
-    }
-
-    /**
-     * Gets if the tile was valid.
-     *
-     * @param entity the entity checking
-     * @param position the position of the tile
-     * @return true, if successful
-     */
     public static boolean isValidTile(Room room, Entity entity, Position position) {
         if (room == null) {
             return false;
@@ -90,15 +51,12 @@ public class RoomTile {
         }
 
         if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
-            if (tile.getHighestItem().isGateOpen()) {
-                return true;
-            }
-
             if (entity != null) {
                 return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
-            } else {
-                return false;
             }
+
+            return false;
+
         }
 
         return room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.OPEN;
