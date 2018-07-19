@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
@@ -52,7 +53,8 @@ public class SETSTUFFDATA implements MessageEvent {
             if (!item.getTile().touches(player.getRoomUser().getTile())) {
                 player.getRoomUser().walkTo(
                         item.getPosition().getSquareInFront().getX(),
-                        item.getPosition().getSquareInFront().getY()
+                        item.getPosition().getSquareInFront().getY(),
+                        PathfinderSettings.VALID_GOAL_NOT_REQUIRED
                 );
                 return;
             }
