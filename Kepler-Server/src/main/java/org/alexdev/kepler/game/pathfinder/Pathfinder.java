@@ -156,7 +156,7 @@ public class Pathfinder {
      * @param entity the entity
      * @return the linked list
      */
-    public static LinkedList<Position> makePath(Entity entity, PathfinderSettings[] settings) {
+    public static LinkedList<Position> makePath(Entity entity, List<PathfinderSettings> settings) {
         int X = entity.getRoomUser().getGoal().getX();
         int Y = entity.getRoomUser().getGoal().getY();
         return makePath(entity, X, Y, settings);
@@ -170,13 +170,13 @@ public class Pathfinder {
      * @param y the y coord to move from
      * @return the linked list
      */
-    private static LinkedList<Position> makePath(Entity entity, int x, int y, PathfinderSettings[] settings) {//List<PathfinderSettings> settings) {
+    private static LinkedList<Position> makePath(Entity entity, int x, int y, List<PathfinderSettings> settings) {//List<PathfinderSettings> settings) {
         if (!RoomTile.isValidTile(entity.getRoomUser().getRoom(), entity, new Position(x, y))) {
             return new LinkedList<>();
         }
 
         LinkedList<Position> squares = new LinkedList<>();
-        PathfinderNode nodes = makePathReversed(entity, x, y, Arrays.asList(settings));
+        PathfinderNode nodes = makePathReversed(entity, x, y, settings);
 
         if (nodes != null) {
             while (nodes.getNextNode() != null) {

@@ -24,11 +24,9 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.mariadb.jdbc.internal.com.send.parameters.ParameterHolder;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -133,9 +131,17 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
-        //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
-        LinkedList<Position> path = Pathfinder.makePath(this.entity, args);
+        List<PathfinderSettings> settings = Arrays.asList(args);
+
+        if (settings.contains(PathfinderSettings.VALID_GOAL_REQUIRED)) {
+            if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
+                //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
+                return;
+            }
+        }
+
+        LinkedList<Position> path = Pathfinder.makePath(this.entity, settings);
 
         if (path.size() > 0) {
             this.path = path;
