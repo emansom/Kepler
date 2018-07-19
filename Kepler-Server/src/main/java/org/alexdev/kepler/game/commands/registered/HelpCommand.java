@@ -37,8 +37,8 @@ public class HelpCommand extends Command {
         }
 
         // Add client-side commands to list
-        about.append(":chooser - List users in current room (HC only)\r\n");
-        about.append(":furni - List furniture in current room (HC only)\r\n");
+        about.append(":chooser - List users in current room (club membership required)\r\n");
+        about.append(":furni - List furniture in current room (club membership required)\r\n");
         about.append(":events - Show current events organised by other users\r\n");
 
         if (entity instanceof Player) {
