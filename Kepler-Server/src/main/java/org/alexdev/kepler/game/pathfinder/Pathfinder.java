@@ -1,7 +1,9 @@
 package org.alexdev.kepler.game.pathfinder;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
@@ -155,10 +157,10 @@ public class Pathfinder {
      * @param entity the entity
      * @return the linked list
      */
-    public static LinkedList<Position> makePath(Entity entity) {
+    public static LinkedList<Position> makePath(Entity entity, PathfinderSettings[] settings) {
         int X = entity.getRoomUser().getGoal().getX();
         int Y = entity.getRoomUser().getGoal().getY();
-        return makePath(entity, X, Y);
+        return makePath(entity, X, Y, settings);
     }
 
     /**
@@ -169,13 +171,13 @@ public class Pathfinder {
      * @param y the y coord to move from
      * @return the linked list
      */
-    private static LinkedList<Position> makePath(Entity entity, int x, int y) {
+    private static LinkedList<Position> makePath(Entity entity, int x, int y, PathfinderSettings[] settings) {//List<PathfinderSettings> settings) {
         if (!RoomTile.isValidTile(entity.getRoomUser().getRoom(), entity, new Position(x, y))) {
             return new LinkedList<>();
         }
 
         LinkedList<Position> squares = new LinkedList<>();
-        PathfinderNode nodes = makePathReversed(entity, x, y);
+        PathfinderNode nodes = makePathReversed(entity, x, y, Arrays.asList(settings));
 
         if (nodes != null) {
             while (nodes.getNextNode() != null) {
@@ -195,11 +197,11 @@ public class Pathfinder {
      * @param entity the entity
      * @return the pathfinder node
      */
-    private static PathfinderNode makePathReversed(Entity entity, int X, int Y) {
+    private static PathfinderNode makePathReversed(Entity entity, int X, int Y, List<PathfinderSettings> settings) {
         LinkedList<PathfinderNode> openList = new LinkedList<>();
 
         PathfinderNode[][] map = new PathfinderNode[entity.getRoomUser().getRoom().getModel().getMapSizeX()][entity.getRoomUser().getRoom().getModel().getMapSizeY()];
-        PathfinderNode node;
+        PathfinderNode node = null;
         Position tmp;
 
         int cost;
@@ -261,6 +263,10 @@ public class Pathfinder {
                     }
                 }
             }
+        }
+
+        if (settings.contains(PathfinderSettings.VALID_GOAL_NOT_REQUIRED)) {
+            return node; // Will return the closest square possible to the item.
         }
 
         return null;
