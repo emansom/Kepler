@@ -227,28 +227,54 @@ public class RoomMapping {
         }
 
         if (!isRotation) {
-            Item highestItem = tile.getHighestItem();
-            item.getPosition().setZ(tile.getTileHeight());
+            Item roller = null, topRollingItem = null;
+            item.getPosition().setZ(tile.getWalkingHeight());
 
-            if (tile.getHighestItem() != null && highestItem.getRollingData() != null) {
-                Item roller = highestItem.getRollingData().getRoller();
+            for (Item rollingItem : tile.getItems()) {
+                if (rollingItem.getRollingData() == null) {
+                    continue;
+                }
 
-                if (highestItem.getItemBelow() != null && highestItem.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
-                    // If the difference between the roller, and the next item up is more than 0.5, then set the item below the floating item
-                    if (Math.abs(highestItem.getPosition().getZ() - roller.getPosition().getZ()) >= 0.5) {
-                        item.getPosition().setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
+                if (rollingItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
+                if (rollingItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                    continue;
+                }
+
+                /*Item itemBelow = rollingItem.getItemBelow();
+
+                if (itemBelow != null) {
+                    if (itemBelow.getId() == item.getId()) {
+                        itemBelow = item.getItemBelow();
                     }
                 }
 
-                if (!highestItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
-                    item.getPosition().setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
+                // If the item is rolling, and the item below is the roller it's rolling on.
+                if (itemBelow != null
+                        && itemBelow.hasBehaviour(ItemBehaviour.ROLLER)
+                        && rollingItem.getItemBelow().getId() == rollingItem.getRollingData().getRoller().getId()) {
 
-                    for (Item tileItem : tile.getItems()) {
-                        if (tileItem.getPosition().getZ() >= item.getPosition().getZ()) {
-                            tileItem.getRollingData().setHeightUpdate(item.getDefinition().getTopHeight());
-                        }
+                    if (rollingItem.getPosition().getZ() - rollingItem.getItemBelow().getPosition().getZ() >= 0.5) {
+                        System.out.println("test...");
+                        continue;
                     }
+                }*/
+
+                if (rollingItem.getRollingData().getHeightUpdate() > 0) {
+                    continue;
                 }
+
+                if (rollingItem.getId() == tile.getHighestItem().getId()) {
+                    roller = rollingItem.getRollingData().getRoller();
+                    rollingItem.getRollingData().setHeightUpdate(item.getDefinition().getTopHeight());
+                    topRollingItem = rollingItem;
+                }
+            }
+
+            if (roller != null) {
+                item.getPosition().setZ(topRollingItem.getPosition().getZ());// + roller.getDefinition().getTopHeight());
             }
         }
 
