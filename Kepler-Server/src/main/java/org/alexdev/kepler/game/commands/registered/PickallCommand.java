@@ -38,6 +38,10 @@ public class PickallCommand extends Command {
         List<Item> itemsToPickup = new ArrayList<>();
 
         for (Item item : player.getRoomUser().getRoom().getItems()) {
+            if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
+                continue; // The client does not allow picking up public room furniture, thus neither will the server
+            }
+
             if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
                 continue; // The client does not allow picking up post-it's, thus neither will the server
             }
