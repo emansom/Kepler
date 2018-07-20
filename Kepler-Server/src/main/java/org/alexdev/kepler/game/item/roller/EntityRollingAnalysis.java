@@ -17,17 +17,17 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null; // Don't roll user if they're walking.
         }
 
-        if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
-            return null; // Don't roll users who aren't on this tile.
-        }
-
         if (entity.getRoomUser().getPosition().getZ() < roller.getPosition().getZ()) {
             return null; // Don't roll user if they're below the roller
         }
 
+        if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
+            return null; // Don't roll users who aren't on this tile.
+        }
+
         Position front = roller.getPosition().getSquareInFront();
 
-        if (!Pathfinder.isValidStep(room, entity, entity.getRoomUser().getPosition(), front, true)) {
+        if (!RoomTile.isValidTile(room, entity, front)) {
             return null;
         }
 

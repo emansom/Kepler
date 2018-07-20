@@ -42,16 +42,6 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
                     continue;
                 }
 
-                if (entity.getRoomUser().isWalking()) {
-
-                    // Don't roll if the users goal is the same as the front tile
-                    if (entity.getRoomUser().getGoal().equals(frontTile.getPosition())) {
-                        return null;
-                    }
-
-                    continue;
-                }
-
                 return null;
             }
         }
