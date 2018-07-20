@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.navigator;
 
 import org.alexdev.kepler.dao.mysql.NavigatorDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.Player;
@@ -12,6 +13,7 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class NAVIGATE implements MessageEvent {
@@ -32,6 +34,8 @@ public class NAVIGATE implements MessageEvent {
         }
 
         List<NavigatorCategory> subCategories = NavigatorManager.getInstance().getCategoriesByParentId(category.getId());
+        subCategories.sort(Comparator.comparingDouble(NavigatorCategory::getCurrentVisitors).reversed());
+
         List<Room> rooms = new ArrayList<>();
 
         int categoryCurrentVisitors = category.getCurrentVisitors();
