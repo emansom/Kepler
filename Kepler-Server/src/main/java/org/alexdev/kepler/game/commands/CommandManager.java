@@ -37,6 +37,7 @@ public class CommandManager {
         this.commands.put(new String[] { "reloadsettings", "refreshsettings" }, new RefreshSettingsCommand());
         this.commands.put(new String[] { "reloadtexts", "refreshtexts" }, new RefreshTextsCommand());
         this.commands.put(new String[] { "packet" }, new PacketTestCommand());
+        this.commands.put(new String[] { "idle", "afk" }, new AfkCommand());
 
         // Add client-side commands to list
         this.commands.put(new String[] { "chooser" }, new ChooserCommand());
