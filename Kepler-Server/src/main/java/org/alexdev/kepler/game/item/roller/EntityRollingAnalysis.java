@@ -65,6 +65,12 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                         continue;
                     }
 
+                    // This is because the ItemRollingAnalysis has setHighestItem in nextTile in doRoll which blocks this
+                    if (entity.getRoomUser().getCurrentItem() != null
+                            && entity.getRoomUser().getCurrentItem().getId() == frontItem.getId()) {
+                        continue;
+                    }
+
                     if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                         Position frontPosition = frontRoller.getPosition().getSquareInFront();
 

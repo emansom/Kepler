@@ -30,7 +30,5 @@ public class ItemRollingTask implements Runnable {
 
             item.setRollingData(null);
         }
-
-        this.room.getMapping().regenerateCollisionMap();
     }
 }
