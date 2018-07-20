@@ -70,6 +70,11 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         }
     }
 
+    @Override
+    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
+        ctx.flush();
+    }
+
 //    @Override
 //    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 //        try {
