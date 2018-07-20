@@ -69,7 +69,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE owner_id > 0 ORDER BY RAND() LIMIT ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms WHERE owner_id > 0 AND accesstype = 0 ORDER BY RAND() LIMIT ?", sqlConnection);
             preparedStatement.setInt(1, limit);
             resultSet = preparedStatement.executeQuery();
 
