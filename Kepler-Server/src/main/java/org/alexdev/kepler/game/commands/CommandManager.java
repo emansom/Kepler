@@ -23,8 +23,8 @@ public class CommandManager {
 
     public CommandManager() {
         this.commands = new LinkedHashMap<>();
-        this.commands.put(new String[] { "about", "info" }, new AboutCommand());
         this.commands.put(new String[] { "help", "commands" }, new HelpCommand());
+        this.commands.put(new String[] { "about", "info" }, new AboutCommand());
         this.commands.put(new String[] { "givedrink"}, new GiveDrinkCommand());
         this.commands.put(new String[] { "sit" }, new SitCommand());
         this.commands.put(new String[] { "uptime", "status" }, new UptimeCommand());
