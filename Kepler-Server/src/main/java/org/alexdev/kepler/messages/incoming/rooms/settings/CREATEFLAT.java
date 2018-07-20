@@ -4,7 +4,9 @@ import org.alexdev.kepler.dao.mysql.NavigatorDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
+import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.settings.GOTO_FLAT;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -22,6 +24,11 @@ public class CREATEFLAT implements MessageEvent {
         String roomModel = data[3];
         String roomAccess = data[4];
         boolean roomShowName = Integer.parseInt(data[5]) == 1;
+
+        if (roomName.replace(" ", "").isEmpty()) {
+            player.send(new ALERT(TextsManager.getInstance().getValue("roomatic_givename")));
+            return;
+        }
 
         if (!floorSetting.equals("first floor")) {
             return;
