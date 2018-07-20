@@ -95,6 +95,25 @@ public class RoomMapping {
                     affectedTile.setTileHeight(item.getTotalHeight());
                     affectedTile.setHighestItem(item);
                 }
+
+                if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
+                    PoolHandler.setupRedirections(this.room, item);
+                }
+
+                // Method to set only one jukebox per room
+                if (this.room.getItemManager().getSoundMachine() == null) {
+                    if (item.hasBehaviour(ItemBehaviour.JUKEBOX) || item.hasBehaviour(ItemBehaviour.SOUND_MACHINE)) {
+                        this.room.getItemManager().setSoundMachine(item);
+                    }
+                }
+            }
+        }
+
+        // Method to set only one moodlight per room
+        for (Item item : this.room.getItemManager().getWallItems()) {
+            if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
+                this.room.getItemManager().setMoodlight(item);
+                break;
             }
         }
     }
