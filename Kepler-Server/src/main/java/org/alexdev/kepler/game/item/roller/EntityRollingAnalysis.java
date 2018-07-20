@@ -17,17 +17,17 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null; // Don't roll user if they're walking.
         }
 
-        if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
-            return null; // Don't roll users who aren't on this tile.
-        }
-
         if (entity.getRoomUser().getPosition().getZ() < roller.getPosition().getZ()) {
             return null; // Don't roll user if they're below the roller
         }
 
+        if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
+            return null; // Don't roll users who aren't on this tile.
+        }
+
         Position front = roller.getPosition().getSquareInFront();
 
-        if (!Pathfinder.isValidStep(room, entity, entity.getRoomUser().getPosition(), front, true)) {
+        if (!RoomTile.isValidTile(room, entity, front)) {
             return null;
         }
 
@@ -65,6 +65,12 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                         continue;
                     }
 
+                    // This is because the ItemRollingAnalysis has setHighestItem in nextTile in doRoll which blocks this
+                    if (entity.getRoomUser().getCurrentItem() != null
+                            && entity.getRoomUser().getCurrentItem().getId() == frontItem.getId()) {
+                        continue;
+                    }
+
                     if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
                         Position frontPosition = frontRoller.getPosition().getSquareInFront();
 
@@ -96,9 +102,11 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         RoomTile nextTile = room.getMapping().getTile(nextPosition);
 
         // Temporary fix if the user walks on an item and their height gets put up.
-        if (Math.abs(entity.getRoomUser().getPosition().getZ() - roller.getPosition().getZ()) >= 0.1) {
-            if (nextTile.getHighestItem() != null && nextTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
-                nextPosition.setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
+        if (!entity.getRoomUser().isSittingOnGround()) {
+            if (Math.abs(entity.getRoomUser().getPosition().getZ() - roller.getPosition().getZ()) >= 0.1) {
+                if (nextTile.getHighestItem() != null && nextTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
+                    nextPosition.setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
+                }
             }
         }
 

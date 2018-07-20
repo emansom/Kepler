@@ -51,8 +51,13 @@ public class SETSTUFFDATA implements MessageEvent {
             return;
         }
 
+        if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            if (!item.getTile().touches(player.getRoomUser().getTile())) {
+                return;
+            }
+        }
 
-        if (item.hasBehaviour(ItemBehaviour.REQUIRES_TOUCHING_FOR_INTERACTION) || item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+        if (item.hasBehaviour(ItemBehaviour.REQUIRES_TOUCHING_FOR_INTERACTION)) {
             if (!item.getTile().touches(player.getRoomUser().getTile())) {
                 player.getRoomUser().walkTo(
                         item.getPosition().getSquareInFront().getX(),
