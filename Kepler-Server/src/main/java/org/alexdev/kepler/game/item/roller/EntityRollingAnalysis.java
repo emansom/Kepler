@@ -96,9 +96,11 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         RoomTile nextTile = room.getMapping().getTile(nextPosition);
 
         // Temporary fix if the user walks on an item and their height gets put up.
-        if (Math.abs(entity.getRoomUser().getPosition().getZ() - roller.getPosition().getZ()) >= 0.1) {
-            if (nextTile.getHighestItem() != null && nextTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
-                nextPosition.setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
+        if (!entity.getRoomUser().isSittingOnGround()) {
+            if (Math.abs(entity.getRoomUser().getPosition().getZ() - roller.getPosition().getZ()) >= 0.1) {
+                if (nextTile.getHighestItem() != null && nextTile.getHighestItem().hasBehaviour(ItemBehaviour.ROLLER)) {
+                    nextPosition.setZ(roller.getPosition().getZ() + roller.getDefinition().getTopHeight());
+                }
             }
         }
 
