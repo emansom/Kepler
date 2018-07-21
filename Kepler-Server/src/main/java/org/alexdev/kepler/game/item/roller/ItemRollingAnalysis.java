@@ -37,7 +37,7 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
         }
 
         if (frontTile.getEntities().size() > 0) {
-            for (Entity e : frontTile.getEntities()) {
+            /*for (Entity e : frontTile.getEntities()) {
                 if (e.getRoomUser().getRoom() == null) {
                     continue;
                 }
@@ -45,7 +45,8 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
                 if (e.getRoomUser().getPosition().equals(front)) {
                     return null;
                 }
-            }
+            }*/
+            return null;
         }
 
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
