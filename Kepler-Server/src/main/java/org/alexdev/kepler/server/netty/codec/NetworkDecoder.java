@@ -3,6 +3,7 @@ package org.alexdev.kepler.server.netty.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.encoding.Base64Encoding;
 
@@ -31,7 +32,8 @@ public class NetworkDecoder extends ByteToMessageDecoder {
             }
 
             out.add(new NettyRequest(buffer.readBytes(length)));
-        } catch (Exception ignored) {
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("Error occurred: ", ex);
             buffer.readBytes(buffer.readableBytes());
         }
     }

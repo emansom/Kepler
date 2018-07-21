@@ -46,8 +46,8 @@ public class NetworkEncoder extends MessageToMessageEncoder<Object> {
             }
 
             out.add(buffer);
-        } catch (Exception ignored) {
-
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("Error occurred: ", ex);
         }
     }
 }
