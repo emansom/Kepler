@@ -12,6 +12,7 @@ import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,75 +29,79 @@ public class RollerTask implements Runnable {
 
     @Override
     public void run() {
-        Map<Item, Pair<Item, Position>> itemsRolling = new LinkedHashMap<>();
-        Map<Entity, Pair<Item, Position>> entitiesRolling = new LinkedHashMap<>();
+        try {
+            Map<Item, Pair<Item, Position>> itemsRolling = new LinkedHashMap<>();
+            Map<Entity, Pair<Item, Position>> entitiesRolling = new LinkedHashMap<>();
 
-        ItemRollingAnalysis itemRollingAnalysis = new ItemRollingAnalysis();
-        EntityRollingAnalysis entityRollingAnalysis = new EntityRollingAnalysis();
+            ItemRollingAnalysis itemRollingAnalysis = new ItemRollingAnalysis();
+            EntityRollingAnalysis entityRollingAnalysis = new EntityRollingAnalysis();
 
-        for (Item roller : this.room.getItems()) {
-            if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
-                continue;
-            }
-
-            // Process items on rollers
-            for (Item item : roller.getTile().getItems()) {
-                if (item.hasBehaviour(ItemBehaviour.ROLLER)) {
+            for (Item roller : this.room.getItems()) {
+                if (!roller.hasBehaviour(ItemBehaviour.ROLLER)) {
                     continue;
                 }
 
-                if (itemsRolling.containsKey(item)) {
-                    continue;
+                // Process items on rollers
+                for (Item item : roller.getTile().getItems()) {
+                    if (item.hasBehaviour(ItemBehaviour.ROLLER)) {
+                        continue;
+                    }
+
+                    if (itemsRolling.containsKey(item)) {
+                        continue;
+                    }
+
+                    Position nextPosition = itemRollingAnalysis.canRoll(item, roller, this.room);
+
+                    if (nextPosition != null) {
+                        itemsRolling.put(item, Pair.of(roller, nextPosition));
+                    }
                 }
 
-                Position nextPosition = itemRollingAnalysis.canRoll(item, roller, this.room);
+                // Process entities on rollers
+                for (Entity entity : roller.getTile().getEntities()) {
+                    if (entitiesRolling.containsKey(entity)) {
+                        continue;
+                    }
 
-                if (nextPosition != null) {
-                    itemsRolling.put(item, Pair.of(roller, nextPosition));
+                    Position nextPosition = entityRollingAnalysis.canRoll(entity, roller, this.room);
+
+                    if (nextPosition != null) {
+                        entitiesRolling.put(entity, Pair.of(roller, nextPosition));
+                    }
                 }
             }
 
-            // Process entities on rollers
-            for (Entity entity : roller.getTile().getEntities()) {
-                if (entitiesRolling.containsKey(entity)) {
-                    continue;
-                }
-
-                Position nextPosition = entityRollingAnalysis.canRoll(entity, roller, this.room);
-
-                if (nextPosition != null) {
-                    entitiesRolling.put(entity, Pair.of(roller, nextPosition));
-                }
+            // Perform roll animation for item
+            for (var kvp : itemsRolling.entrySet()) {
+                itemRollingAnalysis.doRoll(kvp.getKey(),
+                        kvp.getValue().getLeft(), this.room, kvp.getKey().getPosition(), kvp.getValue().getRight());
             }
-        }
 
-        // Perform roll animation for item
-        for (var kvp : itemsRolling.entrySet()) {
-            itemRollingAnalysis.doRoll(kvp.getKey(),
-                    kvp.getValue().getLeft(), this.room, kvp.getKey().getPosition(), kvp.getValue().getRight());
-        }
-
-        // Perform roll animation for entity
-        for (var kvp : entitiesRolling.entrySet()) {
-            entityRollingAnalysis.doRoll(kvp.getKey(),
-                    kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
-        }
+            // Perform roll animation for entity
+            for (var kvp : entitiesRolling.entrySet()) {
+                entityRollingAnalysis.doRoll(kvp.getKey(),
+                        kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
+            }
 
         /*if (!itemsRolling.isEmpty() || !entitiesRolling.isEmpty()) {
             this.room.flushQueue();
         }*/
 
 
-        this.room.getMapping().regenerateCollisionMap();
+            this.room.getMapping().regenerateCollisionMap();
 
-        if (itemsRolling.size() > 0) {
-            ItemDao.updateItems(itemsRolling.keySet());
+            if (itemsRolling.size() > 0) {
+                ItemDao.updateItems(itemsRolling.keySet());
 
-            GameScheduler.getInstance().getSchedulerService().schedule(
-                    new ItemRollingTask(itemsRolling.keySet(), room),
-                    1,
-                    TimeUnit.SECONDS
-            );
+                GameScheduler.getInstance().getSchedulerService().schedule(
+                        new ItemRollingTask(itemsRolling.keySet(), room),
+                        1,
+                        TimeUnit.SECONDS
+                );
+            }
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("RollerTask crashed: ", ex);
         }
     }
 }

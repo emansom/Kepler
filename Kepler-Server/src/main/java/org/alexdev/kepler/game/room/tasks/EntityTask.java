@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -23,26 +24,30 @@ public class EntityTask implements Runnable {
 
     @Override
     public void run() {
-        if (this.room.getEntities().isEmpty()) {
-            return;
-        }
+        try {
+            if (this.room.getEntities().isEmpty()) {
+                return;
+            }
 
-        List<Entity> entitiesToUpdate = new ArrayList<>();
+            List<Entity> entitiesToUpdate = new ArrayList<>();
 
-        for (Entity entity : this.room.getEntities()) {
-            if (entity != null && entity.getRoomUser().getRoom() != null && entity.getRoomUser().getRoom() == this.room) {
-                this.processEntity(entity);
-                RoomUser roomEntity = entity.getRoomUser();
+            for (Entity entity : this.room.getEntities()) {
+                if (entity != null && entity.getRoomUser().getRoom() != null && entity.getRoomUser().getRoom() == this.room) {
+                    this.processEntity(entity);
+                    RoomUser roomEntity = entity.getRoomUser();
 
-                if (roomEntity.isNeedsUpdate()) {
-                    roomEntity.setNeedsUpdate(false);
-                    entitiesToUpdate.add(entity);
+                    if (roomEntity.isNeedsUpdate()) {
+                        roomEntity.setNeedsUpdate(false);
+                        entitiesToUpdate.add(entity);
+                    }
                 }
             }
-        }
 
-        if (entitiesToUpdate.size() > 0) {
-            this.room.send(new USER_STATUSES(entitiesToUpdate));
+            if (entitiesToUpdate.size() > 0) {
+                this.room.send(new USER_STATUSES(entitiesToUpdate));
+            }
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("RollerTask crashed: ", ex);
         }
     }
 
