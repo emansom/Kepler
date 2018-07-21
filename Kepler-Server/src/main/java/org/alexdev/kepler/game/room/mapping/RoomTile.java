@@ -46,17 +46,11 @@ public class RoomTile {
             return false;
         }
 
-        if (tile.hasDisabledWalking()) {
-            return false;
+        if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
+            return entity != null && tile.containsEntity(entity);
         }
 
-        if (entity != null) {
-            if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
-                return tile.containsEntity(entity);
-            }
-        }
-
-        if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
+        if (!tile.hasWalkableFurni()) {
             if (entity != null) {
                 return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
             }
@@ -65,7 +59,7 @@ public class RoomTile {
 
         }
 
-        return room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.OPEN;
+        return true;
     }
 
     /**

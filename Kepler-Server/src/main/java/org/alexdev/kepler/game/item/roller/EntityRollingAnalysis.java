@@ -41,14 +41,15 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         }
 
         if (frontTile.getEntities().size() > 0) {
-            /*for (Entity e : frontTile.getEntities()) {
-                if (e.getRoomUser().isWalking()) {
+            for (Entity e : frontTile.getEntities()) {
+                if (e.getRoomUser().getRoom() == null) {
                     continue;
                 }
 
-                return null;
-            }*/
-            return null;
+                if (e.getRoomUser().getPosition().equals(front)) {
+                    return null;
+                }
+            }
         }
 
         double nextHeight = entity.getRoomUser().getPosition().getZ();
