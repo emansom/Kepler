@@ -126,6 +126,14 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
     
     @Override
     public void doRoll(Item item, Item roller, Room room, Position fromPosition, Position nextPosition) {
+        /*RoomTile roomTile;
+
+        roomTile = room.getMapping().getTile(nextPosition);
+        roomTile.setDisableWalking(true);
+
+        roomTile = room.getMapping().getTile(fromPosition);
+        roomTile.setDisableWalking(true);*/
+
         room.send(new SLIDE_OBJECT(item, nextPosition, roller.getId(), nextPosition.getZ()));
 
         item.getPosition().setX(nextPosition.getX());
