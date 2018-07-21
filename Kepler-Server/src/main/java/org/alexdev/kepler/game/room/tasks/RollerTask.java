@@ -82,9 +82,9 @@ public class RollerTask implements Runnable {
                     kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
         }
 
-        if (!itemsRolling.isEmpty() || !entitiesRolling.isEmpty()) {
+        /*if (!itemsRolling.isEmpty() || !entitiesRolling.isEmpty()) {
             this.room.flushQueue();
-        }
+        }*/
 
         if (itemsRolling.size() > 0) {
             ItemDao.updateItems(itemsRolling.keySet());

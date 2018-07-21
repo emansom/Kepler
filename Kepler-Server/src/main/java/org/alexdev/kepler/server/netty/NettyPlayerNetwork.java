@@ -27,12 +27,12 @@ public class NettyPlayerNetwork {
         this.channel.write(response);
     }
 
-    public void close() {
-        this.channel.close();
-    }
-
     public void flush() {
         this.channel.flush();
+    }
+
+    public void close() {
+        this.channel.close();
     }
 
     public int getConnectionId() {
