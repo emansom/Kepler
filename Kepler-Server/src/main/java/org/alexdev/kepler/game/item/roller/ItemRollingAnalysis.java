@@ -32,17 +32,23 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
             return null;
         }
 
+        if (!frontTile.hasWalkableFurni()) {
+            return null;
+        }
+
         if (frontTile.getEntities().size() > 0) {
-            for (Entity entity : frontTile.getEntities()) {
-                if (entity.getRoomUser().getRoom() == null) {
+            for (Entity e : frontTile.getEntities()) {
+                if (e.getRoomUser().getRoom() == null) {
                     continue;
                 }
 
-                if (!entity.getRoomUser().getPosition().equals(front)) {
+                if (e.getRoomUser().isWalking()) {
                     continue;
                 }
 
-                return null;
+                if (e.getRoomUser().getPosition().equals(front)) {
+                    return null;
+                }
             }
         }
 
@@ -123,15 +129,20 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
     }
     
     @Override
-    public void doRoll(Item item, Item roller, Room room, Position nextPosition) {
-        RoomTile nextTile = room.getMapping().getTile(nextPosition);
-        nextTile.setHighestItem(item);
+    public void doRoll(Item item, Item roller, Room room, Position fromPosition, Position nextPosition) {
+        /*RoomTile roomTile;
+
+        roomTile = room.getMapping().getTile(nextPosition);
+        roomTile.setDisableWalking(true);
+
+        roomTile = room.getMapping().getTile(fromPosition);
+        roomTile.setDisableWalking(true);*/
 
         room.send(new SLIDE_OBJECT(item, nextPosition, roller.getId(), nextPosition.getZ()));
 
         item.getPosition().setX(nextPosition.getX());
         item.getPosition().setY(nextPosition.getY());
         item.getPosition().setZ(nextPosition.getZ());
-        item.setRollingData(new RollingData(roller, nextPosition));
+        item.setRollingData(new RollingData(item, roller, fromPosition, nextPosition));
     }
 }

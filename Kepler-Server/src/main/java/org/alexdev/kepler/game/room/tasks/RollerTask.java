@@ -41,6 +41,10 @@ public class RollerTask implements Runnable {
 
             // Process items on rollers
             for (Item item : roller.getTile().getItems()) {
+                if (item.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
                 if (itemsRolling.containsKey(item)) {
                     continue;
                 }
@@ -68,13 +72,19 @@ public class RollerTask implements Runnable {
 
         // Perform roll animation for item
         for (var kvp : itemsRolling.entrySet()) {
-            itemRollingAnalysis.doRoll(kvp.getKey(), kvp.getValue().getLeft(), this.room, kvp.getValue().getRight());
+            itemRollingAnalysis.doRoll(kvp.getKey(),
+                    kvp.getValue().getLeft(), this.room, kvp.getKey().getPosition(), kvp.getValue().getRight());
         }
 
         // Perform roll animation for entity
         for (var kvp : entitiesRolling.entrySet()) {
-            entityRollingAnalysis.doRoll(kvp.getKey(), kvp.getValue().getLeft(), this.room, kvp.getValue().getRight());
+            entityRollingAnalysis.doRoll(kvp.getKey(),
+                    kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
         }
+
+        /*if (!itemsRolling.isEmpty() || !entitiesRolling.isEmpty()) {
+            this.room.flushQueue();
+        }*/
 
         if (itemsRolling.size() > 0) {
             ItemDao.updateItems(itemsRolling.keySet());

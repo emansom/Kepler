@@ -5,13 +5,21 @@ import org.alexdev.kepler.game.pathfinder.Position;
 
 public class RollingData {
     private Item roller;
+    private Item item;
+    private Position fromPosition;
     private Position nextPosition;
     private double heightUpdate;
 
-    public RollingData(Item roller, Position nextPosition) {
+    public RollingData(Item item, Item roller, Position fromPosition, Position nextPosition) {
+        this.item = item;
         this.roller = roller;
         this.heightUpdate = -1;
+        this.fromPosition = fromPosition;
         this.nextPosition = nextPosition;
+    }
+
+    public Item getItem() {
+        return item;
     }
 
     public Item getRoller() {
@@ -28,5 +36,9 @@ public class RollingData {
 
     public Position getNextPosition() {
         return nextPosition;
+    }
+
+    public Position getFromPosition() {
+        return fromPosition;
     }
 }

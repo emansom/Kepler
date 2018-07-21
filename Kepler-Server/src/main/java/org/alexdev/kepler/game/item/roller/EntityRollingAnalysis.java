@@ -25,13 +25,36 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null; // Don't roll users who aren't on this tile.
         }
 
-        Position front = roller.getPosition().getSquareInFront();
+        if (!entity.getRoomUser().getTile().hasWalkableFurni()) {
+            return null; // Don't roll user if they are stuck, let them be unstuck...
+        }
 
-        if (!RoomTile.isValidTile(room, entity, front)) {
+        Position front = roller.getPosition().getSquareInFront();
+        RoomTile frontTile = room.getMapping().getTile(front);
+
+        if (frontTile == null) {
             return null;
         }
 
-        RoomTile frontTile = room.getMapping().getTile(front);
+        if (!frontTile.hasWalkableFurni()) {
+            return null;
+        }
+
+        if (frontTile.getEntities().size() > 0) {
+            for (Entity e : frontTile.getEntities()) {
+                if (e.getRoomUser().getRoom() == null) {
+                    continue;
+                }
+
+                if (e.getRoomUser().isWalking()) {
+                    continue;
+                }
+
+                if (e.getRoomUser().getPosition().equals(front)) {
+                    return null;
+                }
+            }
+        }
 
         double nextHeight = entity.getRoomUser().getPosition().getZ();
         boolean subtractRollerHeight = true;
@@ -57,10 +80,6 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                 }
 
                 for (Item frontItem : frontTile.getItems()) {
-                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                        continue;
-                    }
-
                     if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
                         continue;
                     }
@@ -86,6 +105,10 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                         return null;
                     }
                 }
+            } else {
+                if (!RoomTile.isValidTile(room, entity, frontTile.getPosition())) {
+                    return null;
+                }
             }
         }
 
@@ -95,10 +118,9 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         return new Position(front.getX(), front.getY(), nextHeight);
     }
-
     @Override
-    public void doRoll(Entity entity, Item roller, Room room, Position nextPosition) {
-        RoomTile previousTile = room.getMapping().getTile(entity.getRoomUser().getPosition());
+    public void doRoll(Entity entity, Item roller, Room room, Position fromPosition, Position nextPosition) {
+        RoomTile previousTile = room.getMapping().getTile(fromPosition);
         RoomTile nextTile = room.getMapping().getTile(nextPosition);
 
         // Temporary fix if the user walks on an item and their height gets put up.

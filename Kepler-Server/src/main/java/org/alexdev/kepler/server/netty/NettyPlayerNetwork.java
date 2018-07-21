@@ -16,23 +16,23 @@ public class NettyPlayerNetwork {
     }
 
     public Channel getChannel() {
-        return channel;
-    }
-
-    public void close() {
-        channel.close();
+        return this.channel;
     }
 
     public void send(Object response) {
-        channel.writeAndFlush(response).syncUninterruptibly();
+        this.channel.writeAndFlush(response).syncUninterruptibly();
     }
 
     public void sendQueued(MessageComposer response) {
-        channel.write(response);
+        this.channel.write(response);
     }
 
     public void flush() {
-        channel.flush();
+        this.channel.flush();
+    }
+
+    public void close() {
+        this.channel.close();
     }
 
     public int getConnectionId() {

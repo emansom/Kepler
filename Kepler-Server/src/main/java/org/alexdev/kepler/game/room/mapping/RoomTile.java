@@ -6,13 +6,15 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RoomTile {
     private Room room;
     private Position position;
-    private List<Entity> entities;
+    private Set<Entity> entities;
     private List<Item> items;
     private boolean disableWalking;
 
@@ -22,7 +24,7 @@ public class RoomTile {
     public RoomTile(Room room, Position position) {
         this.room = room;
         this.position = position;
-        this.entities = new CopyOnWriteArrayList<>();
+        this.entities = new HashSet<>();
         this.items = new CopyOnWriteArrayList<>();
     }
 
@@ -48,13 +50,11 @@ public class RoomTile {
             return false;
         }
 
-        if (entity != null) {
-            if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
-                return tile.containsEntity(entity);
-            }
+        if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
+            return entity != null && tile.containsEntity(entity);
         }
 
-        if (tile.getHighestItem() != null && !tile.getHighestItem().isWalkable()) {
+        if (!tile.hasWalkableFurni()) {
             if (entity != null) {
                 return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
             }
@@ -63,7 +63,7 @@ public class RoomTile {
 
         }
 
-        return room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.OPEN;
+        return true;
     }
 
     /**
@@ -71,6 +71,14 @@ public class RoomTile {
      */
     public boolean touches(RoomTile targetTile) {
         return this.position.getDistanceSquared(targetTile.getPosition()) <= 2;
+    }
+
+    public boolean hasWalkableFurni() {
+        if (this.highestItem != null) {
+            return this.highestItem.isWalkable();
+        }
+
+        return true;
     }
 
     /**
@@ -207,7 +215,7 @@ public class RoomTile {
      *
      * @return the list of entities
      */
-    public List<Entity> getEntities() {
+    public Set<Entity> getEntities() {
         return this.entities;
     }
 

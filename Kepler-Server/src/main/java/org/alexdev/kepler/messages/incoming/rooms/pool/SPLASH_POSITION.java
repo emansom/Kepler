@@ -36,12 +36,8 @@ public class SPLASH_POSITION implements MessageEvent {
             return;
         }
 
-
-        String contents = reader.contents();
-        String[] data = contents.split(",");
-
-        Position destination =
-                new Position(Integer.parseInt(data[0]), Integer.parseInt(data[1]));
+        String contents = "24,19";
+        Position destination = new Position(24, 19);
 
         player.getRoomUser().setStatus(StatusType.SWIM, "");
         player.getRoomUser().warp(destination, true);
@@ -49,7 +45,7 @@ public class SPLASH_POSITION implements MessageEvent {
         room.send(new SHOWPROGRAM(new String[] { "BIGSPLASH", "POSITION", contents,}));
 
         player.getRoomUser().setWalkingAllowed(true);
-        player.getRoomUser().setDiving(true);
+        player.getRoomUser().setDiving(false);
         player.getRoomUser().walkTo(20, 19);
 
         currentItem.showProgram("open");
