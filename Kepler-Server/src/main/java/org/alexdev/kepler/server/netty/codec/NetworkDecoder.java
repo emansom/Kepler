@@ -12,29 +12,24 @@ import java.util.List;
 public class NetworkDecoder extends ByteToMessageDecoder {
 
     @Override
-    protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
-        try {
-            if (buffer.readableBytes() < 5) {
-                // If the incoming data is less than 5 bytes, it's junk.
-                return;
-            }
-
-            buffer.markReaderIndex();
-            int length = Base64Encoding.decode(new byte[]{buffer.readByte(), buffer.readByte(), buffer.readByte()});
-
-            if (buffer.readableBytes() < length) {
-                buffer.resetReaderIndex();
-                return;
-            }
-
-            if (length < 0) {
-                return;
-            }
-
-            out.add(new NettyRequest(buffer.readBytes(length)));
-        } catch (Exception ex) {
-            Log.getErrorLogger().error("Error occurred: ", ex);
-            buffer.readBytes(buffer.readableBytes());
+    protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) {
+        if (buffer.readableBytes() < 5) {
+            // If the incoming data is less than 5 bytes, it's junk.
+            return;
         }
+
+        buffer.markReaderIndex();
+        int length = Base64Encoding.decode(new byte[]{buffer.readByte(), buffer.readByte(), buffer.readByte()});
+
+        if (buffer.readableBytes() < length) {
+            buffer.resetReaderIndex();
+            return;
+        }
+
+        if (length < 0) {
+            return;
+        }
+
+        out.add(new NettyRequest(buffer.readBytes(length)));
     }
 }
