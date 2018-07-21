@@ -6,13 +6,15 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RoomTile {
     private Room room;
     private Position position;
-    private List<Entity> entities;
+    private Set<Entity> entities;
     private List<Item> items;
     private boolean disableWalking;
 
@@ -22,7 +24,7 @@ public class RoomTile {
     public RoomTile(Room room, Position position) {
         this.room = room;
         this.position = position;
-        this.entities = new CopyOnWriteArrayList<>();
+        this.entities = new HashSet<>();
         this.items = new CopyOnWriteArrayList<>();
     }
 
@@ -215,7 +217,7 @@ public class RoomTile {
      *
      * @return the list of entities
      */
-    public List<Entity> getEntities() {
+    public Set<Entity> getEntities() {
         return this.entities;
     }
 
