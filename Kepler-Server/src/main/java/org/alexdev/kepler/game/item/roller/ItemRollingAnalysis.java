@@ -42,6 +42,10 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
                     continue;
                 }
 
+                if (e.getRoomUser().isWalking()) {
+                    continue;
+                }
+
                 if (e.getRoomUser().getPosition().equals(front)) {
                     return null;
                 }

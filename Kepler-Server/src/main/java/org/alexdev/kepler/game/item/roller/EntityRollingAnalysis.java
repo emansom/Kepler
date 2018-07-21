@@ -46,6 +46,10 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                     continue;
                 }
 
+                if (e.getRoomUser().isWalking()) {
+                    continue;
+                }
+
                 if (e.getRoomUser().getPosition().equals(front)) {
                     return null;
                 }
