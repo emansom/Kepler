@@ -147,6 +147,8 @@ public class PoolHandler {
      */
     private static void warpSwim(Item item, Entity entity, Position warp, Position goal, boolean exit) {
         RoomUser roomUser = entity.getRoomUser();
+        roomUser.getTile().removeEntity(entity);
+
         Room room = entity.getRoomUser().getRoom();
 
         if (exit) {
