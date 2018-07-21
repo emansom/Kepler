@@ -252,6 +252,18 @@ public class Item {
             return false;
         }
 
+        boolean isRotation = (item.getPosition().getRotation() != rotation) && new Position(x, y).equals(item.getPosition());
+
+        if (isRotation) {
+            if (item.getRollingData() != null) {
+                return false; // Don't allow rotating items when they're rolling
+            }
+
+            if (item.getDefinition().getLength() <= 1 && item.getDefinition().getWidth() <= 1) {
+                return true;
+            }
+        }
+
         /*for (Item rollingItem : tile.getItems()) {
             if (rollingItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
                 continue;

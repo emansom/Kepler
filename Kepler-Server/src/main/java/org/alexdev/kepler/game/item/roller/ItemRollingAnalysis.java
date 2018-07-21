@@ -32,18 +32,19 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
             return null;
         }
 
-        if (frontTile.getEntities().size() > 0) {
-            for (Entity entity : frontTile.getEntities()) {
-                if (entity.getRoomUser().getRoom() == null) {
-                    continue;
-                }
+        if (!frontTile.hasWalkableFurni()) {
+            return null;
+        }
 
-                if (entity.getRoomUser().isWalking()) {
+        if (frontTile.getEntities().size() > 0) {
+            /*for (Entity e : frontTile.getEntities()) {
+                if (e.getRoomUser().isWalking()) {
                     continue;
                 }
 
                 return null;
-            }
+            }*/
+            return null;
         }
 
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
@@ -124,9 +125,6 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
     
     @Override
     public void doRoll(Item item, Item roller, Room room, Position nextPosition) {
-        RoomTile nextTile = room.getMapping().getTile(nextPosition);
-        nextTile.setHighestItem(item);
-
         room.send(new SLIDE_OBJECT(item, nextPosition, roller.getId(), nextPosition.getZ()));
 
         item.getPosition().setX(nextPosition.getX());

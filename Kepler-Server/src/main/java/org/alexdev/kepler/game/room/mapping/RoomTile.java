@@ -73,6 +73,14 @@ public class RoomTile {
         return this.position.getDistanceSquared(targetTile.getPosition()) <= 2;
     }
 
+    public boolean hasWalkableFurni() {
+        if (this.highestItem != null) {
+            return this.highestItem.isWalkable();
+        }
+
+        return true;
+    }
+
     /**
      * Sets the entity.
      *

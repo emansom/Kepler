@@ -26,12 +26,26 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         }
 
         Position front = roller.getPosition().getSquareInFront();
+        RoomTile frontTile = room.getMapping().getTile(front);
 
-        if (!RoomTile.isValidTile(room, entity, front)) {
+        if (frontTile == null) {
             return null;
         }
 
-        RoomTile frontTile = room.getMapping().getTile(front);
+        if (!frontTile.hasWalkableFurni()) {
+            return null;
+        }
+
+        if (frontTile.getEntities().size() > 0) {
+            /*for (Entity e : frontTile.getEntities()) {
+                if (e.getRoomUser().isWalking()) {
+                    continue;
+                }
+
+                return null;
+            }*/
+            return null;
+        }
 
         double nextHeight = entity.getRoomUser().getPosition().getZ();
         boolean subtractRollerHeight = true;
@@ -57,10 +71,6 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                 }
 
                 for (Item frontItem : frontTile.getItems()) {
-                    if (frontItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                        continue;
-                    }
-
                     if (frontItem.getPosition().getZ() < frontRoller.getPosition().getZ()) {
                         continue;
                     }
@@ -85,6 +95,10 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                     } else {
                         return null;
                     }
+                }
+            } else {
+                if (!RoomTile.isValidTile(room, entity, frontTile.getPosition())) {
+                    return null;
                 }
             }
         }
