@@ -140,7 +140,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms INNER JOIN users ON rooms.owner_id = users.id WHERE users.username LIKE ? OR rooms.name LIKE ? LIMIT 30", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms INNER JOIN users ON rooms.owner_id = users.id WHERE LOWER(users.username) LIKE ? OR (rooms.name) LIKE ? LIMIT 30", sqlConnection);
             preparedStatement.setString(1, "%" + searchQuery + "%");
             preparedStatement.setString(2, "%" + searchQuery + "%");
             resultSet = preparedStatement.executeQuery();
