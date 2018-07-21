@@ -25,6 +25,10 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null; // Don't roll users who aren't on this tile.
         }
 
+        if (!entity.getRoomUser().getTile().hasWalkableFurni()) {
+            return null; // Don't roll user if they are stuck, let them be unstuck...
+        }
+
         Position front = roller.getPosition().getSquareInFront();
         RoomTile frontTile = room.getMapping().getTile(front);
 
