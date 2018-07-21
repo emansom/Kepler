@@ -114,10 +114,9 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         return new Position(front.getX(), front.getY(), nextHeight);
     }
-
     @Override
-    public void doRoll(Entity entity, Item roller, Room room, Position nextPosition) {
-        RoomTile previousTile = room.getMapping().getTile(entity.getRoomUser().getPosition());
+    public void doRoll(Entity entity, Item roller, Room room, Position fromPosition, Position nextPosition) {
+        RoomTile previousTile = room.getMapping().getTile(fromPosition);
         RoomTile nextTile = room.getMapping().getTile(nextPosition);
 
         // Temporary fix if the user walks on an item and their height gets put up.

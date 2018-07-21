@@ -46,6 +46,10 @@ public class RoomTile {
             return false;
         }
 
+        if (tile.hasDisabledWalking()) {
+            return false;
+        }
+
         if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
             return entity != null && tile.containsEntity(entity);
         }

@@ -72,12 +72,14 @@ public class RollerTask implements Runnable {
 
         // Perform roll animation for item
         for (var kvp : itemsRolling.entrySet()) {
-            itemRollingAnalysis.doRoll(kvp.getKey(), kvp.getValue().getLeft(), this.room, kvp.getValue().getRight());
+            itemRollingAnalysis.doRoll(kvp.getKey(),
+                    kvp.getValue().getLeft(), this.room, kvp.getKey().getPosition(), kvp.getValue().getRight());
         }
 
         // Perform roll animation for entity
         for (var kvp : entitiesRolling.entrySet()) {
-            entityRollingAnalysis.doRoll(kvp.getKey(), kvp.getValue().getLeft(), this.room, kvp.getValue().getRight());
+            entityRollingAnalysis.doRoll(kvp.getKey(),
+                    kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
         }
 
         if (itemsRolling.size() > 0) {

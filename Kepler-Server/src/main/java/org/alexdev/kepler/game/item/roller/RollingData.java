@@ -6,12 +6,15 @@ import org.alexdev.kepler.game.pathfinder.Position;
 public class RollingData {
     private Item roller;
     private Item item;
+    private Position fromPosition;
     private Position nextPosition;
     private double heightUpdate;
 
-    public RollingData(Item item, Item roller, Position nextPosition) {
+    public RollingData(Item item, Item roller, Position fromPosition, Position nextPosition) {
+        this.item = item;
         this.roller = roller;
         this.heightUpdate = -1;
+        this.fromPosition = fromPosition;
         this.nextPosition = nextPosition;
     }
 
