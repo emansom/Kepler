@@ -60,11 +60,15 @@ public class EntityTask implements Runnable {
         if (roomUser.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
-
                 RoomTile previousTile = roomUser.getTile();
-                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
-
                 previousTile.removeEntity(entity);
+
+                if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition().copy())) {
+                    roomUser.getNextPosition().setX(roomUser.getPosition().getX());
+                    roomUser.getNextPosition().setY(roomUser.getPosition().getY());
+                }
+
+                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
                 nextTile.addEntity(entity);
 
                 roomUser.getPosition().setX(roomUser.getNextPosition().getX());
