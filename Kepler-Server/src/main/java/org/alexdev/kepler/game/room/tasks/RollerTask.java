@@ -41,6 +41,10 @@ public class RollerTask implements Runnable {
 
             // Process items on rollers
             for (Item item : roller.getTile().getItems()) {
+                if (item.hasBehaviour(ItemBehaviour.ROLLER)) {
+                    continue;
+                }
+
                 if (itemsRolling.containsKey(item)) {
                     continue;
                 }
