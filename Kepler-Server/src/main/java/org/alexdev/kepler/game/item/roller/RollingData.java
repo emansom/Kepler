@@ -37,4 +37,12 @@ public class RollingData {
     public Position getNextPosition() {
         return nextPosition;
     }
+
+    public Position getFromPosition() {
+        return fromPosition;
+    }
+
+    public void setFromPosition(Position fromPosition) {
+        this.fromPosition = fromPosition;
+    }
 }
