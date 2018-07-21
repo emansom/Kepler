@@ -37,14 +37,15 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
         }
 
         if (frontTile.getEntities().size() > 0) {
-            /*for (Entity e : frontTile.getEntities()) {
-                if (e.getRoomUser().isWalking()) {
+            for (Entity e : frontTile.getEntities()) {
+                if (e.getRoomUser().getRoom() == null) {
                     continue;
                 }
 
-                return null;
-            }*/
-            return null;
+                if (e.getRoomUser().getPosition().equals(front)) {
+                    return null;
+                }
+            }
         }
 
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
