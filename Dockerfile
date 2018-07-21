@@ -44,9 +44,9 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/server.ini Database mysql.password verysecret && \
     crudini --set /usr/src/kepler/server.ini Database mysql.database kepler && \
     crudini --set /usr/src/kepler/server.ini Logging log.connections true && \
-    crudini --set /usr/src/kepler/server.ini Logging log.sent.packets false && \
-    crudini --set /usr/src/kepler/server.ini Logging log.received.packets false && \
-    crudini --set /usr/src/kepler/server.ini Console debug false && \
+    crudini --set /usr/src/kepler/server.ini Logging log.sent.packets true && \
+    crudini --set /usr/src/kepler/server.ini Logging log.received.packets true && \
+    crudini --set /usr/src/kepler/server.ini Console debug true && \
     cat /usr/src/kepler/server.ini && \
     cat /usr/src/kepler/game.ini && \
     chown kepler:kepler /usr/src/kepler/server.ini && \
