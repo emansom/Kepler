@@ -467,7 +467,17 @@ public class RoomUser {
      * Update new height.
      */
     public void updateNewHeight(Position position) {
-        double height = this.room.getMapping().getTile(position).getWalkingHeight();
+        if (this.room == null) {
+            return;
+        }
+
+        RoomTile tile = this.room.getMapping().getTile(position);
+
+        if (tile == null) {
+            return;
+        }
+
+        double height = tile.getWalkingHeight();
         double oldHeight = this.position.getZ();
 
         if (height != oldHeight) {
