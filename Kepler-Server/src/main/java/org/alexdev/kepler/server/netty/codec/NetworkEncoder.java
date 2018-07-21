@@ -16,38 +16,34 @@ public class NetworkEncoder extends MessageToMessageEncoder<Object> {
     final private static Logger log = LoggerFactory.getLogger(NetworkEncoder.class);
 
     @Override
-    protected void encode(ChannelHandlerContext ctx, Object obj, List<Object> out) throws Exception {
-        try {
-            ByteBuf buffer = ctx.alloc().buffer();
+    protected void encode(ChannelHandlerContext ctx, Object obj, List<Object> out) {
+        ByteBuf buffer = ctx.alloc().buffer();
 
-            if (obj instanceof MessageComposer) {
-                MessageComposer msg = (MessageComposer) obj;
-                NettyResponse response = new NettyResponse(msg.getHeader(), buffer);
+        if (obj instanceof MessageComposer) {
+            MessageComposer msg = (MessageComposer) obj;
+            NettyResponse response = new NettyResponse(msg.getHeader(), buffer);
 
-                try {
-                    msg.compose(response);
-                } catch (Exception ex) {
-                    Log.getErrorLogger().error("Error occurred when composing " + response.getHeader() + ": ", ex);
-                    return;
-                }
-
-                if (!response.isFinalised()) {
-                    buffer.writeByte(1);
-                    response.setFinalised(true);
-                }
-
-                if (ServerConfiguration.getBoolean("log.sent.packets")) {
-                    log.info("SENT: {} / {}", msg.getHeader(), response.getBodyString());
-                }
+            try {
+                msg.compose(response);
+            } catch (Exception ex) {
+                Log.getErrorLogger().error("Error occurred when composing " + response.getHeader() + ": ", ex);
+                return;
             }
 
-            if (obj instanceof String) {
-                buffer.writeBytes(((String) obj).getBytes());
+            if (!response.isFinalised()) {
+                buffer.writeByte(1);
+                response.setFinalised(true);
             }
 
-            out.add(buffer);
-        } catch (Exception ex) {
-            Log.getErrorLogger().error("Error occurred: ", ex);
+            if (ServerConfiguration.getBoolean("log.sent.packets")) {
+                log.info("SENT: {} / {}", msg.getHeader(), response.getBodyString());
+            }
         }
+
+        if (obj instanceof String) {
+            buffer.writeBytes(((String) obj).getBytes());
+        }
+
+        out.add(buffer);
     }
 }
