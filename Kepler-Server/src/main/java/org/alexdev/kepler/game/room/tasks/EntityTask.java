@@ -64,8 +64,10 @@ public class EntityTask implements Runnable {
                 previousTile.removeEntity(entity);
 
                 if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition().copy())) {
-                    roomUser.getNextPosition().setX(roomUser.getPosition().getX());
-                    roomUser.getNextPosition().setY(roomUser.getPosition().getY());
+                    /*roomUser.getNextPosition().setX(roomUser.getPosition().getX());
+                    roomUser.getNextPosition().setY(roomUser.getPosition().getY());*/
+                    roomUser.getPath().clear();
+                    roomUser.getPath().add(roomUser.getPosition().copy());
                 }
 
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
