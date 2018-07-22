@@ -47,7 +47,7 @@ public class EntityTask implements Runnable {
                 this.room.send(new USER_STATUSES(entitiesToUpdate));
             }
         } catch (Exception ex) {
-            Log.getErrorLogger().error("RollerTask crashed: ", ex);
+            Log.getErrorLogger().error("EntityTask crashed: ", ex);
         }
     }
 
