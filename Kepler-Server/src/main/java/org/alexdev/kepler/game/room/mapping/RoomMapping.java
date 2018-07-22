@@ -143,6 +143,10 @@ public class RoomMapping {
             this.room.send(new PLACE_FLOORITEM(item));
         }
 
+        if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            item.setCustomData("FALSE");
+        }
+
         item.updateEntities(null);
         ItemDao.updateItem(item);
     }
@@ -163,6 +167,10 @@ public class RoomMapping {
             this.regenerateCollisionMap();
 
             this.room.send(new MOVE_FLOORITEM(item));
+        }
+
+        if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            item.setCustomData("FALSE");
         }
 
         item.updateEntities(oldPosition);
@@ -199,6 +207,10 @@ public class RoomMapping {
         if (item.hasBehaviour(ItemBehaviour.DICE) || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
             item.setRequiresUpdate(false);
             item.setCustomData("");
+        }
+
+        if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            item.setCustomData("FALSE");
         }
 
         item.updateEntities(null);

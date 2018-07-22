@@ -79,15 +79,9 @@ public class RollerTask implements Runnable {
                         kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
             }
 
-        /*if (!itemsRolling.isEmpty() || !entitiesRolling.isEmpty()) {
-            this.room.flushQueue();
-        }*/
-
-
-            this.room.getMapping().regenerateCollisionMap();
-
             if (itemsRolling.size() > 0) {
                 ItemDao.updateItems(itemsRolling.keySet());
+                this.room.getMapping().regenerateCollisionMap();
 
                 GameScheduler.getInstance().getSchedulerService().schedule(
                         new RollerCompleteTask(itemsRolling.keySet(), room),
