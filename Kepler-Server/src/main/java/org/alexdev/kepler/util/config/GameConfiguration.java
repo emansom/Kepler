@@ -43,6 +43,8 @@ public class GameConfiguration {
         config.put("credits.scheduler.timeunit", "MINUTES");
         config.put("credits.scheduler.interval", "15");
         config.put("credits.scheduler.amount", "20");
+
+        config.put("chat.garbled.text", "true");
     }
 
     /**

@@ -9,6 +9,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.TYPING_STATUS;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -35,7 +36,7 @@ public class CHAT implements MessageEvent {
         player.getRoomUser().resetRoomTimer();
 
         // Make chat hard to read for long distance in public rooms
-        if (room.isPublicRoom()) {
+        if (room.isPublicRoom() && GameConfiguration.getInstance().getBoolean("chat.garbled.text")) {
             int sourceX = player.getRoomUser().getPosition().getX();
             int sourceY = player.getRoomUser().getPosition().getY();
 
