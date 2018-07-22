@@ -33,7 +33,18 @@ public class SitCommand extends Command {
             return;
         }
 
+        if (player.getRoomUser().containsStatus(StatusType.SWIM)) {
+            return;
+        }
+
         double height = 0.5;
+
+        if (player.getRoomUser().getRoom().isPublicRoom()) {
+            if (player.getRoomUser().getRoom().getModel().getName().startsWith("pool_a")) {
+                height = 0.0;
+            }
+        }
+
         int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
 
         RoomTile tile = player.getRoomUser().getTile();
