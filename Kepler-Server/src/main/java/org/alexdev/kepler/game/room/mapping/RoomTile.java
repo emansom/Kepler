@@ -17,7 +17,6 @@ public class RoomTile {
     private Position position;
     private Set<Entity> entities;
     private List<Item> items;
-    private boolean disableWalking;
 
     private double tileHeight;
     private Item highestItem;
@@ -47,10 +46,6 @@ public class RoomTile {
             return false;
         }
 
-        if (tile.hasDisabledWalking()) {
-            return false;
-        }
-
         if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
             return entity != null && tile.containsEntity(entity);
         }
@@ -75,8 +70,9 @@ public class RoomTile {
     }
 
     /**
+     * Get if the highest item has walkable furni, true if no furni is on the tile.
      *
-     * @return
+     * @return true, if successful.
      */
     public boolean hasWalkableFurni() {
         if (this.highestItem != null) {
@@ -86,6 +82,12 @@ public class RoomTile {
         return true;
     }
 
+    /**
+     * Get the next avaliable tile around this tile.
+     *
+     * @param entity the entity to check for, can be null
+     * @return a valid position, else null
+     */
     public Position getNextAvaliablePosition(Entity entity) {
         for (Position POINT : Pathfinder.DIAGONAL_MOVE_POINTS) {
             Position tmp = this.position.copy().add(POINT);
@@ -243,13 +245,5 @@ public class RoomTile {
      */
     public List<Item> getItems() {
         return items;
-    }
-
-    public boolean hasDisabledWalking() {
-        return disableWalking;
-    }
-
-    public void setDisableWalking(boolean disableWalking) {
-        this.disableWalking = disableWalking;
     }
 }
