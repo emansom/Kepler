@@ -158,10 +158,6 @@ public class Player extends Entity {
      * @param response the response
      */
     public void send(MessageComposer response) {
-        if (this.disconnected) {
-            return;
-        }
-
         this.network.send(response);
     }
 
@@ -171,10 +167,6 @@ public class Player extends Entity {
      * @param object the object to send
      */
     public void sendObject(Object object) {
-        if (this.disconnected) {
-            return;
-        }
-
         this.network.send(object);
     }
 
@@ -185,10 +177,6 @@ public class Player extends Entity {
      * @param response the response
      */
     public void sendQueued(MessageComposer response) {
-        if (this.disconnected) {
-            return;
-        }
-
         this.network.sendQueued(response);
     }
 
@@ -196,10 +184,6 @@ public class Player extends Entity {
      * Flush queue
      */
     public void flush() {
-        if (this.disconnected) {
-            return;
-        }
-
         this.network.flush();
     }
 
