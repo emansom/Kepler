@@ -13,6 +13,8 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest> {
     final private static Logger log = LoggerFactory.getLogger(ConnectionHandler.class);
     final private NettyServer server;
@@ -74,11 +76,6 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         }
     }
 
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
-    }
-
 //    @Override
 //    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
 //        try {
@@ -96,6 +93,12 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        Log.getErrorLogger().error("Netty error occurred: ", cause);
+        if (cause instanceof Exception) {
+            if (!(cause instanceof IOException)) {
+                Log.getErrorLogger().error("Netty error occurred: ", cause);
+            }
+        }
+
+        ctx.close();
     }
 }
