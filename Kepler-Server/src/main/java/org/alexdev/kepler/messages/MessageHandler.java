@@ -256,7 +256,6 @@ public class MessageHandler {
      */
     private void registerSongPackets() {
         registerEvent(244, new GET_SONG_LIST());
-        registerEvent(246, new GET_SONG_LIST());
         registerEvent(239, new NEW_SONG());
         registerEvent(219, new INSERT_SOUND_PACKAGE());
         registerEvent(220, new EJECT_SOUND_PACKAGE());
