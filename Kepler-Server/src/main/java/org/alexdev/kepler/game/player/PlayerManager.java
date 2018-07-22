@@ -7,16 +7,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class PlayerManager {
     private static PlayerManager instance;
-
-    private ConcurrentHashMap<Integer, Player> playerIdMap;
-    private ConcurrentHashMap<String, Player> playerNameMap;
+    private List<Player> players;
 
     public PlayerManager() {
-        this.playerIdMap = new ConcurrentHashMap<>();
-        this.playerNameMap = new ConcurrentHashMap<>();
+        this.players = new CopyOnWriteArrayList<>();
     }
 
     /**
@@ -26,8 +24,10 @@ public class PlayerManager {
      * @return the player, else null if not found
      */
     public Player getPlayerById(int userId) {
-        if (this.playerIdMap.containsKey(userId)) {
-            return this.playerIdMap.get(userId);
+        for (Player player : this.players) {
+            if (player.getDetails().getId() == userId) {
+                return player;
+            }
         }
 
         return null;
@@ -40,8 +40,10 @@ public class PlayerManager {
      * @return the player, else null if not found
      */
     public Player getPlayerByName(String username) {
-        if (this.playerNameMap.containsKey(username)) {
-            return this.playerNameMap.get(username);
+        for (Player player : this.players) {
+            if (player.getDetails().getName().equals(username)) {
+                return player;
+            }
         }
 
         return null;
@@ -72,8 +74,7 @@ public class PlayerManager {
             return;
         }
 
-        this.playerNameMap.remove(player.getDetails().getName());
-        this.playerIdMap.remove(player.getDetails().getId());
+        this.players.remove(player);
     }
 
     /**
@@ -87,8 +88,7 @@ public class PlayerManager {
             return;
         }
 
-        this.playerNameMap.put(player.getDetails().getName(), player);
-        this.playerIdMap.put(player.getDetails().getId(), player);
+        this.players.add(player);
     }
 
     /**
@@ -97,13 +97,11 @@ public class PlayerManager {
      * @param userId the user id of the session to disconnect
      */
     public void disconnectSession(int userId) {
-        Player player = this.getPlayerById(userId);
-
-        if (player == null) {
-            return;
+        for (Player player : this.players) {
+            if (player.getDetails().getId() == userId) {
+                player.kickFromServer(true);
+            }
         }
-
-        player.kickFromServer(true);
     }
 
     /**
@@ -121,7 +119,7 @@ public class PlayerManager {
      * @return the collection of players
      */
     public List<Player> getPlayers() {
-        return new ArrayList<>(this.playerIdMap.values());
+        return new ArrayList<>(this.players);
     }
 
     /**
