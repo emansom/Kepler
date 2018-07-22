@@ -7,11 +7,11 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
 import java.util.Collection;
 import java.util.List;
 
-public class ItemRollingTask implements Runnable {
+public class RollerCompleteTask implements Runnable {
     private final Collection<Item> rollingItems;
     private final Room room;
 
-    public ItemRollingTask(Collection<Item> rollingItems, Room room) {
+    public RollerCompleteTask(Collection<Item> rollingItems, Room room) {
         this.rollingItems = rollingItems;
         this.room = room;
     }
