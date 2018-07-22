@@ -32,7 +32,7 @@ public class NettyPlayerNetwork {
     }
 
     public void disconnect() {
-        this.channel.disconnect();
+        this.channel.close();
     }
 
     public int getConnectionId() {
