@@ -293,7 +293,7 @@ public class Player extends Entity {
 
         try {
             if (closeSocket) {
-                this.network.close();
+                this.network.disconnect();
             }
         } catch (Exception ignored) { }
 
