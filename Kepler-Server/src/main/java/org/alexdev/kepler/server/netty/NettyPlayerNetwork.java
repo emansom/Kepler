@@ -31,7 +31,7 @@ public class NettyPlayerNetwork {
         this.channel.flush();
     }
 
-    public void close() {
+    public void disconnect() {
         this.channel.close().syncUninterruptibly();
     }
 
