@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.room.mapping;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
