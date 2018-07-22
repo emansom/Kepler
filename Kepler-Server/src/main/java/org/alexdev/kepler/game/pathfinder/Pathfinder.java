@@ -56,16 +56,16 @@ public class Pathfinder {
         double oldHeight = fromTile.getWalkingHeight();
         double newHeight = toTile.getWalkingHeight();
 
+        Item fromItem = fromTile.getHighestItem();
+        Item toItem = toTile.getHighestItem();
+
         if (oldHeight - 4 >= newHeight) {
-            return false;
+            return fromItem != null && fromItem.hasBehaviour(ItemBehaviour.TELEPORTER);
         }
 
         if (oldHeight + 1.5 <= newHeight) {
-            return false;
+            return toItem != null && toItem.hasBehaviour(ItemBehaviour.TELEPORTER);
         }
-
-        Item fromItem = fromTile.getHighestItem();
-        Item toItem = toTile.getHighestItem();
 
         // Only check these below if the user is in a pool room.
         if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_")) {
