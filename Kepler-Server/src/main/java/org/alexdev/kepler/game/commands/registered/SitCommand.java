@@ -40,7 +40,7 @@ public class SitCommand extends Command {
         double height = 0.5;
 
         if (player.getRoomUser().getRoom().isPublicRoom()) {
-            if (player.getRoomUser().getRoom().getModel().getName().startsWith("pool_a")) {
+            if (player.getRoomUser().getRoom().getModel().getName().startsWith("pool_")) {
                 height = 0.0;
             }
         }
