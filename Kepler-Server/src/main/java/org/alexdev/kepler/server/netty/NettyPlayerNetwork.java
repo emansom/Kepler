@@ -24,7 +24,7 @@ public class NettyPlayerNetwork {
     }
 
     public void sendQueued(MessageComposer response) {
-        this.channel.write(response);
+        this.channel.write(response).syncUninterruptibly();
     }
 
     public void flush() {
@@ -32,7 +32,7 @@ public class NettyPlayerNetwork {
     }
 
     public void close() {
-        this.channel.close();
+        this.channel.close().syncUninterruptibly();
     }
 
     public int getConnectionId() {

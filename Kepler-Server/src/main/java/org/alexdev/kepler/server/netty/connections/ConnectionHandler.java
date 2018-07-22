@@ -28,7 +28,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
         if (!this.server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
             Log.getErrorLogger().error("Could not accept connection from {}", ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
-            ctx.disconnect();
+            ctx.close();
             return;
         }
 
@@ -73,26 +73,6 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
             Log.getErrorLogger().error("Exception occurred when handling (" + message.getHeaderId() + "): ", ex);
         }
     }
-
-    @Override
-    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-        ctx.flush();
-    }
-
-//    @Override
-//    public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
-//        try {
-//            Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
-//
-//            if (player.isDisconnected()) {
-//                return;
-//            }
-//
-//            player.getNetwork().flush();
-//        } catch (Exception ex) {
-//            Log.getErrorLogger().error("Exception occurred handling channelReadComplete: ", ex);
-//        }
-//    }
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
