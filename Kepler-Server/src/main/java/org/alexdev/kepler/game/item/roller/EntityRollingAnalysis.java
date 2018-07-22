@@ -157,12 +157,13 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         entity.getRoomUser().getPosition().setX(nextPosition.getX());
         entity.getRoomUser().getPosition().setY(nextPosition.getY());
         entity.getRoomUser().getPosition().setZ(nextPosition.getZ());
-        entity.getRoomUser().setNeedsUpdate(true);
 
         //if (nextTile.hasWalkableFurni() && nextTile.getHighestItem().getDefinition().isChairOrBed()) {
         if (!entity.getRoomUser().isSittingOnGround() && !entity.getRoomUser().isSittingOnChair()) {
             entity.getRoomUser().invokeItem();
         }
+
+        entity.getRoomUser().setNeedsUpdate(true);
 
         nextTile.addEntity(entity);
         previousTile.removeEntity(entity);
