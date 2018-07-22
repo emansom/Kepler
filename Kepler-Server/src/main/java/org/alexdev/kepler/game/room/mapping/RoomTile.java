@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.room.mapping;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
@@ -73,12 +74,28 @@ public class RoomTile {
         return this.position.getDistanceSquared(targetTile.getPosition()) <= 2;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean hasWalkableFurni() {
         if (this.highestItem != null) {
             return this.highestItem.isWalkable();
         }
 
         return true;
+    }
+
+    public Position getNextAvaliablePosition(Entity entity) {
+        for (Position POINT : Pathfinder.DIAGONAL_MOVE_POINTS) {
+            Position tmp = this.position.copy().add(POINT);
+
+            if (RoomTile.isValidTile(this.room, entity, tmp)) {
+                return tmp;
+            }
+        }
+
+        return null;
     }
 
     /**

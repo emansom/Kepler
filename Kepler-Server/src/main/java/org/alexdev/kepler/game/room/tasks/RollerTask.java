@@ -6,15 +6,10 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.roller.EntityRollingAnalysis;
 import org.alexdev.kepler.game.item.roller.ItemRollingAnalysis;
-import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
-import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -95,7 +90,7 @@ public class RollerTask implements Runnable {
                 ItemDao.updateItems(itemsRolling.keySet());
 
                 GameScheduler.getInstance().getSchedulerService().schedule(
-                        new ItemRollingTask(itemsRolling.keySet(), room),
+                        new RollerCompleteTask(itemsRolling.keySet(), room),
                         1,
                         TimeUnit.SECONDS
                 );

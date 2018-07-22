@@ -289,7 +289,7 @@ public class Player extends Entity {
      * Get rid of the player from the server.
      */
     public void kickFromServer(boolean closeSocket) {
-        this.dispose();
+        //this.dispose();
 
         try {
             if (closeSocket) {

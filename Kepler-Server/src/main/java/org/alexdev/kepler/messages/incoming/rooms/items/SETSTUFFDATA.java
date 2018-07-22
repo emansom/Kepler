@@ -6,12 +6,15 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
+
+import java.awt.*;
 
 public class SETSTUFFDATA implements MessageEvent {
     @Override
@@ -59,10 +62,11 @@ public class SETSTUFFDATA implements MessageEvent {
 
         if (item.hasBehaviour(ItemBehaviour.REQUIRES_TOUCHING_FOR_INTERACTION)) {
             if (!item.getTile().touches(player.getRoomUser().getTile())) {
+                Position nextPosition = item.getTile().getNextAvaliablePosition(player);
+
                 player.getRoomUser().walkTo(
-                        item.getPosition().getSquareInFront().getX(),
-                        item.getPosition().getSquareInFront().getY(),
-                        PathfinderSettings.VALID_GOAL_NOT_REQUIRED
+                        nextPosition.getX(),
+                        nextPosition.getY()
                 );
                 return;
             }
