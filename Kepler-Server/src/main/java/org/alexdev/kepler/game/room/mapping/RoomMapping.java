@@ -26,8 +26,11 @@ public class RoomMapping {
     private RoomModel roomModel;
     private RoomTile roomMap[][];
 
+    private boolean isRegeneratingMap;
+
     public RoomMapping(Room room) {
         this.room = room;
+        this.isRegeneratingMap = false;
     }
 
     /**
@@ -35,6 +38,12 @@ public class RoomMapping {
      * furniture detection.
      */
     public void regenerateCollisionMap() {
+        if (this.isRegeneratingMap) {
+            return;
+        }
+
+        this.isRegeneratingMap = true;
+
         try {
             this.room.getItemManager().setSoundMachine(null);
             this.room.getItemManager().setMoodlight(null);
@@ -121,6 +130,8 @@ public class RoomMapping {
 
         } catch (Exception ex) {
             Log.getErrorLogger().error("Generate collision map failed for room {}", this.room.getId());
+        } finally {
+            this.isRegeneratingMap = false;
         }
     }
 
