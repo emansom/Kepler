@@ -88,7 +88,7 @@ public class RoomTile {
      * @param entity the entity to check for, can be null
      * @return a valid position, else null
      */
-    public Position getNextAvaliablePosition(Entity entity) {
+    public Position getNextAvailablePosition(Entity entity) {
         for (Position POINT : Pathfinder.DIAGONAL_MOVE_POINTS) {
             Position tmp = this.position.copy().add(POINT);
 
