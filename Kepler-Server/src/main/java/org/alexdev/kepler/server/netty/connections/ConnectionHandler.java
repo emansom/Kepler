@@ -30,7 +30,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
         if (!this.server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
             Log.getErrorLogger().error("Could not accept connection from {}", ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
-            ctx.disconnect();
+            ctx.close();
             return;
         }
 
