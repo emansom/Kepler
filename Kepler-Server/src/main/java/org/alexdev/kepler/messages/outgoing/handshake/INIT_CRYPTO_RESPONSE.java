@@ -7,7 +7,7 @@ public class INIT_CRYPTO_RESPONSE extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(6);
+        response.writeInt(7);
         response.writeInt(0);
         response.writeInt(1);
         response.writeInt(1);
@@ -20,6 +20,9 @@ public class INIT_CRYPTO_RESPONSE extends MessageComposer {
         response.writeInt(1);
         response.writeInt(5);
         response.writeString("dd-MM-yyyy");
+
+        response.writeInt(9);
+        response.writeInt(1);
     }
 
     @Override
