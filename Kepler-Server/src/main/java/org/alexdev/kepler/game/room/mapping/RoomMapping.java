@@ -38,11 +38,11 @@ public class RoomMapping {
      * furniture detection.
      */
     public void regenerateCollisionMap() {
-        if (this.isRegeneratingMap) {
-            return;
-        }
+        //if (this.isRegeneratingMap) {
+        //    return;
+        //}
 
-        this.isRegeneratingMap = true;
+        //this.isRegeneratingMap = true;
 
         try {
             this.room.getItemManager().setSoundMachine(null);
@@ -130,9 +130,9 @@ public class RoomMapping {
 
         } catch (Exception ex) {
             Log.getErrorLogger().error("Generate collision map failed for room {}", this.room.getId());
-        } finally {
+        }/* finally {
             this.isRegeneratingMap = false;
-        }
+        }*/
     }
 
     /**
