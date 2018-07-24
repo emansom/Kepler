@@ -27,5 +27,6 @@ public enum ItemBehaviour {
     POST_IT,
     DECORATION,
     WHEEL_OF_FORTUNE,
-    ROOMDIMMER
+    ROOMDIMMER,
+    PRESENT
 }

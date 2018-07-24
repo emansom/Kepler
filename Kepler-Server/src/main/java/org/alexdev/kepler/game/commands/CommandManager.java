@@ -129,9 +129,9 @@ public class CommandManager {
             if (args.length < cmd.getArguments().length) {
                 if (entity instanceof Player) {
                     Player player = (Player)entity;
-                    player.send(new ALERT(TextsManager.getInstance().getValue("player.commands.no.args")));
+                    player.send(new ALERT(TextsManager.getInstance().getValue("player_commands_no_args")));
                 } else {
-                    System.out.println(TextsManager.getInstance().getValue("player.commands.no.args"));
+                    System.out.println(TextsManager.getInstance().getValue("player_commands_no_args"));
                 }
                 return;
             }

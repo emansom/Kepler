@@ -229,7 +229,18 @@ public class Item {
                 response.writeString(this.definition.getColour());
                 response.writeString("");
                 response.writeInt(this.hasBehaviour(ItemBehaviour.ROLLER) ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
-                response.writeString(this.customData);
+
+                if (this.hasBehaviour(ItemBehaviour.PRESENT)) {
+                    String[] presentData = this.customData.split(Character.toString((char)9));
+                    if (presentData.length >= 3) {
+                        response.writeString("!" + presentData[2]); // Only show post-it colour
+                    } else {
+                        response.writeString("");
+                    }
+                } else {
+                    response.writeString(this.customData);
+                }
+
             }
         }
     }

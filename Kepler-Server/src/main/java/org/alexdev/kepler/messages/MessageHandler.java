@@ -182,6 +182,7 @@ public class MessageHandler {
         registerEvent(341, new MSG_ROOMDIMMER_GET_PRESETS());
         registerEvent(342, new MSG_ROOMDIMMER_SET_PRESET());
         registerEvent(343, new MSG_ROOMDIMMER_CHANGE_STATE());
+        registerEvent(78, new PRESENTOPEN());
     }
 
     /**
