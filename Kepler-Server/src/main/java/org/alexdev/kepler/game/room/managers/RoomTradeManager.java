@@ -5,8 +5,8 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.enums.StatusType;
-import org.alexdev.kepler.messages.outgoing.trade.TRADE_END;
-import org.alexdev.kepler.messages.outgoing.trade.TRADE_WINDOW;
+import org.alexdev.kepler.messages.outgoing.trade.TRADE_CLOSE;
+import org.alexdev.kepler.messages.outgoing.trade.TRADE_ITEMS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +23,10 @@ public class RoomTradeManager {
         Player player = (Player) roomUser.getEntity();
 
         if (roomUser.getTradePartner() != null) {
-            player.send(new TRADE_END());
+            player.send(new TRADE_CLOSE());
             player.getInventory().getView("last");
 
-            roomUser.getTradePartner().send(new TRADE_END());
+            roomUser.getTradePartner().send(new TRADE_CLOSE());
             roomUser.getTradePartner().getInventory().getView("last");
 
             reset(roomUser.getTradePartner().getRoomUser());
@@ -63,7 +63,7 @@ public class RoomTradeManager {
 
         Player tradePartner = player.getRoomUser().getTradePartner();
 
-        player.send(new TRADE_WINDOW(
+        player.send(new TRADE_ITEMS(
                 player,
                 player.getRoomUser().getTradeItems(),
                 player.getRoomUser().hasAcceptedTrade(),

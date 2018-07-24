@@ -8,7 +8,7 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class TRADE_WINDOW extends MessageComposer {
+public class TRADE_ITEMS extends MessageComposer {
     private final Player player;
     private final List<Item> ownItems;
     private final boolean playerAcceptedTrade;
@@ -16,7 +16,7 @@ public class TRADE_WINDOW extends MessageComposer {
     private final List<Item> partnerItems;
     private final boolean partnerAcceptedTrade;
 
-    public TRADE_WINDOW(Player player, List<Item> ownItems, boolean playerAcceptedTrade, Player tradePartner, List<Item> partnerItems, boolean partnerAcceptedTrade) {
+    public TRADE_ITEMS(Player player, List<Item> ownItems, boolean playerAcceptedTrade, Player tradePartner, List<Item> partnerItems, boolean partnerAcceptedTrade) {
         this.player = player;
         this.ownItems = ownItems;
         this.playerAcceptedTrade = playerAcceptedTrade;

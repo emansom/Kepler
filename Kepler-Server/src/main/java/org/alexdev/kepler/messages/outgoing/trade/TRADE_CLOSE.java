@@ -1,9 +1,9 @@
-package org.alexdev.kepler.messages.outgoing.rooms;
+package org.alexdev.kepler.messages.outgoing.trade;
 
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class FLAT_ACCESSIBLE extends MessageComposer {
+public class TRADE_CLOSE extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
 
@@ -11,6 +11,6 @@ public class FLAT_ACCESSIBLE extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 41; // "@i"
+        return 110;
     }
 }
