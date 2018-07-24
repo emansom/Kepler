@@ -76,12 +76,12 @@ public class EntityTask implements Runnable {
                     roomUser.getPath().add(roomUser.getPosition().copy());
                 }*/
 
-                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
-                nextTile.addEntity(entity);
-
                 roomUser.getPosition().setX(roomUser.getNextPosition().getX());
                 roomUser.getPosition().setY(roomUser.getNextPosition().getY());
                 roomUser.updateNewHeight(roomUser.getNextPosition());
+
+                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
+                nextTile.addEntity(entity);
             }
 
             // We still have more tiles left, so lets continue moving
