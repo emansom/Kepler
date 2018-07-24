@@ -67,6 +67,9 @@ public class EntityTask implements Runnable {
         if (roomUser.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
+                RoomTile previousTile = roomUser.getTile();
+                previousTile.setEntity(null);
+
                 roomUser.getPosition().setX(roomUser.getNextPosition().getX());
                 roomUser.getPosition().setY(roomUser.getNextPosition().getY());
                 roomUser.updateNewHeight(roomUser.getNextPosition());
@@ -95,9 +98,6 @@ public class EntityTask implements Runnable {
 
                 int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
                 double height = this.room.getMapping().getTile(next).getWalkingHeight();
-
-                RoomTile previousTile = roomUser.getTile();
-                previousTile.setEntity(null);
 
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
                 nextTile.setEntity(entity);
