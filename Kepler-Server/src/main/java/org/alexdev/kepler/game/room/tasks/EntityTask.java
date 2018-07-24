@@ -111,6 +111,9 @@ public class EntityTask implements Runnable {
                 roomUser.getPosition().setRotation(rotation);
                 roomUser.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomUser.setNextPosition(next);
+
+                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
+                nextTile.addEntity(entity);
             } else {
                 roomUser.stopWalking();
             }
