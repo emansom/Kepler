@@ -68,20 +68,9 @@ public class EntityTask implements Runnable {
         if (roomUser.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
-                RoomTile previousTile = roomUser.getTile();
-                previousTile.removeEntity(entity);
-
-                /*if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition().copy())) {
-                    roomUser.getPath().clear();
-                    roomUser.getPath().add(roomUser.getPosition().copy());
-                }*/
-
                 roomUser.getPosition().setX(roomUser.getNextPosition().getX());
                 roomUser.getPosition().setY(roomUser.getNextPosition().getY());
                 roomUser.updateNewHeight(roomUser.getNextPosition());
-
-                RoomTile nextTile = roomUser.getTile();
-                nextTile.addEntity(entity);
             }
 
             // We still have more tiles left, so lets continue moving
@@ -104,6 +93,9 @@ public class EntityTask implements Runnable {
 
                 roomUser.removeStatus(StatusType.LAY);
                 roomUser.removeStatus(StatusType.SIT);
+
+                RoomTile previousTile = roomUser.getTile();
+                previousTile.removeEntity(entity);
 
                 RoomTile nextTile = this.room.getMapping().getTile(next);
                 nextTile.addEntity(entity);
