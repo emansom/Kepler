@@ -25,9 +25,9 @@ public class INTODOOR implements MessageEvent {
             return;
         }
 
-        if (!item.getPosition().getSquareInFront().equals(player.getRoomUser().getPosition())) {
-            return;
-        }
+//        if (!item.getPosition().getSquareInFront().equals(player.getRoomUser().getPosition())) {
+//            return;
+//        }
 
         Item linkedTeleporter = ItemDao.getItem(item.getTeleporterId());
 

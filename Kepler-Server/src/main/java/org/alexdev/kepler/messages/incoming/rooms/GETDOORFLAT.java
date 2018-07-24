@@ -33,13 +33,20 @@ public class GETDOORFLAT implements MessageEvent {
             return;
         }
 
-        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId()) {
-            return;
-        }
-
         Item linkedTeleporter = ItemDao.getItem(item.getTeleporterId());
 
         if (linkedTeleporter == null) {
+            return;
+        }
+
+        // If their current item is the teleporters linked them, authenticate them so they can teleport back when double clicking.
+        if (player.getRoomUser().getCurrentItem() != null) {
+            if (player.getRoomUser().getCurrentItem().getId() == linkedTeleporter.getId()) {
+                player.getRoomUser().setAuthenticateTelporterId(item.getId());
+            }
+        }
+
+        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId()) {
             return;
         }
 
