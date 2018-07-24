@@ -30,22 +30,18 @@ public class THROW_DICE implements MessageEvent {
 
         String contents = reader.contents();
 
-        // Check if input is numeric
         if (!StringUtil.isNumber(contents)) {
             return;
         }
 
-        // Parse numeric content
         int itemId = Integer.parseInt(contents);
 
         if (itemId < 0) {
             return;
         }
 
-        // Get item by ID
         Item item = room.getItemManager().getById(itemId);
 
-        // Check if item exists and if it is a dice
         if (item == null || !item.hasBehaviour(ItemBehaviour.DICE)) {
             return;
         }
