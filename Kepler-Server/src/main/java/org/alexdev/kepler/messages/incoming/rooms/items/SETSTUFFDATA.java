@@ -86,15 +86,15 @@ public class SETSTUFFDATA implements MessageEvent {
                     RoomTile tile = item.getTile();
 
                     // Make all entities walk out of gate when it's closed
-                    if (tile.getEntities().size() > 0) {
-                        for (Entity entity : tile.getEntities()) {
-                            if (entity.getRoomUser().isWalking()) {
-                                continue;
+                    if (tile.getEntity() != null) {
+                        //for (Entity entity : tile.getEntities()) {
+                            if (!tile.getEntity().getRoomUser().isWalking()) {
+                                return;
                             }
 
                             // Can't close gate if there's a user on the tile
-                            return;
-                        }
+                           // return;
+                        //}
                     }
                 }
             }
