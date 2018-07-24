@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
@@ -68,7 +69,19 @@ public class EntityTask implements Runnable {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
                 RoomTile previousTile = roomUser.getTile();
+<<<<<<< HEAD
                 previousTile.setEntity(null);
+=======
+                previousTile.removeEntity(entity);
+
+                /*if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition().copy())) {
+                    roomUser.getPath().clear();
+                    roomUser.getPath().add(roomUser.getPosition().copy());
+                }*/
+
+                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
+                nextTile.addEntity(entity);
+>>>>>>> parent of 0e145def... Use entity instance per tile not list
 
                 roomUser.getPosition().setX(roomUser.getNextPosition().getX());
                 roomUser.getPosition().setY(roomUser.getNextPosition().getY());
@@ -99,9 +112,12 @@ public class EntityTask implements Runnable {
                 int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
                 double height = this.room.getMapping().getTile(next).getWalkingHeight();
 
+<<<<<<< HEAD
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
                 nextTile.setEntity(entity);
 
+=======
+>>>>>>> parent of 0e145def... Use entity instance per tile not list
                 roomUser.getPosition().setRotation(rotation);
                 roomUser.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomUser.setNextPosition(next);

@@ -36,18 +36,20 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
             return null;
         }
 
-        if (frontTile.getEntity() != null) {
-            Entity e = frontTile.getEntity();
-            //for (Entity e : frontTile.getEntities()) {
-            if (e.getRoomUser().getRoom() != null) {
-                if (!e.getRoomUser().isWalking()) {
+        if (frontTile.getEntities().size() > 0) {
+            for (Entity e : frontTile.getEntities()) {
+                if (e.getRoomUser().getRoom() == null) {
+                    continue;
+                }
 
-                    if (e.getRoomUser().getPosition().equals(front)) {
-                        return null;
-                    }
+                if (e.getRoomUser().isWalking()) {
+                    continue;
+                }
+
+                if (e.getRoomUser().getPosition().equals(front)) {
+                    return null;
                 }
             }
-            // }
         }
 
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
@@ -88,7 +90,7 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
                         // Don't roll an item into the next roller, if the next roller is facing towards the roller
                         // it just rolled from, and the next roller has an item on it.
                         if (frontPosition.equals(item.getPosition())) {
-                            if (frontTile.getItems().size() > 1 || frontTile.getEntity() != null) {
+                            if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
                                 return null;
 
                             }

@@ -203,7 +203,7 @@ public class RoomEntityManager {
         RoomTile tile = entity.getRoomUser().getTile();
 
         if (tile != null) {
-            tile.setEntity(null);
+            tile.removeEntity(entity);
         }
 
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
