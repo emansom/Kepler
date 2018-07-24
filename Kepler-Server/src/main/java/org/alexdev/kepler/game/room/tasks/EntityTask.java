@@ -80,7 +80,7 @@ public class EntityTask implements Runnable {
                 roomUser.getPosition().setY(roomUser.getNextPosition().getY());
                 roomUser.updateNewHeight(roomUser.getNextPosition());
 
-                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
+                RoomTile nextTile = roomUser.getTile();
                 nextTile.addEntity(entity);
             }
 
