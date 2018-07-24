@@ -15,16 +15,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class RoomTile {
     private Room room;
     private Position position;
-    private Set<Entity> entities;
     private List<Item> items;
 
     private double tileHeight;
+
     private Item highestItem;
+    private Entity entity;
 
     public RoomTile(Room room, Position position) {
         this.room = room;
         this.position = position;
-        this.entities = new HashSet<>();
         this.items = new CopyOnWriteArrayList<>();
     }
 
@@ -46,7 +46,7 @@ public class RoomTile {
             return false;
         }
 
-        if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
+        if (tile.getEntity() != null) { // Allow walk if you exist already in the tile
             return entity != null && tile.containsEntity(entity);
         }
 
@@ -105,12 +105,12 @@ public class RoomTile {
      *
      * @param entity the new entity
      */
-    public void addEntity(Entity entity) {
+    public void setEntity(Entity entity) {
         if (new Position(this.position.getX(), this.position.getY()).equals(this.room.getModel().getDoorLocation())) {
             return;
         }
 
-        this.entities.add(entity);
+        this.entity = entity;
     }
 
     /**
@@ -120,16 +120,7 @@ public class RoomTile {
      * @return true, if successful
      */
     public boolean containsEntity(Entity entity) {
-        return this.entities.contains(entity);
-    }
-
-    /**
-     * Removes the entity.
-     *
-     * @param entity the entity
-     */
-    public void removeEntity(Entity entity) {
-        this.entities.remove(entity);
+        return this.entity == entity;
     }
 
     /**
@@ -234,8 +225,8 @@ public class RoomTile {
      *
      * @return the list of entities
      */
-    public Set<Entity> getEntities() {
-        return this.entities;
+    public Entity getEntity() {
+        return entity;
     }
 
     /**

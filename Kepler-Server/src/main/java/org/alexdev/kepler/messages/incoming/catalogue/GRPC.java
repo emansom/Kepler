@@ -88,10 +88,10 @@ public class GRPC implements MessageEvent {
             Player receiver = PlayerManager.getInstance().getPlayerById(receivingUserId);
 
             if (receiver != null) {
+                receiver.send(new DELIVER_PRESENT(present));
+
                 receiver.getInventory().getItems().add(present);
                 receiver.getInventory().getView("last");
-
-                receiver.send(new DELIVER_PRESENT(present));
             }
 
             player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", data[6])));
@@ -103,9 +103,9 @@ public class GRPC implements MessageEvent {
             }
 
             purchase(player, item, extraData);
-            player.getInventory().getView("last");
 
             player.send(new ITEM_DELIVERED());
+            player.getInventory().getView("last");
         }
 
         CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());

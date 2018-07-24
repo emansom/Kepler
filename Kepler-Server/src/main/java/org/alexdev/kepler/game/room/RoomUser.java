@@ -24,7 +24,6 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
-import org.mariadb.jdbc.internal.com.send.parameters.ParameterHolder;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -532,7 +531,7 @@ public class RoomUser {
         RoomTile oldTile = this.getTile();
 
         if (oldTile != null) {
-            oldTile.removeEntity(this.entity);
+            oldTile.setEntity(this.entity);
         }
 
         this.position = position.copy();
@@ -541,7 +540,7 @@ public class RoomUser {
         RoomTile newTile = this.getTile();
 
         if (newTile != null) {
-            newTile.addEntity(this.entity);
+            newTile.setEntity(this.entity);
         }
 
         if (instantUpdate && this.room != null) {

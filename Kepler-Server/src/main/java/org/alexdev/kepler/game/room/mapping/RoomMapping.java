@@ -63,7 +63,7 @@ public class RoomMapping {
                     continue;
                 }
 
-                this.getTile(entity.getRoomUser().getPosition()).addEntity(entity);
+                this.getTile(entity.getRoomUser().getPosition()).setEntity(entity);
             }
 
             List<Item> items = new ArrayList<>(this.room.getItems());

@@ -54,7 +54,10 @@ public class RollerTask implements Runnable {
                 }
 
                 // Process entities on rollers
-                for (Entity entity : roller.getTile().getEntities()) {
+                //for (Entity entity : roller.getTile().getEntities()) {
+                Entity entity = roller.getTile().getEntity();
+
+                if (entity != null) {
                     if (entitiesRolling.containsKey(entity)) {
                         continue;
                     }

@@ -106,7 +106,7 @@ public class Item {
                     continue;
                 }
 
-                entitiesToUpdate.addAll(tile.getEntities());
+                entitiesToUpdate.add(tile.getEntity());
             }
         }
 
@@ -117,7 +117,7 @@ public class Item {
                 continue;
             }
 
-            entitiesToUpdate.addAll(tile.getEntities());
+            entitiesToUpdate.add(tile.getEntity());
         }
 
         for (Entity entity : entitiesToUpdate) {
@@ -307,7 +307,7 @@ public class Item {
             }
 
 
-            if (tile.getEntities().size() > 0) {
+            if (tile.getEntity() != null) {//.size() > 0) {
                 if (!item.isWalkable()) {
                     return false;
                 }
