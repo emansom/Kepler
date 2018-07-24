@@ -75,6 +75,8 @@ public class Player extends Entity {
 
             this.send(new ALERT(alertMessage));
         }
+
+        this.messenger.sendStatusUpdate();
     }
 
     /**
@@ -293,8 +295,11 @@ public class Player extends Entity {
                 this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
             }
 
+
             PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
             PlayerManager.getInstance().removePlayer(this);
+
+            this.messenger.sendStatusUpdate();
         }
 
         this.disconnected = true;

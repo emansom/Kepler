@@ -2,6 +2,9 @@ package org.alexdev.kepler.game.messenger;
 
 import org.alexdev.kepler.dao.mysql.MessengerDao;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.messages.MessageHandler;
+import org.alexdev.kepler.messages.incoming.messenger.FRIENDLIST_UPDATE;
 
 import java.util.List;
 import java.util.Map;
@@ -17,6 +20,21 @@ public class Messenger {
         this.friends = MessengerDao.getFriends(player.getDetails().getId());
         this.requests = MessengerDao.getRequests(player.getDetails().getId());
         this.offlineMessages = MessengerDao.getUnreadMessages(player.getDetails().getId());
+    }
+
+    /**
+     * Sends the status update when a friend enters or leaves a room, logs in or disconnects.
+     */
+    public void sendStatusUpdate() {
+        for (var user : this.friends) {
+            int userId = user.getUserId();
+
+            Player friend = PlayerManager.getInstance().getPlayerById(userId);
+
+            if (friend != null) {
+                new FRIENDLIST_UPDATE().handle(friend, null);
+            }
+        }
     }
 
     /**

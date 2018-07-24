@@ -223,6 +223,7 @@ public class RoomEntityManager {
             player.send(new HOTEL_VIEW());
         }
 
+        player.getMessenger().sendStatusUpdate();
         RoomDao.saveVisitors(this.room);
     }
 
