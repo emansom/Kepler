@@ -3,8 +3,8 @@ package org.alexdev.kepler.messages.incoming.songs;
 import org.alexdev.kepler.dao.mysql.SongMachineDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.messages.outgoing.songs.HAND_SOUNDSETS;
-import org.alexdev.kepler.messages.outgoing.songs.SOUNDSETS;
+import org.alexdev.kepler.messages.outgoing.songs.USER_SOUND_PACKAGES;
+import org.alexdev.kepler.messages.outgoing.songs.SOUND_PACKAGES;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -28,7 +28,7 @@ public class NEW_SONG implements MessageEvent {
         // We don't want a user to get kicked when making cool beats
         player.getRoomUser().resetRoomTimer();
 
-        player.send(new SOUNDSETS(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
-        player.send(new HAND_SOUNDSETS(player.getInventory().getSoundsets()));
+        player.send(new SOUND_PACKAGES(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
+        player.send(new USER_SOUND_PACKAGES(player.getInventory().getSoundsets()));
     }
 }

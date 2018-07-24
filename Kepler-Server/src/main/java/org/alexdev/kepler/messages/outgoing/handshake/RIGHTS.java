@@ -5,10 +5,10 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class FUSERIGHTS extends MessageComposer {
+public class RIGHTS extends MessageComposer {
     private final List<String> avaliableFuserights;
 
-    public FUSERIGHTS(List<String> avaliableFuserights) {
+    public RIGHTS(List<String> avaliableFuserights) {
         this.avaliableFuserights = avaliableFuserights;
     }
 

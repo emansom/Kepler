@@ -6,10 +6,10 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class HAND_SOUNDSETS extends MessageComposer {
+public class USER_SOUND_PACKAGES extends MessageComposer {
     private final List<Integer> handSoundsets;
 
-    public HAND_SOUNDSETS(List<Integer> handSoundsets) {
+    public USER_SOUND_PACKAGES(List<Integer> handSoundsets) {
         this.handSoundsets = handSoundsets;
     }
 

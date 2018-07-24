@@ -6,10 +6,10 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class USER_FLATS extends MessageComposer {
+public class FLAT_RESULTS extends MessageComposer {
     private final List<Room> roomList;
 
-    public USER_FLATS(List<Room> roomList) {
+    public FLAT_RESULTS(List<Room> roomList) {
         this.roomList = roomList;
     }
 

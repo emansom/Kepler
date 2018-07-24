@@ -8,6 +8,10 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class FRIENDLIST_UPDATE implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
+        if (player.isDisconnected()) {
+            return;
+        }
+
         player.send(new FRIENDS_UPDATE(player.getMessenger().getFriends()));
     }
 }

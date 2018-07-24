@@ -15,6 +15,7 @@ public class G_ITEMS implements MessageEvent {
         }
 
         Room room = player.getRoomUser().getRoom();
+
         player.send(new ITEMS(room));
     }
 }

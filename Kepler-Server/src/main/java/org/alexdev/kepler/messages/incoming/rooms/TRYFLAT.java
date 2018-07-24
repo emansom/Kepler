@@ -4,9 +4,9 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.messages.outgoing.rooms.DOORBELL_NOANSWER;
+import org.alexdev.kepler.messages.outgoing.rooms.FLATNOTALLOWEDTOENTER;
 import org.alexdev.kepler.messages.outgoing.rooms.DOORBELL_WAIT;
-import org.alexdev.kepler.messages.outgoing.rooms.FLAT_ACCESSIBLE;
+import org.alexdev.kepler.messages.outgoing.rooms.FLAT_LETIN;
 import org.alexdev.kepler.messages.outgoing.user.LOCALISED_ERROR;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -42,7 +42,7 @@ public class TRYFLAT implements MessageEvent {
                 if (rangDoorbell(room, player)) {
                     player.send(new DOORBELL_WAIT());
                 } else {
-                    player.send(new DOORBELL_NOANSWER());
+                    player.send(new FLATNOTALLOWEDTOENTER());
                 }
 
                 return;
@@ -60,7 +60,7 @@ public class TRYFLAT implements MessageEvent {
             player.getRoomUser().getRoom().getEntityManager().leaveRoom(player);
         }*/
         player.getRoomUser().setAuthenticateId(roomId);
-        player.send(new FLAT_ACCESSIBLE());
+        player.send(new FLAT_LETIN());
     }
 
     private boolean rangDoorbell(Room room, Player player) {

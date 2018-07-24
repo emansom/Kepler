@@ -12,7 +12,7 @@ public class NO_USER_FOUND extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeString(this.username);
+        response.write(this.username);
     }
 
     @Override

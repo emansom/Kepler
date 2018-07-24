@@ -65,7 +65,7 @@ public class SETSTUFFDATA implements MessageEvent {
                 Position nextPosition = item.getPosition().getSquareInFront();
 
                 if (!RoomTile.isValidTile(room, player, nextPosition)) {
-                    nextPosition = item.getTile().getNextAvaliablePosition(player);
+                    nextPosition = item.getTile().getNextAvailablePosition(player);
                 }
 
                 player.getRoomUser().walkTo(

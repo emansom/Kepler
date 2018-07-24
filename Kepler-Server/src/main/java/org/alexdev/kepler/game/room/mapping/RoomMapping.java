@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
@@ -25,8 +26,11 @@ public class RoomMapping {
     private RoomModel roomModel;
     private RoomTile roomMap[][];
 
+    private boolean isRegeneratingMap;
+
     public RoomMapping(Room room) {
         this.room = room;
+        this.isRegeneratingMap = false;
     }
 
     /**
@@ -34,88 +38,101 @@ public class RoomMapping {
      * furniture detection.
      */
     public void regenerateCollisionMap() {
-        this.room.getItemManager().setSoundMachine(null);
-        this.room.getItemManager().setMoodlight(null);
+        //if (this.isRegeneratingMap) {
+        //    return;
+        //}
 
-        this.roomModel = this.room.getModel();
-        this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
+        //this.isRegeneratingMap = true;
 
-        for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
-            for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
-                this.roomMap[x][y] = new RoomTile(this.room, new Position(x, y));
-                this.roomMap[x][y].setTileHeight(this.roomModel.getTileHeight(x, y));
-            }
-        }
+        try {
+            this.room.getItemManager().setSoundMachine(null);
+            this.room.getItemManager().setMoodlight(null);
 
-        for (Entity entity : this.room.getEntities()) {
-            if (entity.getRoomUser().getPosition() == null) {
-                continue;
-            }
+            this.roomModel = this.room.getModel();
+            this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
 
-            this.getTile(entity.getRoomUser().getPosition()).addEntity(entity);
-        }
-
-        List<Item> items = new ArrayList<>(this.room.getItems());
-        items.sort(Comparator.comparingDouble((Item item) -> item.getPosition().getZ()));
-
-        for (Item item : items) {
-            if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
-                continue;
+            for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
+                for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
+                    this.roomMap[x][y] = new RoomTile(this.room, new Position(x, y));
+                    this.roomMap[x][y].setTileHeight(this.roomModel.getTileHeight(x, y));
+                }
             }
 
-            RoomTile tile = item.getTile();
+            for (Entity entity : this.room.getEntities()) {
+                if (entity.getRoomUser().getPosition() == null) {
+                    continue;
+                }
 
-            if (tile == null) {
-                continue;
+                this.getTile(entity.getRoomUser().getPosition()).addEntity(entity);
             }
 
-            tile.getItems().add(item);
+            List<Item> items = new ArrayList<>(this.room.getItems());
+            items.sort(Comparator.comparingDouble((Item item) -> item.getPosition().getZ()));
 
-            if (tile.getTileHeight() < item.getTotalHeight()) {
-                item.setItemBelow(tile.getHighestItem());
-                tile.setTileHeight(item.getTotalHeight());
-                tile.setHighestItem(item);
+            for (Item item : items) {
+                if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
+                    continue;
+                }
 
-                List<Position> affectedTiles = AffectedTile.getAffectedTiles(item);
+                RoomTile tile = item.getTile();
 
-                for (Position position : affectedTiles) {
-                    if (position.getX() == item.getPosition().getX() && position.getY() == item.getPosition().getY()) {
-                        continue;
-                    }
+                if (tile == null) {
+                    continue;
+                }
 
-                    RoomTile affectedTile = this.getTile(position);
+                tile.getItems().add(item);
 
-                    // If there's an item in the affected tiles that has a higher height, then don't override it.
-                    if (affectedTile.getHighestItem() != null) {
-                        if (affectedTile.getWalkingHeight() > item.getTotalHeight()) {
+                if (tile.getTileHeight() < item.getTotalHeight()) {
+                    item.setItemBelow(tile.getHighestItem());
+                    tile.setTileHeight(item.getTotalHeight());
+                    tile.setHighestItem(item);
+
+                    List<Position> affectedTiles = AffectedTile.getAffectedTiles(item);
+
+                    for (Position position : affectedTiles) {
+                        if (position.getX() == item.getPosition().getX() && position.getY() == item.getPosition().getY()) {
                             continue;
                         }
+
+                        RoomTile affectedTile = this.getTile(position);
+
+                        // If there's an item in the affected tiles that has a higher height, then don't override it.
+                        if (affectedTile.getHighestItem() != null) {
+                            if (affectedTile.getWalkingHeight() > item.getTotalHeight()) {
+                                continue;
+                            }
+                        }
+
+                        affectedTile.setTileHeight(item.getTotalHeight());
+                        affectedTile.setHighestItem(item);
                     }
 
-                    affectedTile.setTileHeight(item.getTotalHeight());
-                    affectedTile.setHighestItem(item);
-                }
+                    if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
+                        PoolHandler.setupRedirections(this.room, item);
+                    }
 
-                if (item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
-                    PoolHandler.setupRedirections(this.room, item);
-                }
-
-                // Method to set only one jukebox per room
-                if (this.room.getItemManager().getSoundMachine() == null) {
-                    if (item.hasBehaviour(ItemBehaviour.JUKEBOX) || item.hasBehaviour(ItemBehaviour.SOUND_MACHINE)) {
-                        this.room.getItemManager().setSoundMachine(item);
+                    // Method to set only one jukebox per room
+                    if (this.room.getItemManager().getSoundMachine() == null) {
+                        if (item.hasBehaviour(ItemBehaviour.JUKEBOX) || item.hasBehaviour(ItemBehaviour.SOUND_MACHINE)) {
+                            this.room.getItemManager().setSoundMachine(item);
+                        }
                     }
                 }
             }
-        }
 
-        // Method to set only one moodlight per room
-        for (Item item : this.room.getItemManager().getWallItems()) {
-            if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
-                this.room.getItemManager().setMoodlight(item);
-                break;
+            // Method to set only one moodlight per room
+            for (Item item : this.room.getItemManager().getWallItems()) {
+                if (item.hasBehaviour(ItemBehaviour.ROOMDIMMER)) {
+                    this.room.getItemManager().setMoodlight(item);
+                    break;
+                }
             }
-        }
+
+        } catch (Exception ex) {
+            Log.getErrorLogger().error("Generate collision map failed for room {}", this.room.getId());
+        }/* finally {
+            this.isRegeneratingMap = false;
+        }*/
     }
 
     /**
@@ -143,6 +160,10 @@ public class RoomMapping {
             this.room.send(new PLACE_FLOORITEM(item));
         }
 
+        if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            item.setCustomData("FALSE");
+        }
+
         item.updateEntities(null);
         ItemDao.updateItem(item);
     }
@@ -163,6 +184,10 @@ public class RoomMapping {
             this.regenerateCollisionMap();
 
             this.room.send(new MOVE_FLOORITEM(item));
+        }
+
+        if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            item.setCustomData("FALSE");
         }
 
         item.updateEntities(oldPosition);
@@ -199,6 +224,10 @@ public class RoomMapping {
         if (item.hasBehaviour(ItemBehaviour.DICE) || item.hasBehaviour(ItemBehaviour.WHEEL_OF_FORTUNE)) {
             item.setRequiresUpdate(false);
             item.setCustomData("");
+        }
+
+        if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            item.setCustomData("FALSE");
         }
 
         item.updateEntities(null);

@@ -1,9 +1,9 @@
-package org.alexdev.kepler.messages.outgoing.navigator;
+package org.alexdev.kepler.messages.outgoing.trade;
 
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class SEARCH_NO_RESULTS extends MessageComposer {
+public class TRADE_CLOSE extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
 
@@ -11,6 +11,6 @@ public class SEARCH_NO_RESULTS extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 58; // "@z
+        return 110;
     }
 }

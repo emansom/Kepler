@@ -4,7 +4,7 @@ import org.alexdev.kepler.dao.mysql.SongMachineDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.songs.SONG_NEW;
-import org.alexdev.kepler.messages.outgoing.songs.SOUNDSETS;
+import org.alexdev.kepler.messages.outgoing.songs.SOUND_PACKAGES;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -38,7 +38,7 @@ public class SAVE_SONG_NEW implements MessageEvent {
                 calculateSongLength(data),
                 data);
 
-        player.send(new SOUNDSETS(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
+        player.send(new SOUND_PACKAGES(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
         player.send(new SONG_NEW(room.getItemManager().getSoundMachine().getId(), title));
     }
 

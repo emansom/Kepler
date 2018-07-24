@@ -10,7 +10,7 @@ import org.alexdev.kepler.game.inventory.Inventory;
 import org.alexdev.kepler.game.messenger.Messenger;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.RoomUser;
-import org.alexdev.kepler.messages.outgoing.handshake.FUSERIGHTS;
+import org.alexdev.kepler.messages.outgoing.handshake.RIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
@@ -75,6 +75,8 @@ public class Player extends Entity {
 
             this.send(new ALERT(alertMessage));
         }
+
+        this.messenger.sendStatusUpdate();
     }
 
     /**
@@ -111,7 +113,7 @@ public class Player extends Entity {
      * Send fuseright permissions for player.
      */
     public void refreshFuserights() {
-        this.send(new FUSERIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
+        this.send(new RIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
                 this.details.hasClubSubscription(),
                 this.details.getRank()))
         );
@@ -293,8 +295,11 @@ public class Player extends Entity {
                 this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
             }
 
+
             PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
             PlayerManager.getInstance().removePlayer(this);
+
+            this.messenger.sendStatusUpdate();
         }
 
         this.disconnected = true;

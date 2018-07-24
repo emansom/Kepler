@@ -21,5 +21,7 @@ public class G_OBJS implements MessageEvent {
         player.sendQueued(new OBJECTS_WORLD(room));
         player.sendQueued(new ACTIVE_OBJECTS(room));
         player.flush();
+
+        player.getMessenger().sendStatusUpdate();
     }
 }

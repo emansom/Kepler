@@ -7,8 +7,8 @@ import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.messages.outgoing.songs.HAND_SOUNDSETS;
-import org.alexdev.kepler.messages.outgoing.songs.SOUNDSETS;
+import org.alexdev.kepler.messages.outgoing.songs.USER_SOUND_PACKAGES;
+import org.alexdev.kepler.messages.outgoing.songs.SOUND_PACKAGES;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -54,8 +54,8 @@ public class EJECT_SOUND_PACKAGE implements MessageEvent {
 
         SongMachineDao.removeTrack(room.getItemManager().getSoundMachine().getId(), slotId);
 
-        player.send(new SOUNDSETS(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
-        player.send(new HAND_SOUNDSETS(player.getInventory().getSoundsets()));
+        player.send(new SOUND_PACKAGES(SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId())));
+        player.send(new USER_SOUND_PACKAGES(player.getInventory().getSoundsets()));
 
         // TODO: resend song with removed sounds from soundset (check first if client maybe requests from other packet)
     }

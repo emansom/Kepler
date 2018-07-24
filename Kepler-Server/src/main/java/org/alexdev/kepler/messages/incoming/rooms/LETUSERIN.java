@@ -3,8 +3,8 @@ package org.alexdev.kepler.messages.incoming.rooms;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.messages.outgoing.rooms.DOORBELL_NOANSWER;
-import org.alexdev.kepler.messages.outgoing.rooms.FLAT_ACCESSIBLE;
+import org.alexdev.kepler.messages.outgoing.rooms.FLATNOTALLOWEDTOENTER;
+import org.alexdev.kepler.messages.outgoing.rooms.FLAT_LETIN;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -33,9 +33,9 @@ public class LETUSERIN implements MessageEvent {
 
         if (canEnter) {
             enteringPlayer.getRoomUser().setAuthenticateId(room.getId());
-            enteringPlayer.send(new FLAT_ACCESSIBLE());
+            enteringPlayer.send(new FLAT_LETIN());
         } else {
-            enteringPlayer.send(new DOORBELL_NOANSWER());
+            enteringPlayer.send(new FLATNOTALLOWEDTOENTER());
         }
     }
 }

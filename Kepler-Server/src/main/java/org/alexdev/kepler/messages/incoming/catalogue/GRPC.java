@@ -9,17 +9,25 @@ import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.catalogue.CataloguePackage;
 import org.alexdev.kepler.game.catalogue.CataloguePage;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.texts.TextsManager;
+import org.alexdev.kepler.messages.outgoing.catalogue.DELIVER_PRESENT;
 import org.alexdev.kepler.messages.outgoing.catalogue.NO_CREDITS;
+import org.alexdev.kepler.messages.outgoing.rooms.items.ITEM_DELIVERED;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
+import org.alexdev.kepler.messages.outgoing.user.NO_USER_FOUND;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.sql.SQLException;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GRPC implements MessageEvent {
     @Override
@@ -47,24 +55,76 @@ public class GRPC implements MessageEvent {
             return;
         }
 
-        if (!item.isPackage()) {
-            String extraData = data[4];
-            purchase(player, item.getDefinition(), extraData, item.getItemSpecialId());
-        } else {
-            for (CataloguePackage cataloguePackage : item.getPackages()) {
-                for (int i = 0; i < cataloguePackage.getAmount(); i++){
-                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId());
+        if (data[5].equals("1")) { // It's a gift!
+            int receivingUserId = PlayerDao.getId(data[6]);
+
+            if (!data[6].toLowerCase().equals(player.getDetails().getName().toLowerCase())) {
+                if (receivingUserId == -1) {
+                    player.send(new NO_USER_FOUND(data[6]));
+                    return;
                 }
             }
+
+            String presentNote = "";
+            String extraData = data[4];
+
+            try {
+                presentNote = data[7];
+            } catch (Exception ignored) {
+                presentNote = "";
+            }
+
+            if (presentNote.isEmpty()) {
+                presentNote = " ";
+            }
+
+            Item present = new Item();
+            present.setOwnerId(receivingUserId);
+            present.setDefinitionId(ItemManager.getInstance().getDefinitionBySprite("present_gen" + ThreadLocalRandom.current().nextInt(1, 7)).getId());
+            present.setCustomData(saleCode + (char)9 + player.getDetails().getName() + (char)9 + StringUtil.filterInput(presentNote, true) + (char)9 + extraData);
+
+            ItemDao.newItem(present);
+
+            Player receiver = PlayerManager.getInstance().getPlayerById(receivingUserId);
+
+            if (receiver != null) {
+                receiver.getInventory().getItems().add(present);
+                receiver.getInventory().getView("last");
+
+                receiver.send(new DELIVER_PRESENT(present));
+            }
+
+            player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", data[6])));
+        } else {
+            String extraData = null;
+
+            if (!item.isPackage()) {
+                extraData = data[4];
+            }
+
+            purchase(player, item, extraData);
+            player.getInventory().getView("last");
+
+            player.send(new ITEM_DELIVERED());
         }
 
         CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());
         player.send(new CREDIT_BALANCE(player.getDetails()));
-
-        player.getInventory().getView("last");
     }
 
-    private void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) throws SQLException {
+    public static void purchase(Player player, CatalogueItem item, String extraData) throws SQLException {
+        if (!item.isPackage()) {
+            purchase(player, item.getDefinition(), extraData, item.getItemSpecialId());
+        } else {
+            for (CataloguePackage cataloguePackage : item.getPackages()) {
+                for (int i = 0; i < cataloguePackage.getAmount(); i++) {
+                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId());
+                }
+            }
+        }
+    }
+
+    private static void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) throws SQLException {
         String customData = "";
 
         if (extraData != null) {

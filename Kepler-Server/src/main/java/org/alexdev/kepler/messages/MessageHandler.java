@@ -182,6 +182,7 @@ public class MessageHandler {
         registerEvent(341, new MSG_ROOMDIMMER_GET_PRESETS());
         registerEvent(342, new MSG_ROOMDIMMER_SET_PRESET());
         registerEvent(343, new MSG_ROOMDIMMER_CHANGE_STATE());
+        registerEvent(78, new PRESENTOPEN());
     }
 
     /**
@@ -256,7 +257,6 @@ public class MessageHandler {
      */
     private void registerSongPackets() {
         registerEvent(244, new GET_SONG_LIST());
-        registerEvent(246, new GET_SONG_LIST());
         registerEvent(239, new NEW_SONG());
         registerEvent(219, new INSERT_SOUND_PACKAGE());
         registerEvent(220, new EJECT_SOUND_PACKAGE());
