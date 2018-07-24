@@ -7,10 +7,10 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import java.util.List;
 import java.util.Map;
 
-public class SOUNDSETS extends MessageComposer {
+public class SOUND_PACKAGES extends MessageComposer {
     private final Map<Integer, Integer> tracks;
 
-    public SOUNDSETS(Map<Integer, Integer> tracks) {
+    public SOUND_PACKAGES(Map<Integer, Integer> tracks) {
         this.tracks = tracks;
     }
 

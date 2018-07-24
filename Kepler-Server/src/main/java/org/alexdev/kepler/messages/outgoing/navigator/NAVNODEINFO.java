@@ -8,7 +8,7 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class NAVIGATE_LIST extends MessageComposer {
+public class NAVNODEINFO extends MessageComposer {
     private Player viewer;
     private NavigatorCategory parentCategory;
     private List<Room> rooms;
@@ -18,7 +18,7 @@ public class NAVIGATE_LIST extends MessageComposer {
     private int categoryMaxVisitors;
     private int rank;
 
-    public NAVIGATE_LIST(Player viewer, NavigatorCategory parentCategory, List<Room> rooms, boolean hideFull, List<NavigatorCategory> subCategories, int categoryCurrentVisitors, int categoryMaxVisitors, int rank) {
+    public NAVNODEINFO(Player viewer, NavigatorCategory parentCategory, List<Room> rooms, boolean hideFull, List<NavigatorCategory> subCategories, int categoryCurrentVisitors, int categoryMaxVisitors, int rank) {
         this.viewer = viewer;
         this.parentCategory = parentCategory;
         this.rooms = rooms;

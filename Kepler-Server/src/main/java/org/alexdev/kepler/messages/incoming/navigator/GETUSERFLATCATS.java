@@ -3,7 +3,7 @@ package org.alexdev.kepler.messages.incoming.navigator;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.messages.outgoing.navigator.FLATCATS;
+import org.alexdev.kepler.messages.outgoing.navigator.USERFLATCATS;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -27,6 +27,6 @@ public class GETUSERFLATCATS implements MessageEvent {
             categoryList.add(category);
         }
 
-        player.send(new FLATCATS(categoryList));
+        player.send(new USERFLATCATS(categoryList));
     }
 }

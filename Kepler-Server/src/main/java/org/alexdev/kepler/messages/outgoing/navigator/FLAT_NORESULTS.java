@@ -7,11 +7,11 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class SEARCH_RESULTS extends MessageComposer {
+public class FLAT_NORESULTS extends MessageComposer {
     private final List<Room> roomList;
     private final Player player;
 
-    public SEARCH_RESULTS(List<Room> roomList, Player player) {
+    public FLAT_NORESULTS(List<Room> roomList, Player player) {
         this.roomList = roomList;
         this.player = player;
     }

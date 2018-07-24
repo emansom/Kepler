@@ -6,10 +6,10 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class FLATCATS extends MessageComposer {
+public class USERFLATCATS extends MessageComposer {
     private final List<NavigatorCategory> categoryList;
 
-    public FLATCATS(List<NavigatorCategory> categoryList) {
+    public USERFLATCATS(List<NavigatorCategory> categoryList) {
         this.categoryList = categoryList;
     }
 

@@ -1,9 +1,9 @@
-package org.alexdev.kepler.messages.outgoing.handshake;
+package org.alexdev.kepler.messages.outgoing.navigator;
 
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class SESSION_PARAMS extends MessageComposer {
+public class NOFLATS extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
 
@@ -11,6 +11,6 @@ public class SESSION_PARAMS extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 257;
+        return 58; // "@z
     }
 }

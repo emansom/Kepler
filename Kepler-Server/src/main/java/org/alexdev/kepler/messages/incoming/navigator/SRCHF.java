@@ -4,8 +4,8 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.messages.outgoing.navigator.SEARCH_NO_RESULTS;
-import org.alexdev.kepler.messages.outgoing.navigator.SEARCH_RESULTS;
+import org.alexdev.kepler.messages.outgoing.navigator.NOFLATS;
+import org.alexdev.kepler.messages.outgoing.navigator.FLAT_NORESULTS;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -21,9 +21,9 @@ public class SRCHF implements MessageEvent {
 
         if (roomList.size() > 0) {
             RoomManager.getInstance().sortRooms(roomList);
-            player.send(new SEARCH_RESULTS(roomList, player));
+            player.send(new FLAT_NORESULTS(roomList, player));
         } else {
-            player.send(new SEARCH_NO_RESULTS());
+            player.send(new NOFLATS());
         }
     }
 }

@@ -7,11 +7,11 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class NAVIGATOR_RECOMMENDED_ROOMS extends MessageComposer {
+public class RECOMMENDED_ROOM_LIST extends MessageComposer {
     private final Player player;
     private final List<Room> roomList;
 
-    public NAVIGATOR_RECOMMENDED_ROOMS(Player player, List<Room> roomList) {
+    public RECOMMENDED_ROOM_LIST(Player player, List<Room> roomList) {
         this.player = player;
         this.roomList = roomList;
     }
