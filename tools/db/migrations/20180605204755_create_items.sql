@@ -10,7 +10,7 @@ CREATE TABLE `items` (
   `wall_position` varchar(255) NOT NULL DEFAULT '',
   `rotation` int(11) DEFAULT 0,
   `custom_data` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- migrate:down
 DROP TABLE `items`;

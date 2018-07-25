@@ -10,7 +10,7 @@ CREATE TABLE `catalogue_items` (
   `package_name` varchar(255) DEFAULT NULL,
   `package_description` varchar(255) DEFAULT NULL,
   `is_package` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`, `definition_id`, `item_specialspriteid`, `package_name`, `package_description`, `is_package`) VALUES
 (1, 'floor', 3, 1, 2, 249, 0, NULL, NULL, 0),
