@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -68,6 +69,10 @@ public class EntityTask implements Runnable {
         if (roomUser.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
+                //if (!Pathfinder.isValidStep(this.room, entity, roomUser.getPosition(), roomUser.getNextPosition(), roomUser.getNextPosition().equals(roomUser.getGoal()))) {
+                //    roomUser.setNextPosition(roomUser.getPosition().copy());;
+                //}
+
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
                 nextTile.addEntity(entity);
 

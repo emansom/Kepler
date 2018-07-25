@@ -148,7 +148,6 @@ public class Item {
             return this.currentProgramValue.equals("open");
         }
 
-
         if (this.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
             return true;
         }
