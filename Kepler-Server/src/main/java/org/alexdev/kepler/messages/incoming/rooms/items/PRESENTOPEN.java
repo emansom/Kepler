@@ -49,7 +49,6 @@ public class PRESENTOPEN implements MessageEvent {
         CatalogueItem catalogueItem = CatalogueManager.getInstance().getCatalogueItem(saleCode);
         GRPC.purchase(player, catalogueItem, extraData, receivedFrom, timestamp);
 
-        player.getInventory().getView("new");
         player.send(new ITEM_DELIVERED());
 
         room.getMapping().removeItem(item);
