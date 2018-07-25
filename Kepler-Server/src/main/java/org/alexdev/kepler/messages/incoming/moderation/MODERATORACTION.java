@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages.incoming.moderation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 import org.alexdev.kepler.messages.outgoing.user.MODERATOR_ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -32,6 +33,16 @@ public class MODERATORACTION implements MessageEvent {
                     player.send(new ALERT("Target user is not online."));
             }else if(commandId == 1){
                 // Kick
+                String alertMessage = FuseMessage.getArgument(1, payload);
+                String alertExtra = FuseMessage.getArgument(2, payload);
+                String alertUser = FuseMessage.getArgument(3, payload);
+
+                Player target = PlayerManager.getInstance().getPlayerByName(alertUser);
+                if(target != null){
+                    target.send(new HOTEL_VIEW());
+                    target.send(new MODERATOR_ALERT(alertMessage));
+                }else
+                    player.send(new ALERT("Target user is not online."));
             }else if(commandId == 2){
                 //Ban
             }
