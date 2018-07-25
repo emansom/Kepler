@@ -63,6 +63,7 @@ public class Player extends Entity {
             PlayerDao.clearSSOTicket(this.details.getId()); // Protect against replay attacks
         }
 
+        this.details.loadBadges();
         this.messenger = new Messenger(this);
         this.inventory = new Inventory(this);
 
