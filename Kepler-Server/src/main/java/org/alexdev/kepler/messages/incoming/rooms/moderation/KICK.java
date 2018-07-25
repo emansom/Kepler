@@ -9,8 +9,8 @@ public class KICK implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
         Player target = PlayerManager.getInstance().getPlayerByName(reader.contents());
-        if(target != null && player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) &&
-                target.getRoomUser().getRoom().getId() == player.getRoomUser().getRoom().getId()) {
+        if(target != null && target.getRoomUser().getRoom().getId() == player.getRoomUser().getRoom().getId() &&
+                (player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) || player.hasFuse("fuse_kick"))) {
             target.getRoomUser().setBeingKicked(true);
             target.getRoomUser().getRoom().getEntityManager().leaveRoom(target, true);
         }
