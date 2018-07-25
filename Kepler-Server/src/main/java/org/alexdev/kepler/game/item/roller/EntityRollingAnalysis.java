@@ -21,8 +21,8 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null; // Don't roll user if they're below the roller
         }
 
-        if (!entity.getRoomUser().getPosition().equals(roller.getPosition()) && !entity.getRoomUser().getPosition().equals(roller.getPosition().getSquareInFront())) {
-                return null;
+        if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
+            return null; // Don't roll users who aren't on this tile.
         }
 
         if (!entity.getRoomUser().getTile().hasWalkableFurni()) {
