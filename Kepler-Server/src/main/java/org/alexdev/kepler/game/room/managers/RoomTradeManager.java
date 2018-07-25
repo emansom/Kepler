@@ -24,10 +24,10 @@ public class RoomTradeManager {
 
         if (roomUser.getTradePartner() != null) {
             player.send(new TRADE_CLOSE());
-            player.getInventory().getView("last");
+            player.getInventory().getView("new");
 
             roomUser.getTradePartner().send(new TRADE_CLOSE());
-            roomUser.getTradePartner().getInventory().getView("last");
+            roomUser.getTradePartner().getInventory().getView("new");
 
             reset(roomUser.getTradePartner().getRoomUser());
         }

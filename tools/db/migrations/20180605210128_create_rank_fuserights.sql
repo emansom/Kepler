@@ -2,7 +2,7 @@
 CREATE TABLE `rank_fuserights` (
   `min_rank` int(11) NOT NULL,
   `fuseright` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `rank_fuserights` (`min_rank`, `fuseright`) VALUES
 (1, 'default'),

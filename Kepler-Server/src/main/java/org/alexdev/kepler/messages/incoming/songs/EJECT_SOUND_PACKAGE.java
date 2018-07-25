@@ -49,7 +49,7 @@ public class EJECT_SOUND_PACKAGE implements MessageEvent {
             ItemDao.newItem(item);
 
             player.getInventory().getItems().add(item);
-            player.getInventory().getView("last");
+            player.getInventory().getView("new");
         }
 
         SongMachineDao.removeTrack(room.getItemManager().getSoundMachine().getId(), slotId);

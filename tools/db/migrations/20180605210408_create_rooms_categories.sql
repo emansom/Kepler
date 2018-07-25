@@ -9,7 +9,7 @@ CREATE TABLE `rooms_categories` (
   `allow_trading` int(11) DEFAULT 0,
   `minrole_access` int(11) DEFAULT 1,
   `minrole_setflatcat` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`, `public_spaces`, `allow_trading`, `minrole_access`, `minrole_setflatcat`) VALUES
 (2, 0, 0, 0, 'No category', 0, 0, 1, 1),

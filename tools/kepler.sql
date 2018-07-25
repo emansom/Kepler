@@ -39,7 +39,7 @@ CREATE TABLE `catalogue_items` (
   `package_name` varchar(255) DEFAULT NULL,
   `package_description` varchar(255) DEFAULT NULL,
   `is_package` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `catalogue_items`
@@ -569,7 +569,7 @@ CREATE TABLE `catalogue_packages` (
   `definition_id` int(11) DEFAULT NULL,
   `special_sprite_id` int(11) DEFAULT NULL,
   `amount` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `catalogue_packages`
@@ -614,7 +614,7 @@ CREATE TABLE `catalogue_pages` (
   `label_pick` varchar(255) DEFAULT NULL,
   `label_extra_s` varchar(255) DEFAULT NULL,
   `label_extra_t` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `catalogue_pages`
@@ -679,7 +679,7 @@ CREATE TABLE `items` (
   `wall_position` varchar(255) NOT NULL DEFAULT '',
   `rotation` int(11) DEFAULT 0,
   `custom_data` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -695,7 +695,7 @@ CREATE TABLE `items_definitions` (
   `width` int(11) DEFAULT NULL,
   `top_height` double DEFAULT NULL,
   `behaviour` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `items_definitions`
@@ -1151,7 +1151,7 @@ CREATE TABLE `items_teleporter_links` (
 CREATE TABLE `messenger_friends` (
   `from_id` int(11) NOT NULL,
   `to_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1166,7 +1166,7 @@ CREATE TABLE `messenger_messages` (
   `unread` varchar(255) DEFAULT NULL,
   `body` varchar(255) DEFAULT NULL,
   `date` bigint(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1177,7 +1177,7 @@ CREATE TABLE `messenger_messages` (
 CREATE TABLE `messenger_requests` (
   `from_id` int(11) DEFAULT NULL,
   `to_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1199,7 +1199,7 @@ CREATE TABLE `rank_badges` (
 CREATE TABLE `rank_fuserights` (
   `min_rank` int(11) NOT NULL,
   `fuseright` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rank_fuserights`
@@ -1253,7 +1253,7 @@ CREATE TABLE `rooms` (
   `password` varchar(255) DEFAULT '',
   `visitors_now` int(11) DEFAULT 0,
   `visitors_max` int(11) DEFAULT 25
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rooms`
@@ -1330,7 +1330,7 @@ CREATE TABLE `rooms_categories` (
   `allow_trading` int(11) DEFAULT 0,
   `minrole_access` int(11) DEFAULT 1,
   `minrole_setflatcat` int(11) DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rooms_categories`
@@ -1376,7 +1376,7 @@ CREATE TABLE `rooms_models` (
   `door_dir` int(11) DEFAULT 2,
   `heightmap` text NOT NULL,
   `usertype` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `rooms_models`
@@ -1475,16 +1475,6 @@ CREATE TABLE `rooms_rights` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `schema_migrations`
---
-
-CREATE TABLE `schema_migrations` (
-  `version` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `settings`
 --
 
@@ -1503,7 +1493,7 @@ CREATE TABLE `soundmachine_playlists` (
   `item_id` int(11) NOT NULL,
   `song_id` int(11) NOT NULL,
   `slot_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1560,7 +1550,7 @@ CREATE TABLE `users` (
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
   `sound_enabled` tinyint(1) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1571,7 +1561,7 @@ CREATE TABLE `users` (
 CREATE TABLE `users_badges` (
   `user_id` int(11) NOT NULL,
   `badge` char(3) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1582,7 +1572,7 @@ CREATE TABLE `users_badges` (
 CREATE TABLE `users_room_favourites` (
   `room_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1594,7 +1584,7 @@ CREATE TABLE `users_room_votes` (
   `user_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL,
   `vote` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Indexes for dumped tables
@@ -1658,12 +1648,6 @@ ALTER TABLE `rooms_categories`
 ALTER TABLE `rooms_models`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`);
-
---
--- Indexes for table `schema_migrations`
---
-ALTER TABLE `schema_migrations`
-  ADD PRIMARY KEY (`version`);
 
 --
 -- Indexes for table `settings`

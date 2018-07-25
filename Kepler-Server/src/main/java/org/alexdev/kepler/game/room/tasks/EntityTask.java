@@ -1,7 +1,8 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
+import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
@@ -68,13 +69,16 @@ public class EntityTask implements Runnable {
         if (roomUser.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
-                RoomTile previousTile = roomUser.getTile();
-                previousTile.removeEntity(entity);
+                // Push back if the next tile is invalid
+                if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition())) {
+                    RoomTile tile = this.room.getMapping().getTile(roomUser.getNextPosition());
+                    Item item = tile.getHighestItem();
 
-                /*if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition().copy())) {
-                    roomUser.getPath().clear();
-                    roomUser.getPath().add(roomUser.getPosition().copy());
-                }*/
+                    // Don't push back if the invalid tile is a teleporter
+                    if (!(item != null && item.hasBehaviour(ItemBehaviour.TELEPORTER))) {
+                        roomUser.setNextPosition(roomUser.getPosition().copy());
+                    }
+                }
 
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
                 nextTile.addEntity(entity);
@@ -101,6 +105,9 @@ public class EntityTask implements Runnable {
                     roomUser.getRoom().getEntityManager().leaveRoom(entity, true);
                     return;
                 }
+
+                RoomTile previousTile = roomUser.getTile();
+                previousTile.removeEntity(entity);
 
                 roomUser.removeStatus(StatusType.LAY);
                 roomUser.removeStatus(StatusType.SIT);

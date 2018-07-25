@@ -7,7 +7,7 @@ CREATE TABLE `items_definitions` (
   `width` int(11) DEFAULT NULL,
   `top_height` double DEFAULT NULL,
   `behaviour` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `top_height`, `behaviour`) VALUES
 (1, 'shelves_norja', '#ffffff,#F7EBBC', 1, 1, 2, 'solid'),

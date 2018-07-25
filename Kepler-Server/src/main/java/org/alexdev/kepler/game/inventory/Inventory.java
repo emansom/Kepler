@@ -28,6 +28,7 @@ public class Inventory {
     }
 
     private void refreshPagination() {
+        this.items.sort(Comparator.comparingDouble(Item::getId).reversed());
         this.paginatedItems = StringUtil.paginate(this.items, MAX_ITEMS_PER_PAGE);
     }
 

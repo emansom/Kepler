@@ -140,6 +140,14 @@ public class Item {
      * @return true, if successful.
      */
     public boolean isWalkable() {
+        if (this.definition.getSprite().equals("poolLift")) {
+            return this.currentProgramValue.equals("open");
+        }
+
+        if (this.definition.getSprite().equals("poolBooth")) {
+            return this.currentProgramValue.equals("open");
+        }
+
         if (this.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
             return true;
         }
@@ -159,7 +167,7 @@ public class Item {
         if (this.hasBehaviour(ItemBehaviour.DOOR)) {
             return this.isGateOpen();
         }
-
+        
         return false;
     }
 
@@ -233,7 +241,7 @@ public class Item {
                 if (this.hasBehaviour(ItemBehaviour.PRESENT)) {
                     String[] presentData = this.customData.split(Character.toString((char)9));
                     if (presentData.length >= 3) {
-                        response.writeString("!" + presentData[2]); // Only show post-it colour
+                        response.writeString("!" + presentData[2]);
                     } else {
                         response.writeString("");
                     }

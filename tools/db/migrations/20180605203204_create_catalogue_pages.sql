@@ -12,7 +12,7 @@ CREATE TABLE `catalogue_pages` (
   `label_pick` varchar(255) DEFAULT NULL,
   `label_extra_s` varchar(255) DEFAULT NULL,
   `label_extra_t` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `name_index`, `name`, `layout`, `image_headline`, `image_teasers`, `body`, `label_pick`, `label_extra_s`, `label_extra_t`) VALUES
 (1, 1, 1, 'Frontpage', 'Frontpage', 'ctlg_frontpage2', 'catal_fp_header', 'catal_fp_pic4,catal_fp_pic5,', 'Welcome to the Hotel Catalogue. It\'s packed full of fab things for your room - there\'s something for everyone! Browse the ranges by clicking the tabs on the right.<br><br>Some ranges are seasonal, so check back regularly for new items.<br><br>We regularly', NULL, 'Home sweet home!', '1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.'),

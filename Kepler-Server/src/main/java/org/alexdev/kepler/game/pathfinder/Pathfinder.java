@@ -156,10 +156,10 @@ public class Pathfinder {
      * @param entity the entity
      * @return the linked list
      */
-    public static LinkedList<Position> makePath(Entity entity, List<PathfinderSettings> settings) {
+    public static LinkedList<Position> makePath(Entity entity) {
         int X = entity.getRoomUser().getGoal().getX();
         int Y = entity.getRoomUser().getGoal().getY();
-        return makePath(entity, X, Y, settings);
+        return makePath(entity, X, Y);
     }
 
     /**
@@ -170,13 +170,13 @@ public class Pathfinder {
      * @param y the y coord to move from
      * @return the linked list
      */
-    private static LinkedList<Position> makePath(Entity entity, int x, int y, List<PathfinderSettings> settings) {//List<PathfinderSettings> settings) {
+    private static LinkedList<Position> makePath(Entity entity, int x, int y) {//List<PathfinderSettings> settings) {
         if (!RoomTile.isValidTile(entity.getRoomUser().getRoom(), entity, new Position(x, y))) {
             return new LinkedList<>();
         }
 
         LinkedList<Position> squares = new LinkedList<>();
-        PathfinderNode nodes = makePathReversed(entity, x, y, settings);
+        PathfinderNode nodes = makePathReversed(entity, x, y);
 
         if (nodes != null) {
             while (nodes.getNextNode() != null) {
@@ -196,7 +196,7 @@ public class Pathfinder {
      * @param entity the entity
      * @return the pathfinder node
      */
-    private static PathfinderNode makePathReversed(Entity entity, int X, int Y, List<PathfinderSettings> settings) {
+    private static PathfinderNode makePathReversed(Entity entity, int X, int Y) {
         LinkedList<PathfinderNode> openList = new LinkedList<>();
 
         PathfinderNode[][] map = new PathfinderNode[entity.getRoomUser().getRoom().getModel().getMapSizeX()][entity.getRoomUser().getRoom().getModel().getMapSizeY()];
@@ -262,10 +262,6 @@ public class Pathfinder {
                     }
                 }
             }
-        }
-
-        if (settings.contains(PathfinderSettings.VALID_GOAL_NOT_REQUIRED)) {
-            return node; // Will return the closest square possible to the item.
         }
 
         return null;
