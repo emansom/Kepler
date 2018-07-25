@@ -41,7 +41,8 @@ public class MODERATORACTION implements MessageEvent {
 
                 Player target = PlayerManager.getInstance().getPlayerByName(alertUser);
                 if(target != null){
-                    target.send(new HOTEL_VIEW());
+                    target.getRoomUser().setBeingKicked(true);
+                    target.getRoomUser().getRoom().getEntityManager().leaveRoom(target, true);
                     target.send(new MODERATOR_ALERT(alertMessage));
                 }else
                     player.send(new ALERT("Target user is not online."));
@@ -67,7 +68,8 @@ public class MODERATORACTION implements MessageEvent {
                 List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
                 for(Player target : players){
                     if(target.getDetails().getRank() < player.getDetails().getRank()){
-                        target.send(new HOTEL_VIEW());
+                        target.getRoomUser().setBeingKicked(true);
+                        target.getRoomUser().getRoom().getEntityManager().leaveRoom(target, true);
                         target.send(new MODERATOR_ALERT(alertMessage));
                     }
                 }
