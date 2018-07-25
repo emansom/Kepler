@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
@@ -71,7 +72,12 @@ public class EntityTask implements Runnable {
                 //    roomUser.setNextPosition(roomUser.getPosition().copy());;
                 //}
                 if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition())) {
-                    roomUser.setNextPosition(roomUser.getPosition().copy());
+                    RoomTile invalidTile = this.room.getMapping().getTile(roomUser.getNextPosition());
+
+                    // Don't push back if the invalid tile is a teleporter
+                    if (!(invalidTile.getHighestItem() != null && invalidTile.getHighestItem().hasBehaviour(ItemBehaviour.TELEPORTER))) {
+                        roomUser.setNextPosition(roomUser.getPosition().copy());
+                    }
                 }
 
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
