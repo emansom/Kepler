@@ -27,6 +27,7 @@ import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GRPC implements MessageEvent {
@@ -35,18 +36,17 @@ public class GRPC implements MessageEvent {
         String content = reader.contents();
         String[] data = content.split(Character.toString((char) 13));
 
-        String pageIndex = data[1];
         String saleCode = data[3];
-
-        CataloguePage page = CatalogueManager.getInstance().getCataloguePage(pageIndex);
-
-        if (page == null || player.getDetails().getRank() < page.getMinRole()) {
-            return;
-        }
 
         CatalogueItem item = CatalogueManager.getInstance().getCatalogueItem(saleCode);
 
         if (item == null) {
+            return;
+        }
+
+        Optional<CataloguePage> pageStream = CatalogueManager.getInstance().getCataloguePages().stream().filter(p -> p.getId() == item.getPageId()).findFirst();
+
+        if (!pageStream.isPresent() || pageStream.get().getMinRole() > player.getDetails().getRank()) {
             return;
         }
 
