@@ -22,6 +22,7 @@ import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_GET_PRES
 import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_SET_PRESET;
 import org.alexdev.kepler.messages.incoming.rooms.items.*;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.ASSIGNRIGHTS;
+import org.alexdev.kepler.messages.incoming.rooms.moderation.KICK;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVEALLRIGHTS;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVERIGHTS;
 import org.alexdev.kepler.messages.incoming.rooms.pool.BTCKS;
@@ -209,6 +210,7 @@ public class MessageHandler {
      * Register room moderation packets
      */
     private void registerRoomModerationPackets() {
+        registerEvent(95, new KICK());
         registerEvent(96, new ASSIGNRIGHTS());
         registerEvent(97, new REMOVERIGHTS());
         registerEvent(155, new REMOVEALLRIGHTS());
