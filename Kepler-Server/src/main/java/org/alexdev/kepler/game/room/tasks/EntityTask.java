@@ -1,8 +1,6 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.pathfinder.Pathfinder;
-import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
@@ -72,6 +70,9 @@ public class EntityTask implements Runnable {
                 //if (!Pathfinder.isValidStep(this.room, entity, roomUser.getPosition(), roomUser.getNextPosition(), roomUser.getNextPosition().equals(roomUser.getGoal()))) {
                 //    roomUser.setNextPosition(roomUser.getPosition().copy());;
                 //}
+                if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition())) {
+                    roomUser.setNextPosition(roomUser.getPosition().copy());
+                }
 
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
                 nextTile.addEntity(entity);
