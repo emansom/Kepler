@@ -68,6 +68,17 @@ public class EntityTask implements Runnable {
         if (roomUser.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
+                RoomTile previousTile = roomUser.getTile();
+                previousTile.removeEntity(entity);
+
+                /*if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition().copy())) {
+                    roomUser.getPath().clear();
+                    roomUser.getPath().add(roomUser.getPosition().copy());
+                }*/
+
+                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
+                nextTile.addEntity(entity);
+
                 roomUser.getPosition().setX(roomUser.getNextPosition().getX());
                 roomUser.getPosition().setY(roomUser.getNextPosition().getY());
                 roomUser.updateNewHeight(roomUser.getNextPosition());
@@ -94,14 +105,8 @@ public class EntityTask implements Runnable {
                 roomUser.removeStatus(StatusType.LAY);
                 roomUser.removeStatus(StatusType.SIT);
 
-                RoomTile previousTile = roomUser.getTile();
-                previousTile.removeEntity(entity);
-
-                RoomTile nextTile = this.room.getMapping().getTile(next);
-                nextTile.addEntity(entity);
-
                 int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
-                double height = nextTile.getWalkingHeight();
+                double height = this.room.getMapping().getTile(next).getWalkingHeight();
 
                 roomUser.getPosition().setRotation(rotation);
                 roomUser.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
