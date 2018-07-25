@@ -241,7 +241,7 @@ public class Item {
                 if (this.hasBehaviour(ItemBehaviour.PRESENT)) {
                     String[] presentData = this.customData.split(Character.toString((char)9));
                     if (presentData.length >= 3) {
-                        response.writeString("!" + presentData[2]); // Only show post-it colour
+                        response.writeString("!" + presentData[2]);
                     } else {
                         response.writeString("");
                     }

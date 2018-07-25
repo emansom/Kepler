@@ -81,7 +81,11 @@ public class GRPC implements MessageEvent {
             Item present = new Item();
             present.setOwnerId(receivingUserId);
             present.setDefinitionId(ItemManager.getInstance().getDefinitionBySprite("present_gen" + ThreadLocalRandom.current().nextInt(1, 7)).getId());
-            present.setCustomData(saleCode + (char)9 + player.getDetails().getName() + (char)9 + StringUtil.filterInput(presentNote, true) + (char)9 + extraData);
+            present.setCustomData(saleCode +
+                    (char)9 + player.getDetails().getName() +
+                    (char)9 + StringUtil.filterInput(presentNote, true) +
+                    (char)9 + extraData +
+                    (char)9 + DateUtil.getCurrentTimeSeconds());
 
             ItemDao.newItem(present);
 
@@ -102,7 +106,7 @@ public class GRPC implements MessageEvent {
                 extraData = data[4];
             }
 
-            purchase(player, item, extraData);
+            purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
             player.getInventory().getView("last");
 
             player.send(new ITEM_DELIVERED());
@@ -112,19 +116,19 @@ public class GRPC implements MessageEvent {
         player.send(new CREDIT_BALANCE(player.getDetails()));
     }
 
-    public static void purchase(Player player, CatalogueItem item, String extraData) throws SQLException {
+    public static void purchase(Player player, CatalogueItem item, String extraData, String overrideName, long timestamp) throws SQLException {
         if (!item.isPackage()) {
-            purchase(player, item.getDefinition(), extraData, item.getItemSpecialId());
+            purchase(player, item.getDefinition(), extraData, item.getItemSpecialId(), overrideName, timestamp);
         } else {
             for (CataloguePackage cataloguePackage : item.getPackages()) {
                 for (int i = 0; i < cataloguePackage.getAmount(); i++) {
-                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId());
+                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId(), overrideName, timestamp);
                 }
             }
         }
     }
 
-    private static void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) throws SQLException {
+    private static void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId, String overrideName,  long timestamp) throws SQLException {
         String customData = "";
 
         if (extraData != null) {
@@ -141,10 +145,10 @@ public class GRPC implements MessageEvent {
             }
 
             if (def.hasBehaviour(ItemBehaviour.PRIZE_TROPHY)) {
-                customData += player.getDetails().getName();
+                customData += (overrideName != null ? overrideName : player.getDetails().getName());
                 customData += (char)9;
 
-                customData += DateUtil.getShortDate();
+                customData += DateUtil.getShortDate(timestamp);
                 customData += (char)9;
 
                 customData += StringUtil.filterInput(extraData, true);

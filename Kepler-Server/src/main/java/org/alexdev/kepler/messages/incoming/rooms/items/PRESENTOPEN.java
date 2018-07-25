@@ -11,6 +11,7 @@ import org.alexdev.kepler.messages.incoming.catalogue.GRPC;
 import org.alexdev.kepler.messages.outgoing.rooms.items.ITEM_DELIVERED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.DateUtil;
 
 public class PRESENTOPEN implements MessageEvent {
     @Override
@@ -35,10 +36,18 @@ public class PRESENTOPEN implements MessageEvent {
         String[] presentData = item.getCustomData().split(Character.toString((char)9));
 
         String saleCode = presentData[0];
+        String receivedFrom = presentData[1];
         String extraData = presentData[3];
+        long timestamp = DateUtil.getCurrentTimeSeconds();
+
+        try {
+            timestamp = Long.parseLong(presentData[4]);
+        } catch (Exception ignored) {
+
+        }
 
         CatalogueItem catalogueItem = CatalogueManager.getInstance().getCatalogueItem(saleCode);
-        GRPC.purchase(player, catalogueItem, extraData);
+        GRPC.purchase(player, catalogueItem, extraData, receivedFrom, timestamp);
 
         player.getInventory().getView("new");
         player.send(new ITEM_DELIVERED());
