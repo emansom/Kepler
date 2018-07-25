@@ -11,6 +11,7 @@ import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
 import org.alexdev.kepler.messages.incoming.catalogue.GET_ALIAS_LIST;
 import org.alexdev.kepler.messages.incoming.catalogue.GRPC;
 import org.alexdev.kepler.messages.incoming.messenger.*;
+import org.alexdev.kepler.messages.incoming.moderation.MODERATORACTION;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
@@ -59,11 +60,19 @@ public class MessageHandler {
         registerRoomSettingsPackets();
         registerRoomItemPackets();
         registerRoomModerationPackets();
+        registerGameModerationPackets();
         registerMessengerPackets();
         registerCataloguePackets();
         registerInventoryPackets();
         registerTradePackets();
         registerSongPackets();
+    }
+
+    /**
+     * Register game moderation packets.
+     */
+    private void registerGameModerationPackets(){
+        registerEvent(200, new MODERATORACTION());
     }
 
     /**
