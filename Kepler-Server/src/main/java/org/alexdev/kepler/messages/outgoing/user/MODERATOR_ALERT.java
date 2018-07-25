@@ -12,8 +12,7 @@ public class MODERATOR_ALERT extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeString("mod_warn/");
-        response.writeString(message);
+        response.writeString("mod_warn/"+message);
     }
 
     @Override
