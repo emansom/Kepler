@@ -1,21 +1,15 @@
 package org.alexdev.kepler.util;
 
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtil {
-
-    /**
-     * Gets the date formatter for this app.
-     *
-     * @return the date formatter
-     */
-    private static DateFormat getDateFormatter() {
-        return new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-    }
+    private static final String LONG_DATE = "dd-MM-yyyy HH:mm:ss";
+    private static final String SHORT_DATE = "dd-MM-yyyy";
 
     /**
      * Returns the current date as "dd-MM-yyyy"
@@ -24,7 +18,22 @@ public class DateUtil {
     public static String getShortDate() {
         try {
             Date date = new Date();
-            return new SimpleDateFormat("dd-MM-yyyy").format(date);
+            return new SimpleDateFormat(SHORT_DATE).format(date);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /**
+     * Returns the current date as "dd-MM-yyyy"
+     * @return the date as string
+     */
+    public static String getShortDate(long time) {
+        try {
+            Date date = new Date();
+            return new SimpleDateFormat(SHORT_DATE).format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -40,7 +49,7 @@ public class DateUtil {
     public static String getDateAsString() {
         try {
             Date date = new Date();
-            return getDateFormatter().format(date);
+            return new SimpleDateFormat(LONG_DATE).format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -58,7 +67,7 @@ public class DateUtil {
         try {
             Date date = new Date();
             date.setTime(time * 1000);
-            return getDateFormatter().format(date);
+            return new SimpleDateFormat(LONG_DATE).format(date);
         } catch (Exception e) {
             e.printStackTrace();
         }
