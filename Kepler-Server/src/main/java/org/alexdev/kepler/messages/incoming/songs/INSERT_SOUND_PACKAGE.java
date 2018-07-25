@@ -67,7 +67,7 @@ public class INSERT_SOUND_PACKAGE implements MessageEvent {
         }
 
         player.getInventory().getItems().remove(trackItem);
-        player.getInventory().getView("last");
+        player.getInventory().getView("new");
 
         ItemDao.deleteItem(trackItem.getId());
         SongMachineDao.addTrack(room.getItemManager().getSoundMachine().getId(), soundSetId, slotId);
