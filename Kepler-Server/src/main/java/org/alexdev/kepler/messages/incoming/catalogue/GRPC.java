@@ -90,8 +90,7 @@ public class GRPC implements MessageEvent {
             if (receiver != null) {
                 receiver.getInventory().getItems().add(present);
                 receiver.getInventory().getView("last");
-
-                receiver.send(new DELIVER_PRESENT(present));
+                //receiver.send(new DELIVER_PRESENT(present));
             }
 
             player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", data[6])));
@@ -102,29 +101,28 @@ public class GRPC implements MessageEvent {
                 extraData = data[4];
             }
 
-            purchase(player, item, extraData);
+            purchase(player, item, extraData, null);
             player.getInventory().getView("last");
-
-            player.send(new ITEM_DELIVERED());
+            //player.send(new ITEM_DELIVERED());
         }
 
         CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());
         player.send(new CREDIT_BALANCE(player.getDetails()));
     }
 
-    public static void purchase(Player player, CatalogueItem item, String extraData) throws SQLException {
+    public static void purchase(Player player, CatalogueItem item, String extraData, String overrideName) throws SQLException {
         if (!item.isPackage()) {
-            purchase(player, item.getDefinition(), extraData, item.getItemSpecialId());
+            purchase(player, item.getDefinition(), extraData, item.getItemSpecialId(),  overrideName);
         } else {
             for (CataloguePackage cataloguePackage : item.getPackages()) {
                 for (int i = 0; i < cataloguePackage.getAmount(); i++) {
-                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId());
+                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId(), overrideName);
                 }
             }
         }
     }
 
-    private static void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId) throws SQLException {
+    private static void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId, String overrideName) throws SQLException {
         String customData = "";
 
         if (extraData != null) {
@@ -141,8 +139,13 @@ public class GRPC implements MessageEvent {
             }
 
             if (def.hasBehaviour(ItemBehaviour.PRIZE_TROPHY)) {
-                customData += player.getDetails().getName();
-                customData += (char)9;
+                if (overrideName != null) {
+                    customData += overrideName;
+                    customData += (char) 9;
+                } else {
+                    customData += player.getDetails().getName();
+                    customData += (char) 9;
+                }
 
                 customData += DateUtil.getShortDate();
                 customData += (char)9;

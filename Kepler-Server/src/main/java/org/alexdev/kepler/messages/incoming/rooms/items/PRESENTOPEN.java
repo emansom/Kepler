@@ -35,10 +35,11 @@ public class PRESENTOPEN implements MessageEvent {
         String[] presentData = item.getCustomData().split(Character.toString((char)9));
 
         String saleCode = presentData[0];
+        String from = presentData[1];
         String extraData = presentData[3];
 
         CatalogueItem catalogueItem = CatalogueManager.getInstance().getCatalogueItem(saleCode);
-        GRPC.purchase(player, catalogueItem, extraData);
+        GRPC.purchase(player, catalogueItem, extraData, from);
 
         player.getInventory().getView("new");
         player.send(new ITEM_DELIVERED());
