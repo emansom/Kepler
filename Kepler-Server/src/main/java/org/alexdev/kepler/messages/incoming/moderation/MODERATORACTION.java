@@ -10,6 +10,8 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.encoding.FuseMessage;
 import org.alexdev.kepler.util.encoding.VL64Encoding;
 
+import java.util.List;
+
 public class MODERATORACTION implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
@@ -50,8 +52,25 @@ public class MODERATORACTION implements MessageEvent {
             // Room Command
             if(commandId == 0){
                 // Room Alert
+                String alertMessage = FuseMessage.getArgument(1, payload);
+                String alertExtra = FuseMessage.getArgument(2, payload);
+
+                List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
+                for(Player target : players){
+                    target.send(new MODERATOR_ALERT(alertMessage));
+                }
             }else if(commandId == 1){
                 // Room Kick
+                String alertMessage = FuseMessage.getArgument(1, payload);
+                String alertExtra = FuseMessage.getArgument(2, payload);
+
+                List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
+                for(Player target : players){
+                    if(target.getDetails().getRank() < player.getDetails().getRank()){
+                        target.send(new HOTEL_VIEW());
+                        target.send(new MODERATOR_ALERT(alertMessage));
+                    }
+                }
             }
         }
     }
