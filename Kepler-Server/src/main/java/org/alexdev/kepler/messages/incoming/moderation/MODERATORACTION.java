@@ -22,7 +22,7 @@ public class MODERATORACTION implements MessageEvent {
 
         if(commandCat == 0){
             // User Command
-            if(commandId == 0){
+            if(commandId == 0 && player.hasFuse("fuse_alert")){
                 // Alert
                 String alertMessage = FuseMessage.getArgument(1, payload);
                 String alertExtra = FuseMessage.getArgument(2, payload);
@@ -33,7 +33,7 @@ public class MODERATORACTION implements MessageEvent {
                     target.send(new MODERATOR_ALERT(alertMessage));
                 else
                     player.send(new ALERT("Target user is not online."));
-            }else if(commandId == 1){
+            }else if(commandId == 1 && player.hasFuse("fuse_kick")){
                 // Kick
                 String alertMessage = FuseMessage.getArgument(1, payload);
                 String alertExtra = FuseMessage.getArgument(2, payload);
@@ -46,12 +46,12 @@ public class MODERATORACTION implements MessageEvent {
                     target.send(new MODERATOR_ALERT(alertMessage));
                 }else
                     player.send(new ALERT("Target user is not online."));
-            }else if(commandId == 2){
+            }else if(commandId == 2 && player.hasFuse("fuse_ban")){
                 //Ban
             }
         }else if(commandCat == 1){
             // Room Command
-            if(commandId == 0){
+            if(commandId == 0 && player.hasFuse("fuse_room_alert")){
                 // Room Alert
                 String alertMessage = FuseMessage.getArgument(1, payload);
                 String alertExtra = FuseMessage.getArgument(2, payload);
@@ -60,7 +60,7 @@ public class MODERATORACTION implements MessageEvent {
                 for(Player target : players){
                     target.send(new MODERATOR_ALERT(alertMessage));
                 }
-            }else if(commandId == 1){
+            }else if(commandId == 1 && player.hasFuse("fuse_room_kick")){
                 // Room Kick
                 String alertMessage = FuseMessage.getArgument(1, payload);
                 String alertExtra = FuseMessage.getArgument(2, payload);
