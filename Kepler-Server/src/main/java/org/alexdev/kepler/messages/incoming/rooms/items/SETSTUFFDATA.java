@@ -4,8 +4,6 @@ import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.item.base.ItemDefinition;
-import org.alexdev.kepler.game.pathfinder.PathfinderSettings;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -13,8 +11,6 @@ import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
-
-import java.awt.*;
 
 public class SETSTUFFDATA implements MessageEvent {
     @Override
