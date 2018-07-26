@@ -33,8 +33,7 @@ public class MessengerDao {
                     "INNER JOIN users " +
                     "ON messenger_friends.from_id = users.id OR messenger_friends.to_id = users.id " +
                     "WHERE (messenger_friends.to_id = ? OR messenger_friends.from_id = ?) " +
-                    "AND users.id <> ? " +
-                    "AND (messenger_friends.from_id <> messenger_friends.to_id)", sqlConnection);
+                    "AND users.id <> ?", sqlConnection);
 
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, userId);
@@ -42,20 +41,7 @@ public class MessengerDao {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                /*int toId = resultSet.getInt("to_id");
-                int fromId = resultSet.getInt("from_id");
-
-                int friendId = -1;
-
-                if (toId != userId) {
-                    friendId = toId;
-                } else {
-                    friendId = fromId;
-                }*/
-                int friendId = resultSet.getInt("id");
-
-                //String username, String figure, String sex, String consoleMotto, long lastOnline)
-                friends.add(new MessengerUser(friendId, resultSet.getString("username"), resultSet.getString("figure"),
+                friends.add(new MessengerUser(resultSet.getInt("id"), resultSet.getString("username"), resultSet.getString("figure"),
                         resultSet.getString("sex"), resultSet.getString("console_motto"), resultSet.getLong("last_online")));
             }
 
