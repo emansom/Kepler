@@ -6,9 +6,10 @@ import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.util.StringUtil;
 
 public class MessengerUser {
-    private final int userId;
+    private int userId;
     private String username;
     private String figure;
     private char sex;
@@ -16,22 +17,22 @@ public class MessengerUser {
     private long lastOnline;
 
     public MessengerUser(PlayerDetails details) {
-        this.userId = details.getId();
-        this.username = details.getName();
-        this.figure = details.getFigure();
-        this.sex = details.getSex();
-        this.consoleMotto = details.getConsoleMotto();
-        this.lastOnline = details.getLastOnline();
+        this.applyUserDetails(details.getId(), details.getName(), details.getFigure(), details.getConsoleMotto(), String.valueOf(details.getSex()), details.getLastOnline());
     }
 
     public MessengerUser(int userId, String username, String figure, String sex, String consoleMotto, long lastOnline) {
+        this.applyUserDetails(userId, username, figure, consoleMotto, sex, lastOnline);
+    }
+
+    private void applyUserDetails(int userId, String username, String figure, String consoleMotto, String sex, long lastOnline) {
         this.userId = userId;
-        this.username = username;
-        this.figure = figure;
+        this.username = StringUtil.filterInput(username, true);
+        this.figure = StringUtil.filterInput(figure, true);
         this.sex = sex.toLowerCase().equals("f") ? 'F' : 'M';
         this.lastOnline = lastOnline;
-        this.consoleMotto = consoleMotto;
+        this.consoleMotto = StringUtil.filterInput(consoleMotto, true);
     }
+
 
     public void serialise(NettyResponse response) {
         Player player = PlayerManager.getInstance().getPlayerById(this.userId);
