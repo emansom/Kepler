@@ -86,11 +86,12 @@ public class MessengerDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM messenger_requests WHERE to_id = " + userId, sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT from_id,username,figure,sex,console_motto,last_online FROM messenger_requests INNER JOIN users ON messenger_requests.from_id = users.id WHERE to_id = " + userId, sqlConnection);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                users.add(new MessengerUser(resultSet.getInt("from_id")));
+                users.add(new MessengerUser(resultSet.getInt("from_id"), resultSet.getString("username"), resultSet.getString("figure"),
+                        resultSet.getString("sex"), resultSet.getString("console_motto"), resultSet.getLong("last_online")));
             }
 
         } catch (Exception e) {

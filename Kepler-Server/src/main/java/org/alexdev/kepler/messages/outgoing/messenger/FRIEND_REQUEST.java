@@ -5,16 +5,18 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class FRIEND_REQUEST extends MessageComposer {
-    private final PlayerDetails details;
+    private final int id;
+    private final String name;
 
-    public FRIEND_REQUEST(PlayerDetails details) {
-        this.details = details;
+    public FRIEND_REQUEST(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(this.details.getId());
-        response.writeString(this.details.getName());
+        response.writeInt(this.id);
+        response.writeString(this.name);
     }
 
     @Override
