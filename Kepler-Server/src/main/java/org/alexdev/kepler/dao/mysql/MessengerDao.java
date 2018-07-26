@@ -29,21 +29,30 @@ public class MessengerDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-
-            // SELECT id,username,figure,console_motto,last_online FROM messenger_friends INNER JOIN users ON messenger_friends.from_id = users.id OR messenger_friends.to_id = users.id
             preparedStatement = Storage.getStorage().prepare("SELECT id,username,figure,console_motto,last_online,sex FROM messenger_friends " +
-                    "INNER JOIN users ON messenger_friends.from_id = users.id OR messenger_friends.to_id = users.id " +
-                    "WHERE users.id <> ?", sqlConnection);
+                    "INNER JOIN users " +
+                    "ON messenger_friends.from_id = users.id OR messenger_friends.to_id = users.id " +
+                    "WHERE (messenger_friends.to_id = ? OR messenger_friends.from_id = ?) " +
+                    "AND users.id <> ? " +
+                    "AND (messenger_friends.from_id <> messenger_friends.to_id)", sqlConnection);
 
             preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setInt(3, userId);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int friendId = resultSet.getInt("id");
+                /*int toId = resultSet.getInt("to_id");
+                int fromId = resultSet.getInt("from_id");
 
-                if (friendId == userId) {
-                  //  continue;
-                }
+                int friendId = -1;
+
+                if (toId != userId) {
+                    friendId = toId;
+                } else {
+                    friendId = fromId;
+                }*/
+                int friendId = resultSet.getInt("id");
 
                 //String username, String figure, String sex, String consoleMotto, long lastOnline)
                 friends.add(new MessengerUser(friendId, resultSet.getString("username"), resultSet.getString("figure"),
