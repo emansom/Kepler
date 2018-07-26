@@ -41,7 +41,8 @@ public class GETDOORFLAT implements MessageEvent {
 
         // If their current item is the teleporters linked them, authenticate them so they can teleport back when double clicking.
         if (player.getRoomUser().getCurrentItem() != null) {
-            if (player.getRoomUser().getCurrentItem().getId() == linkedTeleporter.getId()) {
+            if (player.getRoomUser().getCurrentItem().getId() == item.getId() ||
+                player.getRoomUser().getCurrentItem().getId() == linkedTeleporter.getId()) {
                 player.getRoomUser().setAuthenticateTelporterId(item.getId());
             }
         }
