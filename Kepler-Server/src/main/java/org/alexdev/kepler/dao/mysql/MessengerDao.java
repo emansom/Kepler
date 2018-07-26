@@ -31,24 +31,23 @@ public class MessengerDao {
             sqlConnection = Storage.getStorage().getConnection();
 
             // SELECT id,username,figure,console_motto,last_online FROM messenger_friends INNER JOIN users ON messenger_friends.from_id = users.id OR messenger_friends.to_id = users.id
-            preparedStatement = Storage.getStorage().prepare("SELECT to_id, from_id FROM messenger_friends WHERE (to_id = ?) OR (from_id = ?)", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT id,username,figure,console_motto,last_online,sex FROM messenger_friends " +
+                    "INNER JOIN users ON messenger_friends.from_id = users.id OR messenger_friends.to_id = users.id " +
+                    "WHERE users.id <> ?", sqlConnection);
+
             preparedStatement.setInt(1, userId);
-            preparedStatement.setInt(2, userId);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                int toId = resultSet.getInt("to_id");
-                int fromId = resultSet.getInt("from_id");
+                int friendId = resultSet.getInt("id");
 
-                int friendId = -1;
-
-                if (toId != userId) {
-                    friendId = toId;
-                } else {
-                    friendId = fromId;
+                if (friendId == userId) {
+                  //  continue;
                 }
 
-                friends.add(new MessengerUser(friendId));
+                //String username, String figure, String sex, String consoleMotto, long lastOnline)
+                friends.add(new MessengerUser(friendId, resultSet.getString("username"), resultSet.getString("figure"),
+                        resultSet.getString("sex"), resultSet.getString("console_motto"), resultSet.getLong("last_online")));
             }
 
         } catch (Exception e) {
