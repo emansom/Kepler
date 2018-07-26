@@ -115,4 +115,9 @@ public class MessengerUser {
     public void setLastOnline(long lastOnline) {
         this.lastOnline = lastOnline;
     }
+
+    @Override
+    public String toString() {
+        return "[" + username + "," + consoleMotto + "," + figure + "," + sex + "," + lastOnline + "]";
+    }
 }
