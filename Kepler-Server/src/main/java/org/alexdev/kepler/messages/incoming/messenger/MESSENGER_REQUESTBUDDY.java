@@ -33,7 +33,7 @@ public class MESSENGER_REQUESTBUDDY implements MessageEvent {
 
         if (requested != null) {
             requested.send(new FRIEND_REQUEST(player.getDetails().getId(), player.getDetails().getName()));
-            requested.getMessenger().getRequests().add(new MessengerUser(player.getDetails().getId()));
+            requested.getMessenger().getRequests().add(new MessengerUser(player.getDetails()));
         }
     }
 }

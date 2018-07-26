@@ -15,8 +15,13 @@ public class MessengerUser {
     private String consoleMotto;
     private long lastOnline;
 
-    public MessengerUser(int userId) {
-        this.userId = userId;
+    public MessengerUser(PlayerDetails details) {
+        this.userId = details.getId();
+        this.username = details.getName();
+        this.figure = details.getFigure();
+        this.sex = details.getSex();
+        this.consoleMotto = details.getConsoleMotto();
+        this.lastOnline = details.getLastOnline();
     }
 
     public MessengerUser(int userId, String username, String figure, String sex, String consoleMotto, long lastOnline) {
