@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.MessengerDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.messenger.MessengerUser;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.messenger.FRIEND_REQUEST;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -28,6 +29,9 @@ public class MESSENGER_REQUESTBUDDY implements MessageEvent {
         }
 
         MessengerDao.newRequest(player.getDetails().getId(), userId);
+
+        PlayerDetails details = PlayerManager.getInstance().getPlayerData(userId);
+        player.getMessenger().getRequests().add(new MessengerUser(details));
 
         Player requested = PlayerManager.getInstance().getPlayerById(userId);
 
