@@ -29,6 +29,8 @@ public class MessengerDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
+
+            // SELECT id,username,figure,console_motto,last_online FROM messenger_friends INNER JOIN users ON messenger_friends.from_id = users.id OR messenger_friends.to_id = users.id
             preparedStatement = Storage.getStorage().prepare("SELECT to_id, from_id FROM messenger_friends WHERE (to_id = ?) OR (from_id = ?)", sqlConnection);
             preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, userId);
