@@ -27,6 +27,7 @@ import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.sql.SQLException;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class GRPC implements MessageEvent {
@@ -35,18 +36,17 @@ public class GRPC implements MessageEvent {
         String content = reader.contents();
         String[] data = content.split(Character.toString((char) 13));
 
-        String pageIndex = data[1];
         String saleCode = data[3];
-
-        CataloguePage page = CatalogueManager.getInstance().getCataloguePage(pageIndex);
-
-        if (page == null || player.getDetails().getRank() < page.getMinRole()) {
-            return;
-        }
 
         CatalogueItem item = CatalogueManager.getInstance().getCatalogueItem(saleCode);
 
         if (item == null) {
+            return;
+        }
+
+        Optional<CataloguePage> pageStream = CatalogueManager.getInstance().getCataloguePages().stream().filter(p -> p.getId() == item.getPageId()).findFirst();
+
+        if (!pageStream.isPresent() || pageStream.get().getMinRole() > player.getDetails().getRank()) {
             return;
         }
 
@@ -92,10 +92,7 @@ public class GRPC implements MessageEvent {
             Player receiver = PlayerManager.getInstance().getPlayerById(receivingUserId);
 
             if (receiver != null) {
-                receiver.getInventory().getItems().add(present);
-                receiver.getInventory().getView("last");
-
-                receiver.send(new DELIVER_PRESENT(present));
+                receiver.send(new ITEM_DELIVERED());
             }
 
             player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", data[6])));
@@ -107,7 +104,7 @@ public class GRPC implements MessageEvent {
             }
 
             purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
-            player.getInventory().getView("last");
+            //player.getInventory().getView("last");
 
             player.send(new ITEM_DELIVERED());
         }

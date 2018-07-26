@@ -58,7 +58,7 @@ public class PickallCommand extends Command {
 
         ItemDao.updateItems(itemsToPickup);
 
-        player.getInventory().getView("last");
+        player.getInventory().getView("new");
         player.send(new ALERT("All furniture items have been picked up"));
     }
 
