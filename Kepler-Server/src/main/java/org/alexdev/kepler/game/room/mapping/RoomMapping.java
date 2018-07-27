@@ -221,7 +221,7 @@ public class RoomMapping {
         if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.room.send(new REMOVE_WALLITEM(item));
         } else {
-            this.regenerateCollisionMap();
+            this.regenerateItemCollision();
             this.room.send(new REMOVE_FLOORITEM(item));
         }
 
