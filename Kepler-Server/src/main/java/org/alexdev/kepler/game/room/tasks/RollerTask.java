@@ -67,6 +67,8 @@ public class RollerTask implements Runnable {
                         entitiesRolling.put(entity, Pair.of(roller, nextPosition));
                         entityRollingAnalysis.doRoll(entity, roller, this.room, entity.getRoomUser().getPosition(), nextPosition);
                         this.room.getMapping().regenerateEntityCollision();
+                    } else {
+                        System.out.println("could not roll");
                     }
                 }
             }
