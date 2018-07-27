@@ -79,8 +79,12 @@ public class RollerTask implements Runnable {
                         kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
             }
 
-            if (entitiesRolling.size() > 0 || itemsRolling.size() > 0) {
-                this.room.getMapping().regenerateCollisionMap();
+            if (itemsRolling.size() > 0) {
+                this.room.getMapping().regenerateItemCollision();
+            }
+
+            if (entitiesRolling.size() > 0) {
+                this.room.getMapping().regenerateEntityCollision();
             }
 
             if (itemsRolling.size() > 0) {

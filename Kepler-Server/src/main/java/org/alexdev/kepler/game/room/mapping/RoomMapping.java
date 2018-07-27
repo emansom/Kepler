@@ -25,46 +25,45 @@ public class RoomMapping {
     private Room room;
     private RoomModel roomModel;
     private RoomTile roomMap[][];
-
-    private boolean isRegeneratingMap;
+    private List<RoomTile> tileList;
 
     public RoomMapping(Room room) {
         this.room = room;
-        this.isRegeneratingMap = false;
     }
 
     /**
      * Regenerate the entire collision map used for
-     * furniture detection.
+     * furniture and entity detection
      */
     public void regenerateCollisionMap() {
-        //if (this.isRegeneratingMap) {
-        //    return;
-        //}
+        this.tileList = new ArrayList<>();
+        this.roomModel = this.room.getModel();
+        this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
 
-        //this.isRegeneratingMap = true;
+        for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
+            for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
+                this.roomMap[x][y] = new RoomTile(this.room, new Position(x, y), this.roomModel.getTileHeight(x, y));
+                this.tileList.add(this.roomMap[x][y]);
+            }
+        }
 
+        this.regenerateEntityCollision();
+        this.regenerateItemCollision();
+    }
+
+    /**
+     * Regenerate the item collision map only.
+     */
+    public void regenerateItemCollision() {
         try {
+            for (RoomTile tile : this.tileList) {
+                tile.setHighestItem(null);
+                tile.getItems().clear();
+                tile.setTileHeight(tile.getDefaultHeight());
+            }
+
             this.room.getItemManager().setSoundMachine(null);
             this.room.getItemManager().setMoodlight(null);
-
-            this.roomModel = this.room.getModel();
-            this.roomMap = new RoomTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
-
-            for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
-                for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
-                    this.roomMap[x][y] = new RoomTile(this.room, new Position(x, y));
-                    this.roomMap[x][y].setTileHeight(this.roomModel.getTileHeight(x, y));
-                }
-            }
-
-            for (Entity entity : this.room.getEntities()) {
-                if (entity.getRoomUser().getPosition() == null) {
-                    continue;
-                }
-
-                this.getTile(entity.getRoomUser().getPosition()).addEntity(entity);
-            }
 
             List<Item> items = new ArrayList<>(this.room.getItems());
             items.sort(Comparator.comparingDouble((Item item) -> item.getPosition().getZ()));
@@ -130,9 +129,26 @@ public class RoomMapping {
 
         } catch (Exception ex) {
             Log.getErrorLogger().error("Generate collision map failed for room {}", this.room.getId());
-        }/* finally {
-            this.isRegeneratingMap = false;
-        }*/
+        }
+    }
+
+    /**
+     * Regenerate the entity collision map only.
+     */
+    public void regenerateEntityCollision() {
+        for (RoomTile tile : this.tileList) {
+            tile.getEntities().clear();
+        }
+
+        for (Entity entity : this.room.getEntities()) {
+            RoomTile tile = entity.getRoomUser().getTile();
+
+            if (tile == null) {
+                continue;
+            }
+
+            tile.addEntity(entity);
+        }
     }
 
     /**
@@ -155,7 +171,7 @@ public class RoomMapping {
             }
         } else {
             this.handleItemAdjustment(item, false);
-            this.regenerateCollisionMap();
+            this.regenerateItemCollision();
 
             this.room.send(new PLACE_FLOORITEM(item));
         }
@@ -181,7 +197,7 @@ public class RoomMapping {
 
         if (!item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.handleItemAdjustment(item, isRotation);
-            this.regenerateCollisionMap();
+            this.regenerateItemCollision();
 
             this.room.send(new MOVE_FLOORITEM(item));
         }
