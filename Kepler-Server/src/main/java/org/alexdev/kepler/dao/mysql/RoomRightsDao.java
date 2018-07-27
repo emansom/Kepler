@@ -69,8 +69,6 @@ public class RoomRightsDao {
     }
 
     public static void removeRights(int userId, int roomId) {
-        List<Integer> users = new ArrayList<>();
-
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -89,8 +87,6 @@ public class RoomRightsDao {
     }
 
     public static void deleteRoomRights(int roomId) {
-        List<Integer> users = new ArrayList<>();
-
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
