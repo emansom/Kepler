@@ -105,7 +105,6 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                         // it just rolled from, and the next roller has an item on it.
                         if (frontPosition.equals(entity.getRoomUser().getPosition())) {
                             if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
-                                System.out.println("hmmdedede ?");
                                 return null;
 
                             }
