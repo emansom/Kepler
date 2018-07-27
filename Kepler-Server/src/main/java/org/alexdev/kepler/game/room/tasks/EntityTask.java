@@ -70,7 +70,7 @@ public class EntityTask implements Runnable {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomUser.getNextPosition() != null) {
                 // Push back if the next tile is invalid
-                /*if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition())) {
+                if (!RoomTile.isValidTile(this.room, entity, roomUser.getNextPosition())) {
                     RoomTile tile = this.room.getMapping().getTile(roomUser.getNextPosition());
                     Item item = tile.getHighestItem();
 
@@ -78,11 +78,11 @@ public class EntityTask implements Runnable {
                     if (!(item != null && item.hasBehaviour(ItemBehaviour.TELEPORTER))) {
                         roomUser.setNextPosition(roomUser.getPosition().copy());
                     }
-                }*
+                }
 
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
                 nextTile.addEntity(entity);
-*/
+
                 roomUser.getPosition().setX(roomUser.getNextPosition().getX());
                 roomUser.getPosition().setY(roomUser.getNextPosition().getY());
                 roomUser.updateNewHeight(roomUser.getNextPosition());
@@ -108,9 +108,6 @@ public class EntityTask implements Runnable {
 
                 RoomTile previousTile = roomUser.getTile();
                 previousTile.removeEntity(entity);
-
-                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
-                nextTile.addEntity(entity);
 
                 roomUser.removeStatus(StatusType.LAY);
                 roomUser.removeStatus(StatusType.SIT);

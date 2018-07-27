@@ -55,8 +55,6 @@ public class RollerTask implements Runnable {
 
                     if (nextPosition != null) {
                         itemsRolling.put(item, Pair.of(roller, nextPosition));
-                        itemRollingAnalysis.doRoll(item, roller, this.room, item.getPosition().copy(), nextPosition);
-                        this.room.getMapping().regenerateItemCollision();
                     }
                 }
 
@@ -70,10 +68,28 @@ public class RollerTask implements Runnable {
 
                     if (nextPosition != null) {
                         entitiesRolling.put(entity, Pair.of(roller, nextPosition));
-                        entityRollingAnalysis.doRoll(entity, roller, this.room, entity.getRoomUser().getPosition(), nextPosition);
-                        this.room.getMapping().regenerateEntityCollision();
                     }
                 }
+            }
+
+            // Perform roll animation for item
+            for (var kvp : itemsRolling.entrySet()) {
+                itemRollingAnalysis.doRoll(kvp.getKey(),
+                        kvp.getValue().getLeft(), this.room, kvp.getKey().getPosition(), kvp.getValue().getRight());
+            }
+
+            // Perform roll animation for entity
+            for (var kvp : entitiesRolling.entrySet()) {
+                entityRollingAnalysis.doRoll(kvp.getKey(),
+                        kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
+            }
+
+            if (itemsRolling.size() > 0) {
+                this.room.getMapping().regenerateItemCollision();
+            }
+
+            if (entitiesRolling.size() > 0) {
+                this.room.getMapping().regenerateEntityCollision();
             }
 
             if (itemsRolling.size() > 0) {
