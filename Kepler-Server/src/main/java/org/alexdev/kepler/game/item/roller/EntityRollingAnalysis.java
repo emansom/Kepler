@@ -14,22 +14,18 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
     @Override
     public Position canRoll(Entity entity, Item roller, Room room) {
         if (entity.getRoomUser().isWalking()) {
-            System.out.println("lol 12354445");
             return null; // Don't roll user if they're walking.
         }
 
         if (entity.getRoomUser().getPosition().getZ() < roller.getPosition().getZ()) {
-            System.out.println("lol 123 1222");
             return null; // Don't roll user if they're below the roller
         }
 
         if (!entity.getRoomUser().getPosition().equals(roller.getPosition())) {
-            System.out.println("lol 123");
             return null; // Don't roll users who aren't on this tile.
         }
 
         if (!entity.getRoomUser().getTile().hasWalkableFurni()) {
-            System.out.println("l34242 123 1222 33");
             return null; // Don't roll user if they are stuck, let them be unstuck...
         }
 
@@ -37,12 +33,10 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         RoomTile frontTile = room.getMapping().getTile(front);
 
         if (frontTile == null) {
-            System.out.println(" cfffff3");
             return null;
         }
 
         if (!frontTile.hasWalkableFurni()) {
-            System.out.println(" cfffff3 3333434");
             return null;
         }
 
@@ -82,7 +76,6 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
                 if (frontRoller.getPosition().getZ() != roller.getPosition().getZ()) {
                     if (Math.abs(frontRoller.getPosition().getZ() - roller.getPosition().getZ()) > 0.1) {
-                        System.out.println("hmm ?");
                         return null; // Don't roll if the height of the roller is different by >0.1
                     }
                 }
@@ -104,9 +97,11 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                         // Don't roll an item into the next roller, if the next roller is facing towards the roller
                         // it just rolled from, and the next roller has an item on it.
                         if (frontPosition.equals(entity.getRoomUser().getPosition())) {
-                            if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
+                            if ((frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) &&
+                                    !frontTile.getItems().contains(entity.getRoomUser().getCurrentItem())) {
+                                //System.out.println("NULL 4: " + (frontTile.getItems().size() > 1) + " - " + (frontTile.getEntities().size() > 0));
+                                //System.out.println(frontTile.getItems().contains(entity.getRoomUser().getCurrentItem()));
                                 return null;
-
                             }
                         }
                     } else {
