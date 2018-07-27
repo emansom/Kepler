@@ -15,9 +15,9 @@ public class SLIDE_OBJECT extends MessageComposer {
     private double nextHeight;
     private Entity entity;
 
-    public SLIDE_OBJECT(Item item, Position next, int rollerId, double nextHeight) {
+    public SLIDE_OBJECT(Item item, Position from, Position next, int rollerId, double nextHeight) {
         this.item = item;
-        this.from = item.getPosition().copy();
+        this.from = from.copy();
         this.to = next.copy();
         this.rollerId = rollerId;
         this.nextHeight = nextHeight;
