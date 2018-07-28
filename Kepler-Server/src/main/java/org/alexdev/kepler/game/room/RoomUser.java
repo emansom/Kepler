@@ -121,24 +121,6 @@ public class RoomUser {
         this.goal = new Position(X, Y);
         //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
-        for (Position POINT : Pathfinder.DIAGONAL_MOVE_POINTS) {
-            Position tmp = this.position.copy().add(POINT);
-
-            if (this.room.getMapping().getTile(tmp) == null) {
-                continue;
-            }
-
-            for (Item item : this.room.getMapping().getTile(tmp).getItems()) {
-                if (item.getRollingData() != null) {
-                    if (item.getRollingData().getNextPosition().equals(this.goal)) {
-                        System.out.println("prevented");
-                    }
-                    return;
-                }
-            }
-        }
-
-
         if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
             return;
         }
