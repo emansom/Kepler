@@ -11,19 +11,16 @@ public class CallForHelp {
     private final String message;
     private String pickedUpBy;
     private final String roomName;
-    private final int callerId;
     private final int roomId;
     private int priority = 2;
 
     CallForHelp(int callId, Player caller, String message){
         this.callId = callId;
         this.caller = caller.getDetails().getName();
-        this.callerId = caller.getDetails().getId();
         this.message = message;
         this.pickedUpBy = "";
         this.roomId = caller.getRoomUser().getRoom().getData().getId();
         this.roomName = caller.getRoomUser().getRoom().getData().getName();
-
     }
 
     public String getMessage(){
