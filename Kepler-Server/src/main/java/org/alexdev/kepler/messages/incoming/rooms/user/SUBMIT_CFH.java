@@ -9,7 +9,7 @@ import org.alexdev.kepler.util.encoding.FuseMessage;
 public class SUBMIT_CFH implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        String message = FuseMessage.getArgument(1, reader.contents());
+        String message = reader.readString();
         CallForHelpManager.getInstance().submitCallForHelp(player, message);
     }
 }
