@@ -64,11 +64,24 @@ public class CallForHelpManager {
         return null;
     }
 
+    /**
+     * Send the Call for Help to all online staff
+     * @param cfh the CFH to send
+     */
     void sendToModerators(CallForHelp cfh){
         for(Player p : PlayerManager.getInstance().getActivePlayers()){
             if(p.hasFuse("fuse_cfh")){
                 p.send(new CALL_FOR_HELP(cfh));
             }
+        }
+    }
+
+    public void pickUp(int callId, Player moderator){
+        if(moderator.hasFuse("fuse_cfh")){
+            CallForHelp cfh = this.getCallForHelpById(callId);
+            cfh.pickUp(moderator);
+            // Send the updated CallForHelp to Moderators
+            sendToModerators(cfh);
         }
     }
 

@@ -21,10 +21,7 @@ import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_CHANGE_S
 import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_GET_PRESETS;
 import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_SET_PRESET;
 import org.alexdev.kepler.messages.incoming.rooms.items.*;
-import org.alexdev.kepler.messages.incoming.rooms.moderation.ASSIGNRIGHTS;
-import org.alexdev.kepler.messages.incoming.rooms.moderation.KICK;
-import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVEALLRIGHTS;
-import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVERIGHTS;
+import org.alexdev.kepler.messages.incoming.rooms.moderation.*;
 import org.alexdev.kepler.messages.incoming.rooms.pool.BTCKS;
 import org.alexdev.kepler.messages.incoming.rooms.pool.DIVE;
 import org.alexdev.kepler.messages.incoming.rooms.pool.SPLASH_POSITION;
@@ -76,6 +73,7 @@ public class MessageHandler {
         registerEvent(200, new MODERATORACTION());
         registerEvent(237, new REQUEST_CFH());
         registerEvent(86, new SUBMIT_CFH());
+        registerEvent(48, new PICK_CALLFORHELP());
     }
 
     /**
