@@ -92,6 +92,7 @@ public class GRPC implements MessageEvent {
             Player receiver = PlayerManager.getInstance().getPlayerById(receivingUserId);
 
             if (receiver != null) {
+                receiver.getInventory().getItems().add(present);
                 receiver.send(new ITEM_DELIVERED());
             }
 
