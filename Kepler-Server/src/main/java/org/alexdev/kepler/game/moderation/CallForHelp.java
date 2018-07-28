@@ -52,7 +52,7 @@ public class CallForHelp {
     }
 
     public boolean isOpen(){
-        return this.pickedUpBy.equals("");
+        return !this.pickedUpBy.equals("");
     }
 
     void pickUp(Player moderator){
