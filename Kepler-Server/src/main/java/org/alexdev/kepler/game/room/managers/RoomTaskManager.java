@@ -85,13 +85,4 @@ public class RoomTaskManager {
     public boolean hasTask(String taskName) {
         return this.processTasks.containsKey(taskName);
     }
-
-    public Runnable getTaskByName(String taskName) {
-        if (this.processTasks.containsKey(taskName)) {
-            var entry = this.processTasks.get(taskName);
-            return entry.getValue();
-        }
-
-        return null;
-    }
 }
