@@ -74,6 +74,7 @@ public class MessageHandler {
         registerEvent(237, new REQUEST_CFH());
         registerEvent(86, new SUBMIT_CFH());
         registerEvent(48, new PICK_CALLFORHELP());
+        registerEvent(199, new MESSAGETOCALLER());
     }
 
     /**
