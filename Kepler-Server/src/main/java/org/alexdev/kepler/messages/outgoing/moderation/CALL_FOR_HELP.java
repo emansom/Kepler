@@ -17,7 +17,8 @@ public class CALL_FOR_HELP extends MessageComposer {
         builder.append(cfh.getCallId());
         builder.append((char)2);
         builder.append(cfh.getPriority());
-        builder.append("Picked up by: ");
+        // TODO: Figure out what separates the lines here.
+        builder.append("     Picked up by: ");
         builder.append(cfh.getPickedUpBy());
         builder.append((char)2);
         builder.append(cfh.getCaller());
