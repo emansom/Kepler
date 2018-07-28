@@ -75,6 +75,7 @@ public class MessageHandler {
     private void registerGameModerationPackets(){
         registerEvent(200, new MODERATORACTION());
         registerEvent(237, new REQUEST_CFH());
+        registerEvent(86, new SUBMIT_CFH());
     }
 
     /**
