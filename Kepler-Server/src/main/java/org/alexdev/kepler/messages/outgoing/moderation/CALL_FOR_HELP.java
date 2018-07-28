@@ -32,8 +32,8 @@ public class CALL_FOR_HELP extends MessageComposer {
         builder.append((char)2);
         builder.append("I");
         builder.append((char)2);
+        // TODO: Figure out why the RoomID is being interpreted wrong by client
         builder.append(cfh.getRoomId());
-        builder.append((char)2);
 
         response.writeString(builder.toString());
     }
