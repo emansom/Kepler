@@ -34,8 +34,16 @@ public class CallForHelp {
         return this.roomName;
     }
 
+    public String getPickedUpBy(){
+        return this.pickedUpBy;
+    }
+
     public int getRoomId(){
         return this.roomId;
+    }
+
+    public int getPriority(){
+        return this.priority;
     }
 
     public String getCaller(){
