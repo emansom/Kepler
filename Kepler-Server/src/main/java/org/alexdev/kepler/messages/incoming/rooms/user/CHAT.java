@@ -27,6 +27,10 @@ public class CHAT implements MessageEvent {
         player.getRoomUser().setTyping(false);
         room.send(new TYPING_STATUS(player.getRoomUser().getInstanceId(), player.getRoomUser().isTyping()));
 
+        if (message.isEmpty()) {
+            return;
+        }
+
         if (CommandManager.getInstance().hasCommand(player, message)) {
             CommandManager.getInstance().invokeCommand(player, message);
             return;
@@ -71,6 +75,9 @@ public class CHAT implements MessageEvent {
 
                         roomPlayer.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), new String(garbleMessage)));
                     }
+                } else {
+                    // Disappearing chat bubble
+                    roomPlayer.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), ""));
                 }
             }
         } else {
