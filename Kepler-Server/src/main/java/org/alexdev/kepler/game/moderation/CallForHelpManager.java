@@ -78,6 +78,11 @@ public class CallForHelpManager {
         }
     }
 
+    /**
+     * Pick up a call for help
+     * @param callId the ID of the CFH to pick up
+     * @param moderator the moderator who is picking it up
+     */
     public void pickUp(int callId, Player moderator){
         if(moderator.hasFuse("fuse_cfh")){
             CallForHelp cfh = this.getCallForHelpById(callId);
