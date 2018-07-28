@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages.incoming.rooms.moderation;
 import org.alexdev.kepler.game.moderation.CallForHelpManager;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.messages.outgoing.moderation.CRY_REPLY;
 import org.alexdev.kepler.messages.outgoing.user.MODERATOR_ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -17,7 +18,7 @@ public class MESSAGETOCALLER implements MessageEvent {
         String callerName = CallForHelpManager.getInstance().getCallForHelpById(callId).getCaller();
         Player caller = PlayerManager.getInstance().getPlayerByName(callerName);
         if(caller != null){
-            caller.send(new MODERATOR_ALERT(message));
+            caller.send(new CRY_REPLY(message));
         }
     }
 }

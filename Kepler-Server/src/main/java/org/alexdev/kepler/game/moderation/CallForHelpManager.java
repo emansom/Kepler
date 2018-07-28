@@ -3,6 +3,8 @@ package org.alexdev.kepler.game.moderation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.moderation.CALL_FOR_HELP;
+import org.alexdev.kepler.messages.outgoing.moderation.PICKED_CRY;
+import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -28,7 +30,7 @@ public class CallForHelpManager {
         if(this.getOpenCallForHelpByPlayerName(caller.getDetails().getName()) == null){
             CallForHelp cfh = new CallForHelp(latestCallId++, caller, message);
             this.callsForHelp.add(cfh);
-            sendToModerators(cfh);
+            sendToModerators(new CALL_FOR_HELP(cfh));
             return true;
         }
         return false;
@@ -65,13 +67,13 @@ public class CallForHelpManager {
     }
 
     /**
-     * Send the Call for Help to all online staff
-     * @param cfh the CFH to send
+     * Send a packet to all online staff
+     * @param message the Message to send
      */
-    void sendToModerators(CallForHelp cfh){
+    void sendToModerators(MessageComposer message){
         for(Player p : PlayerManager.getInstance().getActivePlayers()){
             if(p.hasFuse("fuse_cfh")){
-                p.send(new CALL_FOR_HELP(cfh));
+                p.send(message);
             }
         }
     }
@@ -81,7 +83,7 @@ public class CallForHelpManager {
             CallForHelp cfh = this.getCallForHelpById(callId);
             cfh.pickUp(moderator);
             // Send the updated CallForHelp to Moderators
-            sendToModerators(cfh);
+            sendToModerators(new PICKED_CRY(cfh));
         }
     }
 
