@@ -17,17 +17,21 @@ import java.util.concurrent.TimeUnit;
 
 public class RollerTask implements Runnable {
     private final Room room;
+    private final Map<Item, Pair<Item, Position>> itemsRolling;
+    private final Map<Entity, Pair<Item, Position>> entitiesRolling;
 
     public RollerTask(Room room) {
         this.room = room;
+        this.itemsRolling = new LinkedHashMap<>();
+        this.entitiesRolling = new LinkedHashMap<>();
     }
 
     @Override
     public void run() {
-        try {
-            Map<Item, Pair<Item, Position>> itemsRolling = new LinkedHashMap<>();
-            Map<Entity, Pair<Item, Position>> entitiesRolling = new LinkedHashMap<>();
+        this.itemsRolling.clear();
+        this.entitiesRolling.clear();
 
+        try {
             ItemRollingAnalysis itemRollingAnalysis = new ItemRollingAnalysis();
             EntityRollingAnalysis entityRollingAnalysis = new EntityRollingAnalysis();
 
@@ -80,8 +84,15 @@ public class RollerTask implements Runnable {
             }
 
             if (itemsRolling.size() > 0) {
+                this.room.getMapping().regenerateItemCollision();
+            }
+
+            if (entitiesRolling.size() > 0) {
+                this.room.getMapping().regenerateEntityCollision();
+            }
+
+            if (itemsRolling.size() > 0) {
                 ItemDao.updateItems(itemsRolling.keySet());
-                this.room.getMapping().regenerateCollisionMap();
 
                 GameScheduler.getInstance().getSchedulerService().schedule(
                         new RollerCompleteTask(itemsRolling.keySet(), room),
@@ -92,5 +103,19 @@ public class RollerTask implements Runnable {
         } catch (Exception ex) {
             Log.getErrorLogger().error("RollerTask crashed: ", ex);
         }
+    }
+
+    public Item findPotentialRollingItem(Position position) {
+        for (Item item : this.itemsRolling.keySet()) {
+            if (item.getRollingData() == null) {
+                continue;
+            }
+
+            if (item.getRollingData().getNextPosition().equals(position) || item.getRollingData().getFromPosition().equals(position)) {
+                return item;
+            }
+        }
+
+        return null;
     }
 }

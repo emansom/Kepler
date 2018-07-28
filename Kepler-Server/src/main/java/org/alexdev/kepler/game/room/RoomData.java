@@ -34,14 +34,10 @@ public class RoomData {
         this.room = room;
     }
 
-    public void fill(int id, int ownerId, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax) {
+    public void fill(int id, int ownerId, String ownerName, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax) {
         this.id = id;
         this.ownerId = ownerId;
-        if (this.ownerId > 0) {
-            this.ownerName = PlayerDao.getName(this.ownerId);
-        } else {
-            this.ownerName = "";
-        }
+        this.ownerName = StringUtil.filterInput(ownerName, true);;
         this.categoryId = category;
         this.name = StringUtil.filterInput(name, true);
         this.description = StringUtil.filterInput(description, true);

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.8.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jul 08, 2018 at 02:54 AM
--- Server version: 10.2.15-MariaDB
--- PHP Version: 5.6.31
+-- Host: localhost
+-- Generation Time: Jul 28, 2018 at 04:59 AM
+-- Server version: 10.3.7-MariaDB
+-- PHP Version: 7.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dev`
+-- Database: `kepler`
 --
 
 -- --------------------------------------------------------
@@ -30,14 +30,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `catalogue_items` (
   `id` int(11) NOT NULL,
-  `sale_code` varchar(255) DEFAULT NULL,
+  `sale_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `page_id` int(11) DEFAULT NULL,
   `order_id` int(11) NOT NULL DEFAULT 0,
   `price` int(11) NOT NULL DEFAULT 3,
   `definition_id` int(11) DEFAULT NULL,
   `item_specialspriteid` int(11) NOT NULL DEFAULT 0,
-  `package_name` varchar(255) DEFAULT NULL,
-  `package_description` varchar(255) DEFAULT NULL,
+  `package_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `package_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_package` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -565,7 +565,7 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 --
 
 CREATE TABLE `catalogue_packages` (
-  `salecode` varchar(255) DEFAULT NULL,
+  `salecode` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `definition_id` int(11) DEFAULT NULL,
   `special_sprite_id` int(11) DEFAULT NULL,
   `amount` int(11) DEFAULT NULL
@@ -605,15 +605,15 @@ CREATE TABLE `catalogue_pages` (
   `id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
   `min_role` int(11) DEFAULT NULL,
-  `name_index` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `layout` varchar(255) DEFAULT NULL,
-  `image_headline` varchar(255) DEFAULT NULL,
-  `image_teasers` varchar(255) DEFAULT NULL,
-  `body` varchar(255) DEFAULT NULL,
-  `label_pick` varchar(255) DEFAULT NULL,
-  `label_extra_s` varchar(255) DEFAULT NULL,
-  `label_extra_t` varchar(255) DEFAULT NULL
+  `name_index` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `layout` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_headline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_teasers` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `label_pick` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `label_extra_s` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `label_extra_t` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -673,12 +673,12 @@ CREATE TABLE `items` (
   `user_id` int(11) DEFAULT NULL,
   `room_id` int(11) DEFAULT 0,
   `definition_id` int(11) NOT NULL,
-  `x` varchar(255) DEFAULT '0',
-  `y` varchar(255) DEFAULT '0',
-  `z` varchar(255) DEFAULT '0',
-  `wall_position` varchar(255) NOT NULL DEFAULT '',
+  `x` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `y` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `z` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `wall_position` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `rotation` int(11) DEFAULT 0,
-  `custom_data` varchar(255) NOT NULL
+  `custom_data` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -689,12 +689,12 @@ CREATE TABLE `items` (
 
 CREATE TABLE `items_definitions` (
   `id` int(11) NOT NULL,
-  `sprite` varchar(255) DEFAULT NULL,
-  `colour` varchar(255) DEFAULT NULL,
+  `sprite` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `colour` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `length` int(11) DEFAULT NULL,
   `width` int(11) DEFAULT NULL,
   `top_height` double DEFAULT NULL,
-  `behaviour` varchar(255) DEFAULT NULL
+  `behaviour` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1115,7 +1115,13 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (411, 'sound_set_61', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
 (412, 'sound_set_62', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
 (413, 'sound_set_63', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(414, 'sound_set_64', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set');
+(414, 'sound_set_64', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(415, 'present_gen1', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(416, 'present_gen2', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(417, 'present_gen3', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(418, 'present_gen4', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(419, 'present_gen5', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(420, 'present_gen6', '', 1, 1, 1, 'solid,present,can_stack_on_top');
 
 -- --------------------------------------------------------
 
@@ -1163,8 +1169,8 @@ CREATE TABLE `messenger_messages` (
   `id` int(11) NOT NULL,
   `receiver_id` int(11) DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
-  `unread` varchar(255) DEFAULT NULL,
-  `body` varchar(255) DEFAULT NULL,
+  `unread` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1198,7 +1204,7 @@ CREATE TABLE `rank_badges` (
 
 CREATE TABLE `rank_fuserights` (
   `min_rank` int(11) NOT NULL,
-  `fuseright` varchar(255) NOT NULL
+  `fuseright` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1239,18 +1245,18 @@ INSERT INTO `rank_fuserights` (`min_rank`, `fuseright`) VALUES
 
 CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
-  `owner_id` varchar(11) NOT NULL,
+  `owner_id` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` int(11) DEFAULT 2,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `model` varchar(255) NOT NULL,
-  `ccts` varchar(255) DEFAULT '',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ccts` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `wallpaper` int(4) DEFAULT 0,
   `floor` int(4) DEFAULT 0,
   `showname` tinyint(1) DEFAULT 1,
   `superusers` tinyint(1) DEFAULT 0,
   `accesstype` tinyint(3) DEFAULT 0,
-  `password` varchar(255) DEFAULT '',
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `visitors_now` int(11) DEFAULT 0,
   `visitors_max` int(11) DEFAULT 25
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1325,7 +1331,7 @@ CREATE TABLE `rooms_categories` (
   `order_id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `isnode` int(11) DEFAULT 0,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `public_spaces` int(11) DEFAULT 0,
   `allow_trading` int(11) DEFAULT 0,
   `minrole_access` int(11) DEFAULT 1,
@@ -1368,13 +1374,13 @@ INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`,
 
 CREATE TABLE `rooms_models` (
   `id` int(11) NOT NULL,
-  `model_id` varchar(255) NOT NULL,
-  `model_name` varchar(255) DEFAULT NULL,
+  `model_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `door_x` int(11) NOT NULL DEFAULT 0,
   `door_y` int(11) NOT NULL DEFAULT 0,
   `door_z` double NOT NULL,
   `door_dir` int(11) DEFAULT 2,
-  `heightmap` text NOT NULL,
+  `heightmap` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `usertype` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1475,6 +1481,59 @@ CREATE TABLE `rooms_rights` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `schema_migrations`
+--
+
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `schema_migrations`
+--
+
+INSERT INTO `schema_migrations` (`version`) VALUES
+('20180605202455'),
+('20180605202822'),
+('20180605203204'),
+('20180605204755'),
+('20180605205011'),
+('20180605205211'),
+('20180605205405'),
+('20180605205543'),
+('20180605205848'),
+('20180605210028'),
+('20180605210128'),
+('20180605210255'),
+('20180605210408'),
+('20180605210538'),
+('20180605210815'),
+('20180605210848'),
+('20180605210954'),
+('20180605211041'),
+('20180605211154'),
+('20180605211259'),
+('20180605211518'),
+('20180605211722'),
+('20180606130528'),
+('20180606163724'),
+('20180606171138'),
+('20180609193613'),
+('20180609193620'),
+('20180609193627'),
+('20180610045026'),
+('20180610071051'),
+('20180610084935'),
+('20180610105026'),
+('20180616170631'),
+('20180622105649'),
+('20180715121437'),
+('20180715152740'),
+('20180724140234');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `settings`
 --
 
@@ -1531,22 +1590,22 @@ CREATE TABLE `soundmachine_tracks` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `figure` varchar(255) NOT NULL,
-  `pool_figure` varchar(255) NOT NULL,
-  `sex` char(1) NOT NULL DEFAULT 'M',
-  `motto` varchar(100) NOT NULL DEFAULT 'de kepler whey',
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `figure` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pool_figure` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sex` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'M',
+  `motto` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'de kepler whey',
   `credits` int(11) NOT NULL DEFAULT 200,
   `tickets` int(11) NOT NULL DEFAULT 0,
   `film` int(11) NOT NULL DEFAULT 0,
   `rank` tinyint(1) UNSIGNED NOT NULL DEFAULT 1,
-  `console_motto` varchar(100) NOT NULL DEFAULT 'I''m a new user!',
+  `console_motto` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'I''m a new user!',
   `last_online` int(11) NOT NULL DEFAULT 0,
-  `sso_ticket` varchar(255) NOT NULL,
+  `sso_ticket` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `club_subscribed` bigint(11) NOT NULL DEFAULT 0,
   `club_expiration` bigint(11) NOT NULL DEFAULT 0,
-  `badge` char(3) NOT NULL DEFAULT '',
+  `badge` char(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
   `sound_enabled` tinyint(1) NOT NULL DEFAULT 1
@@ -1560,7 +1619,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `users_badges` (
   `user_id` int(11) NOT NULL,
-  `badge` char(3) NOT NULL
+  `badge` char(3) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1650,6 +1709,12 @@ ALTER TABLE `rooms_models`
   ADD KEY `id` (`id`);
 
 --
+-- Indexes for table `schema_migrations`
+--
+ALTER TABLE `schema_migrations`
+  ADD PRIMARY KEY (`version`);
+
+--
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
@@ -1690,46 +1755,55 @@ ALTER TABLE `users_badges`
 --
 ALTER TABLE `catalogue_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=513;
+
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=415;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
+
 --
 -- AUTO_INCREMENT for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1056;
+
 --
 -- AUTO_INCREMENT for table `rooms_categories`
 --
 ALTER TABLE `rooms_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+
 --
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`
 --
 ALTER TABLE `soundmachine_songs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- Constraints for dumped tables
 --

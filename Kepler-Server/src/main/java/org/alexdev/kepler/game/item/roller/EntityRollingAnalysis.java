@@ -51,6 +51,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                 }
 
                 if (e.getRoomUser().getPosition().equals(front)) {
+                    System.out.println("lol 123 444");
                     return null;
                 }
             }
@@ -85,8 +86,8 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                     }
 
                     // This is because the ItemRollingAnalysis has setHighestItem in nextTile in doRoll which blocks this
-                    if (entity.getRoomUser().getCurrentItem() != null
-                            && entity.getRoomUser().getCurrentItem().getId() == frontItem.getId()) {
+                    if (entity.getRoomUser().getCurrentItem() != null &&
+                        entity.getRoomUser().getCurrentItem().getId() == frontItem.getId()) {
                         continue;
                     }
 
@@ -96,9 +97,11 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                         // Don't roll an item into the next roller, if the next roller is facing towards the roller
                         // it just rolled from, and the next roller has an item on it.
                         if (frontPosition.equals(entity.getRoomUser().getPosition())) {
-                            if (frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0) {
+                            if ((frontTile.getItems().size() > 1 || frontTile.getEntities().size() > 0)/* &&
+                                    !frontTile.getItems().contains(entity.getRoomUser().getCurrentItem())*/) {
+                                //System.out.println("NULL 4: " + (frontTile.getItems().size() > 1) + " - " + (frontTile.getEntities().size() > 0));
+                                //System.out.println(frontTile.getItems().contains(entity.getRoomUser().getCurrentItem()));
                                 return null;
-
                             }
                         }
                     } else {
@@ -164,8 +167,5 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         }
 
         entity.getRoomUser().setNeedsUpdate(true);
-
-        nextTile.addEntity(entity);
-        previousTile.removeEntity(entity);
     }
 }
