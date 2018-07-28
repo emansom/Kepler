@@ -144,6 +144,5 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
         item.getPosition().setY(nextPosition.getY());
         item.getPosition().setZ(nextPosition.getZ());
         item.setRollingData(new RollingData(item, roller, fromPosition, nextPosition));
-
     }
 }

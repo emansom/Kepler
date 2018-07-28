@@ -80,9 +80,6 @@ public class EntityTask implements Runnable {
                     }
                 }
 
-                RoomTile previousTile = roomUser.getTile();
-                previousTile.removeEntity(entity);
-
                 RoomTile nextTile = roomUser.getRoom().getMapping().getTile(roomUser.getNextPosition());
                 nextTile.addEntity(entity);
 
@@ -109,11 +106,8 @@ public class EntityTask implements Runnable {
                     return;
                 }
 
-                /*RoomTile previousTile = roomUser.getTile();
+                RoomTile previousTile = roomUser.getTile();
                 previousTile.removeEntity(entity);
-
-                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
-                nextTile.addEntity(entity);*/
 
                 roomUser.removeStatus(StatusType.LAY);
                 roomUser.removeStatus(StatusType.SIT);

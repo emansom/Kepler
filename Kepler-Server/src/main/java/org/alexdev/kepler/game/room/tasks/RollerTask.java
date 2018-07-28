@@ -17,21 +17,17 @@ import java.util.concurrent.TimeUnit;
 
 public class RollerTask implements Runnable {
     private final Room room;
-    private final Map<Item, Pair<Item, Position>> itemsRolling;
-    private final Map<Entity, Pair<Item, Position>> entitiesRolling;
 
     public RollerTask(Room room) {
         this.room = room;
-        this.itemsRolling = new LinkedHashMap<>();
-        this.entitiesRolling = new LinkedHashMap<>();
     }
 
     @Override
     public void run() {
-        this.itemsRolling.clear();
-        this.entitiesRolling.clear();
-
         try {
+            Map<Item, Pair<Item, Position>> itemsRolling = new LinkedHashMap<>();
+            Map<Entity, Pair<Item, Position>> entitiesRolling = new LinkedHashMap<>();
+
             ItemRollingAnalysis itemRollingAnalysis = new ItemRollingAnalysis();
             EntityRollingAnalysis entityRollingAnalysis = new EntityRollingAnalysis();
 
@@ -103,19 +99,5 @@ public class RollerTask implements Runnable {
         } catch (Exception ex) {
             Log.getErrorLogger().error("RollerTask crashed: ", ex);
         }
-    }
-
-    public Item findPotentialRollingItem(Position position) {
-        for (Item item : this.itemsRolling.keySet()) {
-            if (item.getRollingData() == null) {
-                continue;
-            }
-
-            if (item.getRollingData().getNextPosition().equals(position) || item.getRollingData().getFromPosition().equals(position)) {
-                return item;
-            }
-        }
-
-        return null;
     }
 }
