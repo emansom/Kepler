@@ -13,29 +13,17 @@ public class CALL_FOR_HELP extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        StringBuilder builder = new StringBuilder();
-        builder.append(cfh.getCallId());
-        builder.append((char)2);
-        builder.append(cfh.getPriority());
-        // TODO: Figure out what separates the lines here.
-        builder.append("     Picked up by: ");
-        builder.append(cfh.getPickedUpBy());
-        builder.append((char)2);
-        builder.append(cfh.getCaller());
-        builder.append((char)2);
-        builder.append(cfh.getMessage());
-        builder.append((char)2);
-        builder.append("M");
-        builder.append((char)2);
-        builder.append("Room: ");
-        builder.append(cfh.getRoomName());
-        builder.append((char)2);
-        builder.append("I");
-        builder.append((char)2);
-        // TODO: Figure out why the RoomID is being interpreted wrong by client
-        builder.append(cfh.getRoomId());
-
-        response.writeString(builder.toString());
+        response.writeString(cfh.getCallId());
+        response.writeInt(cfh.getPriority());
+        response.writeString("Unknown Time");
+        response.writeString(cfh.getCaller());
+        response.writeString(cfh.getMessage());
+        response.writeString(cfh.getCaller());
+        response.writeString(cfh.getRoomName());
+        response.writeInt(1);
+        response.writeString("Marker");
+        response.writeInt(cfh.getRoomId());
+        response.writeString("Callie");
     }
 
     @Override
