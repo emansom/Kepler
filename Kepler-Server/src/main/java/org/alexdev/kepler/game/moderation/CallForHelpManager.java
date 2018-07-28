@@ -1,6 +1,8 @@
 package org.alexdev.kepler.game.moderation;
 
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.messages.outgoing.moderation.CALL_FOR_HELP;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -24,8 +26,9 @@ public class CallForHelpManager {
      */
     public boolean submitCallForHelp(Player caller, String message){
         if(this.getOpenCallForHelpByPlayerName(caller.getDetails().getName()) == null){
-            this.callsForHelp.add(new CallForHelp(latestCallId++, caller, message));
-            //TODO: Send CFH to Moderators
+            CallForHelp cfh = new CallForHelp(latestCallId++, caller, message);
+            this.callsForHelp.add(cfh);
+            sendToModerators(cfh);
             return true;
         }
         return false;
@@ -59,6 +62,14 @@ public class CallForHelpManager {
             }
         }
         return null;
+    }
+
+    void sendToModerators(CallForHelp cfh){
+        for(Player p : PlayerManager.getInstance().getActivePlayers()){
+            if(p.hasFuse("fuse_cfh")){
+                p.send(new CALL_FOR_HELP(cfh));
+            }
+        }
     }
 
     /**
