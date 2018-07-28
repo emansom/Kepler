@@ -109,6 +109,12 @@ public class EntityTask implements Runnable {
                     return;
                 }
 
+                RoomTile previousTile = roomUser.getTile();
+                previousTile.removeEntity(entity);
+
+                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
+                nextTile.addEntity(entity);
+
                 roomUser.removeStatus(StatusType.LAY);
                 roomUser.removeStatus(StatusType.SIT);
 
