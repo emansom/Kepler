@@ -34,9 +34,7 @@ public class CommandManager {
         this.commands.put(new String[] { "rgb", "rainbow" }, new RainbowDimmerCommand());
         this.commands.put(new String[] { "idle", "afk" }, new AfkCommand());
         this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
-        this.commands.put(new String[] { "reloadcatalog", "refreshcatalog" }, new RefreshCatalogueCommand());
-        this.commands.put(new String[] { "reloadsettings", "refreshsettings" }, new RefreshSettingsCommand());
-        this.commands.put(new String[] { "reloadtexts", "refreshtexts" }, new RefreshTextsCommand());
+        this.commands.put(new String[] { "reload" }, new ReloadCommand());
         this.commands.put(new String[] { "packet" }, new PacketTestCommand());
 
         // Add client-side commands to list

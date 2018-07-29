@@ -28,6 +28,7 @@ public class GameScheduler implements Runnable {
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
+
     private BlockingQueue<Player> creditsHandoutQueue;
 
     private static GameScheduler instance;
@@ -49,6 +50,7 @@ public class GameScheduler implements Runnable {
             for (Player player : PlayerManager.getInstance().getPlayers()) {
                 if (player.getRoomUser().getRoom() != null) {
 
+                    // If their sleep timer is now lower than the current time, make them sleep.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
                         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                             player.getRoomUser().setStatus(StatusType.SLEEP, "");
@@ -56,31 +58,14 @@ public class GameScheduler implements Runnable {
                         }
                     }
 
+                    // If their afk timer is up, send them out.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
-                        Room room = player.getRoomUser().getRoom();
-
-                        var curPos = player.getRoomUser().getPosition();
-                        var doorPos = room.getModel().getDoorLocation();
-
-                        // If we're standing in the door, immediately leave room
-                        if (curPos.equals(doorPos)) {
-                            room.getEntityManager().leaveRoom(player, true);
-                            return;
-                        }
-
-                        // Attempt to walk to the door
-                        player.getRoomUser().walkTo(doorPos.getX(), doorPos.getY());
-
-                        // If user isn't walking, leave immediately
-                        if (!player.getRoomUser().isWalking()) {
-                            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, true);
-                        }
+                        player.getRoomUser().kick();
                     }
 
+                    // If they're not sleeping (aka, active) and their next handout expired, give them their credits!
                     if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                         if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
-                            //CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
-                            //player.send(new CREDIT_BALANCE(player.getDetails()));
                             this.creditsHandoutQueue.put(player);
                             player.getDetails().resetNextHandout();
                         }
@@ -97,7 +82,6 @@ public class GameScheduler implements Runnable {
 
                 for (Player p : playersToHandout) {
                     var details = p.getDetails();
-
                     playerDetailsToSave.put(details, amount);
                 }
 

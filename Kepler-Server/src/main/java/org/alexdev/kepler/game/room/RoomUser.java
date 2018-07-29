@@ -92,6 +92,33 @@ public class RoomUser {
         }
     }
 
+    /**
+     * Kick a user from the room.
+     */
+    public void kick() {
+        Position doorLocation = this.room.getModel().getDoorLocation();
+
+        // If we're standing in the door, immediately leave room
+        if (this.position.equals(doorLocation)) {
+            room.getEntityManager().leaveRoom(this.entity, true);
+            return;
+        }
+
+        // Attempt to walk to the door
+        this.walkTo(doorLocation.getX(), doorLocation.getY());
+
+        // If user isn't walking, leave immediately
+        if (!this.isWalking) {
+            this.room.getEntityManager().leaveRoom(this.entity, true);
+        }
+    }
+
+    /**
+     * Make a user walk to specific coordinates. The goal must be valid and reachable.
+     *
+     * @param X the X coordinates
+     * @param Y the Y coordinate
+     */
     public void walkTo(int X, int Y) {
         if (this.room == null) {
             return;
@@ -778,5 +805,4 @@ public class RoomUser {
     public void setAuthenticateTelporterId(int authenticateTelporterId) {
         this.authenticateTelporterId = authenticateTelporterId;
     }
-
 }

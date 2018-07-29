@@ -30,34 +30,38 @@ public class CurrencyDao {
             // Increase credits
             updateQuery = Storage.getStorage().prepare("UPDATE users SET credits = credits + ? WHERE id = ?", conn);
 
-            // Fetch increased amount
-            fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
+            for (var kvp : playersToSave.entrySet()) {
+                PlayerDetails playerDetails = kvp.getKey();
+                int increaseAmount = kvp.getValue();
+
+                updateQuery.setInt(1, increaseAmount);
+                updateQuery.setInt(2, playerDetails.getId());
+
+                updateQuery.addBatch();
+            }
+
+            updateQuery.executeBatch();
 
             for (var kvp : playersToSave.entrySet()) {
-                var details = kvp.getKey();
-                var amount = kvp.getValue();
+                PlayerDetails playerDetails = kvp.getKey();
+                int updatedAmount = playerDetails.getCredits();
 
-                updateQuery.setInt(1, amount);
-                updateQuery.setInt(2, details.getId());
-                updateQuery.addBatch();
+                // Fetch increased amount
+                fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
+                fetchQuery.setInt(1, playerDetails.getId());
 
-                int updatedAmount = -1;
-
-                fetchQuery.setInt(1, details.getId());
                 row = fetchQuery.executeQuery();
-
-                // Commit these queries
-                conn.commit();
 
                 // Set amount
                 if (row != null && row.next()) {
                     updatedAmount = row.getInt("credits");
                 }
 
-                details.setCredits(updatedAmount);
+                playerDetails.setCredits(updatedAmount);
             }
 
-            updateQuery.executeBatch();
+            // Commit these queries
+            conn.commit();
         } catch (Exception e) {
             try {
                 // Rollback these queries
