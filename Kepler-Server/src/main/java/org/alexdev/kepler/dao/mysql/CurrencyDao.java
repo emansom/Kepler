@@ -38,13 +38,10 @@ public class CurrencyDao {
                 updateQuery.setInt(2, kvp.getKey().getDetails().getId());
                 updateQuery.addBatch();
 
-                int updatedAmount = -1;
+                int updatedAmount = kvp.getKey().getDetails().getCredits();
 
                 fetchQuery.setInt(1, kvp.getKey().getDetails().getId());
                 row = fetchQuery.executeQuery();
-
-                // Commit these queries
-                conn.commit();
 
                 // Set amount
                 if (row != null && row.next()) {
@@ -55,6 +52,9 @@ public class CurrencyDao {
             }
 
             updateQuery.executeBatch();
+
+            // Commit these queries
+            conn.commit();
         } catch (Exception e) {
             try {
                 // Rollback these queries
