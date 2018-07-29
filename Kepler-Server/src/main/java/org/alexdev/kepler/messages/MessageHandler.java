@@ -76,6 +76,7 @@ public class MessageHandler {
         registerEvent(48, new PICK_CALLFORHELP());
         registerEvent(199, new MESSAGETOCALLER());
         registerEvent(198, new CHANGECALLCATEGORY());
+        registerEvent(238, new DELETE_CRY());
     }
 
     /**

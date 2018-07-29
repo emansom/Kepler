@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.moderation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.moderation.CALL_FOR_HELP;
+import org.alexdev.kepler.messages.outgoing.moderation.DELETE_CRY;
 import org.alexdev.kepler.messages.outgoing.moderation.PICKED_CRY;
 import org.alexdev.kepler.messages.outgoing.user.CRY_RECEIVED;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -107,6 +108,12 @@ public class CallForHelpManager {
             // Send the updated CallForHelp to Moderators
             sendToModerators(new CALL_FOR_HELP(cfh));
         }
+    }
+
+    public void deleteCry(int callId){
+        CallForHelp cfh = this.getCallForHelpById(callId);
+        sendToModerators(new DELETE_CRY(cfh));
+        this.callsForHelp.remove(cfh);
     }
 
     /**

@@ -14,6 +14,7 @@ public class CallForHelp {
     private String pickedUpBy;
     private final String roomName;
     private final int roomId;
+    private final boolean isPublicRoom;
     private final long requestTime;
     private int category = 2;
 
@@ -25,6 +26,7 @@ public class CallForHelp {
         this.pickedUpBy = "";
         this.roomId = caller.getRoomUser().getRoom().getData().getId();
         this.roomName = caller.getRoomUser().getRoom().getData().getName();
+        this.isPublicRoom = caller.getRoomUser().getRoom().isPublicRoom();
         this.requestTime = System.currentTimeMillis();
     }
 
@@ -60,8 +62,12 @@ public class CallForHelp {
         return this.pickedUpBy.equals("");
     }
 
+    public boolean isPublicRoom(){
+        return this.isPublicRoom;
+    }
+
     public String getFormattedRequestTime(){
-        SimpleDateFormat sdf = new SimpleDateFormat("H:m d/MM/YYYY");
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm d/MM/YYYY");
         Date resultDate = new Date(this.requestTime);
         return sdf.format(resultDate);
     }
