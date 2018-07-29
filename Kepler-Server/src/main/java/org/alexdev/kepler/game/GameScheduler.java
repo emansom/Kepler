@@ -25,7 +25,7 @@ public class GameScheduler implements Runnable {
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
-    private Map<Player, Integer> playersToSave;
+    private Map<PlayerDetails, Integer> playersToSave;
 
     private static GameScheduler instance;
 
@@ -59,11 +59,10 @@ public class GameScheduler implements Runnable {
                         player.getRoomUser().kick();
                     }
 
+                    // If they're not sleeping (aka, active) and their next handout expired, give them their credits!
                     if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                         if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
-                            //CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
-                            //player.send(new CREDIT_BALANCE(player.getDetails()));
-                            this.playersToSave.put(player, GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
+                            this.playersToSave.put(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
                             player.getDetails().resetNextHandout();
                         }
                     }
@@ -74,7 +73,12 @@ public class GameScheduler implements Runnable {
                 CurrencyDao.increaseCredits(this.playersToSave);
 
                 for (var kvp : this.playersToSave.entrySet()) {
-                    kvp.getKey().send(new CREDIT_BALANCE(kvp.getKey().getDetails()));
+                    PlayerDetails playerDetails = kvp.getKey();
+                    Player player = PlayerManager.getInstance().getPlayerById(playerDetails.getId());
+
+                    if (player != null) {
+                        player.send(new CREDIT_BALANCE(playerDetails));
+                    }
                 }
 
                 this.playersToSave.clear();

@@ -15,7 +15,7 @@ public class CurrencyDao {
     /**
      * Atomically increase credits.
      */
-    public static void increaseCredits(Map<Player, Integer> playersToSave) {
+    public static void increaseCredits(Map<PlayerDetails, Integer> playersToSave) {
         Connection conn = null;
         PreparedStatement updateQuery = null;
         PreparedStatement fetchQuery = null;
@@ -31,23 +31,23 @@ public class CurrencyDao {
             updateQuery = Storage.getStorage().prepare("UPDATE users SET credits = credits + ? WHERE id = ?", conn);
 
             for (var kvp : playersToSave.entrySet()) {
-                Player player = kvp.getKey();
+                PlayerDetails playerDetails = kvp.getKey();
                 int increaseAmount = kvp.getValue();
 
                 updateQuery.setInt(1, increaseAmount);
-                updateQuery.setInt(2, player.getDetails().getId());
+                updateQuery.setInt(2, playerDetails.getId());
                 updateQuery.addBatch();
             }
 
             updateQuery.executeBatch();
 
             for (var kvp : playersToSave.entrySet()) {
-                Player player = kvp.getKey();
-                int updatedAmount = player.getDetails().getCredits();
+                PlayerDetails playerDetails = kvp.getKey();
+                int updatedAmount = playerDetails.getCredits();
 
                 // Fetch increased amount
                 fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
-                fetchQuery.setInt(1, player.getDetails().getId());
+                fetchQuery.setInt(1, playerDetails.getId());
                 row = fetchQuery.executeQuery();
 
                 // Set amount
@@ -55,7 +55,7 @@ public class CurrencyDao {
                     updatedAmount = row.getInt("credits");
                 }
 
-                player.getDetails().setCredits(updatedAmount);
+                playerDetails.setCredits(updatedAmount);
             }
 
             // Commit these queries
