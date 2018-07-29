@@ -1,14 +1,11 @@
 package org.alexdev.kepler.game.commands.registered;
 
-import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
-import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
-import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,9 +28,15 @@ public class AfkCommand extends Command {
             return;
         }
 
+
         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
             player.getRoomUser().setStatus(StatusType.SLEEP, "");
             player.getRoomUser().setNeedsUpdate(true);
+
+            // Send immidiate update to client
+            List<Entity> entitiesToUpdate = new ArrayList<>();
+            entitiesToUpdate.add(entity);
+            player.send(new USER_STATUSES(entitiesToUpdate));
         }
     }
 

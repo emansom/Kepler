@@ -10,14 +10,17 @@ import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GameScheduler implements Runnable {
@@ -25,16 +28,17 @@ public class GameScheduler implements Runnable {
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
-    private Map<PlayerDetails, Integer> playersToSave;
+
+    private BlockingQueue<Player> creditsHandoutQueue;
 
     private static GameScheduler instance;
 
     private GameScheduler() {
         this.schedulerService = createNewScheduler();
         this.gameScheduler = this.schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
-        this.playersToSave = new LinkedHashMap<>();
+        this.creditsHandoutQueue = new LinkedBlockingQueue<>();
     }
-    
+
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
@@ -62,7 +66,7 @@ public class GameScheduler implements Runnable {
                     // If they're not sleeping (aka, active) and their next handout expired, give them their credits!
                     if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                         if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
-                            this.playersToSave.put(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
+                            this.creditsHandoutQueue.put(player);
                             player.getDetails().resetNextHandout();
                         }
                     }
@@ -70,18 +74,24 @@ public class GameScheduler implements Runnable {
             }
 
             if (this.tickRate.get() % 30 == 0) { // Save every 30 seconds
-                CurrencyDao.increaseCredits(this.playersToSave);
+                List<Player> playersToHandout = new ArrayList<>();
+                this.creditsHandoutQueue.drainTo(playersToHandout);
 
-                for (var kvp : this.playersToSave.entrySet()) {
-                    PlayerDetails playerDetails = kvp.getKey();
-                    Player player = PlayerManager.getInstance().getPlayerById(playerDetails.getId());
+                if (playersToHandout.size() > 0) {
+                    Map<PlayerDetails, Integer> playerDetailsToSave = new LinkedHashMap<>();
+                    Integer amount = GameConfiguration.getInstance().getInteger("credits.scheduler.amount");
 
-                    if (player != null) {
-                        player.send(new CREDIT_BALANCE(playerDetails));
+                    for (Player p : playersToHandout) {
+                        var details = p.getDetails();
+                        playerDetailsToSave.put(details, amount);
+                    }
+
+                    CurrencyDao.increaseCredits(playerDetailsToSave);
+
+                    for (Player p : playersToHandout) {
+                        p.send(new CREDIT_BALANCE(p.getDetails()));
                     }
                 }
-
-                this.playersToSave.clear();
             }
 
         } catch (Exception ex) {

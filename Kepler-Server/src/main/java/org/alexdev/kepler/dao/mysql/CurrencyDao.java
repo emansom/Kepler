@@ -36,6 +36,7 @@ public class CurrencyDao {
 
                 updateQuery.setInt(1, increaseAmount);
                 updateQuery.setInt(2, playerDetails.getId());
+
                 updateQuery.addBatch();
             }
 
@@ -48,6 +49,7 @@ public class CurrencyDao {
                 // Fetch increased amount
                 fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
                 fetchQuery.setInt(1, playerDetails.getId());
+
                 row = fetchQuery.executeQuery();
 
                 // Set amount
