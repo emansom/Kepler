@@ -1,14 +1,86 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class CurrencyDao {
+
+    /**
+     * Atomically increase credits.
+     */
+    public static void increaseCredits(Map<Player, Integer> playersToSave) {
+        Connection conn = null;
+        PreparedStatement updateQuery = null;
+        PreparedStatement fetchQuery = null;
+        ResultSet row = null;
+
+        try {
+            conn = Storage.getStorage().getConnection();
+
+            // We disable autocommit to make sure the following queries share the same atomic transaction
+            conn.setAutoCommit(false);
+
+            // Increase credits
+            updateQuery = Storage.getStorage().prepare("UPDATE users SET credits = credits + ? WHERE id = ?", conn);
+
+            for (var kvp : playersToSave.entrySet()) {
+
+
+                updateQuery.setInt(1, kvp.getValue());
+                updateQuery.setInt(2, kvp.getKey().getDetails().getId());
+                updateQuery.addBatch();
+            }
+
+            updateQuery.executeBatch();
+
+            for (var kvp : playersToSave.entrySet()) {
+                int updatedAmount = -1;
+
+                // Fetch increased amount
+                fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
+                fetchQuery.setInt(1, kvp.getKey().getDetails().getId());
+                row = fetchQuery.executeQuery();
+
+                // Commit these queries
+                conn.commit();
+
+                // Set amount
+                if (row != null && row.next()) {
+                    updatedAmount = row.getInt("credits");
+                }
+
+                kvp.getKey().getDetails().setCredits(updatedAmount);
+            }
+        } catch (Exception e) {
+            try {
+                // Rollback these queries
+                conn.rollback();
+            } catch(SQLException re) {
+                Storage.logError(re);
+            }
+
+            Storage.logError(e);
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ce) {
+                Storage.logError(ce);
+            }
+
+            Storage.closeSilently(row);
+            Storage.closeSilently(updateQuery);
+            Storage.closeSilently(fetchQuery);
+            Storage.closeSilently(conn);
+        }
+    }
+
     /**
      * Atomically increase credits.
      *
