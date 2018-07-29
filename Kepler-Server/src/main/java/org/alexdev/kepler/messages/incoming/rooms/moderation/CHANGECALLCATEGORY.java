@@ -8,8 +8,8 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class CHANGECALLCATEGORY implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        int callId = reader.readInt();
-        int category = 1;
+        int callId = Integer.parseInt(reader.readString());
+        int category = reader.readInt();
         CallForHelpManager.getInstance().changeCategory(callId, category);
 
         System.out.println(callId+" "+category);

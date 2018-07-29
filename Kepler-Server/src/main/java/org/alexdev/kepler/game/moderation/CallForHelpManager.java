@@ -27,6 +27,8 @@ public class CallForHelpManager {
      * @param message The message attached to the CFH
      */
     public void submitCallForHelp(Player caller, String message){
+        if(message.replaceAll(" ", "").equals(""))
+            return;
         if(this.getOpenCallForHelpByPlayerName(caller.getDetails().getName()) == null){
             CallForHelp cfh = new CallForHelp(latestCallId++, caller, message);
             this.callsForHelp.add(cfh);
