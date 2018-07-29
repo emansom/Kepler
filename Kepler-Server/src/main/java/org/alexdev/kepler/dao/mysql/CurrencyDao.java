@@ -1,21 +1,23 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.HashMap;
 
 public class CurrencyDao {
 
     /**
      * Atomically increase credits.
      */
-    public static void increaseCredits(Map<PlayerDetails, Integer> playersToSave) {
+    public static void increaseCredits(Map<PlayerDetails, Integer> playerMap) {
         Connection conn = null;
         PreparedStatement updateQuery = null;
         PreparedStatement fetchQuery = null;
@@ -30,7 +32,8 @@ public class CurrencyDao {
             // Increase credits
             updateQuery = Storage.getStorage().prepare("UPDATE users SET credits = credits + ? WHERE id = ?", conn);
 
-            for (var kvp : playersToSave.entrySet()) {
+            // Batch increase update queries
+            for (var kvp : playerMap.entrySet()) {
                 PlayerDetails playerDetails = kvp.getKey();
                 int increaseAmount = kvp.getValue();
 
@@ -40,26 +43,50 @@ public class CurrencyDao {
                 updateQuery.addBatch();
             }
 
+            // Execute update queries in batch
             updateQuery.executeBatch();
 
-            for (var kvp : playersToSave.entrySet()) {
-                PlayerDetails playerDetails = kvp.getKey();
+            List<String> playerIds = new ArrayList<>();
 
-                // Fetch increased amount
-                fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
-                fetchQuery.setInt(1, playerDetails.getId());
-
-                row = fetchQuery.executeQuery();
-
-                // Set amount
-                if (row != null && row.next()) {
-                    int updatedAmount = row.getInt("credits");
-                    playerDetails.setCredits(updatedAmount);
-                }
+            for (var player : playerMap.keySet()) {
+                playerIds.add(Integer.toString(player.getId()));
             }
+
+            // String of structure 1, 2, 3 containing playerIds to be used in query below
+            String rawPlayerBind = String.join(",", playerIds);
+
+            // Fetch increased amount
+            // TODO: find better way to write the IN clause
+            // TODO: use temporary table when playerIds list is above max arguments of SQL IN function
+            fetchQuery = Storage.getStorage().prepare("SELECT id,credits FROM users WHERE id IN (" + rawPlayerBind + ")", conn);
+
+            // Execute fetch query
+            row = fetchQuery.executeQuery();
 
             // Commit these queries
             conn.commit();
+
+            // Map that holds user id and updated credit amount
+            Map<Integer, Integer> updatedAmounts = new HashMap<>();
+
+            // Get all values, we do this to not block the database driver for too long
+            while (row != null && row.next()) {
+                updatedAmounts.put(row.getInt("id"), row.getInt("credits"));
+            }
+
+            for (var kvp : updatedAmounts.entrySet()) {
+                var userId = kvp.getKey();
+                var amount = kvp.getValue();
+
+                for (var details : playerMap.keySet()) {
+                    if (details.getId() != userId) {
+                        continue;
+                    }
+
+                    details.setCredits(amount);
+                }
+            }
+
         } catch (Exception e) {
             try {
                 // Rollback these queries
