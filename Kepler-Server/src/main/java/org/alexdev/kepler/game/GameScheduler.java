@@ -77,18 +77,20 @@ public class GameScheduler implements Runnable {
                 List<Player> playersToHandout = new ArrayList<>();
                 this.creditsHandoutQueue.drainTo(playersToHandout);
 
-                Map<PlayerDetails, Integer> playerDetailsToSave = new LinkedHashMap<>();
-                Integer amount = GameConfiguration.getInstance().getInteger("credits.scheduler.amount");
+                if (playersToHandout.size() > 0) {
+                    Map<PlayerDetails, Integer> playerDetailsToSave = new LinkedHashMap<>();
+                    Integer amount = GameConfiguration.getInstance().getInteger("credits.scheduler.amount");
 
-                for (Player p : playersToHandout) {
-                    var details = p.getDetails();
-                    playerDetailsToSave.put(details, amount);
-                }
+                    for (Player p : playersToHandout) {
+                        var details = p.getDetails();
+                        playerDetailsToSave.put(details, amount);
+                    }
 
-                CurrencyDao.increaseCredits(playerDetailsToSave);
+                    CurrencyDao.increaseCredits(playerDetailsToSave);
 
-                for (Player p : playersToHandout) {
-                    p.send(new CREDIT_BALANCE(p.getDetails()));
+                    for (Player p : playersToHandout) {
+                        p.send(new CREDIT_BALANCE(p.getDetails()));
+                    }
                 }
             }
 
