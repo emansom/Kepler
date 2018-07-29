@@ -70,12 +70,11 @@ public class GameScheduler implements Runnable {
                         }
                     }
 
-                    if (GameConfiguration.getInstance().getInteger("credits.scheduler.interval") > 0) {
-                        TimeUnit unitType = TimeUnit.valueOf(GameConfiguration.getInstance().getString("credits.scheduler.timeunit"));
-
-                        if (this.tickRate.get() % unitType.toSeconds(GameConfiguration.getInstance().getInteger("credits.scheduler.interval")) == 0) {
+                    if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                        if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
                             CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
                             player.send(new CREDIT_BALANCE(player.getDetails()));
+                            player.getDetails().resetNextHandout();
                         }
                     }
                 }
