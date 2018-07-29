@@ -2,6 +2,8 @@ package org.alexdev.kepler.game.moderation;
 
 import org.alexdev.kepler.game.player.Player;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 
 public class CallForHelp {
@@ -12,15 +14,18 @@ public class CallForHelp {
     private String pickedUpBy;
     private final String roomName;
     private final int roomId;
-    private int priority = 2;
+    private final long requestTime;
+    private int category = 2;
 
     CallForHelp(int callId, Player caller, String message){
+        System.out.println(callId);
         this.callId = callId;
         this.caller = caller.getDetails().getName();
         this.message = message;
         this.pickedUpBy = "";
         this.roomId = caller.getRoomUser().getRoom().getData().getId();
         this.roomName = caller.getRoomUser().getRoom().getData().getName();
+        this.requestTime = System.currentTimeMillis();
     }
 
     public String getMessage(){
@@ -39,8 +44,8 @@ public class CallForHelp {
         return this.roomId;
     }
 
-    public int getPriority(){
-        return this.priority;
+    public int getCategory(){
+        return this.category;
     }
 
     public String getCaller(){
@@ -53,6 +58,16 @@ public class CallForHelp {
 
     public boolean isOpen(){
         return !this.pickedUpBy.equals("");
+    }
+
+    public String getFormattedRequestTime(){
+        SimpleDateFormat sdf = new SimpleDateFormat("H:m d/MM/YYYY");
+        Date resultDate = new Date(this.requestTime);
+        return sdf.format(resultDate);
+    }
+
+    void updateCategory(int newCategory){
+        this.category = newCategory;
     }
 
     void pickUp(Player moderator){

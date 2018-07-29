@@ -14,8 +14,8 @@ public class CALL_FOR_HELP extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
         response.writeString(cfh.getCallId());
-        response.writeInt(cfh.getPriority());
-        response.writeString("Unknown Time");
+        response.writeInt(cfh.getCategory());
+        response.writeString(cfh.getFormattedRequestTime());
         response.writeString(cfh.getCaller());
         response.writeString(cfh.getMessage());
         response.writeString(cfh.getCaller());

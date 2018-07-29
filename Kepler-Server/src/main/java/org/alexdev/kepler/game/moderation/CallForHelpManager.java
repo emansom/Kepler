@@ -86,9 +86,25 @@ public class CallForHelpManager {
     public void pickUp(int callId, Player moderator){
         if(moderator.hasFuse("fuse_cfh")){
             CallForHelp cfh = this.getCallForHelpById(callId);
-            cfh.pickUp(moderator);
+            if(cfh != null) {
+                cfh.pickUp(moderator);
+                // Send the updated CallForHelp to Moderators
+                sendToModerators(new PICKED_CRY(cfh));
+            }
+        }
+    }
+
+    /**
+     * Chnage catgeory of Call
+     * @param callId the ID of the call to change
+     * @param newCategory the new category
+     */
+    public void changeCategory(int callId, int newCategory){
+        CallForHelp cfh = this.getCallForHelpById(callId);
+        if(cfh != null) {
+            cfh.updateCategory(newCategory);
             // Send the updated CallForHelp to Moderators
-            sendToModerators(new PICKED_CRY(cfh));
+            sendToModerators(new CALL_FOR_HELP(cfh));
         }
     }
 
