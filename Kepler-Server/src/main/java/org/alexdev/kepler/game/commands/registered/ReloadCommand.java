@@ -37,7 +37,7 @@ public class ReloadCommand extends Command {
         String component = args[0];
         String componentName = null;
 
-        if (component.equalsIgnoreCase("catalog")
+        if (component.equalsIgnoreCase("catalogue")
                 || component.equalsIgnoreCase("shop")
                 || component.equalsIgnoreCase("items")) {
             ItemManager.reset();
@@ -57,6 +57,8 @@ public class ReloadCommand extends Command {
 
         if (componentName != null) {
             player.send(new ALERT(componentName + " has been reloaded."));
+        } else {
+            player.send(new ALERT("You did not specify which item to reload! You may reload either the catalogue/shop/items, texts or game settings."));
         }
     }
 
