@@ -12,6 +12,8 @@ import org.alexdev.kepler.server.netty.connections.IdleConnectionHandler;
 
 public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
     private final NettyServer nettyServer;
+    private final long readLimit = 25*1024;
+    private final long writeLimit = 25*1024;
 
     public NettyChannelInitializer(NettyServer nettyServer) {
         this.nettyServer = nettyServer;
@@ -20,7 +22,7 @@ public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
-        pipeline.addLast("trafficShapingHandler", new ChannelTrafficShapingHandler(2048, 2048));
+        pipeline.addLast("trafficShapingHandler", new ChannelTrafficShapingHandler(this.writeLimit, this.readLimit));
         pipeline.addLast("gameEncoder", new NetworkEncoder());
         pipeline.addLast("gameDecoder", new NetworkDecoder());
         pipeline.addLast("handler", new ConnectionHandler(this.nettyServer));
