@@ -216,6 +216,39 @@ public class RoomDao {
     }
 
     /**
+     * Vote for a room
+     * @param userId the User who is voting
+     * @param roomId the Room that the user is voting for
+     * @param voteValue the Value of the vote (1 or -1)
+     */
+    public static void vote(int userId, int roomId, int voteValue){
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users_room_votes WHERE room_id = ? AND user_id = ?", sqlConnection);
+            preparedStatement.setInt(1, roomId);
+            preparedStatement.setInt(2, userId);
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return;
+            }
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO users_room_votes (user_id, room_id, vote) VALUES (?, ?, ?)", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, roomId);
+            preparedStatement.setInt(3, voteValue);
+            preparedStatement.execute();
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
+
+    /**
      * Save all room information.
      *
      * @param room the room to save

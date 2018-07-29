@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
 import org.alexdev.kepler.dao.Storage;
+import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -19,22 +20,9 @@ public class ROOM_RATING implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        try {
-            sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("INSERT INTO users_room_votes (user_id, room_id, vote) VALUES (?, ?, ?)", sqlConnection);
-            preparedStatement.setInt(1, player.getDetails().getId());
-            preparedStatement.setInt(2, room.getId());
-            if(upvote) {
-                preparedStatement.setInt(3, room.getData().getVisitorsNow());
-            }else{
-                preparedStatement.setInt(3, room.getData().getVisitorsNow());
-            }
-            preparedStatement.execute();
-        } catch (Exception e) {
-            Storage.logError(e);
-        } finally {
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
-        }
+        if(room == null || (room != null && room.isPublicRoom()))
+            return;
+
+        RoomDao.vote(player.getDetails().getId(), player.getRoomUser().getRoom().getId(), (upvote ? 1 : -1));
     }
 }
