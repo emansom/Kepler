@@ -46,6 +46,7 @@ public class GameScheduler implements Runnable {
             for (Player player : PlayerManager.getInstance().getPlayers()) {
                 if (player.getRoomUser().getRoom() != null) {
 
+                    // If their sleep timer is now lower than the current time, make them sleep.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
                         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                             player.getRoomUser().setStatus(StatusType.SLEEP, "");
@@ -53,25 +54,9 @@ public class GameScheduler implements Runnable {
                         }
                     }
 
+                    // If their afk timer is up, send them out.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
-                        Room room = player.getRoomUser().getRoom();
-
-                        var curPos = player.getRoomUser().getPosition();
-                        var doorPos = room.getModel().getDoorLocation();
-
-                        // If we're standing in the door, immediately leave room
-                        if (curPos.equals(doorPos)) {
-                            room.getEntityManager().leaveRoom(player, true);
-                            return;
-                        }
-
-                        // Attempt to walk to the door
-                        player.getRoomUser().walkTo(doorPos.getX(), doorPos.getY());
-
-                        // If user isn't walking, leave immediately
-                        if (!player.getRoomUser().isWalking()) {
-                            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, true);
-                        }
+                        player.getRoomUser().kick();
                     }
 
                     if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
