@@ -2,15 +2,21 @@ package org.alexdev.kepler.game;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
@@ -18,17 +24,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GameScheduler implements Runnable {
-    private static Logger logger = LoggerFactory.getLogger(GameScheduler.class);
     private AtomicLong tickRate = new AtomicLong();
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
+    private Map<PlayerDetails, Integer> playersToSave;
 
     private static GameScheduler instance;
 
     private GameScheduler() {
-        schedulerService = createNewScheduler();
-        gameScheduler = schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+        this.schedulerService = createNewScheduler();
+        this.gameScheduler = this.schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+        this.playersToSave = new HashMap<>();
     }
     
     /* (non-Javadoc)
@@ -72,15 +79,21 @@ public class GameScheduler implements Runnable {
 
                     if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                         if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
-                            CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
-                            player.send(new CREDIT_BALANCE(player.getDetails()));
+                            //CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
+                            //player.send(new CREDIT_BALANCE(player.getDetails()));
+                            this.playersToSave.put(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
                             player.getDetails().resetNextHandout();
                         }
                     }
                 }
             }
+
+            if (this.tickRate.get() % 30 == 0) { // Save every 30 seconds
+
+            }
+
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.getErrorLogger().error("GameScheduler crashed: ", ex);
         }
     }
 
