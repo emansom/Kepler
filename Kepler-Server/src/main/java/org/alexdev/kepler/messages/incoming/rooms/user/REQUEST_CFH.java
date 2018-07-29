@@ -8,6 +8,6 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class REQUEST_CFH implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        player.send(new CFH_ACK());
+        player.send(new CFH_ACK(player));
     }
 }

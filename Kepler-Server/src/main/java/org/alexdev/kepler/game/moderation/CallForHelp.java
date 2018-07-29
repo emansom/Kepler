@@ -57,7 +57,7 @@ public class CallForHelp {
     }
 
     public boolean isOpen(){
-        return !this.pickedUpBy.equals("");
+        return this.pickedUpBy.equals("");
     }
 
     public String getFormattedRequestTime(){
