@@ -15,7 +15,7 @@ public class CurrencyDao {
     /**
      * Atomically increase credits.
      */
-    public static void increaseCredits(Map<Player, Integer> playersToSave) {
+    public static void increaseCredits(Map<PlayerDetails, Integer> playersToSave) {
         Connection conn = null;
         PreparedStatement updateQuery = null;
         PreparedStatement fetchQuery = null;
@@ -34,13 +34,16 @@ public class CurrencyDao {
             fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
 
             for (var kvp : playersToSave.entrySet()) {
-                updateQuery.setInt(1, kvp.getValue());
-                updateQuery.setInt(2, kvp.getKey().getDetails().getId());
+                var details = kvp.getKey();
+                var amount = kvp.getValue();
+
+                updateQuery.setInt(1, amount);
+                updateQuery.setInt(2, details.getId());
                 updateQuery.addBatch();
 
                 int updatedAmount = -1;
 
-                fetchQuery.setInt(1, kvp.getKey().getDetails().getId());
+                fetchQuery.setInt(1, details.getId());
                 row = fetchQuery.executeQuery();
 
                 // Commit these queries
@@ -51,7 +54,7 @@ public class CurrencyDao {
                     updatedAmount = row.getInt("credits");
                 }
 
-                kvp.getKey().getDetails().setCredits(updatedAmount);
+                details.setCredits(updatedAmount);
             }
 
             updateQuery.executeBatch();
