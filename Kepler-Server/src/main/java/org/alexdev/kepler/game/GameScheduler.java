@@ -79,9 +79,9 @@ public class GameScheduler implements Runnable {
 
                     if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                         if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
-                            //CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
-                            //player.send(new CREDIT_BALANCE(player.getDetails()));
-                            this.playersToSave.put(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
+                            CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
+                            player.send(new CREDIT_BALANCE(player.getDetails()));
+                            //this.playersToSave.put(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
                             player.getDetails().resetNextHandout();
                         }
                     }
