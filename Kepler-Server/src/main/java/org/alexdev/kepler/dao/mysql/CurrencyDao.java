@@ -44,7 +44,6 @@ public class CurrencyDao {
 
             for (var kvp : playersToSave.entrySet()) {
                 PlayerDetails playerDetails = kvp.getKey();
-                int updatedAmount = playerDetails.getCredits();
 
                 // Fetch increased amount
                 fetchQuery = Storage.getStorage().prepare("SELECT credits FROM users WHERE id = ?", conn);
@@ -54,10 +53,9 @@ public class CurrencyDao {
 
                 // Set amount
                 if (row != null && row.next()) {
-                    updatedAmount = row.getInt("credits");
+                    int updatedAmount = row.getInt("credits");
+                    playerDetails.setCredits(updatedAmount);
                 }
-
-                playerDetails.setCredits(updatedAmount);
             }
 
             // Commit these queries
@@ -91,7 +89,6 @@ public class CurrencyDao {
      * @param details the player details
      */
     public static void increaseCredits(PlayerDetails details, int amount) {
-        int updatedAmount = -1;
         Connection conn = null;
         PreparedStatement updateQuery = null;
         PreparedStatement fetchQuery = null;
@@ -119,13 +116,11 @@ public class CurrencyDao {
 
             // Set amount
             if (row != null && row.next()) {
-                updatedAmount = row.getInt("credits");
+                int updatedAmount = row.getInt("credits");
+                details.setCredits(updatedAmount);
             }
 
         } catch (Exception e) {
-            // Reset amount
-            updatedAmount = -1;
-
             try {
                 // Rollback these queries
                 conn.rollback();
@@ -146,8 +141,6 @@ public class CurrencyDao {
             Storage.closeSilently(fetchQuery);
             Storage.closeSilently(conn);
         }
-
-        details.setCredits(updatedAmount);
     }
 
     /**
@@ -156,7 +149,6 @@ public class CurrencyDao {
      * @param details the player details
      */
     public static void decreaseCredits(PlayerDetails details, int amount) {
-        int updatedAmount = -1;
         Connection conn = null;
         PreparedStatement updateQuery = null;
         PreparedStatement fetchQuery = null;
@@ -184,13 +176,11 @@ public class CurrencyDao {
 
             // Set amount
             if (row != null && row.next()) {
-                updatedAmount = row.getInt("credits");
+                int updatedAmount = row.getInt("credits");
+                details.setCredits(updatedAmount);
             }
 
         } catch (Exception e) {
-            // Reset amount
-            updatedAmount = -1;
-
             try {
                 // Rollback these queries
                 conn.rollback();
@@ -211,8 +201,6 @@ public class CurrencyDao {
             Storage.closeSilently(fetchQuery);
             Storage.closeSilently(conn);
         }
-
-        details.setCredits(updatedAmount);
     }
 
     /**
@@ -221,7 +209,6 @@ public class CurrencyDao {
      * @param details the player details
      */
     public static void increaseTickets(PlayerDetails details, int amount) {
-        int updatedAmount = -1;
         Connection conn = null;
         PreparedStatement updateQuery = null;
         PreparedStatement fetchQuery = null;
@@ -249,13 +236,11 @@ public class CurrencyDao {
 
             // Set amount
             if (row != null && row.next()) {
-                updatedAmount = row.getInt("tickets");
+                int updatedAmount = row.getInt("tickets");
+                details.setTickets(updatedAmount);
             }
 
         } catch (Exception e) {
-            // Reset amount
-            updatedAmount = -1;
-
             try {
                 // Rollback these queries
                 conn.rollback();
@@ -276,8 +261,6 @@ public class CurrencyDao {
             Storage.closeSilently(fetchQuery);
             Storage.closeSilently(conn);
         }
-
-        details.setTickets(updatedAmount);
     }
 
     /**
@@ -286,7 +269,6 @@ public class CurrencyDao {
      * @param details the player details
      */
     public static void decreaseTickets(PlayerDetails details, int amount) {
-        int updatedAmount = -1;
         Connection conn = null;
         PreparedStatement updateQuery = null;
         PreparedStatement fetchQuery = null;
@@ -314,13 +296,11 @@ public class CurrencyDao {
 
             // Set amount
             if (row != null && row.next()) {
-                updatedAmount = row.getInt("tickets");
+                int updatedAmount = row.getInt("tickets");
+                details.setTickets(updatedAmount);
             }
 
         } catch (Exception e) {
-            // Reset amount
-            updatedAmount = -1;
-
             try {
                 // Rollback these queries
                 conn.rollback();
@@ -341,7 +321,5 @@ public class CurrencyDao {
             Storage.closeSilently(fetchQuery);
             Storage.closeSilently(conn);
         }
-
-        details.setTickets(updatedAmount);
     }
 }
