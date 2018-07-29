@@ -8,8 +8,8 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class PICK_CALLFORHELP implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        int callId = reader.readInt();
-
+        int callId = Integer.parseInt(reader.readString());
+        System.out.println(callId);
         CallForHelpManager.getInstance().pickUp(callId, player);
     }
 }

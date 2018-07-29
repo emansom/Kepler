@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.moderation.CALL_FOR_HELP;
 import org.alexdev.kepler.messages.outgoing.moderation.PICKED_CRY;
+import org.alexdev.kepler.messages.outgoing.user.CRY_RECEIVED;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.List;
@@ -24,16 +25,14 @@ public class CallForHelpManager {
      *
      * @param caller The person submitting the CFH
      * @param message The message attached to the CFH
-     * @return True if CFH was submitted successfully
      */
-    public boolean submitCallForHelp(Player caller, String message){
+    public void submitCallForHelp(Player caller, String message){
         if(this.getOpenCallForHelpByPlayerName(caller.getDetails().getName()) == null){
             CallForHelp cfh = new CallForHelp(latestCallId++, caller, message);
             this.callsForHelp.add(cfh);
             sendToModerators(new CALL_FOR_HELP(cfh));
-            return true;
+            caller.send(new CRY_RECEIVED());
         }
-        return false;
     }
 
     /**
