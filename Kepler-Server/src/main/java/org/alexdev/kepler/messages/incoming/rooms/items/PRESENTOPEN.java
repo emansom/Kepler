@@ -8,10 +8,13 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.incoming.catalogue.GRPC;
+import org.alexdev.kepler.messages.outgoing.catalogue.DELIVER_PRESENT;
 import org.alexdev.kepler.messages.outgoing.rooms.items.ITEM_DELIVERED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.DateUtil;
+
+import java.util.List;
 
 public class PRESENTOPEN implements MessageEvent {
     @Override
@@ -47,9 +50,15 @@ public class PRESENTOPEN implements MessageEvent {
         }
 
         CatalogueItem catalogueItem = CatalogueManager.getInstance().getCatalogueItem(saleCode);
-        GRPC.purchase(player, catalogueItem, extraData, receivedFrom, timestamp);
 
-        player.send(new ITEM_DELIVERED());
+        List<Item> itemList = GRPC.purchase(player, catalogueItem, extraData, receivedFrom, timestamp);
+
+        if (itemList.isEmpty()) {
+            return;
+        }
+
+        player.send(new DELIVER_PRESENT(itemList.get(0)));
+        player.getInventory().getView("new");
 
         room.getMapping().removeItem(item);
         ItemDao.deleteItem(item.getId());

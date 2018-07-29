@@ -13,6 +13,7 @@ import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.catalogue.DELIVER_PRESENT;
@@ -27,6 +28,8 @@ import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -56,14 +59,14 @@ public class GRPC implements MessageEvent {
         }
 
         if (data[5].equals("1")) { // It's a gift!
-            int receivingUserId = PlayerDao.getId(data[6]);
+            PlayerDetails receivingUserDetails = PlayerManager.getInstance().getPlayerData(PlayerDao.getId(data[6]));
 
-            if (!data[6].toLowerCase().equals(player.getDetails().getName().toLowerCase())) {
-                if (receivingUserId == -1) {
-                    player.send(new NO_USER_FOUND(data[6]));
-                    return;
-                }
+            //if (!data[6].toLowerCase().equals(player.getDetails().getName().toLowerCase())) {
+            if (receivingUserDetails == null) {
+                player.send(new NO_USER_FOUND(data[6]));
+                return;
             }
+            //}
 
             String presentNote = "";
             String extraData = data[4];
@@ -79,24 +82,26 @@ public class GRPC implements MessageEvent {
             }
 
             Item present = new Item();
-            present.setOwnerId(receivingUserId);
+            present.setOwnerId(receivingUserDetails.getId());
             present.setDefinitionId(ItemManager.getInstance().getDefinitionBySprite("present_gen" + ThreadLocalRandom.current().nextInt(1, 7)).getId());
             present.setCustomData(saleCode +
-                    (char)9 + player.getDetails().getName() +
-                    (char)9 + StringUtil.filterInput(presentNote, true) +
-                    (char)9 + extraData +
-                    (char)9 + DateUtil.getCurrentTimeSeconds());
+                    (char) 9 + player.getDetails().getName() +
+                    (char) 9 + StringUtil.filterInput(presentNote, true) +
+                    (char) 9 + extraData +
+                    (char) 9 + DateUtil.getCurrentTimeSeconds());
 
             ItemDao.newItem(present);
 
-            Player receiver = PlayerManager.getInstance().getPlayerById(receivingUserId);
+            Player receiver = PlayerManager.getInstance().getPlayerById(receivingUserDetails.getId());
 
             if (receiver != null) {
                 receiver.getInventory().getItems().add(present);
-                receiver.send(new ITEM_DELIVERED());
+                receiver.getInventory().getView("last");
+                //receiver.send(new ITEM_DELIVERED());
             }
 
-            player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", data[6])));
+            player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", receivingUserDetails.getName())));
+            //player.send(new DELIVER_PRESENT(present));
         } else {
             String extraData = null;
 
@@ -114,19 +119,25 @@ public class GRPC implements MessageEvent {
         player.send(new CREDIT_BALANCE(player.getDetails()));
     }
 
-    public static void purchase(Player player, CatalogueItem item, String extraData, String overrideName, long timestamp) throws SQLException {
+    public static List<Item> purchase(Player player, CatalogueItem item, String extraData, String overrideName, long timestamp) throws SQLException {
+       List<Item> itemsBought = new ArrayList<>();
+
         if (!item.isPackage()) {
-            purchase(player, item.getDefinition(), extraData, item.getItemSpecialId(), overrideName, timestamp);
+            Item newItem = purchase(player, item.getDefinition(), extraData, item.getItemSpecialId(), overrideName, timestamp);
+            itemsBought.add(newItem);
         } else {
             for (CataloguePackage cataloguePackage : item.getPackages()) {
                 for (int i = 0; i < cataloguePackage.getAmount(); i++) {
-                    purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId(), overrideName, timestamp);
+                    Item newItem = purchase(player, cataloguePackage.getDefinition(), null, cataloguePackage.getSpecialSpriteId(), overrideName, timestamp);
+                    itemsBought.add(newItem);
                 }
             }
         }
+
+        return itemsBought;
     }
 
-    private static void purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId, String overrideName,  long timestamp) throws SQLException {
+    private static Item purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId, String overrideName,  long timestamp) throws SQLException {
         String customData = "";
 
         if (extraData != null) {
@@ -180,5 +191,7 @@ public class GRPC implements MessageEvent {
             TeleporterDao.addPair(linkedTeleporterItem.getId(), item.getId());
             TeleporterDao.addPair(item.getId(), linkedTeleporterItem.getId());
         }
+
+        return item;
     }
 }

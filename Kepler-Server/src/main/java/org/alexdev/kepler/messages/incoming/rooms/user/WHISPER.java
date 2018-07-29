@@ -22,6 +22,10 @@ public class WHISPER implements MessageEvent {
         String username = contents.substring(0, contents.indexOf(" "));
         String message = StringUtil.filterInput(contents.substring(username.length() + 1), true);
 
+        if (message.isEmpty()) {
+            return;
+        }
+
         CHAT_MESSAGE chatMessage = new CHAT_MESSAGE(
                 CHAT_MESSAGE.type.WHISPER,
                 player.getRoomUser().getInstanceId(),

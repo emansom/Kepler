@@ -4,6 +4,7 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.timeout.IdleStateHandler;
+import io.netty.handler.traffic.ChannelTrafficShapingHandler;
 import org.alexdev.kepler.server.netty.codec.NetworkDecoder;
 import org.alexdev.kepler.server.netty.codec.NetworkEncoder;
 import org.alexdev.kepler.server.netty.connections.ConnectionHandler;
@@ -19,6 +20,7 @@ public class NettyChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
+        pipeline.addLast("trafficShapingHandler", new ChannelTrafficShapingHandler(2048, 2048));
         pipeline.addLast("gameEncoder", new NetworkEncoder());
         pipeline.addLast("gameDecoder", new NetworkDecoder());
         pipeline.addLast("handler", new ConnectionHandler(this.nettyServer));
