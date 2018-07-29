@@ -29,12 +29,13 @@ public class RoomData {
     private int visitorsMax;
     private boolean navigatorHide;
     private List<Room> childRooms;
+    private int rating;
 
     RoomData(Room room) {
         this.room = room;
     }
 
-    public void fill(int id, int ownerId, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax) {
+    public void fill(int id, int ownerId, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax, int rating) {
         this.id = id;
         this.ownerId = ownerId;
         if (this.ownerId > 0) {
@@ -56,6 +57,7 @@ public class RoomData {
         this.visitorsNow = visitorsNow;
         this.visitorsMax = visitorsMax;
         this.childRooms = new ArrayList<>();
+        this.rating = rating;
         this.applyModelSettings();
     }
 
@@ -100,6 +102,14 @@ public class RoomData {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway4"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway5"));
         }
+    }
+
+    public int getRating(){
+        return this.rating;
+    }
+
+    public void incrementVoteBy(int amount){
+        this.rating += amount;
     }
 
     public int getTotalVisitorsNow() {
