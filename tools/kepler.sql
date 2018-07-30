@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.7.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jul 28, 2018 at 04:59 AM
--- Server version: 10.3.7-MariaDB
--- PHP Version: 7.2.6
+-- Host: 127.0.0.1
+-- Generation Time: Jul 30, 2018 at 01:57 PM
+-- Server version: 10.2.15-MariaDB
+-- PHP Version: 5.6.31
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -715,15 +715,15 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (11, 'chair_norja', '#ffffff,#ffffff,#F7EBBC,#F7EBBC', 1, 1, 1, 'can_sit_on_top'),
 (12, 'table_polyfon_med', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
 (13, 'doormat_love', '0,0,0', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(14, 'doormat_plain', '0,0,0', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(14, 'doormat_plain', '0,0,0', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (15, 'sofachair_polyfon', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 1, 1, 'can_sit_on_top'),
 (16, 'sofachair_silo', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 1, 1, 'can_sit_on_top'),
 (17, 'bed_polyfon', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 2, 3, 1, 'can_lay_on_top'),
 (18, 'bed_polyfon_one', '#ffffff,#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 3, 1, 'can_lay_on_top'),
-(19, 'bed_silo_one', '0,0,0', 1, 3, 1, 'can_lay_on_top'),
-(20, 'bed_silo_two', '0,0,0', 2, 3, 1, 'can_lay_on_top'),
+(19, 'bed_silo_one', '0,0,0', 1, 3, 1.7, 'can_lay_on_top'),
+(20, 'bed_silo_two', '0,0,0', 2, 3, 1.7, 'can_lay_on_top'),
 (21, 'table_silo_small', '#ffffff,#ABD0D2', 1, 1, 1, 'solid,can_stack_on_top'),
-(22, 'bed_armas_two', '0,0,0', 2, 3, 1, 'can_lay_on_top'),
+(22, 'bed_armas_two', '0,0,0', 2, 3, 1.7, 'can_lay_on_top'),
 (23, 'shelves_armas', '0,0,0', 2, 1, 2, 'solid'),
 (24, 'bench_armas', '0,0,0', 2, 1, 1, 'can_sit_on_top'),
 (25, 'table_armas', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
@@ -731,17 +731,17 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (27, 'small_chair_armas', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
 (28, 'fireplace_armas', '0,0,0', 2, 1, 2, 'solid,custom_data_numeric_on_off'),
 (29, 'lamp_armas', '0,0,0', 1, 1, 2, 'solid,custom_data_numeric_on_off'),
-(30, 'bed_armas_one', '0,0,0', 1, 3, 1, 'can_lay_on_top'),
+(30, 'bed_armas_one', '0,0,0', 1, 3, 1.7, 'can_lay_on_top'),
 (31, 'carpet_standard', '0,0,0', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (32, 'carpet_armas', '0,0,0', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
 (33, 'carpet_polar', '#ffffff,#ffffff,#ffffff', 2, 3, 0, 'can_stand_on_top,can_stack_on_top'),
 (34, 'fireplace_polyfon', '0,0,0', 2, 1, 2, 'solid,custom_data_numeric_on_off'),
 (35, 'carpet_standard*1', '#ff1f08', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
-(36, 'doormat_plain*1', '#ff1f08', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(36, 'doormat_plain*1', '#ff1f08', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (37, 'carpet_standard*2', '#99DCCC', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (38, 'carpet_standard*3', '#ffee00', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (39, 'carpet_standard*4', '#ccddff', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
-(40, 'doormat_plain*6', '#777777', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(40, 'doormat_plain*6', '#777777', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (41, 'carpet_standard*5', '#ddccff', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (42, 'carpet_standard*6', '#777777', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (43, 'pizza', '', 1, 1, 0.1, 'solid,can_stack_on_top'),
@@ -766,11 +766,11 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (62, 'carpet_polar*1', '#ffbbcf,#ffbbcf,#ffddef', 2, 3, 0, 'can_stand_on_top,can_stack_on_top'),
 (63, 'smooth_table_polyfon', '', 2, 2, 1, 'solid,can_stack_on_top'),
 (64, 'sofachair_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 1, 1, 'can_sit_on_top'),
-(65, 'bed_polyfon_girl_one', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 3, 1, 'can_lay_on_top'),
-(66, 'bed_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 2, 3, 1, 'can_lay_on_top'),
+(65, 'bed_polyfon_girl_one', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 3, 1.6, 'can_lay_on_top'),
+(66, 'bed_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 2, 3, 1.6, 'can_lay_on_top'),
 (67, 'sofa_polyfon_girl', '#ffffff,#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4,#EE7EA4,#EE7EA4', 2, 1, 1, 'can_sit_on_top'),
-(68, 'bed_budgetb_one', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 1, 3, 1, 'can_lay_on_top'),
-(69, 'bed_budgetb', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 2, 3, 1, 'can_lay_on_top'),
+(68, 'bed_budgetb_one', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 1, 3, 1.6, 'can_lay_on_top'),
+(69, 'bed_budgetb', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 2, 3, 1.6, 'can_lay_on_top'),
 (70, 'plant_pineapple', '', 1, 1, 1, 'solid'),
 (71, 'plant_fruittree', '', 1, 1, 1, 'solid'),
 (72, 'plant_small_cactus', '', 1, 1, 1, 'solid'),
@@ -903,7 +903,7 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (199, 'bardeskcorner_polyfon*5', '#ffffff,#FF9BBD', 1, 1, 1, 'solid,can_stack_on_top'),
 (200, 'divider_poly3*5', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 1, 1, 'solid,requires_rights_for_interaction,door'),
 (201, 'chair_china', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
-(202, 'china_table', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
+(202, 'china_table', '0,0,0', 1, 1, 0.9, 'solid,can_stack_on_top'),
 (203, 'safe_silo', '#ffffff,#ABD0D2,#ABD0D2,#ffffff', 1, 1, 1, 'solid,custom_data_true_false'),
 (204, 'china_shelve', '0,0,0', 2, 1, 2, 'solid'),
 (205, 'divider_nor5', '#ffffff,#F7EBBC,#F7EBBC', 1, 1, 2, 'solid,requires_rights_for_interaction,door'),
@@ -930,9 +930,9 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (226, 'hc_rllr', '0,0,0', 1, 1, 0.45, 'can_stand_on_top,can_stack_on_top,roller'),
 (227, 'hc_rntgn', '0,0,0', 2, 1, 2, 'solid'),
 (228, 'hc_trll', '0,0,0', 1, 2, 1.5, 'solid'),
-(229, 'gothic_chair*3', '#ffffff,#dd0000,#ffffff,#dd0000', 1, 1, 1, 'can_sit_on_top'),
-(230, 'gothic_sofa*3', '#ffffff,#dd0000,#ffffff,#ffffff,#dd0000,#ffffff', 2, 1, 1, 'can_sit_on_top'),
-(231, 'gothic_stool*3', '#ffffff,#dd0000,#ffffff', 1, 1, 1, 'can_sit_on_top'),
+(229, 'gothic_chair*3', '#ffffff,#dd0000,#ffffff,#dd0000', 1, 1, 1.2, 'can_sit_on_top'),
+(230, 'gothic_sofa*3', '#ffffff,#dd0000,#ffffff,#ffffff,#dd0000,#ffffff', 2, 1, 1.2, 'can_sit_on_top'),
+(231, 'gothic_stool*3', '#ffffff,#dd0000,#ffffff', 1, 1, 1.2, 'can_sit_on_top'),
 (232, 'sound_machine', '', 1, 1, 1, 'solid,requires_rights_for_interaction,custom_data_numeric_on_off,sound_machine'),
 (233, 'plant_mazegate', '', 2, 1, 1, 'solid,requires_rights_for_interaction,door'),
 (234, 'plant_maze', '', 2, 1, 1, 'solid'),
@@ -940,11 +940,11 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (236, 'petfood4', '0,0', 1, 1, 0, 'can_stand_on_top'),
 (237, 'gothic_carpet', '', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
 (238, 'gothic_carpet2', '', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
-(239, 'sound_set_1', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(240, 'sound_set_3', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(241, 'sound_set_6', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(242, 'sound_set_7', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(243, 'sound_set_8', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(239, 'sound_set_1', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(240, 'sound_set_3', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(241, 'sound_set_6', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(242, 'sound_set_7', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(243, 'sound_set_8', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
 (244, 'post.it', '', 0, 0, 0, 'wall_item,requires_rights_for_interaction,post_it'),
 (245, 'gothicfountain', '', 0, 0, 0, 'wall_item,custom_data_numeric_on_off'),
 (246, 'hc_wall_lamp', '', 0, 0, 0, 'wall_item,custom_data_numeric_on_off'),
@@ -954,10 +954,10 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (250, 'wallpaper', '', 0, 0, 0, 'wall_item,decoration'),
 (251, 'poster', '', 0, 0, 0, 'wall_item'),
 (252, 'table_norja_med', '0,#E2DAAC', 2, 2, 1, 'solid,can_stack_on_top'),
-(253, 'doormat_plain*4', '#ccddff', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(254, 'doormat_plain*2', '#99DCCC', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(255, 'doormat_plain*3', '#ffee00', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(256, 'doormat_plain*5', '#ddccff', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(253, 'doormat_plain*4', '#ccddff', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(254, 'doormat_plain*2', '#99DCCC', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(255, 'doormat_plain*3', '#ffee00', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(256, 'doormat_plain*5', '#ddccff', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (257, 'rare_parasol*1', '#ffffff,#ffffff,#ffffff,#ffff11', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (258, 'rare_parasol*2', '#ffffff,#ffffff,#ffffff,#ff8f61', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (259, 'rare_parasol*3', '#ffffff,#ffffff,#ffffff,#d47fff', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
@@ -1056,66 +1056,66 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (352, 'roomdimmer', '', 1, 1, 1, 'wall_item,roomdimmer'),
 (353, 'jukebox*1', '', 1, 1, 1, 'solid,jukebox'),
 (354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox'),
-(355, 'carpet_soft_tut', '', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(356, 'sound_set_9', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(357, 'sound_set_10', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(358, 'sound_set_2', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(359, 'sound_set_4', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(360, 'sound_set_5', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(361, 'sound_set_11', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(362, 'sound_set_12', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(363, 'sound_set_13', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(364, 'sound_set_14', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(365, 'sound_set_15', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(366, 'sound_set_16', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(367, 'sound_set_17', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(368, 'sound_set_18', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(369, 'sound_set_19', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(370, 'sound_set_20', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(371, 'sound_set_21', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(372, 'sound_set_22', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(373, 'sound_set_23', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(374, 'sound_set_24', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(375, 'sound_set_25', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(376, 'sound_set_26', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(377, 'sound_set_27', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(378, 'sound_set_28', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(379, 'sound_set_29', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(380, 'sound_set_30', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(381, 'sound_set_31', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(382, 'sound_set_32', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(383, 'sound_set_33', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(384, 'sound_set_34', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(385, 'sound_set_35', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(386, 'sound_set_36', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(387, 'sound_set_37', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(388, 'sound_set_38', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(389, 'sound_set_39', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(390, 'sound_set_40', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(391, 'sound_set_41', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(392, 'sound_set_42', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(393, 'sound_set_43', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(394, 'sound_set_44', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(395, 'sound_set_45', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(396, 'sound_set_46', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(397, 'sound_set_47', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(398, 'sound_set_48', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(399, 'sound_set_49', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(400, 'sound_set_50', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(401, 'sound_set_51', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(402, 'sound_set_52', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(403, 'sound_set_53', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(404, 'sound_set_54', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(405, 'sound_set_55', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(406, 'sound_set_56', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(407, 'sound_set_57', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(408, 'sound_set_58', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(409, 'sound_set_59', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(410, 'sound_set_60', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(411, 'sound_set_61', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(412, 'sound_set_62', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(413, 'sound_set_63', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(414, 'sound_set_64', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(355, 'carpet_soft_tut', '', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(356, 'sound_set_9', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(357, 'sound_set_10', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(358, 'sound_set_2', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(359, 'sound_set_4', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(360, 'sound_set_5', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(361, 'sound_set_11', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(362, 'sound_set_12', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(363, 'sound_set_13', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(364, 'sound_set_14', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(365, 'sound_set_15', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(366, 'sound_set_16', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(367, 'sound_set_17', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(368, 'sound_set_18', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(369, 'sound_set_19', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(370, 'sound_set_20', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(371, 'sound_set_21', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(372, 'sound_set_22', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(373, 'sound_set_23', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(374, 'sound_set_24', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(375, 'sound_set_25', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(376, 'sound_set_26', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(377, 'sound_set_27', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(378, 'sound_set_28', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(379, 'sound_set_29', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(380, 'sound_set_30', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(381, 'sound_set_31', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(382, 'sound_set_32', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(383, 'sound_set_33', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(384, 'sound_set_34', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(385, 'sound_set_35', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(386, 'sound_set_36', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(387, 'sound_set_37', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(388, 'sound_set_38', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(389, 'sound_set_39', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(390, 'sound_set_40', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(391, 'sound_set_41', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(392, 'sound_set_42', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(393, 'sound_set_43', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(394, 'sound_set_44', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(395, 'sound_set_45', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(396, 'sound_set_46', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(397, 'sound_set_47', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(398, 'sound_set_48', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(399, 'sound_set_49', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(400, 'sound_set_50', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(401, 'sound_set_51', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(402, 'sound_set_52', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(403, 'sound_set_53', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(404, 'sound_set_54', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(405, 'sound_set_55', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(406, 'sound_set_56', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(407, 'sound_set_57', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(408, 'sound_set_58', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(409, 'sound_set_59', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(410, 'sound_set_60', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(411, 'sound_set_61', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(412, 'sound_set_62', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(413, 'sound_set_63', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(414, 'sound_set_64', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
 (415, 'present_gen1', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (416, 'present_gen2', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (417, 'present_gen3', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
@@ -1755,55 +1755,46 @@ ALTER TABLE `users_badges`
 --
 ALTER TABLE `catalogue_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=513;
-
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
-
 --
 -- AUTO_INCREMENT for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1056;
-
 --
 -- AUTO_INCREMENT for table `rooms_categories`
 --
 ALTER TABLE `rooms_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
-
 --
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
-
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`
 --
 ALTER TABLE `soundmachine_songs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
 --
 -- Constraints for dumped tables
 --
