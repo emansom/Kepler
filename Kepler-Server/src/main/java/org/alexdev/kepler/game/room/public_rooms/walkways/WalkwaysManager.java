@@ -44,6 +44,25 @@ public class WalkwaysManager {
         this.addWalkway("hallway5", "hallway4", "22,0 23,0 24,0 25,0", "24,17,1,0", true);
         this.addWalkway("hallway4", "hallway2", "0,2 0,3 0,4 0,5", "25,7,0,6", true);
         this.addWalkway("hallway4", "hallway5", "22,19 23,19 24,19 25,19", "24,2,1,4", true);
+
+        this.addWalkway("hallway9", "hallway8", "14,0 15,0 16,0 17,0", "19,21,0,0", true);
+        this.addWalkway("hallway9", "hallway10", "14,31 15,31 16,31 17,31", "3,6,1,4", true);
+        this.addWalkway("hallway9", "hallway7", "0,14 0,15 0,16 0,17", "17,23,0,6", true);
+        this.addWalkway("hallway9", "hallway11", "31,17 31,16 31,15 31,14", "2,3,1,2", true);
+
+        this.addWalkway("hallway8", "hallway7", "0,14 0,15 0,16 0,17", "13,8,1,6", true);
+        this.addWalkway("hallway8", "hallway9", "18,23 19,23 20,23 21,23", "16,2,0,4", true);
+
+        this.addWalkway("hallway7", "hallway8", "15,6 15,7 15,8 15,9", "2,15,1,2", true);
+        this.addWalkway("hallway7", "hallway6", "0,25 0,24 0,23 0,22", "21,12,0,6", true);
+        this.addWalkway("hallway7", "hallway9", "19,22 19,23 19,24 19,25", "2,15,0,2", true);
+        this.addWalkway("hallway6", "hallway7", "23,13 23,12 23,11 23,10", "2,23,0,2", true);
+
+        this.addWalkway("hallway10", "hallway9", "2,4 3,4 4,4 5,4", "15,29,0,0", true);
+        this.addWalkway("hallway10", "hallway11", "17,0 17,1 17,2 17,3", "10,19,0,2", true);
+
+        this.addWalkway("hallway11", "hallway10", "8,18 8,19 8,20 8,21", "15,1,0,6", true);
+        this.addWalkway("hallway11", "hallway9", "0,5 0,4 0,3 0,2", "29,15,0,6", true);
     }
 
     private void addWalkway(String modelFrom, String modelTo, String fromCoords, String destination, boolean hideRoom) {
@@ -66,7 +85,7 @@ public class WalkwaysManager {
             destinationPosition = new Position(x, y, z, rotation, rotation);
         }
 
-        WalkwaysEntrance entrance = new WalkwaysEntrance(modelFrom, modelTo, coordinates, hideRoom, destinationPosition);
+        WalkwaysEntrance entrance = new WalkwaysEntrance(modelFrom, modelTo, coordinates, destinationPosition);
         this.walkways.add(entrance);
     }
 

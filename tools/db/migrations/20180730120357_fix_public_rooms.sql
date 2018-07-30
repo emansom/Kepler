@@ -85,6 +85,7 @@ UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 21;
 UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 22;
 UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 23;
 UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 24;
+UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 26;
 
 -- migrate:down
 
