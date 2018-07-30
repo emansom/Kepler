@@ -141,8 +141,7 @@ public class Kepler {
             rcon = new RconServer(rconIP, rconPort);
             rcon.listen();
             
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> dispose()));
-
+            Runtime.getRuntime().addShutdownHook(new Thread(Kepler::dispose));
         } catch (Exception e) {
             e.printStackTrace();
         }
