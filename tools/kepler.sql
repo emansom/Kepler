@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 30, 2018 at 01:57 PM
+-- Generation Time: Jul 30, 2018 at 02:07 PM
 -- Server version: 10.2.15-MariaDB
 -- PHP Version: 5.6.31
 
@@ -1266,59 +1266,64 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `owner_id`, `category`, `name`, `description`, `model`, `ccts`, `wallpaper`, `floor`, `showname`, `superusers`, `accesstype`, `password`, `visitors_now`, `visitors_max`) VALUES
-(1001, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, 0, 0, 0, 0, '', 0, 40),
-(1003, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, 0, 0, 0, 0, '', 0, 100),
-(1004, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, 0, 0, 0, 0, '', 0, 30),
-(1005, '0', 5, 'TV Studio', 'tv_studio', 'tv_studio', 'hh_room_tv_studio_general', 0, 0, 0, 0, 0, '', 0, 20),
-(1006, '0', 5, 'Cinema', 'habbo_cinema', 'cinema_a', 'hh_room_cinema', 0, 0, 0, 0, 0, '', 0, 50),
-(1007, '0', 5, 'Power Gym', 'sport', 'sport', 'hh_room_sport', 0, 0, 0, 0, 0, '', 0, 35),
-(1008, '0', 5, 'Olympic Stadium', 'ballroom', 'ballroom', 'hh_room_ballroom', 0, 0, 0, 0, 0, '', 0, 50),
-(1009, '0', 5, 'Habbo Kitchen', 'hotel_kitchen', 'cr_kitchen', 'hh_room_kitchen', 0, 0, 0, 0, 0, '', 0, 20),
-(1010, '0', 6, 'The Dirty Duck Pub', 'the_dirty_duck_pub', 'pub_a', 'hh_room_pub', 0, 0, 0, 0, 0, '', 0, 40),
-(1011, '0', 6, 'Cafe Ole', 'cafe_ole', 'cafe_ole', 'hh_room_cafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1012, '0', 6, 'Gallery Cafe', 'eric\'s_eaterie', 'cr_cafe', 'hh_room_erics', 0, 0, 0, 0, 0, '', 0, 35),
-(1013, '0', 6, 'Space Cafe', 'space_cafe', 'space_cafe', 'hh_room_space_cafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1014, '0', 7, 'Rooftop Terrace', 'rooftop', 'rooftop', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 30),
-(1015, '0', 7, 'Rooftop Cafe', 'rooftop', 'rooftop_2', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 20),
-(1016, '0', 6, 'Palazzo Pizza', 'pizza', 'pizza', 'hh_room_pizza', 0, 0, 0, 0, 0, '', 0, 40),
-(1017, '0', 6, 'Habburgers', 'habburger\'s', 'habburger', 'hh_room_habburger', 0, 0, 0, 0, 0, '', 0, 40),
-(1018, '0', 8, 'Grandfathers Lounge', 'dusty_lounge', 'dusty_lounge', 'hh_room_dustylounge', 0, 0, 0, 0, 0, '', 0, 45),
-(1019, '0', 7, 'Oriental Tearoom', 'tearoom', 'tearoom', 'hh_room_tearoom', 0, 0, 0, 0, 0, '', 0, 40),
-(1020, '0', 7, 'Oldskool Lounge', 'old_skool', 'old_skool0', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
-(1022, '0', 7, 'Oldskool Dancefloor', 'old_skool', 'old_skool1', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
-(1023, '0', 7, 'The Chromide Club', 'the_chromide_club', 'malja_bar_a', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 45),
-(1024, '0', 7, 'The Chromide Club II', 'the_chromide_club', 'malja_bar_b', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 50),
-(1025, '0', 7, 'Club Massiva', 'club_massiva', 'bar_a', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 45),
-(1026, '0', 7, 'Club Massiva II', 'club_massiva2', 'bar_b', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 70),
-(1027, '0', 6, 'Sunset Cafe', 'sunset_cafe', 'sunset_cafe', 'hh_room_sunsetcafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1028, '0', 7, 'Oasis Spa', 'cafe_gold', 'cafe_gold0', 'hh_room_gold', 0, 0, 0, 0, 0, '', 0, 50),
-(1029, '0', 9, 'Treehugger Garden', 'chill', 'chill', 'hh_room_chill', 0, 0, 0, 0, 0, '', 0, 30),
-(1030, '0', 8, 'Club Mammoth', 'club_mammoth', 'club_mammoth', 'hh_room_clubmammoth', 0, 0, 0, 0, 0, '', 0, 45),
-(1031, '0', 9, 'Floating Garden', 'floatinggarden', 'floatinggarden', 'hh_room_floatinggarden', 0, 0, 0, 0, 0, '', 0, 80),
-(1032, '0', 9, 'Picnic Fields', 'picnic', 'picnic', 'hh_room_picnic', 0, 0, 0, 0, 0, '', 0, 55),
-(1033, '0', 9, 'Sun Terrace', 'sun_terrace', 'sun_terrace', 'hh_room_sun_terrace', 0, 0, 0, 0, 0, '', 0, 50),
-(1034, '0', 20, 'The Laughing Lions - Gate', 'gate_park', 'gate_park', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
-(1035, '0', 20, 'The Laughing Lions - Picnic', 'gate_park', 'gate_park_2', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
-(1036, '0', 21, 'The Park', 'park', 'park_a', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 45),
-(1037, '0', 21, 'The Infobus', 'park', 'park_b', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 20),
-(1038, '0', 10, 'Habbo Lido', 'habbo_lido', 'pool_a', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
-(1039, '0', 10, 'Lido B', 'habbo_lido_ii', 'pool_b', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
-(1040, '0', 10, 'Rooftop Rumble', 'rooftop_rumble', 'md_a', 'hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu', 0, 0, 0, 0, 0, '', 0, 50),
-(1041, '0', 11, 'Main Lobby', 'main_lobby', 'lobby_a', 'hh_room_lobby', 0, 0, 0, 0, 0, '', 0, 100),
-(1042, '0', 11, 'Basement Lobby', 'basement_lobby', 'floorlobby_a', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1043, '0', 11, 'Median Lobby', 'median_lobby', 'floorlobby_b', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1044, '0', 11, 'Skylight Lobby', 'skylight_lobby', 'floorlobby_c', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1045, '0', 6, 'Ice Cafe', 'ice_cafe', 'ice_cafe', 'hh_room_icecafe', 0, 0, 0, 0, 0, '', 0, 25),
-(1046, '0', 6, 'Net Cafe', 'netcafe', 'netcafe', 'hh_room_netcafe', 0, 0, 0, 0, 0, '', 0, 25),
-(1047, '0', 5, 'Beauty Salon', 'beauty_salon_loreal', 'beauty_salon0', 'hh_room_beauty_salon_general', 0, 0, 0, 0, 0, '', 0, 25),
-(1048, '0', 5, 'The Den', 'the_den', 'cr_staff', 'hh_room_den', 0, 0, 0, 0, 0, '', 0, 100),
-(1049, '0', 12, 'Lower Hallways', 'hallway', 'hallway2', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1050, '0', 12, 'Lower Hallways I', 'hallway', 'hallway0', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1051, '0', 12, 'Lower Hallways II', 'hallway', 'hallway1', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1052, '0', 12, 'Lower Hallways III', 'hallway', 'hallway3', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1053, '0', 12, 'Lower Hallways IV', 'hallway', 'hallway5', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1054, '0', 12, 'Lower Hallways V', 'hallway', 'hallway4', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1055, '0', 12, 'Upper Hallways', 'hallway_ii', 'hallway9', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25);
+(1, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, 0, 0, 0, 0, '', 0, 40),
+(2, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, 0, 0, 0, 0, '', 0, 100),
+(3, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, 0, 0, 0, 0, '', 0, 30),
+(4, '0', 5, 'TV Studio', 'tv_studio', 'tv_studio', 'hh_room_tv_studio_general', 0, 0, 0, 0, 0, '', 0, 20),
+(5, '0', 5, 'Cinema', 'habbo_cinema', 'cinema_a', 'hh_room_cinema', 0, 0, 0, 0, 0, '', 0, 50),
+(6, '0', 5, 'Power Gym', 'sport', 'sport', 'hh_room_sport', 0, 0, 0, 0, 0, '', 0, 35),
+(7, '0', 5, 'Olympic Stadium', 'ballroom', 'ballroom', 'hh_room_ballroom', 0, 0, 0, 0, 0, '', 0, 50),
+(8, '0', 5, 'Habbo Kitchen', 'hotel_kitchen', 'cr_kitchen', 'hh_room_kitchen', 0, 0, 0, 0, 0, '', 0, 20),
+(9, '0', 6, 'The Dirty Duck Pub', 'the_dirty_duck_pub', 'pub_a', 'hh_room_pub', 0, 0, 0, 0, 0, '', 0, 40),
+(10, '0', 6, 'Cafe Ole', 'cafe_ole', 'cafe_ole', 'hh_room_cafe', 0, 0, 0, 0, 0, '', 0, 35),
+(11, '0', 6, 'Gallery Cafe', 'eric\'s_eaterie', 'cr_cafe', 'hh_room_erics', 0, 0, 0, 0, 0, '', 0, 35),
+(12, '0', 6, 'Space Cafe', 'space_cafe', 'space_cafe', 'hh_room_space_cafe', 0, 0, 0, 0, 0, '', 0, 35),
+(13, '0', 7, 'Rooftop Terrace', 'rooftop', 'rooftop', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 30),
+(14, '0', 7, 'Rooftop Cafe', 'rooftop', 'rooftop_2', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 20),
+(15, '0', 6, 'Palazzo Pizza', 'pizza', 'pizza', 'hh_room_pizza', 0, 0, 0, 0, 0, '', 0, 40),
+(16, '0', 6, 'Habburgers', 'habburger\'s', 'habburger', 'hh_room_habburger', 0, 0, 0, 0, 0, '', 0, 40),
+(17, '0', 8, 'Grandfathers Lounge', 'dusty_lounge', 'dusty_lounge', 'hh_room_dustylounge', 0, 0, 0, 0, 0, '', 0, 45),
+(18, '0', 7, 'Oriental Tearoom', 'tearoom', 'tearoom', 'hh_room_tearoom', 0, 0, 0, 0, 0, '', 0, 40),
+(19, '0', 7, 'Oldskool Lounge', 'old_skool', 'old_skool0', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
+(20, '0', 7, 'Oldskool Dancefloor', 'old_skool', 'old_skool1', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
+(21, '0', 7, 'The Chromide Club', 'the_chromide_club', 'malja_bar_a', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 45),
+(22, '0', 7, 'The Chromide Club II', 'the_chromide_club', 'malja_bar_b', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 50),
+(23, '0', 7, 'Club Massiva', 'club_massiva', 'bar_a', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 45),
+(24, '0', 7, 'Club Massiva II', 'club_massiva2', 'bar_b', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 70),
+(25, '0', 6, 'Sunset Cafe', 'sunset_cafe', 'sunset_cafe', 'hh_room_sunsetcafe', 0, 0, 0, 0, 0, '', 0, 35),
+(26, '0', 7, 'Oasis Spa', 'cafe_gold', 'cafe_gold0', 'hh_room_gold', 0, 0, 0, 0, 0, '', 0, 50),
+(27, '0', 9, 'Treehugger Garden', 'chill', 'chill', 'hh_room_chill', 0, 0, 0, 0, 0, '', 0, 30),
+(28, '0', 8, 'Club Mammoth', 'club_mammoth', 'club_mammoth', 'hh_room_clubmammoth', 0, 0, 0, 0, 0, '', 0, 45),
+(29, '0', 9, 'Floating Garden', 'floatinggarden', 'floatinggarden', 'hh_room_floatinggarden', 0, 0, 0, 0, 0, '', 0, 80),
+(30, '0', 9, 'Picnic Fields', 'picnic', 'picnic', 'hh_room_picnic', 0, 0, 0, 0, 0, '', 0, 55),
+(31, '0', 9, 'Sun Terrace', 'sun_terrace', 'sun_terrace', 'hh_room_sun_terrace', 0, 0, 0, 0, 0, '', 0, 50),
+(32, '0', 20, 'The Laughing Lions - Gate', 'gate_park', 'gate_park', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
+(33, '0', 20, 'The Laughing Lions - Picnic', 'gate_park', 'gate_park_2', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
+(34, '0', 21, 'The Park', 'park', 'park_a', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 45),
+(35, '0', 21, 'The Infobus', 'park', 'park_b', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 20),
+(36, '0', 10, 'Habbo Lido', 'habbo_lido', 'pool_a', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
+(37, '0', 10, 'Lido B', 'habbo_lido_ii', 'pool_b', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
+(38, '0', 10, 'Rooftop Rumble', 'rooftop_rumble', 'md_a', 'hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu', 0, 0, 0, 0, 0, '', 0, 50),
+(39, '0', 11, 'Main Lobby', 'main_lobby', 'lobby_a', 'hh_room_lobby', 0, 0, 0, 0, 0, '', 0, 100),
+(40, '0', 11, 'Basement Lobby', 'basement_lobby', 'floorlobby_a', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(41, '0', 11, 'Median Lobby', 'median_lobby', 'floorlobby_b', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(42, '0', 11, 'Skylight Lobby', 'skylight_lobby', 'floorlobby_c', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(43, '0', 6, 'Ice Cafe', 'ice_cafe', 'ice_cafe', 'hh_room_icecafe', 0, 0, 0, 0, 0, '', 0, 25),
+(44, '0', 6, 'Net Cafe', 'netcafe', 'netcafe', 'hh_room_netcafe', 0, 0, 0, 0, 0, '', 0, 25),
+(45, '0', 5, 'Beauty Salon', 'beauty_salon_loreal', 'beauty_salon0', 'hh_room_beauty_salon_general', 0, 0, 0, 0, 0, '', 0, 25),
+(46, '0', 5, 'The Den', 'the_den', 'cr_staff', 'hh_room_den', 0, 0, 0, 0, 0, '', 0, 100),
+(47, '0', 12, 'Lower Hallways', 'hallway', 'hallway2', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(48, '0', 12, 'Lower Hallways I', 'hallway', 'hallway0', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(49, '0', 12, 'Lower Hallways II', 'hallway', 'hallway1', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(50, '0', 12, 'Lower Hallways III', 'hallway', 'hallway3', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(51, '0', 12, 'Lower Hallways IV', 'hallway', 'hallway5', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(52, '0', 12, 'Lower Hallways V', 'hallway', 'hallway4', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(53, '0', 12, 'Upper Hallways', 'hallway_ii', 'hallway9', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(54, '0', 12, 'Upper Hallways I', 'hallway_ii', 'hallway8', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(55, '0', 12, 'Upper Hallways II', 'hallway_ii', 'hallway7', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(56, '0', 12, 'Upper Hallways III', 'hallway_ii', 'hallway6', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(57, '0', 12, 'Upper Hallways IV', 'hallway_ii', 'hallway10', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(58, '0', 12, 'Upper Hallways V', 'hallway_ii', 'hallway11', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 1, 25);
 
 -- --------------------------------------------------------
 
@@ -1459,13 +1464,18 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 (67, 'club_mammoth', 'club_mammoth', 6, 16, 4, 2, 'xxxxxx4444444x4444xxxxxxxxxxxxx|xxxxxx4444444x444322xxxxxxxxxxx|xxxxxxxxxxxxxx444322xxxxxxxxxxx|x444444444444444442222xxxxxxxxx|4444444444444444442222xxxxxxxxx|4xxxxxxxxxxxxxxxxx2222xxxxxxxxx|4xxxxxxxxxx22222xx2222xxxxxxxxx|44xxxxxxxxx22222x2xxxxxxxxxxxxx|x4444444xxx22222x22xxxxxxxxxxxx|xx4444444xx22x22x222xxxxxxxxxxx|xxxxxxx444x22222xxxxxxxxxxxxxxx|xxxxxx444322222222211111111xxxx|xxxxxx444322222222211111111xxxx|xxxxxx444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxxxxx4444422222222x1111111xxxx|xxxxxx4444422222222xxxxxxxxxxxx|xxxxxx4443222222222222222222xxx|xxxxxx4443xxxxxxx2xxxxx222xxxxx|xxxxxx444xxxxxxxxxxxxxxx22xxxxx|xxxxxx4xxxxxxxxxxxxx444422xxxxx|xxx4444xxxxxxxxxxxxx4444x2xxxxx|xxx566666666666666664444xxxxxxx|xxxx66666666666666664444xxxxxxx|xxxxxxx666666666666544xxxxxxxxx|xxxxxxx666666666666544xxxxxxxxx|xxxxxxx6666666666666xxxxxxxxxxx|xxxxxxx6666666666666xxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 1),
 (68, 'ice_cafe', 'taivas_cafe', 17, 23, 0, 0, 'xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx1111111000000000|xx1111111000000000|111111111000000000|111111111000000000|111111111000000000|111111111000000000|111111111000000000|11111111x000000000|11111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx1111110000000000|xx1111111000000000|xx1111111000000000|xx1111111000000000|', 0),
 (69, 'netcafe', 'netcafe', 22, 12, 0, 6, 'xxxxx1111xxxxxxxxxxx1xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxxxxx0000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|xxxx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx111000000000000000000|x1xx111000000000000000000|xxxx111000000000000000000|xxxx11100000000000000xxxx|xxxx1110000000xx11111xxxx|xxxxx111110000x111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxx1111100001111111xxxx|', 1),
-(70, 'hallway0', 'hallway0', 2, 3, 0, 4, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx0000000x1111111111111111xxxx|xxxxxxxxxxxxx1111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
-(71, 'hallway9', 'hallway9', 21, 23, 7, 6, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx', 1),
+(70, 'hallway0', 'hallway0', 2, 2, 0, 2, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx0000000x1111111111111111xxxx|xxxxxxxxxxxxx1111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
+(71, 'hallway9', 'hallway9', 21, 23, 0, 7, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx', 1),
 (72, 'hallway2', 'hallway2', 15, 2, 0, 4, 'xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxx11111111000000000000xxxx|xxxx11111111000000000000xxxx|1111111111110000000000000000|1111111111110000000000000000|1111111111110000000000000000|1111111111110000000000000000|xxxx11111111000000000000xxxx|xxxx11111111000000000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx', 1),
-(73, 'hallway1', 'hallway1', 15, 2, 0, 4, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx', 1),
-(74, 'hallway3', 'hallway3', 15, 2, 0, 4, 'xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
-(75, 'hallway4', 'hallway4', 15, 2, 0, 4, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx', 1),
-(76, 'hallway5', 'hallway5', 15, 2, 0, 4, 'xxxxxxxxxxxxxx11xxxxxx1111xx|xxxxxxxxxxxxxx111xxxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxx000000001111111111111111|xxxx000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|xxxx000000001111111111111111|xxxx0000000x1111111111111111|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx', 1);
+(73, 'hallway1', 'hallway1', 2, 14, 0, 2, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx', 1),
+(74, 'hallway3', 'hallway3', 14, 21, 1, 0, 'xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
+(75, 'hallway4', 'hallway4', 29, 3, 1, 6, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx', 1),
+(76, 'hallway5', 'hallway5', 14, 2, 1, 4, 'xxxxxxxxxxxxxx11xxxxxx1111xx|xxxxxxxxxxxxxx111xxxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxx000000001111111111111111|xxxx000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|xxxx000000001111111111111111|xxxx0000000x1111111111111111|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx', 1),
+(77, 'hallway8', 'hallway8', 15, 3, 0, 4, 'xxxxxxxxxxxxxx00xxxx0000|xxxxxxxxxxxxxx000xxx0000|xxxxxxxxxxxxxx0000xx0000|xxxxxxxxxxxxxx0000xx0000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111xxxx00000000|xxxx11111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|xxxx11111111xxxx00000000|xxxx11111111xxxx00000000|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx', 1),
+(78, 'hallway7', 'hallway7', 7, 2, 1, 4, 'xxxxxx11xxxxxxxxxxxx|xxxxxx111xxxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx000000000000xxxx|xxxx000000000000xxxx|00000000000000000000|00000000000000000000|00000000000000000000|00000000000000000000|xxxx000000000000xxxx|xxxx000000000000xxxx', 1),
+(79, 'hallway6', 'hallway6', 1, 10, 1, 2, 'xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx', 1),
+(80, 'hallway10', 'hallway10', 3, 23, 1, 1, 'xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx', 1),
+(81, 'hallway11', 'hallway11', 20, 3, 0, 6, 'xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx', 1);
 
 -- --------------------------------------------------------
 
@@ -1529,7 +1539,9 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180622105649'),
 ('20180715121437'),
 ('20180715152740'),
-('20180724140234');
+('20180724140234'),
+('20180729161108'),
+('20180730120357');
 
 -- --------------------------------------------------------
 
@@ -1774,7 +1786,7 @@ ALTER TABLE `messenger_messages`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1056;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000;
 --
 -- AUTO_INCREMENT for table `rooms_categories`
 --
@@ -1784,7 +1796,7 @@ ALTER TABLE `rooms_categories`
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`
 --
