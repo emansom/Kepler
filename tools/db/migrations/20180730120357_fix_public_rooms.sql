@@ -76,16 +76,17 @@ UPDATE `rooms_models` SET `door_x` = 14,`door_y` = 21,`door_z` = 1,`door_dir` = 
 UPDATE `rooms_models` SET `door_x` = 14,`door_y` = 2,`door_z` = 1,`door_dir` = 4 WHERE model_id = 'hallway5';
 UPDATE `rooms_models` SET `door_x` = 29,`door_y` = 3,`door_z` = 1,`door_dir` = 6 WHERE model_id = 'hallway4';
 
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 13;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 14;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 18;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 19;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 20;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 21;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 22;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 23;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 24;
-UPDATE `rooms` SET `category` = '7' WHERE `rooms`.`id` = 26;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 13;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 14;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 18;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 19;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 20;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 21;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 22;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 23;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 24;
+UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 26;
+UPDATE `rooms` SET `category` = 12 WHERE `rooms`.`id` = 53;
 
 -- migrate:down
 
