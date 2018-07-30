@@ -74,6 +74,14 @@ public class Kepler {
 
             // TODO: The "Standard" ASCII from
             // http://patorjk.com/software/taag/#p=display&f=Standard&t=Kepler
+
+            System.out.println("  _  __          _           \n" +
+                    " | |/ /___ _ __ | | ___ _ __ \n" +
+                    " | ' // _ \\ '_ \\| |/ _ \\ '__|\n" +
+                    " | . \\  __/ |_) | |  __/ |   \n" +
+                    " |_|\\_\\___| .__/|_|\\___|_|   \n" +
+                    "          |_|                ");
+
             log.info("Kepler - Habbo Hotel V21 Emulation");
 
             if (!Storage.connect()) {
