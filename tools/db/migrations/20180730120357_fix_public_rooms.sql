@@ -88,8 +88,6 @@ UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 24;
 UPDATE `rooms` SET `category` = 7 WHERE `rooms`.`id` = 26;
 UPDATE `rooms` SET `category` = 12 WHERE `rooms`.`id` = 53;
 
-UPDATE rooms SET name = "Upper Hallways" WHERE name LIKE "Upper Hallways%" AND owner_id = 0;
-UPDATE rooms SET name = "Lower Hallways" WHERE name LIKE "Lower Hallways%" AND owner_id = 0;
 UPDATE rooms SET name = "Habbo Lido B" WHERE model = "pool_b" AND owner_id = 0;
 
 -- migrate:down
