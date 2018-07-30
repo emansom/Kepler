@@ -74,9 +74,6 @@ public class Kepler {
 
             // TODO: The "Standard" ASCII from
             // http://patorjk.com/software/taag/#p=display&f=Standard&t=Kepler
-            // On a grey background with white ASCII text
-            // ASCII logo on the left side, contributors and other credits/info on the right side
-            // TODO: also a way to disable the fancy headers, as in production it would only fill the logs
             log.info("Kepler - Habbo Hotel V21 Emulation");
 
             if (!Storage.connect()) {
@@ -98,7 +95,6 @@ public class Kepler {
             CommandManager.getInstance();
             MessageHandler.getInstance();
             TextsManager.getInstance();
-
 
             // Get the server variables for the socket to listen on
             serverIP = ServerConfiguration.getString("server.bind");
@@ -122,7 +118,6 @@ public class Kepler {
             server.createSocket();
             server.bind();
 
-
             rconIP = ServerConfiguration.getString("rcon.bind");
             rconPort = ServerConfiguration.getInteger("rcon.port");
 
@@ -137,8 +132,7 @@ public class Kepler {
 
             rcon = new RconServer(rconIP, rconPort);
             rcon.listen();
-
-
+            
             Runtime.getRuntime().addShutdownHook(new Thread(() -> dispose()));
 
         } catch (Exception e) {
