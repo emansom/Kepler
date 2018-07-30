@@ -74,7 +74,7 @@ public class CallForHelpManager {
      */
     void sendToModerators(MessageComposer message){
         for(Player p : PlayerManager.getInstance().getActivePlayers()){
-            if(p.hasFuse("fuse_cfh")){
+            if(p.hasFuse("fuse_receive_calls_for_help")){
                 p.send(message);
             }
         }
@@ -86,7 +86,7 @@ public class CallForHelpManager {
      * @param moderator the moderator who is picking it up
      */
     public void pickUp(int callId, Player moderator){
-        if(moderator.hasFuse("fuse_cfh")){
+        if(moderator.hasFuse("fuse_receive_calls_for_help")){
             CallForHelp cfh = this.getCallForHelpById(callId);
             if(cfh != null) {
                 cfh.pickUp(moderator);
