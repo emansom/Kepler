@@ -411,6 +411,7 @@ public class Item {
 
 
     public void setDefinitionId(int definitionId) {
+        this.definition = null;
         this.definitionId = definitionId;
     }
 
