@@ -28,6 +28,8 @@ public class Item {
     private int teleporterId;
 
     private ItemDefinition definition;
+    private int definitionId;
+
     private Item itemBelow;
     private Item itemAbove;
 
@@ -56,7 +58,8 @@ public class Item {
         this.id = id;
         this.ownerId = ownerId;
         this.roomId = roomId;
-        this.setDefinitionId(definitionId);
+        this.definitionId = definitionId;
+        this.definition = null;
         this.position = new Position(X, Y, Z, rotation, rotation);
         this.wallPosition = wallPosition;
         this.customData = customData;
@@ -131,7 +134,7 @@ public class Item {
      * @return the total height
      */
     public double getTotalHeight() {
-        return this.position.getZ() + this.definition.getTopHeight();
+        return this.position.getZ() + this.getDefinition().getTopHeight();
     }
 
     /**
@@ -140,11 +143,11 @@ public class Item {
      * @return true, if successful.
      */
     public boolean isWalkable() {
-        if (this.definition.getSprite().equals("poolLift")) {
+        if (this.getDefinition().getSprite().equals("poolLift")) {
             return this.currentProgramValue.equals("open");
         }
 
-        if (this.definition.getSprite().equals("poolBooth")) {
+        if (this.getDefinition().getSprite().equals("poolBooth")) {
             return this.currentProgramValue.equals("open");
         }
 
@@ -196,9 +199,11 @@ public class Item {
      * @param response the response to serialise to
      */
     public void serialise(NettyResponse response) {
-        if (this.definition.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
+        ItemDefinition definition = this.getDefinition();
+
+        if (definition.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
             response.writeDelimeter(this.customData, ' ');
-            response.writeString(this.definition.getSprite());
+            response.writeString(definition.getSprite());
             response.writeDelimeter(this.position.getX(), ' ');
             response.writeDelimeter(this.position.getY(), ' ');
             response.writeDelimeter((int) this.position.getZ(), ' ');
@@ -212,7 +217,7 @@ public class Item {
         } else {
             if (this.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
                 response.writeDelimeter(this.id, (char) 9);
-                response.writeDelimeter(this.definition.getSprite(), (char) 9);
+                response.writeDelimeter(definition.getSprite(), (char) 9);
                 response.writeDelimeter(" ", (char) 9);
                 response.writeDelimeter(this.wallPosition, (char) 9);
 
@@ -227,14 +232,14 @@ public class Item {
                 response.write(Character.toString((char) 13));
             } else {
                 response.writeString(this.id);
-                response.writeString(this.definition.getSprite());
+                response.writeString(definition.getSprite());
                 response.writeInt(this.position.getX());
                 response.writeInt(this.position.getY());
-                response.writeInt(this.definition.getLength());
-                response.writeInt(this.definition.getWidth());
+                response.writeInt(definition.getLength());
+                response.writeInt(definition.getWidth());
                 response.writeInt(this.position.getRotation());
                 response.writeString(StringUtil.format(this.position.getZ()));
-                response.writeString(this.definition.getColour());
+                response.writeString(definition.getColour());
                 response.writeString("");
                 response.writeInt(this.hasBehaviour(ItemBehaviour.ROLLER) ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
 
@@ -283,26 +288,6 @@ public class Item {
             }
         }
 
-        /*for (Item rollingItem : tile.getItems()) {
-            if (rollingItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
-                continue;
-            }
-
-            if (rollingItem.getId() == item.getId()) {
-                continue;
-            }
-
-            if (rollingItem.isRolling()) {
-                if (rollingItem.getItemBelow() != null && rollingItem.getItemBelow().hasBehaviour(ItemBehaviour.ROLLER)) {
-                    // If the item is rolling and there's a 0.5 gap of height underneath it or more, then you can place
-                    // an item below it.
-                    if (rollingItem.getPosition().getZ() - rollingItem.getItemBelow().getPosition().getZ() >= 0.5) {
-                        return true;
-                    }
-                }
-            }
-        }*/
-
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
             tile = room.getMapping().getTile(position);
 
@@ -343,7 +328,7 @@ public class Item {
                         return false; // Can't place rollers on top of rollers
                     }
 
-                    if (this.definition.getLength() > 1 || this.definition.getWidth() > 1) {
+                    if (this.getDefinition().getLength() > 1 || this.getDefinition().getWidth() > 1) {
                         return false; // Item is too big to place on rollers.
                     }
                 }
@@ -413,7 +398,20 @@ public class Item {
      * @return true, if successful
      */
     public boolean hasBehaviour(ItemBehaviour behaviour) {
-        return this.definition.hasBehaviour(behaviour);
+        return this.getDefinition().hasBehaviour(behaviour);
+    }
+
+    public ItemDefinition getDefinition() {
+        if (this.definition != null) {
+            return this.definition;
+        }
+
+        return ItemManager.getInstance().getDefinition(this.definitionId);
+    }
+
+
+    public void setDefinitionId(int definitionId) {
+        this.definitionId = definitionId;
     }
 
     public int getId() {
@@ -438,14 +436,6 @@ public class Item {
 
     public void setTeleporterId(int teleporterId) {
         this.teleporterId = teleporterId;
-    }
-
-    public ItemDefinition getDefinition() {
-        return this.definition;
-    }
-
-    public void setDefinitionId(int definitionId) {
-        this.definition = ItemManager.getInstance().getDefinition(definitionId);
     }
 
     public Position getPosition() {
