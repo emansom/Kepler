@@ -163,6 +163,20 @@ public class RoomData {
         return name;
     }
 
+    public String getPublicName() {
+        if (this.room.isPublicRoom()) {
+            if (this.name.startsWith("Upper Hallways")) {
+                return "Upper Hallways";
+            }
+
+            if (this.name.startsWith("Lower Hallways")) {
+                return "Lower Hallways";
+            }
+        }
+
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
