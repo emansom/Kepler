@@ -60,7 +60,7 @@ public class MessengerUser {
                 if (room.getData().getOwnerId() > 0) {
                     response.writeString("Floor1a");
                 } else {
-                    response.writeString(room.getData().getName());
+                    response.writeString(room.getData().getPublicName());
                 }
             } else {
                 response.writeString("On hotel view");
