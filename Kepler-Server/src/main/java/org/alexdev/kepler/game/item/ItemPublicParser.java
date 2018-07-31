@@ -95,6 +95,10 @@ public class ItemPublicParser {
                     item.getDefinition().setTopHeight(7.0);
                 }
 
+                if (item.getDefinition().getSprite().equals("hw_shelf")) {
+                    item.getDefinition().setLength(2);
+                }
+
                 items.add(item);
             }
         } catch (IOException e) {
