@@ -45,7 +45,7 @@ public class NAVNODEINFO extends MessageComposer {
 
         for (Room room : this.rooms) {
             if (room.isPublicRoom()) {
-                response.writeInt(room.getId());
+                response.writeInt(room.getId() + 1000);
                 response.writeInt(1);
                 response.writeString(room.getData().getName());
                 response.writeInt(room.getData().getTotalVisitorsNow());
