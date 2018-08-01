@@ -42,7 +42,11 @@ public class ReloadCommand extends Command {
                 || component.equalsIgnoreCase("items")) {
             ItemManager.reset();
             CatalogueManager.reset();
-            componentName = "Catalogue";
+
+            // Regenerate collision map with proper height differences (if they changed).
+            player.getRoomUser().getRoom().getMapping().regenerateItemCollision();
+
+            componentName = "Catalogue and item definitions";
         }
 
         if (component.equalsIgnoreCase("texts")) {

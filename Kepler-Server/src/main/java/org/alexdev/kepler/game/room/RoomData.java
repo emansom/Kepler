@@ -65,7 +65,12 @@ public class RoomData {
                 || this.model.equals("hallway1")
                 || this.model.equals("hallway3")
                 || this.model.equals("hallway4")
-                || this.model.equals("hallway5")) {
+                || this.model.equals("hallway5")
+                || this.model.equals("hallway6")
+                || this.model.equals("hallway7")
+                || this.model.equals("hallway8")
+                || this.model.equals("hallway10")
+                || this.model.equals("hallway11")) {
             this.navigatorHide = true;
         }
 
@@ -95,6 +100,14 @@ public class RoomData {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway3"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway4"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway5"));
+        }
+
+        if (this.model.equals("hallway9")) {
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway10"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway11"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway8"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway7"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway6"));
         }
     }
 
@@ -147,6 +160,20 @@ public class RoomData {
     }
 
     public String getName() {
+        return name;
+    }
+
+    public String getPublicName() {
+        if (this.room.isPublicRoom()) {
+            if (this.name.startsWith("Upper Hallways")) {
+                return "Upper Hallways";
+            }
+
+            if (this.name.startsWith("Lower Hallways")) {
+                return "Lower Hallways";
+            }
+        }
+
         return name;
     }
 

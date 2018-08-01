@@ -13,7 +13,8 @@ public class SSO implements MessageEvent {
         String ticket = reader.readString();
 
         if (!PlayerDao.loginTicket(player, ticket)) {
-            player.send(new LOCALISED_ERROR("Incorrect SSO ticket"));
+            //player.send(new LOCALISED_ERROR("Incorrect SSO ticket"));
+            player.getNetwork().disconnect();
         } else {
             player.login();
         }
