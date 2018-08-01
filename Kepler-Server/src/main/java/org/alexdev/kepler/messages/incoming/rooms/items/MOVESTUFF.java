@@ -36,9 +36,9 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
-        int x = Integer.parseInt(data[1]);
-        int y = Integer.parseInt(data[2]);
-        int rotation = Integer.parseInt(data[3]);
+        int x = (int) Double.parseDouble(data[1]);
+        int y = (int) Double.parseDouble(data[2]);
+        int rotation = (int) Double.parseDouble(data[3]);
 
         Position oldPosition = item.getPosition().copy();
 

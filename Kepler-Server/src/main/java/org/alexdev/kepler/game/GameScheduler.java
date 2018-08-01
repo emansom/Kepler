@@ -2,35 +2,43 @@ package org.alexdev.kepler.game;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class GameScheduler implements Runnable {
-    private static Logger logger = LoggerFactory.getLogger(GameScheduler.class);
     private AtomicLong tickRate = new AtomicLong();
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
 
+    private BlockingQueue<Player> creditsHandoutQueue;
+
     private static GameScheduler instance;
 
     private GameScheduler() {
-        schedulerService = createNewScheduler();
-        gameScheduler = schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+        this.schedulerService = createNewScheduler();
+        this.gameScheduler = this.schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
+        this.creditsHandoutQueue = new LinkedBlockingQueue<>();
     }
-    
+
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
@@ -42,6 +50,7 @@ public class GameScheduler implements Runnable {
             for (Player player : PlayerManager.getInstance().getPlayers()) {
                 if (player.getRoomUser().getRoom() != null) {
 
+                    // If their sleep timer is now lower than the current time, make them sleep.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
                         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                             player.getRoomUser().setStatus(StatusType.SLEEP, "");
@@ -49,39 +58,44 @@ public class GameScheduler implements Runnable {
                         }
                     }
 
+                    // If their afk timer is up, send them out.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
-                        Room room = player.getRoomUser().getRoom();
-
-                        var curPos = player.getRoomUser().getPosition();
-                        var doorPos = room.getModel().getDoorLocation();
-
-                        // If we're standing in the door, immediately leave room
-                        if (curPos.equals(doorPos)) {
-                            room.getEntityManager().leaveRoom(player, true);
-                            return;
-                        }
-
-                        // Attempt to walk to the door
-                        player.getRoomUser().walkTo(doorPos.getX(), doorPos.getY());
-
-                        // If user isn't walking, leave immediately
-                        if (!player.getRoomUser().isWalking()) {
-                            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, true);
-                        }
+                        player.getRoomUser().kick();
                     }
 
-                    if (GameConfiguration.getInstance().getInteger("credits.scheduler.interval") > 0) {
-                        TimeUnit unitType = TimeUnit.valueOf(GameConfiguration.getInstance().getString("credits.scheduler.timeunit"));
-
-                        if (this.tickRate.get() % unitType.toSeconds(GameConfiguration.getInstance().getInteger("credits.scheduler.interval")) == 0) {
-                            CurrencyDao.increaseCredits(player.getDetails(), GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
-                            player.send(new CREDIT_BALANCE(player.getDetails()));
+                    // If they're not sleeping (aka, active) and their next handout expired, give them their credits!
+                    if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                        if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
+                            this.creditsHandoutQueue.put(player);
+                            player.getDetails().resetNextHandout();
                         }
                     }
                 }
             }
+
+            if (this.tickRate.get() % 30 == 0) { // Save every 30 seconds
+                List<Player> playersToHandout = new ArrayList<>();
+                this.creditsHandoutQueue.drainTo(playersToHandout);
+
+                if (playersToHandout.size() > 0) {
+                    Map<PlayerDetails, Integer> playerDetailsToSave = new LinkedHashMap<>();
+                    Integer amount = GameConfiguration.getInstance().getInteger("credits.scheduler.amount");
+
+                    for (Player p : playersToHandout) {
+                        var details = p.getDetails();
+                        playerDetailsToSave.put(details, amount);
+                    }
+
+                    CurrencyDao.increaseCredits(playerDetailsToSave);
+
+                    for (Player p : playersToHandout) {
+                        p.send(new CREDIT_BALANCE(p.getDetails()));
+                    }
+                }
+            }
+
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Log.getErrorLogger().error("GameScheduler crashed: ", ex);
         }
     }
 

@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.player;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +28,8 @@ public class PlayerDetails {
     private List<String> badges;
     private boolean allowStalking;
     private boolean soundEnabled;
+
+    private long nextHandout;
 
     public PlayerDetails() {
     }
@@ -74,7 +77,6 @@ public class PlayerDetails {
         }
 
         this.currentBadge = currentBadge;
-        this.badges = badges;
         this.showBadge = showBadge;
         this.allowStalking = allowStalking;
         this.soundEnabled = soundEnabled;
@@ -244,5 +246,15 @@ public class PlayerDetails {
 
     public void setSoundSetting(boolean soundEnabled) {
         this.soundEnabled = soundEnabled;
+    }
+
+    public long getNextHandout() {
+        return nextHandout;
+    }
+
+    public void resetNextHandout() {
+        TimeUnit unit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("credits.scheduler.timeunit"));
+        this.nextHandout = DateUtil.getCurrentTimeSeconds()
+                + unit.toSeconds(GameConfiguration.getInstance().getInteger("credits.scheduler.interval"));
     }
 }
