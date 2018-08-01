@@ -28,8 +28,9 @@ public class AboutCommand extends Command {
                 "\n - Lightbulb" + // Helping me with getting tables to show up in public rooms
                 "\n - Romuald" + // Creating Habbo Club subscription
                 "\n - Glaceon" + // Creating redeeming furni
-                "\n - Nillus" + // Various parts of Woodpecker, Holograph, and Blunk assisted me, A LOT
+                "\n - Nillus/Holo Team" + // Various parts of Woodpecker, Holograph assisted me, A LOT with protocol
                 "\n - Meth0d" + // Uber had the Club Mammoth furni data
+                "\n - office.boy" + // Parts of Blunk
                 "\n\nMade by Quackster from RaGEZONE"));
     }
 
