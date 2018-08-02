@@ -4,7 +4,7 @@ import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.user.CLUB_INFO;
-import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
+import org.alexdev.kepler.messages.outgoing.user.currencies.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 
 public class ClubSubscription {

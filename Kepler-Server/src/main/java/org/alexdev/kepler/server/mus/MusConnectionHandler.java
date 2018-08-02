@@ -14,22 +14,17 @@ import org.alexdev.kepler.game.item.Photo;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.outgoing.user.FILM;
+import org.alexdev.kepler.messages.outgoing.user.currencies.FILM;
 import org.alexdev.kepler.server.mus.connection.MusClient;
 import org.alexdev.kepler.server.mus.streams.MusMessage;
 import org.alexdev.kepler.server.mus.streams.MusPropList;
 import org.alexdev.kepler.server.mus.streams.MusTypes;
-import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage> {
     final private static AttributeKey<MusClient> MUS_CLIENT_KEY = AttributeKey.valueOf("MusClient");
