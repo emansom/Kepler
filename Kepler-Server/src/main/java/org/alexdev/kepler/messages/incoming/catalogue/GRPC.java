@@ -104,17 +104,16 @@ public class GRPC implements MessageEvent {
             player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", receivingUserDetails.getName())));
             //player.send(new DELIVER_PRESENT(present));
         } else {
-            if (saleCode.equals("film")) {
-                CurrencyDao.increaseFilm(player.getDetails(), 5);
-                player.send(new FILM(player.getDetails()));
-            } else {
-                String extraData = null;
+            String extraData = null;
 
-                if (!item.isPackage()) {
-                    extraData = data[4];
-                }
+            if (!item.isPackage()) {
+                extraData = data[4];
+            }
 
-                purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
+            purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
+
+            // Don't send item delivered if they just buy film
+            if (!item.getDefinition().getSprite().equals("film")) {
                 player.send(new ITEM_DELIVERED());
             }
         }
