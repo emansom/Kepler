@@ -26,9 +26,9 @@ public class CoordsCommand extends Command {
         }
 
         player.send(new ALERT("Your coordinates:<br>" +
-                "X:" + player.getRoomUser().getPosition().getX() + "<br>" +
-                "Y:" + player.getRoomUser().getPosition().getY() + "<br>" +
-                "Z:" + Double.toString(StringUtil.format(player.getRoomUser().getPosition().getZ()))));
+                "X: " + player.getRoomUser().getPosition().getX() + "<br>" +
+                "Y: " + player.getRoomUser().getPosition().getY() + "<br>" +
+                "Z: " + Double.toString(StringUtil.format(player.getRoomUser().getPosition().getZ()))));
     }
 
     @Override
