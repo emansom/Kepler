@@ -112,12 +112,6 @@ public class GRPC implements MessageEvent {
 
                 if (!item.isPackage()) {
                     extraData = data[4];
-
-                    // If the item is a camera, give them 2 free film.
-                    if (item.getDefinition().getSprite().equals("camera")) {
-                        CurrencyDao.increaseFilm(player.getDetails(), 2);
-                        player.send(new FILM(player.getDetails()));
-                    }
                 }
 
                 purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
@@ -134,7 +128,10 @@ public class GRPC implements MessageEvent {
 
         if (!item.isPackage()) {
             Item newItem = purchase(player, item.getDefinition(), extraData, item.getItemSpecialId(), overrideName, timestamp);
-            itemsBought.add(newItem);
+
+            if (newItem != null) {
+                itemsBought.add(newItem);
+            }
         } else {
             for (CataloguePackage cataloguePackage : item.getPackages()) {
                 for (int i = 0; i < cataloguePackage.getAmount(); i++) {
@@ -148,6 +145,13 @@ public class GRPC implements MessageEvent {
     }
 
     private static Item purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId, String overrideName,  long timestamp) throws SQLException {
+        // If the item is film, just give the user film
+        if (def.getSprite().equals("film")) {
+            CurrencyDao.increaseFilm(player.getDetails(), 5);
+            player.send(new FILM(player.getDetails()));
+            return null;
+        }
+
         String customData = "";
 
         if (extraData != null) {
@@ -185,6 +189,12 @@ public class GRPC implements MessageEvent {
 
         ItemDao.newItem(item);
         player.getInventory().getItems().add(item);
+
+        // If the item is a camera, give them 2 free film.
+        if (def.getSprite().equals("camera")) {
+            CurrencyDao.increaseFilm(player.getDetails(), 2);
+            player.send(new FILM(player.getDetails()));
+        }
 
         if (def.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             Item linkedTeleporterItem = new Item();
