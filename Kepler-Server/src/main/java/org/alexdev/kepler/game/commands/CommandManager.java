@@ -29,6 +29,7 @@ public class CommandManager {
         this.commands.put(new String[] { "sit" }, new SitCommand());
         this.commands.put(new String[] { "uptime", "status" }, new UptimeCommand());
         this.commands.put(new String[] { "poof", "update" }, new PoofCommand());
+        this.commands.put(new String[] { "coords" }, new CoordsCommand());
         this.commands.put(new String[] { "pickall" }, new PickallCommand());
         this.commands.put(new String[] { "usersonline", "whosonline" }, new UsersOnlineCommand());
         this.commands.put(new String[] { "rgb", "rainbow" }, new RainbowDimmerCommand());
