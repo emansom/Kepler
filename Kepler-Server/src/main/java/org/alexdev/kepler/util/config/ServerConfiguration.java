@@ -28,7 +28,7 @@ public class ServerConfiguration {
         config.put("server.port", "12321");
 
         config.put("mus.bind", "127.0.0.1");
-        config.put("mus.port", "30001");
+        config.put("mus.port", "12322");
 
         config.put("rcon.bind", "127.0.0.1");
         config.put("rcon.port", "12309");

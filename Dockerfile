@@ -38,6 +38,8 @@ RUN touch /usr/src/kepler/game.ini && \
     crudini --set /usr/src/kepler/server.ini Server server.port 12321 && \
     crudini --set /usr/src/kepler/server.ini Rcon rcon.bind 0.0.0.0 && \
     crudini --set /usr/src/kepler/server.ini Rcon rcon.port 12309 && \
+    crudini --set /usr/src/kepler/server.ini Mus mus.bind 0.0.0.0 && \
+    crudini --set /usr/src/kepler/server.ini Mus mus.port 12322 && \
     crudini --set /usr/src/kepler/server.ini Database mysql.hostname mariadb && \
     crudini --set /usr/src/kepler/server.ini Database mysql.port 3306 && \
     crudini --set /usr/src/kepler/server.ini Database mysql.username kepler && \
@@ -59,6 +61,7 @@ WORKDIR /usr/src/kepler
 
 EXPOSE 12321
 EXPOSE 12309
+EXPOSE 12322
 
 USER kepler
 
