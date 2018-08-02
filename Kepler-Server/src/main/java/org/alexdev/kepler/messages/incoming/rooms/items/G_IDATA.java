@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.items.IDATA;
@@ -24,13 +25,17 @@ public class G_IDATA implements MessageEvent {
             return;
         }
 
-        String colour = item.getCustomData().substring(0, 6);
-        String text = "";
+        if (item.hasBehaviour(ItemBehaviour.POST_IT)) {
+            String colour = item.getCustomData().substring(0, 6);
+            String text = "";
 
-        if (item.getCustomData().length() > 6) {
-            text = item.getCustomData().substring(6);
+            if (item.getCustomData().length() > 6) {
+                text = item.getCustomData().substring(6);
+            }
+
+            player.send(new IDATA(item.getId(), colour, text));
+        } else {
+            player.send(new IDATA(item));
         }
-
-        player.send(new IDATA(item.getId(), colour, text));
     }
 }

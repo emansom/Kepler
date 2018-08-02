@@ -349,4 +349,124 @@ public class CurrencyDao {
             Storage.closeSilently(conn);
         }
     }
+
+    /**
+     * Atomically increase tickets.
+     *
+     * @param details the player details
+     */
+    public static void increaseFilm(PlayerDetails details, int amount) {
+        Connection conn = null;
+        PreparedStatement updateQuery = null;
+        PreparedStatement fetchQuery = null;
+        ResultSet row = null;
+
+        try {
+            conn = Storage.getStorage().getConnection();
+
+            // We disable autocommit to make sure the following queries share the same atomic transaction
+            conn.setAutoCommit(false);
+
+            // Increase credits
+            updateQuery = Storage.getStorage().prepare("UPDATE users SET film = film + ? WHERE id = ?", conn);
+            updateQuery.setInt(1, amount);
+            updateQuery.setInt(2, details.getId());
+            updateQuery.execute();
+
+            // Fetch increased amount
+            fetchQuery = Storage.getStorage().prepare("SELECT film FROM users WHERE id = ?", conn);
+            fetchQuery.setInt(1, details.getId());
+            row = fetchQuery.executeQuery();
+
+            // Commit these queries
+            conn.commit();
+
+            // Set amount
+            if (row != null && row.next()) {
+                int updatedAmount = row.getInt("film");
+                details.setFilm(updatedAmount);
+            }
+
+        } catch (Exception e) {
+            try {
+                // Rollback these queries
+                conn.rollback();
+            } catch(SQLException re) {
+                Storage.logError(re);
+            }
+
+            Storage.logError(e);
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ce) {
+                Storage.logError(ce);
+            }
+
+            Storage.closeSilently(row);
+            Storage.closeSilently(updateQuery);
+            Storage.closeSilently(fetchQuery);
+            Storage.closeSilently(conn);
+        }
+    }
+
+    /**
+     * Atomically decrease film.
+     *
+     * @param details the player details
+     */
+    public static void decreaseFilm(PlayerDetails details, int amount) {
+        Connection conn = null;
+        PreparedStatement updateQuery = null;
+        PreparedStatement fetchQuery = null;
+        ResultSet row = null;
+
+        try {
+            conn = Storage.getStorage().getConnection();
+
+            // We disable autocommit to make sure the following queries share the same atomic transaction
+            conn.setAutoCommit(false);
+
+            // Increase credits
+            updateQuery = Storage.getStorage().prepare("UPDATE users SET film = film - ? WHERE id = ?", conn);
+            updateQuery.setInt(1, amount);
+            updateQuery.setInt(2, details.getId());
+            updateQuery.execute();
+
+            // Fetch increased amount
+            fetchQuery = Storage.getStorage().prepare("SELECT film FROM users WHERE id = ?", conn);
+            fetchQuery.setInt(1, details.getId());
+            row = fetchQuery.executeQuery();
+
+            // Commit these queries
+            conn.commit();
+
+            // Set amount
+            if (row != null && row.next()) {
+                int updatedAmount = row.getInt("film");
+                details.setFilm(updatedAmount);
+            }
+
+        } catch (Exception e) {
+            try {
+                // Rollback these queries
+                conn.rollback();
+            } catch(SQLException re) {
+                Storage.logError(re);
+            }
+
+            Storage.logError(e);
+        } finally {
+            try {
+                conn.setAutoCommit(true);
+            } catch (SQLException ce) {
+                Storage.logError(ce);
+            }
+
+            Storage.closeSilently(row);
+            Storage.closeSilently(updateQuery);
+            Storage.closeSilently(fetchQuery);
+            Storage.closeSilently(conn);
+        }
+    }
 }

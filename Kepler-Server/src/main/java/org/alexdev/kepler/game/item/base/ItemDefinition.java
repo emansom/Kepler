@@ -60,8 +60,10 @@ public class ItemDefinition {
     private static List<ItemBehaviour> parseBehaviour(String behaviourData) {
         List<ItemBehaviour> behaviourList = new ArrayList<>();
 
-        for (String behaviourEnum : behaviourData.split(",")) {
-            behaviourList.add(ItemBehaviour.valueOf(behaviourEnum.toUpperCase()));
+        if (behaviourData.length() > 0) {
+            for (String behaviourEnum : behaviourData.split(",")) {
+                behaviourList.add(ItemBehaviour.valueOf(behaviourEnum.toUpperCase()));
+            }
         }
 
         return behaviourList;

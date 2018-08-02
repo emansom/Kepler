@@ -31,8 +31,8 @@ public class CatalogueDao {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                CataloguePage page = new CataloguePage(resultSet.getInt("id"), resultSet.getInt("min_role"),
-                        resultSet.getString("name_index"), resultSet.getString("name"), resultSet.getString("layout"),
+                CataloguePage page = new CataloguePage(resultSet.getInt("id"), resultSet.getInt("min_role"), resultSet.getBoolean("index_visible"),
+                        resultSet.getString("name_index"), resultSet.getString("link_list"), resultSet.getString("name"), resultSet.getString("layout"),
                         resultSet.getString("image_headline"), resultSet.getString("image_teasers"), resultSet.getString("body"),
                         resultSet.getString("label_pick"), resultSet.getString("label_extra_s"), resultSet.getString("label_extra_t"));
 

@@ -27,6 +27,9 @@ public class ServerConfiguration {
         config.put("server.bind", "127.0.0.1");
         config.put("server.port", "12321");
 
+        config.put("mus.bind", "127.0.0.1");
+        config.put("mus.port", "30001");
+
         config.put("rcon.bind", "127.0.0.1");
         config.put("rcon.port", "12309");
 
@@ -56,6 +59,10 @@ public class ServerConfiguration {
         writer.println("[Rcon]");
         writer.println("rcon.bind=" + config.get("rcon.bind"));
         writer.println("rcon.port=" + config.get("rcon.port"));
+        writer.println("");
+        writer.println("[Mus]");
+        writer.println("mus.bind=" + config.get("mus.bind"));
+        writer.println("mus.port=" + config.get("mus.port"));
         writer.println("");
         writer.println("[Database]");
         writer.println("mysql.hostname=" + config.get("mysql.hostname"));

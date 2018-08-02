@@ -334,7 +334,12 @@ public class RoomUser {
         this.removeStatus(StatusType.CARRY_DRINK);
         this.removeStatus(StatusType.DANCE);
 
-        this.setStatus(carryStatus, carryId, GameConfiguration.getInstance().getInteger("carry.timer.seconds"), useStatus, 12, 1);
+        if (carryStatus != StatusType.CARRY_ITEM) {
+            this.setStatus(carryStatus, carryId, GameConfiguration.getInstance().getInteger("carry.timer.seconds"), useStatus, 12, 1);
+        } else {
+            this.setStatus(carryStatus, carryId); // Use camera for infinite time, don't switch between using and holding item.
+        }
+
         this.needsUpdate = true;
     }
 

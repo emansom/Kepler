@@ -28,5 +28,6 @@ public enum ItemBehaviour {
     DECORATION,
     WHEEL_OF_FORTUNE,
     ROOMDIMMER,
-    PRESENT
+    PRESENT,
+    PHOTO
 }

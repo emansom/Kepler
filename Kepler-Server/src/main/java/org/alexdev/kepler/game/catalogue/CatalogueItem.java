@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.texts.TextsManager;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +43,13 @@ public class CatalogueItem {
             return this.packageName;
         }
 
-        return TextsManager.getInstance().getValue(this.definition.getName(this.itemSpecialId));
+        String name = TextsManager.getInstance().getValue(this.definition.getName(this.itemSpecialId));
+
+        if (name.isEmpty()) {
+            name = StringUtils.capitalize(this.definition.getSprite());
+        }
+
+        return name;
     }
 
     public String getDescription() {

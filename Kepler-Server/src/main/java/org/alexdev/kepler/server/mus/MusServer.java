@@ -1,4 +1,4 @@
-package org.alexdev.kepler.server.netty;
+package org.alexdev.kepler.server.mus;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
@@ -19,10 +19,10 @@ import org.slf4j.LoggerFactory;
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class NettyServer  {
+public class MusServer {
     final private static int BACK_LOG = 20;
     final private static int BUFFER_SIZE = 2048;
-	final private static Logger log = LoggerFactory.getLogger(NettyServer.class);
+    final private static Logger log = LoggerFactory.getLogger(MusServer.class);
 
     private final String ip;
     private final int port;
@@ -34,7 +34,7 @@ public class NettyServer  {
     private EventLoopGroup bossGroup;
     private EventLoopGroup workerGroup;
 
-    public NettyServer(String ip, int port) {
+    public MusServer(String ip, int port) {
         this.ip = ip;
         this.port = port;
         this.channels = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
@@ -52,7 +52,7 @@ public class NettyServer  {
 
         this.bootstrap.group(bossGroup, workerGroup)
                 .channel((Epoll.isAvailable()) ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
-                .childHandler(new NettyChannelInitializer(this))
+                .childHandler(new MusChannelInitializer(this))
                 .option(ChannelOption.SO_BACKLOG, BACK_LOG)
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childOption(ChannelOption.SO_KEEPALIVE, true)
@@ -67,10 +67,10 @@ public class NettyServer  {
     public void bind() {
         this.bootstrap.bind(new InetSocketAddress(this.getIp(), this.getPort())).addListener(objectFuture -> {
             if (!objectFuture.isSuccess()) {
-                Log.getErrorLogger().error("Failed to start server on address: {}:{}", this.getIp(), this.getPort());
+                Log.getErrorLogger().error("Failed to start MUS server on address: {}:{}", this.getIp(), this.getPort());
                 Log.getErrorLogger().error("Please double check there's no programs using the same port, and you have set the correct IP address to listen on.", this.getIp(), this.getPort());
             } else {
-                log.info("Server is listening on {}:{}", this.getIp(), this.getPort());
+                log.info("MUS Server is listening on {}:{}", this.getIp(), this.getPort());
             }
         });
     }
@@ -78,7 +78,7 @@ public class NettyServer  {
     /**
      * Dispose the server handler.
      *
-     * @throws InterruptedException
+     * @throws InterruptedException will throw exception if fails
      */
     public void dispose() throws InterruptedException {
         // Shutdown gracefully

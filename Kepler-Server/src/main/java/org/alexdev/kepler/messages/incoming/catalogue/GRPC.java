@@ -21,6 +21,7 @@ import org.alexdev.kepler.messages.outgoing.catalogue.NO_CREDITS;
 import org.alexdev.kepler.messages.outgoing.rooms.items.ITEM_DELIVERED;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
+import org.alexdev.kepler.messages.outgoing.user.FILM;
 import org.alexdev.kepler.messages.outgoing.user.NO_USER_FOUND;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -103,16 +104,25 @@ public class GRPC implements MessageEvent {
             player.send(new ALERT(TextsManager.getInstance().getValue("successfully_purchase_gift_for").replace("%user%", receivingUserDetails.getName())));
             //player.send(new DELIVER_PRESENT(present));
         } else {
-            String extraData = null;
+            if (saleCode.equals("film")) {
+                CurrencyDao.increaseFilm(player.getDetails(), 5);
+                player.send(new FILM(player.getDetails()));
+            } else {
+                String extraData = null;
 
-            if (!item.isPackage()) {
-                extraData = data[4];
+                if (!item.isPackage()) {
+                    extraData = data[4];
+
+                    // If the item is a camera, give them 2 free film.
+                    if (item.getDefinition().getSprite().equals("camera")) {
+                        CurrencyDao.increaseFilm(player.getDetails(), 2);
+                        player.send(new FILM(player.getDetails()));
+                    }
+                }
+
+                purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
+                player.send(new ITEM_DELIVERED());
             }
-
-            purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
-            //player.getInventory().getView("last");
-
-            player.send(new ITEM_DELIVERED());
         }
 
         CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());

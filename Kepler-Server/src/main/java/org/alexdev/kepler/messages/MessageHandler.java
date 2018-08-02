@@ -131,6 +131,7 @@ public class MessageHandler {
         registerEvent(318, new USER_CANCEL_TYPING());
         registerEvent(79, new LOOKTO());
         registerEvent(80, new CARRYDRINK());
+        registerEvent(87, new CARRYITEM());
         registerEvent(94, new WAVE());
         registerEvent(93, new DANCE());
         registerEvent(88, new STOP());
@@ -167,6 +168,7 @@ public class MessageHandler {
         registerEvent(73, new MOVESTUFF());
         registerEvent(67, new ADDSTRIPITEM());
         registerEvent(83, new G_IDATA());
+        registerEvent(89, new USEITEM());
         registerEvent(84, new SETITEMDATA());
         registerEvent(214, new SETITEMSTATE());
         registerEvent(85, new REMOVEITEM());
