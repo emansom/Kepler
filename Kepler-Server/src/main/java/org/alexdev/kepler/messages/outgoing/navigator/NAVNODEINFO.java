@@ -45,7 +45,7 @@ public class NAVNODEINFO extends MessageComposer {
 
         for (Room room : this.rooms) {
             if (room.isPublicRoom()) {
-                response.writeInt(room.getId());
+                response.writeInt(room.getId() + 1000);
                 response.writeInt(1);
                 response.writeString(room.getData().getName());
                 response.writeInt(room.getData().getTotalVisitorsNow());
@@ -61,9 +61,7 @@ public class NAVNODEINFO extends MessageComposer {
                 response.writeInt(room.getId());
                 response.writeString(room.getData().getName());
 
-                if (room.getData().getOwnerId() == viewer.getDetails().getId() ||
-                        room.getData().showName() ||
-                        viewer.hasFuse("fuse_see_all_roomowners")) {
+                if (room.isOwner(this.viewer.getEntityId())|| room.getData().showName() || this.viewer.hasFuse("fuse_see_all_roomowners")) {
                     response.writeString(room.getData().getOwnerName());
                 } else {
                     response.writeString("-");

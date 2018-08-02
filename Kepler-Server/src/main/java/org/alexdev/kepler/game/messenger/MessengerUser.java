@@ -6,27 +6,49 @@ import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.util.StringUtil;
 
 public class MessengerUser {
-    private final int userId;
+    private int userId;
+    private String username;
+    private String figure;
+    private char sex;
+    private String consoleMotto;
+    private long lastOnline;
 
-    public MessengerUser(int userId) {
-        this.userId = userId;
+    public MessengerUser(PlayerDetails details) {
+        this.applyUserDetails(details.getId(), details.getName(), details.getFigure(), details.getConsoleMotto(), String.valueOf(details.getSex()), details.getLastOnline());
     }
 
-    public void serialise(NettyResponse response) {
-        PlayerDetails details = PlayerManager.getInstance().getPlayerData(this.userId);
+    public MessengerUser(int userId, String username, String figure, String sex, String consoleMotto, long lastOnline) {
+        this.applyUserDetails(userId, username, figure, consoleMotto, sex, lastOnline);
+    }
 
-        if (details == null) {
-            return;
+    private void applyUserDetails(int userId, String username, String figure, String consoleMotto, String sex, long lastOnline) {
+        this.userId = userId;
+        this.username = StringUtil.filterInput(username, true);
+        this.figure = StringUtil.filterInput(figure, true);
+        this.sex = sex.toLowerCase().equals("f") ? 'F' : 'M';
+        this.lastOnline = lastOnline;
+        this.consoleMotto = StringUtil.filterInput(consoleMotto, true);
+    }
+
+
+    public void serialise(NettyResponse response) {
+        Player player = PlayerManager.getInstance().getPlayerById(this.userId);
+
+        if (player != null) {
+            this.figure = player.getDetails().getFigure();
+            this.lastOnline = player.getDetails().getLastOnline();
+            this.sex = player.getDetails().getSex();
+            this.consoleMotto = player.getDetails().getConsoleMotto();
         }
 
-        response.writeInt(details.getId());
-        response.writeString(details.getName());
-        response.writeBool(Character.toLowerCase(details.getSex()) == 'm');
-        response.writeString(details.getConsoleMotto());
+        response.writeInt(this.userId);
+        response.writeString(this.username);
+        response.writeBool(Character.toLowerCase(this.sex) == 'm');
+        response.writeString(this.consoleMotto);
 
-        Player player = PlayerManager.getInstance().getPlayerById(details.getId());
         boolean isOnline = (player != null);
 
         response.writeBool(isOnline);
@@ -38,20 +60,65 @@ public class MessengerUser {
                 if (room.getData().getOwnerId() > 0) {
                     response.writeString("Floor1a");
                 } else {
-                    response.writeString(room.getData().getName());
+                    response.writeString(room.getData().getPublicName());
                 }
             } else {
                 response.writeString("On hotel view");
             }
         } else {
-            response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
+            response.writeString(DateUtil.getDateAsString(this.lastOnline));
         }
 
-        response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
-        response.writeString(details.getFigure());
+        response.writeString(DateUtil.getDateAsString(this.lastOnline));
+        response.writeString(this.figure);
     }
 
     public int getUserId() {
         return this.userId;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getFigure() {
+        return figure;
+    }
+
+    public void setFigure(String figure) {
+        this.figure = figure;
+    }
+
+    public char getSex() {
+        return sex;
+    }
+
+    public void setSex(char sex) {
+        this.sex = sex;
+    }
+
+    public String getConsoleMotto() {
+        return consoleMotto;
+    }
+
+    public void setConsoleMotto(String consoleMotto) {
+        this.consoleMotto = consoleMotto;
+    }
+
+    public long getLastOnline() {
+        return lastOnline;
+    }
+
+    public void setLastOnline(long lastOnline) {
+        this.lastOnline = lastOnline;
+    }
+
+    @Override
+    public String toString() {
+        return "[" + username + "," + consoleMotto + "," + figure + "," + sex + "," + lastOnline + "]";
     }
 }

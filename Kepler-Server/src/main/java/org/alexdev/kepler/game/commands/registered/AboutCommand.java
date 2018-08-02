@@ -20,7 +20,18 @@ public class AboutCommand extends Command {
         }
 
         Player player = (Player)entity;
-        player.send(new ALERT("Project Kepler\n\nContributors:\n - Hoshiko\n - ThuGie\n - Ascii\n - Lightbulb\n - Romuald\n - Glaceon\n\nMade by Quackster from RaGEZONE"));
+        
+        player.send(new ALERT("Project Kepler\n\nContributors:" +
+                "\n - Hoshiko" + // Aside from myself (Quackster), Hoshiko contributed a lot.
+                "\n - ThuGie" + // Helping me with knowing the Habbo protocol better
+                "\n - Ascii" + // Helping me with various packet structures
+                "\n - Lightbulb" + // Helping me with getting tables to show up in public rooms
+                "\n - Romuald" + // Creating Habbo Club subscription
+                "\n - Glaceon" + // Creating redeeming furni
+                "\n - Nillus/Holo Team" + // Various parts of Woodpecker, Holograph assisted me, A LOT with protocol
+                "\n - Meth0d" + // Uber had the Club Mammoth furni data
+                "\n - office.boy" + // Parts of Blunk
+                "\n\nMade by Quackster from RaGEZONE"));
     }
 
     @Override

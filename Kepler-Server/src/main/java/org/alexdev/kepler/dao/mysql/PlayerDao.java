@@ -502,7 +502,7 @@ public class PlayerDao {
                 row.getString("console_motto"), row.getString("sex"), row.getInt("tickets"),
                 row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
-                row.getBoolean("badge_active"), PlayerDao.getBadges(row.getInt("id")), row.getBoolean("allow_stalking"),
+                row.getBoolean("badge_active"), row.getBoolean("allow_stalking"),
                 row.getBoolean("sound_enabled"));
     }
 }

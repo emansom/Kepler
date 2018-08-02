@@ -20,23 +20,25 @@ public class MESSENGER_ACCEPTBUDDY implements MessageEvent {
                 continue;
             }
 
-            MessengerDao.newFriend(userId, player.getDetails().getId());
+            MessengerUser requestFrom = player.getMessenger().getRequest(userId);
 
+            MessengerDao.newFriend(userId, player.getDetails().getId());
             MessengerDao.removeRequest(userId, player.getDetails().getId());
             MessengerDao.removeRequest(player.getDetails().getId(), userId);
 
-            player.send(new NEW_FRIEND(PlayerManager.getInstance().getPlayerData(userId)));
+            player.send(new NEW_FRIEND(requestFrom));
 
-            player.getMessenger().getRequests().remove(player.getMessenger().getRequest(userId));
-            player.getMessenger().getFriends().add(new MessengerUser(userId));
+            player.getMessenger().getRequests().remove(requestFrom);
+            player.getMessenger().getFriends().add(requestFrom);
 
             Player friend = PlayerManager.getInstance().getPlayerById(userId);
 
             if (friend != null) {
-                friend.send(new NEW_FRIEND(player.getDetails()));
+                requestFrom = friend.getMessenger().getRequest(player.getDetails().getId());
+                friend.send(new NEW_FRIEND(requestFrom));
 
-                friend.getMessenger().getRequests().remove(friend.getMessenger().getRequest(player.getDetails().getId()));
-                friend.getMessenger().getFriends().add(new MessengerUser(player.getDetails().getId()));
+                friend.getMessenger().getRequests().remove(requestFrom);
+                friend.getMessenger().getFriends().add(requestFrom);
             }
         }
     }

@@ -35,7 +35,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms WHERE owner_id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE owner_id = ?", sqlConnection);
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
 
@@ -69,9 +69,11 @@ public class RoomDao {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
+        //SELECT * FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE owner_id = 0
+
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms WHERE owner_id > 0 AND accesstype = 0 ORDER BY RAND() LIMIT ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE owner_id > 0 AND accesstype = 0 ORDER BY RAND() LIMIT ?", sqlConnection);
             preparedStatement.setInt(1, limit);
             resultSet = preparedStatement.executeQuery();
 
@@ -173,7 +175,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms WHERE id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE id = ?", sqlConnection);
             preparedStatement.setInt(1, roomId);
             resultSet = preparedStatement.executeQuery();
 
@@ -369,7 +371,9 @@ public class RoomDao {
             return;
         }
 
-        data.fill(row.getInt("id"), row.getInt("owner_id"), row.getInt("category"),
+        String ownerName = row.getString("username");
+
+        data.fill(row.getInt("id"), row.getInt("owner_id"), ownerName != null ? ownerName : "", row.getInt("category"),
                 row.getString("name"), row.getString("description"), row.getString("model"),
                 row.getString("ccts"), row.getInt("wallpaper"), row.getInt("floor"), row.getBoolean("showname"),
                 row.getBoolean("superusers"), row.getInt("accesstype"), row.getString("password"),

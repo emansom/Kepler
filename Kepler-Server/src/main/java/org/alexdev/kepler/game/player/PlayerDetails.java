@@ -1,7 +1,9 @@
 package org.alexdev.kepler.game.player;
 
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -27,6 +29,8 @@ public class PlayerDetails {
     private boolean allowStalking;
     private boolean soundEnabled;
 
+    private long nextHandout;
+
     public PlayerDetails() {
     }
 
@@ -49,11 +53,10 @@ public class PlayerDetails {
      * @param clubExpiration the club expiration date in a unix timestamp
      * @param currentBadge   the current badge
      * @param showBadge      whether the badge is shown or not
-     * @param badges         An array of strings of badges
      * @param allowStalking  allow stalking/following
      * @param soundEnabled   allow playing music from soundmachines
      */
-    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, List<String> badges, boolean allowStalking, boolean soundEnabled) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled) {
         this.id = id;
         this.username = StringUtil.filterInput(username, true);
         this.figure = StringUtil.filterInput(figure, true); // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
@@ -74,10 +77,13 @@ public class PlayerDetails {
         }
 
         this.currentBadge = currentBadge;
-        this.badges = badges;
         this.showBadge = showBadge;
         this.allowStalking = allowStalking;
         this.soundEnabled = soundEnabled;
+    }
+
+    public void loadBadges() {
+        this.badges = PlayerDao.getBadges(this.id);
     }
 
     public boolean hasClubSubscription() {
@@ -240,5 +246,15 @@ public class PlayerDetails {
 
     public void setSoundSetting(boolean soundEnabled) {
         this.soundEnabled = soundEnabled;
+    }
+
+    public long getNextHandout() {
+        return nextHandout;
+    }
+
+    public void resetNextHandout() {
+        TimeUnit unit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("credits.scheduler.timeunit"));
+        this.nextHandout = DateUtil.getCurrentTimeSeconds()
+                + unit.toSeconds(GameConfiguration.getInstance().getInteger("credits.scheduler.interval"));
     }
 }

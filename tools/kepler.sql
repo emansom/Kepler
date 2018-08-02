@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 08, 2018 at 02:54 AM
+-- Generation Time: Jul 30, 2018 at 02:07 PM
 -- Server version: 10.2.15-MariaDB
 -- PHP Version: 5.6.31
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dev`
+-- Database: `kepler`
 --
 
 -- --------------------------------------------------------
@@ -30,14 +30,14 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `catalogue_items` (
   `id` int(11) NOT NULL,
-  `sale_code` varchar(255) DEFAULT NULL,
+  `sale_code` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `page_id` int(11) DEFAULT NULL,
   `order_id` int(11) NOT NULL DEFAULT 0,
   `price` int(11) NOT NULL DEFAULT 3,
   `definition_id` int(11) DEFAULT NULL,
   `item_specialspriteid` int(11) NOT NULL DEFAULT 0,
-  `package_name` varchar(255) DEFAULT NULL,
-  `package_description` varchar(255) DEFAULT NULL,
+  `package_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `package_description` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `is_package` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -565,7 +565,7 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 --
 
 CREATE TABLE `catalogue_packages` (
-  `salecode` varchar(255) DEFAULT NULL,
+  `salecode` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `definition_id` int(11) DEFAULT NULL,
   `special_sprite_id` int(11) DEFAULT NULL,
   `amount` int(11) DEFAULT NULL
@@ -605,15 +605,15 @@ CREATE TABLE `catalogue_pages` (
   `id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
   `min_role` int(11) DEFAULT NULL,
-  `name_index` varchar(255) DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `layout` varchar(255) DEFAULT NULL,
-  `image_headline` varchar(255) DEFAULT NULL,
-  `image_teasers` varchar(255) DEFAULT NULL,
-  `body` varchar(255) DEFAULT NULL,
-  `label_pick` varchar(255) DEFAULT NULL,
-  `label_extra_s` varchar(255) DEFAULT NULL,
-  `label_extra_t` varchar(255) DEFAULT NULL
+  `name_index` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `layout` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_headline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `image_teasers` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `label_pick` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `label_extra_s` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `label_extra_t` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -673,12 +673,12 @@ CREATE TABLE `items` (
   `user_id` int(11) DEFAULT NULL,
   `room_id` int(11) DEFAULT 0,
   `definition_id` int(11) NOT NULL,
-  `x` varchar(255) DEFAULT '0',
-  `y` varchar(255) DEFAULT '0',
-  `z` varchar(255) DEFAULT '0',
-  `wall_position` varchar(255) NOT NULL DEFAULT '',
+  `x` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `y` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `z` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '0',
+  `wall_position` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `rotation` int(11) DEFAULT 0,
-  `custom_data` varchar(255) NOT NULL
+  `custom_data` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -689,12 +689,12 @@ CREATE TABLE `items` (
 
 CREATE TABLE `items_definitions` (
   `id` int(11) NOT NULL,
-  `sprite` varchar(255) DEFAULT NULL,
-  `colour` varchar(255) DEFAULT NULL,
+  `sprite` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `colour` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `length` int(11) DEFAULT NULL,
   `width` int(11) DEFAULT NULL,
   `top_height` double DEFAULT NULL,
-  `behaviour` varchar(255) DEFAULT NULL
+  `behaviour` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -715,15 +715,15 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (11, 'chair_norja', '#ffffff,#ffffff,#F7EBBC,#F7EBBC', 1, 1, 1, 'can_sit_on_top'),
 (12, 'table_polyfon_med', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
 (13, 'doormat_love', '0,0,0', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(14, 'doormat_plain', '0,0,0', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(14, 'doormat_plain', '0,0,0', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (15, 'sofachair_polyfon', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 1, 1, 'can_sit_on_top'),
 (16, 'sofachair_silo', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 1, 1, 'can_sit_on_top'),
 (17, 'bed_polyfon', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 2, 3, 1, 'can_lay_on_top'),
 (18, 'bed_polyfon_one', '#ffffff,#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 3, 1, 'can_lay_on_top'),
-(19, 'bed_silo_one', '0,0,0', 1, 3, 1, 'can_lay_on_top'),
-(20, 'bed_silo_two', '0,0,0', 2, 3, 1, 'can_lay_on_top'),
+(19, 'bed_silo_one', '0,0,0', 1, 3, 1.7, 'can_lay_on_top'),
+(20, 'bed_silo_two', '0,0,0', 2, 3, 1.7, 'can_lay_on_top'),
 (21, 'table_silo_small', '#ffffff,#ABD0D2', 1, 1, 1, 'solid,can_stack_on_top'),
-(22, 'bed_armas_two', '0,0,0', 2, 3, 1, 'can_lay_on_top'),
+(22, 'bed_armas_two', '0,0,0', 2, 3, 1.7, 'can_lay_on_top'),
 (23, 'shelves_armas', '0,0,0', 2, 1, 2, 'solid'),
 (24, 'bench_armas', '0,0,0', 2, 1, 1, 'can_sit_on_top'),
 (25, 'table_armas', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
@@ -731,17 +731,17 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (27, 'small_chair_armas', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
 (28, 'fireplace_armas', '0,0,0', 2, 1, 2, 'solid,custom_data_numeric_on_off'),
 (29, 'lamp_armas', '0,0,0', 1, 1, 2, 'solid,custom_data_numeric_on_off'),
-(30, 'bed_armas_one', '0,0,0', 1, 3, 1, 'can_lay_on_top'),
+(30, 'bed_armas_one', '0,0,0', 1, 3, 1.7, 'can_lay_on_top'),
 (31, 'carpet_standard', '0,0,0', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (32, 'carpet_armas', '0,0,0', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
 (33, 'carpet_polar', '#ffffff,#ffffff,#ffffff', 2, 3, 0, 'can_stand_on_top,can_stack_on_top'),
 (34, 'fireplace_polyfon', '0,0,0', 2, 1, 2, 'solid,custom_data_numeric_on_off'),
 (35, 'carpet_standard*1', '#ff1f08', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
-(36, 'doormat_plain*1', '#ff1f08', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(36, 'doormat_plain*1', '#ff1f08', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (37, 'carpet_standard*2', '#99DCCC', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (38, 'carpet_standard*3', '#ffee00', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (39, 'carpet_standard*4', '#ccddff', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
-(40, 'doormat_plain*6', '#777777', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(40, 'doormat_plain*6', '#777777', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (41, 'carpet_standard*5', '#ddccff', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (42, 'carpet_standard*6', '#777777', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (43, 'pizza', '', 1, 1, 0.1, 'solid,can_stack_on_top'),
@@ -766,11 +766,11 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (62, 'carpet_polar*1', '#ffbbcf,#ffbbcf,#ffddef', 2, 3, 0, 'can_stand_on_top,can_stack_on_top'),
 (63, 'smooth_table_polyfon', '', 2, 2, 1, 'solid,can_stack_on_top'),
 (64, 'sofachair_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 1, 1, 'can_sit_on_top'),
-(65, 'bed_polyfon_girl_one', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 3, 1, 'can_lay_on_top'),
-(66, 'bed_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 2, 3, 1, 'can_lay_on_top'),
+(65, 'bed_polyfon_girl_one', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 3, 1.6, 'can_lay_on_top'),
+(66, 'bed_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 2, 3, 1.6, 'can_lay_on_top'),
 (67, 'sofa_polyfon_girl', '#ffffff,#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4,#EE7EA4,#EE7EA4', 2, 1, 1, 'can_sit_on_top'),
-(68, 'bed_budgetb_one', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 1, 3, 1, 'can_lay_on_top'),
-(69, 'bed_budgetb', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 2, 3, 1, 'can_lay_on_top'),
+(68, 'bed_budgetb_one', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 1, 3, 1.6, 'can_lay_on_top'),
+(69, 'bed_budgetb', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 2, 3, 1.6, 'can_lay_on_top'),
 (70, 'plant_pineapple', '', 1, 1, 1, 'solid'),
 (71, 'plant_fruittree', '', 1, 1, 1, 'solid'),
 (72, 'plant_small_cactus', '', 1, 1, 1, 'solid'),
@@ -903,7 +903,7 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (199, 'bardeskcorner_polyfon*5', '#ffffff,#FF9BBD', 1, 1, 1, 'solid,can_stack_on_top'),
 (200, 'divider_poly3*5', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 1, 1, 'solid,requires_rights_for_interaction,door'),
 (201, 'chair_china', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
-(202, 'china_table', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
+(202, 'china_table', '0,0,0', 1, 1, 0.9, 'solid,can_stack_on_top'),
 (203, 'safe_silo', '#ffffff,#ABD0D2,#ABD0D2,#ffffff', 1, 1, 1, 'solid,custom_data_true_false'),
 (204, 'china_shelve', '0,0,0', 2, 1, 2, 'solid'),
 (205, 'divider_nor5', '#ffffff,#F7EBBC,#F7EBBC', 1, 1, 2, 'solid,requires_rights_for_interaction,door'),
@@ -930,9 +930,9 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (226, 'hc_rllr', '0,0,0', 1, 1, 0.45, 'can_stand_on_top,can_stack_on_top,roller'),
 (227, 'hc_rntgn', '0,0,0', 2, 1, 2, 'solid'),
 (228, 'hc_trll', '0,0,0', 1, 2, 1.5, 'solid'),
-(229, 'gothic_chair*3', '#ffffff,#dd0000,#ffffff,#dd0000', 1, 1, 1, 'can_sit_on_top'),
-(230, 'gothic_sofa*3', '#ffffff,#dd0000,#ffffff,#ffffff,#dd0000,#ffffff', 2, 1, 1, 'can_sit_on_top'),
-(231, 'gothic_stool*3', '#ffffff,#dd0000,#ffffff', 1, 1, 1, 'can_sit_on_top'),
+(229, 'gothic_chair*3', '#ffffff,#dd0000,#ffffff,#dd0000', 1, 1, 1.2, 'can_sit_on_top'),
+(230, 'gothic_sofa*3', '#ffffff,#dd0000,#ffffff,#ffffff,#dd0000,#ffffff', 2, 1, 1.2, 'can_sit_on_top'),
+(231, 'gothic_stool*3', '#ffffff,#dd0000,#ffffff', 1, 1, 1.2, 'can_sit_on_top'),
 (232, 'sound_machine', '', 1, 1, 1, 'solid,requires_rights_for_interaction,custom_data_numeric_on_off,sound_machine'),
 (233, 'plant_mazegate', '', 2, 1, 1, 'solid,requires_rights_for_interaction,door'),
 (234, 'plant_maze', '', 2, 1, 1, 'solid'),
@@ -940,11 +940,11 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (236, 'petfood4', '0,0', 1, 1, 0, 'can_stand_on_top'),
 (237, 'gothic_carpet', '', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
 (238, 'gothic_carpet2', '', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
-(239, 'sound_set_1', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(240, 'sound_set_3', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(241, 'sound_set_6', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(242, 'sound_set_7', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(243, 'sound_set_8', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(239, 'sound_set_1', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(240, 'sound_set_3', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(241, 'sound_set_6', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(242, 'sound_set_7', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(243, 'sound_set_8', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
 (244, 'post.it', '', 0, 0, 0, 'wall_item,requires_rights_for_interaction,post_it'),
 (245, 'gothicfountain', '', 0, 0, 0, 'wall_item,custom_data_numeric_on_off'),
 (246, 'hc_wall_lamp', '', 0, 0, 0, 'wall_item,custom_data_numeric_on_off'),
@@ -954,10 +954,10 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (250, 'wallpaper', '', 0, 0, 0, 'wall_item,decoration'),
 (251, 'poster', '', 0, 0, 0, 'wall_item'),
 (252, 'table_norja_med', '0,#E2DAAC', 2, 2, 1, 'solid,can_stack_on_top'),
-(253, 'doormat_plain*4', '#ccddff', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(254, 'doormat_plain*2', '#99DCCC', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(255, 'doormat_plain*3', '#ffee00', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(256, 'doormat_plain*5', '#ddccff', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(253, 'doormat_plain*4', '#ccddff', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(254, 'doormat_plain*2', '#99DCCC', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(255, 'doormat_plain*3', '#ffee00', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(256, 'doormat_plain*5', '#ddccff', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (257, 'rare_parasol*1', '#ffffff,#ffffff,#ffffff,#ffff11', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (258, 'rare_parasol*2', '#ffffff,#ffffff,#ffffff,#ff8f61', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (259, 'rare_parasol*3', '#ffffff,#ffffff,#ffffff,#d47fff', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
@@ -1056,66 +1056,72 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (352, 'roomdimmer', '', 1, 1, 1, 'wall_item,roomdimmer'),
 (353, 'jukebox*1', '', 1, 1, 1, 'solid,jukebox'),
 (354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox'),
-(355, 'carpet_soft_tut', '', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(356, 'sound_set_9', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(357, 'sound_set_10', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(358, 'sound_set_2', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(359, 'sound_set_4', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(360, 'sound_set_5', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(361, 'sound_set_11', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(362, 'sound_set_12', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(363, 'sound_set_13', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(364, 'sound_set_14', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(365, 'sound_set_15', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(366, 'sound_set_16', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(367, 'sound_set_17', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(368, 'sound_set_18', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(369, 'sound_set_19', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(370, 'sound_set_20', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(371, 'sound_set_21', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(372, 'sound_set_22', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(373, 'sound_set_23', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(374, 'sound_set_24', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(375, 'sound_set_25', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(376, 'sound_set_26', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(377, 'sound_set_27', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(378, 'sound_set_28', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(379, 'sound_set_29', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(380, 'sound_set_30', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(381, 'sound_set_31', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(382, 'sound_set_32', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(383, 'sound_set_33', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(384, 'sound_set_34', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(385, 'sound_set_35', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(386, 'sound_set_36', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(387, 'sound_set_37', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(388, 'sound_set_38', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(389, 'sound_set_39', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(390, 'sound_set_40', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(391, 'sound_set_41', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(392, 'sound_set_42', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(393, 'sound_set_43', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(394, 'sound_set_44', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(395, 'sound_set_45', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(396, 'sound_set_46', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(397, 'sound_set_47', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(398, 'sound_set_48', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(399, 'sound_set_49', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(400, 'sound_set_50', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(401, 'sound_set_51', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(402, 'sound_set_52', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(403, 'sound_set_53', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(404, 'sound_set_54', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(405, 'sound_set_55', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(406, 'sound_set_56', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(407, 'sound_set_57', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(408, 'sound_set_58', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(409, 'sound_set_59', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(410, 'sound_set_60', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(411, 'sound_set_61', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(412, 'sound_set_62', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(413, 'sound_set_63', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(414, 'sound_set_64', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set');
+(355, 'carpet_soft_tut', '', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(356, 'sound_set_9', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(357, 'sound_set_10', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(358, 'sound_set_2', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(359, 'sound_set_4', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(360, 'sound_set_5', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(361, 'sound_set_11', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(362, 'sound_set_12', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(363, 'sound_set_13', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(364, 'sound_set_14', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(365, 'sound_set_15', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(366, 'sound_set_16', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(367, 'sound_set_17', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(368, 'sound_set_18', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(369, 'sound_set_19', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(370, 'sound_set_20', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(371, 'sound_set_21', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(372, 'sound_set_22', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(373, 'sound_set_23', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(374, 'sound_set_24', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(375, 'sound_set_25', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(376, 'sound_set_26', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(377, 'sound_set_27', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(378, 'sound_set_28', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(379, 'sound_set_29', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(380, 'sound_set_30', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(381, 'sound_set_31', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(382, 'sound_set_32', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(383, 'sound_set_33', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(384, 'sound_set_34', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(385, 'sound_set_35', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(386, 'sound_set_36', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(387, 'sound_set_37', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(388, 'sound_set_38', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(389, 'sound_set_39', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(390, 'sound_set_40', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(391, 'sound_set_41', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(392, 'sound_set_42', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(393, 'sound_set_43', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(394, 'sound_set_44', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(395, 'sound_set_45', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(396, 'sound_set_46', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(397, 'sound_set_47', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(398, 'sound_set_48', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(399, 'sound_set_49', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(400, 'sound_set_50', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(401, 'sound_set_51', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(402, 'sound_set_52', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(403, 'sound_set_53', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(404, 'sound_set_54', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(405, 'sound_set_55', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(406, 'sound_set_56', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(407, 'sound_set_57', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(408, 'sound_set_58', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(409, 'sound_set_59', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(410, 'sound_set_60', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(411, 'sound_set_61', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(412, 'sound_set_62', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(413, 'sound_set_63', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(414, 'sound_set_64', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(415, 'present_gen1', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(416, 'present_gen2', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(417, 'present_gen3', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(418, 'present_gen4', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(419, 'present_gen5', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(420, 'present_gen6', '', 1, 1, 1, 'solid,present,can_stack_on_top');
 
 -- --------------------------------------------------------
 
@@ -1163,8 +1169,8 @@ CREATE TABLE `messenger_messages` (
   `id` int(11) NOT NULL,
   `receiver_id` int(11) DEFAULT NULL,
   `sender_id` int(11) DEFAULT NULL,
-  `unread` varchar(255) DEFAULT NULL,
-  `body` varchar(255) DEFAULT NULL,
+  `unread` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `date` bigint(20) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1198,7 +1204,7 @@ CREATE TABLE `rank_badges` (
 
 CREATE TABLE `rank_fuserights` (
   `min_rank` int(11) NOT NULL,
-  `fuseright` varchar(255) NOT NULL
+  `fuseright` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -1239,18 +1245,18 @@ INSERT INTO `rank_fuserights` (`min_rank`, `fuseright`) VALUES
 
 CREATE TABLE `rooms` (
   `id` int(11) NOT NULL,
-  `owner_id` varchar(11) NOT NULL,
+  `owner_id` varchar(11) COLLATE utf8mb4_unicode_ci NOT NULL,
   `category` int(11) DEFAULT 2,
-  `name` varchar(255) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `model` varchar(255) NOT NULL,
-  `ccts` varchar(255) DEFAULT '',
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ccts` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `wallpaper` int(4) DEFAULT 0,
   `floor` int(4) DEFAULT 0,
   `showname` tinyint(1) DEFAULT 1,
   `superusers` tinyint(1) DEFAULT 0,
   `accesstype` tinyint(3) DEFAULT 0,
-  `password` varchar(255) DEFAULT '',
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT '',
   `visitors_now` int(11) DEFAULT 0,
   `visitors_max` int(11) DEFAULT 25
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1260,59 +1266,64 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `owner_id`, `category`, `name`, `description`, `model`, `ccts`, `wallpaper`, `floor`, `showname`, `superusers`, `accesstype`, `password`, `visitors_now`, `visitors_max`) VALUES
-(1001, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, 0, 0, 0, 0, '', 0, 40),
-(1003, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, 0, 0, 0, 0, '', 0, 100),
-(1004, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, 0, 0, 0, 0, '', 0, 30),
-(1005, '0', 5, 'TV Studio', 'tv_studio', 'tv_studio', 'hh_room_tv_studio_general', 0, 0, 0, 0, 0, '', 0, 20),
-(1006, '0', 5, 'Cinema', 'habbo_cinema', 'cinema_a', 'hh_room_cinema', 0, 0, 0, 0, 0, '', 0, 50),
-(1007, '0', 5, 'Power Gym', 'sport', 'sport', 'hh_room_sport', 0, 0, 0, 0, 0, '', 0, 35),
-(1008, '0', 5, 'Olympic Stadium', 'ballroom', 'ballroom', 'hh_room_ballroom', 0, 0, 0, 0, 0, '', 0, 50),
-(1009, '0', 5, 'Habbo Kitchen', 'hotel_kitchen', 'cr_kitchen', 'hh_room_kitchen', 0, 0, 0, 0, 0, '', 0, 20),
-(1010, '0', 6, 'The Dirty Duck Pub', 'the_dirty_duck_pub', 'pub_a', 'hh_room_pub', 0, 0, 0, 0, 0, '', 0, 40),
-(1011, '0', 6, 'Cafe Ole', 'cafe_ole', 'cafe_ole', 'hh_room_cafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1012, '0', 6, 'Gallery Cafe', 'eric\'s_eaterie', 'cr_cafe', 'hh_room_erics', 0, 0, 0, 0, 0, '', 0, 35),
-(1013, '0', 6, 'Space Cafe', 'space_cafe', 'space_cafe', 'hh_room_space_cafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1014, '0', 7, 'Rooftop Terrace', 'rooftop', 'rooftop', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 30),
-(1015, '0', 7, 'Rooftop Cafe', 'rooftop', 'rooftop_2', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 20),
-(1016, '0', 6, 'Palazzo Pizza', 'pizza', 'pizza', 'hh_room_pizza', 0, 0, 0, 0, 0, '', 0, 40),
-(1017, '0', 6, 'Habburgers', 'habburger\'s', 'habburger', 'hh_room_habburger', 0, 0, 0, 0, 0, '', 0, 40),
-(1018, '0', 8, 'Grandfathers Lounge', 'dusty_lounge', 'dusty_lounge', 'hh_room_dustylounge', 0, 0, 0, 0, 0, '', 0, 45),
-(1019, '0', 7, 'Oriental Tearoom', 'tearoom', 'tearoom', 'hh_room_tearoom', 0, 0, 0, 0, 0, '', 0, 40),
-(1020, '0', 7, 'Oldskool Lounge', 'old_skool', 'old_skool0', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
-(1022, '0', 7, 'Oldskool Dancefloor', 'old_skool', 'old_skool1', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
-(1023, '0', 7, 'The Chromide Club', 'the_chromide_club', 'malja_bar_a', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 45),
-(1024, '0', 7, 'The Chromide Club II', 'the_chromide_club', 'malja_bar_b', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 50),
-(1025, '0', 7, 'Club Massiva', 'club_massiva', 'bar_a', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 45),
-(1026, '0', 7, 'Club Massiva II', 'club_massiva2', 'bar_b', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 70),
-(1027, '0', 6, 'Sunset Cafe', 'sunset_cafe', 'sunset_cafe', 'hh_room_sunsetcafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1028, '0', 7, 'Oasis Spa', 'cafe_gold', 'cafe_gold0', 'hh_room_gold', 0, 0, 0, 0, 0, '', 0, 50),
-(1029, '0', 9, 'Treehugger Garden', 'chill', 'chill', 'hh_room_chill', 0, 0, 0, 0, 0, '', 0, 30),
-(1030, '0', 8, 'Club Mammoth', 'club_mammoth', 'club_mammoth', 'hh_room_clubmammoth', 0, 0, 0, 0, 0, '', 0, 45),
-(1031, '0', 9, 'Floating Garden', 'floatinggarden', 'floatinggarden', 'hh_room_floatinggarden', 0, 0, 0, 0, 0, '', 0, 80),
-(1032, '0', 9, 'Picnic Fields', 'picnic', 'picnic', 'hh_room_picnic', 0, 0, 0, 0, 0, '', 0, 55),
-(1033, '0', 9, 'Sun Terrace', 'sun_terrace', 'sun_terrace', 'hh_room_sun_terrace', 0, 0, 0, 0, 0, '', 0, 50),
-(1034, '0', 20, 'The Laughing Lions - Gate', 'gate_park', 'gate_park', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
-(1035, '0', 20, 'The Laughing Lions - Picnic', 'gate_park', 'gate_park_2', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
-(1036, '0', 21, 'The Park', 'park', 'park_a', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 45),
-(1037, '0', 21, 'The Infobus', 'park', 'park_b', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 20),
-(1038, '0', 10, 'Habbo Lido', 'habbo_lido', 'pool_a', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
-(1039, '0', 10, 'Lido B', 'habbo_lido_ii', 'pool_b', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
-(1040, '0', 10, 'Rooftop Rumble', 'rooftop_rumble', 'md_a', 'hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu', 0, 0, 0, 0, 0, '', 0, 50),
-(1041, '0', 11, 'Main Lobby', 'main_lobby', 'lobby_a', 'hh_room_lobby', 0, 0, 0, 0, 0, '', 0, 100),
-(1042, '0', 11, 'Basement Lobby', 'basement_lobby', 'floorlobby_a', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1043, '0', 11, 'Median Lobby', 'median_lobby', 'floorlobby_b', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1044, '0', 11, 'Skylight Lobby', 'skylight_lobby', 'floorlobby_c', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1045, '0', 6, 'Ice Cafe', 'ice_cafe', 'ice_cafe', 'hh_room_icecafe', 0, 0, 0, 0, 0, '', 0, 25),
-(1046, '0', 6, 'Net Cafe', 'netcafe', 'netcafe', 'hh_room_netcafe', 0, 0, 0, 0, 0, '', 0, 25),
-(1047, '0', 5, 'Beauty Salon', 'beauty_salon_loreal', 'beauty_salon0', 'hh_room_beauty_salon_general', 0, 0, 0, 0, 0, '', 0, 25),
-(1048, '0', 5, 'The Den', 'the_den', 'cr_staff', 'hh_room_den', 0, 0, 0, 0, 0, '', 0, 100),
-(1049, '0', 12, 'Lower Hallways', 'hallway', 'hallway2', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1050, '0', 12, 'Lower Hallways I', 'hallway', 'hallway0', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1051, '0', 12, 'Lower Hallways II', 'hallway', 'hallway1', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1052, '0', 12, 'Lower Hallways III', 'hallway', 'hallway3', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1053, '0', 12, 'Lower Hallways IV', 'hallway', 'hallway5', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1054, '0', 12, 'Lower Hallways V', 'hallway', 'hallway4', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1055, '0', 12, 'Upper Hallways', 'hallway_ii', 'hallway9', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25);
+(1, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, 0, 0, 0, 0, '', 0, 40),
+(2, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, 0, 0, 0, 0, '', 0, 100),
+(3, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, 0, 0, 0, 0, '', 0, 30),
+(4, '0', 5, 'TV Studio', 'tv_studio', 'tv_studio', 'hh_room_tv_studio_general', 0, 0, 0, 0, 0, '', 0, 20),
+(5, '0', 5, 'Cinema', 'habbo_cinema', 'cinema_a', 'hh_room_cinema', 0, 0, 0, 0, 0, '', 0, 50),
+(6, '0', 5, 'Power Gym', 'sport', 'sport', 'hh_room_sport', 0, 0, 0, 0, 0, '', 0, 35),
+(7, '0', 5, 'Olympic Stadium', 'ballroom', 'ballroom', 'hh_room_ballroom', 0, 0, 0, 0, 0, '', 0, 50),
+(8, '0', 5, 'Habbo Kitchen', 'hotel_kitchen', 'cr_kitchen', 'hh_room_kitchen', 0, 0, 0, 0, 0, '', 0, 20),
+(9, '0', 6, 'The Dirty Duck Pub', 'the_dirty_duck_pub', 'pub_a', 'hh_room_pub', 0, 0, 0, 0, 0, '', 0, 40),
+(10, '0', 6, 'Cafe Ole', 'cafe_ole', 'cafe_ole', 'hh_room_cafe', 0, 0, 0, 0, 0, '', 0, 35),
+(11, '0', 6, 'Gallery Cafe', 'eric\'s_eaterie', 'cr_cafe', 'hh_room_erics', 0, 0, 0, 0, 0, '', 0, 35),
+(12, '0', 6, 'Space Cafe', 'space_cafe', 'space_cafe', 'hh_room_space_cafe', 0, 0, 0, 0, 0, '', 0, 35),
+(13, '0', 7, 'Rooftop Terrace', 'rooftop', 'rooftop', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 30),
+(14, '0', 7, 'Rooftop Cafe', 'rooftop', 'rooftop_2', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 20),
+(15, '0', 6, 'Palazzo Pizza', 'pizza', 'pizza', 'hh_room_pizza', 0, 0, 0, 0, 0, '', 0, 40),
+(16, '0', 6, 'Habburgers', 'habburger\'s', 'habburger', 'hh_room_habburger', 0, 0, 0, 0, 0, '', 0, 40),
+(17, '0', 8, 'Grandfathers Lounge', 'dusty_lounge', 'dusty_lounge', 'hh_room_dustylounge', 0, 0, 0, 0, 0, '', 0, 45),
+(18, '0', 7, 'Oriental Tearoom', 'tearoom', 'tearoom', 'hh_room_tearoom', 0, 0, 0, 0, 0, '', 0, 40),
+(19, '0', 7, 'Oldskool Lounge', 'old_skool', 'old_skool0', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
+(20, '0', 7, 'Oldskool Dancefloor', 'old_skool', 'old_skool1', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
+(21, '0', 7, 'The Chromide Club', 'the_chromide_club', 'malja_bar_a', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 45),
+(22, '0', 7, 'The Chromide Club II', 'the_chromide_club', 'malja_bar_b', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 50),
+(23, '0', 7, 'Club Massiva', 'club_massiva', 'bar_a', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 45),
+(24, '0', 7, 'Club Massiva II', 'club_massiva2', 'bar_b', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 70),
+(25, '0', 6, 'Sunset Cafe', 'sunset_cafe', 'sunset_cafe', 'hh_room_sunsetcafe', 0, 0, 0, 0, 0, '', 0, 35),
+(26, '0', 7, 'Oasis Spa', 'cafe_gold', 'cafe_gold0', 'hh_room_gold', 0, 0, 0, 0, 0, '', 0, 50),
+(27, '0', 9, 'Treehugger Garden', 'chill', 'chill', 'hh_room_chill', 0, 0, 0, 0, 0, '', 0, 30),
+(28, '0', 8, 'Club Mammoth', 'club_mammoth', 'club_mammoth', 'hh_room_clubmammoth', 0, 0, 0, 0, 0, '', 0, 45),
+(29, '0', 9, 'Floating Garden', 'floatinggarden', 'floatinggarden', 'hh_room_floatinggarden', 0, 0, 0, 0, 0, '', 0, 80),
+(30, '0', 9, 'Picnic Fields', 'picnic', 'picnic', 'hh_room_picnic', 0, 0, 0, 0, 0, '', 0, 55),
+(31, '0', 9, 'Sun Terrace', 'sun_terrace', 'sun_terrace', 'hh_room_sun_terrace', 0, 0, 0, 0, 0, '', 0, 50),
+(32, '0', 20, 'The Laughing Lions - Gate', 'gate_park', 'gate_park', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
+(33, '0', 20, 'The Laughing Lions - Picnic', 'gate_park', 'gate_park_2', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
+(34, '0', 21, 'The Park', 'park', 'park_a', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 45),
+(35, '0', 21, 'The Infobus', 'park', 'park_b', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 20),
+(36, '0', 10, 'Habbo Lido', 'habbo_lido', 'pool_a', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
+(37, '0', 10, 'Lido B', 'habbo_lido_ii', 'pool_b', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
+(38, '0', 10, 'Rooftop Rumble', 'rooftop_rumble', 'md_a', 'hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu', 0, 0, 0, 0, 0, '', 0, 50),
+(39, '0', 11, 'Main Lobby', 'main_lobby', 'lobby_a', 'hh_room_lobby', 0, 0, 0, 0, 0, '', 0, 100),
+(40, '0', 11, 'Basement Lobby', 'basement_lobby', 'floorlobby_a', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(41, '0', 11, 'Median Lobby', 'median_lobby', 'floorlobby_b', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(42, '0', 11, 'Skylight Lobby', 'skylight_lobby', 'floorlobby_c', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(43, '0', 6, 'Ice Cafe', 'ice_cafe', 'ice_cafe', 'hh_room_icecafe', 0, 0, 0, 0, 0, '', 0, 25),
+(44, '0', 6, 'Net Cafe', 'netcafe', 'netcafe', 'hh_room_netcafe', 0, 0, 0, 0, 0, '', 0, 25),
+(45, '0', 5, 'Beauty Salon', 'beauty_salon_loreal', 'beauty_salon0', 'hh_room_beauty_salon_general', 0, 0, 0, 0, 0, '', 0, 25),
+(46, '0', 5, 'The Den', 'the_den', 'cr_staff', 'hh_room_den', 0, 0, 0, 0, 0, '', 0, 100),
+(47, '0', 12, 'Lower Hallways', 'hallway', 'hallway2', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(48, '0', 12, 'Lower Hallways I', 'hallway', 'hallway0', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(49, '0', 12, 'Lower Hallways II', 'hallway', 'hallway1', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(50, '0', 12, 'Lower Hallways III', 'hallway', 'hallway3', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(51, '0', 12, 'Lower Hallways IV', 'hallway', 'hallway5', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(52, '0', 12, 'Lower Hallways V', 'hallway', 'hallway4', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(53, '0', 12, 'Upper Hallways', 'hallway_ii', 'hallway9', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(54, '0', 12, 'Upper Hallways I', 'hallway_ii', 'hallway8', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(55, '0', 12, 'Upper Hallways II', 'hallway_ii', 'hallway7', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(56, '0', 12, 'Upper Hallways III', 'hallway_ii', 'hallway6', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(57, '0', 12, 'Upper Hallways IV', 'hallway_ii', 'hallway10', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(58, '0', 12, 'Upper Hallways V', 'hallway_ii', 'hallway11', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 1, 25);
 
 -- --------------------------------------------------------
 
@@ -1325,7 +1336,7 @@ CREATE TABLE `rooms_categories` (
   `order_id` int(11) NOT NULL,
   `parent_id` int(11) NOT NULL,
   `isnode` int(11) DEFAULT 0,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `public_spaces` int(11) DEFAULT 0,
   `allow_trading` int(11) DEFAULT 0,
   `minrole_access` int(11) DEFAULT 1,
@@ -1368,13 +1379,13 @@ INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`,
 
 CREATE TABLE `rooms_models` (
   `id` int(11) NOT NULL,
-  `model_id` varchar(255) NOT NULL,
-  `model_name` varchar(255) DEFAULT NULL,
+  `model_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `door_x` int(11) NOT NULL DEFAULT 0,
   `door_y` int(11) NOT NULL DEFAULT 0,
   `door_z` double NOT NULL,
   `door_dir` int(11) DEFAULT 2,
-  `heightmap` text NOT NULL,
+  `heightmap` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `usertype` int(11) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -1453,13 +1464,18 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 (67, 'club_mammoth', 'club_mammoth', 6, 16, 4, 2, 'xxxxxx4444444x4444xxxxxxxxxxxxx|xxxxxx4444444x444322xxxxxxxxxxx|xxxxxxxxxxxxxx444322xxxxxxxxxxx|x444444444444444442222xxxxxxxxx|4444444444444444442222xxxxxxxxx|4xxxxxxxxxxxxxxxxx2222xxxxxxxxx|4xxxxxxxxxx22222xx2222xxxxxxxxx|44xxxxxxxxx22222x2xxxxxxxxxxxxx|x4444444xxx22222x22xxxxxxxxxxxx|xx4444444xx22x22x222xxxxxxxxxxx|xxxxxxx444x22222xxxxxxxxxxxxxxx|xxxxxx444322222222211111111xxxx|xxxxxx444322222222211111111xxxx|xxxxxx444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxxxxx4444422222222x1111111xxxx|xxxxxx4444422222222xxxxxxxxxxxx|xxxxxx4443222222222222222222xxx|xxxxxx4443xxxxxxx2xxxxx222xxxxx|xxxxxx444xxxxxxxxxxxxxxx22xxxxx|xxxxxx4xxxxxxxxxxxxx444422xxxxx|xxx4444xxxxxxxxxxxxx4444x2xxxxx|xxx566666666666666664444xxxxxxx|xxxx66666666666666664444xxxxxxx|xxxxxxx666666666666544xxxxxxxxx|xxxxxxx666666666666544xxxxxxxxx|xxxxxxx6666666666666xxxxxxxxxxx|xxxxxxx6666666666666xxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 1),
 (68, 'ice_cafe', 'taivas_cafe', 17, 23, 0, 0, 'xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx1111111000000000|xx1111111000000000|111111111000000000|111111111000000000|111111111000000000|111111111000000000|111111111000000000|11111111x000000000|11111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx1111110000000000|xx1111111000000000|xx1111111000000000|xx1111111000000000|', 0),
 (69, 'netcafe', 'netcafe', 22, 12, 0, 6, 'xxxxx1111xxxxxxxxxxx1xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxxxxx0000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|xxxx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx111000000000000000000|x1xx111000000000000000000|xxxx111000000000000000000|xxxx11100000000000000xxxx|xxxx1110000000xx11111xxxx|xxxxx111110000x111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxx1111100001111111xxxx|', 1),
-(70, 'hallway0', 'hallway0', 2, 3, 0, 4, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx0000000x1111111111111111xxxx|xxxxxxxxxxxxx1111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
-(71, 'hallway9', 'hallway9', 21, 23, 7, 6, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx', 1),
+(70, 'hallway0', 'hallway0', 2, 2, 0, 2, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx0000000x1111111111111111xxxx|xxxxxxxxxxxxx1111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
+(71, 'hallway9', 'hallway9', 21, 23, 0, 7, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx', 1),
 (72, 'hallway2', 'hallway2', 15, 2, 0, 4, 'xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxx11111111000000000000xxxx|xxxx11111111000000000000xxxx|1111111111110000000000000000|1111111111110000000000000000|1111111111110000000000000000|1111111111110000000000000000|xxxx11111111000000000000xxxx|xxxx11111111000000000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx', 1),
-(73, 'hallway1', 'hallway1', 15, 2, 0, 4, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx', 1),
-(74, 'hallway3', 'hallway3', 15, 2, 0, 4, 'xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
-(75, 'hallway4', 'hallway4', 15, 2, 0, 4, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx', 1),
-(76, 'hallway5', 'hallway5', 15, 2, 0, 4, 'xxxxxxxxxxxxxx11xxxxxx1111xx|xxxxxxxxxxxxxx111xxxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxx000000001111111111111111|xxxx000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|xxxx000000001111111111111111|xxxx0000000x1111111111111111|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx', 1);
+(73, 'hallway1', 'hallway1', 2, 14, 0, 2, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx', 1),
+(74, 'hallway3', 'hallway3', 14, 21, 1, 0, 'xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
+(75, 'hallway4', 'hallway4', 29, 3, 1, 6, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx', 1),
+(76, 'hallway5', 'hallway5', 14, 2, 1, 4, 'xxxxxxxxxxxxxx11xxxxxx1111xx|xxxxxxxxxxxxxx111xxxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxx000000001111111111111111|xxxx000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|xxxx000000001111111111111111|xxxx0000000x1111111111111111|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx', 1),
+(77, 'hallway8', 'hallway8', 15, 3, 0, 4, 'xxxxxxxxxxxxxx00xxxx0000|xxxxxxxxxxxxxx000xxx0000|xxxxxxxxxxxxxx0000xx0000|xxxxxxxxxxxxxx0000xx0000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111xxxx00000000|xxxx11111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|xxxx11111111xxxx00000000|xxxx11111111xxxx00000000|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx', 1),
+(78, 'hallway7', 'hallway7', 7, 2, 1, 4, 'xxxxxx11xxxxxxxxxxxx|xxxxxx111xxxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx000000000000xxxx|xxxx000000000000xxxx|00000000000000000000|00000000000000000000|00000000000000000000|00000000000000000000|xxxx000000000000xxxx|xxxx000000000000xxxx', 1),
+(79, 'hallway6', 'hallway6', 1, 10, 1, 2, 'xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx', 1),
+(80, 'hallway10', 'hallway10', 3, 23, 1, 1, 'xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx', 1),
+(81, 'hallway11', 'hallway11', 20, 3, 0, 6, 'xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx', 1);
 
 -- --------------------------------------------------------
 
@@ -1471,6 +1487,61 @@ CREATE TABLE `rooms_rights` (
   `user_id` int(11) NOT NULL,
   `room_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `schema_migrations`
+--
+
+CREATE TABLE `schema_migrations` (
+  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `schema_migrations`
+--
+
+INSERT INTO `schema_migrations` (`version`) VALUES
+('20180605202455'),
+('20180605202822'),
+('20180605203204'),
+('20180605204755'),
+('20180605205011'),
+('20180605205211'),
+('20180605205405'),
+('20180605205543'),
+('20180605205848'),
+('20180605210028'),
+('20180605210128'),
+('20180605210255'),
+('20180605210408'),
+('20180605210538'),
+('20180605210815'),
+('20180605210848'),
+('20180605210954'),
+('20180605211041'),
+('20180605211154'),
+('20180605211259'),
+('20180605211518'),
+('20180605211722'),
+('20180606130528'),
+('20180606163724'),
+('20180606171138'),
+('20180609193613'),
+('20180609193620'),
+('20180609193627'),
+('20180610045026'),
+('20180610071051'),
+('20180610084935'),
+('20180610105026'),
+('20180616170631'),
+('20180622105649'),
+('20180715121437'),
+('20180715152740'),
+('20180724140234'),
+('20180729161108'),
+('20180730120357');
 
 -- --------------------------------------------------------
 
@@ -1531,22 +1602,22 @@ CREATE TABLE `soundmachine_tracks` (
 
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `figure` varchar(255) NOT NULL,
-  `pool_figure` varchar(255) NOT NULL,
-  `sex` char(1) NOT NULL DEFAULT 'M',
-  `motto` varchar(100) NOT NULL DEFAULT 'de kepler whey',
+  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `figure` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `pool_figure` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sex` char(1) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'M',
+  `motto` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'de kepler whey',
   `credits` int(11) NOT NULL DEFAULT 200,
   `tickets` int(11) NOT NULL DEFAULT 0,
   `film` int(11) NOT NULL DEFAULT 0,
   `rank` tinyint(1) UNSIGNED NOT NULL DEFAULT 1,
-  `console_motto` varchar(100) NOT NULL DEFAULT 'I''m a new user!',
+  `console_motto` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'I''m a new user!',
   `last_online` int(11) NOT NULL DEFAULT 0,
-  `sso_ticket` varchar(255) NOT NULL,
+  `sso_ticket` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `club_subscribed` bigint(11) NOT NULL DEFAULT 0,
   `club_expiration` bigint(11) NOT NULL DEFAULT 0,
-  `badge` char(3) NOT NULL DEFAULT '',
+  `badge` char(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
   `sound_enabled` tinyint(1) NOT NULL DEFAULT 1
@@ -1560,7 +1631,7 @@ CREATE TABLE `users` (
 
 CREATE TABLE `users_badges` (
   `user_id` int(11) NOT NULL,
-  `badge` char(3) NOT NULL
+  `badge` char(3) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1650,6 +1721,12 @@ ALTER TABLE `rooms_models`
   ADD KEY `id` (`id`);
 
 --
+-- Indexes for table `schema_migrations`
+--
+ALTER TABLE `schema_migrations`
+  ADD PRIMARY KEY (`version`);
+
+--
 -- Indexes for table `settings`
 --
 ALTER TABLE `settings`
@@ -1699,7 +1776,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=415;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
 --
 -- AUTO_INCREMENT for table `messenger_messages`
 --
@@ -1709,7 +1786,7 @@ ALTER TABLE `messenger_messages`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1056;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000;
 --
 -- AUTO_INCREMENT for table `rooms_categories`
 --
@@ -1719,7 +1796,7 @@ ALTER TABLE `rooms_categories`
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`
 --

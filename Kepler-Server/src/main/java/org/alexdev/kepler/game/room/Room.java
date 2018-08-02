@@ -57,27 +57,6 @@ public class Room {
     }
 
     /**
-     * Add a packet queue for all players.
-     *
-     * @param composer the message composer packet
-     */
-    public void sendQueued(MessageComposer composer) {
-        for (Player player : this.roomEntityManager.getPlayers()) {
-            player.sendQueued(composer);
-        }
-    }
-
-    /**
-     * Flush the queue to all players.
-     */
-    public void flushQueue() {
-        for (Player player : this.roomEntityManager.getPlayers()) {
-            player.flush();
-        }
-    }
-
-
-    /**
      * Checks if the user id is the owner of the room.
      *
      * @param ownerId the owner id to check for

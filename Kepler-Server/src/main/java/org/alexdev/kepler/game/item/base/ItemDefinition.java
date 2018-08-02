@@ -226,4 +226,12 @@ public class ItemDefinition {
     public String getBehaviourData() {
         return behaviourData;
     }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
 }

@@ -3,29 +3,20 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.incoming.club.GET_CLUB;
-import org.alexdev.kepler.messages.incoming.club.SUBSCRIBE_CLUB;
-import org.alexdev.kepler.messages.incoming.inventory.GETSTRIP;
-import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
-import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
-import org.alexdev.kepler.messages.incoming.catalogue.GET_ALIAS_LIST;
-import org.alexdev.kepler.messages.incoming.catalogue.GRPC;
+import org.alexdev.kepler.messages.incoming.club.*;
+import org.alexdev.kepler.messages.incoming.inventory.*;
+import org.alexdev.kepler.messages.incoming.catalogue.*;
 import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.moderation.MODERATORACTION;
 import org.alexdev.kepler.messages.incoming.navigator.*;
+import org.alexdev.kepler.messages.incoming.purse.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
-import org.alexdev.kepler.messages.incoming.rooms.badges.GETAVAILABLEBADGES;
-import org.alexdev.kepler.messages.incoming.rooms.badges.SETBADGE;
-import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_CHANGE_STATE;
-import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_GET_PRESETS;
-import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_SET_PRESET;
+import org.alexdev.kepler.messages.incoming.rooms.badges.*;
+import org.alexdev.kepler.messages.incoming.rooms.dimmer.*;
 import org.alexdev.kepler.messages.incoming.rooms.items.*;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.*;
-import org.alexdev.kepler.messages.incoming.rooms.pool.BTCKS;
-import org.alexdev.kepler.messages.incoming.rooms.pool.DIVE;
-import org.alexdev.kepler.messages.incoming.rooms.pool.SPLASH_POSITION;
-import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
+import org.alexdev.kepler.messages.incoming.rooms.pool.*;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.songs.*;
@@ -49,6 +40,7 @@ public class MessageHandler {
         this.messages = new ConcurrentHashMap<>();
 
         registerHandshakePackets();
+        registerPursePackets();
         registerUserPackets();
         registerNavigatorPackets();
         registerRoomPackets();
@@ -90,11 +82,19 @@ public class MessageHandler {
     }
 
     /**
+     * Register purse packets.
+     */
+    private void registerPursePackets() {
+        registerEvent(8, new GET_CREDITS());
+        registerEvent(127, new GETUSERCREDITLOG());
+        registerEvent(129, new REDEEM_VOUCHER());
+    }
+
+    /**
      * Register general purpose user packets.
      */
     private void registerUserPackets() {
         registerEvent(7, new GET_INFO());
-        registerEvent(8, new GET_CREDITS());
         registerEvent(228, new GET_SOUND_SETTING());
         registerEvent(196, new PONG());
         registerEvent(26, new GET_CLUB());

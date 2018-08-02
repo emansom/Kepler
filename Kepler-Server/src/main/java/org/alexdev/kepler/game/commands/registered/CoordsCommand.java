@@ -1,19 +1,16 @@
 package org.alexdev.kepler.game.commands.registered;
 
-import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
-import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.texts.TextsManager;
-import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
-import org.w3c.dom.Text;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.util.StringUtil;
 
-public class RefreshTextsCommand extends Command {
+public class CoordsCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("fuse_administrator_access");
+        this.permissions.add("default");
     }
 
     @Override
@@ -28,14 +25,14 @@ public class RefreshTextsCommand extends Command {
             return;
         }
 
-        // Reload the texts manager (used for item names and descriptions, etc)
-        TextsManager.reset();
-
-        player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Texts refreshed."));
+        player.send(new ALERT("Your coordinates:<br>" +
+                "X: " + player.getRoomUser().getPosition().getX() + "<br>" +
+                "Y: " + player.getRoomUser().getPosition().getY() + "<br>" +
+                "Z: " + Double.toString(StringUtil.format(player.getRoomUser().getPosition().getZ()))));
     }
 
     @Override
     public String getDescription() {
-        return "Refresh the catalogue";
+        return "Shows the coordinates in the room";
     }
 }

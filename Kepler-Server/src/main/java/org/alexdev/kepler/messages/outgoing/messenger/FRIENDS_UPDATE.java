@@ -23,14 +23,19 @@ public class FRIENDS_UPDATE extends MessageComposer {
         response.writeInt(this.friends.size());
 
         for (MessengerUser friend : this.friends) {
-            PlayerDetails details = PlayerManager.getInstance().getPlayerData(friend.getUserId());
+            Player player = PlayerManager.getInstance().getPlayerById(friend.getUserId());
 
-            response.writeInt(details.getId());
-            response.writeString(details.getConsoleMotto());
+            if (player != null) {
+                friend.setFigure(player.getDetails().getFigure());
+                friend.setLastOnline(player.getDetails().getLastOnline());
+                friend.setSex(player.getDetails().getSex());
+                friend.setConsoleMotto(player.getDetails().getConsoleMotto());
+            }
 
-            Player player = PlayerManager.getInstance().getPlayerById(details.getId());
+            response.writeInt(friend.getUserId());
+            response.writeString(friend.getConsoleMotto());
+
             boolean isOnline = (player != null);
-
             response.writeBool(isOnline);
 
             if (isOnline) {
@@ -40,13 +45,13 @@ public class FRIENDS_UPDATE extends MessageComposer {
                     if (room.getData().getOwnerId() > 0) {
                         response.writeString("Floor1a");
                     } else {
-                        response.writeString(room.getData().getName());
+                        response.writeString(room.getData().getPublicName());
                     }
                 } else {
                     response.writeString("On hotel view");
                 }
             } else {
-                response.writeString(DateUtil.getDateAsString(details.getLastOnline()));
+                response.writeString(DateUtil.getDateAsString(friend.getLastOnline()));
             }
 
         }

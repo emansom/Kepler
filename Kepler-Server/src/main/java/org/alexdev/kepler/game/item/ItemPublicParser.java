@@ -95,6 +95,11 @@ public class ItemPublicParser {
                     item.getDefinition().setTopHeight(7.0);
                 }
 
+                // This is the only public item I'm aware of that has a length of 2
+                if (item.getDefinition().getSprite().equals("hw_shelf")) {
+                    item.getDefinition().setLength(2);
+                }
+
                 items.add(item);
             }
         } catch (IOException e) {

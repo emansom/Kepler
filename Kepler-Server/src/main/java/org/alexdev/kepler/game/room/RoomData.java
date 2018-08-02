@@ -35,14 +35,10 @@ public class RoomData {
         this.room = room;
     }
 
-    public void fill(int id, int ownerId, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax, int rating) {
+    public void fill(int id, int ownerId, String ownerName, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax, int rating) {
         this.id = id;
         this.ownerId = ownerId;
-        if (this.ownerId > 0) {
-            this.ownerName = PlayerDao.getName(this.ownerId);
-        } else {
-            this.ownerName = "";
-        }
+        this.ownerName = StringUtil.filterInput(ownerName, true);;
         this.categoryId = category;
         this.name = StringUtil.filterInput(name, true);
         this.description = StringUtil.filterInput(description, true);
@@ -71,7 +67,12 @@ public class RoomData {
                 || this.model.equals("hallway1")
                 || this.model.equals("hallway3")
                 || this.model.equals("hallway4")
-                || this.model.equals("hallway5")) {
+                || this.model.equals("hallway5")
+                || this.model.equals("hallway6")
+                || this.model.equals("hallway7")
+                || this.model.equals("hallway8")
+                || this.model.equals("hallway10")
+                || this.model.equals("hallway11")) {
             this.navigatorHide = true;
         }
 
@@ -101,6 +102,14 @@ public class RoomData {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway3"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway4"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway5"));
+        }
+
+        if (this.model.equals("hallway9")) {
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway10"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway11"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway8"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway7"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway6"));
         }
     }
 
@@ -161,6 +170,20 @@ public class RoomData {
     }
 
     public String getName() {
+        return name;
+    }
+
+    public String getPublicName() {
+        if (this.room.isPublicRoom()) {
+            if (this.name.startsWith("Upper Hallways")) {
+                return "Upper Hallways";
+            }
+
+            if (this.name.startsWith("Lower Hallways")) {
+                return "Lower Hallways";
+            }
+        }
+
         return name;
     }
 

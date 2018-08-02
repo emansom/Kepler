@@ -19,11 +19,15 @@ public class RoomTile {
     private List<Item> items;
 
     private double tileHeight;
+    private double defaultHeight;
+
     private Item highestItem;
 
-    public RoomTile(Room room, Position position) {
+    public RoomTile(Room room, Position position, double tileHeight) {
         this.room = room;
         this.position = position;
+        this.tileHeight = tileHeight;
+        this.defaultHeight = tileHeight;
         this.entities = new HashSet<>();
         this.items = new CopyOnWriteArrayList<>();
     }
@@ -245,5 +249,9 @@ public class RoomTile {
      */
     public List<Item> getItems() {
         return items;
+    }
+
+    public double getDefaultHeight() {
+        return defaultHeight;
     }
 }

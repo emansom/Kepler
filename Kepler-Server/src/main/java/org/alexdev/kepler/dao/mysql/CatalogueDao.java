@@ -27,7 +27,7 @@ public class CatalogueDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM catalogue_pages", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM catalogue_pages ORDER BY order_id ASC", sqlConnection);
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

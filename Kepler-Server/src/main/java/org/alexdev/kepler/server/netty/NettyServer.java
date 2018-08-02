@@ -2,8 +2,6 @@ package org.alexdev.kepler.server.netty;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.buffer.PooledByteBufAllocator;
-import io.netty.buffer.UnpooledByteBufAllocator;
-import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.FixedRecvByteBufAllocator;
@@ -13,19 +11,15 @@ import io.netty.channel.epoll.EpollServerSocketChannel;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.flush.FlushConsolidationHandler;
 import io.netty.util.concurrent.GlobalEventExecutor;
-import io.netty.util.internal.ThreadLocalRandom;
 import org.alexdev.kepler.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class NettyServer  {
-
     final private static int BACK_LOG = 20;
     final private static int BUFFER_SIZE = 2048;
 	final private static Logger log = LoggerFactory.getLogger(NettyServer.class);
@@ -48,10 +42,13 @@ public class NettyServer  {
         this.connectionIds = new AtomicInteger(0);
     }
 
+    /**
+     * Create the Netty sockets.
+     */
     public void createSocket() {
         int threads = Runtime.getRuntime().availableProcessors();
         this.bossGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup(threads) : new NioEventLoopGroup(threads);
-        this.workerGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup() : new NioEventLoopGroup();
+        this.workerGroup = (Epoll.isAvailable()) ? new EpollEventLoopGroup(threads) : new NioEventLoopGroup(threads);
 
         this.bootstrap.group(bossGroup, workerGroup)
                 .channel((Epoll.isAvailable()) ? EpollServerSocketChannel.class : NioServerSocketChannel.class)
@@ -64,7 +61,10 @@ public class NettyServer  {
                 .childOption(ChannelOption.ALLOCATOR, new PooledByteBufAllocator(true));
     }
 
-    public boolean bind() {
+    /**
+     * Bind the server to its address that's been specified
+     */
+    public void bind() {
         this.bootstrap.bind(new InetSocketAddress(this.getIp(), this.getPort())).addListener(objectFuture -> {
             if (!objectFuture.isSuccess()) {
                 Log.getErrorLogger().error("Failed to start server on address: {}:{}", this.getIp(), this.getPort());
@@ -74,21 +74,34 @@ public class NettyServer  {
                 log.info("Ready for connections!");
             }
         });
-
-        return false;
     }
 
+    /**
+     * Dispose the server handler.
+     *
+     * @throws InterruptedException
+     */
     public void dispose() throws InterruptedException {
         // Shutdown gracefully
         this.workerGroup.shutdownGracefully().sync();
         this.bossGroup.shutdownGracefully().sync();
     }
 
-    public String getIp() {
+    /**
+     * Get the IP of this server.
+     *
+     * @return the server ip
+     */
+    private String getIp() {
         return ip;
     }
 
-    public Integer getPort() {
+    /**
+     * Get the port of this server.
+     *
+     * @return the port
+     */
+    private Integer getPort() {
         return port;
     }
 
@@ -107,13 +120,5 @@ public class NettyServer  {
      */
     public AtomicInteger getConnectionIds() {
         return connectionIds;
-    }
-
-    public EventLoopGroup getBossGroup() {
-        return bossGroup;
-    }
-
-    public EventLoopGroup getWorkerGroup() {
-        return workerGroup;
     }
 }
