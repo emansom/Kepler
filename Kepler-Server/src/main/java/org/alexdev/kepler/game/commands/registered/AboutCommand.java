@@ -23,7 +23,7 @@ public class AboutCommand extends Command {
         
         player.send(new ALERT("Project Kepler\n\nContributors:" +
                 "\n - Hoshiko" + // Aside from myself (Quackster), Hoshiko contributed a lot.
-                "\n - ThuGie" + // Giving me Lingo from the Habbo client files
+                "\n - ThuGie" + // Helping me with knowing the Habbo protocol better
                 "\n - Ascii" + // Helping me with various packet structures
                 "\n - Lightbulb" + // Helping me with getting tables to show up in public rooms
                 "\n - Romuald" + // Creating Habbo Club subscription
