@@ -233,6 +233,8 @@ public class PlayerDao {
      * @param details the details of the user
      */
     public static void saveLastOnline(PlayerDetails details, long currentTime) {
+        details.setLastOnline(currentTime);
+        
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
