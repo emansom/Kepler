@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 
 import com.goterl.lazycode.lazysodium.LazySodiumJava;
+import org.alexdev.kepler.util.DateUtil;
 
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
@@ -232,9 +233,10 @@ public class PlayerDao {
      *
      * @param details the details of the user
      */
-    public static void saveLastOnline(PlayerDetails details, long currentTime) {
+    public static void saveLastOnline(PlayerDetails details) {
+        long currentTime = DateUtil.getCurrentTimeSeconds();
         details.setLastOnline(currentTime);
-        
+
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 

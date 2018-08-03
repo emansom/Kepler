@@ -17,7 +17,6 @@ import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
-import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
@@ -56,8 +55,7 @@ public class Player extends Entity {
 
         PlayerManager.getInstance().disconnectSession(this.details.getId()); // Kill other sessions with same id
         PlayerManager.getInstance().addPlayer(this); // Add new connection
-
-        PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
+        PlayerDao.saveLastOnline(this.getDetails());
 
         if (!ServerConfiguration.getBoolean("debug")) {
             PlayerDao.clearSSOTicket(this.details.getId()); // Protect against replay attacks
@@ -299,7 +297,7 @@ public class Player extends Entity {
             }
 
 
-            PlayerDao.saveLastOnline(this.getDetails(), DateUtil.getCurrentTimeSeconds());
+            PlayerDao.saveLastOnline(this.getDetails());
             PlayerManager.getInstance().removePlayer(this);
 
             this.messenger.sendStatusUpdate();
