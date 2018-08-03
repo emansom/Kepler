@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.7.0
+-- version 4.8.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jul 30, 2018 at 02:07 PM
--- Server version: 10.2.15-MariaDB
--- PHP Version: 5.6.31
+-- Host: localhost
+-- Generation Time: Aug 03, 2018 at 11:00 PM
+-- Server version: 10.3.7-MariaDB
+-- PHP Version: 7.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -556,7 +556,9 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (509, 'soundset61', 11, 9, 3, 411, 0, '', '', 0),
 (510, 'soundset62', 11, 9, 3, 412, 0, '', '', 0),
 (511, 'soundset63', 11, 9, 3, 413, 0, '', '', 0),
-(512, 'soundset64', 11, 9, 3, 414, 0, '', '', 0);
+(512, 'soundset64', 11, 9, 3, 414, 0, '', '', 0),
+(513, 'camera', 41, 0, 10, 421, 0, NULL, NULL, 0),
+(514, 'film', 41, 1, 6, 423, 0, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -605,12 +607,14 @@ CREATE TABLE `catalogue_pages` (
   `id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
   `min_role` int(11) DEFAULT NULL,
+  `index_visible` tinyint(1) NOT NULL DEFAULT 1,
   `name_index` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `link_list` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `layout` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_headline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_teasers` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` text COLLATE utf8mb4_unicode_ci DEFAULT '',
   `label_pick` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `label_extra_s` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `label_extra_t` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
@@ -620,47 +624,49 @@ CREATE TABLE `catalogue_pages` (
 -- Dumping data for table `catalogue_pages`
 --
 
-INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `name_index`, `name`, `layout`, `image_headline`, `image_teasers`, `body`, `label_pick`, `label_extra_s`, `label_extra_t`) VALUES
-(1, 1, 1, 'Frontpage', 'Frontpage', 'ctlg_frontpage2', 'catal_fp_header', 'catal_fp_pic4,catal_fp_pic5,', 'Welcome to the Hotel Catalogue. It\'s packed full of fab things for your room - there\'s something for everyone! Browse the ranges by clicking the tabs on the right.<br><br>Some ranges are seasonal, so check back regularly for new items.<br><br>We regularly', NULL, 'Home sweet home!', '1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.'),
-(2, 2, 1, 'Rare', 'Rare', 'ctlg_productpage1', 'catalog_rares_headline1', '', 'Okay this thing is fucking epic!\rEnjoy it while it lasts!', NULL, NULL, NULL),
-(3, 3, 1, 'Spaces', 'Spaces', 'ctlg_spaces', 'catalog_spaces_headline1', '', 'Floors, wallpapers, landscapes - get a groovy combination to your room. Use our virtual room preview below to test out the combinations before you buy. Select the design and color you like and click Buy.', NULL, NULL, '1:Wall\r\n2:Floor\r\n3:Pattern\r\n4:Colour\r\n5:Pattern\r\n6:Colour\r\n7:Preview'),
-(4, 4, 1, 'Bank', 'Exchange', 'ctlg_layout2', 'catalog_bank_headline1', 'catalog_bank_teaser,', 'The Habbo Exchange is where you can convert your Habbo Credits into a tradable currency. You can use this tradable currency to exchange Habbo Credits for Furni!', 'Click on the item you want for more information', 'EPIC YAY!', NULL),
-(5, 5, 1, 'Rollers', 'Rollers', 'ctlg_layout2', 'catalog_roller_headline1', '', 'Move your imagination, while you move your Habbo!  Perfect for mazes, games, for keeping your queue moving or making your pet go round in circles for hours.  Available in multi-packs ? the more you buy the cheaper the Roller! Pink Rollers out now!', 'Click on a Roller to see more information!', 'You can fit 30 Rollers in a user flat!', NULL),
-(6, 6, 1, 'Teleporters', 'Teleporters', 'ctlg_productpage3', 'catalog_doors_headline1', 'catalog_door_a,catalog_door_c,catalog_door_b,', 'Beam your user from one room to another with one of our cunningly disguised, space age teleports. Now you can link any two rooms together! Teleports are sold in pairs, so if you trade for them, check you\'re getting a linked pair.', 'Click on the item you want for more information', 'Beam!', NULL),
-(7, 7, 1, 'Pets', 'Pets', 'ctlg_pets', 'catalog_pet_headline1', 'catalog_pets_teaser1,', 'Fluff and whiskers, meows and woofs! You\'\'re about to enter the world of small creatures with furry features. Find a new friend from our ever-changing selection. From faithful servants to playful playmates - here\'s where you\'\'ll find them all.', 'Find your own pet!', NULL, '1:Give name:'),
-(8, 8, 1, 'Petstuff', 'Pet accessories', 'ctlg_layout2', 'catalog_pet_headline2', 'ctlg_pet_teaser1,', 'You\'\'ll need to take care of your pet to keep it happy and healthy. This section of the Catalogue has EVERYTHING you\'ll need to satisfy your pet\'s needs.', 'Click on the item you want for more information', 'You\'ll have to share it!', NULL),
-(9, 9, 1, 'Area', 'Area', 'Area', 'catalog_area_headline1', 'catalog_area_teaser1,', 'Introducing the Area Collection...  Clean, chunky lines set this collection apart as a preserve of the down-to-earth person. It\'s beautiful in its simplicity, and welcoming to everyone.', 'Click on the item you want for more information', '2: Beautiful in it\'s simplicity!', NULL),
-(10, 10, 1, 'Gothic', 'Gothic', 'ctlg_layout2', 'catalog_gothic_headline1', 'catalog_gothic_teaser1,', 'The Gothic section is full of medieval looking items. Create your own Gothic castle!', 'Click on the item you want for more information', NULL, NULL),
-(11, 11, 1, 'Soundmachines', 'Trax', 'ctlg_soundmachine', 'catalog_djshop_headline1', 'catalog_djshop_teaser1,', 'Bring sound to your room! Purchase a sound machine plus some sample packs and create your own songs to play in your flat!<br>Moar soundsets coming soon!', 'Click on the item you want for more information', NULL, NULL),
-(12, 12, 1, 'Candy', 'Candy', 'ctlg_layout2', 'catalog_candy_headline1', 'catalog_candy_teaser1,', 'Candy combines the cool, clean lines of the Mode collection with a softer, more soothing style. It\'\'s urban sharpness with a hint of the feminine.', 'Click on the item you want for more information', '2: WTF SCREW YOU LOL', NULL),
-(13, 13, 1, 'Asian', 'Asian', 'ctlg_layout2', 'catalog_asian_headline1', 'catalog_asian_teaser1,', 'Introducing the Asian collection... These handcrafted items are the result of years of child slavery, some mixture of Ying and Yang and a mass-shipping from China. These authentic items fit in every oriental themed user flat. Made in China: fo\' real nigga', 'Click on the item you want for more information', NULL, NULL),
-(14, 14, 1, 'Iced', 'Iced', 'ctlg_layout2', 'catalog_iced_headline1', 'catalog_iced_teaser1,', 'Introducing the Iced Collection...  For the person who needs no introduction. It\'s so chic, it says everything and nothing. It\'s a blank canvas, let your imagination to run wild!', 'Click on the item you want for more information', '2: These chairs are so filthy', NULL),
-(15, 15, 1, 'Lodge', 'Lodge', 'ctlg_layout2', 'catalog_lodge_headline1', 'catalog_lodge_teaser1,', 'Introducing the Lodge Collection...  Do you appreciate the beauty of wood?  For that ski lodge effect, or to match that open fire... Lodge is the Furni of choice for people with that no frills approach to decorating.', 'Click on the item you want for more information', '2: I luv wood!', NULL),
-(16, 16, 1, 'Plasto', 'Plasto', 'ctlg_plasto', 'catalog_plasto_headline1', '', 'Introducing The Plasto Collection...  Can you feel that 1970s vibe?  Decorate with Plasto and add some colour to your life. Choose a colour that reflect your mood, or just pick your favourite shade.', 'Select an item and a colour and buy!', 'New colors!', '1:Choose an item\r\n2:Select the color\r\n3:Preview'),
-(17, 17, 1, 'Pura', 'Pura', 'ctlg_layout2', 'catalog_pura_headline1', 'catalog_pura_teaser1,', 'Introducing the Pura Collection...  This collection breathes fresh, clean air and cool tranquillity. Use it to create a special haven away from the hullabaloo of life outside the Hotel.', 'Click on the item you want for more information', NULL, NULL),
-(18, 18, 1, 'Mode', 'Mode', 'ctlg_layout2', 'catalog_mode_headline1', 'catalog_mode_teaser1,', 'Introducing the Mode Collection...  Steely grey functionality combined with sleek designer upholstery. The person that chooses this furniture is a cool urban cat - streetwise, sassy and so slightly untouchable.', 'Click on the item you want for more information', '2: So shiny and new...', NULL),
-(19, 19, 1, 'Accessories', 'Accessories', 'ctlg_layout2', 'catalog_extra_headline1', 'catalog_extra_teaser1,', 'Is your room missing something?  Well, now you can add the finishing touches that express your true personality. And don\'t forget, like everything else, these accessories can be moved about to suit your mood.', 'Click on the item you want for more information', '2: I herd u liek mudkips?', NULL),
-(20, 20, 1, 'Bathroom', 'Bathroom', 'ctlg_layout2', 'catalog_bath_headline1', 'catalog_bath_teaser1,', 'Introducing the Bathroom Collection...  Have some fun with the cheerful bathroom collection. Give yourself and your guests somewhere to freshen up - vital if you want to avoid nasty niffs. Put your loo in a corner though...', 'Click on the item you want for more information', NULL, NULL),
-(21, 21, 1, 'Plants', 'Plants', 'ctlg_layout2', 'catalog_plants_headline1', 'catalog_plants_teaser1,', 'Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!', 'Click on the item you want for more information', NULL, NULL),
-(22, 22, 1, 'Sports', 'Sport', 'ctlg_layout2', 'catalog_sports_headline1', 'catalog_sports_teaser1,', 'For the sporty people, here is the Sports section! Create your own hockey stadium!', 'Click on the item you want for more information', '2:Yay!', NULL),
-(23, 23, 1, 'Rugs', 'Rugs', 'ctlg_layout2', 'catalog_rugs_headline1', 'catalog_rugs_teaser1,', 'We have rugs for all occasions. All rugs are non-slip and washable.', 'Click on the item you want for more information', '2:We have rugs for ANY room!', NULL),
-(24, 24, 1, 'Gallery', 'Gallery', 'ctlg_layout2', 'catalog_gallery_headline1', 'catalog_gallery_teaser1,', 'Adorn your walls with wondrous works of art, posters, plaques and wall hangings. We have items to suit all tastes, from kitsch to cool, traditional to modern.', 'Click on the item you want for more information', '2: Brighten up your walls!', NULL),
-(25, 25, 1, 'Flags', 'Flags', 'ctlg_layout2', 'catalog_flags_headline1', 'catalog_flags_teaser1,', 'If you\'re feeling patriotic, get a flag to prove it. Our finest cloth flags will brighten up the dullest walls.', 'Click on the item you want for more information', '2:Hail Nillus!', NULL),
-(26, 26, 1, 'Trophies', 'Trophies', 'ctlg_trophies', 'catalog_trophies_headline1', '', 'Reward your friends, or yourself with one of our fabulous glittering array of bronze, silver and gold trophies.<br><br>First choose the trophy model (click on the arrows to see all the different styles) and then the metal (click on the seal below the trop', NULL, NULL, '1:Type your inscription CAREFULLY, it\'s permanent!'),
-(27, 40, 5, 'staffHC', 'Club Shop', 'ctlg_layout2', 'catalog_club_headline1', 'catalog_hc_teaser,', 'Welcome to the Club Shop! All \'Habbo Club membership gifts\' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.', 'Click on the item you want for more information', NULL, NULL),
-(28, 41, 5, 'Dragons', 'Dragons', 'ctlg_layout2', 'catalog_rares_headline1', '', 'The Dragon page contains all of the Dragon Lamps.', 'Click on the item you want for more information', NULL, NULL),
-(29, 43, 5, 'Sci-fi Doors', 'Sci-fi Doors', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(30, 43, 5, 'Parasols', 'Parasols', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(31, 43, 5, 'Screens', 'Screens', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(32, 32, 5, 'Marquee', 'Marquee', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(33, 33, 5, 'Pillows', 'Pillows', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(34, 34, 5, 'Icecream', 'Icecream', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(35, 35, 5, 'Smoke machines', 'Smoke machines', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(36, 36, 5, 'Laser Ports', 'Laser Ports', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(37, 37, 5, 'Amber Lamp', 'Amber Lamp', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(38, 38, 5, 'Fountains', 'Fountains', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(39, 39, 5, 'Elephants', 'Elephants', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(40, 40, 5, 'Fans', 'Fans', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL);
+INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `name_index`, `link_list`, `name`, `layout`, `image_headline`, `image_teasers`, `body`, `label_pick`, `label_extra_s`, `label_extra_t`) VALUES
+(1, 1, 1, 1, 'Frontpage', '', 'Frontpage', 'ctlg_frontpage2', 'catal_fp_header', 'catal_fp_pic4,catal_fp_pic5,', 'Welcome to the Hotel Catalogue. It\'s packed full of fab things for your room - there\'s something for everyone! Browse the ranges by clicking the tabs on the right.<br><br>Some ranges are seasonal, so check back regularly for new items.<br><br>We regularly', NULL, 'Home sweet home!', '1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.'),
+(2, 2, 1, 1, 'Rare', '', 'Rare', 'ctlg_productpage1', 'catalog_rares_headline1', '', 'Okay this thing is fucking epic!\rEnjoy it while it lasts!', NULL, NULL, NULL),
+(3, 3, 1, 1, 'Spaces', '', 'Spaces', 'ctlg_spaces', 'catalog_spaces_headline1', '', 'Floors, wallpapers, landscapes - get a groovy combination to your room. Use our virtual room preview below to test out the combinations before you buy. Select the design and color you like and click Buy.', NULL, NULL, '1:Wall\r\n2:Floor\r\n3:Pattern\r\n4:Colour\r\n5:Pattern\r\n6:Colour\r\n7:Preview'),
+(4, 4, 1, 1, 'Bank', '', 'Exchange', 'ctlg_layout2', 'catalog_bank_headline1', 'catalog_bank_teaser,', 'The Habbo Exchange is where you can convert your Habbo Credits into a tradable currency. You can use this tradable currency to exchange Habbo Credits for Furni!', 'Click on the item you want for more information', 'EPIC YAY!', NULL),
+(5, 5, 1, 1, 'Rollers', '', 'Rollers', 'ctlg_layout2', 'catalog_roller_headline1', '', 'Move your imagination, while you move your Habbo!  Perfect for mazes, games, for keeping your queue moving or making your pet go round in circles for hours.  Available in multi-packs ? the more you buy the cheaper the Roller! Pink Rollers out now!', 'Click on a Roller to see more information!', 'You can fit 30 Rollers in a user flat!', NULL),
+(6, 6, 1, 1, 'Teleporters', '', 'Teleporters', 'ctlg_productpage3', 'catalog_doors_headline1', 'catalog_door_a,catalog_door_c,catalog_door_b,', 'Beam your user from one room to another with one of our cunningly disguised, space age teleports. Now you can link any two rooms together! Teleports are sold in pairs, so if you trade for them, check you\'re getting a linked pair.', 'Click on the item you want for more information', 'Beam!', NULL),
+(7, 7, 1, 1, 'Pets', '', 'Pets', 'ctlg_pets', 'catalog_pet_headline1', 'catalog_pets_teaser1,', 'Fluff and whiskers, meows and woofs! You\'\'re about to enter the world of small creatures with furry features. Find a new friend from our ever-changing selection. From faithful servants to playful playmates - here\'s where you\'\'ll find them all.', 'Find your own pet!', NULL, '1:Give name:'),
+(8, 8, 1, 1, 'Petstuff', '', 'Pet accessories', 'ctlg_layout2', 'catalog_pet_headline2', 'ctlg_pet_teaser1,', 'You\'\'ll need to take care of your pet to keep it happy and healthy. This section of the Catalogue has EVERYTHING you\'ll need to satisfy your pet\'s needs.', 'Click on the item you want for more information', 'You\'ll have to share it!', NULL),
+(9, 9, 1, 1, 'Area', '', 'Area', 'Area', 'catalog_area_headline1', 'catalog_area_teaser1,', 'Introducing the Area Collection...  Clean, chunky lines set this collection apart as a preserve of the down-to-earth person. It\'s beautiful in its simplicity, and welcoming to everyone.', 'Click on the item you want for more information', '2: Beautiful in it\'s simplicity!', NULL),
+(10, 10, 1, 1, 'Gothic', '', 'Gothic', 'ctlg_layout2', 'catalog_gothic_headline1', 'catalog_gothic_teaser1,', 'The Gothic section is full of medieval looking items. Create your own Gothic castle!', 'Click on the item you want for more information', NULL, NULL),
+(11, 11, 1, 1, 'Soundmachines', '', 'Trax', 'ctlg_soundmachine', 'catalog_djshop_headline1', 'catalog_djshop_teaser1,', 'Bring sound to your room! Purchase a sound machine plus some sample packs and create your own songs to play in your flat!<br>Moar soundsets coming soon!', 'Click on the item you want for more information', NULL, NULL),
+(12, 12, 1, 1, 'Candy', '', 'Candy', 'ctlg_layout2', 'catalog_candy_headline1', 'catalog_candy_teaser1,', 'Candy combines the cool, clean lines of the Mode collection with a softer, more soothing style. It\'\'s urban sharpness with a hint of the feminine.', 'Click on the item you want for more information', '2: WTF SCREW YOU LOL', NULL),
+(13, 13, 1, 1, 'Asian', '', 'Asian', 'ctlg_layout2', 'catalog_asian_headline1', 'catalog_asian_teaser1,', 'Introducing the Asian collection... These handcrafted items are the result of years of child slavery, some mixture of Ying and Yang and a mass-shipping from China. These authentic items fit in every oriental themed user flat. Made in China: fo\' real nigga', 'Click on the item you want for more information', NULL, NULL),
+(14, 14, 1, 1, 'Iced', '', 'Iced', 'ctlg_layout2', 'catalog_iced_headline1', 'catalog_iced_teaser1,', 'Introducing the Iced Collection...  For the person who needs no introduction. It\'s so chic, it says everything and nothing. It\'s a blank canvas, let your imagination to run wild!', 'Click on the item you want for more information', '2: These chairs are so filthy', NULL),
+(15, 15, 1, 1, 'Lodge', '', 'Lodge', 'ctlg_layout2', 'catalog_lodge_headline1', 'catalog_lodge_teaser1,', 'Introducing the Lodge Collection...  Do you appreciate the beauty of wood?  For that ski lodge effect, or to match that open fire... Lodge is the Furni of choice for people with that no frills approach to decorating.', 'Click on the item you want for more information', '2: I luv wood!', NULL),
+(16, 16, 1, 1, 'Plasto', '', 'Plasto', 'ctlg_plasto', 'catalog_plasto_headline1', '', 'Introducing The Plasto Collection...  Can you feel that 1970s vibe?  Decorate with Plasto and add some colour to your life. Choose a colour that reflect your mood, or just pick your favourite shade.', 'Select an item and a colour and buy!', 'New colors!', '1:Choose an item\r\n2:Select the color\r\n3:Preview'),
+(17, 17, 1, 1, 'Pura', '', 'Pura', 'ctlg_layout2', 'catalog_pura_headline1', 'catalog_pura_teaser1,', 'Introducing the Pura Collection...  This collection breathes fresh, clean air and cool tranquillity. Use it to create a special haven away from the hullabaloo of life outside the Hotel.', 'Click on the item you want for more information', NULL, NULL),
+(18, 18, 1, 1, 'Mode', '', 'Mode', 'ctlg_layout2', 'catalog_mode_headline1', 'catalog_mode_teaser1,', 'Introducing the Mode Collection...  Steely grey functionality combined with sleek designer upholstery. The person that chooses this furniture is a cool urban cat - streetwise, sassy and so slightly untouchable.', 'Click on the item you want for more information', '2: So shiny and new...', NULL),
+(19, 19, 1, 1, 'Accessories', '', 'Accessories', 'ctlg_layout2', 'catalog_extra_headline1', 'catalog_extra_teaser1,', 'Is your room missing something?  Well, now you can add the finishing touches that express your true personality. And don\'t forget, like everything else, these accessories can be moved about to suit your mood.', 'Click on the item you want for more information', '2: I herd u liek mudkips?', NULL),
+(20, 20, 1, 1, 'Bathroom', '', 'Bathroom', 'ctlg_layout2', 'catalog_bath_headline1', 'catalog_bath_teaser1,', 'Introducing the Bathroom Collection...  Have some fun with the cheerful bathroom collection. Give yourself and your guests somewhere to freshen up - vital if you want to avoid nasty niffs. Put your loo in a corner though...', 'Click on the item you want for more information', NULL, NULL),
+(21, 21, 1, 1, 'Plants', '', 'Plants', 'ctlg_layout2', 'catalog_plants_headline1', 'catalog_plants_teaser1,', 'Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!', 'Click on the item you want for more information', NULL, NULL),
+(22, 22, 1, 1, 'Sports', '', 'Sport', 'ctlg_layout2', 'catalog_sports_headline1', 'catalog_sports_teaser1,', 'For the sporty people, here is the Sports section! Create your own hockey stadium!', 'Click on the item you want for more information', '2:Yay!', NULL),
+(23, 23, 1, 1, 'Rugs', '', 'Rugs', 'ctlg_layout2', 'catalog_rugs_headline1', 'catalog_rugs_teaser1,', 'We have rugs for all occasions. All rugs are non-slip and washable.', 'Click on the item you want for more information', '2:We have rugs for ANY room!', NULL),
+(24, 24, 1, 1, 'Gallery', '', 'Gallery', 'ctlg_layout2', 'catalog_gallery_headline1', 'catalog_gallery_teaser1,', 'Adorn your walls with wondrous works of art, posters, plaques and wall hangings. We have items to suit all tastes, from kitsch to cool, traditional to modern.', 'Click on the item you want for more information', '2: Brighten up your walls!', NULL),
+(25, 25, 1, 1, 'Flags', '', 'Flags', 'ctlg_layout2', 'catalog_flags_headline1', 'catalog_flags_teaser1,', 'If you\'re feeling patriotic, get a flag to prove it. Our finest cloth flags will brighten up the dullest walls.', 'Click on the item you want for more information', '2:Hail Nillus!', NULL),
+(26, 26, 1, 1, 'Trophies', '', 'Trophies', 'ctlg_trophies', 'catalog_trophies_headline1', '', 'Reward your friends, or yourself with one of our fabulous glittering array of bronze, silver and gold trophies.<br><br>First choose the trophy model (click on the arrows to see all the different styles) and then the metal (click on the seal below the trop', NULL, NULL, '1:Type your inscription CAREFULLY, it\'s permanent!'),
+(27, 40, 5, 1, 'staffHC', '', 'Club Shop', 'ctlg_layout2', 'catalog_club_headline1', 'catalog_hc_teaser,', 'Welcome to the Club Shop! All \'Habbo Club membership gifts\' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.', 'Click on the item you want for more information', NULL, NULL),
+(28, 41, 5, 1, 'Dragons', '', 'Dragons', 'ctlg_layout2', 'catalog_rares_headline1', '', 'The Dragon page contains all of the Dragon Lamps.', 'Click on the item you want for more information', NULL, NULL),
+(29, 43, 5, 1, 'Sci-fi Doors', '', 'Sci-fi Doors', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(30, 43, 5, 1, 'Parasols', '', 'Parasols', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(31, 43, 5, 1, 'Screens', '', 'Screens', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(32, 32, 5, 1, 'Marquee', '', 'Marquee', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(33, 33, 5, 1, 'Pillows', '', 'Pillows', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(34, 34, 5, 1, 'Icecream', '', 'Icecream', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(35, 35, 5, 1, 'Smoke machines', '', 'Smoke machines', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(36, 36, 5, 1, 'Laser Ports', '', 'Laser Ports', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(37, 37, 5, 1, 'Amber Lamp', '', 'Amber Lamp', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(38, 38, 5, 1, 'Fountains', '', 'Fountains', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(39, 39, 5, 1, 'Elephants', '', 'Elephants', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(40, 40, 5, 1, 'Fans', '', 'Fans', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(41, 3, 1, 1, 'Camera', 'Camera2', 'Camera', 'ctlg_camera1', 'catalog_camera_headline1', 'campic_cam,campic_film,', 'With your Camera you can take pictures of just about anything in the hotel - your friend on the loo (hehe), your best dive in the Lido, or your room when you\'ve got it just right!<br><br>A camera costs 10 Credits (two free photos included).', NULL, NULL, '1:When you\'ve used your free photos, you\'ll need to buy more. Each roll of film takes five photos. Your Camera will show how much film you have left and loads the next roll automatically.<br><br>Each Film (5 photos) costs:'),
+(42, 3, 1, 0, 'Camera2', '', 'Camera', 'ctlg_camera2', 'catalog_camera_headline1', 'campic_help,', 'CAMERA FUNCTIONS<br><br>1. Press this button to take a photo.<br>2. Photo cancel - for when you\'ve chopped off your friend\'s head!<br>3. Zoom in and out.<br>4. Photo counter - shows how much film you have left<br>5. Caption Box - write your caption before saving the photo.<br>6. Save - this moves the photo to your giant.<br>You can give photos to your friends, or put them on the wall like posters.', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1121,7 +1127,10 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (417, 'present_gen3', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (418, 'present_gen4', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (419, 'present_gen5', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
-(420, 'present_gen6', '', 1, 1, 1, 'solid,present,can_stack_on_top');
+(420, 'present_gen6', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(421, 'camera', '', 1, 1, 0, 'solid'),
+(422, 'photo', '', 0, 0, 0, 'photo,wall_item'),
+(423, 'film', '', 0, 0, 0, '');
 
 -- --------------------------------------------------------
 
@@ -1136,6 +1145,20 @@ CREATE TABLE `items_moodlight_presets` (
   `preset_2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255',
   `preset_3` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `items_photos`
+--
+
+CREATE TABLE `items_photos` (
+  `photo_id` int(11) NOT NULL,
+  `photo_user_id` bigint(11) NOT NULL,
+  `timestamp` bigint(11) NOT NULL,
+  `photo_data` blob NOT NULL,
+  `photo_checksum` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1541,7 +1564,8 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180715152740'),
 ('20180724140234'),
 ('20180729161108'),
-('20180730120357');
+('20180730120357'),
+('20180802105259');
 
 -- --------------------------------------------------------
 
@@ -1687,6 +1711,13 @@ ALTER TABLE `items_moodlight_presets`
   ADD PRIMARY KEY (`item_id`);
 
 --
+-- Indexes for table `items_photos`
+--
+ALTER TABLE `items_photos`
+  ADD PRIMARY KEY (`photo_id`),
+  ADD UNIQUE KEY `photo_id` (`photo_id`);
+
+--
 -- Indexes for table `items_teleporter_links`
 --
 ALTER TABLE `items_teleporter_links`
@@ -1766,47 +1797,56 @@ ALTER TABLE `users_badges`
 -- AUTO_INCREMENT for table `catalogue_items`
 --
 ALTER TABLE `catalogue_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=513;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=515;
+
 --
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=424;
+
 --
 -- AUTO_INCREMENT for table `messenger_messages`
 --
 ALTER TABLE `messenger_messages`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000;
+
 --
 -- AUTO_INCREMENT for table `rooms_categories`
 --
 ALTER TABLE `rooms_categories`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=121;
+
 --
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`
 --
 ALTER TABLE `soundmachine_songs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
 --
 -- Constraints for dumped tables
 --
