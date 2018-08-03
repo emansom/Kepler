@@ -28,6 +28,9 @@ public class AfkCommand extends Command {
             return;
         }
 
+        if (player.getRoomUser().isWalking()) {
+            return;
+        }
 
         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
             player.getRoomUser().setStatus(StatusType.SLEEP, "");
