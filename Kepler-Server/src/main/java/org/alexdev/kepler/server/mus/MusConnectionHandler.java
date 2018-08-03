@@ -155,6 +155,10 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
                     return;
                 }
 
+                if (client.getUserId() < 1) {
+                    return;
+                }
+
                 reply = new MusMessage();
                 reply.setSubject("BINARYDATA");
                 reply.setContentType(MusTypes.PropList);
