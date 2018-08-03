@@ -131,6 +131,8 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
                 photo.setCustomData(DateUtil.getDateAsString(timeSeconds) + "\r" + photoText);
                 ItemDao.newItem(photo);
 
+                PhotoDao.addPhoto(photo.getId(), client.getUserId(), DateUtil.getCurrentTimeSeconds(), image, cs);
+
                 reply = new MusMessage();
                 reply.setSubject("BINDATA_SAVED");
                 reply.setContentType(MusTypes.String);
@@ -141,9 +143,7 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
                 player.getInventory().getView("new");
 
                 CurrencyDao.decreaseFilm(player.getDetails(), 1);
-                player.send(new FILM(player.getDetails()));
-
-                PhotoDao.addPhoto(photo.getId(), client.getUserId(), DateUtil.getCurrentTimeSeconds(), image, cs);
+                player.send(new FILM(player.getDetails()));;
             }
 
             if (message.getSubject().equals("GETBINDATA")) {
