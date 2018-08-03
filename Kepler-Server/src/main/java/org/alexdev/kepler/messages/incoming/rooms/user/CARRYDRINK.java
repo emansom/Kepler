@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -9,6 +10,10 @@ public class CARRYDRINK implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         if (player.getRoomUser().getRoom() == null) {
+            return;
+        }
+
+        if (player.getRoomUser().containsStatus(StatusType.CARRY_ITEM)) {
             return;
         }
 
