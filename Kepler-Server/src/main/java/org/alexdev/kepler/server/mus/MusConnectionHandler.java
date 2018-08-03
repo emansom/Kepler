@@ -8,12 +8,18 @@ import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PhotoDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.Photo;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.game.room.tasks.CameraTask;
+import org.alexdev.kepler.game.room.tasks.WaveTask;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
+import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 import org.alexdev.kepler.messages.outgoing.user.currencies.FILM;
 import org.alexdev.kepler.server.mus.connection.MusClient;
 import org.alexdev.kepler.server.mus.streams.MusMessage;
@@ -25,6 +31,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage> {
     final private static AttributeKey<MusClient> MUS_CLIENT_KEY = AttributeKey.valueOf("MusClient");
@@ -114,16 +122,20 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
                     return;
                 }
 
+                if (client.getUserId() < 1) {
+                    return;
+                }
+
+                if (player.getRoomUser().getRoom() == null) {
+                    return;
+                }
+
                 long timeSeconds = DateUtil.getCurrentTimeSeconds();
 
                 String time = message.getContentPropList().getPropAsString("time");
                 Integer cs = message.getContentPropList().getPropAsInt("cs");
                 byte[] image = message.getContentPropList().getPropAsBytes("image");
                 String photoText = client.getPhotoText();
-
-                if (client.getUserId() < 1) {
-                    return;
-                }
 
                 Item photo = new Item();
                 photo.setOwnerId(client.getUserId());
@@ -143,7 +155,18 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
                 player.getInventory().getView("new");
 
                 CurrencyDao.decreaseFilm(player.getDetails(), 1);
-                player.send(new FILM(player.getDetails()));;
+                player.send(new FILM(player.getDetails()));
+
+                String item = player.getRoomUser().getStatus(StatusType.CARRY_ITEM).getValue();
+
+                player.getRoomUser().getStatuses().remove(StatusType.CARRY_ITEM.getStatusCode());
+                player.getRoomUser().setStatus(StatusType.USE_ITEM, item);
+
+                if (!player.getRoomUser().isWalking()) {
+                    player.getRoomUser().getRoom().send(new USER_STATUSES(List.of(player)));
+                }
+
+                GameScheduler.getInstance().getSchedulerService().schedule(new CameraTask(player), 1, TimeUnit.SECONDS);
             }
 
             if (message.getSubject().equals("GETBINDATA")) {
