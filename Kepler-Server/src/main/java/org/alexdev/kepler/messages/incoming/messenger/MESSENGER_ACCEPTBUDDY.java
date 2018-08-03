@@ -26,7 +26,9 @@ public class MESSENGER_ACCEPTBUDDY implements MessageEvent {
             MessengerDao.removeRequest(userId, player.getDetails().getId());
             MessengerDao.removeRequest(player.getDetails().getId(), userId);
 
-            player.send(new NEW_FRIEND(requestFrom));
+            if (requestFrom != null) {
+                player.send(new NEW_FRIEND(requestFrom));
+            }
 
             player.getMessenger().getRequests().remove(requestFrom);
             player.getMessenger().getFriends().add(requestFrom);
@@ -35,7 +37,10 @@ public class MESSENGER_ACCEPTBUDDY implements MessageEvent {
 
             if (friend != null) {
                 requestFrom = friend.getMessenger().getRequest(player.getDetails().getId());
-                friend.send(new NEW_FRIEND(requestFrom));
+
+                if (requestFrom != null) {
+                    friend.send(new NEW_FRIEND(requestFrom));
+                }
 
                 friend.getMessenger().getRequests().remove(requestFrom);
                 friend.getMessenger().getFriends().add(requestFrom);
