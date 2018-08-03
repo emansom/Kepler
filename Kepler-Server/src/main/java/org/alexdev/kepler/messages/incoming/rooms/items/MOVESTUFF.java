@@ -42,6 +42,18 @@ public class MOVESTUFF implements MessageEvent {
 
         Position oldPosition = item.getPosition().copy();
 
+        boolean isRotation = false;
+
+        if (item.getPosition().getRotation() != rotation) {
+            isRotation = true;
+        }
+
+        if (isRotation) {
+            if (item.getRollingData() != null) {
+                return; // Don't allow rotating when rolling.
+            }
+        }
+
         if ((oldPosition.getX() == x &&
             oldPosition.getY() == y &&
             oldPosition.getRotation() == rotation) || !item.isValidMove(item, room, x, y, rotation)) {
@@ -53,12 +65,6 @@ public class MOVESTUFF implements MessageEvent {
         item.getPosition().setX(x);
         item.getPosition().setY(y);
         item.getPosition().setRotation(rotation);
-
-        boolean isRotation = false;
-
-        if (item.getPosition().getRotation() != oldPosition.getRotation()) {
-            isRotation = true;
-        }
 
         room.getMapping().moveItem(item, isRotation, oldPosition);
     }
