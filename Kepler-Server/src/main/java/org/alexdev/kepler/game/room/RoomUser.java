@@ -266,6 +266,11 @@ public class RoomUser {
      * @param carryName the carry name to add
      */
     public void carryItem(int carryId, String carryName) {
+        // Don't let them carry a drink if they're carrying a camera
+        if (this.containsStatus(StatusType.CARRY_ITEM)) {
+            return;
+        }
+
         DrinkType[] drinks = new DrinkType[26];
         drinks[1] = DrinkType.DRINK;  // Tea
         drinks[2] = DrinkType.DRINK;  // Juice

@@ -13,10 +13,6 @@ public class CARRYDRINK implements MessageEvent {
             return;
         }
 
-        if (player.getRoomUser().containsStatus(StatusType.CARRY_ITEM)) {
-            return;
-        }
-
         String contents = reader.contents();
 
         if (StringUtil.isNumber(contents)) {
