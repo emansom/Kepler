@@ -33,7 +33,7 @@ public class G_IDATA implements MessageEvent {
                 text = item.getCustomData().substring(6);
             }
 
-            player.send(new IDATA(item.getId(), colour, text));
+            player.send(new IDATA(item, colour, text));
         } else {
             player.send(new IDATA(item));
         }
