@@ -89,7 +89,7 @@ public class Player extends Entity {
         if (!this.details.hasClubSubscription()) {
             // If the database still thinks we have Habbo club even after it expired, reset it back to 0.
             if (this.details.getClubExpiration() > 0) {
-                this.details.setFirstClubSubscription(0);
+                //this.details.setFirstClubSubscription(0);
                 this.details.setClubExpiration(0);
                 this.details.getBadges().remove("HC1"); // If their HC ran out, remove badge.
                 this.details.getBadges().remove("HC2"); // No gold badge when not subscribed.
