@@ -153,20 +153,6 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
 
                 player.getInventory().getItems().add(photo);
                 player.getInventory().getView("new");
-
-                CurrencyDao.decreaseFilm(player.getDetails(), 1);
-                player.send(new FILM(player.getDetails()));
-
-                String item = player.getRoomUser().getStatus(StatusType.CARRY_ITEM).getValue();
-
-                player.getRoomUser().getStatuses().remove(StatusType.CARRY_ITEM.getStatusCode());
-                player.getRoomUser().setStatus(StatusType.USE_ITEM, item);
-
-                if (!player.getRoomUser().isWalking()) {
-                    player.getRoomUser().getRoom().send(new USER_STATUSES(List.of(player)));
-                }
-
-                GameScheduler.getInstance().getSchedulerService().schedule(new CameraTask(player), 1, TimeUnit.SECONDS);
             }
 
             if (message.getSubject().equals("GETBINDATA")) {
