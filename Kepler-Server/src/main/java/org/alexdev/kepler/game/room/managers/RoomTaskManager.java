@@ -8,7 +8,8 @@ import org.alexdev.kepler.game.room.tasks.StatusTask;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -16,11 +17,11 @@ import java.util.concurrent.TimeUnit;
 public class RoomTaskManager {
     private Room room;
     private ScheduledExecutorService executorService;
-    private HashMap<String, Pair<ScheduledFuture<?>, Runnable>> processTasks;
+    private Map<String, Pair<ScheduledFuture<?>, Runnable>> processTasks;
 
     public RoomTaskManager(Room room) {
         this.room = room;
-        this.processTasks = new HashMap<>();
+        this.processTasks = new ConcurrentHashMap<>();
         this.executorService = GameScheduler.getInstance().getSchedulerService();
     }
 
