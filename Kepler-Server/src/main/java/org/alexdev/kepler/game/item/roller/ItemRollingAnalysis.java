@@ -52,6 +52,14 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
             }
         }
 
+        for (Item floorItem : room.getItemManager().getFloorItems()) {
+            if (floorItem.getRollingData() != null) {
+                if (floorItem.getRollingData().getNextPosition().equals(front)) {
+                    return  null;
+                }
+            }
+        }
+
         double nextHeight = item.getPosition().getZ();//this.room.getModel().getTileHeight(roller.getPosition().getX(), roller.getPosition().getY());
         boolean subtractRollerHeight = true;
 
@@ -125,7 +133,9 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
             nextHeight = GameConfiguration.getInstance().getInteger("stack.height.limit");
         }
 
-        return new Position(front.getX(), front.getY(), nextHeight);
+        Position nextPosition = new Position(front.getX(), front.getY(), nextHeight);
+        item.setRollingData(new RollingData(item, roller, item.getPosition().copy(), nextPosition));
+        return nextPosition;
     }
     
     @Override
