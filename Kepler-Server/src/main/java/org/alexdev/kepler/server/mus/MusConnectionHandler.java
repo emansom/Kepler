@@ -153,6 +153,9 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
 
                 player.getInventory().getItems().add(photo);
                 player.getInventory().getView("new");
+
+                CurrencyDao.decreaseFilm(player.getDetails(), 1);
+                player.send(new FILM(player.getDetails()));
             }
 
             if (message.getSubject().equals("GETBINDATA")) {

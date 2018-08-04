@@ -19,9 +19,6 @@ public class USEITEM implements MessageEvent {
         if (!player.getRoomUser().containsStatus(StatusType.CARRY_ITEM)) {
             return;
         }
-
-        CurrencyDao.decreaseFilm(player.getDetails(), 1);
-        player.send(new FILM(player.getDetails()));
         
         String item = player.getRoomUser().getStatus(StatusType.CARRY_ITEM).getValue();
 
