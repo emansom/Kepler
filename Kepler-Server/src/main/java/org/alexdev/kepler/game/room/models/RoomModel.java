@@ -50,34 +50,33 @@ public class RoomModel {
 
         StringBuilder temporaryHeightmap = new StringBuilder();
 
-            for (int y = 0; y < this.mapSizeY; y++) {
-                String line = lines[y];
+        for (int y = 0; y < this.mapSizeY; y++) {
+            String line = lines[y];
 
-                for (int x = 0; x < this.mapSizeX; x++) {
-                    String tile = Character.toString(line.charAt(x));
+            for (int x = 0; x < this.mapSizeX; x++) {
+                String tile = Character.toString(line.charAt(x));
 
-                    if (StringUtil.isNumber(tile)) {
-                        this.tileStates[x][y] = RoomTileState.OPEN;
-                        this.tileHeights[x][y] = Double.parseDouble(tile);
-                    } else {
-                        this.tileStates[x][y] = RoomTileState.CLOSED;
-                        this.tileHeights[x][y] = 0;
-                    }
-
-                    if (x == this.doorX && y == this.doorY) {
-                        this.tileStates[x][y] = RoomTileState.OPEN;
-                        this.tileHeights[x][y] = this.doorZ;
-                    }
-
-                    temporaryHeightmap.append(tile);
+                if (StringUtil.isNumber(tile)) {
+                    this.tileStates[x][y] = RoomTileState.OPEN;
+                    this.tileHeights[x][y] = Double.parseDouble(tile);
+                } else {
+                    this.tileStates[x][y] = RoomTileState.CLOSED;
+                    this.tileHeights[x][y] = 0;
                 }
 
-                temporaryHeightmap.append("\r");
+                if (x == this.doorX && y == this.doorY) {
+                    this.tileStates[x][y] = RoomTileState.OPEN;
+                    this.tileHeights[x][y] = this.doorZ;
+                }
+
+                temporaryHeightmap.append(tile);
             }
 
-            this.heightmap = temporaryHeightmap.toString();
-
+            temporaryHeightmap.append("\r");
         }
+
+        this.heightmap = temporaryHeightmap.toString();
+    }
 
     /**
      * Get the tile state by given coordinates. This
