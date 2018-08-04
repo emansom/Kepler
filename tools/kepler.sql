@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 04, 2018 at 07:55 AM
+-- Generation Time: Aug 04, 2018 at 08:16 AM
 -- Server version: 10.3.7-MariaDB
 -- PHP Version: 7.2.6
 
@@ -1570,7 +1570,8 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180729161108'),
 ('20180730120357'),
 ('20180802105259'),
-('20180804021505');
+('20180804021505'),
+('20180804075142');
 
 -- --------------------------------------------------------
 
@@ -1649,7 +1650,8 @@ CREATE TABLE `users` (
   `badge` char(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
-  `sound_enabled` tinyint(1) NOT NULL DEFAULT 1
+  `sound_enabled` tinyint(1) NOT NULL DEFAULT 1,
+  `tutorial_finished` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
