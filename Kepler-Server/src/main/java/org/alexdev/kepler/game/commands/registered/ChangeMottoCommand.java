@@ -35,7 +35,7 @@ public class ChangeMottoCommand extends Command {
         }
 
         // Filter out possible packet injection attacks
-        String motto = StringUtil.filterInput(String.join("", args), true);
+        String motto = StringUtil.filterInput(String.join(" ", args), true);
 
         // Update motto
         player.getDetails().setMotto(motto);
