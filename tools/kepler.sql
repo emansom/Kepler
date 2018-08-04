@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 03, 2018 at 11:00 PM
+-- Generation Time: Aug 04, 2018 at 07:55 AM
 -- Server version: 10.3.7-MariaDB
 -- PHP Version: 7.2.6
 
@@ -1346,7 +1346,9 @@ INSERT INTO `rooms` (`id`, `owner_id`, `category`, `name`, `description`, `model
 (55, '0', 12, 'Upper Hallways II', 'hallway_ii', 'hallway7', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
 (56, '0', 12, 'Upper Hallways III', 'hallway_ii', 'hallway6', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
 (57, '0', 12, 'Upper Hallways IV', 'hallway_ii', 'hallway10', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(58, '0', 12, 'Upper Hallways V', 'hallway_ii', 'hallway11', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 1, 25);
+(58, '0', 12, 'Upper Hallways V', 'hallway_ii', 'hallway11', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 1, 25),
+(59, '0', 7, 'Star Lounge', 'star_lounge', 'star_lounge', 'hh_room_starlounge', 0, 0, 1, 0, 0, '', 0, 35),
+(60, '0', 8, 'Club Orient', 'orient', 'orient', 'hh_room_orient', 0, 0, 1, 0, 0, '', 1, 35);
 
 -- --------------------------------------------------------
 
@@ -1498,7 +1500,9 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 (78, 'hallway7', 'hallway7', 7, 2, 1, 4, 'xxxxxx11xxxxxxxxxxxx|xxxxxx111xxxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx000000000000xxxx|xxxx000000000000xxxx|00000000000000000000|00000000000000000000|00000000000000000000|00000000000000000000|xxxx000000000000xxxx|xxxx000000000000xxxx', 1),
 (79, 'hallway6', 'hallway6', 1, 10, 1, 2, 'xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx', 1),
 (80, 'hallway10', 'hallway10', 3, 23, 1, 1, 'xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx', 1),
-(81, 'hallway11', 'hallway11', 20, 3, 0, 6, 'xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx', 1);
+(81, 'hallway11', 'hallway11', 20, 3, 0, 6, 'xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx', 1),
+(82, 'star_lounge', 'star_lounge', 36, 35, 0, 6, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx2222x4444442222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222x444x32222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222xx4xx22222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222222111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222222111xxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222222222xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222222222xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222221111xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333xx2x22222220000xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx333333332222222000000xxxxxxxxxxxxx|xxxxxxxxxxxxxxxx333333332222222x0000000xxxxxxxxxxx|xxxxxxxxxxxxxxxxx33333332222222x0000000xxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxx222222000000xxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 1),
+(83, 'orient', 'orient', 32, 20, 1, 6, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1000000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xx000x000xx111x111xxx|xxxxxxxxxxxxxx1xx000x000xxxxxx1111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxx111111111111xx000x000x111111111xx|xxx1xxxxxxxxxxxxx000x000x111111111xx|xxx1x1111111111000000000x111111111xx|xxx1x1111111111000000000xx1111111xxx|xxx1x11xxxxxx11000000000xx1111111100|xxx111xxxxxxx11000000000011111111100|xxx111xxxxxxx11000000000011111111100|xxxxx1xxxxxxx11000000000011111111100|xxxxx11xxxxxx11000000000xx1111111100|xxxxx1111111111000000000xx1111111xxx|xxxxx1111111111xx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x00xx11xxxx111xx|xxxxxxxxxxxxxxxxxxxxxxxxxx11111111xx|', 1);
 
 -- --------------------------------------------------------
 
@@ -1565,7 +1569,8 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180724140234'),
 ('20180729161108'),
 ('20180730120357'),
-('20180802105259');
+('20180802105259'),
+('20180804021505');
 
 -- --------------------------------------------------------
 
@@ -1833,7 +1838,7 @@ ALTER TABLE `rooms_categories`
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=82;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`
