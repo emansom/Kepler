@@ -42,42 +42,42 @@ public class RoomModel {
     public void parse() {
         String[] lines = this.heightmap.split("\r");
 
-        this.mapSizeX = lines.length;
-        this.mapSizeY = lines[0].length();
+        this.mapSizeY = lines.length;
+        this.mapSizeX = lines[0].length();
 
         this.tileStates = new RoomTileState[this.mapSizeX][this.mapSizeY];
         this.tileHeights = new double[this.mapSizeX][this.mapSizeY];
 
         StringBuilder temporaryHeightmap = new StringBuilder();
 
-        for (int x = 0; x < this.mapSizeX; x++) {
-            String line = lines[x];
-
             for (int y = 0; y < this.mapSizeY; y++) {
-                String tile = Character.toString(line.charAt(y));
+                String line = lines[y];
 
-                if (StringUtil.isNumber(tile)) {
-                    this.tileStates[x][y] = RoomTileState.OPEN;
-                    this.tileHeights[x][y] = Double.parseDouble(tile);
-                } else {
-                    this.tileStates[x][y] = RoomTileState.CLOSED;
-                    this.tileHeights[x][y] = 0;
+                for (int x = 0; x < this.mapSizeX; x++) {
+                    String tile = Character.toString(line.charAt(x));
+
+                    if (StringUtil.isNumber(tile)) {
+                        this.tileStates[x][y] = RoomTileState.OPEN;
+                        this.tileHeights[x][y] = Double.parseDouble(tile);
+                    } else {
+                        this.tileStates[x][y] = RoomTileState.CLOSED;
+                        this.tileHeights[x][y] = 0;
+                    }
+
+                    if (x == this.doorX && y == this.doorY) {
+                        this.tileStates[x][y] = RoomTileState.OPEN;
+                        this.tileHeights[x][y] = this.doorZ;
+                    }
+
+                    temporaryHeightmap.append(tile);
                 }
 
-                if (x == this.doorX && y == this.doorY) {
-                    this.tileStates[x][y] = RoomTileState.OPEN;
-                    this.tileHeights[x][y] = this.doorZ;
-                }
-
-                temporaryHeightmap.append(tile);
+                temporaryHeightmap.append("\r");
             }
 
-            temporaryHeightmap.append("\r");
+            this.heightmap = temporaryHeightmap.toString();
+
         }
-
-        this.heightmap = temporaryHeightmap.toString();
-
-    }
 
     /**
      * Get the tile state by given coordinates. This
