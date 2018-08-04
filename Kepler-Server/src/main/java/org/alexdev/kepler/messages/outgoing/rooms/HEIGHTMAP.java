@@ -18,7 +18,7 @@ public class HEIGHTMAP extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeString(this.heightmap);
+        response.write(this.heightmap);
     }
 
     @Override
