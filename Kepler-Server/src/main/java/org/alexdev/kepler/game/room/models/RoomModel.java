@@ -42,17 +42,17 @@ public class RoomModel {
     public void parse() {
         String[] lines = this.heightmap.split("\r");
 
-        this.mapSizeY = lines.length;
-        this.mapSizeX = lines[0].length();
+        this.mapSizeX = lines.length;
+        this.mapSizeY = lines[0].length();
 
         this.tileStates = new RoomTileState[this.mapSizeX][this.mapSizeY];
         this.tileHeights = new double[this.mapSizeX][this.mapSizeY];
+        
+        for (int x = 0; x < this.mapSizeX; x++) {
+            String line = lines[x];
 
-        for (int y = 0; y < this.mapSizeY; y++) {
-            String line = lines[y];
-
-            for (int x = 0; x < this.mapSizeX; x++) {
-                String tile = Character.toString(line.charAt(x));
+            for (int y = 0; y < this.mapSizeY; y++) {
+                String tile = Character.toString(line.charAt(y));
 
                 if (StringUtil.isNumber(tile)) {
                     this.tileStates[x][y] = RoomTileState.OPEN;
