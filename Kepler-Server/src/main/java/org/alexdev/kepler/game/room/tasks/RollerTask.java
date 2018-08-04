@@ -49,8 +49,8 @@ public class RollerTask implements Runnable {
                     Position nextPosition = itemRollingAnalysis.canRoll(item, roller, this.room);
 
                     if (nextPosition != null) {
-                        //itemsRolling.put(item, Pair.of(roller, nextPosition));
-                        itemRollingAnalysis.doRoll(item, roller, this.room, item.getPosition().copy(), nextPosition);
+                        itemsRolling.put(item, Pair.of(roller, nextPosition));
+                        //itemRollingAnalysis.doRoll(item, roller, this.room, item.getPosition().copy(), nextPosition);
                         this.room.getMapping().regenerateItemCollision();
 
 
@@ -66,8 +66,8 @@ public class RollerTask implements Runnable {
                     Position nextPosition = entityRollingAnalysis.canRoll(entity, roller, this.room);
 
                     if (nextPosition != null) {
-                        //entitiesRolling.put(entity, Pair.of(roller, nextPosition));
-                        entityRollingAnalysis.doRoll(entity, roller, this.room, entity.getRoomUser().getPosition().copy(), nextPosition);
+                        entitiesRolling.put(entity, Pair.of(roller, nextPosition));
+                        //entityRollingAnalysis.doRoll(entity, roller, this.room, entity.getRoomUser().getPosition().copy(), nextPosition);
                         this.room.getMapping().regenerateEntityCollision();
                     }
                 }
@@ -75,12 +75,14 @@ public class RollerTask implements Runnable {
 
             // Perform roll animation for item
             for (var kvp : itemsRolling.entrySet()) {
+                itemRollingAnalysis.doRoll(kvp.getKey(),
+                        kvp.getValue().getLeft(), this.room, kvp.getKey().getPosition(), kvp.getValue().getRight());
             }
 
             // Perform roll animation for entity
             for (var kvp : entitiesRolling.entrySet()) {
-                //entityRollingAnalysis.doRoll(kvp.getKey(),
-                       // kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
+                entityRollingAnalysis.doRoll(kvp.getKey(),
+                       kvp.getValue().getLeft(), this.room, kvp.getKey().getRoomUser().getPosition(), kvp.getValue().getRight());
             }
 
             if (itemsRolling.size() > 0) {
