@@ -204,6 +204,11 @@ public class CurrencyDao {
             // Set amount
             if (row != null && row.next()) {
                 int updatedAmount = row.getInt("credits");
+
+                if (updatedAmount < 0) {
+                    updatedAmount = 0;
+                }
+
                 details.setCredits(updatedAmount);
             }
 
@@ -324,6 +329,11 @@ public class CurrencyDao {
             // Set amount
             if (row != null && row.next()) {
                 int updatedAmount = row.getInt("tickets");
+
+                if (updatedAmount < 0) {
+                    updatedAmount = 0;
+                }
+
                 details.setTickets(updatedAmount);
             }
 
@@ -444,6 +454,11 @@ public class CurrencyDao {
             // Set amount
             if (row != null && row.next()) {
                 int updatedAmount = row.getInt("film");
+
+                if (updatedAmount < 0) {
+                    updatedAmount = 0;
+                }
+
                 details.setFilm(updatedAmount);
             }
 
