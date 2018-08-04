@@ -9,6 +9,8 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.util.StringUtil;
 
+import java.util.Arrays;
+
 public class ChangeMottoCommand extends Command {
     @Override
     public void addPermissions() {
@@ -38,7 +40,7 @@ public class ChangeMottoCommand extends Command {
         }
 
         // Filter out possible packet injection attacks
-        String motto = StringUtil.filterInput(args[0], true);
+        String motto = StringUtil.filterInput(String.join("", args), true);
 
         // Update motto
         player.getDetails().setMotto(motto);
