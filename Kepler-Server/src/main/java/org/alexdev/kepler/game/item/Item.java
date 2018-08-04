@@ -124,7 +124,7 @@ public class Item {
         }
 
         for (Entity entity : entitiesToUpdate) {
-            entity.getRoomUser().invokeItem();
+            entity.getRoomUser().invokeItem(false);
         }
     }
 

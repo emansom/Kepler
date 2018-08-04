@@ -189,7 +189,7 @@ public class RoomUser {
             return;
         }
 
-        this.invokeItem();
+        this.invokeItem(false);
 
         // Use walk to next tile if on pool queue
         PoolHandler.checkPoolQueue(this.entity);
@@ -197,7 +197,7 @@ public class RoomUser {
     /**
      * Triggers the current item that the player has walked on top of.
      */
-    public void invokeItem() {
+    public void invokeItem(boolean isRolling) {
         boolean needsUpdate = false;
         double height = this.getTile().getWalkingHeight();
 
@@ -242,8 +242,10 @@ public class RoomUser {
                 needsUpdate = true;
             }
 
-            if (needsUpdate && this.getLookTimer() > -1) {
-                this.position.setHeadRotation(headRotation);
+            if (isRolling) {
+                if (needsUpdate && this.getLookTimer() > -1) {
+                    this.position.setHeadRotation(headRotation);
+                }
             }
 
             if (item.getDefinition().getSprite().equals("poolBooth") ||

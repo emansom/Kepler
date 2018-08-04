@@ -151,7 +151,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         room.send(new SLIDE_OBJECT(entity, nextPosition, roller.getId(), displayNextHeight));
 
         if (!entity.getRoomUser().isSittingOnGround()) {
-            entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
+            entity.getRoomUser().invokeItem(true); // Invoke the current tile item if they're not sitting on rollers.
         }
 
         entity.getRoomUser().getPosition().setX(nextPosition.getX());
@@ -160,7 +160,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         //if (nextTile.hasWalkableFurni() && nextTile.getHighestItem().getDefinition().isChairOrBed()) {
         if (!entity.getRoomUser().isSittingOnGround() && !entity.getRoomUser().isSittingOnChair()) {
-            entity.getRoomUser().invokeItem();
+            entity.getRoomUser().invokeItem(false);
         }
 
         entity.getRoomUser().setNeedsUpdate(true);
