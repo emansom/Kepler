@@ -142,6 +142,7 @@ public class RoomUser {
         RoomTile tile = this.room.getMapping().getTile(X, Y);
 
         if (tile == null) {
+            //System.out.println("User requested " + X + ", " + Y + " from " + this.position);
             return;
         }
 
