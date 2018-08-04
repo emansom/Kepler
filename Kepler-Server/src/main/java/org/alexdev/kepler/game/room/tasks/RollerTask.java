@@ -50,7 +50,7 @@ public class RollerTask implements Runnable {
 
                     if (nextPosition != null) {
                         //itemsRolling.put(item, Pair.of(roller, nextPosition));
-                        itemRollingAnalysis.doRoll(item, roller, this.room, item.getPosition(), nextPosition);
+                        itemRollingAnalysis.doRoll(item, roller, this.room, item.getPosition().copy(), nextPosition);
                         this.room.getMapping().regenerateItemCollision();
 
 
@@ -67,7 +67,7 @@ public class RollerTask implements Runnable {
 
                     if (nextPosition != null) {
                         //entitiesRolling.put(entity, Pair.of(roller, nextPosition));
-                        entityRollingAnalysis.doRoll(entity, roller, this.room, entity.getRoomUser().getPosition(), nextPosition);
+                        entityRollingAnalysis.doRoll(entity, roller, this.room, entity.getRoomUser().getPosition().copy(), nextPosition);
                         this.room.getMapping().regenerateEntityCollision();
                     }
                 }
@@ -84,11 +84,11 @@ public class RollerTask implements Runnable {
             }
 
             if (itemsRolling.size() > 0) {
-                this.room.getMapping().regenerateItemCollision();
+                //this.room.getMapping().regenerateItemCollision();
             }
 
             if (entitiesRolling.size() > 0) {
-                this.room.getMapping().regenerateEntityCollision();
+                //this.room.getMapping().regenerateEntityCollision();
             }
 
             if (itemsRolling.size() > 0) {
