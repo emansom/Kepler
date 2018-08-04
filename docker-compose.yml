@@ -1,7 +1,7 @@
 version: '3.2'
 services:
     kepler:
-        image: ewout/kepler:0.1.98
+        image: ewout/kepler:1.0.1
         restart: always
         environment:
             MYSQL_HOST: mariadb
@@ -19,6 +19,7 @@ services:
             - "12321"
             - "12309"
         ports:
+            - "12322:12322"
             - "12321:12321"
 
     matcha:
