@@ -34,11 +34,6 @@ public class ChangeMottoCommand extends Command {
             return;
         }
 
-        if (args.length == 0) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "No motto provided"));
-            return;
-        }
-
         // Filter out possible packet injection attacks
         String motto = StringUtil.filterInput(String.join("", args), true);
 
