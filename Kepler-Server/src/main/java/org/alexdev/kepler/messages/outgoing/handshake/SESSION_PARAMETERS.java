@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.handshake;
 
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -51,6 +52,12 @@ public class SESSION_PARAMETERS extends MessageComposer {
         }
     }
 
+    private PlayerDetails details;
+
+    public SESSION_PARAMETERS(PlayerDetails details) {
+        this.details = details;
+    }
+
     @Override
     public void compose(NettyResponse response) {
         Map<SessionParamType, String> parameters = new HashMap<>();
@@ -63,7 +70,7 @@ public class SESSION_PARAMETERS extends MessageComposer {
         parameters.put(SessionParamType.PARTNER_INTEGRATION_ENABLED, "0");  // conf_partner_integration. Value is either 1 or 0 (enabled or disabled)
         parameters.put(SessionParamType.ALLOW_PROFILE_EDITING, GameConfiguration.getInstance().getBoolean("profile.editing") ? "1" : "0"); // allow_profile_editing. Enables the client (in-game) profile editor
         parameters.put(SessionParamType.TRACKING_HEADER, ""); // tracking_header. Value is unknown
-        parameters.put(SessionParamType.TUTORIAL_ENABLED, GameConfiguration.getInstance().getBoolean("tutorial.enabled") ? "1" : "0"); // tutorial_enabled. Value is either 1 or 0 (enabled or disabled)
+        parameters.put(SessionParamType.TUTORIAL_ENABLED, this.details.isTutorialFinished() ? "0" : "1"); // tutorial_enabled. Value is either 1 or 0 (enabled or disabled)
 
         response.writeInt(parameters.size());
 
