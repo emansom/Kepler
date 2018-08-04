@@ -39,7 +39,7 @@ public class WHISPER implements MessageEvent {
         if (whisperUser != null) {
             whisperUser.send(chatMessage);
         } else {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "User not found. Whisper not send."));
+            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "User not found. Whisper not sent."));
         }
     }
 }
