@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerDetails {
+    // Basic info
     private int id;
     private String username;
     private String figure;
@@ -17,19 +18,29 @@ public class PlayerDetails {
     private String motto;
     private String consoleMotto;
     private char sex;
+
+    // Currencies
     private int tickets;
     private int film;
     private int rank;
-    private long lastOnline;
+
+    // Club
     private long firstClubSubscription;
     private long clubExpiration;
+
+    // Badges
     private String currentBadge;
     private boolean showBadge;
     private List<String> badges;
+
+    // Settings
     private boolean allowStalking;
     private boolean soundEnabled;
+    private boolean tutorialFinished;
 
+    // Timestamps
     private long nextHandout;
+    private long lastOnline;
 
     public PlayerDetails() {
     }
@@ -56,7 +67,7 @@ public class PlayerDetails {
      * @param allowStalking  allow stalking/following
      * @param soundEnabled   allow playing music from soundmachines
      */
-    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished) {
         this.id = id;
         this.username = StringUtil.filterInput(username, true);
         this.figure = StringUtil.filterInput(figure, true); // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
@@ -80,6 +91,7 @@ public class PlayerDetails {
         this.showBadge = showBadge;
         this.allowStalking = allowStalking;
         this.soundEnabled = soundEnabled;
+        this.tutorialFinished = tutorialFinished;
     }
 
     public void loadBadges() {
@@ -256,5 +268,13 @@ public class PlayerDetails {
         TimeUnit unit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("credits.scheduler.timeunit"));
         this.nextHandout = DateUtil.getCurrentTimeSeconds()
                 + unit.toSeconds(GameConfiguration.getInstance().getInteger("credits.scheduler.interval"));
+    }
+
+    public boolean isTutorialFinished() {
+        return tutorialFinished;
+    }
+
+    public void setTutorialFinished(boolean tutorialFinished) {
+        this.tutorialFinished = tutorialFinished;
     }
 }

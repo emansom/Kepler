@@ -9,6 +9,6 @@ public class GENERATEKEY implements MessageEvent {
 
     @Override
     public void handle(Player player, NettyRequest reader) {
-        player.send(new SESSION_PARAMETERS());
+        player.send(new SESSION_PARAMETERS(player.getDetails()));
     }
 }
