@@ -12,8 +12,6 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
 
-import javax.swing.*;
-
 public class SETSTUFFDATA implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
