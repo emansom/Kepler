@@ -18,7 +18,6 @@ public class UptimeCommand extends Command {
     private static final int CPU_NUM_THREADS = Runtime.getRuntime().availableProcessors();
     private static final String CPU_ARCHITECTURE = System.getProperty("os.arch");
     private static final String JVM_NAME = System.getProperty("java.vm.name");
-    private static final String JVM_VERSION = System.getProperty("java.vm.name");
     private static final String OPERATING_SYSTEM_NAME = System.getProperty("os.name");
 
     private static int MEMORY_USAGE = 0;
@@ -68,7 +67,7 @@ public class UptimeCommand extends Command {
         msg.append("CPU architecture: " + CPU_ARCHITECTURE + "<br>");
         msg.append("CPU cores: " + CPU_NUM_THREADS + "<br>");
         msg.append("memory usage: " + MEMORY_USAGE + " MB<br>");
-        msg.append("JVM: " + JVM_NAME + " " + JVM_VERSION + "<br>");
+        msg.append("JVM: " + JVM_NAME + "<br>");
         msg.append("OS: " + OPERATING_SYSTEM_NAME);
 
         player.send(new ALERT(msg.toString()));
