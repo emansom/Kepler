@@ -45,6 +45,7 @@ public class GameConfiguration {
         config.put("credits.scheduler.amount", "20");
 
         config.put("chat.garbled.text", "true");
+        config.put("chat.bubble.timeout.seconds", "15");
 
         config.put("tutorial.enabled", "true");
         config.put("profile.editing", "true");

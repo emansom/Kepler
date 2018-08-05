@@ -85,7 +85,7 @@ public class RoomUser {
 
         this.instanceId = -1;
         this.authenticateId = -1;
-        this.timerManager.resetRoomTimer();
+        this.timerManager.resetTimers();
 
         if (this.entity.getType() == EntityType.PLAYER) {
             RoomTradeManager.close(this);

@@ -1,7 +1,6 @@
 package org.alexdev.kepler.game.room.managers;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.util.DateUtil;
@@ -13,10 +12,20 @@ public class RoomTimerManager {
     private int lookTimer;
     private long afkTimer;
     private long sleepTimer;
+    private long chatBubbleTimer;
 
     public RoomTimerManager(RoomUser roomUser) {
         this.roomUser = roomUser;
         this.entity = roomUser.getEntity();
+    }
+
+    /**
+     * Reset all timers, used for first entry into room.
+     */
+    public void resetTimers() {
+        this.resetRoomTimer();
+        this.stopChatBubbleTimer();
+        this.stopLookTimer();
     }
 
     /**
@@ -56,8 +65,30 @@ public class RoomTimerManager {
         this.lookTimer = -1;
     }
 
+    /**
+     * Begin chat time out.
+     */
+    public void beginChatBubbleTimer() {
+        int timeout = GameConfiguration.getInstance().getInteger("chat.bubble.timeout.seconds");
+
+        if (timeout > 0) {
+            this.chatBubbleTimer = DateUtil.getCurrentTimeSeconds() + timeout;
+        }
+    }
+
+    /**
+     * Stop chat time out.
+     */
+    public void stopChatBubbleTimer() {
+        this.chatBubbleTimer = -1;
+    }
+
     public Entity getEntity() {
         return entity;
+    }
+
+    public long getChatBubbleTimer() {
+        return chatBubbleTimer;
     }
 
     public int getLookTimer() {

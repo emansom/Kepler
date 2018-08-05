@@ -15,7 +15,9 @@ public class USER_START_TYPING implements MessageEvent {
             return;
         }
 
+        player.getRoomUser().getTimerManager().beginChatBubbleTimer();
         player.getRoomUser().setTyping(true);
+
         room.send(new TYPING_STATUS(player.getRoomUser().getInstanceId(), player.getRoomUser().isTyping()));
     }
 }
