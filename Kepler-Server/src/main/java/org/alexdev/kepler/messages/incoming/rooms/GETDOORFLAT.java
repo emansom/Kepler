@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.tasks.TeleporterTask;
+import org.alexdev.kepler.game.room.tasks.TeleporterTask2;
 import org.alexdev.kepler.messages.outgoing.rooms.items.BROADCAST_TELEPORTER;
 import org.alexdev.kepler.messages.outgoing.rooms.items.TELEPORTER_INIT;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
@@ -60,6 +61,11 @@ public class GETDOORFLAT implements MessageEvent {
                     room.getItemManager().getById(item.getTeleporterId()),
                     player,
                     room),1000, TimeUnit.MILLISECONDS);
+
+            GameScheduler.getInstance().getSchedulerService().schedule(new TeleporterTask2(
+                    room.getItemManager().getById(item.getTeleporterId()),
+                    player,
+                    room),1500, TimeUnit.MILLISECONDS);
         }
     }
 }
