@@ -149,11 +149,6 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         RoomTile previousTile = room.getMapping().getTile(fromPosition);
         RoomTile nextTile = room.getMapping().getTile(nextPosition);
 
-        // Don't roll if an entity is in this tile
-        if (nextTile.getEntities().size() > 0) {
-            return;
-        }
-
         // Temporary fix if the user walks on an item and their height gets put up.
         if (entity.getRoomUser().getCurrentItem() != null && entity.getRoomUser().getCurrentItem().hasBehaviour(ItemBehaviour.ROLLER)) {
             if (Math.abs(entity.getRoomUser().getPosition().getZ() - roller.getPosition().getZ()) >= 0.1) {
@@ -196,7 +191,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         entity.getRoomUser().setNeedsUpdate(true);
 
-        nextTile.addEntity(entity);
         previousTile.removeEntity(entity);
+        nextTile.addEntity(entity);
     }
 }
