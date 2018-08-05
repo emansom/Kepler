@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -35,6 +36,7 @@ public class RoomUser {
     private Position nextPosition;
     private Room room;
     private Item currentItem;
+    private RollingData rollingData;
 
     private int instanceId;
     private int authenticateId;
@@ -75,6 +77,7 @@ public class RoomUser {
         this.currentItem = null;
         this.goal = null;
         this.room = null;
+        this.rollingData = null;
 
         this.isWalkingAllowed = true;
         this.isWalking = false;
@@ -817,5 +820,13 @@ public class RoomUser {
 
     public void setAuthenticateTelporterId(int authenticateTelporterId) {
         this.authenticateTelporterId = authenticateTelporterId;
+    }
+
+    public RollingData getRollingData() {
+        return rollingData;
+    }
+
+    public void setRollingData(RollingData rollingData) {
+        this.rollingData = rollingData;
     }
 }

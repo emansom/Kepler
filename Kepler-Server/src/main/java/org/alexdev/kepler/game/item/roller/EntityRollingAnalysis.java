@@ -50,8 +50,22 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                     continue;
                 }
 
+                if (e.getRoomUser().getRollingData() != null) {
+                    if (e.getRoomUser().getRollingData().getNextPosition().equals(front)) {
+                        return null;
+                    }
+                }
+
                 if (e.getRoomUser().getPosition().equals(front)) {
                     return null;
+                }
+            }
+        }
+
+        for (Item floorItem : room.getItemManager().getFloorItems()) {
+            if (floorItem.getRollingData() != null) {
+                if (floorItem.getRollingData().getNextPosition().equals(front)) {
+                    return  null;
                 }
             }
         }
@@ -116,7 +130,9 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             nextHeight -= roller.getDefinition().getTopHeight();
         }
 
-        return new Position(front.getX(), front.getY(), nextHeight);
+        Position nextPosition = new Position(front.getX(), front.getY(), nextHeight);
+        entity.getRoomUser().setRollingData(new RollingData(entity, roller, entity.getRoomUser().getPosition().copy(), nextPosition));
+        return nextPosition;
     }
     @Override
     public void doRoll(Entity entity, Item roller, Room room, Position fromPosition, Position nextPosition) {
