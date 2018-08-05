@@ -100,7 +100,7 @@ public class RoomEntityManager {
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
-        entity.getRoomUser().resetRoomTimer();
+        entity.getRoomUser().getTimerManager().resetRoomTimer();
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
 

@@ -39,8 +39,9 @@ public class StatusTask implements Runnable {
     private void processEntity(Entity entity) {
         List<String> toRemove = new ArrayList<>();
 
-        if (entity.getRoomUser().getLookTimer() != -1 && DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getLookTimer()) {
-            entity.getRoomUser().setLookTimer(-1);
+        if (entity.getRoomUser().getTimerManager().getLookTimer() != -1 &&
+                DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getTimerManager().getLookTimer()) {
+            entity.getRoomUser().getTimerManager().stopLookTimer();
             entity.getRoomUser().getPosition().setHeadRotation(entity.getRoomUser().getPosition().getBodyRotation());
             entity.getRoomUser().setNeedsUpdate(true);
         }

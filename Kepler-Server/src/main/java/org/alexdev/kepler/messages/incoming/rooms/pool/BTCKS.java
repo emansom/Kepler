@@ -59,7 +59,7 @@ public class BTCKS implements MessageEvent {
             ticketPlayer.send(new TICKET_BALANCE(details.getTickets()));
         }
 
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
 
         CurrencyDao.decreaseCredits(player.getDetails(), costCredits);
         player.send(new CREDIT_BALANCE(player.getDetails()));

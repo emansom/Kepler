@@ -50,7 +50,7 @@ public class GameScheduler implements Runnable {
                 if (player.getRoomUser().getRoom() != null) {
 
                     // If their sleep timer is now lower than the current time, make them sleep.
-                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
+                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getSleepTimer()) {
                         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                             player.getRoomUser().setStatus(StatusType.SLEEP, "");
                             player.getRoomUser().setNeedsUpdate(true);
@@ -58,7 +58,7 @@ public class GameScheduler implements Runnable {
                     }
 
                     // If their afk timer is up, send them out.
-                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
+                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getAfkTimer()) {
                         player.getRoomUser().kick();
                     }
 

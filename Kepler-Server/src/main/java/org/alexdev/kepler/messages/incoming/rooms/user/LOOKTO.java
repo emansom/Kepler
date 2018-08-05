@@ -54,6 +54,6 @@ public class LOOKTO implements MessageEvent {
         }
 
         player.getRoomUser().setNeedsUpdate(true);
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
     }
 }
