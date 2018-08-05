@@ -40,33 +40,33 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null;
         }
 
-        if (frontTile.getEntities().size() > 0) {
-            for (Entity e : frontTile.getEntities()) {
-                if (e.getRoomUser().getRoom() == null) {
-                    continue;
-                }
+        //if (frontTile.getEntities().size() > 0) {
+        for (Entity e : room.getEntities()) {
+            if (e.getRoomUser().getRoom() == null) {
+                continue;
+            }
 
-                if (e.getRoomUser().getNextPosition() != null) {
-                    if (e.getRoomUser().getNextPosition().equals(front)) {
-                        return null;
-                    }
-                }
+            if (e.getRoomUser().isWalking()) {
+                continue;
+            }
 
-                if (e.getRoomUser().isWalking()) {
-                    continue;
-                }
-
-                if (e.getRoomUser().getRollingData() != null) {
-                    if (e.getRoomUser().getRollingData().getNextPosition().equals(front)) {
-                        return null;
-                    }
-                }
-
-                if (e.getRoomUser().getPosition().equals(front)) {
+            if (e.getRoomUser().getNextPosition() != null) {
+                if (e.getRoomUser().getNextPosition().equals(front)) {
                     return null;
                 }
             }
+
+            if (e.getRoomUser().getRollingData() != null) {
+                if (e.getRoomUser().getRollingData().getNextPosition().equals(front)) {
+                    return null;
+                }
+            }
+
+            if (e.getRoomUser().getPosition().equals(front)) {
+                return null;
+            }
         }
+        //}
 
         for (Item floorItem : room.getItemManager().getFloorItems()) {
             if (floorItem.getRollingData() != null) {
