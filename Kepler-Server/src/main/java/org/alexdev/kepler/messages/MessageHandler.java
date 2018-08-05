@@ -94,6 +94,7 @@ public class MessageHandler {
      */
     private void registerTutorialPackets() {
         registerEvent(250, new GET_TUTORIAL_CONFIGURATION());
+        registerEvent(249, new SET_TUTORIAL_MODE());
     }
 
     /**
