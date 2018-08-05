@@ -20,6 +20,7 @@ import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.songs.*;
 import org.alexdev.kepler.messages.incoming.trade.*;
+import org.alexdev.kepler.messages.incoming.tutorial.*;
 import org.alexdev.kepler.messages.incoming.user.*;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -80,11 +81,18 @@ public class MessageHandler {
      */
     private void registerUserPackets() {
         registerEvent(7, new GET_INFO());
-        registerEvent(228, new GET_SOUND_SETTING());
+        registerEvent(228, new GET_ACCOUNT_PREFERENCES());
         registerEvent(196, new PONG());
         registerEvent(26, new GET_CLUB());
         registerEvent(190, new SUBSCRIBE_CLUB());
         //registerEvent(315, new TEST_LATENCY());
+    }
+
+    /**
+     * Register tutorial packets
+     */
+    private void registerTutorialPackets() {
+        registerEvent(250, new GET_TUTORIAL_CONFIGURATION());
     }
 
     /**
