@@ -10,6 +10,7 @@ import org.alexdev.kepler.messages.outgoing.user.currencies.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,15 +28,18 @@ public class GameScheduler implements Runnable {
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
-
     private BlockingQueue<Player> creditsHandoutQueue;
 
     private static GameScheduler instance;
+    private static long TIME_UNTIL_NEXT_RESET;
+
+    public static long DAILY_PLAYER_PEAK;
 
     private GameScheduler() {
         this.schedulerService = createNewScheduler();
         this.gameScheduler = this.schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
         this.creditsHandoutQueue = new LinkedBlockingQueue<>();
+        this.resetTimeUntilNextReset();
     }
 
     /* (non-Javadoc)
@@ -46,6 +50,17 @@ public class GameScheduler implements Runnable {
         this.tickRate.incrementAndGet();
 
         try {
+            if (DateUtil.getCurrentTimeSeconds() > DAILY_PLAYER_PEAK) {
+                resetTimeUntilNextReset();
+                DAILY_PLAYER_PEAK = PlayerManager.getInstance().getPlayers().size();
+            } else {
+                int newSize = PlayerManager.getInstance().getPlayers().size();
+
+                if (newSize > DAILY_PLAYER_PEAK) {
+                    DAILY_PLAYER_PEAK = newSize;
+                }
+            }
+
             for (Player player : PlayerManager.getInstance().getPlayers()) {
                 if (player.getRoomUser().getRoom() != null) {
 
@@ -96,6 +111,10 @@ public class GameScheduler implements Runnable {
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameScheduler crashed: ", ex);
         }
+    }
+
+    private void resetTimeUntilNextReset() {
+        TIME_UNTIL_NEXT_RESET = DateUtil.getCurrentTimeSeconds() + TimeUnit.DAYS.toSeconds(1);
     }
 
     /**

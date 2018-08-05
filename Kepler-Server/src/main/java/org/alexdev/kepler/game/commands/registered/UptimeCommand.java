@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.commands.registered;
 
 import org.alexdev.kepler.Kepler;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -59,14 +60,15 @@ public class UptimeCommand extends Command {
 
         StringBuilder msg = new StringBuilder();
         msg.append("SERVER\r");
-        msg.append("Server uptime is " + days + " day(s), " + hours + " hour(s), " + minutes + " minute(s) and " + seconds + " second(s)\r");
-        msg.append("There are " + ACTIVE_PLAYERS + " active players, and " + AUTHENTICATED_PLAYERS + " authenticated players\r");
-        msg.append("\r");
-        msg.append("SYSTEM\r");
-        msg.append("CPU architecture: " + CPU_ARCHITECTURE + "\r");
-        msg.append("CPU cores: " + CPU_NUM_THREADS + "\r");
-        msg.append("memory usage: " + MEMORY_USAGE + " MB\r");
-        msg.append("JVM: " + JVM_NAME + " " + JVM_VERSION + "\r");
+        msg.append("Server uptime is " + days + " day(s), " + hours + " hour(s), " + minutes + " minute(s) and " + seconds + " second(s)<br>");
+        msg.append("There are " + ACTIVE_PLAYERS + " active players, and " + AUTHENTICATED_PLAYERS + " authenticated players<br>");
+        msg.append("Daily player peak count: " + GameScheduler.DAILY_PLAYER_PEAK + "<br>");
+        msg.append("<br>");
+        msg.append("SYSTEM<br>");
+        msg.append("CPU architecture: " + CPU_ARCHITECTURE + "<br>");
+        msg.append("CPU cores: " + CPU_NUM_THREADS + "<br>");
+        msg.append("memory usage: " + MEMORY_USAGE + " MB<br>");
+        msg.append("JVM: " + JVM_NAME + " " + JVM_VERSION + "<br>");
         msg.append("OS: " + OPERATING_SYSTEM_NAME);
 
         player.send(new ALERT(msg.toString()));
