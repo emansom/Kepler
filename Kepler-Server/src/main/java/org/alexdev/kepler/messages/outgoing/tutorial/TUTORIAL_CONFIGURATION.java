@@ -20,7 +20,7 @@ public class TUTORIAL_CONFIGURATION extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeString(this.tutorialId);
+        response.writeInt(this.tutorialId);
         response.writeString(this.tutorialName);
         response.writeInt(this.topics.size());
 
