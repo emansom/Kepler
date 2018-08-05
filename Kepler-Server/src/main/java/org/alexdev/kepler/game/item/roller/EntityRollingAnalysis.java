@@ -46,14 +46,14 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
                 continue;
             }
 
-            if (e.getRoomUser().isWalking()) {
-                continue;
-            }
-
             if (e.getRoomUser().getNextPosition() != null) {
                 if (e.getRoomUser().getNextPosition().equals(front)) {
                     return null;
                 }
+            }
+
+            if (e.getRoomUser().isWalking()) {
+                continue;
             }
 
             if (e.getRoomUser().getRollingData() != null) {
@@ -67,7 +67,6 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             }
         }
         //}
-
         for (Item floorItem : room.getItemManager().getFloorItems()) {
             if (floorItem.getRollingData() != null) {
                 if (floorItem.getPosition().equals(roller.getPosition())) {
