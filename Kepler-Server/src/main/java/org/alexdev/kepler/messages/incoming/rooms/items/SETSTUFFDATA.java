@@ -12,6 +12,8 @@ import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
 
+import javax.swing.*;
+
 public class SETSTUFFDATA implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
@@ -107,6 +109,11 @@ public class SETSTUFFDATA implements MessageEvent {
 
             if (item.hasBehaviour(ItemBehaviour.CUSTOM_DATA_ON_OFF) &&
                     (itemData.equals("ON") || itemData.equals("OFF"))) {
+                newData = itemData;
+            }
+
+            // Special handler because we don't want to allow users to empty the waterbowl, only pets can
+            if (item.getDefinition().getSprite().startsWith("waterbowl") && itemData.equals("5")) {
                 newData = itemData;
             }
 
