@@ -50,7 +50,7 @@ public class GameScheduler implements Runnable {
         this.tickRate.incrementAndGet();
 
         try {
-            if (DateUtil.getCurrentTimeSeconds() > DAILY_PLAYER_PEAK) {
+            if (DateUtil.getCurrentTimeSeconds() > TIME_UNTIL_NEXT_RESET) {
                 resetTimeUntilNextReset();
                 DAILY_PLAYER_PEAK = PlayerManager.getInstance().getPlayers().size();
             } else {
