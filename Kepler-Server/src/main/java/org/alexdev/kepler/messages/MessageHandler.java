@@ -42,6 +42,7 @@ public class MessageHandler {
         registerHandshakePackets();
         registerPursePackets();
         registerUserPackets();
+        registerTutorialPackets();
         registerNavigatorPackets();
         registerRoomPackets();
         registerRoomUserPackets();
