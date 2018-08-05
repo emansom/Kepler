@@ -32,7 +32,7 @@ public class EJECT_SOUND_PACKAGE implements MessageEvent {
         }
 
         // We don't want a user to get kicked when making cool beats
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
 
         int slotId = reader.readInt();
         Map<Integer, Integer> tracks = SongMachineDao.getTracks(room.getItemManager().getSoundMachine().getId());

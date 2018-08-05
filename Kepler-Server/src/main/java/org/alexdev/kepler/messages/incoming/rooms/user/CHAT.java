@@ -37,7 +37,7 @@ public class CHAT implements MessageEvent {
         }
 
         player.getRoomUser().showChat(message, false);
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
 
         // Make chat hard to read for long distance in public rooms
         if (room.isPublicRoom() && GameConfiguration.getInstance().getBoolean("chat.garbled.text")) {

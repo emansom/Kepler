@@ -12,6 +12,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.enums.DrinkType;
+import org.alexdev.kepler.game.room.managers.RoomTimerManager;
 import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
@@ -21,7 +22,6 @@ import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.room.tasks.WaveTask;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
-import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
@@ -37,6 +37,7 @@ public class RoomUser {
     private Room room;
     private Item currentItem;
     private RollingData rollingData;
+    private RoomTimerManager timerManager;
 
     private int instanceId;
     private int authenticateId;
@@ -52,10 +53,6 @@ public class RoomUser {
     private boolean isTyping;
     private boolean isDiving;
 
-    private int lookTimer;
-    private long afkTimer;
-    private long sleepTimer;
-
     private Player tradePartner;
     private List<Item> tradeItems;
     private boolean tradeAccept;
@@ -66,6 +63,7 @@ public class RoomUser {
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
         this.authenticateTelporterId = -1;
+        this.timerManager = new RoomTimerManager(this);
         this.reset();
     }
 
@@ -87,8 +85,7 @@ public class RoomUser {
 
         this.instanceId = -1;
         this.authenticateId = -1;
-
-        this.resetRoomTimer();
+        this.timerManager.resetTimers();
 
         if (this.entity.getType() == EntityType.PLAYER) {
             RoomTradeManager.close(this);
@@ -161,7 +158,7 @@ public class RoomUser {
         if (path.size() > 0) {
             this.path = path;
             this.isWalking = true;
-            this.resetRoomTimer();
+            this.timerManager.resetRoomTimer();
         }
     }
 
@@ -246,7 +243,7 @@ public class RoomUser {
             }
 
             if (isRolling) {
-                if (needsUpdate && this.getLookTimer() > -1) {
+                if (needsUpdate && this.timerManager.getLookTimer() > -1) {
                     this.position.setHeadRotation(headRotation);
                 }
             }
@@ -465,7 +462,7 @@ public class RoomUser {
         }
 
         this.position.setHeadRotation(Rotation.getHeadRotation(this.position.getRotation(), this.position, towards));
-        this.lookTimer = DateUtil.getCurrentTimeSeconds() + 6;
+        this.timerManager.beginLookTimer();
         this.needsUpdate = true;
     }
 
@@ -509,29 +506,6 @@ public class RoomUser {
 
         if (height != oldHeight) {
             this.position.setZ(height);
-            this.needsUpdate = true;
-        }
-    }
-
-    /**
-     * Set the room timer, make it 10 minutes by default
-     */
-    public void resetRoomTimer() {
-        this.resetRoomTimer(GameConfiguration.getInstance().getInteger("afk.timer.seconds"));
-    }
-
-    /**
-     * Set the room timer, but with an option to override it.
-     *
-     * @param afkTimer the timer to override
-     */
-    public void resetRoomTimer(int afkTimer) {
-        this.afkTimer = DateUtil.getCurrentTimeSeconds() + afkTimer;
-        this.sleepTimer = DateUtil.getCurrentTimeSeconds() + GameConfiguration.getInstance().getInteger("sleep.timer.seconds");
-
-        // If the user was sleeping, remove the sleep and tell the room cycle to update our character
-        if (this.containsStatus(StatusType.SLEEP)) {
-            this.removeStatus(StatusType.SLEEP);
             this.needsUpdate = true;
         }
     }
@@ -669,7 +643,6 @@ public class RoomUser {
         return null;
     }
 
-
     public Entity getEntity() {
         return entity;
     }
@@ -700,6 +673,10 @@ public class RoomUser {
 
     public void setRoom(Room room) {
         this.room = room;
+    }
+
+    public RoomTimerManager getTimerManager() {
+        return timerManager;
     }
 
     public int getInstanceId() {
@@ -776,22 +753,6 @@ public class RoomUser {
 
     public void setDiving(boolean diving) {
         isDiving = diving;
-    }
-
-    public int getLookTimer() {
-        return lookTimer;
-    }
-
-    public void setLookTimer(int lookTimer) {
-        this.lookTimer = lookTimer;
-    }
-
-    public long getAfkTimer() {
-        return afkTimer;
-    }
-
-    public long getSleepTimer() {
-        return sleepTimer;
     }
 
     public Player getTradePartner() {

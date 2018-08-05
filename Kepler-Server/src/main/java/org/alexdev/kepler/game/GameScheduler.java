@@ -10,6 +10,7 @@ import org.alexdev.kepler.messages.outgoing.user.currencies.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,15 +28,18 @@ public class GameScheduler implements Runnable {
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
-
     private BlockingQueue<Player> creditsHandoutQueue;
 
     private static GameScheduler instance;
+    private static long TIME_UNTIL_NEXT_RESET;
+
+    public static long DAILY_PLAYER_PEAK;
 
     private GameScheduler() {
         this.schedulerService = createNewScheduler();
         this.gameScheduler = this.schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
         this.creditsHandoutQueue = new LinkedBlockingQueue<>();
+        this.resetTimeUntilNextReset();
     }
 
     /* (non-Javadoc)
@@ -46,11 +50,22 @@ public class GameScheduler implements Runnable {
         this.tickRate.incrementAndGet();
 
         try {
+            if (DateUtil.getCurrentTimeSeconds() > TIME_UNTIL_NEXT_RESET) {
+                resetTimeUntilNextReset();
+                DAILY_PLAYER_PEAK = PlayerManager.getInstance().getPlayers().size();
+            } else {
+                int newSize = PlayerManager.getInstance().getPlayers().size();
+
+                if (newSize > DAILY_PLAYER_PEAK) {
+                    DAILY_PLAYER_PEAK = newSize;
+                }
+            }
+
             for (Player player : PlayerManager.getInstance().getPlayers()) {
                 if (player.getRoomUser().getRoom() != null) {
 
                     // If their sleep timer is now lower than the current time, make them sleep.
-                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
+                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getSleepTimer()) {
                         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                             player.getRoomUser().setStatus(StatusType.SLEEP, "");
                             player.getRoomUser().setNeedsUpdate(true);
@@ -58,7 +73,7 @@ public class GameScheduler implements Runnable {
                     }
 
                     // If their afk timer is up, send them out.
-                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
+                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getAfkTimer()) {
                         player.getRoomUser().kick();
                     }
 
@@ -96,6 +111,10 @@ public class GameScheduler implements Runnable {
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameScheduler crashed: ", ex);
         }
+    }
+
+    private void resetTimeUntilNextReset() {
+        TIME_UNTIL_NEXT_RESET = DateUtil.getCurrentTimeSeconds() + TimeUnit.DAYS.toSeconds(1);
     }
 
     /**

@@ -58,7 +58,7 @@ public class THROW_DICE implements MessageEvent {
 
         // We reset the room timer here too as in casinos you might be in the same place for a while
         // And you don't want to get kicked while you're still actively rolling dices for people :)
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
 
         // TODO: change rotation of user towards dice
 

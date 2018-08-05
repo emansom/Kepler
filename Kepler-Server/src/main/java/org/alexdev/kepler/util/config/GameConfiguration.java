@@ -27,6 +27,7 @@ public class GameConfiguration {
 
     private void setConfigurationDefaults() {
         config.put("fuck.aaron", "true");
+        config.put("max.connections.per.ip", "2");
 
         config.put("welcome.message.enabled", "false");
         config.put("welcome.message.content", "Hello, %username%! And welcome to the Kepler server!");
@@ -45,6 +46,7 @@ public class GameConfiguration {
         config.put("credits.scheduler.amount", "20");
 
         config.put("chat.garbled.text", "true");
+        config.put("chat.bubble.timeout.seconds", "15");
 
         config.put("tutorial.enabled", "true");
         config.put("profile.editing", "true");

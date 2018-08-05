@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.commands.registered;
 
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -40,7 +41,8 @@ public class UsersOnlineCommand extends Command {
         Player session = (Player) entity;
 
         StringBuilder sb = new StringBuilder()
-                .append("Users online: ").append(players.size()).append("<br>");
+                .append("Users online: ").append(players.size()).append("<br>")
+                .append("Daily player peak count: ").append(GameScheduler.DAILY_PLAYER_PEAK).append("<br>");
 
         if (paginatedPlayers.containsKey(pageNumber - 1)) {
             List<Player> playerList = paginatedPlayers.get(pageNumber - 1);

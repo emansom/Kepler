@@ -97,7 +97,7 @@ public class RoomEntityManager {
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
-        entity.getRoomUser().resetRoomTimer();
+        entity.getRoomUser().getTimerManager().resetRoomTimer();
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
 
@@ -128,6 +128,7 @@ public class RoomEntityManager {
                             entity,
                             this.room).run();
 
+                    entity.getRoomUser().setWalkingAllowed(true);
                     entity.getRoomUser().setPosition(entryPosition);
                 }
             }

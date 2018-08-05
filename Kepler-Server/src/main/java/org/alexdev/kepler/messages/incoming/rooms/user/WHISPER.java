@@ -32,7 +32,7 @@ public class WHISPER implements MessageEvent {
                 message);
 
         player.send(chatMessage);
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
 
         Player whisperUser = PlayerManager.getInstance().getPlayerByName(username);
 
