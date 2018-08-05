@@ -64,6 +64,10 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         for (Item floorItem : room.getItemManager().getFloorItems()) {
             if (floorItem.getRollingData() != null) {
+                if (floorItem.getPosition().equals(roller.getPosition())) {
+                    continue;
+                }
+
                 if (floorItem.getRollingData().getNextPosition().equals(front)) {
                     return  null;
                 }
