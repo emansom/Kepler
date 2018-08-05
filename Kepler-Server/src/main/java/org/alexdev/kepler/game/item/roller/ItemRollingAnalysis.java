@@ -36,43 +36,46 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
             return null;
         }
 
-        //if (frontTile.getEntities().size() > 0) {
-            for (Entity e : room.getEntities()) {
-                if (e.getRoomUser().getRoom() == null) {
-                    continue;
-                }
+        // Check all entities in the room
+        for (Entity e : room.getEntities()) {
+            if (e.getRoomUser().getRoom() == null) {
+                continue;
+            }
 
-                if (e.getRoomUser().getNextPosition() != null) {
-                    if (e.getRoomUser().getNextPosition().equals(front)) {
-                        return null;
-                    }
-                }
-
-                if (e.getRoomUser().isWalking()) {
-                    continue;
-                }
-
-                if (e.getRoomUser().getRollingData() != null) {
-                    if (e.getRoomUser().getRollingData().getNextPosition().equals(front)) {
-                        return null;
-                    }
-                }
-
-                if (e.getRoomUser().getPosition().equals(front)) {
+            // Don't roll if an entity is going to walk into the furniture
+            if (e.getRoomUser().getNextPosition() != null) {
+                if (e.getRoomUser().getNextPosition().equals(front)) {
                     return null;
                 }
             }
-        //}
 
+            // Ignore people who are walking
+            if (e.getRoomUser().isWalking()) {
+                continue;
+            }
 
+            // Don't roll if there's an entity rolling into you
+            if (e.getRoomUser().getRollingData() != null) {
+                if (e.getRoomUser().getRollingData().getNextPosition().equals(front)) {
+                    return null;
+                }
+            }
+
+            if (e.getRoomUser().getPosition().equals(front)) {
+                return null;
+            }
+        }
+
+        // Check all rolling items in the room
         for (Item floorItem : room.getItemManager().getFloorItems()) {
             if (floorItem.getRollingData() != null) {
                 if (floorItem.getPosition().equals(roller.getPosition())) {
                     continue;
                 }
 
+                // Don't roll if there's another item that's going to roll into this item
                 if (floorItem.getRollingData().getNextPosition().equals(front)) {
-                    return  null;
+                    return null;
                 }
             }
         }
