@@ -149,6 +149,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         RoomTile previousTile = room.getMapping().getTile(fromPosition);
         RoomTile nextTile = room.getMapping().getTile(nextPosition);
 
+        // Don't roll if an entity is in this tile
         if (nextTile.getEntities().size() > 0) {
             return;
         }
