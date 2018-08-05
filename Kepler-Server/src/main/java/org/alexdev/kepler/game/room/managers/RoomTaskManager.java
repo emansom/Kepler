@@ -33,7 +33,7 @@ public class RoomTaskManager {
 
         this.scheduleTask("EntityTask", new EntityTask(this.room), 500, TimeUnit.MILLISECONDS);
         this.scheduleTask("StatusTask", new StatusTask(this.room), 1, TimeUnit.SECONDS);
-        this.scheduleTask("RollerTask", new RollerTask(this.room), rollerMillisTask, TimeUnit.MILLISECONDS);
+        this.scheduleTask("RollerTask", new RollerTask(this.room), 0, rollerMillisTask, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -59,6 +59,25 @@ public class RoomTaskManager {
         this.cancelTask(taskName);
 
         var future = this.executorService.scheduleAtFixedRate(runnableTask, 0, interval, timeUnit);
+        this.processTasks.put(taskName, Pair.of(
+                future,
+                runnableTask
+        ));
+    }
+
+    /**
+     * Schedule a custom task with a delay.
+     *
+     * @param taskName the task name identifier
+     * @param runnableTask the runnable task instance
+     * @param interval the interval of the task
+     * @param delay the time to wait before the task starts
+     * @param timeUnit the time unit of the interval
+     */
+    public void scheduleTask(String taskName, Runnable runnableTask, int delay, int interval, TimeUnit timeUnit) {
+        this.cancelTask(taskName);
+
+        var future = this.executorService.scheduleAtFixedRate(runnableTask, delay, interval, timeUnit);
         this.processTasks.put(taskName, Pair.of(
                 future,
                 runnableTask
