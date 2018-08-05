@@ -1,5 +1,6 @@
 package org.alexdev.kepler.server.netty.connections;
 
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import org.alexdev.kepler.Kepler;
@@ -10,6 +11,7 @@ import org.alexdev.kepler.messages.outgoing.handshake.HELLO;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.config.GameConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,11 +27,33 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
+        int maxConnectionsPerIp = GameConfiguration.getInstance().getInteger("max.connections.per.ip");
+
+        if (maxConnectionsPerIp > 0) {
+            String ipAddress = NettyPlayerNetwork.getIpAddress(ctx.channel());
+
+            int count = 0;
+
+            for (Channel channel : this.server.getChannels()) {
+                String connectedIpAddress = NettyPlayerNetwork.getIpAddress(channel);
+
+                if (connectedIpAddress.equals(ipAddress)) {
+                    count++;
+                }
+            }
+
+            if (count >= maxConnectionsPerIp) {
+                log.info("Connection " + ipAddress + " kicked off, max connections per IP of " + maxConnectionsPerIp + " reached.");
+                ctx.close();
+                return;
+            }
+        }
+
         Player player = new Player(new NettyPlayerNetwork(ctx.channel(), this.server.getConnectionIds().getAndIncrement()));
         ctx.channel().attr(Player.PLAYER_KEY).set(player);
 
         if (!this.server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
-            Log.getErrorLogger().error("Could not accept connection from {}", ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
+            Log.getErrorLogger().error("Could not accept connection from {}", NettyPlayerNetwork.getIpAddress(ctx.channel()));
             ctx.close();
             return;
         }
@@ -37,7 +61,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         player.send(new HELLO());
 
         //if (ServerConfiguration.getBoolean("log.connections")) {
-        log.info("[{}] Connection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
+        log.info("[{}] Connection from {} ", player.getNetwork().getConnectionId(), NettyPlayerNetwork.getIpAddress(ctx.channel()));
         //}
     }
 
@@ -47,11 +71,14 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         this.server.getChannels().remove(ctx.channel());
 
         Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
-        player.dispose();
 
-        //if (ServerConfiguration.getBoolean("log.connections")) {
-        log.info("[{}] Disonnection from {} ", player.getNetwork().getConnectionId(), ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
-        //}
+        if (player != null) {
+            player.dispose();
+
+            //if (ServerConfiguration.getBoolean("log.connections")) {
+            log.info("[{}] Disonnection from {} ", player.getNetwork().getConnectionId(), NettyPlayerNetwork.getIpAddress(ctx.channel()));
+            //}
+        }
     }
 
     @Override
