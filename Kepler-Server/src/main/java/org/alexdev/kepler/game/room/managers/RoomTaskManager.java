@@ -33,7 +33,7 @@ public class RoomTaskManager {
 
         this.scheduleTask("EntityTask", new EntityTask(this.room), 500, TimeUnit.MILLISECONDS);
         this.scheduleTask("StatusTask", new StatusTask(this.room), 1, TimeUnit.SECONDS);
-        this.scheduleTask("RollerTask", new RollerTask(this.room), 0, rollerMillisTask, TimeUnit.MILLISECONDS);
+        this.scheduleTask("RollerTask", new RollerTask(this.room), 1, rollerMillisTask, TimeUnit.MILLISECONDS);
     }
 
     /**
