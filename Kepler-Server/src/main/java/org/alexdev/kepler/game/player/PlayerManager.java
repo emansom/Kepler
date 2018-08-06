@@ -41,7 +41,7 @@ public class PlayerManager {
      */
     public Player getPlayerByName(String username) {
         for (Player player : this.players) {
-            if (player.getDetails().getName().equals(username)) {
+            if (player.getDetails().getName().equalsIgnoreCase(username)) {
                 return player;
             }
         }
