@@ -1,7 +1,7 @@
 version: '3.2'
 services:
     kepler:
-        image: ewout/kepler:1.0.13
+        image: ewout/kepler:1.0.14
         restart: always
         environment:
             MYSQL_HOST: mariadb
