@@ -110,9 +110,16 @@ public class GRPC implements MessageEvent {
             }
 
             purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
+            player.getInventory().getView("new");
+
+            boolean showItemDelivered = true;
 
             // Don't send item delivered if they just buy film
-            if (!item.getDefinition().getSprite().equals("film")) {
+            if (item.getDefinition() != null && item.getDefinition().getSprite().equals("film")) {
+                showItemDelivered = false;
+            }
+
+            if (showItemDelivered) {
                 player.send(new ITEM_DELIVERED());
             }
         }
