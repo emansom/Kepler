@@ -61,7 +61,7 @@ public class UptimeCommand extends Command {
         msg.append("SERVER\r");
         msg.append("Server uptime is " + days + " day(s), " + hours + " hour(s), " + minutes + " minute(s) and " + seconds + " second(s)<br>");
         msg.append("There are " + ACTIVE_PLAYERS + " active players, and " + AUTHENTICATED_PLAYERS + " authenticated players<br>");
-        msg.append("Daily player peak count: " + GameScheduler.DAILY_PLAYER_PEAK + "<br>");
+        msg.append("Daily player peak count: " + PlayerManager.getInstance().getDailyPlayerPeak() + "<br>");
         msg.append("<br>");
         msg.append("SYSTEM<br>");
         msg.append("CPU architecture: " + CPU_ARCHITECTURE + "<br>");

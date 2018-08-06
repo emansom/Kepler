@@ -42,7 +42,7 @@ public class UsersOnlineCommand extends Command {
 
         StringBuilder sb = new StringBuilder()
                 .append("Users online: ").append(players.size()).append("<br>")
-                .append("Daily player peak count: ").append(GameScheduler.DAILY_PLAYER_PEAK).append("<br>");
+                .append("Daily player peak count: ").append(PlayerManager.getInstance().getDailyPlayerPeak()).append("<br>");
 
         if (paginatedPlayers.containsKey(pageNumber - 1)) {
             List<Player> playerList = paginatedPlayers.get(pageNumber - 1);

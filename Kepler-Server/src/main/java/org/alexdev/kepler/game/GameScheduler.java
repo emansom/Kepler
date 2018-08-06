@@ -31,15 +31,11 @@ public class GameScheduler implements Runnable {
     private BlockingQueue<Player> creditsHandoutQueue;
 
     private static GameScheduler instance;
-    private static long TIME_UNTIL_NEXT_RESET;
-
-    public static long DAILY_PLAYER_PEAK;
 
     private GameScheduler() {
         this.schedulerService = createNewScheduler();
         this.gameScheduler = this.schedulerService.scheduleAtFixedRate(this, 0, 1, TimeUnit.SECONDS);
         this.creditsHandoutQueue = new LinkedBlockingQueue<>();
-        this.resetTimeUntilNextReset();
     }
 
     /* (non-Javadoc)
@@ -50,16 +46,7 @@ public class GameScheduler implements Runnable {
         this.tickRate.incrementAndGet();
 
         try {
-            if (DateUtil.getCurrentTimeSeconds() > TIME_UNTIL_NEXT_RESET) {
-                resetTimeUntilNextReset();
-                DAILY_PLAYER_PEAK = PlayerManager.getInstance().getPlayers().size();
-            } else {
-                int newSize = PlayerManager.getInstance().getPlayers().size();
-
-                if (newSize > DAILY_PLAYER_PEAK) {
-                    DAILY_PLAYER_PEAK = newSize;
-                }
-            }
+            PlayerManager.getInstance().checkPlayerPeak();
 
             for (Player player : PlayerManager.getInstance().getPlayers()) {
                 if (player.getRoomUser().getRoom() != null) {
@@ -111,10 +98,6 @@ public class GameScheduler implements Runnable {
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameScheduler crashed: ", ex);
         }
-    }
-
-    private void resetTimeUntilNextReset() {
-        TIME_UNTIL_NEXT_RESET = DateUtil.getCurrentTimeSeconds() + TimeUnit.DAYS.toSeconds(1);
     }
 
     /**

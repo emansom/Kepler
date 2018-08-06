@@ -2,19 +2,41 @@ package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerManager {
     private static PlayerManager instance;
     private List<Player> players;
 
+    private long timeUntilNextReset;
+    private long dailyPlayerPeak;
+
     public PlayerManager() {
         this.players = new CopyOnWriteArrayList<>();
+    }
+
+    /**
+     * Checks and sets the daily player peak.
+     */
+    public void checkPlayerPeak() {
+        if (DateUtil.getCurrentTimeSeconds() > this.timeUntilNextReset) {
+            this.timeUntilNextReset = DateUtil.getCurrentTimeSeconds() + TimeUnit.DAYS.toSeconds(1);
+            this.dailyPlayerPeak = PlayerManager.getInstance().getPlayers().size();
+        } else {
+            int newSize = PlayerManager.getInstance().getPlayers().size();
+
+            if (newSize > this.dailyPlayerPeak) {
+                this.dailyPlayerPeak = newSize;
+            }
+        }
+
     }
 
     /**
@@ -142,6 +164,10 @@ public class PlayerManager {
         }
 
         return activePlayers;
+    }
+
+    public long getDailyPlayerPeak() {
+        return dailyPlayerPeak;
     }
 
     /**
