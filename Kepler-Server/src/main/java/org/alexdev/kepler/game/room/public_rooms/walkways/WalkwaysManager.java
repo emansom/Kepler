@@ -99,18 +99,18 @@ public class WalkwaysManager {
         this.walkways.add(entrance);
     }
 
-    public WalkwaysEntrance getWalkway(RoomUser roomUser) {
-        if (!roomUser.getRoom().isPublicRoom()) {
+    public WalkwaysEntrance getWalkway(Room room, Position position) {
+        if (!room.isPublicRoom()) {
             return null;
         }
 
         for (WalkwaysEntrance entrance : this.walkways) {
-            if (!entrance.getModelFrom().equals(roomUser.getRoom().getModel().getName())) {
+            if (!entrance.getModelFrom().equals(room.getModel().getName())) {
                 continue;
             }
 
             for (Position coord : entrance.getFromCoords()) {
-                if (coord.equals(roomUser.getPosition())) {
+                if (coord.equals(position)) {
                     return entrance;
                 }
             }

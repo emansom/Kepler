@@ -1,7 +1,9 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -14,21 +16,14 @@ public class GOAWAY implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        var curPos = player.getRoomUser().getPosition();
-        var doorPos = room.getModel().getDoorLocation();
+        if (room.isPublicRoom()) {
+            Position doorPosition = room.getModel().getDoorLocation();
 
-        // If we're standing in the door, immediately leave room
-        if (curPos.equals(doorPos)) {
-            room.getEntityManager().leaveRoom(player, true);
-            return;
+            if (WalkwaysManager.getInstance().getWalkway(room, doorPosition) != null) {
+                return;
+            }
         }
 
-        // Attempt to walk to the door
-        player.getRoomUser().walkTo(doorPos.getX(), doorPos.getY());
-
-        // If user isn't walking, leave immediately
-        if (!player.getRoomUser().isWalking()) {
-            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, true);
-        }
+        player.getRoomUser().kick();
     }
 }
