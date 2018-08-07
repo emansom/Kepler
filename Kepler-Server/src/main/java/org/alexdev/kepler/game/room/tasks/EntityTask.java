@@ -96,12 +96,6 @@ public class EntityTask implements Runnable {
                     return;
                 }
 
-                // Leave room if the tile is the door and we are in a flat
-                if (next.equals(roomUser.getRoom().getModel().getDoorLocation())) {
-                    roomUser.getRoom().getEntityManager().leaveRoom(entity, true);
-                    return;
-                }
-
                 RoomTile previousTile = roomUser.getTile();
                 previousTile.removeEntity(entity);
 
