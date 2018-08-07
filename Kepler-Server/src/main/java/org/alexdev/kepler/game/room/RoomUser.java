@@ -147,7 +147,7 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
-        //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
+        System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
         if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
             return;
@@ -172,7 +172,7 @@ public class RoomUser {
         this.nextPosition = null;
         this.removeStatus(StatusType.MOVE);
 
-        WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this);
+        WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this.room, this.position);
 
         if (entrance != null) {
             Room room = WalkwaysManager.getInstance().getWalkwayRoom(entrance.getModelTo());

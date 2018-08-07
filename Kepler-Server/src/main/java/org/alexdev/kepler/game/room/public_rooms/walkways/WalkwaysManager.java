@@ -63,15 +63,15 @@ public class WalkwaysManager {
         this.addWalkway("hallway11", "hallway9", "0,5 0,4 0,3 0,2", "29,15,0,6");
 
         // Cunning Fox Gamehall
-        this.addWalkway("entryhall", "hallC", "14,0 15,0", null);
-        this.addWalkway("entryhall", "hallB", "8,0 9,0", null);
-        this.addWalkway("entryhall", "hallA", "2,0 3,0", null);
-        this.addWalkway("entryhall", "hallD", "0,2 0,3", null);
+        this.addWalkway("entryhall", "hallC", "14,0 15,0", "1,1,1,4");
+        this.addWalkway("entryhall", "hallB", "8,0 9,0", "1,1,1,4");
+        this.addWalkway("entryhall", "hallA", "2,0 3,0", "1,1,1,4");
+        this.addWalkway("entryhall", "hallD", "0,2 0,3", "1,1,1,4");
 
-        this.addWalkway("hallC", "entryhall", "0,0 1,0", "15,1,1,4");
-        this.addWalkway("hallB", "entryhall", "0,0 1,0", "9,1,1,4");
-        this.addWalkway("hallA", "entryhall", "0,0 1,0", "3,1,1,4");
-        this.addWalkway("hallD", "entryhall", "0,0 1,0", "1,3,1,2");
+        this.addWalkway("hallC", "entryhall", "2,0 1,0", "15,1,1,4");
+        this.addWalkway("hallB", "entryhall", "2,0 1,0", "9,1,1,4");
+        this.addWalkway("hallA", "entryhall", "2,0 1,0", "3,1,1,4");
+        this.addWalkway("hallD", "entryhall", "2,0 1,0", "1,3,1,2");
         //this.addWalkway("ha", "rooftop", "3,11 4,11 5,11", "10,5,4,4");
     }
 
@@ -99,18 +99,18 @@ public class WalkwaysManager {
         this.walkways.add(entrance);
     }
 
-    public WalkwaysEntrance getWalkway(RoomUser roomUser) {
-        if (!roomUser.getRoom().isPublicRoom()) {
+    public WalkwaysEntrance getWalkway(Room room, Position position) {
+        if (!room.isPublicRoom()) {
             return null;
         }
 
         for (WalkwaysEntrance entrance : this.walkways) {
-            if (!entrance.getModelFrom().equals(roomUser.getRoom().getModel().getName())) {
+            if (!entrance.getModelFrom().equals(room.getModel().getName())) {
                 continue;
             }
 
             for (Position coord : entrance.getFromCoords()) {
-                if (coord.equals(roomUser.getPosition())) {
+                if (coord.equals(position)) {
                     return entrance;
                 }
             }
