@@ -147,7 +147,7 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
-        System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
+        //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
         if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
             return;
