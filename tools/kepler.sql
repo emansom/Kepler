@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 04, 2018 at 08:16 AM
--- Server version: 10.3.7-MariaDB
--- PHP Version: 7.2.6
+-- Generation Time: Aug 07, 2018 at 02:01 PM
+-- Server version: 10.2.15-MariaDB
+-- PHP Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -1348,7 +1348,14 @@ INSERT INTO `rooms` (`id`, `owner_id`, `category`, `name`, `description`, `model
 (57, '0', 12, 'Upper Hallways IV', 'hallway_ii', 'hallway10', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
 (58, '0', 12, 'Upper Hallways V', 'hallway_ii', 'hallway11', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 1, 25),
 (59, '0', 7, 'Star Lounge', 'star_lounge', 'star_lounge', 'hh_room_starlounge', 0, 0, 1, 0, 0, '', 0, 35),
-(60, '0', 8, 'Club Orient', 'orient', 'orient', 'hh_room_orient', 0, 0, 1, 0, 0, '', 1, 35);
+(60, '0', 8, 'Club Orient', 'orient', 'orient', 'hh_room_orient', 0, 0, 1, 0, 0, '', 1, 35),
+(61, '0', 13, 'Cunning Fox Gamehall', 'cunning_fox_gamehall', 'entryhall', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(62, '0', 13, 'TicTacToe hall', 'cunning_fox_gamehall/1', 'hallA', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 1, 25),
+(63, '0', 13, 'Battleships hall', 'cunning_fox_gamehall/2', 'hallB', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(64, '0', 13, 'Chess hall', 'cunning_fox_gamehall/3', 'hallC', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(65, '0', 13, 'Poker hall', 'cunning_fox_gamehall/4', 'hallD', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(66, '0', 13, 'Battleball Lobby', 'bb_lobby_beginner_0', 'bb_lobby_1', 'hh_game_bb,hh_game_bb_room,hh_game_bb_ui,hh_gamesys', 0, 0, 1, 0, 0, '', 0, 25),
+(67, '0', 13, 'Snowstorm Lobby', 'sw_lobby_beginner_0', 'snowwar_lobby_1', 'hh_gamesys,hh_game_snowwar,hh_game_snowwar_room,hh_game_snowwar_ui', 0, 0, 1, 0, 0, '', 0, 25);
 
 -- --------------------------------------------------------
 
@@ -1384,6 +1391,7 @@ INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`,
 (10, 0, 3, 0, 'Swimming Pools', 1, 0, 1, 6),
 (11, 0, 3, 0, 'The Lobbies', 1, 0, 1, 6),
 (12, -1, 3, 0, 'The Hallways', 1, 0, 1, 6),
+(13, 0, 3, 0, 'Games', 1, 0, 1, 6),
 (20, 0, 9, 0, 'The Laughing Lions Park', 1, 0, 1, 6),
 (21, 0, 9, 0, 'The Green Heart', 1, 0, 1, 6),
 (101, 0, 4, 0, 'Staff HQ', 0, 1, 4, 5),
@@ -1463,7 +1471,7 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 (42, 'dusty_lounge', 'dusty_lounge', 14, 1, 2, 4, 'xxxxxxxxxxxxxx22xxxxxxxxxxxxx|xxxxxxxxxx222x222x2xxxxxxxxxx|xxxxxxx33322222222223xxxxxxx3|xxxxxxx33322222222223xxxxxxx3|xxxxxxx33322222222223x33333x3|xxxxxxx33322222222223x33333x3|xx111xx33322222222223xxxxxxx3|xx111xxx332222222222333333333|xx111xxxx32222222222333333333|xx111xxxxxx222222222333333333|xx111xxxxxxx1111111x333333333|xx111xxxxxxx1111111x222222222|xx111xxxxxx111111111111111111|xx111xxxxxx111111111111111111|11111xxxxxx111111111111111111|11111xxxxxx111111111111111111|11x11xxxxxx111111111111111111|11xxxxxxxxx11111111111111111x|x11xxxxxxxxx1111111x1111111xx|xx11xxxxxxx111111111111111xxx|xxx11xxxxxx11111111111111xxxx|xxxx11111111111111111111xxxxx|xxxxx11111111111111xxxxxxxxxx|xxxxxxxxxxx11111111xxxxxxxxxx|xxxxxxxxxxx11111111xxxxxxxxxx', 0),
 (43, 'cr_staff', 'cr_staff', 3, 22, 0, 0, '00000000xxxxxxxx|0000000000000000|0000000000000000|000000000000xx00|0000000000000000|0000000000000000|0000000000000000|x000000000000000|0000000000000000|0000000000000000|0000000000000000|0000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|xxx00xxxxxxxxxxx|xxx00xxxxxxxxxxx|xxx00xxxxxxxxxxx', 0),
 (44, 'rooftop', 'rooftop', 17, 12, 4, 0, '44xxxxxxxxxxxxxxxxxx|444xxxxxxxxxxx444444|4444xxxxxxxxxx444444|44444xxxx4xxxx444444|444444xxx44xxx444444|44444444444444444444|44444444444444444444|44444444444444444444|44444444xx44xx44xx44|44444444xx44xx44xx44|44444444444444444444|44444444444444444444|44444444444444444444|x444444x444444xx4444|x444444x444444xx333x|x444444x444444xx222x|x444444x444444xx11xx|x444444x444444xxxxxx', 0),
-(45, 'rooftop_2', 'rooftop_2', 4, 9, 0, 0, 'x0000x000|xxxxxx000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|xxx000xxx|xxx000xxx', 0),
+(45, 'rooftop_2', 'rooftop_2', 4, 11, 0, 0, 'x0000x000|xxxxxx000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|xxx000xxx|xxx000xxx', 0),
 (46, 'tearoom', 'tearoom', 21, 19, 1, 6, 'xxxxxxxxxxxxxxxxxxxxxx|xxxxxxxx3333x33333333x|333333xx3333x33333333x|3333333x3333x33333333x|3333333x3333x33333333x|3333333xxxxxx33333333x|333333333333333333333x|333333333333333333333x|333333333333333333333x|333333333333333333333x|33333333222x333333333x|33333333222x333333333x|33333333222x333333333x|33333333222x333333333x|33333333111x333333333x|33333333111x333333333x|33333333111x333333333x|xxxxxxxx111xxxxxxxxxxx|11111111111111111111xx|1111111111111111111111|1111111111111111111111|11111111111111111111xx', 0),
 (47, 'cafe_ole', 'taivas_cafe', 14, 29, 0, 0, 'XXXXXXXXXXXXX111111X|XXXXXXXXXXXXX1111111|XXXXXXXXXXXXX1111111|XXXXXXXXXXXXX1111111|XXXXXXXXXXXXX1111111|XXX11111111111111111|XXX11111111111111111|XX111111111111111111|XX111111111111111111|XX111111111111111111|XXX11111111111111111|111111111XXXXXXX1111|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|X11111111X0000000000|XX1111111X0000000000|XXX111111X0000000000|XXXX11111X0000000000|XXXXX111110000000000|XXXXXX11110000000000|XXXXXXX1110000000000|XXXXXXXX11000000000X|XXXXXXXXXX00000000XX|XXXXXXXXXXXXXX00XXXX|XXXXXXXXXXXXXX00XXXX', 0),
 (48, 'cr_cafe', 'cr_cafe', 20, 10, 0, 6, '0000000000000000000xx|x000000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xxxx000000000000000xx|0000000000000000000xx|0000000000000000000xx|x000000000000000000xx|xx00000000000000000xx|xxxx00000000000000000|xxx000000000000000000|xxx0000000000000000xx|xxx0000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx', 0),
@@ -1502,7 +1510,12 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 (80, 'hallway10', 'hallway10', 3, 23, 1, 1, 'xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx', 1),
 (81, 'hallway11', 'hallway11', 20, 3, 0, 6, 'xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx', 1),
 (82, 'star_lounge', 'star_lounge', 36, 35, 0, 6, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx2222x4444442222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222x444x32222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222xx4xx22222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222222111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222222111xxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222222222xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222222222xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222221111xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333xx2x22222220000xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx333333332222222000000xxxxxxxxxxxxx|xxxxxxxxxxxxxxxx333333332222222x0000000xxxxxxxxxxx|xxxxxxxxxxxxxxxxx33333332222222x0000000xxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxx222222000000xxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 1),
-(83, 'orient', 'orient', 32, 20, 1, 6, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1000000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xx000x000xx111x111xxx|xxxxxxxxxxxxxx1xx000x000xxxxxx1111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxx111111111111xx000x000x111111111xx|xxx1xxxxxxxxxxxxx000x000x111111111xx|xxx1x1111111111000000000x111111111xx|xxx1x1111111111000000000xx1111111xxx|xxx1x11xxxxxx11000000000xx1111111100|xxx111xxxxxxx11000000000011111111100|xxx111xxxxxxx11000000000011111111100|xxxxx1xxxxxxx11000000000011111111100|xxxxx11xxxxxx11000000000xx1111111100|xxxxx1111111111000000000xx1111111xxx|xxxxx1111111111xx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x00xx11xxxx111xx|xxxxxxxxxxxxxxxxxxxxxxxxxx11111111xx|', 1);
+(83, 'orient', 'orient', 32, 20, 1, 6, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1000000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xx000x000xx111x111xxx|xxxxxxxxxxxxxx1xx000x000xxxxxx1111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxx111111111111xx000x000x111111111xx|xxx1xxxxxxxxxxxxx000x000x111111111xx|xxx1x1111111111000000000x111111111xx|xxx1x1111111111000000000xx1111111xxx|xxx1x11xxxxxx11000000000xx1111111100|xxx111xxxxxxx11000000000011111111100|xxx111xxxxxxx11000000000011111111100|xxxxx1xxxxxxx11000000000011111111100|xxxxx11xxxxxx11000000000xx1111111100|xxxxx1111111111000000000xx1111111xxx|xxxxx1111111111xx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x00xx11xxxx111xx|xxxxxxxxxxxxxxxxxxxxxxxxxx11111111xx|', 1),
+(84, 'entryhall', 'entryhall', 17, 18, 1, 0, 'xx11xxxx11xxxx11xxxx|x1111111111111111111|11111111111111111111|11111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|xxxxxxxxxxxxxxxxx11x', 1),
+(85, 'hallA', 'hallA', 0, 0, 1, 4, '11xxxxxxxxxxxxxxx|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111', 1),
+(86, 'hallB', 'hallB', 1, 0, 1, 4, 'x11xxxxxxxxxxxxxxxx|1111111111111111111|1111111111111111111|1111111111111111111|1111111111111111111|1111111111111111111|1111111111111111111|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx', 1),
+(87, 'hallC', 'hallC', 0, 0, 1, 4, '11xxxxxxxxxxxxxxx|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111', 1),
+(88, 'hallD', 'hallD', 0, 0, 1, 4, '11xxxxxxxxxxxxxxx|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111', 1);
 
 -- --------------------------------------------------------
 
@@ -1571,7 +1584,10 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180730120357'),
 ('20180802105259'),
 ('20180804021505'),
-('20180804075142');
+('20180804075142'),
+('20180807115604'),
+('20180807132707'),
+('20180807135756');
 
 -- --------------------------------------------------------
 
@@ -1840,7 +1856,7 @@ ALTER TABLE `rooms_categories`
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`

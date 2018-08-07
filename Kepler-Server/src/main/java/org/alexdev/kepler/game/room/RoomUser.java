@@ -147,7 +147,7 @@ public class RoomUser {
         }
 
         this.goal = new Position(X, Y);
-        System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
+        //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
         if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
             return;
@@ -184,7 +184,21 @@ public class RoomUser {
 
         }
 
-        if (this.beingKicked) {
+        boolean enteredDoor = false;
+        Position doorPosition = this.room.getModel().getDoorLocation();
+
+        if (doorPosition.equals(this.position)) {
+            enteredDoor = true;
+        }
+
+        if (this.room.isPublicRoom()) {
+            if (WalkwaysManager.getInstance().getWalkway(this.room, doorPosition) != null) {
+                enteredDoor = false;
+            }
+        }
+
+        // Leave room if the tile is the door and we are in a flat or we're being kicked
+        if (enteredDoor || this.beingKicked) {
             this.room.getEntityManager().leaveRoom(this.entity, true);
             return;
         }

@@ -94,12 +94,12 @@ public class RoomEntityManager {
             RoomManager.getInstance().addRoom(this.room);
         }
 
-        this.room.getEntities().add(entity);
-        this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
-
         entity.getRoomUser().getTimerManager().resetRoomTimer();
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
+
+        this.room.getEntities().add(entity);
+        this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
         Position entryPosition = this.room.getModel().getDoorLocation();
 
