@@ -63,10 +63,10 @@ public class WalkwaysManager {
         this.addWalkway("hallway11", "hallway9", "0,5 0,4 0,3 0,2", "29,15,0,6");
 
         // Cunning Fox Gamehall
-        this.addWalkway("entryhall", "hallA", "2,0 3,0", "0,0,1,4");
-        this.addWalkway("entryhall", "hallB", "8,0 9,0", "1,0,1,4");
-        this.addWalkway("entryhall", "hallC", "14,0 15,0", "0,0,1,4");
-        this.addWalkway("entryhall", "hallD", "0,2 0,3", "0,0,1,4");
+        this.addWalkway("entryhall", "hallA", "2,0 3,0", "1,1,1,4");
+        this.addWalkway("entryhall", "hallB", "8,0 9,0", "2,1,1,4");
+        this.addWalkway("entryhall", "hallC", "14,0 15,0", "1,1,1,4");
+        this.addWalkway("entryhall", "hallD", "0,2 0,3", "1,1,1,4");
 
         this.addWalkway("hallA", "entryhall", "0,0 1,0", "3,1,1,4");
         this.addWalkway("hallB", "entryhall", "2,0 1,0", "9,1,1,4");
