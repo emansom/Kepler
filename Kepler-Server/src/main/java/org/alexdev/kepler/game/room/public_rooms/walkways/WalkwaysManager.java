@@ -61,6 +61,18 @@ public class WalkwaysManager {
         this.addWalkway("hallway10", "hallway11", "17,0 17,1 17,2 17,3", "10,19,0,2");
         this.addWalkway("hallway11", "hallway10", "8,18 8,19 8,20 8,21", "15,1,0,6");
         this.addWalkway("hallway11", "hallway9", "0,5 0,4 0,3 0,2", "29,15,0,6");
+
+        // Cunning Fox Gamehall
+        this.addWalkway("entryhall", "hallC", "14,0 15,0", null);
+        this.addWalkway("entryhall", "hallB", "8,0 9,0", null);
+        this.addWalkway("entryhall", "hallA", "2,0 3,0", null);
+        this.addWalkway("entryhall", "hallD", "0,2 0,3", null);
+
+        this.addWalkway("hallC", "entryhall", "0,0 1,0", "15,1,1,4");
+        this.addWalkway("hallB", "entryhall", "0,0 1,0", "9,1,1,4");
+        this.addWalkway("hallA", "entryhall", "0,0 1,0", "3,1,1,4");
+        this.addWalkway("hallD", "entryhall", "0,0 1,0", "1,3,1,2");
+        //this.addWalkway("ha", "rooftop", "3,11 4,11 5,11", "10,5,4,4");
     }
 
     private void addWalkway(String modelFrom, String modelTo, String fromCoords, String destination) {

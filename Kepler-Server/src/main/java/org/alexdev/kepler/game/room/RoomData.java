@@ -70,7 +70,11 @@ public class RoomData {
                 || this.model.equals("hallway7")
                 || this.model.equals("hallway8")
                 || this.model.equals("hallway10")
-                || this.model.equals("hallway11")) {
+                || this.model.equals("hallway11")
+                || this.model.equals("hallA")
+                || this.model.equals("hallB")
+                || this.model.equals("hallC")
+                || this.model.equals("hallD")) {
             this.navigatorHide = true;
         }
 
@@ -92,6 +96,14 @@ public class RoomData {
 
         if (this.model.equals("bar_a")) {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("bar_b"));
+        }
+
+        if (this.model.equals("entryhall")) {
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallA"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallB"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallC"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallD"));
+
         }
 
         if (this.model.equals("hallway2")) {
@@ -171,6 +183,18 @@ public class RoomData {
 
             if (this.name.startsWith("Lower Hallways")) {
                 return "Lower Hallways";
+            }
+
+            if (this.name.startsWith("Club Massiva")) {
+                return "Club Massiva";
+            }
+
+            if (this.name.startsWith("The Chromide Club")) {
+                return "The Chromide Club";
+            }
+
+            if (this.ccts.equals("hh_room_gamehall,hh_games")) {
+                return "Cunning Fox Gamehall";
             }
         }
 
