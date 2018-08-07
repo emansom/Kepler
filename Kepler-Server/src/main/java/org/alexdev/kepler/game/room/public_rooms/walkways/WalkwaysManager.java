@@ -71,7 +71,7 @@ public class WalkwaysManager {
         this.addWalkway("hallC", "entryhall", "2,0 1,0", "15,1,1,4");
         this.addWalkway("hallB", "entryhall", "2,0 1,0", "9,1,1,4");
         this.addWalkway("hallA", "entryhall", "2,0 1,0", "3,1,1,4");
-        this.addWalkway("hallD", "entryhall", "2,0 1,0", "1,3,1,2");
+        this.addWalkway("hallD", "entryhall", "0,0 1,0", "1,3,1,2");
         //this.addWalkway("ha", "rooftop", "3,11 4,11 5,11", "10,5,4,4");
     }
 
