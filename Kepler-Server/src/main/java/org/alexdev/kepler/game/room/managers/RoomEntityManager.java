@@ -21,6 +21,7 @@ import org.alexdev.kepler.messages.incoming.rooms.user.HOTEL_VIEW;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
@@ -30,6 +31,22 @@ public class RoomEntityManager {
     public RoomEntityManager(Room room) {
         this.room = room;
         this.instanceIdCounter = new AtomicInteger(0);
+    }
+
+    /**
+     * Generates a unique ID for the entities in a room. Will be used for pets
+     * and bots in future.
+     *
+     * @return the unique ID
+     */
+    public int generateUniqueId() {
+        int unqiueId = ThreadLocalRandom.current().nextInt();
+
+        if (getByInstanceId(unqiueId) != null) {
+            unqiueId = generateUniqueId();
+        }
+
+        return unqiueId;
     }
 
     /**
@@ -96,7 +113,11 @@ public class RoomEntityManager {
 
         entity.getRoomUser().getTimerManager().resetRoomTimer();
         entity.getRoomUser().setRoom(this.room);
-        entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
+        entity.getRoomUser().setInstanceId(this.generateUniqueId());
+
+        if (!this.room.isActive()) {
+            this.initialiseRoom();
+        }
 
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
@@ -105,14 +126,16 @@ public class RoomEntityManager {
 
         if (destination != null) {
             entryPosition = destination.copy();
+
+            RoomTile tile = this.room.getMapping().getTile(entryPosition);
+
+            if (tile != null) {
+                tile.addEntity(entity);
+            }
         }
 
         entity.getRoomUser().setPosition(entryPosition);
         entity.getRoomUser().setAuthenticateId(-1);
-
-        if (!this.room.isActive()) {
-            this.initialiseRoom();
-        }
 
         if (entity.getRoomUser().getAuthenticateTelporterId() != -1) {
             Item teleporter = ItemDao.getItem(entity.getRoomUser().getAuthenticateTelporterId());

@@ -6,8 +6,10 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.ACTIVE_OBJECTS;
 import org.alexdev.kepler.messages.outgoing.rooms.OBJECTS_WORLD;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
+import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class G_OBJS implements MessageEvent {
     @Override
@@ -23,5 +25,31 @@ public class G_OBJS implements MessageEvent {
         player.flush();
 
         player.getMessenger().sendStatusUpdate();
+
+        /*player.send(new MessageComposer() {
+            @Override
+            public void compose(NettyResponse response) {
+                response.writeInt(0);
+            }
+
+            @Override
+            public short getHeader() {
+                return 231;
+            }
+        });
+
+        player.send(new MessageComposer() {
+            @Override
+            public void compose(NettyResponse response) {
+                response.writeInt(0);
+                response.writeInt(0);
+                response.writeInt(0);
+            }
+
+            @Override
+            public short getHeader() {
+                return 232;
+            }
+        });*/
     }
 }
