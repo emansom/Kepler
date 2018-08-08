@@ -11,8 +11,9 @@ public class NavigatorCategory {
     private boolean allowTrading;
     private int minimumRoleAccess;
     private int minimumRoleSetFlat;
+    private boolean isNode;
 
-    public NavigatorCategory(int id, int parentId, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat) {
+    public NavigatorCategory(int id, int parentId, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat, boolean isNode) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
@@ -20,6 +21,7 @@ public class NavigatorCategory {
         this.allowTrading = allowTrading;
         this.minimumRoleAccess = minimumRoleAccess;
         this.minimumRoleSetFlat = minimumRoleSetFlat;
+        this.isNode = isNode;
     }
 
     public int getCurrentVisitors() {
@@ -72,5 +74,9 @@ public class NavigatorCategory {
 
     public int getMinimumRoleSetFlat() {
         return minimumRoleSetFlat;
+    }
+
+    public boolean isNode() {
+        return isNode;
     }
 }
