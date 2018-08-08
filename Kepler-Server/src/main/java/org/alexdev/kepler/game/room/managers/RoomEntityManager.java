@@ -21,6 +21,7 @@ import org.alexdev.kepler.messages.incoming.rooms.user.HOTEL_VIEW;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
@@ -30,6 +31,16 @@ public class RoomEntityManager {
     public RoomEntityManager(Room room) {
         this.room = room;
         this.instanceIdCounter = new AtomicInteger(0);
+    }
+
+    public int generateUniqueId() {
+        int unqiueId = ThreadLocalRandom.current().nextInt();
+
+        if (getByInstanceId(unqiueId) != null) {
+            unqiueId = generateUniqueId();
+        }
+
+        return unqiueId;
     }
 
     /**
@@ -96,7 +107,7 @@ public class RoomEntityManager {
 
         entity.getRoomUser().getTimerManager().resetRoomTimer();
         entity.getRoomUser().setRoom(this.room);
-        entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
+        entity.getRoomUser().setInstanceId(this.generateUniqueId());
 
         if (!this.room.isActive()) {
             this.initialiseRoom();
