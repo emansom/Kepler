@@ -37,7 +37,7 @@ public class NavigatorDao {
                 NavigatorCategory category = new NavigatorCategory(
                         resultSet.getInt("id"), resultSet.getInt("parent_id"), resultSet.getString("name"),
                         resultSet.getBoolean("public_spaces"), resultSet.getBoolean("allow_trading"),
-                        resultSet.getInt("minrole_access"), resultSet.getInt("minrole_setflatcat")
+                        resultSet.getInt("minrole_access"), resultSet.getInt("minrole_setflatcat"), resultSet.getBoolean("isnode")
                 );
 
                 categories.put(category.getId(), category);
