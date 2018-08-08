@@ -95,8 +95,25 @@ public class WalkwaysManager {
             destinationPosition = new Position(x, y, z, rotation, rotation);
         }
 
-        WalkwaysEntrance entrance = new WalkwaysEntrance(modelFrom, modelTo, coordinates, destinationPosition);
-        this.walkways.add(entrance);
+        this.walkways.add(new WalkwaysEntrance(modelFrom, modelTo, coordinates, destinationPosition));
+    }
+
+    public WalkwaysEntrance getDestination(Room room, Position position) {
+        if (!room.isPublicRoom()) {
+            return null;
+        }
+
+        for (WalkwaysEntrance entrance : this.walkways) {
+            if (!entrance.getModelTo().equals(room.getModel().getName())) {
+                continue;
+            }
+
+            if (entrance.getDestination().equals(position)) {
+                return entrance;
+            }
+        }
+
+        return null;
     }
 
     public WalkwaysEntrance getWalkway(Room room, Position position) {
