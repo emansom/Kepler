@@ -60,7 +60,7 @@ public class PoolHandler {
             item.showProgram("close");
 
             player.getRoomUser().setWalkingAllowed(false);
-            player.getRoomUser().getTimerManager().resetRoomTimer(60); // Only allow 60 seconds when diving, to stop the queue from piling up if someone goes AFK.
+            player.getRoomUser().getTimerManager().resetRoomTimer(120); // Only allow 120 seconds when diving, to stop the queue from piling up if someone goes AFK.
             player.getRoomUser().setDiving(true);
 
             player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
@@ -74,7 +74,7 @@ public class PoolHandler {
             item.showProgram("close");
 
             player.getRoomUser().setWalkingAllowed(false);
-            player.getRoomUser().getTimerManager().resetRoomTimer(60); // Only allow 60 seconds when changing clothes, to stop someone from just afking in the booth for 15 minutes.
+            player.getRoomUser().getTimerManager().resetRoomTimer(120); // Only allow 120 seconds when changing clothes, to stop someone from just afking in the booth for 15 minutes.
             player.send(new OPEN_UIMAKOPPI());
         }
 
