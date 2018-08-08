@@ -33,6 +33,12 @@ public class RoomEntityManager {
         this.instanceIdCounter = new AtomicInteger(0);
     }
 
+    /**
+     * Generates a unique ID for the entities in a room. Will be used for pets
+     * and bots in future.
+     *
+     * @return the unique ID
+     */
     public int generateUniqueId() {
         int unqiueId = ThreadLocalRandom.current().nextInt();
 
