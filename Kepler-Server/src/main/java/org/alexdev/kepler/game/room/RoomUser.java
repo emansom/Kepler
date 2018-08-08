@@ -218,12 +218,7 @@ public class RoomUser {
             needsUpdate = true;
         }
 
-        RoomTile tile = this.getTile();
-        Item item = null;
-
-        if (tile.getHighestItem() != null) {
-            item = tile.getHighestItem();
-        }
+        Item item = this.getCurrentItem();
 
         if (item == null || (!item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || !item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP))) {
             if (this.containsStatus(StatusType.SIT) || this.containsStatus(StatusType.LAY)) {

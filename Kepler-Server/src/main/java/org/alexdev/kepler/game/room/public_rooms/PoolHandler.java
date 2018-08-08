@@ -168,14 +168,14 @@ public class PoolHandler {
      * @param player the player to leave
      */
     public static void exitBooth(Player player) {
-        RoomTile tile = player.getRoomUser().getTile();
+        Item item = player.getRoomUser().getCurrentItem();
         Room room = player.getRoomUser().getRoom();
 
-        if (tile == null || tile.getHighestItem() == null || room == null) {
+        if (item == null || room == null) {
             return;
         }
 
-        if (!tile.getHighestItem().getDefinition().getSprite().equals("poolBooth")) {
+        if (!item.getDefinition().getSprite().equals("poolBooth")) {
             return;
         }
 
@@ -184,7 +184,7 @@ public class PoolHandler {
             return;
         }
 
-        tile.getHighestItem().showProgram("open");
+        item.showProgram("open");
         player.getRoomUser().setWalkingAllowed(true);
 
         if (room.getData().getModel().equals("pool_a")) {
@@ -215,14 +215,12 @@ public class PoolHandler {
      * @param player the player to handle
      */
     public static void disconnect(Player player) {
-        RoomTile tile = player.getRoomUser().getTile();
+        Item item = player.getRoomUser().getCurrentItem();
         Room room = player.getRoomUser().getRoom();
 
-        if (tile == null || tile.getHighestItem() == null || room == null) {
+        if (item == null || room == null) {
             return;
         }
-
-        Item item = tile.getHighestItem();
 
         if (item.getDefinition().getSprite().equals("poolBooth") ||
             item.getDefinition().getSprite().equals("poolLift")) {
