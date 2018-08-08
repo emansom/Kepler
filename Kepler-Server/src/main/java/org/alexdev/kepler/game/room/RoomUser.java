@@ -35,7 +35,6 @@ public class RoomUser {
     private Position goal;
     private Position nextPosition;
     private Room room;
-    private Item currentItem;
     private RollingData rollingData;
     private RoomTimerManager timerManager;
 
@@ -72,7 +71,6 @@ public class RoomUser {
         this.path.clear();
 
         this.nextPosition = null;
-        this.currentItem = null;
         this.goal = null;
         this.room = null;
         this.rollingData = null;
@@ -271,8 +269,6 @@ public class RoomUser {
         }
 
         this.updateNewHeight(this.position);
-
-        this.currentItem = item;
         this.needsUpdate = needsUpdate;
     }
 
@@ -623,7 +619,7 @@ public class RoomUser {
      * @return true, if successful
      */
     public boolean isSittingOnGround() {
-        if (this.currentItem == null || !this.currentItem.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
+        if (this.getCurrentItem() == null || !this.getCurrentItem().hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
             return this.containsStatus(StatusType.SIT);
         }
 
@@ -636,8 +632,8 @@ public class RoomUser {
      * @return true, if successful.
      */
     public boolean isSittingOnChair() {
-        if (this.currentItem != null) {
-            return this.currentItem.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
+        if (this.getCurrentItem() != null) {
+            return this.getCurrentItem().hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
         }
 
         return false;
@@ -656,6 +652,17 @@ public class RoomUser {
 
         return null;
     }
+
+    public Item getCurrentItem() {
+        RoomTile tile = this.getTile();
+
+        if (tile != null && tile.getHighestItem() != null) {
+            return tile.getHighestItem();
+        }
+
+        return null;
+    }
+
 
     public Entity getEntity() {
         return entity;
@@ -755,10 +762,6 @@ public class RoomUser {
 
     public void setTyping(boolean typing) {
         isTyping = typing;
-    }
-
-    public Item getCurrentItem() {
-        return currentItem;
     }
 
     public boolean isDiving() {
