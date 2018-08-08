@@ -107,7 +107,10 @@ public class RoomEntityManager {
             entryPosition = destination.copy();
 
             RoomTile tile = this.room.getMapping().getTile(entryPosition);
-            tile.addEntity(entity);
+
+            if (tile != null) {
+                tile.addEntity(entity);
+            }
         }
 
         entity.getRoomUser().setPosition(entryPosition);
