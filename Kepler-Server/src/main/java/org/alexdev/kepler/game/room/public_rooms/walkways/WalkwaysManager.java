@@ -108,7 +108,13 @@ public class WalkwaysManager {
                 continue;
             }
 
-            if (entrance.getDestination().equals(position)) {
+            Position destination = room.getModel().getDoorLocation();
+
+            if (entrance.getDestination() != null) {
+                destination = entrance.getDestination();
+            }
+
+            if (destination.equals(position)) {
                 return entrance;
             }
         }
