@@ -98,6 +98,10 @@ public class RoomEntityManager {
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
 
+        if (!this.room.isActive()) {
+            this.initialiseRoom();
+        }
+
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
 
@@ -115,10 +119,6 @@ public class RoomEntityManager {
 
         entity.getRoomUser().setPosition(entryPosition);
         entity.getRoomUser().setAuthenticateId(-1);
-
-        if (!this.room.isActive()) {
-            this.initialiseRoom();
-        }
 
         if (entity.getRoomUser().getAuthenticateTelporterId() != -1) {
             Item teleporter = ItemDao.getItem(entity.getRoomUser().getAuthenticateTelporterId());
