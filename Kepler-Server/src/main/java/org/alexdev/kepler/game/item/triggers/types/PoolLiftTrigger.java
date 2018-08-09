@@ -29,10 +29,9 @@ public class PoolLiftTrigger implements ItemTrigger {
         player.getRoomUser().getTimerManager().resetRoomTimer(120); // Only allow 120 seconds when diving, to stop the queue from piling up if someone goes AFK.
         player.getRoomUser().setDiving(true);
 
+        CurrencyDao.decreaseTickets(player.getDetails(), 1);
+
         player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
         player.send(new JUMPINGPLACE_OK());
-
-        CurrencyDao.decreaseTickets(player.getDetails(), 1);
-        player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
     }
 }
