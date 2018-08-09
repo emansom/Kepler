@@ -417,9 +417,11 @@ public class Item {
         this.definition = null;
         this.definitionId = definitionId;
 
-        for (ItemBehaviour behaviour : this.getDefinition().getBehaviourList()) {
-            if (behaviour.getTrigger() != null) {
-                this.itemTrigger = behaviour.getTrigger();
+        if (this.getDefinition() != null) {
+            for (ItemBehaviour behaviour : this.getDefinition().getBehaviourList()) {
+                if (behaviour.getTrigger() != null) {
+                    this.itemTrigger = behaviour.getTrigger();
+                }
             }
         }
     }
