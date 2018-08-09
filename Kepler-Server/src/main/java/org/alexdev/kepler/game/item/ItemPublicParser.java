@@ -52,12 +52,12 @@ public class ItemPublicParser {
                         || item.getDefinition().getSprite().contains("seat")
                         || item.getDefinition().getSprite().contains("stool")
                         || item.getDefinition().getSprite().contains("sofa")
-                        || item.getDefinition().getSprite().equals("rooftop_flatcurb")
                         || item.getDefinition().getSprite().equals("l")
                         || item.getDefinition().getSprite().equals("m")
                         || item.getDefinition().getSprite().equals("k")
                         || item.getDefinition().getSprite().equals("shift1")
-                        || item.getDefinition().getSprite().equals("stone")) {
+                        || item.getDefinition().getSprite().equals("stone")
+                        || item.getDefinition().getSprite().startsWith("rooftop_flatcurb")) {
                     item.getDefinition().addBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
                     item.getDefinition().removeBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
                     item.getDefinition().setTopHeight(1.0);
