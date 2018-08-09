@@ -21,18 +21,18 @@ public class AboutCommand extends Command {
 
         Player player = (Player)entity;
         
-        player.send(new ALERT("Project Kepler\n\nContributors:" +
-                "\n - Hoshiko" + // Aside from myself (Quackster), Hoshiko contributed a lot.
-                "\n - ThuGie" + // Helping me with knowing the Habbo protocol better
-                "\n - Alito" + // Bug tester and contributor for rooms/fixed badges
-                "\n - Ascii" + // Helping me with various packet structures
-                "\n - Lightbulb" + // Helping me with getting tables to show up in public rooms
-                "\n - Romuald" + // Creating Habbo Club subscription
-                "\n - Glaceon" + // Creating redeeming furni
-                "\n - Nillus/Holo Team" + // Various parts of Woodpecker, Holograph assisted me, A LOT with protocol
-                "\n - Meth0d" + // Uber had the Club Mammoth furni data
-                "\n - office.boy" + // Parts of Blunk
-                "\n\nMade by Quackster from RaGEZONE"));
+        player.send(new ALERT("Project Kepler<br><br>Contributors:" +
+                "<br> - Hoshiko" + // Aside from myself (Quackster), Hoshiko contributed a lot.
+                "<br> - ThuGie" + // Helping me with knowing the Habbo protocol better
+                "<br> - Alito" + // Bug tester and contributor for rooms/fixed badges
+                "<br> - Ascii" + // Helping me with various packet structures
+                "<br> - Lightbulb" + // Helping me with getting tables to show up in public rooms
+                "<br> - Romuald" + // Creating Habbo Club subscription
+                "<br> - Glaceon" + // Creating redeeming furni
+                "<br> - Nillus/Holo Team" + // Various parts of Woodpecker, Holograph assisted me, A LOT with protocol
+                "<br> - Meth0d" + // Uber had the Club Mammoth furni data
+                "<br> - office.boy" + // Parts of Blunk
+                "<br><br>Made by Quackster from RaGEZONE"));
     }
 
     @Override
