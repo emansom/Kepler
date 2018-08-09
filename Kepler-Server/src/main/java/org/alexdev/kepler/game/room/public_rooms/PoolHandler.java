@@ -65,9 +65,8 @@ public class PoolHandler {
         }
 
         roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp).getTileHeight()));
-        roomUser.getPath().clear();
-        roomUser.getPath().add(goal);
         roomUser.setWalking(true);
+        roomUser.walkTo(goal.getX(), goal.getY());
 
         item.showProgram(null);
     }

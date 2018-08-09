@@ -11,11 +11,6 @@ import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 public class PoolExitTrigger implements ItemTrigger {
     @Override
     public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-
-    }
-
-    @Override
-    public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
             return;
         }
@@ -46,5 +41,10 @@ public class PoolExitTrigger implements ItemTrigger {
         if (warp != null) {
             PoolHandler.warpSwim(item, entity, warp, goal, true);
         }
+    }
+
+    @Override
+    public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+
     }
 }
