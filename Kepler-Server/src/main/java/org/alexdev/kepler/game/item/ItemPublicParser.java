@@ -2,13 +2,27 @@ package org.alexdev.kepler.game.item;
 
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolBoothTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolEnterTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolExitTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolLiftTrigger;
 
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemPublicParser {
+    private static Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
+        put("poolExit", new PoolExitTrigger());
+        put("poolEnter", new PoolEnterTrigger());
+        put("poolLift", new PoolLiftTrigger());
+        put("poolBooth", new PoolBoothTrigger());
+    }};
+
     public static List<Item> getPublicItems(String modelId) {
         List<Item> items = new ArrayList<>();
         File file = Paths.get("tools", "gamedata", "public_items", modelId + ".dat").toFile();
@@ -99,6 +113,11 @@ public class ItemPublicParser {
                 // This is the only public item I'm aware of that has a length of 2
                 if (item.getDefinition().getSprite().equals("hw_shelf")) {
                     item.getDefinition().setLength(2);
+                }
+
+                // Set item triggers for public room furniture
+                if (itemTriggerMap.containsKey(item.getDefinition().getSprite())) {
+                    item.setItemTrigger(itemTriggerMap.get(item.getDefinition().getSprite()));
                 }
 
                 items.add(item);
