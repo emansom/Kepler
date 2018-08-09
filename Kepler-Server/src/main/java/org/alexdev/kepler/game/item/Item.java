@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.roller.RollingData;
+import org.alexdev.kepler.game.item.triggers.ItemTrigger;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -40,7 +41,9 @@ public class Item {
     private String currentProgramValue;
 
     private boolean requiresUpdate;
+
     private RollingData rollingData;
+    private ItemTrigger itemTrigger;
 
     public Item() {
         this.id = 0;
@@ -58,12 +61,14 @@ public class Item {
         this.id = id;
         this.ownerId = ownerId;
         this.roomId = roomId;
-        this.definitionId = definitionId;
         this.definition = null;
+        this.definitionId = definitionId;
         this.position = new Position(X, Y, Z, rotation, rotation);
         this.wallPosition = wallPosition;
         this.customData = customData;
         this.rollingData = null;
+
+        this.setDefinitionId(this.definitionId);
 
         if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             this.teleporterId = TeleporterDao.getTeleporterId(this.id);
@@ -413,6 +418,14 @@ public class Item {
     public void setDefinitionId(int definitionId) {
         this.definition = null;
         this.definitionId = definitionId;
+
+        if (this.getDefinition() != null) {
+            for (ItemBehaviour behaviour : this.getDefinition().getBehaviourList()) {
+                if (behaviour.getTrigger() != null) {
+                    this.itemTrigger = behaviour.getTrigger();
+                }
+            }
+        }
     }
 
     public int getId() {
@@ -522,5 +535,14 @@ public class Item {
     public void setRollingData(RollingData rollingData) {
         this.rollingData = rollingData;
     }
+
+    public ItemTrigger getItemTrigger() {
+        return itemTrigger;
+    }
+
+    public void setItemTrigger(ItemTrigger itemTrigger) {
+        this.itemTrigger = itemTrigger;
+    }
+
 }
 

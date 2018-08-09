@@ -44,95 +44,6 @@ public class PoolHandler {
     }
 
     /**
-     * Interact with a pool item.
-     *
-     * @param item the item to handle
-     * @param entity the entity to handles
-     */
-    public static void interact(Item item, Entity entity) {
-        if (entity.getType() != EntityType.PLAYER) {
-            return;
-        }
-
-        Player player = (Player) entity;
-
-        if (item.getDefinition().getSprite().equals("poolLift")) {
-            item.showProgram("close");
-
-            player.getRoomUser().setWalkingAllowed(false);
-            player.getRoomUser().getTimerManager().resetRoomTimer(120); // Only allow 120 seconds when diving, to stop the queue from piling up if someone goes AFK.
-            player.getRoomUser().setDiving(true);
-
-            player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
-            player.send(new JUMPINGPLACE_OK());
-
-            CurrencyDao.decreaseTickets(player.getDetails(), 1);
-            player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
-        }
-
-        if (item.getDefinition().getSprite().equals("poolBooth")) {
-            item.showProgram("close");
-
-            player.getRoomUser().setWalkingAllowed(false);
-            player.getRoomUser().getTimerManager().resetRoomTimer(120); // Only allow 120 seconds when changing clothes, to stop someone from just afking in the booth for 15 minutes.
-            player.send(new OPEN_UIMAKOPPI());
-        }
-
-        if (item.getDefinition().getSprite().equals("poolEnter")) {
-            Position warp = null;
-            Position goal = null;
-
-            if (item.getPosition().getX() == 20 && item.getPosition().getY() == 28) {
-                warp = new Position(21, 28);
-                goal = new Position(22, 28);
-            }
-
-            if (item.getPosition().getX() == 17 && item.getPosition().getY() == 21) {
-                warp = new Position(16, 22);
-                goal = new Position(16, 23);
-            }
-
-            if (item.getPosition().getX() == 31 && item.getPosition().getY() == 10) {
-                warp = new Position(30, 11);
-                goal = new Position(30, 12);
-            }
-
-            if (warp != null) {
-                warpSwim(item, entity, warp, goal, false);
-            }
-        }
-
-        if (item.getDefinition().getSprite().equals("poolExit")) {
-            Position warp = null;
-            Position goal = null;
-
-            if (item.getPosition().getX() == 21 && item.getPosition().getY() == 28) {
-                warp = new Position(20, 28);
-                goal = new Position(19, 28);
-            }
-
-            if (item.getPosition().getX() == 17 && item.getPosition().getY() == 22) {
-                warp = new Position(17, 21);
-                goal = new Position(17, 20);
-            }
-
-            if (item.getPosition().getX() == 31 && item.getPosition().getY() == 11) {
-                warp = new Position(31, 10);
-                goal = new Position(31, 9);
-            }
-
-            if (item.getPosition().getX() == 20 && item.getPosition().getY() == 19) {
-                warp = new Position(19, 19);
-                goal = new Position(18, 19);
-            }
-
-            if (warp != null) {
-                warpSwim(item, entity, warp, goal, true);
-            }
-        }
-    }
-
-    /**
      * Warps the player to a location fluidly with splashing.
      *
      * @param item the item, it's either a poolExit or poolEnter
@@ -141,7 +52,7 @@ public class PoolHandler {
      * @param goal the goal location to swim to
      * @param exit whether it was exiting or entering the ladder, to add or remove swimming
      */
-    private static void warpSwim(Item item, Entity entity, Position warp, Position goal, boolean exit) {
+    public static void warpSwim(Item item, Entity entity, Position warp, Position goal, boolean exit) {
         RoomUser roomUser = entity.getRoomUser();
         roomUser.getTile().removeEntity(entity);
 
@@ -154,9 +65,8 @@ public class PoolHandler {
         }
 
         roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp).getTileHeight()));
-        roomUser.getPath().clear();
-        roomUser.getPath().add(goal);
         roomUser.setWalking(true);
+        roomUser.walkTo(goal.getX(), goal.getY());
 
         item.showProgram(null);
     }

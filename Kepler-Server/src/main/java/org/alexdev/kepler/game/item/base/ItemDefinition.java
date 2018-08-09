@@ -21,7 +21,7 @@ public class ItemDefinition {
         this.sprite = "";
         this.behaviourData = "";
         this.colour = "";
-        this.topHeight = 0.01;
+        this.topHeight = DEFAULT_TOP_HEIGHT;
         this.length = 1;
         this.width = 1;
         this.behaviourList = new ArrayList<>();
@@ -235,5 +235,9 @@ public class ItemDefinition {
 
     public void setWidth(int width) {
         this.width = width;
+    }
+
+    public List<ItemBehaviour> getBehaviourList() {
+        return behaviourList;
     }
 }

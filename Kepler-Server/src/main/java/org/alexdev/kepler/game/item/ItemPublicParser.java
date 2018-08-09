@@ -2,13 +2,27 @@ package org.alexdev.kepler.game.item;
 
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolBoothTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolEnterTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolExitTrigger;
+import org.alexdev.kepler.game.item.triggers.types.PoolLiftTrigger;
 
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ItemPublicParser {
+    private static Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
+        put("poolExit", new PoolExitTrigger());
+        put("poolEnter", new PoolEnterTrigger());
+        put("poolLift", new PoolLiftTrigger());
+        put("poolBooth", new PoolBoothTrigger());
+    }};
+
     public static List<Item> getPublicItems(String modelId) {
         List<Item> items = new ArrayList<>();
         File file = Paths.get("tools", "gamedata", "public_items", modelId + ".dat").toFile();
@@ -52,12 +66,12 @@ public class ItemPublicParser {
                         || item.getDefinition().getSprite().contains("seat")
                         || item.getDefinition().getSprite().contains("stool")
                         || item.getDefinition().getSprite().contains("sofa")
-                        || item.getDefinition().getSprite().equals("rooftop_flatcurb")
                         || item.getDefinition().getSprite().equals("l")
                         || item.getDefinition().getSprite().equals("m")
                         || item.getDefinition().getSprite().equals("k")
                         || item.getDefinition().getSprite().equals("shift1")
-                        || item.getDefinition().getSprite().equals("stone")) {
+                        || item.getDefinition().getSprite().equals("stone")
+                        || item.getDefinition().getSprite().startsWith("rooftop_flatcurb")) {
                     item.getDefinition().addBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
                     item.getDefinition().removeBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
                     item.getDefinition().setTopHeight(1.0);
@@ -70,7 +84,8 @@ public class ItemPublicParser {
                     || item.getDefinition().getSprite().equals("poolExit")
                     || item.getDefinition().getSprite().equals("poolLift")
                     || item.getDefinition().getSprite().equals("poolBooth")
-                    || item.getDefinition().getSprite().equals("queue_tile2")) {
+                    || item.getDefinition().getSprite().equals("queue_tile2")
+                    || item.getDefinition().getSprite().equals("stair")) {
                     //item.getBehaviour().setCanSitOnTop(false);
                     //item.getBehaviour().setCanStandOnTop(true);
                     item.getDefinition().removeBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
@@ -98,6 +113,11 @@ public class ItemPublicParser {
                 // This is the only public item I'm aware of that has a length of 2
                 if (item.getDefinition().getSprite().equals("hw_shelf")) {
                     item.getDefinition().setLength(2);
+                }
+
+                // Set item triggers for public room furniture
+                if (itemTriggerMap.containsKey(item.getDefinition().getSprite())) {
+                    item.setItemTrigger(itemTriggerMap.get(item.getDefinition().getSprite()));
                 }
 
                 items.add(item);

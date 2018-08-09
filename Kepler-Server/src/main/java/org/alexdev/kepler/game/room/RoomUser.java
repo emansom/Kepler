@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.roller.RollingData;
+import org.alexdev.kepler.game.item.triggers.ItemTrigger;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -210,12 +211,10 @@ public class RoomUser {
      * Triggers the current item that the player has walked on top of.
      */
     public void invokeItem(boolean isRolling) {
-        boolean needsUpdate = false;
         double height = this.getTile().getWalkingHeight();
 
         if (height != this.position.getZ()) {
             this.position.setZ(height);
-            needsUpdate = true;
         }
 
         Item item = this.getCurrentItem();
@@ -224,47 +223,19 @@ public class RoomUser {
             if (this.containsStatus(StatusType.SIT) || this.containsStatus(StatusType.LAY)) {
                 this.removeStatus(StatusType.SIT);
                 this.removeStatus(StatusType.LAY);
-                needsUpdate = true;
             }
         }
 
         if (item != null) {
-            int headRotation = this.position.getHeadRotation();
+            ItemTrigger trigger = item.getItemTrigger();
 
-            if (item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
-                this.removeStatus(StatusType.DANCE);
-                this.position.setRotation(item.getPosition().getRotation());
-                this.setStatus(StatusType.SIT, StringUtil.format(item.getDefinition().getTopHeight()));
-                needsUpdate = true;
-            }
-
-            if (item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
-                this.removeStatus(StatusType.CARRY_ITEM);
-                this.removeStatus(StatusType.CARRY_FOOD);
-                this.removeStatus(StatusType.CARRY_DRINK);
-                this.removeStatus(StatusType.DANCE);
-
-                this.position.setRotation(item.getPosition().getRotation());
-                this.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
-                needsUpdate = true;
-            }
-
-            if (isRolling) {
-                if (needsUpdate && this.timerManager.getLookTimer() > -1) {
-                    this.position.setHeadRotation(headRotation);
-                }
-            }
-
-            if (item.getDefinition().getSprite().equals("poolBooth") ||
-                item.getDefinition().getSprite().equals("poolExit") ||
-                item.getDefinition().getSprite().equals("poolEnter") ||
-                item.getDefinition().getSprite().equals("poolLift")) {
-                PoolHandler.interact(item, this.entity);
+            if (trigger != null) {
+                item.getItemTrigger().onEntityStop(this.entity, this, item, isRolling);
             }
         }
 
         this.updateNewHeight(this.position);
-        this.needsUpdate = needsUpdate;
+        this.needsUpdate = true;
     }
 
     /**
