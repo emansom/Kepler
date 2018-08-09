@@ -46,9 +46,7 @@ public class SitCommand extends Command {
         }
 
         int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
-
-        RoomTile tile = player.getRoomUser().getTile();
-        Item item = tile.getHighestItem();
+        Item item = player.getRoomUser().getCurrentItem();
 
         if (item != null) {
             if (item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {

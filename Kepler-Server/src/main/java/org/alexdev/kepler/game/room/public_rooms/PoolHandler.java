@@ -60,7 +60,7 @@ public class PoolHandler {
             item.showProgram("close");
 
             player.getRoomUser().setWalkingAllowed(false);
-            player.getRoomUser().getTimerManager().resetRoomTimer(60); // Only allow 60 seconds when diving, to stop the queue from piling up if someone goes AFK.
+            player.getRoomUser().getTimerManager().resetRoomTimer(120); // Only allow 120 seconds when diving, to stop the queue from piling up if someone goes AFK.
             player.getRoomUser().setDiving(true);
 
             player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
@@ -74,7 +74,7 @@ public class PoolHandler {
             item.showProgram("close");
 
             player.getRoomUser().setWalkingAllowed(false);
-            player.getRoomUser().getTimerManager().resetRoomTimer(60); // Only allow 60 seconds when changing clothes, to stop someone from just afking in the booth for 15 minutes.
+            player.getRoomUser().getTimerManager().resetRoomTimer(120); // Only allow 120 seconds when changing clothes, to stop someone from just afking in the booth for 15 minutes.
             player.send(new OPEN_UIMAKOPPI());
         }
 
@@ -168,14 +168,14 @@ public class PoolHandler {
      * @param player the player to leave
      */
     public static void exitBooth(Player player) {
-        RoomTile tile = player.getRoomUser().getTile();
+        Item item = player.getRoomUser().getCurrentItem();
         Room room = player.getRoomUser().getRoom();
 
-        if (tile == null || tile.getHighestItem() == null || room == null) {
+        if (item == null || room == null) {
             return;
         }
 
-        if (!tile.getHighestItem().getDefinition().getSprite().equals("poolBooth")) {
+        if (!item.getDefinition().getSprite().equals("poolBooth")) {
             return;
         }
 
@@ -184,7 +184,7 @@ public class PoolHandler {
             return;
         }
 
-        tile.getHighestItem().showProgram("open");
+        item.showProgram("open");
         player.getRoomUser().setWalkingAllowed(true);
 
         if (room.getData().getModel().equals("pool_a")) {
@@ -215,14 +215,12 @@ public class PoolHandler {
      * @param player the player to handle
      */
     public static void disconnect(Player player) {
-        RoomTile tile = player.getRoomUser().getTile();
+        Item item = player.getRoomUser().getCurrentItem();
         Room room = player.getRoomUser().getRoom();
 
-        if (tile == null || tile.getHighestItem() == null || room == null) {
+        if (item == null || room == null) {
             return;
         }
-
-        Item item = tile.getHighestItem();
 
         if (item.getDefinition().getSprite().equals("poolBooth") ||
             item.getDefinition().getSprite().equals("poolLift")) {
