@@ -61,7 +61,7 @@ public class Item {
         this.id = id;
         this.ownerId = ownerId;
         this.roomId = roomId;
-        this.definitionId = definitionId;
+        this.setDefinitionId(this.definitionId);
         this.definition = null;
         this.position = new Position(X, Y, Z, rotation, rotation);
         this.wallPosition = wallPosition;
@@ -70,12 +70,6 @@ public class Item {
 
         if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             this.teleporterId = TeleporterDao.getTeleporterId(this.id);
-        }
-
-        for (ItemBehaviour behaviour : this.getDefinition().getBehaviourList()) {
-            if (behaviour.getTrigger() != null) {
-                this.itemTrigger = behaviour.getTrigger();
-            }
         }
     }
 
@@ -422,6 +416,12 @@ public class Item {
     public void setDefinitionId(int definitionId) {
         this.definition = null;
         this.definitionId = definitionId;
+
+        for (ItemBehaviour behaviour : this.getDefinition().getBehaviourList()) {
+            if (behaviour.getTrigger() != null) {
+                this.itemTrigger = behaviour.getTrigger();
+            }
+        }
     }
 
     public int getId() {
