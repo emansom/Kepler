@@ -328,6 +328,17 @@ public class RoomUser {
     }
 
     /**
+     * Remove drinks, used for when going AFK.
+     */
+    public void removeDrinks() {
+        if (this.containsStatus(StatusType.CARRY_FOOD) || this.containsStatus(StatusType.CARRY_DRINK)) {
+            this.removeStatus(StatusType.CARRY_DRINK);
+            this.removeStatus(StatusType.CARRY_FOOD);
+            this.needsUpdate = true;
+        }
+    }
+
+    /**
      * Animates the users mouth when speaking and detects any gestures.
      *
      * @param message the text to read for any gestures and to find animation length

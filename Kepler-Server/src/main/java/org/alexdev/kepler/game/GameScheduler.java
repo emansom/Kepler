@@ -54,13 +54,7 @@ public class GameScheduler implements Runnable {
                     // If their sleep timer is now lower than the current time, make them sleep.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getSleepTimer()) {
                         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
-                            // Remove drinks, as those animations don't play nice together with the 'Sleep' animation
-                            if (player.getRoomUser().containsStatus(StatusType.CARRY_FOOD) ||
-                                    player.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
-                                player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
-                                player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
-                            }
-
+                            player.getRoomUser().removeDrinks();
                             player.getRoomUser().setStatus(StatusType.SLEEP, "");
                             player.getRoomUser().setNeedsUpdate(true);
                         }

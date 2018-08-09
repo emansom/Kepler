@@ -33,13 +33,7 @@ public class AfkCommand extends Command {
         }
 
         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
-            // Remove drinks, as those animations don't play nice together with the 'Sleep' animation
-            if (player.getRoomUser().containsStatus(StatusType.CARRY_FOOD) ||
-                    player.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
-                player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
-                player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
-            }
-
+            player.getRoomUser().removeDrinks();
             player.getRoomUser().setStatus(StatusType.SLEEP, "");
             player.getRoomUser().setNeedsUpdate(true);
 
