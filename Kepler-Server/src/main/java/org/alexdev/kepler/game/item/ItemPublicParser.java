@@ -70,7 +70,8 @@ public class ItemPublicParser {
                     || item.getDefinition().getSprite().equals("poolExit")
                     || item.getDefinition().getSprite().equals("poolLift")
                     || item.getDefinition().getSprite().equals("poolBooth")
-                    || item.getDefinition().getSprite().equals("queue_tile2")) {
+                    || item.getDefinition().getSprite().equals("queue_tile2")
+                    || item.getDefinition().getSprite().equals("stair")) {
                     //item.getBehaviour().setCanSitOnTop(false);
                     //item.getBehaviour().setCanStandOnTop(true);
                     item.getDefinition().removeBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
