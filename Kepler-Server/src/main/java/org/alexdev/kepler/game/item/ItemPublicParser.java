@@ -61,6 +61,12 @@ public class ItemPublicParser {
                     }
                 }
 
+
+                // Set item triggers for public room furniture
+                if (itemTriggerMap.containsKey(item.getDefinition().getSprite())) {
+                    item.setItemTrigger(itemTriggerMap.get(item.getDefinition().getSprite()));
+                }
+
                 if (item.getDefinition().getSprite().contains("chair")
                         || item.getDefinition().getSprite().contains("bench")
                         || item.getDefinition().getSprite().contains("seat")
@@ -75,6 +81,11 @@ public class ItemPublicParser {
                     item.getDefinition().addBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
                     item.getDefinition().removeBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
                     item.getDefinition().setTopHeight(1.0);
+
+                    if (item.getItemTrigger() == null) {
+                        item.setItemTrigger(ItemBehaviour.CAN_SIT_ON_TOP.getTrigger());
+                    }
+
                 } else {
                     item.getDefinition().removeBehaviour(ItemBehaviour.CAN_SIT_ON_TOP);
                     item.getDefinition().removeBehaviour(ItemBehaviour.CAN_STAND_ON_TOP);
@@ -113,11 +124,6 @@ public class ItemPublicParser {
                 // This is the only public item I'm aware of that has a length of 2
                 if (item.getDefinition().getSprite().equals("hw_shelf")) {
                     item.getDefinition().setLength(2);
-                }
-
-                // Set item triggers for public room furniture
-                if (itemTriggerMap.containsKey(item.getDefinition().getSprite())) {
-                    item.setItemTrigger(itemTriggerMap.get(item.getDefinition().getSprite()));
                 }
 
                 items.add(item);
