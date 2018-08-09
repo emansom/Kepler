@@ -61,12 +61,14 @@ public class Item {
         this.id = id;
         this.ownerId = ownerId;
         this.roomId = roomId;
-        this.setDefinitionId(this.definitionId);
         this.definition = null;
+        this.definitionId = definitionId;
         this.position = new Position(X, Y, Z, rotation, rotation);
         this.wallPosition = wallPosition;
         this.customData = customData;
         this.rollingData = null;
+
+        this.setDefinitionId(this.definitionId);
 
         if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             this.teleporterId = TeleporterDao.getTeleporterId(this.id);
