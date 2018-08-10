@@ -13,6 +13,7 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.tasks.TeleporterTask;
+import org.alexdev.kepler.messages.incoming.rooms.ROOM_RATING;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
@@ -197,6 +198,7 @@ public class RoomEntityManager {
         }
 
         this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
+        this.room.getData().setRating(RoomDao.getRating(this.room.getId()));
 
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();

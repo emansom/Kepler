@@ -125,14 +125,6 @@ public class RoomData {
         }
     }
 
-    public int getRating(){
-        return this.rating;
-    }
-
-    public void setRating(int amount){
-        this.rating = amount;
-    }
-
     public int getTotalVisitorsNow() {
         if (this.childRooms.size() > 0) {
             int totalVisitors = this.visitorsNow;
@@ -314,4 +306,13 @@ public class RoomData {
     public boolean isNavigatorHide() {
         return navigatorHide;
     }
+
+    public int getRating(){
+        return this.rating;
+    }
+
+    public void setRating(int amount){
+        this.rating = amount;
+    }
+
 }

@@ -5,7 +5,6 @@ import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.room.RoomData;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
-import org.alexdev.kepler.util.encoding.Base64Encoding;
 
 public class UPDATE_VOTES extends MessageComposer {
     RoomData room;
@@ -18,7 +17,7 @@ public class UPDATE_VOTES extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        if(RoomDao.hasVoted(user.getId(), room.getId())) {
+        if(RoomDao.checkVoted(user.getId(), room.getId())) {
             if(this.room.getRating() > 0)
                 response.writeInt(this.room.getRating());
             else

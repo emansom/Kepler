@@ -1,11 +1,8 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomData;
-import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -35,7 +32,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE owner_id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE rooms.owner_id = ?", sqlConnection);
             preparedStatement.setInt(1, userId);
             resultSet = preparedStatement.executeQuery();
 
@@ -73,7 +70,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE owner_id > 0 AND accesstype = 0 ORDER BY RAND() LIMIT ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE owner_id > 0 AND accesstype = 0 ORDER BY RAND() LIMIT ?", sqlConnection);
             preparedStatement.setInt(1, limit);
             resultSet = preparedStatement.executeQuery();
 
@@ -144,7 +141,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms INNER JOIN users ON rooms.owner_id = users.id WHERE LOWER(users.username) LIKE ? OR (rooms.name) LIKE ? LIMIT 30", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms INNER JOIN users ON rooms.owner_id = users.id WHERE LOWER(users.username) LIKE ? OR LOWER(rooms.name) LIKE ? LIMIT 30", sqlConnection);
             preparedStatement.setString(1, "%" + searchQuery + "%");
             preparedStatement.setString(2, "%" + searchQuery + "%");
             resultSet = preparedStatement.executeQuery();
@@ -175,7 +172,7 @@ public class RoomDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT *, (SELECT IFNULL(SUM(vote),0) FROM users_room_votes WHERE users_room_votes.room_id = id) AS rating FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms LEFT JOIN users ON rooms.owner_id = users.id WHERE rooms.id = ?", sqlConnection);
             preparedStatement.setInt(1, roomId);
             resultSet = preparedStatement.executeQuery();
 
@@ -217,63 +214,6 @@ public class RoomDao {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }
-    }
-
-    /**
-     * Vote for a room
-     * @param userId the User who is voting
-     * @param roomId the Room that the user is voting for
-     * @param voteValue the Value of the vote (1 or -1)
-     */
-    public static void vote(int userId, int roomId, int voteValue){
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-
-        if(!hasVoted(userId, roomId)) {
-            try {
-                sqlConnection = Storage.getStorage().getConnection();
-
-                preparedStatement = Storage.getStorage().prepare("INSERT INTO users_room_votes (user_id, room_id, vote) VALUES (?, ?, ?)", sqlConnection);
-                preparedStatement.setInt(1, userId);
-                preparedStatement.setInt(2, roomId);
-                preparedStatement.setInt(3, voteValue);
-                preparedStatement.execute();
-            } catch (Exception e) {
-                Storage.logError(e);
-            } finally {
-                Storage.closeSilently(preparedStatement);
-                Storage.closeSilently(sqlConnection);
-            }
-        }
-    }
-
-    /**
-     * Vote for a room
-     * @param userId the User who is voting
-     * @param roomId the Room that the user is voting for
-     * @return true if the user has voted, false if not
-     */
-    public static boolean hasVoted(int userId, int roomId){
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            sqlConnection = Storage.getStorage().getConnection();
-
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users_room_votes WHERE room_id = ? AND user_id = ?", sqlConnection);
-            preparedStatement.setInt(1, roomId);
-            preparedStatement.setInt(2, userId);
-            resultSet = preparedStatement.executeQuery();
-            if (resultSet.next()) {
-                return true;
-            }
-        } catch (Exception e) {
-            Storage.logError(e);
-        } finally {
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
-        }
-        return false;
     }
 
     /**
@@ -354,6 +294,100 @@ public class RoomDao {
     }
 
     /**
+     * Vote for a room
+     * @param userId the User who is voting
+     * @param roomId the Room that the user is voting for
+     * @param voteValue the Value of the vote (1 or -1)
+     */
+    public static void vote(int userId, int roomId, int voteValue){
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        if(!checkVoted(userId, roomId)) {
+            try {
+                sqlConnection = Storage.getStorage().getConnection();
+                preparedStatement = Storage.getStorage().prepare("INSERT INTO users_room_votes (user_id, room_id, vote) VALUES (?, ?, ?)", sqlConnection);
+                preparedStatement.setInt(1, userId);
+                preparedStatement.setInt(2, roomId);
+                preparedStatement.setInt(3, voteValue);
+                preparedStatement.execute();
+
+            } catch (Exception e) {
+                Storage.logError(e);
+            } finally {
+                Storage.closeSilently(preparedStatement);
+                Storage.closeSilently(sqlConnection);
+            }
+        }
+    }
+
+    /**
+     * Get room rating.
+
+     * @param roomId the room id to get the rating for
+     */
+    public static int getRating(int roomId) {
+        int rating = 0;
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT SUM(vote) AS rating FROM users_room_votes WHERE room_id = ?;", sqlConnection);
+            preparedStatement.setInt(1, roomId);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                rating = resultSet.getInt("rating");
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return rating;
+    }
+
+    /**
+     * Vote for a room
+     * @param userId the User who is voting
+     * @param roomId the Room that the user is voting for
+     * @return true if the user has voted, false if not
+     */
+    public static boolean checkVoted(int userId, int roomId) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet;
+
+        boolean hasVoted = false;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users_room_votes WHERE room_id = ? AND user_id = ? LIMIT 1", sqlConnection);
+            preparedStatement.setInt(1, roomId);
+            preparedStatement.setInt(2, userId);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                hasVoted = true;
+            }
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return hasVoted;
+    }
+
+    /**
      * Fill player data
      *
      * @param data the room data instance
@@ -371,7 +405,7 @@ public class RoomDao {
                 row.getString("name"), row.getString("description"), row.getString("model"),
                 row.getString("ccts"), row.getInt("wallpaper"), row.getInt("floor"), row.getBoolean("showname"),
                 row.getBoolean("superusers"), row.getInt("accesstype"), row.getString("password"),
-                row.getInt("visitors_now"), row.getInt("visitors_max"), row.getInt("rating"));
+                row.getInt("visitors_now"), row.getInt("visitors_max"), 0);
 
     }
 }

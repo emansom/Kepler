@@ -1,4 +1,4 @@
-package org.alexdev.kepler.messages.incoming.rooms.user;
+package org.alexdev.kepler.messages.incoming.rooms.moderation;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.user.CFH_ACK;
