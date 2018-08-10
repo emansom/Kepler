@@ -21,6 +21,8 @@ $ git submodule update --init --recursive
 
 Now to build the docker container you'd use;
 
-./gradlew jibDockerBuild --image quackster/kepler docker tag quackster/kepler:latest quackster/kepler:$(git rev-parse --short HEAD)
+./gradlew jibDockerBuild --image quackster/kepler 
+
+docker tag quackster/kepler:latest quackster/kepler:$(git rev-parse --short HEAD)
 
 And then update docker-compose.yml to make kepler point to the new quackster/kepler:$(git rev-parse --short HEAD) image
