@@ -107,7 +107,7 @@ public class RoomUser {
 
         // Attempt to walk to the door
         this.walkTo(doorLocation.getX(), doorLocation.getY());
-        this.isWalkingAllowed = false;
+        this.isWalkingAllowed = allowWalking;
         this.beingKicked = true;
 
         // If user isn't walking, leave immediately
