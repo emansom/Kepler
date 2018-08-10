@@ -1,5 +1,5 @@
 -- migrate:up
-CREATE TABLE `moderation_logs` (
+CREATE TABLE `housekeeping_audit_log` (
   `action` enum('alert_user','kick_user','ban_user','room_alert','room_kick') NOT NULL,
   `user_id` int(11) NOT NULL,
   `target_id` int(11) NOT NULL DEFAULT -1,

@@ -13,7 +13,7 @@ public class ModerationDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("INSERT INTO moderation_logs (action, user_id, target_id, message, extra_notes) VALUES (?, ?, ?, ?, ?)", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO housekeeping_audit_log (action, user_id, target_id, message, extra_notes) VALUES (?, ?, ?, ?, ?)", sqlConnection);
             preparedStatement.setString(1, type.name().toLowerCase());
             preparedStatement.setInt(2, targetId);
             preparedStatement.setInt(3, userId);
