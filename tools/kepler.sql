@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.2
+-- version 4.8.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 07, 2018 at 02:01 PM
--- Server version: 10.2.15-MariaDB
--- PHP Version: 7.2.8
+-- Generation Time: Aug 10, 2018 at 10:50 AM
+-- Server version: 10.3.7-MariaDB
+-- PHP Version: 7.2.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `kepler`
+-- Database: `dev`
 --
 
 -- --------------------------------------------------------
@@ -558,7 +558,79 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (511, 'soundset63', 11, 9, 3, 413, 0, '', '', 0),
 (512, 'soundset64', 11, 9, 3, 414, 0, '', '', 0),
 (513, 'camera', 41, 0, 10, 421, 0, NULL, NULL, 0),
-(514, 'film', 41, 1, 6, 423, 0, NULL, NULL, 0);
+(514, 'film', 41, 1, 6, 423, 0, NULL, NULL, 0),
+(515, 'chair_plasto', 16, 1, 3, 439, 0, NULL, NULL, 0),
+(516, 'chair_plasto*1', 16, 1, 3, 467, 0, NULL, NULL, 0),
+(517, 'chair_plasto*10', 16, 1, 3, 651, 0, NULL, NULL, 0),
+(518, 'chair_plasto*11', 16, 1, 3, 652, 0, NULL, NULL, 0),
+(519, 'chair_plasto*2', 16, 1, 3, 474, 0, NULL, NULL, 0),
+(520, 'chair_plasto*3', 16, 1, 3, 481, 0, NULL, NULL, 0),
+(521, 'chair_plasto*4', 16, 1, 3, 488, 0, NULL, NULL, 0),
+(522, 'chair_plasto*5', 16, 1, 3, 498, 0, NULL, NULL, 0),
+(523, 'chair_plasto*6', 16, 1, 3, 503, 0, NULL, NULL, 0),
+(524, 'chair_plasto*7', 16, 1, 3, 508, 0, NULL, NULL, 0),
+(525, 'chair_plasto*8', 16, 1, 3, 513, 0, NULL, NULL, 0),
+(526, 'chair_plasto*9', 16, 1, 3, 518, 0, NULL, NULL, 0),
+(527, 'chair_plasty', 16, 1, 3, 438, 0, NULL, NULL, 0),
+(528, 'chair_plasty*1', 16, 1, 3, 520, 0, NULL, NULL, 0),
+(529, 'chair_plasty*10', 16, 1, 3, 706, 0, NULL, NULL, 0),
+(530, 'chair_plasty*11', 16, 1, 3, 707, 0, NULL, NULL, 0),
+(531, 'chair_plasty*2', 16, 1, 3, 523, 0, NULL, NULL, 0),
+(532, 'chair_plasty*3', 16, 1, 3, 524, 0, NULL, NULL, 0),
+(533, 'chair_plasty*4', 16, 1, 3, 525, 0, NULL, NULL, 0),
+(534, 'chair_plasty*5', 16, 1, 3, 545, 0, NULL, NULL, 0),
+(535, 'chair_plasty*6', 16, 1, 3, 549, 0, NULL, NULL, 0),
+(536, 'chair_plasty*7', 16, 1, 3, 703, 0, NULL, NULL, 0),
+(537, 'chair_plasty*8', 16, 1, 3, 704, 0, NULL, NULL, 0),
+(538, 'chair_plasty*9', 16, 1, 3, 705, 0, NULL, NULL, 0),
+(539, 'table_plasto_4leg', 16, 1, 3, 424, 0, NULL, NULL, 0),
+(540, 'table_plasto_4leg*1', 16, 1, 3, 463, 0, NULL, NULL, 0),
+(541, 'table_plasto_4leg*10', 16, 1, 3, 694, 0, NULL, NULL, 0),
+(542, 'table_plasto_4leg*14', 16, 1, 3, 658, 0, NULL, NULL, 0),
+(543, 'table_plasto_4leg*2', 16, 1, 3, 470, 0, NULL, NULL, 0),
+(544, 'table_plasto_4leg*3', 16, 1, 3, 477, 0, NULL, NULL, 0),
+(545, 'table_plasto_4leg*4', 16, 1, 3, 484, 0, NULL, NULL, 0),
+(546, 'table_plasto_4leg*5', 16, 1, 3, 494, 0, NULL, NULL, 0),
+(547, 'table_plasto_4leg*6', 16, 1, 3, 499, 0, NULL, NULL, 0),
+(548, 'table_plasto_4leg*7', 16, 1, 3, 504, 0, NULL, NULL, 0),
+(549, 'table_plasto_4leg*8', 16, 1, 3, 509, 0, NULL, NULL, 0),
+(550, 'table_plasto_4leg*9', 16, 1, 3, 514, 0, NULL, NULL, 0),
+(551, 'table_plasto_bigsquare', 16, 1, 3, 426, 0, NULL, NULL, 0),
+(552, 'table_plasto_bigsquare*1', 16, 1, 3, 464, 0, NULL, NULL, 0),
+(553, 'table_plasto_bigsquare*14', 16, 1, 3, 696, 0, NULL, NULL, 0),
+(554, 'table_plasto_bigsquare*15', 16, 1, 3, 697, 0, NULL, NULL, 0),
+(555, 'table_plasto_bigsquare*2', 16, 1, 3, 471, 0, NULL, NULL, 0),
+(556, 'table_plasto_bigsquare*3', 16, 1, 3, 478, 0, NULL, NULL, 0),
+(557, 'table_plasto_bigsquare*4', 16, 1, 3, 485, 0, NULL, NULL, 0),
+(558, 'table_plasto_bigsquare*5', 16, 1, 3, 495, 0, NULL, NULL, 0),
+(559, 'table_plasto_bigsquare*6', 16, 1, 3, 500, 0, NULL, NULL, 0),
+(560, 'table_plasto_bigsquare*7', 16, 1, 3, 505, 0, NULL, NULL, 0),
+(561, 'table_plasto_bigsquare*8', 16, 1, 3, 510, 0, NULL, NULL, 0),
+(562, 'table_plasto_bigsquare*9', 16, 1, 3, 515, 0, NULL, NULL, 0),
+(563, 'table_plasto_round', 16, 1, 3, 425, 0, NULL, NULL, 0),
+(564, 'table_plasto_round*1', 16, 1, 3, 465, 0, NULL, NULL, 0),
+(565, 'table_plasto_round*14', 16, 1, 3, 698, 0, NULL, NULL, 0),
+(566, 'table_plasto_round*15', 16, 1, 3, 699, 0, NULL, NULL, 0),
+(567, 'table_plasto_round*2', 16, 1, 3, 472, 0, NULL, NULL, 0),
+(568, 'table_plasto_round*3', 16, 1, 3, 479, 0, NULL, NULL, 0),
+(569, 'table_plasto_round*4', 16, 1, 3, 486, 0, NULL, NULL, 0),
+(570, 'table_plasto_round*5', 16, 1, 3, 496, 0, NULL, NULL, 0),
+(571, 'table_plasto_round*6', 16, 1, 3, 501, 0, NULL, NULL, 0),
+(572, 'table_plasto_round*7', 16, 1, 3, 506, 0, NULL, NULL, 0),
+(573, 'table_plasto_round*8', 16, 1, 3, 511, 0, NULL, NULL, 0),
+(574, 'table_plasto_round*9', 16, 1, 3, 516, 0, NULL, NULL, 0),
+(575, 'table_plasto_square', 16, 1, 3, 440, 0, NULL, NULL, 0),
+(576, 'table_plasto_square*1', 16, 1, 3, 466, 0, NULL, NULL, 0),
+(577, 'table_plasto_square*14', 16, 1, 3, 700, 0, NULL, NULL, 0),
+(578, 'table_plasto_square*15', 16, 1, 3, 701, 0, NULL, NULL, 0),
+(579, 'table_plasto_square*2', 16, 1, 3, 473, 0, NULL, NULL, 0),
+(580, 'table_plasto_square*3', 16, 1, 3, 480, 0, NULL, NULL, 0),
+(581, 'table_plasto_square*4', 16, 1, 3, 487, 0, NULL, NULL, 0),
+(582, 'table_plasto_square*5', 16, 1, 3, 497, 0, NULL, NULL, 0),
+(583, 'table_plasto_square*6', 16, 1, 3, 502, 0, NULL, NULL, 0),
+(584, 'table_plasto_square*7', 16, 1, 3, 507, 0, NULL, NULL, 0),
+(585, 'table_plasto_square*8', 16, 1, 3, 512, 0, NULL, NULL, 0),
+(586, 'table_plasto_square*9', 16, 1, 3, 517, 0, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -1130,7 +1202,79 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (420, 'present_gen6', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (421, 'camera', '', 1, 1, 0, 'solid'),
 (422, 'photo', '', 0, 0, 0, 'photo,wall_item'),
-(423, 'film', '', 0, 0, 0, '');
+(423, 'film', '', 0, 0, 0, ''),
+(424, 'table_plasto_4leg', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
+(425, 'table_plasto_round', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
+(426, 'table_plasto_bigsquare', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
+(438, 'chair_plasty', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
+(439, 'chair_plasto', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
+(440, 'table_plasto_square', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
+(463, 'table_plasto_4leg*1', '#ffffff,#ff1f08', 2, 2, 1, 'solid,can_stack_on_top'),
+(464, 'table_plasto_bigsquare*1', '#ffffff,#ff1f08', 2, 2, 1, 'solid,can_stack_on_top'),
+(465, 'table_plasto_round*1', '#ffffff,#ff1f08', 2, 2, 1, 'solid,can_stack_on_top'),
+(466, 'table_plasto_square*1', '#ffffff,#ff1f08', 1, 1, 1, 'solid,can_stack_on_top'),
+(467, 'chair_plasto*1', '#ffffff,#ff1f08,#ffffff,#ff1f08', 1, 1, 1, 'can_sit_on_top'),
+(470, 'table_plasto_4leg*2', '#ffffff,#99DCCC', 2, 2, 1, 'solid,can_stack_on_top'),
+(471, 'table_plasto_bigsquare*2', '#ffffff,#99DCCC', 2, 2, 1, 'solid,can_stack_on_top'),
+(472, 'table_plasto_round*2', '#ffffff,#99DCCC', 2, 2, 1, 'solid,can_stack_on_top'),
+(473, 'table_plasto_square*2', '#ffffff,#99DCCC', 1, 1, 1, 'solid,can_stack_on_top'),
+(474, 'chair_plasto*2', '#ffffff,#99DCCC,#ffffff,#99DCCc', 1, 1, 1, 'can_sit_on_top'),
+(477, 'table_plasto_4leg*3', '#ffffff,#ffee00', 2, 2, 1, 'solid,can_stack_on_top'),
+(478, 'table_plasto_bigsquare*3', '#ffffff,#ffee00', 2, 2, 1, 'solid,can_stack_on_top'),
+(479, 'table_plasto_round*3', '#ffffff,#ffee00', 2, 2, 1, 'solid,can_stack_on_top'),
+(480, 'table_plasto_square*3', '#ffffff,#ffee00', 1, 1, 1, 'solid,can_stack_on_top'),
+(481, 'chair_plasto*3', '#ffffff,#ffee00,#ffffff,#ffee00', 1, 1, 1, 'can_sit_on_top'),
+(484, 'table_plasto_4leg*4', '#ffffff,#ccddff', 2, 2, 1, 'solid,can_stack_on_top'),
+(485, 'table_plasto_bigsquare*4', '#ffffff,#ccddff', 2, 2, 1, 'solid,can_stack_on_top'),
+(486, 'table_plasto_round*4', '#ffffff,#ccddff', 2, 2, 1, 'solid,can_stack_on_top'),
+(487, 'table_plasto_square*4', '#ffffff,#ccddff', 1, 1, 1, 'solid,can_stack_on_top'),
+(488, 'chair_plasto*4', '#ffffff,#ccddff,#ffffff,#ccddff', 1, 1, 1, 'can_sit_on_top'),
+(494, 'table_plasto_4leg*5', '#ffffff,#54ca00', 2, 2, 1, 'solid,can_stack_on_top'),
+(495, 'table_plasto_bigsquare*5', '#ffffff,#54ca00', 2, 2, 1, 'solid,can_stack_on_top'),
+(496, 'table_plasto_round*5', '#ffffff,#54ca00', 2, 2, 1, 'solid,can_stack_on_top'),
+(497, 'table_plasto_square*5', '#ffffff,#54ca00', 1, 1, 1, 'solid,can_stack_on_top'),
+(498, 'chair_plasto*5', '#ffffff,#54ca00,#ffffff,#54ca00', 1, 1, 1, 'can_sit_on_top'),
+(499, 'table_plasto_4leg*6', '#ffffff,#2860ff', 2, 2, 1, 'solid,can_stack_on_top'),
+(500, 'table_plasto_bigsquare*6', '#ffffff,#2860ff', 2, 2, 1, 'solid,can_stack_on_top'),
+(501, 'table_plasto_round*6', '#ffffff,#2860ff', 2, 2, 1, 'solid,can_stack_on_top'),
+(502, 'table_plasto_square*6', '#ffffff,#2860ff', 1, 1, 1, 'solid,can_stack_on_top'),
+(503, 'chair_plasto*6', '#ffffff,#2860ff,#ffffff,#2860ff', 1, 1, 1, 'can_sit_on_top'),
+(504, 'table_plasto_4leg*7', '#ffffff,#ff6d00', 2, 2, 1, 'solid,can_stack_on_top'),
+(505, 'table_plasto_bigsquare*7', '#ffffff,#ff6d00', 2, 2, 1, 'solid,can_stack_on_top'),
+(506, 'table_plasto_round*7', '#ffffff,#ff6d00', 2, 2, 1, 'solid,can_stack_on_top'),
+(507, 'table_plasto_square*7', '#ffffff,#ff6d00', 1, 1, 1, 'solid,can_stack_on_top'),
+(508, 'chair_plasto*7', '#ffffff,#ff6d00,#ffffff,#ff6d00', 1, 1, 1, 'can_sit_on_top'),
+(509, 'table_plasto_4leg*8', '#ffffff,#c38d1a', 2, 2, 1, 'solid,can_stack_on_top'),
+(510, 'table_plasto_bigsquare*8', '#ffffff,#c38d1a', 2, 2, 1, 'solid,can_stack_on_top'),
+(511, 'table_plasto_round*8', '#ffffff,#c38d1a', 2, 2, 1, 'solid,can_stack_on_top'),
+(512, 'table_plasto_square*8', '#ffffff,#c38d1a', 1, 1, 1, 'solid,can_stack_on_top'),
+(513, 'chair_plasto*8', '#ffffff,#c38d1a,#ffffff,#c38d1a', 1, 1, 1, 'can_sit_on_top'),
+(514, 'table_plasto_4leg*9', '#ffffff,#533e10', 2, 2, 1, 'solid,can_stack_on_top'),
+(515, 'table_plasto_bigsquare*9', '#ffffff,#533e10', 2, 2, 1, 'solid,can_stack_on_top'),
+(516, 'table_plasto_round*9', '#ffffff,#533e10', 2, 2, 1, 'solid,can_stack_on_top'),
+(517, 'table_plasto_square*9', '#ffffff,#533e10', 1, 1, 1, 'solid,can_stack_on_top'),
+(518, 'chair_plasto*9', '#ffffff,#533e10,#ffffff,#533e10', 1, 1, 1, 'can_sit_on_top'),
+(520, 'chair_plasty*1', '#ffffff,#8EB5D1,#ffffff,#8EB5D1', 1, 1, 1, 'can_sit_on_top'),
+(523, 'chair_plasty*2', '#ffffff,#ff9316,#ffffff,#ff9316', 1, 1, 1, 'can_sit_on_top'),
+(524, 'chair_plasty*3', '#ffffff,#ff1616,#ffffff,#ff1616', 1, 1, 1, 'can_sit_on_top'),
+(525, 'chair_plasty*4', '#ffffff,#00cc00,#ffffff,#00cc00', 1, 1, 1, 'can_sit_on_top'),
+(545, 'chair_plasty*5', '#ffffff,#00508f,#ffffff,#00508f', 1, 1, 1, 'can_sit_on_top'),
+(549, 'chair_plasty*6', '#ffffff,#ffee00,#ffffff,#ffee00', 1, 1, 1, 'can_sit_on_top'),
+(651, 'chair_plasto*10', '#ffffff,#FF99FF,#ffffff,#FF99FF', 1, 1, 1, 'can_sit_on_top'),
+(652, 'chair_plasto*11', '#ffffff,#66FFFF,#ffffff,#66FFFF', 1, 1, 1, 'can_sit_on_top'),
+(658, 'table_plasto_4leg*14', '#ffffff,#3CB4F0', 2, 2, 1, 'solid,can_stack_on_top'),
+(694, 'table_plasto_4leg*10', '#ffffff,#ccddff', 2, 2, 1, 'solid,can_stack_on_top'),
+(696, 'table_plasto_bigsquare*14', '#ffffff,#CC2815', 2, 2, 1, 'solid,can_stack_on_top'),
+(697, 'table_plasto_bigsquare*15', '#ffffff,#FF97BA', 2, 2, 1, 'solid,can_stack_on_top'),
+(698, 'table_plasto_round*14', '#ffffff,#CC2815', 2, 2, 1, 'solid,can_stack_on_top'),
+(699, 'table_plasto_round*15', '#ffffff,#FF97BA', 2, 2, 1, 'solid,can_stack_on_top'),
+(700, 'table_plasto_square*14', '#ffffff,#CC2815', 1, 1, 1, 'solid,can_stack_on_top'),
+(701, 'table_plasto_square*15', '#ffffff,#FF97BA', 1, 1, 1, 'solid,can_stack_on_top'),
+(703, 'chair_plasty*7', '#ffffff,#99DCCc,#ffffff,#99DCCc', 1, 1, 1, 'can_sit_on_top'),
+(704, 'chair_plasty*8', '#ffffff,#c38d1a,#ffffff,#c38d1a', 1, 1, 1, 'can_sit_on_top'),
+(705, 'chair_plasty*9', '#ffffff,#533e10,#ffffff,#533e10', 1, 1, 1, 'can_sit_on_top'),
+(706, 'chair_plasty*10', '#ffffff,#CC2815,#ffffff,#CC2815', 1, 1, 1, 'can_sit_on_top'),
+(707, 'chair_plasty*11', '#ffffff,#FF97BA,#ffffff,#FF97BA', 1, 1, 1, 'can_sit_on_top');
 
 -- --------------------------------------------------------
 
@@ -1587,7 +1731,8 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180804075142'),
 ('20180807115604'),
 ('20180807132707'),
-('20180807135756');
+('20180807135756'),
+('20180809133417');
 
 -- --------------------------------------------------------
 
@@ -1820,7 +1965,7 @@ ALTER TABLE `users_badges`
 -- AUTO_INCREMENT for table `catalogue_items`
 --
 ALTER TABLE `catalogue_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=515;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=587;
 
 --
 -- AUTO_INCREMENT for table `items`
@@ -1832,7 +1977,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=424;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=708;
 
 --
 -- AUTO_INCREMENT for table `messenger_messages`

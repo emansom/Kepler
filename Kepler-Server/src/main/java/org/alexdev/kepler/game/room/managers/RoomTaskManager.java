@@ -31,8 +31,8 @@ public class RoomTaskManager {
     public void startTasks() {
         int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
 
-        this.scheduleTask("EntityTask", new EntityTask(this.room), 500, TimeUnit.MILLISECONDS);
-        this.scheduleTask("StatusTask", new StatusTask(this.room), 1, TimeUnit.SECONDS);
+        this.scheduleTask("EntityTask", new EntityTask(this.room), 0,500, TimeUnit.MILLISECONDS);
+        this.scheduleTask("StatusTask", new StatusTask(this.room), 0,1, TimeUnit.SECONDS);
         this.scheduleTask("RollerTask", new RollerTask(this.room), 1, rollerMillisTask, TimeUnit.MILLISECONDS);
     }
 
@@ -45,24 +45,6 @@ public class RoomTaskManager {
         }
 
         this.processTasks.clear();
-    }
-
-    /**
-     * Schedule a custom task.
-     *
-     * @param taskName the task name identifier
-     * @param runnableTask the runnable task instance
-     * @param interval the interval of the task
-     * @param timeUnit the time unit of the interval
-     */
-    public void scheduleTask(String taskName, Runnable runnableTask, int interval, TimeUnit timeUnit) {
-        this.cancelTask(taskName);
-
-        var future = this.executorService.scheduleAtFixedRate(runnableTask, 0, interval, timeUnit);
-        this.processTasks.put(taskName, Pair.of(
-                future,
-                runnableTask
-        ));
     }
 
     /**

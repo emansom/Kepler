@@ -13,9 +13,11 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.tasks.TeleporterTask;
+import org.alexdev.kepler.messages.incoming.rooms.ROOM_RATING;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
+import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.incoming.rooms.user.HOTEL_VIEW;
 
@@ -171,6 +173,8 @@ public class RoomEntityManager {
             player.send(new FLATPROPERTY("floor", this.room.getData().getFloor()));
         }
 
+        player.send(new UPDATE_VOTES(room.getData(), player.getDetails()));
+
         RoomDao.saveVisitors(this.room);
     }
 
@@ -194,6 +198,7 @@ public class RoomEntityManager {
         }
 
         this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
+        this.room.getData().setRating(RoomDao.getRating(this.room.getId()));
 
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();
