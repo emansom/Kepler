@@ -49,7 +49,7 @@ public class GameScheduler implements Runnable {
             PlayerManager.getInstance().checkPlayerPeak();
 
             for (Player player : PlayerManager.getInstance().getPlayers()) {
-                if (player.getRoomUser().getRoom() != null) { //
+                if (player.getRoomUser().getRoom() != null) {
 
                     // If their sleep timer is now lower than the current time, make them sleep.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getSleepTimer()) {
