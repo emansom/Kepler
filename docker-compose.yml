@@ -1,16 +1,15 @@
 version: '3.2'
 services:
     kepler:
-        image: ewout/kepler:1.0.25
+        image: ewout/kepler:1.0.26
         restart: always
         environment:
+            KEPLER_BIND: 0.0.0.0
             MYSQL_HOST: mariadb
             MYSQL_PORT: 3306
             MYSQL_USER: kepler
             MYSQL_DATABASE: kepler
             MYSQL_PASSWORD: verysecret
-            KEPLER_PORT: 12321
-            KEPLER_RCON_PORT: 12309
         depends_on:
             - mariadb
         links:
