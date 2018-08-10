@@ -136,7 +136,7 @@ public class ServerConfiguration {
      */
     private static void setConfigurationData(PrintWriter writer) {
         writer.println("[Global]");
-        writer.println("bind=" + config.get("server.bind"));
+        writer.println("bind=" + config.get("bind"));
         writer.println("");
         writer.println("[Server]");
         writer.println("server.port=" + config.get("server.port"));
