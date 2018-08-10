@@ -14,63 +14,55 @@ import java.util.List;
 public class MODERATORACTION implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        String mBody = reader.contents();
-        int commandCat = VL64Encoding.decode(mBody.substring(0,1).getBytes());
-        int commandId = VL64Encoding.decode(mBody.substring(1,2).getBytes());
-        String payload = mBody.substring(2);
+        int commandCat = reader.readInt();
+        int commandId = reader.readInt();
 
-        if(commandCat == 0){
+        String alertMessage = reader.readString();
+        String alertExtra = reader.readString();
+
+        if (commandCat == 0) {
             // User Command
-            if(commandId == 0 && player.hasFuse("fuse_room_alert")){
-                // Alert
-                String alertMessage = FuseMessage.getArgument(1, payload);
-                String alertExtra = FuseMessage.getArgument(2, payload);
-                String alertUser = FuseMessage.getArgument(3, payload);
+            if (commandId == 0 && player.hasFuse("fuse_room_alert")) {
+                String alertUser = reader.readString();
 
                 Player target = PlayerManager.getInstance().getPlayerByName(alertUser);
-                if(target != null)
+                if (target != null)
                     target.send(new MODERATOR_ALERT(alertMessage));
                 else
                     player.send(new ALERT("Target user is not online."));
-            }else if(commandId == 1 && player.hasFuse("fuse_kick")){
+            } else if (commandId == 1 && player.hasFuse("fuse_kick")) {
                 // Kick
-                String alertMessage = FuseMessage.getArgument(1, payload);
-                String alertExtra = FuseMessage.getArgument(2, payload);
-                String alertUser = FuseMessage.getArgument(3, payload);
-
+                String alertUser = reader.readString();
                 Player target = PlayerManager.getInstance().getPlayerByName(alertUser);
-                if(target != null){
-                    target.getRoomUser().setBeingKicked(true);
-                    target.getRoomUser().getRoom().getEntityManager().leaveRoom(target, true);
-                    target.send(new MODERATOR_ALERT(alertMessage));
-                }else
-                    player.send(new ALERT("Target user is not online."));
-            }else if(commandId == 2 && player.hasFuse("fuse_ban")){
-                //Ban
-            }
-        }else if(commandCat == 1){
-            // Room Command
-            if(commandId == 0 && player.hasFuse("fuse_room_alert")){
-                // Room Alert
-                String alertMessage = FuseMessage.getArgument(1, payload);
-                String alertExtra = FuseMessage.getArgument(2, payload);
 
+                if (target != null) {
+                    target.getRoomUser().kick(false);
+                    target.send(new MODERATOR_ALERT(alertMessage));
+                } else
+                    player.send(new ALERT("Target user is not online."));
+            } else if (commandId == 2 && player.hasFuse("fuse_ban")) {
+                //Ban
+                // TODO: Banning
+            }
+        } else if (commandCat == 1) {
+            // Room Command
+            if (commandId == 0 && player.hasFuse("fuse_room_alert")) {
                 List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
-                for(Player target : players){
+
+                for (Player target : players) {
                     target.send(new MODERATOR_ALERT(alertMessage));
                 }
-            }else if(commandId == 1 && player.hasFuse("fuse_room_kick")){
+            } else if (commandId == 1 && player.hasFuse("fuse_room_kick")) {
                 // Room Kick
-                String alertMessage = FuseMessage.getArgument(1, payload);
-                String alertExtra = FuseMessage.getArgument(2, payload);
-
                 List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
-                for(Player target : players){
-                    if(target.getDetails().getRank() < player.getDetails().getRank()){
-                        target.getRoomUser().setBeingKicked(true);
-                        target.getRoomUser().getRoom().getEntityManager().leaveRoom(target, true);
-                        target.send(new MODERATOR_ALERT(alertMessage));
+
+                for (Player target : players) {
+                    if (target.hasFuse("fuse_room_kick")) {
+                        continue;
                     }
+
+                    target.getRoomUser().kick(false);
+                    target.send(new MODERATOR_ALERT(alertMessage));
                 }
             }
         }
