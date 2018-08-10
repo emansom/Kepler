@@ -14,8 +14,10 @@ public class GameConfiguration {
         this.config = new LinkedHashMap<>();
         this.setConfigurationDefaults();
 
+        Map<String, String> settings = SettingsDao.getAllSettings();
+
         for (var entrySet : this.config.entrySet()) {
-            String value = SettingsDao.getSetting(entrySet.getKey());
+            String value = settings.get(entrySet.getKey());
 
             if (value != null) {
                 this.config.put(entrySet.getKey(), value);
