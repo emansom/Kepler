@@ -93,8 +93,10 @@ public class RoomUser {
 
     /**
      * Kick a user from the room.
+     *
+     * @param allowWalking whether the user can interrupt themselves walking towards the door
      */
-    public void kick() {
+    public void kick(boolean allowWalking) {
         Position doorLocation = this.room.getModel().getDoorLocation();
 
         // If we're standing in the door, immediately leave room
@@ -105,6 +107,8 @@ public class RoomUser {
 
         // Attempt to walk to the door
         this.walkTo(doorLocation.getX(), doorLocation.getY());
+        this.isWalkingAllowed = false;
+        this.beingKicked = true;
 
         // If user isn't walking, leave immediately
         if (!this.isWalking) {

@@ -24,6 +24,6 @@ public class GOAWAY implements MessageEvent {
             }
         }
 
-        player.getRoomUser().kick();
+        player.getRoomUser().kick(true);
     }
 }

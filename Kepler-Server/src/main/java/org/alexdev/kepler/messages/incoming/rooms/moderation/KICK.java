@@ -12,7 +12,7 @@ public class KICK implements MessageEvent {
         if(target != null && target.getRoomUser().getRoom().getId() == player.getRoomUser().getRoom().getId() &&
                 (player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) || player.hasFuse("fuse_kick"))) {
             target.getRoomUser().setBeingKicked(true);
-            target.getRoomUser().getRoom().getEntityManager().leaveRoom(target, true);
+            target.getRoomUser().kick(false);
         }
     }
 }
