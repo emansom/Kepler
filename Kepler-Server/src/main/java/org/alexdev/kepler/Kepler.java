@@ -128,7 +128,7 @@ public class Kepler {
     }
 
     private static void setupServer(InetAddressValidator validator) throws UnknownHostException {
-        serverIP = ServerConfiguration.getString("server.bind");
+        serverIP = ServerConfiguration.getString("bind");
         serverPort = ServerConfiguration.getInteger("server.port");
 
         if (!validator.isValid(serverIP)) {
@@ -145,7 +145,7 @@ public class Kepler {
 
     private static void setupRcon(InetAddressValidator validator) throws IOException {
         // Create the RCON instance
-        rconIP = ServerConfiguration.getString("rcon.bind");
+        rconIP = ServerConfiguration.getString("bind");
         rconPort = ServerConfiguration.getInteger("rcon.port");
 
         // Validate an IPv4 or IPv6 address
@@ -162,7 +162,7 @@ public class Kepler {
     }
 
     private static void setupMus(InetAddressValidator validator) throws UnknownHostException {
-        musServerIP = ServerConfiguration.getString("mus.bind");
+        musServerIP = ServerConfiguration.getString("bind");
         musServerPort = ServerConfiguration.getInteger("mus.port");
 
         if (musServerIP.length() > 0) {
