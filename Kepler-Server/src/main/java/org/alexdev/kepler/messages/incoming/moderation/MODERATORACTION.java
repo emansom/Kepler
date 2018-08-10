@@ -3,7 +3,6 @@ package org.alexdev.kepler.messages.incoming.moderation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
-import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
 import org.alexdev.kepler.messages.outgoing.user.MODERATOR_ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
