@@ -12,15 +12,10 @@ jib {
     from {
         image = 'openjdk:10-jre-slim'
     }
-    to {
-        image = 'ewout/kepler'
-    }
     container {
         ports = ['12321/tcp', '12309/tcp','12322/tcp']
     }
 }
-
-tasks.build.dependsOn tasks.jib
 
 repositories {
     flatDir {
