@@ -129,8 +129,8 @@ public class RoomData {
         return this.rating;
     }
 
-    public void incrementVoteBy(int amount){
-        this.rating += amount;
+    public void setRating(int amount){
+        this.rating = amount;
     }
 
     public int getTotalVisitorsNow() {

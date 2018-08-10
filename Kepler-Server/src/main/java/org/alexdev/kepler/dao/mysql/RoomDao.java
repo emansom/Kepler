@@ -244,12 +244,6 @@ public class RoomDao {
                 Storage.closeSilently(preparedStatement);
                 Storage.closeSilently(sqlConnection);
             }
-
-            Room room = RoomManager.getInstance().getRoomById(roomId);
-            room.getData().incrementVoteBy(voteValue);
-            for(Player p : room.getEntityManager().getPlayers()){
-                p.send(new UPDATE_VOTES(room.getData(), p.getDetails()));
-            }
         }
     }
 

@@ -22,7 +22,7 @@ public class MODERATORACTION implements MessageEvent {
 
         if(commandCat == 0){
             // User Command
-            if(commandId == 0 && player.hasFuse("fuse_alert")){
+            if(commandId == 0 && player.hasFuse("fuse_room_alert")){
                 // Alert
                 String alertMessage = FuseMessage.getArgument(1, payload);
                 String alertExtra = FuseMessage.getArgument(2, payload);
