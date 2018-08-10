@@ -159,8 +159,7 @@ public class ServerConfiguration {
         writer.println("log.sent.packets=" + config.get("log.sent.packets"));
         writer.println("");
         writer.println("[Console]");
-        writer.println("debug=" + config.get("debug"));
-        writer.println("");
+        writer.print("debug=" + config.get("debug"));
         writer.flush();
         writer.close();
     }
