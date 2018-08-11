@@ -9130,7 +9130,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('p907', 'orient', 'koc_table', 25, 14, 1, 0, 0.001, 1, 1, 'solid', ''),
 ('d805', 'orient', 'koc_table', 30, 15, 1, 0, 0.001, 1, 1, 'solid', ''),
 ('y639', 'orient', 'koc_table', 32, 12, 1, 0, 0.001, 1, 1, 'solid', ''),
-('l461', 'entryhall', 'splashkiosk', 11, 11, 1, 0, 0.001, 1, 1, 'solid', ''),
+('l461', 'entryhall', 'splashkiosk', 11, 11, 1, 0, 0.001, 3, 3, 'solid', ''),
 ('u750', 'entryhall', 'gl_sofatable', 7, 16, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('v213', 'entryhall', 'gl_sofatable', 5, 1, 1, 4, 1, 1, 1, 'can_sit_on_top', ''),
 ('e750', 'entryhall', 'gl_sofatable', 16, 1, 1, 4, 1, 1, 1, 'can_sit_on_top', ''),
