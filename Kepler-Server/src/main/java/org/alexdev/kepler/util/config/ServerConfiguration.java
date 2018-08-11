@@ -108,7 +108,7 @@ public class ServerConfiguration {
         String envMysqlHost = System.getenv("MYSQL_HOST");
 
         if (envMysqlHost != null) {
-            if (validator.isValid(envBind)) {
+            if (validator.isValid(envMysqlHost)) {
                 try {
                     config.put("mysql.hostname", InetAddress.getByName(envMysqlHost).getHostAddress());
                 } catch (UnknownHostException e) {
