@@ -1,9 +1,11 @@
 package org.alexdev.kepler.messages.incoming.rooms.moderation;
 
+import org.alexdev.kepler.game.moderation.CallForHelp;
 import org.alexdev.kepler.game.moderation.CallForHelpManager;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.moderation.CRY_REPLY;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.MODERATOR_ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -11,14 +13,36 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class MESSAGETOCALLER implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        // BUG: Calling reader.readInt() and then reader.readString() acts as if the int hasn't been read, thus
-        //      returns the callId. To counteract this read both a strings but parse callId to Integer.
+        // Only players that have this fuse are allowed to reply to call for helps
+        if (!player.hasFuse("fuse_receive_calls_for_help")) {
+            return;
+        }
+
+        // The inconsistent v21 client sends the call ID non-VL64 encoded :/
         int callId = Integer.parseInt(reader.readString());
         String message = reader.readString();
-        String callerName = CallForHelpManager.getInstance().getCallForHelpById(callId).getCaller();
-        Player caller = PlayerManager.getInstance().getPlayerByName(callerName);
-        if(caller != null){
-            caller.send(new CRY_REPLY(message));
+
+        // Retrieve call for help by ID provided by client
+        CallForHelp cfh = CallForHelpManager.getInstance().getCall(callId);
+
+        // Make sure call for help exists
+        // TODO: find error packet / message to return to client
+        if (cfh == null) {
+            return;
         }
+
+        // Call has been handled, delete it :)
+        CallForHelpManager.getInstance().deleteCall(cfh);
+
+        // Get callee of call for help
+        Player caller = PlayerManager.getInstance().getPlayerById(cfh.getCaller());
+
+        // Make sure caller isn't null
+        if (caller == null) {
+            return;
+        }
+
+        // Notify callee
+        caller.send(new CRY_REPLY(message));
     }
 }
