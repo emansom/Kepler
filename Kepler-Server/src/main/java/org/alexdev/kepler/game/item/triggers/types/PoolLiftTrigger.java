@@ -34,4 +34,9 @@ public class PoolLiftTrigger implements ItemTrigger {
         player.send(new TICKET_BALANCE(player.getDetails().getTickets()));
         player.send(new JUMPINGPLACE_OK());
     }
+
+    @Override
+    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+
+    }
 }

@@ -24,4 +24,9 @@ public class BedTrigger implements ItemTrigger {
         roomUser.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
         roomUser.setNeedsUpdate(true);
     }
+
+    @Override
+    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+
+    }
 }

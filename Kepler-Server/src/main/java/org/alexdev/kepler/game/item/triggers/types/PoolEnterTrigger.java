@@ -43,4 +43,9 @@ public class PoolEnterTrigger implements ItemTrigger {
     public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
 
     }
+
+    @Override
+    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+
+    }
 }

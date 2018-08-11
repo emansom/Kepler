@@ -2,8 +2,8 @@ package org.alexdev.kepler.game.item.public_items;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.item.triggers.types.TicTacToeTrigger;
 import org.alexdev.kepler.game.item.triggers.ItemTrigger;
 import org.alexdev.kepler.game.item.triggers.types.PoolBoothTrigger;
 import org.alexdev.kepler.game.item.triggers.types.PoolEnterTrigger;
@@ -17,14 +17,15 @@ import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class PublicItemParser {
-    private static Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
-        put("poolExit", new PoolExitTrigger());
-        put("poolEnter", new PoolEnterTrigger());
-        put("poolLift", new PoolLiftTrigger());
-        put("poolBooth", new PoolBoothTrigger());
-    }};
-
     public static List<Item> getPublicItems(int roomId, String modelId) {
+        Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
+            put("poolExit", new PoolExitTrigger());
+            put("poolEnter", new PoolEnterTrigger());
+            put("poolLift", new PoolLiftTrigger());
+            put("poolBooth", new PoolBoothTrigger());
+            put("gamehall_chair_wood", new TicTacToeTrigger(roomId));
+        }};
+
         List<Item> items = new ArrayList<>();
         List<PublicItemData> publicItemData = ItemDao.getPublicItemData(modelId);
 
