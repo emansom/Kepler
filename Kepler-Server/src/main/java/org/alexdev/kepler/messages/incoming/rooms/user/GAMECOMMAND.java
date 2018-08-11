@@ -9,7 +9,7 @@ import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class INSTANTMINIGAMEMOVE implements MessageEvent {
+public class GAMECOMMAND implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
         String[] contents = reader.contents().split(" ");
@@ -39,7 +39,7 @@ public class INSTANTMINIGAMEMOVE implements MessageEvent {
         String command = contents[1];
 
         if (command.equals("CLOSE")) {
-            trigger.onEntityStop(player, roomUser, currentItem);
+            trigger.onEntityLeave(player, roomUser, currentItem);
         }
     }
 }

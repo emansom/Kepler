@@ -112,6 +112,7 @@ public class TicTacToeTrigger extends GameTrigger {
      * @param position the position to look for the game instance
      * @return the game instance, if successful
      */
+    @Override
     public GameTicTacToe getGameInstance(Position position) {
         for (GameTicTacToe instances : this.gameInstances) {
             if (instances.getChairPosition().equals(position) ||
