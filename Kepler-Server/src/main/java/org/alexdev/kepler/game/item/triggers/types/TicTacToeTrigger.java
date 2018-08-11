@@ -7,13 +7,11 @@ import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.room.RoomUser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class TicTacToeTrigger extends GameTrigger {
     public TicTacToeTrigger(int roomId) {
-        for (var kvp : this.getChairPairs()) {
+        for (var kvp : this.getChairGroups()) {
             this.gameInstances.add(new GameTicTacToe(roomId, kvp));
         }
     }
@@ -39,7 +37,7 @@ public class TicTacToeTrigger extends GameTrigger {
      * @return the map of chair pairs
      */
     @Override
-    public List<List<int[]>> getChairPairs() {
+    public List<List<int[]>> getChairGroups() {
         return new ArrayList<>() {{
            add(new ArrayList<>() {{
                add(new int[] { 15, 4});

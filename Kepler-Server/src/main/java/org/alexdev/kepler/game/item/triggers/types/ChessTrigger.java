@@ -2,19 +2,17 @@ package org.alexdev.kepler.game.item.triggers.types;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.games.GameTicTacToe;
+import org.alexdev.kepler.game.item.games.GameChess;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.room.RoomUser;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ChessTrigger extends GameTrigger {
     public ChessTrigger(int roomId) {
-        for (var kvp : this.getChairPairs()) {
-            this.gameInstances.add(new GameTicTacToe(roomId, kvp));
+        for (var kvp : this.getChairGroups()) {
+            this.gameInstances.add(new GameChess(roomId, kvp));
         }
     }
 
@@ -39,7 +37,7 @@ public class ChessTrigger extends GameTrigger {
      * @return the map of chair pairs
      */
     @Override
-    public List<List<int[]>> getChairPairs() {
+    public List<List<int[]>> getChairGroups() {
         return new ArrayList<>() {{
             add(new ArrayList<>() {{
                 add(new int[] { 2, 7});
@@ -47,23 +45,23 @@ public class ChessTrigger extends GameTrigger {
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 15, 9});
-                add(new int[] { 15, 10});
+                add(new int[] { 6, 14});
+                add(new int[] { 4, 10});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 15, 14});
-                add(new int[] { 15, 15});
+                add(new int[] { 12, 14});
+                add(new int[] { 12, 12});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 10, 4});
-                add(new int[] { 10, 5});
+                add(new int[] { 13, 7});
+                add(new int[] { 13, 5});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 10, 9});
-                add(new int[] { 10,10});
+                add(new int[] { 7, 3});
+                add(new int[] { 9, 3});
             }});
         }};
     }

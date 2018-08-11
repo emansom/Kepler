@@ -97,5 +97,5 @@ public abstract class GameTrigger implements ItemTrigger {
     /**
      * Gets the list of seats and their pairs as coordinates
      */
-    public abstract List<List<int[]>> getChairPairs();
+    public abstract List<List<int[]>> getChairGroups();
 }
