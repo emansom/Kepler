@@ -1,4 +1,4 @@
-package org.alexdev.kepler.messages.incoming.rooms;
+package org.alexdev.kepler.messages.incoming.rooms.user;
 
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.player.Player;
