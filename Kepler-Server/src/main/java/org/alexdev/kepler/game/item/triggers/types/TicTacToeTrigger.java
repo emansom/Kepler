@@ -103,6 +103,7 @@ public class TicTacToeTrigger extends GameTrigger {
             }
 
             instance.resetGameId();
+            instance.removePlayers();
         }
     }
 

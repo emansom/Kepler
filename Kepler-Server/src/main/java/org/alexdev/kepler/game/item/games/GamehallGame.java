@@ -146,4 +146,13 @@ public abstract class GamehallGame {
             return;
         }
     }
+
+    /**
+     * Set the first and second player to null for when
+     * the game ends.
+     */
+    public void removePlayers() {
+        this.firstPlayer = null;
+        this.secondPlayer = null;
+    }
 }
