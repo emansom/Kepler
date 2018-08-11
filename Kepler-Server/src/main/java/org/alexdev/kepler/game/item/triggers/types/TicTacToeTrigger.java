@@ -73,6 +73,7 @@ public class TicTacToeTrigger extends GameTrigger {
         // Open gameboard if there's a user in the other tile
         if (opponentTile.getEntities().size() > 0) {
             instance.createGameId();
+            instance.addPlayer((Player) opponentTile.getEntities().get(0));
 
             player.send(new OPENGAMEBOARD(instance.getGameId(), "TicTacToe"));
             instance.getOpponent(player).send(new OPENGAMEBOARD(instance.getGameId(), "TicTacToe"));
