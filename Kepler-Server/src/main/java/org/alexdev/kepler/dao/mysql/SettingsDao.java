@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SettingsDao {
 
@@ -68,6 +70,38 @@ public class SettingsDao {
         }
 
         return value;
+    }
+
+    /**
+     * Get all settings from the settings table.
+     *
+     * @return a map containing key and values
+     */
+    public static Map<String, String> getAllSettings() {
+        Map<String, String> settings = new HashMap<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT setting, value FROM settings", sqlConnection);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                settings.put(resultSet.getString("setting"), resultSet.getString("value"));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return settings;
     }
 
     /**

@@ -4,13 +4,13 @@ import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
-import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
+import org.alexdev.kepler.messages.outgoing.user.currencies.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -28,7 +28,6 @@ public class GameScheduler implements Runnable {
 
     private ScheduledExecutorService schedulerService;
     private ScheduledFuture<?> gameScheduler;
-
     private BlockingQueue<Player> creditsHandoutQueue;
 
     private static GameScheduler instance;
@@ -47,19 +46,22 @@ public class GameScheduler implements Runnable {
         this.tickRate.incrementAndGet();
 
         try {
+            PlayerManager.getInstance().checkPlayerPeak();
+
             for (Player player : PlayerManager.getInstance().getPlayers()) {
                 if (player.getRoomUser().getRoom() != null) {
 
                     // If their sleep timer is now lower than the current time, make them sleep.
-                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getSleepTimer()) {
+                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getSleepTimer()) {
                         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                            player.getRoomUser().removeDrinks();
                             player.getRoomUser().setStatus(StatusType.SLEEP, "");
                             player.getRoomUser().setNeedsUpdate(true);
                         }
                     }
 
                     // If their afk timer is up, send them out.
-                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getAfkTimer()) {
+                    if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getAfkTimer()) {
                         player.getRoomUser().kick();
                     }
 

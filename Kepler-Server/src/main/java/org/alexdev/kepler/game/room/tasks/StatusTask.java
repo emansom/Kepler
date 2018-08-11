@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
+import org.alexdev.kepler.messages.outgoing.rooms.user.TYPING_STATUS;
 import org.alexdev.kepler.util.DateUtil;
 
 import java.util.ArrayList;
@@ -39,11 +40,8 @@ public class StatusTask implements Runnable {
     private void processEntity(Entity entity) {
         List<String> toRemove = new ArrayList<>();
 
-        if (entity.getRoomUser().getLookTimer() != -1 && DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getLookTimer()) {
-            entity.getRoomUser().setLookTimer(-1);
-            entity.getRoomUser().getPosition().setHeadRotation(entity.getRoomUser().getPosition().getBodyRotation());
-            entity.getRoomUser().setNeedsUpdate(true);
-        }
+        this.processHeadRotation(entity);
+        this.processChatBubble(entity);
 
         // Use walk to next tile if on pool queue
         PoolHandler.checkPoolQueue(entity);
@@ -84,8 +82,29 @@ public class StatusTask implements Runnable {
             }
         }
 
-        for (String keyRemove: toRemove) {
+        for (String keyRemove : toRemove) {
             entity.getRoomUser().getStatuses().remove(keyRemove);
+        }
+    }
+
+    private void processChatBubble(Entity entity) {
+        if (entity.getRoomUser().getTimerManager().getChatBubbleTimer() != -1 &&
+                DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getTimerManager().getChatBubbleTimer()) {
+
+            entity.getRoomUser().setTyping(false);
+            entity.getRoomUser().getTimerManager().stopChatBubbleTimer();
+            entity.getRoomUser().getRoom().send(new TYPING_STATUS(entity.getRoomUser().getInstanceId(), false));
+        }
+    }
+
+
+    private void processHeadRotation(Entity entity) {
+        if (entity.getRoomUser().getTimerManager().getLookTimer() != -1 &&
+                DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getTimerManager().getLookTimer()) {
+
+            entity.getRoomUser().getTimerManager().stopLookTimer();
+            entity.getRoomUser().getPosition().setHeadRotation(entity.getRoomUser().getPosition().getBodyRotation());
+            entity.getRoomUser().setNeedsUpdate(true);
         }
     }
 }

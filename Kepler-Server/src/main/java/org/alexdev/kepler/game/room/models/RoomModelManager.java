@@ -30,6 +30,16 @@ public class RoomModelManager {
     }
 
     /**
+     * Reload the instance of {@link RoomModelManager}
+     *
+     * @return the instance
+     */
+    public static void reset() {
+        instance = null;
+        RoomModelManager.getInstance();
+    }
+
+    /**
      * Get the map of models.
      *
      * @return the model map

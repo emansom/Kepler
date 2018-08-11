@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 28, 2018 at 04:59 AM
--- Server version: 10.3.7-MariaDB
--- PHP Version: 7.2.6
+-- Generation Time: Aug 07, 2018 at 02:01 PM
+-- Server version: 10.2.15-MariaDB
+-- PHP Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -556,7 +556,9 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (509, 'soundset61', 11, 9, 3, 411, 0, '', '', 0),
 (510, 'soundset62', 11, 9, 3, 412, 0, '', '', 0),
 (511, 'soundset63', 11, 9, 3, 413, 0, '', '', 0),
-(512, 'soundset64', 11, 9, 3, 414, 0, '', '', 0);
+(512, 'soundset64', 11, 9, 3, 414, 0, '', '', 0),
+(513, 'camera', 41, 0, 10, 421, 0, NULL, NULL, 0),
+(514, 'film', 41, 1, 6, 423, 0, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -605,12 +607,14 @@ CREATE TABLE `catalogue_pages` (
   `id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
   `min_role` int(11) DEFAULT NULL,
+  `index_visible` tinyint(1) NOT NULL DEFAULT 1,
   `name_index` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `link_list` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `name` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `layout` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_headline` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `image_teasers` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `body` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `body` text COLLATE utf8mb4_unicode_ci DEFAULT '',
   `label_pick` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `label_extra_s` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `label_extra_t` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL
@@ -620,47 +624,49 @@ CREATE TABLE `catalogue_pages` (
 -- Dumping data for table `catalogue_pages`
 --
 
-INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `name_index`, `name`, `layout`, `image_headline`, `image_teasers`, `body`, `label_pick`, `label_extra_s`, `label_extra_t`) VALUES
-(1, 1, 1, 'Frontpage', 'Frontpage', 'ctlg_frontpage2', 'catal_fp_header', 'catal_fp_pic4,catal_fp_pic5,', 'Welcome to the Hotel Catalogue. It\'s packed full of fab things for your room - there\'s something for everyone! Browse the ranges by clicking the tabs on the right.<br><br>Some ranges are seasonal, so check back regularly for new items.<br><br>We regularly', NULL, 'Home sweet home!', '1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.'),
-(2, 2, 1, 'Rare', 'Rare', 'ctlg_productpage1', 'catalog_rares_headline1', '', 'Okay this thing is fucking epic!\rEnjoy it while it lasts!', NULL, NULL, NULL),
-(3, 3, 1, 'Spaces', 'Spaces', 'ctlg_spaces', 'catalog_spaces_headline1', '', 'Floors, wallpapers, landscapes - get a groovy combination to your room. Use our virtual room preview below to test out the combinations before you buy. Select the design and color you like and click Buy.', NULL, NULL, '1:Wall\r\n2:Floor\r\n3:Pattern\r\n4:Colour\r\n5:Pattern\r\n6:Colour\r\n7:Preview'),
-(4, 4, 1, 'Bank', 'Exchange', 'ctlg_layout2', 'catalog_bank_headline1', 'catalog_bank_teaser,', 'The Habbo Exchange is where you can convert your Habbo Credits into a tradable currency. You can use this tradable currency to exchange Habbo Credits for Furni!', 'Click on the item you want for more information', 'EPIC YAY!', NULL),
-(5, 5, 1, 'Rollers', 'Rollers', 'ctlg_layout2', 'catalog_roller_headline1', '', 'Move your imagination, while you move your Habbo!  Perfect for mazes, games, for keeping your queue moving or making your pet go round in circles for hours.  Available in multi-packs ? the more you buy the cheaper the Roller! Pink Rollers out now!', 'Click on a Roller to see more information!', 'You can fit 30 Rollers in a user flat!', NULL),
-(6, 6, 1, 'Teleporters', 'Teleporters', 'ctlg_productpage3', 'catalog_doors_headline1', 'catalog_door_a,catalog_door_c,catalog_door_b,', 'Beam your user from one room to another with one of our cunningly disguised, space age teleports. Now you can link any two rooms together! Teleports are sold in pairs, so if you trade for them, check you\'re getting a linked pair.', 'Click on the item you want for more information', 'Beam!', NULL),
-(7, 7, 1, 'Pets', 'Pets', 'ctlg_pets', 'catalog_pet_headline1', 'catalog_pets_teaser1,', 'Fluff and whiskers, meows and woofs! You\'\'re about to enter the world of small creatures with furry features. Find a new friend from our ever-changing selection. From faithful servants to playful playmates - here\'s where you\'\'ll find them all.', 'Find your own pet!', NULL, '1:Give name:'),
-(8, 8, 1, 'Petstuff', 'Pet accessories', 'ctlg_layout2', 'catalog_pet_headline2', 'ctlg_pet_teaser1,', 'You\'\'ll need to take care of your pet to keep it happy and healthy. This section of the Catalogue has EVERYTHING you\'ll need to satisfy your pet\'s needs.', 'Click on the item you want for more information', 'You\'ll have to share it!', NULL),
-(9, 9, 1, 'Area', 'Area', 'Area', 'catalog_area_headline1', 'catalog_area_teaser1,', 'Introducing the Area Collection...  Clean, chunky lines set this collection apart as a preserve of the down-to-earth person. It\'s beautiful in its simplicity, and welcoming to everyone.', 'Click on the item you want for more information', '2: Beautiful in it\'s simplicity!', NULL),
-(10, 10, 1, 'Gothic', 'Gothic', 'ctlg_layout2', 'catalog_gothic_headline1', 'catalog_gothic_teaser1,', 'The Gothic section is full of medieval looking items. Create your own Gothic castle!', 'Click on the item you want for more information', NULL, NULL),
-(11, 11, 1, 'Soundmachines', 'Trax', 'ctlg_soundmachine', 'catalog_djshop_headline1', 'catalog_djshop_teaser1,', 'Bring sound to your room! Purchase a sound machine plus some sample packs and create your own songs to play in your flat!<br>Moar soundsets coming soon!', 'Click on the item you want for more information', NULL, NULL),
-(12, 12, 1, 'Candy', 'Candy', 'ctlg_layout2', 'catalog_candy_headline1', 'catalog_candy_teaser1,', 'Candy combines the cool, clean lines of the Mode collection with a softer, more soothing style. It\'\'s urban sharpness with a hint of the feminine.', 'Click on the item you want for more information', '2: WTF SCREW YOU LOL', NULL),
-(13, 13, 1, 'Asian', 'Asian', 'ctlg_layout2', 'catalog_asian_headline1', 'catalog_asian_teaser1,', 'Introducing the Asian collection... These handcrafted items are the result of years of child slavery, some mixture of Ying and Yang and a mass-shipping from China. These authentic items fit in every oriental themed user flat. Made in China: fo\' real nigga', 'Click on the item you want for more information', NULL, NULL),
-(14, 14, 1, 'Iced', 'Iced', 'ctlg_layout2', 'catalog_iced_headline1', 'catalog_iced_teaser1,', 'Introducing the Iced Collection...  For the person who needs no introduction. It\'s so chic, it says everything and nothing. It\'s a blank canvas, let your imagination to run wild!', 'Click on the item you want for more information', '2: These chairs are so filthy', NULL),
-(15, 15, 1, 'Lodge', 'Lodge', 'ctlg_layout2', 'catalog_lodge_headline1', 'catalog_lodge_teaser1,', 'Introducing the Lodge Collection...  Do you appreciate the beauty of wood?  For that ski lodge effect, or to match that open fire... Lodge is the Furni of choice for people with that no frills approach to decorating.', 'Click on the item you want for more information', '2: I luv wood!', NULL),
-(16, 16, 1, 'Plasto', 'Plasto', 'ctlg_plasto', 'catalog_plasto_headline1', '', 'Introducing The Plasto Collection...  Can you feel that 1970s vibe?  Decorate with Plasto and add some colour to your life. Choose a colour that reflect your mood, or just pick your favourite shade.', 'Select an item and a colour and buy!', 'New colors!', '1:Choose an item\r\n2:Select the color\r\n3:Preview'),
-(17, 17, 1, 'Pura', 'Pura', 'ctlg_layout2', 'catalog_pura_headline1', 'catalog_pura_teaser1,', 'Introducing the Pura Collection...  This collection breathes fresh, clean air and cool tranquillity. Use it to create a special haven away from the hullabaloo of life outside the Hotel.', 'Click on the item you want for more information', NULL, NULL),
-(18, 18, 1, 'Mode', 'Mode', 'ctlg_layout2', 'catalog_mode_headline1', 'catalog_mode_teaser1,', 'Introducing the Mode Collection...  Steely grey functionality combined with sleek designer upholstery. The person that chooses this furniture is a cool urban cat - streetwise, sassy and so slightly untouchable.', 'Click on the item you want for more information', '2: So shiny and new...', NULL),
-(19, 19, 1, 'Accessories', 'Accessories', 'ctlg_layout2', 'catalog_extra_headline1', 'catalog_extra_teaser1,', 'Is your room missing something?  Well, now you can add the finishing touches that express your true personality. And don\'t forget, like everything else, these accessories can be moved about to suit your mood.', 'Click on the item you want for more information', '2: I herd u liek mudkips?', NULL),
-(20, 20, 1, 'Bathroom', 'Bathroom', 'ctlg_layout2', 'catalog_bath_headline1', 'catalog_bath_teaser1,', 'Introducing the Bathroom Collection...  Have some fun with the cheerful bathroom collection. Give yourself and your guests somewhere to freshen up - vital if you want to avoid nasty niffs. Put your loo in a corner though...', 'Click on the item you want for more information', NULL, NULL),
-(21, 21, 1, 'Plants', 'Plants', 'ctlg_layout2', 'catalog_plants_headline1', 'catalog_plants_teaser1,', 'Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!', 'Click on the item you want for more information', NULL, NULL),
-(22, 22, 1, 'Sports', 'Sport', 'ctlg_layout2', 'catalog_sports_headline1', 'catalog_sports_teaser1,', 'For the sporty people, here is the Sports section! Create your own hockey stadium!', 'Click on the item you want for more information', '2:Yay!', NULL),
-(23, 23, 1, 'Rugs', 'Rugs', 'ctlg_layout2', 'catalog_rugs_headline1', 'catalog_rugs_teaser1,', 'We have rugs for all occasions. All rugs are non-slip and washable.', 'Click on the item you want for more information', '2:We have rugs for ANY room!', NULL),
-(24, 24, 1, 'Gallery', 'Gallery', 'ctlg_layout2', 'catalog_gallery_headline1', 'catalog_gallery_teaser1,', 'Adorn your walls with wondrous works of art, posters, plaques and wall hangings. We have items to suit all tastes, from kitsch to cool, traditional to modern.', 'Click on the item you want for more information', '2: Brighten up your walls!', NULL),
-(25, 25, 1, 'Flags', 'Flags', 'ctlg_layout2', 'catalog_flags_headline1', 'catalog_flags_teaser1,', 'If you\'re feeling patriotic, get a flag to prove it. Our finest cloth flags will brighten up the dullest walls.', 'Click on the item you want for more information', '2:Hail Nillus!', NULL),
-(26, 26, 1, 'Trophies', 'Trophies', 'ctlg_trophies', 'catalog_trophies_headline1', '', 'Reward your friends, or yourself with one of our fabulous glittering array of bronze, silver and gold trophies.<br><br>First choose the trophy model (click on the arrows to see all the different styles) and then the metal (click on the seal below the trop', NULL, NULL, '1:Type your inscription CAREFULLY, it\'s permanent!'),
-(27, 40, 5, 'staffHC', 'Club Shop', 'ctlg_layout2', 'catalog_club_headline1', 'catalog_hc_teaser,', 'Welcome to the Club Shop! All \'Habbo Club membership gifts\' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.', 'Click on the item you want for more information', NULL, NULL),
-(28, 41, 5, 'Dragons', 'Dragons', 'ctlg_layout2', 'catalog_rares_headline1', '', 'The Dragon page contains all of the Dragon Lamps.', 'Click on the item you want for more information', NULL, NULL),
-(29, 43, 5, 'Sci-fi Doors', 'Sci-fi Doors', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(30, 43, 5, 'Parasols', 'Parasols', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(31, 43, 5, 'Screens', 'Screens', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(32, 32, 5, 'Marquee', 'Marquee', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(33, 33, 5, 'Pillows', 'Pillows', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(34, 34, 5, 'Icecream', 'Icecream', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(35, 35, 5, 'Smoke machines', 'Smoke machines', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(36, 36, 5, 'Laser Ports', 'Laser Ports', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(37, 37, 5, 'Amber Lamp', 'Amber Lamp', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(38, 38, 5, 'Fountains', 'Fountains', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(39, 39, 5, 'Elephants', 'Elephants', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(40, 40, 5, 'Fans', 'Fans', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL);
+INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `name_index`, `link_list`, `name`, `layout`, `image_headline`, `image_teasers`, `body`, `label_pick`, `label_extra_s`, `label_extra_t`) VALUES
+(1, 1, 1, 1, 'Frontpage', '', 'Frontpage', 'ctlg_frontpage2', 'catal_fp_header', 'catal_fp_pic4,catal_fp_pic5,', 'Welcome to the Hotel Catalogue. It\'s packed full of fab things for your room - there\'s something for everyone! Browse the ranges by clicking the tabs on the right.<br><br>Some ranges are seasonal, so check back regularly for new items.<br><br>We regularly', NULL, 'Home sweet home!', '1:You need Credits to buy Furni for your room, click the Purse at the bottom of your screen for more information about Credits.'),
+(2, 2, 1, 1, 'Rare', '', 'Rare', 'ctlg_productpage1', 'catalog_rares_headline1', '', 'Okay this thing is fucking epic!\rEnjoy it while it lasts!', NULL, NULL, NULL),
+(3, 3, 1, 1, 'Spaces', '', 'Spaces', 'ctlg_spaces', 'catalog_spaces_headline1', '', 'Floors, wallpapers, landscapes - get a groovy combination to your room. Use our virtual room preview below to test out the combinations before you buy. Select the design and color you like and click Buy.', NULL, NULL, '1:Wall\r\n2:Floor\r\n3:Pattern\r\n4:Colour\r\n5:Pattern\r\n6:Colour\r\n7:Preview'),
+(4, 4, 1, 1, 'Bank', '', 'Exchange', 'ctlg_layout2', 'catalog_bank_headline1', 'catalog_bank_teaser,', 'The Habbo Exchange is where you can convert your Habbo Credits into a tradable currency. You can use this tradable currency to exchange Habbo Credits for Furni!', 'Click on the item you want for more information', 'EPIC YAY!', NULL),
+(5, 5, 1, 1, 'Rollers', '', 'Rollers', 'ctlg_layout2', 'catalog_roller_headline1', '', 'Move your imagination, while you move your Habbo!  Perfect for mazes, games, for keeping your queue moving or making your pet go round in circles for hours.  Available in multi-packs ? the more you buy the cheaper the Roller! Pink Rollers out now!', 'Click on a Roller to see more information!', 'You can fit 30 Rollers in a user flat!', NULL),
+(6, 6, 1, 1, 'Teleporters', '', 'Teleporters', 'ctlg_productpage3', 'catalog_doors_headline1', 'catalog_door_a,catalog_door_c,catalog_door_b,', 'Beam your user from one room to another with one of our cunningly disguised, space age teleports. Now you can link any two rooms together! Teleports are sold in pairs, so if you trade for them, check you\'re getting a linked pair.', 'Click on the item you want for more information', 'Beam!', NULL),
+(7, 7, 1, 1, 'Pets', '', 'Pets', 'ctlg_pets', 'catalog_pet_headline1', 'catalog_pets_teaser1,', 'Fluff and whiskers, meows and woofs! You\'\'re about to enter the world of small creatures with furry features. Find a new friend from our ever-changing selection. From faithful servants to playful playmates - here\'s where you\'\'ll find them all.', 'Find your own pet!', NULL, '1:Give name:'),
+(8, 8, 1, 1, 'Petstuff', '', 'Pet accessories', 'ctlg_layout2', 'catalog_pet_headline2', 'ctlg_pet_teaser1,', 'You\'\'ll need to take care of your pet to keep it happy and healthy. This section of the Catalogue has EVERYTHING you\'ll need to satisfy your pet\'s needs.', 'Click on the item you want for more information', 'You\'ll have to share it!', NULL),
+(9, 9, 1, 1, 'Area', '', 'Area', 'Area', 'catalog_area_headline1', 'catalog_area_teaser1,', 'Introducing the Area Collection...  Clean, chunky lines set this collection apart as a preserve of the down-to-earth person. It\'s beautiful in its simplicity, and welcoming to everyone.', 'Click on the item you want for more information', '2: Beautiful in it\'s simplicity!', NULL),
+(10, 10, 1, 1, 'Gothic', '', 'Gothic', 'ctlg_layout2', 'catalog_gothic_headline1', 'catalog_gothic_teaser1,', 'The Gothic section is full of medieval looking items. Create your own Gothic castle!', 'Click on the item you want for more information', NULL, NULL),
+(11, 11, 1, 1, 'Soundmachines', '', 'Trax', 'ctlg_soundmachine', 'catalog_djshop_headline1', 'catalog_djshop_teaser1,', 'Bring sound to your room! Purchase a sound machine plus some sample packs and create your own songs to play in your flat!<br>Moar soundsets coming soon!', 'Click on the item you want for more information', NULL, NULL),
+(12, 12, 1, 1, 'Candy', '', 'Candy', 'ctlg_layout2', 'catalog_candy_headline1', 'catalog_candy_teaser1,', 'Candy combines the cool, clean lines of the Mode collection with a softer, more soothing style. It\'\'s urban sharpness with a hint of the feminine.', 'Click on the item you want for more information', '2: WTF SCREW YOU LOL', NULL),
+(13, 13, 1, 1, 'Asian', '', 'Asian', 'ctlg_layout2', 'catalog_asian_headline1', 'catalog_asian_teaser1,', 'Introducing the Asian collection... These handcrafted items are the result of years of child slavery, some mixture of Ying and Yang and a mass-shipping from China. These authentic items fit in every oriental themed user flat. Made in China: fo\' real nigga', 'Click on the item you want for more information', NULL, NULL),
+(14, 14, 1, 1, 'Iced', '', 'Iced', 'ctlg_layout2', 'catalog_iced_headline1', 'catalog_iced_teaser1,', 'Introducing the Iced Collection...  For the person who needs no introduction. It\'s so chic, it says everything and nothing. It\'s a blank canvas, let your imagination to run wild!', 'Click on the item you want for more information', '2: These chairs are so filthy', NULL),
+(15, 15, 1, 1, 'Lodge', '', 'Lodge', 'ctlg_layout2', 'catalog_lodge_headline1', 'catalog_lodge_teaser1,', 'Introducing the Lodge Collection...  Do you appreciate the beauty of wood?  For that ski lodge effect, or to match that open fire... Lodge is the Furni of choice for people with that no frills approach to decorating.', 'Click on the item you want for more information', '2: I luv wood!', NULL),
+(16, 16, 1, 1, 'Plasto', '', 'Plasto', 'ctlg_plasto', 'catalog_plasto_headline1', '', 'Introducing The Plasto Collection...  Can you feel that 1970s vibe?  Decorate with Plasto and add some colour to your life. Choose a colour that reflect your mood, or just pick your favourite shade.', 'Select an item and a colour and buy!', 'New colors!', '1:Choose an item\r\n2:Select the color\r\n3:Preview'),
+(17, 17, 1, 1, 'Pura', '', 'Pura', 'ctlg_layout2', 'catalog_pura_headline1', 'catalog_pura_teaser1,', 'Introducing the Pura Collection...  This collection breathes fresh, clean air and cool tranquillity. Use it to create a special haven away from the hullabaloo of life outside the Hotel.', 'Click on the item you want for more information', NULL, NULL),
+(18, 18, 1, 1, 'Mode', '', 'Mode', 'ctlg_layout2', 'catalog_mode_headline1', 'catalog_mode_teaser1,', 'Introducing the Mode Collection...  Steely grey functionality combined with sleek designer upholstery. The person that chooses this furniture is a cool urban cat - streetwise, sassy and so slightly untouchable.', 'Click on the item you want for more information', '2: So shiny and new...', NULL),
+(19, 19, 1, 1, 'Accessories', '', 'Accessories', 'ctlg_layout2', 'catalog_extra_headline1', 'catalog_extra_teaser1,', 'Is your room missing something?  Well, now you can add the finishing touches that express your true personality. And don\'t forget, like everything else, these accessories can be moved about to suit your mood.', 'Click on the item you want for more information', '2: I herd u liek mudkips?', NULL),
+(20, 20, 1, 1, 'Bathroom', '', 'Bathroom', 'ctlg_layout2', 'catalog_bath_headline1', 'catalog_bath_teaser1,', 'Introducing the Bathroom Collection...  Have some fun with the cheerful bathroom collection. Give yourself and your guests somewhere to freshen up - vital if you want to avoid nasty niffs. Put your loo in a corner though...', 'Click on the item you want for more information', NULL, NULL),
+(21, 21, 1, 1, 'Plants', '', 'Plants', 'ctlg_layout2', 'catalog_plants_headline1', 'catalog_plants_teaser1,', 'Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!', 'Click on the item you want for more information', NULL, NULL),
+(22, 22, 1, 1, 'Sports', '', 'Sport', 'ctlg_layout2', 'catalog_sports_headline1', 'catalog_sports_teaser1,', 'For the sporty people, here is the Sports section! Create your own hockey stadium!', 'Click on the item you want for more information', '2:Yay!', NULL),
+(23, 23, 1, 1, 'Rugs', '', 'Rugs', 'ctlg_layout2', 'catalog_rugs_headline1', 'catalog_rugs_teaser1,', 'We have rugs for all occasions. All rugs are non-slip and washable.', 'Click on the item you want for more information', '2:We have rugs for ANY room!', NULL),
+(24, 24, 1, 1, 'Gallery', '', 'Gallery', 'ctlg_layout2', 'catalog_gallery_headline1', 'catalog_gallery_teaser1,', 'Adorn your walls with wondrous works of art, posters, plaques and wall hangings. We have items to suit all tastes, from kitsch to cool, traditional to modern.', 'Click on the item you want for more information', '2: Brighten up your walls!', NULL),
+(25, 25, 1, 1, 'Flags', '', 'Flags', 'ctlg_layout2', 'catalog_flags_headline1', 'catalog_flags_teaser1,', 'If you\'re feeling patriotic, get a flag to prove it. Our finest cloth flags will brighten up the dullest walls.', 'Click on the item you want for more information', '2:Hail Nillus!', NULL),
+(26, 26, 1, 1, 'Trophies', '', 'Trophies', 'ctlg_trophies', 'catalog_trophies_headline1', '', 'Reward your friends, or yourself with one of our fabulous glittering array of bronze, silver and gold trophies.<br><br>First choose the trophy model (click on the arrows to see all the different styles) and then the metal (click on the seal below the trop', NULL, NULL, '1:Type your inscription CAREFULLY, it\'s permanent!'),
+(27, 40, 5, 1, 'staffHC', '', 'Club Shop', 'ctlg_layout2', 'catalog_club_headline1', 'catalog_hc_teaser,', 'Welcome to the Club Shop! All \'Habbo Club membership gifts\' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.', 'Click on the item you want for more information', NULL, NULL),
+(28, 41, 5, 1, 'Dragons', '', 'Dragons', 'ctlg_layout2', 'catalog_rares_headline1', '', 'The Dragon page contains all of the Dragon Lamps.', 'Click on the item you want for more information', NULL, NULL),
+(29, 43, 5, 1, 'Sci-fi Doors', '', 'Sci-fi Doors', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(30, 43, 5, 1, 'Parasols', '', 'Parasols', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(31, 43, 5, 1, 'Screens', '', 'Screens', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(32, 32, 5, 1, 'Marquee', '', 'Marquee', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(33, 33, 5, 1, 'Pillows', '', 'Pillows', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(34, 34, 5, 1, 'Icecream', '', 'Icecream', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(35, 35, 5, 1, 'Smoke machines', '', 'Smoke machines', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(36, 36, 5, 1, 'Laser Ports', '', 'Laser Ports', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(37, 37, 5, 1, 'Amber Lamp', '', 'Amber Lamp', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(38, 38, 5, 1, 'Fountains', '', 'Fountains', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(39, 39, 5, 1, 'Elephants', '', 'Elephants', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(40, 40, 5, 1, 'Fans', '', 'Fans', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(41, 3, 1, 1, 'Camera', 'Camera2', 'Camera', 'ctlg_camera1', 'catalog_camera_headline1', 'campic_cam,campic_film,', 'With your Camera you can take pictures of just about anything in the hotel - your friend on the loo (hehe), your best dive in the Lido, or your room when you\'ve got it just right!<br><br>A camera costs 10 Credits (two free photos included).', NULL, NULL, '1:When you\'ve used your free photos, you\'ll need to buy more. Each roll of film takes five photos. Your Camera will show how much film you have left and loads the next roll automatically.<br><br>Each Film (5 photos) costs:'),
+(42, 3, 1, 0, 'Camera2', '', 'Camera', 'ctlg_camera2', 'catalog_camera_headline1', 'campic_help,', 'CAMERA FUNCTIONS<br><br>1. Press this button to take a photo.<br>2. Photo cancel - for when you\'ve chopped off your friend\'s head!<br>3. Zoom in and out.<br>4. Photo counter - shows how much film you have left<br>5. Caption Box - write your caption before saving the photo.<br>6. Save - this moves the photo to your giant.<br>You can give photos to your friends, or put them on the wall like posters.', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -715,15 +721,15 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (11, 'chair_norja', '#ffffff,#ffffff,#F7EBBC,#F7EBBC', 1, 1, 1, 'can_sit_on_top'),
 (12, 'table_polyfon_med', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
 (13, 'doormat_love', '0,0,0', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(14, 'doormat_plain', '0,0,0', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(14, 'doormat_plain', '0,0,0', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (15, 'sofachair_polyfon', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 1, 1, 'can_sit_on_top'),
 (16, 'sofachair_silo', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 1, 1, 'can_sit_on_top'),
 (17, 'bed_polyfon', '#ffffff,#ffffff,#ABD0D2,#ABD0D2', 2, 3, 1, 'can_lay_on_top'),
 (18, 'bed_polyfon_one', '#ffffff,#ffffff,#ffffff,#ABD0D2,#ABD0D2', 1, 3, 1, 'can_lay_on_top'),
-(19, 'bed_silo_one', '0,0,0', 1, 3, 1, 'can_lay_on_top'),
-(20, 'bed_silo_two', '0,0,0', 2, 3, 1, 'can_lay_on_top'),
+(19, 'bed_silo_one', '0,0,0', 1, 3, 1.7, 'can_lay_on_top'),
+(20, 'bed_silo_two', '0,0,0', 2, 3, 1.7, 'can_lay_on_top'),
 (21, 'table_silo_small', '#ffffff,#ABD0D2', 1, 1, 1, 'solid,can_stack_on_top'),
-(22, 'bed_armas_two', '0,0,0', 2, 3, 1, 'can_lay_on_top'),
+(22, 'bed_armas_two', '0,0,0', 2, 3, 1.7, 'can_lay_on_top'),
 (23, 'shelves_armas', '0,0,0', 2, 1, 2, 'solid'),
 (24, 'bench_armas', '0,0,0', 2, 1, 1, 'can_sit_on_top'),
 (25, 'table_armas', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top'),
@@ -731,17 +737,17 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (27, 'small_chair_armas', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
 (28, 'fireplace_armas', '0,0,0', 2, 1, 2, 'solid,custom_data_numeric_on_off'),
 (29, 'lamp_armas', '0,0,0', 1, 1, 2, 'solid,custom_data_numeric_on_off'),
-(30, 'bed_armas_one', '0,0,0', 1, 3, 1, 'can_lay_on_top'),
+(30, 'bed_armas_one', '0,0,0', 1, 3, 1.7, 'can_lay_on_top'),
 (31, 'carpet_standard', '0,0,0', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (32, 'carpet_armas', '0,0,0', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
 (33, 'carpet_polar', '#ffffff,#ffffff,#ffffff', 2, 3, 0, 'can_stand_on_top,can_stack_on_top'),
 (34, 'fireplace_polyfon', '0,0,0', 2, 1, 2, 'solid,custom_data_numeric_on_off'),
 (35, 'carpet_standard*1', '#ff1f08', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
-(36, 'doormat_plain*1', '#ff1f08', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(36, 'doormat_plain*1', '#ff1f08', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (37, 'carpet_standard*2', '#99DCCC', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (38, 'carpet_standard*3', '#ffee00', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (39, 'carpet_standard*4', '#ccddff', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
-(40, 'doormat_plain*6', '#777777', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(40, 'doormat_plain*6', '#777777', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (41, 'carpet_standard*5', '#ddccff', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (42, 'carpet_standard*6', '#777777', 3, 5, 0, 'can_stand_on_top,can_stack_on_top'),
 (43, 'pizza', '', 1, 1, 0.1, 'solid,can_stack_on_top'),
@@ -766,11 +772,11 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (62, 'carpet_polar*1', '#ffbbcf,#ffbbcf,#ffddef', 2, 3, 0, 'can_stand_on_top,can_stack_on_top'),
 (63, 'smooth_table_polyfon', '', 2, 2, 1, 'solid,can_stack_on_top'),
 (64, 'sofachair_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 1, 1, 'can_sit_on_top'),
-(65, 'bed_polyfon_girl_one', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 3, 1, 'can_lay_on_top'),
-(66, 'bed_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 2, 3, 1, 'can_lay_on_top'),
+(65, 'bed_polyfon_girl_one', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 3, 1.6, 'can_lay_on_top'),
+(66, 'bed_polyfon_girl', '#ffffff,#ffffff,#EE7EA4,#EE7EA4', 2, 3, 1.6, 'can_lay_on_top'),
 (67, 'sofa_polyfon_girl', '#ffffff,#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4,#EE7EA4,#EE7EA4', 2, 1, 1, 'can_sit_on_top'),
-(68, 'bed_budgetb_one', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 1, 3, 1, 'can_lay_on_top'),
-(69, 'bed_budgetb', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 2, 3, 1, 'can_lay_on_top'),
+(68, 'bed_budgetb_one', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 1, 3, 1.6, 'can_lay_on_top'),
+(69, 'bed_budgetb', '#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF,#FFFFFF', 2, 3, 1.6, 'can_lay_on_top'),
 (70, 'plant_pineapple', '', 1, 1, 1, 'solid'),
 (71, 'plant_fruittree', '', 1, 1, 1, 'solid'),
 (72, 'plant_small_cactus', '', 1, 1, 1, 'solid'),
@@ -903,7 +909,7 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (199, 'bardeskcorner_polyfon*5', '#ffffff,#FF9BBD', 1, 1, 1, 'solid,can_stack_on_top'),
 (200, 'divider_poly3*5', '#ffffff,#ffffff,#ffffff,#EE7EA4,#EE7EA4', 1, 1, 1, 'solid,requires_rights_for_interaction,door'),
 (201, 'chair_china', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
-(202, 'china_table', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
+(202, 'china_table', '0,0,0', 1, 1, 0.9, 'solid,can_stack_on_top'),
 (203, 'safe_silo', '#ffffff,#ABD0D2,#ABD0D2,#ffffff', 1, 1, 1, 'solid,custom_data_true_false'),
 (204, 'china_shelve', '0,0,0', 2, 1, 2, 'solid'),
 (205, 'divider_nor5', '#ffffff,#F7EBBC,#F7EBBC', 1, 1, 2, 'solid,requires_rights_for_interaction,door'),
@@ -930,9 +936,9 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (226, 'hc_rllr', '0,0,0', 1, 1, 0.45, 'can_stand_on_top,can_stack_on_top,roller'),
 (227, 'hc_rntgn', '0,0,0', 2, 1, 2, 'solid'),
 (228, 'hc_trll', '0,0,0', 1, 2, 1.5, 'solid'),
-(229, 'gothic_chair*3', '#ffffff,#dd0000,#ffffff,#dd0000', 1, 1, 1, 'can_sit_on_top'),
-(230, 'gothic_sofa*3', '#ffffff,#dd0000,#ffffff,#ffffff,#dd0000,#ffffff', 2, 1, 1, 'can_sit_on_top'),
-(231, 'gothic_stool*3', '#ffffff,#dd0000,#ffffff', 1, 1, 1, 'can_sit_on_top'),
+(229, 'gothic_chair*3', '#ffffff,#dd0000,#ffffff,#dd0000', 1, 1, 1.2, 'can_sit_on_top'),
+(230, 'gothic_sofa*3', '#ffffff,#dd0000,#ffffff,#ffffff,#dd0000,#ffffff', 2, 1, 1.2, 'can_sit_on_top'),
+(231, 'gothic_stool*3', '#ffffff,#dd0000,#ffffff', 1, 1, 1.2, 'can_sit_on_top'),
 (232, 'sound_machine', '', 1, 1, 1, 'solid,requires_rights_for_interaction,custom_data_numeric_on_off,sound_machine'),
 (233, 'plant_mazegate', '', 2, 1, 1, 'solid,requires_rights_for_interaction,door'),
 (234, 'plant_maze', '', 2, 1, 1, 'solid'),
@@ -940,11 +946,11 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (236, 'petfood4', '0,0', 1, 1, 0, 'can_stand_on_top'),
 (237, 'gothic_carpet', '', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
 (238, 'gothic_carpet2', '', 2, 4, 0, 'can_stand_on_top,can_stack_on_top'),
-(239, 'sound_set_1', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(240, 'sound_set_3', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(241, 'sound_set_6', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(242, 'sound_set_7', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(243, 'sound_set_8', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(239, 'sound_set_1', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(240, 'sound_set_3', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(241, 'sound_set_6', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(242, 'sound_set_7', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(243, 'sound_set_8', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
 (244, 'post.it', '', 0, 0, 0, 'wall_item,requires_rights_for_interaction,post_it'),
 (245, 'gothicfountain', '', 0, 0, 0, 'wall_item,custom_data_numeric_on_off'),
 (246, 'hc_wall_lamp', '', 0, 0, 0, 'wall_item,custom_data_numeric_on_off'),
@@ -954,10 +960,10 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (250, 'wallpaper', '', 0, 0, 0, 'wall_item,decoration'),
 (251, 'poster', '', 0, 0, 0, 'wall_item'),
 (252, 'table_norja_med', '0,#E2DAAC', 2, 2, 1, 'solid,can_stack_on_top'),
-(253, 'doormat_plain*4', '#ccddff', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(254, 'doormat_plain*2', '#99DCCC', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(255, 'doormat_plain*3', '#ffee00', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(256, 'doormat_plain*5', '#ddccff', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
+(253, 'doormat_plain*4', '#ccddff', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(254, 'doormat_plain*2', '#99DCCC', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(255, 'doormat_plain*3', '#ffee00', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(256, 'doormat_plain*5', '#ddccff', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
 (257, 'rare_parasol*1', '#ffffff,#ffffff,#ffffff,#ffff11', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (258, 'rare_parasol*2', '#ffffff,#ffffff,#ffffff,#ff8f61', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
 (259, 'rare_parasol*3', '#ffffff,#ffffff,#ffffff,#d47fff', 1, 1, 1, 'solid,custom_data_numeric_on_off'),
@@ -1056,72 +1062,75 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (352, 'roomdimmer', '', 1, 1, 1, 'wall_item,roomdimmer'),
 (353, 'jukebox*1', '', 1, 1, 1, 'solid,jukebox'),
 (354, 'jukebox_ptv*1', '', 1, 1, 1, 'solid,jukebox'),
-(355, 'carpet_soft_tut', '', 1, 1, 0, 'can_stand_on_top,can_stack_on_top'),
-(356, 'sound_set_9', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(357, 'sound_set_10', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(358, 'sound_set_2', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(359, 'sound_set_4', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(360, 'sound_set_5', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(361, 'sound_set_11', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(362, 'sound_set_12', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(363, 'sound_set_13', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(364, 'sound_set_14', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(365, 'sound_set_15', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(366, 'sound_set_16', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(367, 'sound_set_17', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(368, 'sound_set_18', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(369, 'sound_set_19', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(370, 'sound_set_20', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(371, 'sound_set_21', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(372, 'sound_set_22', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(373, 'sound_set_23', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(374, 'sound_set_24', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(375, 'sound_set_25', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(376, 'sound_set_26', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(377, 'sound_set_27', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(378, 'sound_set_28', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(379, 'sound_set_29', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(380, 'sound_set_30', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(381, 'sound_set_31', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(382, 'sound_set_32', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(383, 'sound_set_33', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(384, 'sound_set_34', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(385, 'sound_set_35', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(386, 'sound_set_36', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(387, 'sound_set_37', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(388, 'sound_set_38', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(389, 'sound_set_39', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(390, 'sound_set_40', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(391, 'sound_set_41', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(392, 'sound_set_42', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(393, 'sound_set_43', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(394, 'sound_set_44', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(395, 'sound_set_45', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(396, 'sound_set_46', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(397, 'sound_set_47', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(398, 'sound_set_48', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(399, 'sound_set_49', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(400, 'sound_set_50', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(401, 'sound_set_51', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(402, 'sound_set_52', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(403, 'sound_set_53', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(404, 'sound_set_54', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(405, 'sound_set_55', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(406, 'sound_set_56', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(407, 'sound_set_57', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(408, 'sound_set_58', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(409, 'sound_set_59', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(410, 'sound_set_60', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(411, 'sound_set_61', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(412, 'sound_set_62', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(413, 'sound_set_63', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
-(414, 'sound_set_64', '', 1, 1, 0.1, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(355, 'carpet_soft_tut', '', 1, 1, 0.2, 'can_stand_on_top,can_stack_on_top'),
+(356, 'sound_set_9', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(357, 'sound_set_10', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(358, 'sound_set_2', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(359, 'sound_set_4', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(360, 'sound_set_5', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(361, 'sound_set_11', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(362, 'sound_set_12', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(363, 'sound_set_13', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(364, 'sound_set_14', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(365, 'sound_set_15', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(366, 'sound_set_16', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(367, 'sound_set_17', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(368, 'sound_set_18', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(369, 'sound_set_19', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(370, 'sound_set_20', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(371, 'sound_set_21', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(372, 'sound_set_22', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(373, 'sound_set_23', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(374, 'sound_set_24', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(375, 'sound_set_25', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(376, 'sound_set_26', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(377, 'sound_set_27', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(378, 'sound_set_28', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(379, 'sound_set_29', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(380, 'sound_set_30', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(381, 'sound_set_31', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(382, 'sound_set_32', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(383, 'sound_set_33', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(384, 'sound_set_34', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(385, 'sound_set_35', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(386, 'sound_set_36', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(387, 'sound_set_37', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(388, 'sound_set_38', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(389, 'sound_set_39', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(390, 'sound_set_40', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(391, 'sound_set_41', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(392, 'sound_set_42', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(393, 'sound_set_43', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(394, 'sound_set_44', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(395, 'sound_set_45', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(396, 'sound_set_46', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(397, 'sound_set_47', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(398, 'sound_set_48', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(399, 'sound_set_49', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(400, 'sound_set_50', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(401, 'sound_set_51', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(402, 'sound_set_52', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(403, 'sound_set_53', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(404, 'sound_set_54', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(405, 'sound_set_55', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(406, 'sound_set_56', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(407, 'sound_set_57', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(408, 'sound_set_58', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(409, 'sound_set_59', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(410, 'sound_set_60', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(411, 'sound_set_61', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(412, 'sound_set_62', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(413, 'sound_set_63', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
+(414, 'sound_set_64', '', 1, 1, 0.2, 'solid,can_stack_on_top,sound_machine_sample_set'),
 (415, 'present_gen1', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (416, 'present_gen2', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (417, 'present_gen3', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (418, 'present_gen4', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
 (419, 'present_gen5', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
-(420, 'present_gen6', '', 1, 1, 1, 'solid,present,can_stack_on_top');
+(420, 'present_gen6', '', 1, 1, 1, 'solid,present,can_stack_on_top'),
+(421, 'camera', '', 1, 1, 0, 'solid'),
+(422, 'photo', '', 0, 0, 0, 'photo,wall_item'),
+(423, 'film', '', 0, 0, 0, '');
 
 -- --------------------------------------------------------
 
@@ -1136,6 +1145,20 @@ CREATE TABLE `items_moodlight_presets` (
   `preset_2` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255',
   `preset_3` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '1,#000000,255'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `items_photos`
+--
+
+CREATE TABLE `items_photos` (
+  `photo_id` int(11) NOT NULL,
+  `photo_user_id` bigint(11) NOT NULL,
+  `timestamp` bigint(11) NOT NULL,
+  `photo_data` blob NOT NULL,
+  `photo_checksum` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
 
@@ -1266,59 +1289,73 @@ CREATE TABLE `rooms` (
 --
 
 INSERT INTO `rooms` (`id`, `owner_id`, `category`, `name`, `description`, `model`, `ccts`, `wallpaper`, `floor`, `showname`, `superusers`, `accesstype`, `password`, `visitors_now`, `visitors_max`) VALUES
-(1001, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, 0, 0, 0, 0, '', 0, 40),
-(1003, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, 0, 0, 0, 0, '', 0, 100),
-(1004, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, 0, 0, 0, 0, '', 0, 30),
-(1005, '0', 5, 'TV Studio', 'tv_studio', 'tv_studio', 'hh_room_tv_studio_general', 0, 0, 0, 0, 0, '', 0, 20),
-(1006, '0', 5, 'Cinema', 'habbo_cinema', 'cinema_a', 'hh_room_cinema', 0, 0, 0, 0, 0, '', 0, 50),
-(1007, '0', 5, 'Power Gym', 'sport', 'sport', 'hh_room_sport', 0, 0, 0, 0, 0, '', 0, 35),
-(1008, '0', 5, 'Olympic Stadium', 'ballroom', 'ballroom', 'hh_room_ballroom', 0, 0, 0, 0, 0, '', 0, 50),
-(1009, '0', 5, 'Habbo Kitchen', 'hotel_kitchen', 'cr_kitchen', 'hh_room_kitchen', 0, 0, 0, 0, 0, '', 0, 20),
-(1010, '0', 6, 'The Dirty Duck Pub', 'the_dirty_duck_pub', 'pub_a', 'hh_room_pub', 0, 0, 0, 0, 0, '', 0, 40),
-(1011, '0', 6, 'Cafe Ole', 'cafe_ole', 'cafe_ole', 'hh_room_cafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1012, '0', 6, 'Gallery Cafe', 'eric\'s_eaterie', 'cr_cafe', 'hh_room_erics', 0, 0, 0, 0, 0, '', 0, 35),
-(1013, '0', 6, 'Space Cafe', 'space_cafe', 'space_cafe', 'hh_room_space_cafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1014, '0', 7, 'Rooftop Terrace', 'rooftop', 'rooftop', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 30),
-(1015, '0', 7, 'Rooftop Cafe', 'rooftop', 'rooftop_2', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 20),
-(1016, '0', 6, 'Palazzo Pizza', 'pizza', 'pizza', 'hh_room_pizza', 0, 0, 0, 0, 0, '', 0, 40),
-(1017, '0', 6, 'Habburgers', 'habburger\'s', 'habburger', 'hh_room_habburger', 0, 0, 0, 0, 0, '', 0, 40),
-(1018, '0', 8, 'Grandfathers Lounge', 'dusty_lounge', 'dusty_lounge', 'hh_room_dustylounge', 0, 0, 0, 0, 0, '', 0, 45),
-(1019, '0', 7, 'Oriental Tearoom', 'tearoom', 'tearoom', 'hh_room_tearoom', 0, 0, 0, 0, 0, '', 0, 40),
-(1020, '0', 7, 'Oldskool Lounge', 'old_skool', 'old_skool0', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
-(1022, '0', 7, 'Oldskool Dancefloor', 'old_skool', 'old_skool1', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
-(1023, '0', 7, 'The Chromide Club', 'the_chromide_club', 'malja_bar_a', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 45),
-(1024, '0', 7, 'The Chromide Club II', 'the_chromide_club', 'malja_bar_b', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 50),
-(1025, '0', 7, 'Club Massiva', 'club_massiva', 'bar_a', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 45),
-(1026, '0', 7, 'Club Massiva II', 'club_massiva2', 'bar_b', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 70),
-(1027, '0', 6, 'Sunset Cafe', 'sunset_cafe', 'sunset_cafe', 'hh_room_sunsetcafe', 0, 0, 0, 0, 0, '', 0, 35),
-(1028, '0', 7, 'Oasis Spa', 'cafe_gold', 'cafe_gold0', 'hh_room_gold', 0, 0, 0, 0, 0, '', 0, 50),
-(1029, '0', 9, 'Treehugger Garden', 'chill', 'chill', 'hh_room_chill', 0, 0, 0, 0, 0, '', 0, 30),
-(1030, '0', 8, 'Club Mammoth', 'club_mammoth', 'club_mammoth', 'hh_room_clubmammoth', 0, 0, 0, 0, 0, '', 0, 45),
-(1031, '0', 9, 'Floating Garden', 'floatinggarden', 'floatinggarden', 'hh_room_floatinggarden', 0, 0, 0, 0, 0, '', 0, 80),
-(1032, '0', 9, 'Picnic Fields', 'picnic', 'picnic', 'hh_room_picnic', 0, 0, 0, 0, 0, '', 0, 55),
-(1033, '0', 9, 'Sun Terrace', 'sun_terrace', 'sun_terrace', 'hh_room_sun_terrace', 0, 0, 0, 0, 0, '', 0, 50),
-(1034, '0', 20, 'The Laughing Lions - Gate', 'gate_park', 'gate_park', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
-(1035, '0', 20, 'The Laughing Lions - Picnic', 'gate_park', 'gate_park_2', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
-(1036, '0', 21, 'The Park', 'park', 'park_a', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 45),
-(1037, '0', 21, 'The Infobus', 'park', 'park_b', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 20),
-(1038, '0', 10, 'Habbo Lido', 'habbo_lido', 'pool_a', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
-(1039, '0', 10, 'Lido B', 'habbo_lido_ii', 'pool_b', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
-(1040, '0', 10, 'Rooftop Rumble', 'rooftop_rumble', 'md_a', 'hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu', 0, 0, 0, 0, 0, '', 0, 50),
-(1041, '0', 11, 'Main Lobby', 'main_lobby', 'lobby_a', 'hh_room_lobby', 0, 0, 0, 0, 0, '', 0, 100),
-(1042, '0', 11, 'Basement Lobby', 'basement_lobby', 'floorlobby_a', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1043, '0', 11, 'Median Lobby', 'median_lobby', 'floorlobby_b', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1044, '0', 11, 'Skylight Lobby', 'skylight_lobby', 'floorlobby_c', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
-(1045, '0', 6, 'Ice Cafe', 'ice_cafe', 'ice_cafe', 'hh_room_icecafe', 0, 0, 0, 0, 0, '', 0, 25),
-(1046, '0', 6, 'Net Cafe', 'netcafe', 'netcafe', 'hh_room_netcafe', 0, 0, 0, 0, 0, '', 0, 25),
-(1047, '0', 5, 'Beauty Salon', 'beauty_salon_loreal', 'beauty_salon0', 'hh_room_beauty_salon_general', 0, 0, 0, 0, 0, '', 0, 25),
-(1048, '0', 5, 'The Den', 'the_den', 'cr_staff', 'hh_room_den', 0, 0, 0, 0, 0, '', 0, 100),
-(1049, '0', 12, 'Lower Hallways', 'hallway', 'hallway2', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1050, '0', 12, 'Lower Hallways I', 'hallway', 'hallway0', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1051, '0', 12, 'Lower Hallways II', 'hallway', 'hallway1', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1052, '0', 12, 'Lower Hallways III', 'hallway', 'hallway3', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1053, '0', 12, 'Lower Hallways IV', 'hallway', 'hallway5', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1054, '0', 12, 'Lower Hallways V', 'hallway', 'hallway4', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
-(1055, '0', 12, 'Upper Hallways', 'hallway_ii', 'hallway9', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25);
+(1, '0', 3, 'Welcome Lounge', 'welcome_lounge', 'newbie_lobby', 'hh_room_nlobby', 0, 0, 0, 0, 0, '', 0, 40),
+(2, '0', 3, 'Theatredome', 'theatredrome', 'theater', 'hh_room_theater', 0, 0, 0, 0, 0, '', 0, 100),
+(3, '0', 3, 'Library', 'library', 'library', 'hh_room_library', 0, 0, 0, 0, 0, '', 0, 30),
+(4, '0', 5, 'TV Studio', 'tv_studio', 'tv_studio', 'hh_room_tv_studio_general', 0, 0, 0, 0, 0, '', 0, 20),
+(5, '0', 5, 'Cinema', 'habbo_cinema', 'cinema_a', 'hh_room_cinema', 0, 0, 0, 0, 0, '', 0, 50),
+(6, '0', 5, 'Power Gym', 'sport', 'sport', 'hh_room_sport', 0, 0, 0, 0, 0, '', 0, 35),
+(7, '0', 5, 'Olympic Stadium', 'ballroom', 'ballroom', 'hh_room_ballroom', 0, 0, 0, 0, 0, '', 0, 50),
+(8, '0', 5, 'Habbo Kitchen', 'hotel_kitchen', 'cr_kitchen', 'hh_room_kitchen', 0, 0, 0, 0, 0, '', 0, 20),
+(9, '0', 6, 'The Dirty Duck Pub', 'the_dirty_duck_pub', 'pub_a', 'hh_room_pub', 0, 0, 0, 0, 0, '', 0, 40),
+(10, '0', 6, 'Cafe Ole', 'cafe_ole', 'cafe_ole', 'hh_room_cafe', 0, 0, 0, 0, 0, '', 0, 35),
+(11, '0', 6, 'Gallery Cafe', 'eric\'s_eaterie', 'cr_cafe', 'hh_room_erics', 0, 0, 0, 0, 0, '', 0, 35),
+(12, '0', 6, 'Space Cafe', 'space_cafe', 'space_cafe', 'hh_room_space_cafe', 0, 0, 0, 0, 0, '', 0, 35),
+(13, '0', 7, 'Rooftop Terrace', 'rooftop', 'rooftop', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 30),
+(14, '0', 7, 'Rooftop Cafe', 'rooftop', 'rooftop_2', 'hh_room_rooftop', 0, 0, 0, 0, 0, '', 0, 20),
+(15, '0', 6, 'Palazzo Pizza', 'pizza', 'pizza', 'hh_room_pizza', 0, 0, 0, 0, 0, '', 0, 40),
+(16, '0', 6, 'Habburgers', 'habburger\'s', 'habburger', 'hh_room_habburger', 0, 0, 0, 0, 0, '', 0, 40),
+(17, '0', 8, 'Grandfathers Lounge', 'dusty_lounge', 'dusty_lounge', 'hh_room_dustylounge', 0, 0, 0, 0, 0, '', 0, 45),
+(18, '0', 7, 'Oriental Tearoom', 'tearoom', 'tearoom', 'hh_room_tearoom', 0, 0, 0, 0, 0, '', 0, 40),
+(19, '0', 7, 'Oldskool Lounge', 'old_skool', 'old_skool0', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
+(20, '0', 7, 'Oldskool Dancefloor', 'old_skool', 'old_skool1', 'hh_room_old_skool', 0, 0, 0, 0, 0, '', 0, 45),
+(21, '0', 7, 'The Chromide Club', 'the_chromide_club', 'malja_bar_a', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 45),
+(22, '0', 7, 'The Chromide Club II', 'the_chromide_club', 'malja_bar_b', 'hh_room_disco', 0, 0, 0, 0, 0, '', 0, 50),
+(23, '0', 7, 'Club Massiva', 'club_massiva', 'bar_a', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 45),
+(24, '0', 7, 'Club Massiva II', 'club_massiva2', 'bar_b', 'hh_room_bar', 0, 0, 0, 0, 0, '', 0, 70),
+(25, '0', 6, 'Sunset Cafe', 'sunset_cafe', 'sunset_cafe', 'hh_room_sunsetcafe', 0, 0, 0, 0, 0, '', 0, 35),
+(26, '0', 7, 'Oasis Spa', 'cafe_gold', 'cafe_gold0', 'hh_room_gold', 0, 0, 0, 0, 0, '', 0, 50),
+(27, '0', 9, 'Treehugger Garden', 'chill', 'chill', 'hh_room_chill', 0, 0, 0, 0, 0, '', 0, 30),
+(28, '0', 8, 'Club Mammoth', 'club_mammoth', 'club_mammoth', 'hh_room_clubmammoth', 0, 0, 0, 0, 0, '', 0, 45),
+(29, '0', 9, 'Floating Garden', 'floatinggarden', 'floatinggarden', 'hh_room_floatinggarden', 0, 0, 0, 0, 0, '', 0, 80),
+(30, '0', 9, 'Picnic Fields', 'picnic', 'picnic', 'hh_room_picnic', 0, 0, 0, 0, 0, '', 0, 55),
+(31, '0', 9, 'Sun Terrace', 'sun_terrace', 'sun_terrace', 'hh_room_sun_terrace', 0, 0, 0, 0, 0, '', 0, 50),
+(32, '0', 20, 'The Laughing Lions - Gate', 'gate_park', 'gate_park', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
+(33, '0', 20, 'The Laughing Lions - Picnic', 'gate_park', 'gate_park_2', 'hh_room_gate_park', 0, 0, 0, 0, 0, '', 0, 50),
+(34, '0', 21, 'The Park', 'park', 'park_a', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 45),
+(35, '0', 21, 'The Infobus', 'park', 'park_b', 'hh_room_park_general,hh_room_park', 0, 0, 0, 0, 0, '', 0, 20),
+(36, '0', 10, 'Habbo Lido', 'habbo_lido', 'pool_a', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
+(37, '0', 10, 'Lido B', 'habbo_lido_ii', 'pool_b', 'hh_room_pool,hh_people_pool', 0, 0, 0, 0, 0, '', 0, 60),
+(38, '0', 10, 'Rooftop Rumble', 'rooftop_rumble', 'md_a', 'hh_room_terrace,hh_paalu,hh_people_pool,hh_people_paalu', 0, 0, 0, 0, 0, '', 0, 50),
+(39, '0', 11, 'Main Lobby', 'main_lobby', 'lobby_a', 'hh_room_lobby', 0, 0, 0, 0, 0, '', 0, 100),
+(40, '0', 11, 'Basement Lobby', 'basement_lobby', 'floorlobby_a', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(41, '0', 11, 'Median Lobby', 'median_lobby', 'floorlobby_b', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(42, '0', 11, 'Skylight Lobby', 'skylight_lobby', 'floorlobby_c', 'hh_room_floorlobbies', 0, 0, 0, 0, 0, '', 0, 50),
+(43, '0', 6, 'Ice Cafe', 'ice_cafe', 'ice_cafe', 'hh_room_icecafe', 0, 0, 0, 0, 0, '', 0, 25),
+(44, '0', 6, 'Net Cafe', 'netcafe', 'netcafe', 'hh_room_netcafe', 0, 0, 0, 0, 0, '', 0, 25),
+(45, '0', 5, 'Beauty Salon', 'beauty_salon_loreal', 'beauty_salon0', 'hh_room_beauty_salon_general', 0, 0, 0, 0, 0, '', 0, 25),
+(46, '0', 5, 'The Den', 'the_den', 'cr_staff', 'hh_room_den', 0, 0, 0, 0, 0, '', 0, 100),
+(47, '0', 12, 'Lower Hallways', 'hallway', 'hallway2', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(48, '0', 12, 'Lower Hallways I', 'hallway', 'hallway0', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(49, '0', 12, 'Lower Hallways II', 'hallway', 'hallway1', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(50, '0', 12, 'Lower Hallways III', 'hallway', 'hallway3', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(51, '0', 12, 'Lower Hallways IV', 'hallway', 'hallway5', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(52, '0', 12, 'Lower Hallways V', 'hallway', 'hallway4', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(53, '0', 12, 'Upper Hallways', 'hallway_ii', 'hallway9', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(54, '0', 12, 'Upper Hallways I', 'hallway_ii', 'hallway8', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(55, '0', 12, 'Upper Hallways II', 'hallway_ii', 'hallway7', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(56, '0', 12, 'Upper Hallways III', 'hallway_ii', 'hallway6', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(57, '0', 12, 'Upper Hallways IV', 'hallway_ii', 'hallway10', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 0, 25),
+(58, '0', 12, 'Upper Hallways V', 'hallway_ii', 'hallway11', 'hh_room_hallway', 0, 0, 1, 0, 0, '', 1, 25),
+(59, '0', 7, 'Star Lounge', 'star_lounge', 'star_lounge', 'hh_room_starlounge', 0, 0, 1, 0, 0, '', 0, 35),
+(60, '0', 8, 'Club Orient', 'orient', 'orient', 'hh_room_orient', 0, 0, 1, 0, 0, '', 1, 35),
+(61, '0', 13, 'Cunning Fox Gamehall', 'cunning_fox_gamehall', 'entryhall', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(62, '0', 13, 'TicTacToe hall', 'cunning_fox_gamehall/1', 'hallA', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 1, 25),
+(63, '0', 13, 'Battleships hall', 'cunning_fox_gamehall/2', 'hallB', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(64, '0', 13, 'Chess hall', 'cunning_fox_gamehall/3', 'hallC', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(65, '0', 13, 'Poker hall', 'cunning_fox_gamehall/4', 'hallD', 'hh_room_gamehall,hh_games', 0, 0, 1, 0, 0, '', 0, 25),
+(66, '0', 13, 'Battleball Lobby', 'bb_lobby_beginner_0', 'bb_lobby_1', 'hh_game_bb,hh_game_bb_room,hh_game_bb_ui,hh_gamesys', 0, 0, 1, 0, 0, '', 0, 25),
+(67, '0', 13, 'Snowstorm Lobby', 'sw_lobby_beginner_0', 'snowwar_lobby_1', 'hh_gamesys,hh_game_snowwar,hh_game_snowwar_room,hh_game_snowwar_ui', 0, 0, 1, 0, 0, '', 0, 25);
 
 -- --------------------------------------------------------
 
@@ -1354,6 +1391,7 @@ INSERT INTO `rooms_categories` (`id`, `order_id`, `parent_id`, `isnode`, `name`,
 (10, 0, 3, 0, 'Swimming Pools', 1, 0, 1, 6),
 (11, 0, 3, 0, 'The Lobbies', 1, 0, 1, 6),
 (12, -1, 3, 0, 'The Hallways', 1, 0, 1, 6),
+(13, 0, 3, 0, 'Games', 1, 0, 1, 6),
 (20, 0, 9, 0, 'The Laughing Lions Park', 1, 0, 1, 6),
 (21, 0, 9, 0, 'The Green Heart', 1, 0, 1, 6),
 (101, 0, 4, 0, 'Staff HQ', 0, 1, 4, 5),
@@ -1433,7 +1471,7 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 (42, 'dusty_lounge', 'dusty_lounge', 14, 1, 2, 4, 'xxxxxxxxxxxxxx22xxxxxxxxxxxxx|xxxxxxxxxx222x222x2xxxxxxxxxx|xxxxxxx33322222222223xxxxxxx3|xxxxxxx33322222222223xxxxxxx3|xxxxxxx33322222222223x33333x3|xxxxxxx33322222222223x33333x3|xx111xx33322222222223xxxxxxx3|xx111xxx332222222222333333333|xx111xxxx32222222222333333333|xx111xxxxxx222222222333333333|xx111xxxxxxx1111111x333333333|xx111xxxxxxx1111111x222222222|xx111xxxxxx111111111111111111|xx111xxxxxx111111111111111111|11111xxxxxx111111111111111111|11111xxxxxx111111111111111111|11x11xxxxxx111111111111111111|11xxxxxxxxx11111111111111111x|x11xxxxxxxxx1111111x1111111xx|xx11xxxxxxx111111111111111xxx|xxx11xxxxxx11111111111111xxxx|xxxx11111111111111111111xxxxx|xxxxx11111111111111xxxxxxxxxx|xxxxxxxxxxx11111111xxxxxxxxxx|xxxxxxxxxxx11111111xxxxxxxxxx', 0),
 (43, 'cr_staff', 'cr_staff', 3, 22, 0, 0, '00000000xxxxxxxx|0000000000000000|0000000000000000|000000000000xx00|0000000000000000|0000000000000000|0000000000000000|x000000000000000|0000000000000000|0000000000000000|0000000000000000|0000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|x000000000000000|xxx00xxxxxxxxxxx|xxx00xxxxxxxxxxx|xxx00xxxxxxxxxxx', 0),
 (44, 'rooftop', 'rooftop', 17, 12, 4, 0, '44xxxxxxxxxxxxxxxxxx|444xxxxxxxxxxx444444|4444xxxxxxxxxx444444|44444xxxx4xxxx444444|444444xxx44xxx444444|44444444444444444444|44444444444444444444|44444444444444444444|44444444xx44xx44xx44|44444444xx44xx44xx44|44444444444444444444|44444444444444444444|44444444444444444444|x444444x444444xx4444|x444444x444444xx333x|x444444x444444xx222x|x444444x444444xx11xx|x444444x444444xxxxxx', 0),
-(45, 'rooftop_2', 'rooftop_2', 4, 9, 0, 0, 'x0000x000|xxxxxx000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|xxx000xxx|xxx000xxx', 0),
+(45, 'rooftop_2', 'rooftop_2', 4, 11, 0, 0, 'x0000x000|xxxxxx000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|000000000|xxx000xxx|xxx000xxx', 0),
 (46, 'tearoom', 'tearoom', 21, 19, 1, 6, 'xxxxxxxxxxxxxxxxxxxxxx|xxxxxxxx3333x33333333x|333333xx3333x33333333x|3333333x3333x33333333x|3333333x3333x33333333x|3333333xxxxxx33333333x|333333333333333333333x|333333333333333333333x|333333333333333333333x|333333333333333333333x|33333333222x333333333x|33333333222x333333333x|33333333222x333333333x|33333333222x333333333x|33333333111x333333333x|33333333111x333333333x|33333333111x333333333x|xxxxxxxx111xxxxxxxxxxx|11111111111111111111xx|1111111111111111111111|1111111111111111111111|11111111111111111111xx', 0),
 (47, 'cafe_ole', 'taivas_cafe', 14, 29, 0, 0, 'XXXXXXXXXXXXX111111X|XXXXXXXXXXXXX1111111|XXXXXXXXXXXXX1111111|XXXXXXXXXXXXX1111111|XXXXXXXXXXXXX1111111|XXX11111111111111111|XXX11111111111111111|XX111111111111111111|XX111111111111111111|XX111111111111111111|XXX11111111111111111|111111111XXXXXXX1111|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|111111111X0000000000|X11111111X0000000000|XX1111111X0000000000|XXX111111X0000000000|XXXX11111X0000000000|XXXXX111110000000000|XXXXXX11110000000000|XXXXXXX1110000000000|XXXXXXXX11000000000X|XXXXXXXXXX00000000XX|XXXXXXXXXXXXXX00XXXX|XXXXXXXXXXXXXX00XXXX', 0),
 (48, 'cr_cafe', 'cr_cafe', 20, 10, 0, 6, '0000000000000000000xx|x000000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xxxx000000000000000xx|0000000000000000000xx|0000000000000000000xx|x000000000000000000xx|xx00000000000000000xx|xxxx00000000000000000|xxx000000000000000000|xxx0000000000000000xx|xxx0000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx|xx00000000000000000xx', 0),
@@ -1459,13 +1497,25 @@ INSERT INTO `rooms_models` (`id`, `model_id`, `model_name`, `door_x`, `door_y`, 
 (67, 'club_mammoth', 'club_mammoth', 6, 16, 4, 2, 'xxxxxx4444444x4444xxxxxxxxxxxxx|xxxxxx4444444x444322xxxxxxxxxxx|xxxxxxxxxxxxxx444322xxxxxxxxxxx|x444444444444444442222xxxxxxxxx|4444444444444444442222xxxxxxxxx|4xxxxxxxxxxxxxxxxx2222xxxxxxxxx|4xxxxxxxxxx22222xx2222xxxxxxxxx|44xxxxxxxxx22222x2xxxxxxxxxxxxx|x4444444xxx22222x22xxxxxxxxxxxx|xx4444444xx22x22x222xxxxxxxxxxx|xxxxxxx444x22222xxxxxxxxxxxxxxx|xxxxxx444322222222211111111xxxx|xxxxxx444322222222211111111xxxx|xxxxxx444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxx444444442222222211111111xxxx|xxxxxx4444422222222x1111111xxxx|xxxxxx4444422222222xxxxxxxxxxxx|xxxxxx4443222222222222222222xxx|xxxxxx4443xxxxxxx2xxxxx222xxxxx|xxxxxx444xxxxxxxxxxxxxxx22xxxxx|xxxxxx4xxxxxxxxxxxxx444422xxxxx|xxx4444xxxxxxxxxxxxx4444x2xxxxx|xxx566666666666666664444xxxxxxx|xxxx66666666666666664444xxxxxxx|xxxxxxx666666666666544xxxxxxxxx|xxxxxxx666666666666544xxxxxxxxx|xxxxxxx6666666666666xxxxxxxxxxx|xxxxxxx6666666666666xxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 1),
 (68, 'ice_cafe', 'taivas_cafe', 17, 23, 0, 0, 'xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx1111111000000000|xx1111111000000000|111111111000000000|111111111000000000|111111111000000000|111111111000000000|111111111000000000|11111111x000000000|11111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx111111x000000000|xx1111110000000000|xx1111111000000000|xx1111111000000000|xx1111111000000000|', 0),
 (69, 'netcafe', 'netcafe', 22, 12, 0, 6, 'xxxxx1111xxxxxxxxxxx1xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxx1111111111111111xxxx|xxxxxxxx0000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|111111100000000000000xxxx|xxxx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx11100000000000000xxxx|x1xx111000000000000000000|x1xx111000000000000000000|xxxx111000000000000000000|xxxx11100000000000000xxxx|xxxx1110000000xx11111xxxx|xxxxx111110000x111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxxx111100001111111xxxx|xxxxx1111100001111111xxxx|', 1),
-(70, 'hallway0', 'hallway0', 2, 3, 0, 4, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx0000000x1111111111111111xxxx|xxxxxxxxxxxxx1111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
-(71, 'hallway9', 'hallway9', 21, 23, 7, 6, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx', 1),
+(70, 'hallway0', 'hallway0', 2, 2, 0, 2, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx0000000x1111111111111111xxxx|xxxxxxxxxxxxx1111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
+(71, 'hallway9', 'hallway9', 21, 23, 0, 7, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|00000000000000000000000000000000|xxxx000000000000000000000000xxxx|xxxx000000000000000000000000xxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx000000000000xxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx', 1),
 (72, 'hallway2', 'hallway2', 15, 2, 0, 4, 'xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxx|xxxx11111111000000000000xxxx|xxxx11111111000000000000xxxx|1111111111110000000000000000|1111111111110000000000000000|1111111111110000000000000000|1111111111110000000000000000|xxxx11111111000000000000xxxx|xxxx11111111000000000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxx11111111xxxx00000000xxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxx', 1),
-(73, 'hallway1', 'hallway1', 15, 2, 0, 4, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx', 1),
-(74, 'hallway3', 'hallway3', 15, 2, 0, 4, 'xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
-(75, 'hallway4', 'hallway4', 15, 2, 0, 4, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx', 1),
-(76, 'hallway5', 'hallway5', 15, 2, 0, 4, 'xxxxxxxxxxxxxx11xxxxxx1111xx|xxxxxxxxxxxxxx111xxxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxx000000001111111111111111|xxxx000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|xxxx000000001111111111111111|xxxx0000000x1111111111111111|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx', 1);
+(73, 'hallway1', 'hallway1', 2, 14, 0, 2, 'xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxxxx0000xxxxxxxxxxxxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx00000000000000000000|xxxxxxxxxxxx0000000000000000xxxx|xxxxxxxxxxxx0000000000000000xxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|11111111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx|xxxx1111111100000000xxxxxxxxxxxx', 1),
+(74, 'hallway3', 'hallway3', 14, 21, 1, 0, 'xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxxxx1111xxxxxxxxxxxxxxxxxxxxxx|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|11111111111111111111000000000000|xxxx111111111111111100000000xxxx|xxxx111111111111111100000000xxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx|xxxxxxxxxxxxxx1111xxxxxxxxxxxxxx', 1),
+(75, 'hallway4', 'hallway4', 29, 3, 1, 6, 'xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|00000000000011111111111111111111|xxxx000000001111111111111111xxxx|xxxx000000001111111111111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxx11111111xxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx|xxxxxxxxxxxxxxxxxxxxxx1111xxxxxx', 1),
+(76, 'hallway5', 'hallway5', 14, 2, 1, 4, 'xxxxxxxxxxxxxx11xxxxxx1111xx|xxxxxxxxxxxxxx111xxxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxxxx1111xxxx1111xx|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxxxxxxxxxx1111111111111111|xxxx000000001111111111111111|xxxx000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|0000000000001111111111111111|xxxx000000001111111111111111|xxxx0000000x1111111111111111|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx|xxxxxxxxxxxx11111111xxxxxxxx', 1),
+(77, 'hallway8', 'hallway8', 15, 3, 0, 4, 'xxxxxxxxxxxxxx00xxxx0000|xxxxxxxxxxxxxx000xxx0000|xxxxxxxxxxxxxx0000xx0000|xxxxxxxxxxxxxx0000xx0000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111000000000000|xxxx11111111xxxx00000000|xxxx11111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|111111111111xxxx00000000|xxxx11111111xxxx00000000|xxxx11111111xxxx00000000|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx|xxxxxxxxxxxxxxxxxx0000xx', 1),
+(78, 'hallway7', 'hallway7', 7, 2, 1, 4, 'xxxxxx11xxxxxxxxxxxx|xxxxxx111xxxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxxxx1111xxxxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx111111111111xxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx11111111xxxxxxxx|xxxx000000000000xxxx|xxxx000000000000xxxx|00000000000000000000|00000000000000000000|00000000000000000000|00000000000000000000|xxxx000000000000xxxx|xxxx000000000000xxxx', 1),
+(79, 'hallway6', 'hallway6', 1, 10, 1, 2, 'xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111111111111111xxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111xxxxxxxxxxxxxxxx|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx1111xxxxxxxxxxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx|xxxxxxxx111111111111xxxx', 1),
+(80, 'hallway10', 'hallway10', 3, 23, 1, 1, 'xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xxxxxxxxxx00000000xxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|xx1111xxxx0000xxxxxxxx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xx0000000000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|11111111xxxxxxxx0000xx|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|1111111111111111000000|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx|xx1111xxxxxxxxxxxxxxxx', 1),
+(81, 'hallway11', 'hallway11', 20, 3, 0, 6, 'xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|111111111111000000000000|111111111111000000000000|111111111111000000000000|111111111111000000000000|xxxx1111111100000000xxxx|xxxx1111111100000000xxxx|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxx00000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxxxxxx000000000000|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx|xxxxxxxx000000000000xxxx', 1),
+(82, 'star_lounge', 'star_lounge', 36, 35, 0, 6, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx2222x4444442222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222x444x32222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222xx4xx22222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx222222222222222xxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222211111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222222111xxxxxxxxx|xxxxxxxxxxxxxxxxxxxxx22222222222222222111xxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222222222xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222222222xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333x22222222221111xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx3333xx2x22222220000xxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx333333332222222000000xxxxxxxxxxxxx|xxxxxxxxxxxxxxxx333333332222222x0000000xxxxxxxxxxx|xxxxxxxxxxxxxxxxx33333332222222x0000000xxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxx222222000000xxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 1),
+(83, 'orient', 'orient', 32, 20, 1, 6, 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxxxx00000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1000000000xxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xxxxxxxxxxxxxxxxxxxxx|xxxxxxxxxxxxxx1xx000x000xx111x111xxx|xxxxxxxxxxxxxx1xx000x000xxxxxx1111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxxxxxxxxxxxxx1xx000x000x111111111xx|xxx111111111111xx000x000x111111111xx|xxx1xxxxxxxxxxxxx000x000x111111111xx|xxx1x1111111111000000000x111111111xx|xxx1x1111111111000000000xx1111111xxx|xxx1x11xxxxxx11000000000xx1111111100|xxx111xxxxxxx11000000000011111111100|xxx111xxxxxxx11000000000011111111100|xxxxx1xxxxxxx11000000000011111111100|xxxxx11xxxxxx11000000000xx1111111100|xxxxx1111111111000000000xx1111111xxx|xxxxx1111111111xx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x000x111111111xx|xxxxxxxxxxxxxxxxx000x00xx11xxxx111xx|xxxxxxxxxxxxxxxxxxxxxxxxxx11111111xx|', 1),
+(84, 'entryhall', 'entryhall', 17, 18, 1, 0, 'xx11xxxx11xxxx11xxxx|x1111111111111111111|11111111111111111111|11111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|x1111111111111111111|xxxxxxxxxxxxxxxxx11x', 1),
+(85, 'hallA', 'hallA', 0, 0, 1, 4, '11xxxxxxxxxxxxxxx|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111', 1),
+(86, 'hallB', 'hallB', 1, 0, 1, 4, 'x11xxxxxxxxxxxxxxxx|1111111111111111111|1111111111111111111|1111111111111111111|1111111111111111111|1111111111111111111|1111111111111111111|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx|111111xxxxxxxxxxxxx', 1),
+(87, 'hallC', 'hallC', 0, 0, 1, 4, '11xxxxxxxxxxxxxxx|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111', 1),
+(88, 'hallD', 'hallD', 0, 0, 1, 4, '11xxxxxxxxxxxxxxx|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111|11111111111111111', 1);
 
 -- --------------------------------------------------------
 
@@ -1529,7 +1579,15 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180622105649'),
 ('20180715121437'),
 ('20180715152740'),
-('20180724140234');
+('20180724140234'),
+('20180729161108'),
+('20180730120357'),
+('20180802105259'),
+('20180804021505'),
+('20180804075142'),
+('20180807115604'),
+('20180807132707'),
+('20180807135756');
 
 -- --------------------------------------------------------
 
@@ -1608,7 +1666,8 @@ CREATE TABLE `users` (
   `badge` char(3) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `badge_active` tinyint(1) NOT NULL DEFAULT 1,
   `allow_stalking` tinyint(1) NOT NULL DEFAULT 1,
-  `sound_enabled` tinyint(1) NOT NULL DEFAULT 1
+  `sound_enabled` tinyint(1) NOT NULL DEFAULT 1,
+  `tutorial_finished` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -1673,6 +1732,13 @@ ALTER TABLE `items_definitions`
 --
 ALTER TABLE `items_moodlight_presets`
   ADD PRIMARY KEY (`item_id`);
+
+--
+-- Indexes for table `items_photos`
+--
+ALTER TABLE `items_photos`
+  ADD PRIMARY KEY (`photo_id`),
+  ADD UNIQUE KEY `photo_id` (`photo_id`);
 
 --
 -- Indexes for table `items_teleporter_links`
@@ -1754,7 +1820,7 @@ ALTER TABLE `users_badges`
 -- AUTO_INCREMENT for table `catalogue_items`
 --
 ALTER TABLE `catalogue_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=513;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=515;
 
 --
 -- AUTO_INCREMENT for table `items`
@@ -1766,7 +1832,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=421;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=424;
 
 --
 -- AUTO_INCREMENT for table `messenger_messages`
@@ -1778,7 +1844,7 @@ ALTER TABLE `messenger_messages`
 -- AUTO_INCREMENT for table `rooms`
 --
 ALTER TABLE `rooms`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1056;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1000;
 
 --
 -- AUTO_INCREMENT for table `rooms_categories`
@@ -1790,7 +1856,7 @@ ALTER TABLE `rooms_categories`
 -- AUTO_INCREMENT for table `rooms_models`
 --
 ALTER TABLE `rooms_models`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=77;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT for table `soundmachine_songs`

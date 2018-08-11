@@ -28,15 +28,17 @@ public class AfkCommand extends Command {
             return;
         }
 
+        if (player.getRoomUser().isWalking()) {
+            return;
+        }
 
         if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
+            player.getRoomUser().removeDrinks();
             player.getRoomUser().setStatus(StatusType.SLEEP, "");
             player.getRoomUser().setNeedsUpdate(true);
 
-            // Send immidiate update to client
-            List<Entity> entitiesToUpdate = new ArrayList<>();
-            entitiesToUpdate.add(entity);
-            player.send(new USER_STATUSES(entitiesToUpdate));
+            // Send immediate update to client
+            player.send(new USER_STATUSES(List.of(player)));
         }
     }
 

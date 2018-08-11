@@ -21,6 +21,7 @@ public class USER_OBJECT extends MessageComposer {
         response.writeInt(this.details.getTickets());
         response.writeString(this.details.getPoolFigure());
         response.writeInt(this.details.getFilm());
+        //response.writeInt(this.details.getDirectMail()); TODO: figure out what directmail is used for in handleUserObj in hh_entry
     }
 
     @Override

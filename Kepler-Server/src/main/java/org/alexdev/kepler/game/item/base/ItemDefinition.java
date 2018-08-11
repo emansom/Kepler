@@ -21,7 +21,7 @@ public class ItemDefinition {
         this.sprite = "";
         this.behaviourData = "";
         this.colour = "";
-        this.topHeight = 0.01;
+        this.topHeight = DEFAULT_TOP_HEIGHT;
         this.length = 1;
         this.width = 1;
         this.behaviourList = new ArrayList<>();
@@ -60,8 +60,10 @@ public class ItemDefinition {
     private static List<ItemBehaviour> parseBehaviour(String behaviourData) {
         List<ItemBehaviour> behaviourList = new ArrayList<>();
 
-        for (String behaviourEnum : behaviourData.split(",")) {
-            behaviourList.add(ItemBehaviour.valueOf(behaviourEnum.toUpperCase()));
+        if (behaviourData.length() > 0) {
+            for (String behaviourEnum : behaviourData.split(",")) {
+                behaviourList.add(ItemBehaviour.valueOf(behaviourEnum.toUpperCase()));
+            }
         }
 
         return behaviourList;
@@ -225,5 +227,17 @@ public class ItemDefinition {
 
     public String getBehaviourData() {
         return behaviourData;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public List<ItemBehaviour> getBehaviourList() {
+        return behaviourList;
     }
 }

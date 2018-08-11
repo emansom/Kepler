@@ -18,6 +18,10 @@ public class CATALOGUE_PAGES extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
         for (CataloguePage page : this.cataloguePages) {
+            if (!page.isIndexVisible()) {
+                continue;
+            }
+
             if (this.role >= page.getMinRole()) {
                 response.writeDelimeter(page.getNameIndex(), (char) 9);
                 response.writeDelimeter(page.getName(), (char) 13);

@@ -50,7 +50,7 @@ public class NAVIGATE implements MessageEvent {
                     continue;
                 }
 
-                if (hideFull && room.getData().getVisitorsNow() >= room.getData().getVisitorsMax()) {
+                if (hideFull && (room.getData().getVisitorsNow() >= room.getData().getVisitorsMax())) {
                     continue;
                 }
 
@@ -62,7 +62,7 @@ public class NAVIGATE implements MessageEvent {
                     continue;
                 }
 
-                if (hideFull && room.getData().getVisitorsNow() >= room.getData().getVisitorsMax()) {
+                if (hideFull && (room.getData().getVisitorsNow() >= room.getData().getVisitorsMax())) {
                     continue;
                 }
 

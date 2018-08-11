@@ -16,11 +16,11 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.texts.TextsManager;
-import org.alexdev.kepler.messages.outgoing.catalogue.DELIVER_PRESENT;
 import org.alexdev.kepler.messages.outgoing.catalogue.NO_CREDITS;
 import org.alexdev.kepler.messages.outgoing.rooms.items.ITEM_DELIVERED;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
-import org.alexdev.kepler.messages.outgoing.user.CREDIT_BALANCE;
+import org.alexdev.kepler.messages.outgoing.user.currencies.CREDIT_BALANCE;
+import org.alexdev.kepler.messages.outgoing.user.currencies.FILM;
 import org.alexdev.kepler.messages.outgoing.user.NO_USER_FOUND;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -110,9 +110,18 @@ public class GRPC implements MessageEvent {
             }
 
             purchase(player, item, extraData, null, DateUtil.getCurrentTimeSeconds());
-            //player.getInventory().getView("last");
+            player.getInventory().getView("new");
 
-            player.send(new ITEM_DELIVERED());
+            boolean showItemDelivered = true;
+
+            // Don't send item delivered if they just buy film
+            if (item.getDefinition() != null && item.getDefinition().getSprite().equals("film")) {
+                showItemDelivered = false;
+            }
+
+            if (showItemDelivered) {
+                player.send(new ITEM_DELIVERED());
+            }
         }
 
         CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());
@@ -124,7 +133,10 @@ public class GRPC implements MessageEvent {
 
         if (!item.isPackage()) {
             Item newItem = purchase(player, item.getDefinition(), extraData, item.getItemSpecialId(), overrideName, timestamp);
-            itemsBought.add(newItem);
+
+            if (newItem != null) {
+                itemsBought.add(newItem);
+            }
         } else {
             for (CataloguePackage cataloguePackage : item.getPackages()) {
                 for (int i = 0; i < cataloguePackage.getAmount(); i++) {
@@ -138,6 +150,13 @@ public class GRPC implements MessageEvent {
     }
 
     private static Item purchase(Player player, ItemDefinition def, String extraData, int specialSpriteId, String overrideName,  long timestamp) throws SQLException {
+        // If the item is film, just give the user film
+        if (def.getSprite().equals("film")) {
+            CurrencyDao.increaseFilm(player.getDetails(), 5);
+            player.send(new FILM(player.getDetails()));
+            return null;
+        }
+
         String customData = "";
 
         if (extraData != null) {
@@ -175,6 +194,12 @@ public class GRPC implements MessageEvent {
 
         ItemDao.newItem(item);
         player.getInventory().getItems().add(item);
+
+        // If the item is a camera, give them 2 free film.
+        if (def.getSprite().equals("camera")) {
+            CurrencyDao.increaseFilm(player.getDetails(), 2);
+            player.send(new FILM(player.getDetails()));
+        }
 
         if (def.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             Item linkedTeleporterItem = new Item();

@@ -3,34 +3,24 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.incoming.club.GET_CLUB;
-import org.alexdev.kepler.messages.incoming.club.SUBSCRIBE_CLUB;
-import org.alexdev.kepler.messages.incoming.inventory.GETSTRIP;
-import org.alexdev.kepler.messages.incoming.catalogue.GCAP;
-import org.alexdev.kepler.messages.incoming.catalogue.GCIX;
-import org.alexdev.kepler.messages.incoming.catalogue.GET_ALIAS_LIST;
-import org.alexdev.kepler.messages.incoming.catalogue.GRPC;
+import org.alexdev.kepler.messages.incoming.club.*;
+import org.alexdev.kepler.messages.incoming.inventory.*;
+import org.alexdev.kepler.messages.incoming.catalogue.*;
 import org.alexdev.kepler.messages.incoming.messenger.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
+import org.alexdev.kepler.messages.incoming.purse.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
 import org.alexdev.kepler.messages.incoming.handshake.*;
-import org.alexdev.kepler.messages.incoming.rooms.badges.GETAVAILABLEBADGES;
-import org.alexdev.kepler.messages.incoming.rooms.badges.SETBADGE;
-import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_CHANGE_STATE;
-import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_GET_PRESETS;
-import org.alexdev.kepler.messages.incoming.rooms.dimmer.MSG_ROOMDIMMER_SET_PRESET;
+import org.alexdev.kepler.messages.incoming.rooms.badges.*;
+import org.alexdev.kepler.messages.incoming.rooms.dimmer.*;
 import org.alexdev.kepler.messages.incoming.rooms.items.*;
-import org.alexdev.kepler.messages.incoming.rooms.moderation.ASSIGNRIGHTS;
-import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVEALLRIGHTS;
-import org.alexdev.kepler.messages.incoming.rooms.moderation.REMOVERIGHTS;
-import org.alexdev.kepler.messages.incoming.rooms.pool.BTCKS;
-import org.alexdev.kepler.messages.incoming.rooms.pool.DIVE;
-import org.alexdev.kepler.messages.incoming.rooms.pool.SPLASH_POSITION;
-import org.alexdev.kepler.messages.incoming.rooms.pool.SWIMSUIT;
+import org.alexdev.kepler.messages.incoming.rooms.moderation.*;
+import org.alexdev.kepler.messages.incoming.rooms.pool.*;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.songs.*;
 import org.alexdev.kepler.messages.incoming.trade.*;
+import org.alexdev.kepler.messages.incoming.tutorial.*;
 import org.alexdev.kepler.messages.incoming.user.*;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -50,7 +40,9 @@ public class MessageHandler {
         this.messages = new ConcurrentHashMap<>();
 
         registerHandshakePackets();
+        registerPursePackets();
         registerUserPackets();
+        registerTutorialPackets();
         registerNavigatorPackets();
         registerRoomPackets();
         registerRoomUserPackets();
@@ -77,16 +69,32 @@ public class MessageHandler {
     }
 
     /**
+     * Register purse packets.
+     */
+    private void registerPursePackets() {
+        registerEvent(8, new GET_CREDITS());
+        registerEvent(127, new GETUSERCREDITLOG());
+        registerEvent(129, new REDEEM_VOUCHER());
+    }
+
+    /**
      * Register general purpose user packets.
      */
     private void registerUserPackets() {
         registerEvent(7, new GET_INFO());
-        registerEvent(8, new GET_CREDITS());
-        registerEvent(228, new GET_SOUND_SETTING());
+        registerEvent(228, new GET_ACCOUNT_PREFERENCES());
         registerEvent(196, new PONG());
         registerEvent(26, new GET_CLUB());
         registerEvent(190, new SUBSCRIBE_CLUB());
         //registerEvent(315, new TEST_LATENCY());
+    }
+
+    /**
+     * Register tutorial packets
+     */
+    private void registerTutorialPackets() {
+        registerEvent(250, new GET_TUTORIAL_CONFIGURATION());
+        registerEvent(249, new SET_TUTORIAL_MODE());
     }
 
     /**
@@ -131,6 +139,7 @@ public class MessageHandler {
         registerEvent(318, new USER_CANCEL_TYPING());
         registerEvent(79, new LOOKTO());
         registerEvent(80, new CARRYDRINK());
+        registerEvent(87, new CARRYITEM());
         registerEvent(94, new WAVE());
         registerEvent(93, new DANCE());
         registerEvent(88, new STOP());
@@ -167,6 +176,7 @@ public class MessageHandler {
         registerEvent(73, new MOVESTUFF());
         registerEvent(67, new ADDSTRIPITEM());
         registerEvent(83, new G_IDATA());
+        registerEvent(89, new USEITEM());
         registerEvent(84, new SETITEMDATA());
         registerEvent(214, new SETITEMSTATE());
         registerEvent(85, new REMOVEITEM());

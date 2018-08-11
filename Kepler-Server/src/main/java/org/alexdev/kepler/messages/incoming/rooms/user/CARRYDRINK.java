@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -20,6 +21,6 @@ public class CARRYDRINK implements MessageEvent {
             player.getRoomUser().carryItem(-1, contents);
         }
 
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
     }
 }

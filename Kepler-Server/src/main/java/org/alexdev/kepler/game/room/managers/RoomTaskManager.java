@@ -8,7 +8,8 @@ import org.alexdev.kepler.game.room.tasks.StatusTask;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
@@ -16,11 +17,11 @@ import java.util.concurrent.TimeUnit;
 public class RoomTaskManager {
     private Room room;
     private ScheduledExecutorService executorService;
-    private HashMap<String, Pair<ScheduledFuture<?>, Runnable>> processTasks;
+    private Map<String, Pair<ScheduledFuture<?>, Runnable>> processTasks;
 
     public RoomTaskManager(Room room) {
         this.room = room;
-        this.processTasks = new HashMap<>();
+        this.processTasks = new ConcurrentHashMap<>();
         this.executorService = GameScheduler.getInstance().getSchedulerService();
     }
 
@@ -32,7 +33,7 @@ public class RoomTaskManager {
 
         this.scheduleTask("EntityTask", new EntityTask(this.room), 500, TimeUnit.MILLISECONDS);
         this.scheduleTask("StatusTask", new StatusTask(this.room), 1, TimeUnit.SECONDS);
-        this.scheduleTask("RollerTask", new RollerTask(this.room), rollerMillisTask, TimeUnit.MILLISECONDS);
+        this.scheduleTask("RollerTask", new RollerTask(this.room), 1, rollerMillisTask, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -58,6 +59,25 @@ public class RoomTaskManager {
         this.cancelTask(taskName);
 
         var future = this.executorService.scheduleAtFixedRate(runnableTask, 0, interval, timeUnit);
+        this.processTasks.put(taskName, Pair.of(
+                future,
+                runnableTask
+        ));
+    }
+
+    /**
+     * Schedule a custom task with a delay.
+     *
+     * @param taskName the task name identifier
+     * @param runnableTask the runnable task instance
+     * @param interval the interval of the task
+     * @param delay the time to wait before the task starts
+     * @param timeUnit the time unit of the interval
+     */
+    public void scheduleTask(String taskName, Runnable runnableTask, int delay, int interval, TimeUnit timeUnit) {
+        this.cancelTask(taskName);
+
+        var future = this.executorService.scheduleAtFixedRate(runnableTask, delay, interval, timeUnit);
         this.processTasks.put(taskName, Pair.of(
                 future,
                 runnableTask

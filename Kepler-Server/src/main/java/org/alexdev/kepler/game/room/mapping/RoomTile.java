@@ -6,6 +6,8 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
+import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 
 import java.util.HashSet;
 import java.util.List;
@@ -110,8 +112,18 @@ public class RoomTile {
      * @param entity the new entity
      */
     public void addEntity(Entity entity) {
+        // Don't add a user to the tile in a doorway.
         if (new Position(this.position.getX(), this.position.getY()).equals(this.room.getModel().getDoorLocation())) {
             return;
+        }
+
+        // If the position is a destination in a walkway, don't add a user to the tile.
+        if (this.room.isPublicRoom()) {
+            WalkwaysEntrance destination = WalkwaysManager.getInstance().getDestination(this.room, this.position);
+
+            if (destination != null) {
+                return;
+            }
         }
 
         this.entities.add(entity);

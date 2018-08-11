@@ -46,8 +46,7 @@ public class FOLLOW_FRIEND implements MessageEvent {
             return;
         }
 
-        // TODO: FUSE permission instead of rank check
-        if (!friend.getDetails().doesAllowStalking() && player.getDetails().getRank() < 5) {
+        if (!friend.getDetails().doesAllowStalking()) {
             player.send(new FOLLOW_ERROR(FollowErrors.NO_CREEPING_ALLOWED.getErrorId())); // Friend does not allow stalking
             return;
         }

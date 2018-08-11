@@ -49,37 +49,43 @@ public class GiveDrinkCommand extends Command {
             return;
         }
 
-        RoomUserStatus status = null;
+        RoomUserStatus drink = null;
 
         if (player.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
-            status = player.getRoomUser().getStatus(StatusType.CARRY_DRINK);
+            drink = player.getRoomUser().getStatus(StatusType.CARRY_DRINK);
         }
 
         if (player.getRoomUser().containsStatus(StatusType.CARRY_FOOD)) {
-            status = player.getRoomUser().getStatus(StatusType.CARRY_FOOD);//.getStatuses().get(StatusType.CARRY_FOOD.getStatusCode());
+            drink = player.getRoomUser().getStatus(StatusType.CARRY_FOOD);
         }
 
-        if (status != null) {
-            // Give drink to user if they're not already having a drink or food, and they're not dancing
-            if (!targetUser.getRoomUser().containsStatus(StatusType.CARRY_FOOD) &&
-                !targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
-
-                if (!targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
-                    int carryID = Integer.parseInt(status.getValue());
-                    targetUser.getRoomUser().carryItem(carryID, null);
-                    String carryName = TextsManager.getInstance().getValue("handitem" + carryID);
-
-                    targetUser.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, targetUser.getRoomUser().getInstanceId(), player.getDetails().getName() + " handed you a " + carryName + "."));
-
-                    player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
-                    player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
-                    player.getRoomUser().setNeedsUpdate(true);
-                } else {
-                    player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Can't hand drink to " + targetUser.getDetails().getName() + ", because he/she is dancing."));
-                }
-            } else {
-                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is already enjoying a drink."));
+        if (drink != null) {
+            if (targetUser.getRoomUser().containsStatus(StatusType.SLEEP)) {
+                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is sleeping."));
+                return;
             }
+
+            // Give drink to user if they're not already having a drink or food, and they're not dancing
+            if (targetUser.getRoomUser().containsStatus(StatusType.CARRY_FOOD) ||
+                targetUser.getRoomUser().containsStatus(StatusType.CARRY_DRINK)) {
+                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), targetUser.getDetails().getName() + " is already enjoying a drink."));
+                return;
+            }
+
+            if (targetUser.getRoomUser().containsStatus(StatusType.DANCE)) {
+                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Can't hand drink to " + targetUser.getDetails().getName() + ", because he/she is dancing."));
+                return;
+            }
+
+            int carryID = Integer.parseInt(drink.getValue());
+            targetUser.getRoomUser().carryItem(carryID, null);
+            String carryName = TextsManager.getInstance().getValue("handitem" + carryID);
+
+            targetUser.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, targetUser.getRoomUser().getInstanceId(), player.getDetails().getName() + " handed you a " + carryName + "."));
+
+            player.getRoomUser().removeStatus(StatusType.CARRY_DRINK);
+            player.getRoomUser().removeStatus(StatusType.CARRY_FOOD);
+            player.getRoomUser().setNeedsUpdate(true);
         }
     }
 

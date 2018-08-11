@@ -14,12 +14,12 @@ UPDATE `items_definitions` SET `top_height` = '1.7' WHERE `items_definitions`.`i
 UPDATE `items_definitions` SET `top_height` = '1.6' WHERE `items_definitions`.`id` = 68;
 UPDATE `items_definitions` SET `top_height` = '1.6' WHERE `items_definitions`.`id` = 69;
 
-UPDATE `items_definitions` SET `top_height` = '1.3' WHERE `items_definitions`.`id` = 230;
-UPDATE `items_definitions` SET `top_height` = '1.3' WHERE `items_definitions`.`id` = 231;
-UPDATE `items_definitions` SET `top_height` = '1.3' WHERE `items_definitions`.`id` = 229;
+UPDATE `items_definitions` SET `top_height` = '1.2' WHERE `items_definitions`.`id` = 230;
+UPDATE `items_definitions` SET `top_height` = '1.2' WHERE `items_definitions`.`id` = 231;
+UPDATE `items_definitions` SET `top_height` = '1.2' WHERE `items_definitions`.`id` = 229;
 
 UPDATE `items_definitions` SET `top_height` = '0.2' WHERE `items_definitions`.`sprite` LIKE 'sound_set_%';
-UPDATE `items_definitions` SET `top_height` = '0.1' WHERE `items_definitions`.`sprite` LIKE 'doormat_plain%';
+UPDATE `items_definitions` SET `top_height` = '0.2' WHERE `items_definitions`.`sprite` LIKE 'doormat_plain%';
 UPDATE `items_definitions` SET `top_height` = '0.2' WHERE `items_definitions`.`id` = 355;
 
 

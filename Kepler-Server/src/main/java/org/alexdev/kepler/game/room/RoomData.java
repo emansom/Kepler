@@ -65,7 +65,16 @@ public class RoomData {
                 || this.model.equals("hallway1")
                 || this.model.equals("hallway3")
                 || this.model.equals("hallway4")
-                || this.model.equals("hallway5")) {
+                || this.model.equals("hallway5")
+                || this.model.equals("hallway6")
+                || this.model.equals("hallway7")
+                || this.model.equals("hallway8")
+                || this.model.equals("hallway10")
+                || this.model.equals("hallway11")
+                || this.model.equals("hallA")
+                || this.model.equals("hallB")
+                || this.model.equals("hallC")
+                || this.model.equals("hallD")) {
             this.navigatorHide = true;
         }
 
@@ -89,12 +98,28 @@ public class RoomData {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("bar_b"));
         }
 
+        if (this.model.equals("entryhall")) {
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallA"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallB"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallC"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallD"));
+
+        }
+
         if (this.model.equals("hallway2")) {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway0"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway1"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway3"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway4"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway5"));
+        }
+
+        if (this.model.equals("hallway9")) {
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway10"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway11"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway8"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway7"));
+            this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway6"));
         }
     }
 
@@ -147,6 +172,32 @@ public class RoomData {
     }
 
     public String getName() {
+        return name;
+    }
+
+    public String getPublicName() {
+        if (this.room.isPublicRoom()) {
+            if (this.name.startsWith("Upper Hallways")) {
+                return "Upper Hallways";
+            }
+
+            if (this.name.startsWith("Lower Hallways")) {
+                return "Lower Hallways";
+            }
+
+            if (this.name.startsWith("Club Massiva")) {
+                return "Club Massiva";
+            }
+
+            if (this.name.startsWith("The Chromide Club")) {
+                return "The Chromide Club";
+            }
+
+            if (this.ccts.equals("hh_room_gamehall,hh_games")) {
+                return "Cunning Fox Gamehall";
+            }
+        }
+
         return name;
     }
 

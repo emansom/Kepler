@@ -28,6 +28,10 @@ public class CATALOGUE_PAGE extends MessageComposer {
         response.writeKeyValue("e", this.page.getImageTeasers());
         response.writeKeyValue("h", this.page.getBody());
 
+        if (this.page.getLinkList().length() > 0) {
+            response.writeKeyValue("u", this.page.getLinkList());
+        }
+
         if (!StringUtil.isNullOrEmpty(this.page.getLabelPick())) {
             response.writeKeyValue("w", this.page.getLabelPick());
         }

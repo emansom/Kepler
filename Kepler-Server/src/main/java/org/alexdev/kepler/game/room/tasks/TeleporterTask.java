@@ -23,7 +23,7 @@ public class TeleporterTask implements Runnable {
     public void run() {
         this.entity.getRoomUser().warp(this.item.getPosition().copy(), true);
         this.entity.getRoomUser().setAuthenticateTelporterId(-1);
-        this.entity.getRoomUser().setWalkingAllowed(true);
+        //this.entity.getRoomUser().setWalkingAllowed(true);
 
         this.room.send(new BROADCAST_TELEPORTER(this.item, this.entity.getDetails().getName(), false));
     }

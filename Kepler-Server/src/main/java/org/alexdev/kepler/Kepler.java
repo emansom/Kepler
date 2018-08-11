@@ -16,6 +16,8 @@ import org.alexdev.kepler.game.room.models.RoomModelManager;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.MessageHandler;
+import org.alexdev.kepler.server.mus.MusServer;
+import org.alexdev.kepler.server.mus.connection.MusClient;
 import org.alexdev.kepler.server.netty.NettyServer;
 import org.alexdev.kepler.server.rcon.RconServer;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -26,7 +28,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.commons.validator.routines.InetAddressValidator;
 
+import java.io.IOException;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 public class Kepler {
@@ -35,13 +39,19 @@ public class Kepler {
 
     private static String serverIP;
     private static int serverPort;
+
+    private static String musServerIP;
+    private static int musServerPort;
+
     private static String rconIP;
     private static int rconPort;
 
     private static boolean isShutdown;
     
     private static NettyServer server;
+    private static MusServer musServer;
     private static RconServer rcon;
+
     private static Logger log;
 
     /**
@@ -74,9 +84,14 @@ public class Kepler {
 
             // TODO: The "Standard" ASCII from
             // http://patorjk.com/software/taag/#p=display&f=Standard&t=Kepler
-            // On a grey background with white ASCII text
-            // ASCII logo on the left side, contributors and other credits/info on the right side
-            // TODO: also a way to disable the fancy headers, as in production it would only fill the logs
+
+            System.out.println("  _  __          _           \n" +
+                    " | |/ /___ _ __ | | ___ _ __ \n" +
+                    " | ' // _ \\ '_ \\| |/ _ \\ '__|\n" +
+                    " | . \\  __/ |_) | |  __/ |   \n" +
+                    " |_|\\_\\___| .__/|_|\\___|_|   \n" +
+                    "          |_|                ");
+
             log.info("Kepler - Habbo Hotel V21 Emulation");
 
             if (!Storage.connect()) {
@@ -99,50 +114,68 @@ public class Kepler {
             MessageHandler.getInstance();
             TextsManager.getInstance();
 
-
-            // Get the server variables for the socket to listen on
-            serverIP = ServerConfiguration.getString("server.bind");
-            serverPort = ServerConfiguration.getInteger("server.port");
-
             // Get an InetAddressValidator
             InetAddressValidator validator = InetAddressValidator.getInstance();
 
-            // Validate an IPv4 or IPv6 address
-            if (!validator.isValid(serverIP)) {
-                log.error("%s is not a valid IP", serverIP);
-                return;
-            }
+            setupServer(validator);
+            setupRcon(validator);
+            setupMus(validator);
 
-            // getByName parses IPv6, IPv4 and DNS all in one go
-            serverIP = InetAddress.getByName(serverIP).getHostAddress();
-
-            // Create the server instance
-            // TODO: listen on both IPv4 and IPv6 if serverIP is 0.0.0.0 or localhost
-            server = new NettyServer(serverIP, serverPort);
-            server.createSocket();
-            server.bind();
-
-
-            rconIP = ServerConfiguration.getString("rcon.bind");
-            rconPort = ServerConfiguration.getInteger("rcon.port");
-
-            // Validate an IPv4 or IPv6 address
-            if (!validator.isValid(rconIP)) {
-                log.error("%s is not a valid IP", rconIP);
-                return;
-            }
-
-            // getByName parses IPv6, IPv4 and DNS all in one go
-            rconIP = InetAddress.getByName(rconIP).getHostAddress();
-
-            rcon = new RconServer(rconIP, rconPort);
-            rcon.listen();
-
-
-            Runtime.getRuntime().addShutdownHook(new Thread(() -> dispose()));
-
+            Runtime.getRuntime().addShutdownHook(new Thread(Kepler::dispose));
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    private static void setupServer(InetAddressValidator validator) throws UnknownHostException {
+        serverIP = ServerConfiguration.getString("bind");
+        serverPort = ServerConfiguration.getInteger("server.port");
+
+        if (!validator.isValid(serverIP)) {
+            log.error("%s is not a valid server IP", serverIP);
+            return;
+        }
+
+        serverIP = InetAddress.getByName(serverIP).getHostAddress();
+
+        server = new NettyServer(serverIP, serverPort);
+        server.createSocket();
+        server.bind();
+    }
+
+    private static void setupRcon(InetAddressValidator validator) throws IOException {
+        // Create the RCON instance
+        rconIP = ServerConfiguration.getString("bind");
+        rconPort = ServerConfiguration.getInteger("rcon.port");
+
+        // Validate an IPv4 or IPv6 address
+        if (!validator.isValid(rconIP)) {
+            log.error("%s is not a valid IP", rconIP);
+            return;
+        }
+
+        // getByName parses IPv6, IPv4 and DNS all in one go
+        rconIP = InetAddress.getByName(rconIP).getHostAddress();
+
+        rcon = new RconServer(rconIP, rconPort);
+        rcon.listen();
+    }
+
+    private static void setupMus(InetAddressValidator validator) throws UnknownHostException {
+        musServerIP = ServerConfiguration.getString("bind");
+        musServerPort = ServerConfiguration.getInteger("mus.port");
+
+        if (musServerIP.length() > 0) {
+            if (!validator.isValid(musServerIP)) {
+                log.error("%s is not a valid IP", musServerIP);
+                return;
+            }
+
+            musServerIP = InetAddress.getByName(musServerIP).getHostAddress();
+
+            musServer = new MusServer(musServerIP, musServerPort);
+            musServer.createSocket();
+            musServer.bind();
         }
     }
 

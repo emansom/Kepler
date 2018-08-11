@@ -1,24 +1,35 @@
 package org.alexdev.kepler.messages.outgoing.rooms.items;
 
+import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class IDATA extends MessageComposer {
-    private final int itemId;
-    private final String colour;
-    private final String text;
+    private String colour;
+    private String text;
+    private Item item;
 
-    public IDATA(int itemId, String colour, String text) {
-        this.itemId = itemId;
+    public IDATA(Item item, String colour, String text) {
+        this.item = item;
         this.colour = colour;
         this.text = text;
     }
 
+    public IDATA(Item item) {
+        this.item = item;
+    }
+
     @Override
     public void compose(NettyResponse response) {
-        response.writeDelimeter(this.itemId, (char) 9);
-        response.writeDelimeter(this.colour, ' ');
-        response.write(this.text);
+        if (this.item.hasBehaviour(ItemBehaviour.POST_IT)) {
+            response.writeDelimeter(this.item.getId(), (char) 9);
+            response.writeDelimeter(this.colour, ' ');
+            response.write(this.text);
+        } else {
+            response.writeDelimeter(this.item.getId(), (char) 9);
+            response.write(Integer.toString(item.getId()) + " x " + item.getCustomData());
+        }
     }
 
     @Override

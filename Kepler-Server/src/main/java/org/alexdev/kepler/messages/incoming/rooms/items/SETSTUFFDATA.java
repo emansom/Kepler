@@ -110,6 +110,11 @@ public class SETSTUFFDATA implements MessageEvent {
                 newData = itemData;
             }
 
+            // Special handler because we don't want to allow users to empty the waterbowl, only pets can
+            if (item.getDefinition().getSprite().startsWith("waterbowl") && itemData.equals("5")) {
+                newData = itemData;
+            }
+
             if (item.hasBehaviour(ItemBehaviour.CUSTOM_DATA_NUMERIC_STATE)) {
                 if (itemData.equals("x")) {
                     newData = itemData;

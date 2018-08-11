@@ -3,7 +3,6 @@ package org.alexdev.kepler.game.room.managers;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.RoomRightsDao;
-import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -17,13 +16,12 @@ import org.alexdev.kepler.game.room.tasks.TeleporterTask;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
-import org.alexdev.kepler.messages.outgoing.rooms.items.BROADCAST_TELEPORTER;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
-import org.alexdev.kepler.messages.outgoing.user.HOTEL_VIEW;
+import org.alexdev.kepler.messages.incoming.rooms.user.HOTEL_VIEW;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
@@ -33,6 +31,22 @@ public class RoomEntityManager {
     public RoomEntityManager(Room room) {
         this.room = room;
         this.instanceIdCounter = new AtomicInteger(0);
+    }
+
+    /**
+     * Generates a unique ID for the entities in a room. Will be used for pets
+     * and bots in future.
+     *
+     * @return the unique ID
+     */
+    public int generateUniqueId() {
+        int unqiueId = ThreadLocalRandom.current().nextInt();
+
+        if (getByInstanceId(unqiueId) != null) {
+            unqiueId = generateUniqueId();
+        }
+
+        return unqiueId;
     }
 
     /**
@@ -97,12 +111,16 @@ public class RoomEntityManager {
             RoomManager.getInstance().addRoom(this.room);
         }
 
+        entity.getRoomUser().getTimerManager().resetRoomTimer();
+        entity.getRoomUser().setRoom(this.room);
+        entity.getRoomUser().setInstanceId(this.generateUniqueId());
+
+        if (!this.room.isActive()) {
+            this.initialiseRoom();
+        }
+
         this.room.getEntities().add(entity);
         this.room.getData().setVisitorsNow(this.room.getEntityManager().getPlayers().size());
-
-        entity.getRoomUser().resetRoomTimer();
-        entity.getRoomUser().setRoom(this.room);
-        entity.getRoomUser().setInstanceId(this.instanceIdCounter.getAndIncrement());
 
         Position entryPosition = this.room.getModel().getDoorLocation();
 
@@ -112,10 +130,6 @@ public class RoomEntityManager {
 
         entity.getRoomUser().setPosition(entryPosition);
         entity.getRoomUser().setAuthenticateId(-1);
-
-        if (!this.room.isActive()) {
-            this.initialiseRoom();
-        }
 
         if (entity.getRoomUser().getAuthenticateTelporterId() != -1) {
             Item teleporter = ItemDao.getItem(entity.getRoomUser().getAuthenticateTelporterId());
@@ -131,6 +145,7 @@ public class RoomEntityManager {
                             entity,
                             this.room).run();
 
+                    entity.getRoomUser().setWalkingAllowed(true);
                     entity.getRoomUser().setPosition(entryPosition);
                 }
             }

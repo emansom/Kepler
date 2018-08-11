@@ -48,6 +48,8 @@ public class RoomModel {
         this.tileStates = new RoomTileState[this.mapSizeX][this.mapSizeY];
         this.tileHeights = new double[this.mapSizeX][this.mapSizeY];
 
+        StringBuilder temporaryHeightmap = new StringBuilder();
+
         for (int y = 0; y < this.mapSizeY; y++) {
             String line = lines[y];
 
@@ -66,8 +68,14 @@ public class RoomModel {
                     this.tileStates[x][y] = RoomTileState.OPEN;
                     this.tileHeights[x][y] = this.doorZ;
                 }
+
+                temporaryHeightmap.append(tile);
             }
+
+            temporaryHeightmap.append("\r");
         }
+
+        this.heightmap = temporaryHeightmap.toString();
     }
 
     /**

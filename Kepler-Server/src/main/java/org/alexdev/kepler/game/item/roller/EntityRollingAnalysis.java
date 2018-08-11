@@ -40,17 +40,45 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             return null;
         }
 
-        if (frontTile.getEntities().size() > 0) {
-            for (Entity e : frontTile.getEntities()) {
-                if (e.getRoomUser().getRoom() == null) {
+        // Check all entities in the room
+        for (Entity e : room.getEntities()) {
+            if (e.getRoomUser().getRoom() == null) {
+                continue;
+            }
+
+            // Don't roll if an entity is going to walk into the this entity
+            if (e.getRoomUser().getNextPosition() != null) {
+                if (e.getRoomUser().getNextPosition().equals(front)) {
+                    return null;
+                }
+            }
+
+            // Ignore people who are walking
+            if (e.getRoomUser().isWalking()) {
+                continue;
+            }
+
+            // Don't roll if there's an entity rolling into you
+            if (e.getRoomUser().getRollingData() != null) {
+                if (e.getRoomUser().getRollingData().getNextPosition().equals(front)) {
+                    return null;
+                }
+            }
+
+            if (e.getRoomUser().getPosition().equals(front)) {
+                return null;
+            }
+        }
+
+        // Check all rolling items in the room
+        for (Item floorItem : room.getItemManager().getFloorItems()) {
+            if (floorItem.getRollingData() != null) {
+                if (floorItem.getPosition().equals(roller.getPosition())) {
                     continue;
                 }
 
-                if (e.getRoomUser().isWalking()) {
-                    continue;
-                }
-
-                if (e.getRoomUser().getPosition().equals(front)) {
+                // Don't roll if there's another item that's going to roll into this entity
+                if (floorItem.getRollingData().getNextPosition().equals(front)) {
                     return null;
                 }
             }
@@ -116,7 +144,9 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             nextHeight -= roller.getDefinition().getTopHeight();
         }
 
-        return new Position(front.getX(), front.getY(), nextHeight);
+        Position nextPosition = new Position(front.getX(), front.getY(), nextHeight);
+        entity.getRoomUser().setRollingData(new RollingData(entity, roller, entity.getRoomUser().getPosition().copy(), nextPosition));
+        return nextPosition;
     }
     @Override
     public void doRoll(Entity entity, Item roller, Room room, Position fromPosition, Position nextPosition) {
@@ -151,7 +181,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
         room.send(new SLIDE_OBJECT(entity, nextPosition, roller.getId(), displayNextHeight));
 
         if (!entity.getRoomUser().isSittingOnGround()) {
-            entity.getRoomUser().invokeItem(); // Invoke the current tile item if they're not sitting on rollers.
+            entity.getRoomUser().invokeItem(true); // Invoke the current tile item if they're not sitting on rollers.
         }
 
         entity.getRoomUser().getPosition().setX(nextPosition.getX());
@@ -160,12 +190,12 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
 
         //if (nextTile.hasWalkableFurni() && nextTile.getHighestItem().getDefinition().isChairOrBed()) {
         if (!entity.getRoomUser().isSittingOnGround() && !entity.getRoomUser().isSittingOnChair()) {
-            entity.getRoomUser().invokeItem();
+            entity.getRoomUser().invokeItem(false);
         }
 
         entity.getRoomUser().setNeedsUpdate(true);
 
-        nextTile.addEntity(entity);
         previousTile.removeEntity(entity);
+        nextTile.addEntity(entity);
     }
 }

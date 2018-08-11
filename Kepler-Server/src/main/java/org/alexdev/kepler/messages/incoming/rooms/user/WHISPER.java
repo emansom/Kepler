@@ -32,14 +32,14 @@ public class WHISPER implements MessageEvent {
                 message);
 
         player.send(chatMessage);
-        player.getRoomUser().resetRoomTimer();
+        player.getRoomUser().getTimerManager().resetRoomTimer();
 
         Player whisperUser = PlayerManager.getInstance().getPlayerByName(username);
 
         if (whisperUser != null) {
             whisperUser.send(chatMessage);
         } else {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "User not found. Whisper not send."));
+            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "User not found. Whisper not sent."));
         }
     }
 }

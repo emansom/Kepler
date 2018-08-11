@@ -2,15 +2,15 @@ package org.alexdev.kepler.game.catalogue;
 
 import org.alexdev.kepler.util.StringUtil;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class CataloguePage {
     private int id;
     private int minRole;
+    private boolean indexVisible;
     private String nameIndex;
+    private String linkList;
     private String name;
     private String layout;
     private String imageHeadline;
@@ -20,10 +20,12 @@ public class CataloguePage {
     private String labelExtra_s;
     private Map<String, String> labelExtra;
 
-    public CataloguePage(int id, int minRole, String nameIndex, String name, String layout, String imageHeadline, String imageTeasers, String body, String labelPick, String labelExtra_s, String labelExtra_t) {
+    public CataloguePage(int id, int minRole, boolean indexVisible, String nameIndex, String linkedList, String name, String layout, String imageHeadline, String imageTeasers, String body, String labelPick, String labelExtra_s, String labelExtra_t) {
         this.id = id;
         this.minRole = minRole;
+        this.indexVisible = indexVisible;
         this.nameIndex = nameIndex;
+        this.linkList = linkedList;
         this.name = name;
         this.layout = layout;
         this.imageHeadline = imageHeadline;
@@ -63,12 +65,20 @@ public class CataloguePage {
         this.minRole = minRole;
     }
 
+    public boolean isIndexVisible() {
+        return indexVisible;
+    }
+
     public String getNameIndex() {
         return nameIndex;
     }
 
     public void setNameIndex(String nameIndex) {
         this.nameIndex = nameIndex;
+    }
+
+    public String getLinkList() {
+        return linkList;
     }
 
     public String getName() {

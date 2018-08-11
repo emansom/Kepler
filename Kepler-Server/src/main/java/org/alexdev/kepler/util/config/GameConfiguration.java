@@ -14,8 +14,10 @@ public class GameConfiguration {
         this.config = new LinkedHashMap<>();
         this.setConfigurationDefaults();
 
+        Map<String, String> settings = SettingsDao.getAllSettings();
+
         for (var entrySet : this.config.entrySet()) {
-            String value = SettingsDao.getSetting(entrySet.getKey());
+            String value = settings.get(entrySet.getKey());
 
             if (value != null) {
                 this.config.put(entrySet.getKey(), value);
@@ -27,6 +29,7 @@ public class GameConfiguration {
 
     private void setConfigurationDefaults() {
         config.put("fuck.aaron", "true");
+        config.put("max.connections.per.ip", "2");
 
         config.put("welcome.message.enabled", "false");
         config.put("welcome.message.content", "Hello, %username%! And welcome to the Kepler server!");
@@ -45,6 +48,12 @@ public class GameConfiguration {
         config.put("credits.scheduler.amount", "20");
 
         config.put("chat.garbled.text", "true");
+        config.put("chat.bubble.timeout.seconds", "15");
+
+        config.put("tutorial.enabled", "true");
+        config.put("profile.editing", "true");
+        config.put("vouchers.enabled", "true");
+
     }
 
     /**
