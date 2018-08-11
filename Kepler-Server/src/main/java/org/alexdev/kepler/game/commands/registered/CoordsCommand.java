@@ -10,7 +10,7 @@ import org.alexdev.kepler.util.StringUtil;
 public class CoordsCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add("fuse_administrator_access");
     }
 
     @Override

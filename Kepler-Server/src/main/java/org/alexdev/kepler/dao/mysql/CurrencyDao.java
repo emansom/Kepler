@@ -57,7 +57,7 @@ public class CurrencyDao {
 
             // Fetch increased amount
             // TODO: find better way to write the IN clause
-            // TODO: use temporary table when playerIds list is above max arguments of SQL IN function
+            // TODO: use temporary table when playerIds list is above max arguments of SQL IN function or size above max_allowed_packet MariaDB configuration setting
             fetchQuery = Storage.getStorage().prepare("SELECT id,credits FROM users WHERE id IN (" + rawPlayerBind + ")", conn);
 
             // Execute fetch query

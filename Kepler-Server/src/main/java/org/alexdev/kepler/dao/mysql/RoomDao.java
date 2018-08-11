@@ -295,61 +295,59 @@ public class RoomDao {
 
     /**
      * Vote for a room
-     * @param userId the User who is voting
-     * @param roomId the Room that the user is voting for
+     *
+     * @param userId    the User who is voting
+     * @param roomId    the Room that the user is voting for
      * @param voteValue the Value of the vote (1 or -1)
      */
-    public static void vote(int userId, int roomId, int voteValue){
+    public static void vote(int userId, int roomId, int voteValue) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
-        if(!checkVoted(userId, roomId)) {
-            try {
-                sqlConnection = Storage.getStorage().getConnection();
-                preparedStatement = Storage.getStorage().prepare("INSERT INTO users_room_votes (user_id, room_id, vote) VALUES (?, ?, ?)", sqlConnection);
-                preparedStatement.setInt(1, userId);
-                preparedStatement.setInt(2, roomId);
-                preparedStatement.setInt(3, voteValue);
-                preparedStatement.execute();
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("INSERT INTO users_room_votes (user_id, room_id, vote) VALUES (?, ?, ?)", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, roomId);
+            preparedStatement.setInt(3, voteValue);
+            preparedStatement.execute();
 
-            } catch (Exception e) {
-                Storage.logError(e);
-            } finally {
-                Storage.closeSilently(preparedStatement);
-                Storage.closeSilently(sqlConnection);
-            }
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
         }
     }
 
     /**
      * Vote for a room
+     *
      * @param userId the User who is voting
      * @param roomId the Room that the user is voting for
      */
-    public static void removeVote(int userId, int roomId){
+    public static void removeVote(int userId, int roomId) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
-        if(!checkVoted(userId, roomId)) {
-            try {
-                sqlConnection = Storage.getStorage().getConnection();
-                preparedStatement = Storage.getStorage().prepare("DELETE FROM users_room_votes WHERE user_id = ? AND room_id = ?", sqlConnection);
-                preparedStatement.setInt(1, userId);
-                preparedStatement.setInt(2, roomId);
-                preparedStatement.execute();
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM users_room_votes WHERE user_id = ? AND room_id = ?", sqlConnection);
+            preparedStatement.setInt(1, userId);
+            preparedStatement.setInt(2, roomId);
+            preparedStatement.execute();
 
-            } catch (Exception e) {
-                Storage.logError(e);
-            } finally {
-                Storage.closeSilently(preparedStatement);
-                Storage.closeSilently(sqlConnection);
-            }
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
         }
     }
 
     /**
      * Get room rating.
-
+     *
      * @param roomId the room id to get the rating for
      */
     public static int getRating(int roomId) {
@@ -380,12 +378,13 @@ public class RoomDao {
     }
 
     /**
-     * Vote for a room
+     * Check if a user has voted for a room
+     *
      * @param userId the User who is voting
      * @param roomId the Room that the user is voting for
      * @return true if the user has voted, false if not
      */
-    public static boolean checkVoted(int userId, int roomId) {
+    public static boolean hasVoted(int userId, int roomId) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet;
@@ -417,7 +416,7 @@ public class RoomDao {
      * Fill player data
      *
      * @param data the room data instance
-     * @param row the row
+     * @param row  the row
      * @throws SQLException the SQL exception
      */
     public static void fill(RoomData data, ResultSet row) throws SQLException {

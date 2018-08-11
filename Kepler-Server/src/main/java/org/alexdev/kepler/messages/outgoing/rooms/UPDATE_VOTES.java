@@ -7,22 +7,19 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class UPDATE_VOTES extends MessageComposer {
-    RoomData room;
-    PlayerDetails user;
+    private final boolean hasVoted;
+    private final int rating;
 
-    public UPDATE_VOTES(RoomData room, PlayerDetails user){
-        this.room = room;
-        this.user = user;
+    public UPDATE_VOTES(boolean hasVoted, int rating) {
+        this.hasVoted = hasVoted;
+        this.rating = rating;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        if(RoomDao.checkVoted(user.getId(), room.getId())) {
-            if(this.room.getRating() > 0)
-                response.writeInt(this.room.getRating());
-            else
-                response.writeInt(0);
-        }else{
+        if (hasVoted) {
+            response.writeInt(this.rating);
+        } else {
             response.writeInt(-1);
         }
     }

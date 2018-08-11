@@ -9,20 +9,21 @@ import org.alexdev.kepler.util.encoding.Base64Encoding;
 import org.alexdev.kepler.util.encoding.VL64Encoding;
 
 public class CFH_ACK extends MessageComposer {
-    private Player player;
-    public CFH_ACK(Player p){
-        this.player = p;
+    private final CallForHelp call;
+
+    public CFH_ACK(CallForHelp call){
+        this.call = call;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        CallForHelp call = CallForHelpManager.getInstance().getOpenCallForHelpByPlayerName(player.getDetails().getName());
-        if(call != null){
-            response.writeString("I" + call.getCallId());
+        // TODO: verify if structure and packet name is correct by looking at the lingo
+        response.writeBool(call != null);
+
+        if (call != null) {
+            response.writeString(call.getCallId());
             response.writeString(call.getFormattedRequestTime());
             response.writeString(call.getMessage());
-        }else{
-            response.writeString("H");
         }
     }
 

@@ -23,15 +23,16 @@ public class ROOM_RATING implements MessageEvent {
             return;
         }
 
-        if (RoomDao.checkVoted(player.getEntityId(), room.getId())) {
+        if (RoomDao.hasVoted(player.getEntityId(), room.getId())) {
             return;
         }
 
         RoomDao.vote(player.getDetails().getId(), player.getRoomUser().getRoom().getId(), answer);
         room.getData().setRating(RoomDao.getRating(room.getId()));
 
-        for (Player p : room.getEntityManager().getPlayers()){
-            p.send(new UPDATE_VOTES(room.getData(), p.getDetails()));
+        for (Player p : room.getEntityManager().getPlayers()) {
+            boolean voted = RoomDao.hasVoted(player.getDetails().getId(), room.getData().getId());
+            p.send(new UPDATE_VOTES(voted, room.getData().getRating()));
         }
     }
 }

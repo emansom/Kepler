@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.moderation;
 
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.RoomManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -8,78 +9,72 @@ import java.util.HashMap;
 
 public class CallForHelp {
 
-    private final int callId;
-    private final String caller;
+    private final int id;
+    private final int callerId;
     private final String message;
-    private String pickedUpBy;
-    private final String roomName;
+    private int pickedUpBy;
     private final int roomId;
-    private final boolean isPublicRoom;
     private final long requestTime;
+
+    // TODO: enumize category
     private int category = 2;
 
-    CallForHelp(int callId, Player caller, String message){
-        System.out.println(callId);
-        this.callId = callId;
-        this.caller = caller.getDetails().getName();
+    CallForHelp(int id, int callerId, int roomId, String message) {
+        this.id = id;
+        this.callerId = callerId;
         this.message = message;
-        this.pickedUpBy = "";
-        this.roomId = caller.getRoomUser().getRoom().getData().getId();
-        this.roomName = caller.getRoomUser().getRoom().getData().getName();
-        this.isPublicRoom = caller.getRoomUser().getRoom().isPublicRoom();
+        this.pickedUpBy = 0;
+        this.roomId = roomId;
         this.requestTime = System.currentTimeMillis();
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return this.message;
     }
 
-    public String getRoomName(){
-        return this.roomName;
-    }
-
-    public String getPickedUpBy(){
+    public int getPickedUpBy() {
         return this.pickedUpBy;
     }
 
-    public int getRoomId(){
+    public int getRoomId() {
         return this.roomId;
     }
 
-    public int getCategory(){
+    public int getCategory() {
         return this.category;
     }
 
-    public String getCaller(){
-        return this.caller;
+    public int getCaller() {
+        return this.callerId;
     }
 
-    public int getCallId(){
-        return this.callId;
+    public int getCallId() {
+        return this.id;
     }
 
-    public boolean isOpen(){
-        return this.pickedUpBy.equals("");
+    public boolean isOpen() {
+        return this.pickedUpBy == 0;
     }
 
-    public boolean isPublicRoom(){
-        return this.isPublicRoom;
+    public String getRoomName() {
+        return RoomManager.getInstance().getRoomById(this.roomId).getData().getPublicName();
     }
 
-    public String getFormattedRequestTime(){
+    public String getRoomOwner() {
+        return RoomManager.getInstance().getRoomById(this.roomId).getData().getOwnerName();
+    }
+
+    public String getFormattedRequestTime() {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm d/MM/YYYY");
         Date resultDate = new Date(this.requestTime);
         return sdf.format(resultDate);
     }
 
-    void updateCategory(int newCategory){
+    public void updateCategory(int newCategory) {
         this.category = newCategory;
     }
 
-    void pickUp(Player moderator){
-        if(moderator.hasFuse("fuse_cfh")) {
-            this.pickedUpBy = moderator.getDetails().getName();
-        }
+    public void setPickedUpBy(Player moderator) {
+        this.pickedUpBy = moderator.getDetails().getId();
     }
-
 }

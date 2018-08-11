@@ -20,11 +20,11 @@ public class CALL_FOR_HELP extends MessageComposer {
         response.writeString(cfh.getCaller());
         response.writeString(cfh.getMessage());
         response.writeString(cfh.getCaller());
-        response.writeString((cfh.isPublicRoom() ? "Public" : "Private") + " Room: " + cfh.getRoomName());
-        response.writeInt(1);
-        response.writeString("Marker");
+        response.writeString(cfh.getRoomName());
+        response.writeInt(1); // TODO: find out what this is
+        response.writeString("Marker"); // TODO: find out what this is
         response.writeInt(cfh.getRoomId());
-        response.writeString("Callie");
+        response.writeString(cfh.getRoomOwner());
     }
 
     @Override
