@@ -38,6 +38,7 @@ public class CommandManager {
         this.commands.put(new String[] { "reload" }, new ReloadCommand());
         this.commands.put(new String[] { "packet" }, new PacketTestCommand());
         this.commands.put(new String[] { "motto" }, new ChangeMottoCommand());
+        this.commands.put(new String[] { "resetvote" }, new ResetVoteCommand());
 
         // Add client-side commands to list
         this.commands.put(new String[] { "chooser" }, new ChooserCommand());

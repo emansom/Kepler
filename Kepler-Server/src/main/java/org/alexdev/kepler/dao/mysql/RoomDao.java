@@ -322,6 +322,32 @@ public class RoomDao {
     }
 
     /**
+     * Vote for a room
+     * @param userId the User who is voting
+     * @param roomId the Room that the user is voting for
+     */
+    public static void removeVote(int userId, int roomId){
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        if(!checkVoted(userId, roomId)) {
+            try {
+                sqlConnection = Storage.getStorage().getConnection();
+                preparedStatement = Storage.getStorage().prepare("DELETE FROM users_room_votes WHERE user_id = ? AND room_id = ?", sqlConnection);
+                preparedStatement.setInt(1, userId);
+                preparedStatement.setInt(2, roomId);
+                preparedStatement.execute();
+
+            } catch (Exception e) {
+                Storage.logError(e);
+            } finally {
+                Storage.closeSilently(preparedStatement);
+                Storage.closeSilently(sqlConnection);
+            }
+        }
+    }
+
+    /**
      * Get room rating.
 
      * @param roomId the room id to get the rating for
