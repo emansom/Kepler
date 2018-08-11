@@ -18,9 +18,7 @@ public class ChangeMottoCommand extends Command {
     }
 
     @Override
-    public void addArguments() {
-        this.arguments.add("motto");
-    }
+    public void addArguments() { }
 
     @Override
     public void handleCommand(Entity entity, String message, String[] args) {
@@ -35,7 +33,13 @@ public class ChangeMottoCommand extends Command {
         }
 
         // Filter out possible packet injection attacks
-        String motto = StringUtil.filterInput(String.join(" ", args), true);
+        String motto;
+
+        if (args.length > 0) {
+            motto = StringUtil.filterInput(String.join(" ", args), true);
+        } else {
+            motto = "";
+        }
 
         // Update motto
         player.getDetails().setMotto(motto);
