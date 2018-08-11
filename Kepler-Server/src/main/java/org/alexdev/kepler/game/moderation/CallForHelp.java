@@ -13,6 +13,7 @@ public class CallForHelp {
     private final String message;
     private String pickedUpBy;
     private final String roomName;
+    private final String roomOwner;
     private final int roomId;
     private final boolean isPublicRoom;
     private final long requestTime;
@@ -25,6 +26,7 @@ public class CallForHelp {
         this.message = message;
         this.pickedUpBy = "";
         this.roomId = caller.getRoomUser().getRoom().getData().getId();
+        this.roomOwner = caller.getRoomUser().getRoom().getData().getOwnerName();
         this.roomName = caller.getRoomUser().getRoom().getData().getName();
         this.isPublicRoom = caller.getRoomUser().getRoom().isPublicRoom();
         this.requestTime = System.currentTimeMillis();
@@ -82,4 +84,7 @@ public class CallForHelp {
         }
     }
 
+    public String getRoomOwner() {
+        return roomOwner;
+    }
 }
