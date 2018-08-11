@@ -41,13 +41,13 @@ public class RoomEntityManager {
      * @return the unique ID
      */
     public int generateUniqueId() {
-        int unqiueId = ThreadLocalRandom.current().nextInt();
+        int uniqueId = ThreadLocalRandom.current().nextInt(500, 600);
 
-        if (getByInstanceId(unqiueId) != null) {
-            unqiueId = generateUniqueId();
+        while (getByInstanceId(uniqueId) != null) {
+            uniqueId = generateUniqueId();
         }
 
-        return unqiueId;
+        return uniqueId;
     }
 
     /**
@@ -55,7 +55,7 @@ public class RoomEntityManager {
      * given class.
      *
      * @param entityClass the entity class
-     * @return List<{@link T}> list of entities
+     * @return List<{                                                               @                                                               link                                                                                                                               T                                                               }> list of entities
      */
     public <T extends Entity> List<T> getEntitiesByClass(Class<T> entityClass) {
         List<T> entities = new ArrayList<>();
@@ -73,7 +73,7 @@ public class RoomEntityManager {
      * Return the list of players currently in this room by its
      * given class.
      *
-     * @return List<{@link Player}> list players entities
+     * @return List<{                                                               @                                                               link                                                                                                                               Player                                                               }> list players entities
      */
     public List<Player> getPlayers() {
         return getEntitiesByClass(Player.class);
@@ -99,7 +99,7 @@ public class RoomEntityManager {
      * Adds a generic entity to the room.
      * Will send packets if the entity is a player.
      *
-     * @param entity the entity to add
+     * @param entity      the entity to add
      * @param destination the (optional) destination to take the user to when they enter
      */
     public void enterRoom(Entity entity, Position destination) {
@@ -172,7 +172,8 @@ public class RoomEntityManager {
             player.send(new FLATPROPERTY("floor", this.room.getData().getFloor()));
         }
 
-        player.send(new UPDATE_VOTES(room.getData(), player.getDetails()));
+        boolean voted = RoomDao.hasVoted(player.getDetails().getId(), room.getData().getId());
+        player.send(new UPDATE_VOTES(voted, room.getData().getRating()));
 
         RoomDao.saveVisitors(this.room);
     }
