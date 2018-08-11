@@ -8,6 +8,7 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ public abstract class GamehallGame {
     public GamehallGame(int roomId, List<int[]> chairs) {
         this.roomId = roomId;
         this.chairs = chairs;
-        this.players = new ArrayList<>();
+        this.players = new CopyOnWriteArrayList<>();
     }
 
     /**
