@@ -107,7 +107,7 @@ public class ServerConfiguration {
             try {
                 config.put("mysql.hostname", InetAddress.getByName(envMysqlHost).getHostAddress());
             } catch (UnknownHostException e) {
-                log.error("Could not use {} as MariaDB host, reverting to default {}", envMysqlHost, config.get("mysql.hostname"));
+                log.warn("Could not use {} as MariaDB host, reverting to default {}", envMysqlHost, config.get("mysql.hostname"));
             }
         }
 
