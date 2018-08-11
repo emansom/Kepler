@@ -128,4 +128,29 @@ public class SettingsDao {
             Storage.closeSilently(sqlConnection);
         }
     }
+
+    public static Map<String, String> getTexts() {
+        Map<String, String> texts = new HashMap<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM external_texts", sqlConnection);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                texts.put(resultSet.getString("entry"), resultSet.getString("text"));
+            }
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return texts;
+    }
 }
