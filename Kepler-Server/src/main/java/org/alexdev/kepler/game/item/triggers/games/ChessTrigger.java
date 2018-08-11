@@ -65,13 +65,4 @@ public class ChessTrigger extends GameTrigger {
             }});
         }};
     }
-
-    /**
-     * Get FUSE game type
-     *
-     * @return the game type
-     */
-    public String getGameFuseType() {
-        return "Chess";
-    }
 }
