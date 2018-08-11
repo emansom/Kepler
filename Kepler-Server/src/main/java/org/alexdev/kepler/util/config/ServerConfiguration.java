@@ -136,7 +136,7 @@ public class ServerConfiguration {
      */
     private static void setConfigurationData(PrintWriter writer) {
         writer.println("[Global]");
-        writer.println("bind=" + config.get("server.bind"));
+        writer.println("bind=" + config.get("bind"));
         writer.println("");
         writer.println("[Server]");
         writer.println("server.port=" + config.get("server.port"));
@@ -159,8 +159,7 @@ public class ServerConfiguration {
         writer.println("log.sent.packets=" + config.get("log.sent.packets"));
         writer.println("");
         writer.println("[Console]");
-        writer.println("debug=" + config.get("debug"));
-        writer.println("");
+        writer.print("debug=" + config.get("debug"));
         writer.flush();
         writer.close();
     }

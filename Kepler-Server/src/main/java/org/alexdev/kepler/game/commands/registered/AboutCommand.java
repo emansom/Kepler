@@ -27,6 +27,7 @@ public class AboutCommand extends Command {
                 "<br> - Alito" + // Bug tester and contributor for rooms/fixed badges
                 "<br> - Ascii" + // Helping me with various packet structures
                 "<br> - Lightbulb" + // Helping me with getting tables to show up in public rooms
+                "<br> - Raptosaur " + // Call for help
                 "<br> - Romuald" + // Creating Habbo Club subscription
                 "<br> - Glaceon" + // Creating redeeming furni
                 "<br> - Nillus/Holo Team" + // Various parts of Woodpecker, Holograph assisted me, A LOT with protocol

@@ -7,6 +7,7 @@ import org.alexdev.kepler.messages.incoming.club.*;
 import org.alexdev.kepler.messages.incoming.inventory.*;
 import org.alexdev.kepler.messages.incoming.catalogue.*;
 import org.alexdev.kepler.messages.incoming.messenger.*;
+import org.alexdev.kepler.messages.incoming.moderation.MODERATORACTION;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.purse.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
@@ -51,11 +52,25 @@ public class MessageHandler {
         registerRoomSettingsPackets();
         registerRoomItemPackets();
         registerRoomModerationPackets();
+        registerGameModerationPackets();
         registerMessengerPackets();
         registerCataloguePackets();
         registerInventoryPackets();
         registerTradePackets();
         registerSongPackets();
+    }
+
+    /**
+     * Register game moderation packets.
+     */
+    private void registerGameModerationPackets(){
+        registerEvent(200, new MODERATORACTION());
+        registerEvent(237, new REQUEST_CFH());
+        registerEvent(86, new SUBMIT_CFH());
+        registerEvent(48, new PICK_CALLFORHELP());
+        registerEvent(199, new MESSAGETOCALLER());
+        registerEvent(198, new CHANGECALLCATEGORY());
+        registerEvent(238, new DELETE_CRY());
     }
 
     /**
@@ -123,6 +138,7 @@ public class MessageHandler {
         registerEvent(64, new G_STAT());
         registerEvent(63, new G_ITEMS());
         registerEvent(98, new LETUSERIN());
+        registerEvent(261, new ROOM_RATING());
     }
 
     /**
@@ -209,6 +225,7 @@ public class MessageHandler {
      * Register room moderation packets
      */
     private void registerRoomModerationPackets() {
+        registerEvent(95, new KICK());
         registerEvent(96, new ASSIGNRIGHTS());
         registerEvent(97, new REMOVERIGHTS());
         registerEvent(155, new REMOVEALLRIGHTS());

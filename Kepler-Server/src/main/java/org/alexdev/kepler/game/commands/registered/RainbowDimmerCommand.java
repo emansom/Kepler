@@ -64,7 +64,7 @@ public class RainbowDimmerCommand extends Command {
             player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Rainbow room dimmer cycle has stopped"));
         } else {
             RainbowTask rainbowTask = new RainbowTask(room);
-            room.getTaskManager().scheduleTask("RainbowTask", rainbowTask, tickInterval, TimeUnit.SECONDS);
+            room.getTaskManager().scheduleTask("RainbowTask", rainbowTask, 0, tickInterval, TimeUnit.SECONDS);
             player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Rainbow room dimmer cycle has started"));
         }
     }

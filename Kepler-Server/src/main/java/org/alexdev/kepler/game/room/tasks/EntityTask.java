@@ -92,6 +92,13 @@ public class EntityTask implements Runnable {
                     return;
                 }
 
+                // Set up trigger for leaving a current item
+                if (roomUser.getCurrentItem() != null) {
+                    if (roomUser.getCurrentItem().getItemTrigger() != null) {
+                        roomUser.getCurrentItem().getItemTrigger().onEntityLeave(entity, roomUser, roomUser.getCurrentItem());
+                    }
+                }
+
                 RoomTile previousTile = roomUser.getTile();
                 previousTile.removeEntity(entity);
 

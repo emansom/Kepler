@@ -6,6 +6,7 @@ import org.alexdev.kepler.dao.mysql.RoomRightsDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.public_items.PublicItemParser;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -13,9 +14,11 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.tasks.TeleporterTask;
+import org.alexdev.kepler.messages.incoming.rooms.ROOM_RATING;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
+import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
 import org.alexdev.kepler.messages.incoming.rooms.user.HOTEL_VIEW;
 
@@ -171,6 +174,8 @@ public class RoomEntityManager {
             player.send(new FLATPROPERTY("floor", this.room.getData().getFloor()));
         }
 
+        player.send(new UPDATE_VOTES(room.getData(), player.getDetails()));
+
         RoomDao.saveVisitors(this.room);
     }
 
@@ -185,15 +190,13 @@ public class RoomEntityManager {
         this.room.setActive(true);
 
         if (this.room.isPublicRoom()) {
-            for (var item : this.room.getModel().getPublicItems()) {
-                item.setRoomId(this.room.getId());
-                this.room.getItems().add(item);
-            }
+            this.room.getItems().addAll(PublicItemParser.getPublicItems(this.room.getId(), this.room.getModel().getId()));
         } else {
             this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getId()));
         }
 
         this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
+        this.room.getData().setRating(RoomDao.getRating(this.room.getId()));
 
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();
@@ -211,8 +214,11 @@ public class RoomEntityManager {
 
         this.room.getEntities().remove(entity);
 
-        if (entity.getType() == EntityType.PLAYER) {
-            PoolHandler.disconnect((Player) entity);
+        // Set up trigger for leaving a current item
+        if (entity.getRoomUser().getCurrentItem() != null) {
+            if (entity.getRoomUser().getCurrentItem().getItemTrigger() != null) {
+                entity.getRoomUser().getCurrentItem().getItemTrigger().onEntityLeave(entity, entity.getRoomUser(), entity.getRoomUser().getCurrentItem());
+            }
         }
 
         RoomTile tile = entity.getRoomUser().getTile();

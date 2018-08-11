@@ -1,13 +1,8 @@
 package org.alexdev.kepler.game.room.models;
 
-import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.ItemPublicParser;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.util.StringUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class RoomModel {
     private String modelId;
@@ -19,7 +14,6 @@ public class RoomModel {
     private int mapSizeX;
     private int mapSizeY;
     private String heightmap;
-    private List<Item> publicItems;
 
     private RoomTileState[][] tileStates;
     private double[][] tileHeights;
@@ -32,7 +26,6 @@ public class RoomModel {
         this.doorZ = doorZ;
         this.doorRotation = doorRotation;
         this.heightmap = heightmap.replace("|", "\r");
-        this.publicItems = ItemPublicParser.getPublicItems(this.modelId);
     }
 
     /**
@@ -141,9 +134,5 @@ public class RoomModel {
 
     public String getHeightmap() {
         return heightmap;
-    }
-
-    public List<Item> getPublicItems() {
-        return publicItems;
     }
 }

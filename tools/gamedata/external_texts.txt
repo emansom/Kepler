@@ -1,4 +1,5 @@
 player_commands_no_args=You have not supplied any arguments!
+modtool_rankerror=You do not have the rights for this action on this user!
 successfully_purchase_gift_for=Successfully purchased gift for user %user%!
 roomdimmer_furni_limit=You can only have one roomdimmer per room
 furni_glass_table*7_desc=Habbo Club

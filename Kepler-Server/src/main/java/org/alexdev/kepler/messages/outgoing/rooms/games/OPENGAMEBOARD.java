@@ -4,11 +4,11 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class OPENGAMEBOARD extends MessageComposer {
-    private final int gameId;
+    private final String gameId;
     private final String type;
 
-    public OPENGAMEBOARD(String type) {
-        this.gameId = 1;
+    public OPENGAMEBOARD(String gameId, String type) {
+        this.gameId = gameId;
         this.type = type;
     }
 

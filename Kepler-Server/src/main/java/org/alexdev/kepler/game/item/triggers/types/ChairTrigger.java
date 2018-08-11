@@ -35,4 +35,9 @@ public class ChairTrigger implements ItemTrigger {
 
         roomUser.setNeedsUpdate(true);
     }
+
+    @Override
+    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+
+    }
 }

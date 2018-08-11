@@ -62,7 +62,7 @@ public class GameScheduler implements Runnable {
 
                     // If their afk timer is up, send them out.
                     if (DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getAfkTimer()) {
-                        player.getRoomUser().kick();
+                        player.getRoomUser().kick(true);
                     }
 
                     // If they're not sleeping (aka, active) and their next handout expired, give them their credits!
