@@ -65,6 +65,10 @@ public class PublicItemParser {
                 item.showProgram("open");
             }
 
+            if (item.getDefinition().getSprite().equals("queue_tile2")) {
+                item.getDefinition().removeBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT);
+            }
+
             items.add(item);
         }
 
