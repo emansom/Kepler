@@ -16,6 +16,7 @@ public class PublicItemParser {
     public static List<Item> getPublicItems(int roomId, String modelId) {
         TicTacToeTrigger ticTacToeTrigger = new TicTacToeTrigger(roomId);
         ChessTrigger chessTrigger = new ChessTrigger(roomId);
+        BattleShipsTrigger battleShipsTrigger = new BattleShipsTrigger(roomId);
 
         Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
             put("poolExit", new PoolExitTrigger());
@@ -27,6 +28,10 @@ public class PublicItemParser {
             if (modelId.equals("hallC")) {
                 put("gamehall_chair_green", chessTrigger);
                 put("chess_king_chair", chessTrigger);
+            }
+
+            if (modelId.equals("hallB")) {
+                put("gamehall_chair_green", battleShipsTrigger);
             }
         }};
 
