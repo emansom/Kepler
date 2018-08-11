@@ -1,10 +1,11 @@
 version: '3.2'
 services:
     kepler:
-        image: ewout/kepler:1.0.36
+        image: ewout/kepler:1.0.37
         restart: always
         environment:
             KEPLER_BIND: 0.0.0.0
+            KEPLER_RCON_BIND: 0.0.0.0
             MYSQL_HOST: mariadb
             MYSQL_PORT: 3306
             MYSQL_USER: kepler
