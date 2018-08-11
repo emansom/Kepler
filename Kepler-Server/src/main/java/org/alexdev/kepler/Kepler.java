@@ -117,9 +117,9 @@ public class Kepler {
             // Get an InetAddressValidator
             InetAddressValidator validator = InetAddressValidator.getInstance();
 
-            setupServer(validator);
             setupRcon(validator);
             setupMus(validator);
+            setupServer(validator);
 
             Runtime.getRuntime().addShutdownHook(new Thread(Kepler::dispose));
         } catch (Exception e) {
