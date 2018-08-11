@@ -41,7 +41,7 @@ public class RoomEntityManager {
      * @return the unique ID
      */
     public int generateUniqueId() {
-        int uniqueId = ThreadLocalRandom.current().nextInt(500, 600);
+        int uniqueId = ThreadLocalRandom.current().nextInt(0, 9999);
 
         while (getByInstanceId(uniqueId) != null) {
             uniqueId = generateUniqueId();
