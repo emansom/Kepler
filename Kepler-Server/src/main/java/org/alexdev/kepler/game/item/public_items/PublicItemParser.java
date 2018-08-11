@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class PublicItemParser {
     private static Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
@@ -29,6 +30,7 @@ public class PublicItemParser {
 
         for (PublicItemData itemData : publicItemData) {
             Item item = new Item();
+            item.setId(ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE));
             item.setRoomId(roomId);
             item.setCustomData(itemData.getId());
             item.getDefinition().setSprite(itemData.getSprite());
