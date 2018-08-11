@@ -26,12 +26,14 @@ public class PublicItemParser {
             put("gamehall_chair_wood", new TicTacToeTrigger(roomId));
         }};
 
+        int itemId = 0;
+
         List<Item> items = new ArrayList<>();
         List<PublicItemData> publicItemData = ItemDao.getPublicItemData(modelId);
 
         for (PublicItemData itemData : publicItemData) {
             Item item = new Item();
-            item.setId(ThreadLocalRandom.current().nextInt(0, Integer.MAX_VALUE));
+            item.setId(itemId++);
             item.setRoomId(roomId);
             item.setCustomData(itemData.getId());
             item.getDefinition().setSprite(itemData.getSprite());
