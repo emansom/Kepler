@@ -12,7 +12,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 public class ResetVoteCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("fuse_administrator_access");
+        this.permissions.add("default");
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ResetVoteCommand extends Command {
         room.getData().setRating(RoomDao.getRating(room.getId()));
 
         for (Player p : room.getEntityManager().getPlayers()) {
-            boolean voted =RoomDao.hasVoted(p.getDetails().getId(), room.getId());
+            boolean voted = RoomDao.hasVoted(p.getDetails().getId(), room.getId());
             p.send(new UPDATE_VOTES(voted, room.getData().getRating()));
         }
     }
