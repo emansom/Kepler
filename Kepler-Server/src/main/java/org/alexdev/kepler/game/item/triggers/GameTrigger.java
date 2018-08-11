@@ -4,8 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.item.games.GameTicTacToe;
-import org.alexdev.kepler.game.item.games.GamehallGame;
+import org.alexdev.kepler.game.games.GamehallGame;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomUser;
@@ -15,7 +14,6 @@ import org.alexdev.kepler.messages.outgoing.rooms.games.OPENGAMEBOARD;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public abstract class GameTrigger implements ItemTrigger {
     protected List<GamehallGame> gameInstances;

@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.item.games;
+package org.alexdev.kepler.game.games;
 
 import java.util.List;
 

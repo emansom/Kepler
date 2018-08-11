@@ -1,6 +1,5 @@
-package org.alexdev.kepler.game.item.games;
+package org.alexdev.kepler.game.games;
 
-import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;

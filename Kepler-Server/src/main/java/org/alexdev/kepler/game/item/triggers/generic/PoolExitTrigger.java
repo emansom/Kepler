@@ -1,15 +1,14 @@
-package org.alexdev.kepler.game.item.triggers.types;
+package org.alexdev.kepler.game.item.triggers.generic;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.ItemTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
-import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 
-public class PoolEnterTrigger implements ItemTrigger {
+public class PoolExitTrigger implements ItemTrigger {
     @Override
     public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
@@ -19,23 +18,28 @@ public class PoolEnterTrigger implements ItemTrigger {
         Position warp = null;
         Position goal = null;
 
-        if (item.getPosition().getX() == 20 && item.getPosition().getY() == 28) {
-            warp = new Position(21, 28);
-            goal = new Position(22, 28);
+        if (item.getPosition().getX() == 21 && item.getPosition().getY() == 28) {
+            warp = new Position(20, 28);
+            goal = new Position(19, 28);
         }
 
-        if (item.getPosition().getX() == 17 && item.getPosition().getY() == 21) {
-            warp = new Position(16, 22);
-            goal = new Position(16, 23);
+        if (item.getPosition().getX() == 17 && item.getPosition().getY() == 22) {
+            warp = new Position(17, 21);
+            goal = new Position(17, 20);
         }
 
-        if (item.getPosition().getX() == 31 && item.getPosition().getY() == 10) {
-            warp = new Position(30, 11);
-            goal = new Position(30, 12);
+        if (item.getPosition().getX() == 31 && item.getPosition().getY() == 11) {
+            warp = new Position(31, 10);
+            goal = new Position(31, 9);
+        }
+
+        if (item.getPosition().getX() == 20 && item.getPosition().getY() == 19) {
+            warp = new Position(19, 19);
+            goal = new Position(18, 19);
         }
 
         if (warp != null) {
-            PoolHandler.warpSwim(item, entity, warp, goal, false);
+            PoolHandler.warpSwim(item, entity, warp, goal, true);
         }
     }
 

@@ -1,9 +1,9 @@
-package org.alexdev.kepler.game.item.games;
+package org.alexdev.kepler.game.games;
 
 import java.util.List;
 
-public class GameChess extends GamehallGame {
-    public GameChess(int roomId, List<int[]> chairs) {
+public class GameTicTacToe extends GamehallGame {
+    public GameTicTacToe(int roomId, List<int[]> chairs) {
         super(roomId, chairs);
     }
 
@@ -14,6 +14,6 @@ public class GameChess extends GamehallGame {
      * @return the game type
      */
     public String getGameFuseType() {
-        return "Chess";
+        return "TicTacToe";
     }
 }

@@ -3,14 +3,16 @@ package org.alexdev.kepler.game.item.public_items;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.item.triggers.types.*;
+import org.alexdev.kepler.game.item.triggers.generic.*;
 import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.item.triggers.games.BattleShipsTrigger;
+import org.alexdev.kepler.game.item.triggers.games.ChessTrigger;
+import org.alexdev.kepler.game.item.triggers.games.TicTacToeTrigger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class PublicItemParser {
     public static List<Item> getPublicItems(int roomId, String modelId) {
