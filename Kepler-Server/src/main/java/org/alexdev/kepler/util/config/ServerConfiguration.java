@@ -36,6 +36,7 @@ public class ServerConfiguration {
         config.put("bind", "127.0.0.1");
         config.put("server.port",  "12321");
         config.put("mus.port", "12322");
+        config.put("rcon.bind",  "127.0.0.1");
         config.put("rcon.port",  "12309");
 
         config.put("log.connections", "true");
@@ -81,6 +82,20 @@ public class ServerConfiguration {
         if (envMusPort != null) {
             int parsedPort = Integer.parseUnsignedInt(envMusPort);
             config.put("mus.port", parsedPort > 0 ? Integer.toString(parsedPort) : "12322");
+        }
+
+        String envRconBind = System.getenv("KEPLER_RCON_BIND");
+
+        if (envRconBind != null) {
+            if (validator.isValid(envRconBind)) {
+                try {
+                    config.put("rcon.bind", InetAddress.getByName(envRconBind).getHostAddress());
+                } catch (UnknownHostException e) {
+                    // Ignore, will revert to default
+                }
+            } else {
+                log.error("Could not use %s as RCON bind", envRconBind);
+            }
         }
 
         String envRconPort = System.getenv("KEPLER_RCON_PORT");
@@ -142,6 +157,7 @@ public class ServerConfiguration {
         writer.println("server.port=" + config.get("server.port"));
         writer.println("");
         writer.println("[Rcon]");
+        writer.println("rcon.bind=" + config.get("rcon.bind"));
         writer.println("rcon.port=" + config.get("rcon.port"));
         writer.println("");
         writer.println("[Mus]");

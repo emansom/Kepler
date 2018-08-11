@@ -5,6 +5,7 @@ services:
         restart: always
         environment:
             KEPLER_BIND: 0.0.0.0
+            KEPLER_RCON_BIND: 0.0.0.0
             MYSQL_HOST: mariadb
             MYSQL_PORT: 3306
             MYSQL_USER: kepler
