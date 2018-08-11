@@ -2,7 +2,7 @@
 CREATE TABLE `external_texts` (
   `entry` varchar(255) CHARACTER SET utf8mb4 NOT NULL,
   `text` text CHARACTER SET utf8mb4 NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
 INSERT INTO `external_texts` (`entry`, `text`) VALUES
