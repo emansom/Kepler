@@ -37,6 +37,10 @@ public class PoolLiftTrigger implements ItemTrigger {
 
     @Override
     public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+        if (roomUser.isWalking()) {
+            return;
+        }
 
+        item.showProgram("open");
     }
 }

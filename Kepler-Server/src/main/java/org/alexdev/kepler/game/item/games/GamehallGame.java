@@ -1,17 +1,23 @@
 package org.alexdev.kepler.game.item.games;
 
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class GamehallGame {
     private String gameId;
     private int roomId;
+
     private Position chairPosition;
     private Position opponentPosition;
+
+    private Player firstPlayer;
+    private Player secondPlayer;
 
     public GamehallGame(int roomId, int[] chairPosition, int[] opponentPosition) {
         this.roomId = roomId;
@@ -109,5 +115,35 @@ public abstract class GamehallGame {
      */
     public Position getOpponentPosition() {
         return opponentPosition;
+    }
+
+    /**
+     * Get the opponent, aka the player which isn't the player in the parameters.
+     *
+     * @param player the player to not return
+     * @return the opponent they're playing
+     */
+    public Player getOpponent(Player player) {
+        if (this.firstPlayer == player) {
+            return this.secondPlayer;
+        }
+
+        return firstPlayer;
+    }
+    /**
+     * Add a player, will automatically assign it to the first or second player.
+     *
+     * @param player the player to add
+     */
+    public void addPlayer(Player player) {
+        if (this.firstPlayer == null) {
+            this.firstPlayer = player;
+            return;
+        }
+
+        if (this.secondPlayer == null) {
+            this.secondPlayer = player;
+            return;
+        }
     }
 }

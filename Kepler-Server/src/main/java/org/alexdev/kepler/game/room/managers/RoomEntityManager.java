@@ -214,8 +214,11 @@ public class RoomEntityManager {
 
         this.room.getEntities().remove(entity);
 
-        if (entity.getType() == EntityType.PLAYER) {
-            PoolHandler.disconnect((Player) entity);
+        // Set up trigger for leaving a current item
+        if (entity.getRoomUser().getCurrentItem() != null) {
+            if (entity.getRoomUser().getCurrentItem().getItemTrigger() != null) {
+                entity.getRoomUser().getCurrentItem().getItemTrigger().onEntityLeave(entity, entity.getRoomUser(), entity.getRoomUser().getCurrentItem());
+            }
         }
 
         RoomTile tile = entity.getRoomUser().getTile();

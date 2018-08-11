@@ -10,6 +10,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.messages.outgoing.rooms.games.CLOSEGAMEBOARD;
 import org.alexdev.kepler.messages.outgoing.rooms.games.OPENGAMEBOARD;
 
 import java.util.ArrayList;
@@ -68,22 +69,42 @@ public class TicTacToeTrigger implements ItemTrigger {
             return; // Game already started
         }
 
+        instance.addPlayer(player);
+
         // Open gameboard if there's a user in the other tile
         if (opponentTile.getEntities().size() > 0) {
             instance.createGameId();
+
             player.send(new OPENGAMEBOARD(instance.getGameId(), "TicTacToe"));
+            instance.getOpponent(player).send(new OPENGAMEBOARD(instance.getGameId(), "TicTacToe"));
         }
     }
 
     @Override
     public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+        if (entity.getType() != EntityType.PLAYER) {
+            return;
+        }
+
+        Player player = (Player) entity;
         GameTicTacToe instance = this.getGameInstance(item.getPosition());
 
         if (instance == null) {
             return;
         }
 
-        instance.resetGameId();
+        // Close the game
+        if (instance.getGameId() != null) {
+            player.send(new CLOSEGAMEBOARD(instance.getGameId(), "TicTacToe"));
+
+            Player opponent = instance.getOpponent(player);
+
+            if (opponent != null) {
+                opponent.send(new CLOSEGAMEBOARD(instance.getGameId(), "TicTacToe"));
+            }
+
+            instance.resetGameId();
+        }
     }
 
     /**

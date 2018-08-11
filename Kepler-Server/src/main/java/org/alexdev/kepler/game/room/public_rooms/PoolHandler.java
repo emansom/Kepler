@@ -118,26 +118,6 @@ public class PoolHandler {
         }
     }
 
-    /**
-     * Handle item program when player disconnects or leaves room.
-     * Will re-open up pool lift or the changing booths.
-     *
-     * @param player the player to handle
-     */
-    public static void disconnect(Player player) {
-        Item item = player.getRoomUser().getCurrentItem();
-        Room room = player.getRoomUser().getRoom();
-
-        if (item == null || room == null) {
-            return;
-        }
-
-        if (item.getDefinition().getSprite().equals("poolBooth") ||
-            item.getDefinition().getSprite().equals("poolLift")) {
-            item.showProgram("open");
-        }
-    }
-
     public static void checkPoolQueue(Entity entity) {
         if (entity.getRoomUser().isWalking()) {
             return;
