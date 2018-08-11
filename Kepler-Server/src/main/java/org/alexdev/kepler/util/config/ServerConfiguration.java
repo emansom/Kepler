@@ -34,10 +34,10 @@ public class ServerConfiguration {
     private static void setConfigurationDefaults() {
         // Default settings
         config.put("bind", "127.0.0.1");
-        config.put("server.port",  "12321");
+        config.put("server.port", "12321");
         config.put("mus.port", "12322");
-        config.put("rcon.bind",  "127.0.0.1");
-        config.put("rcon.port",  "12309");
+        config.put("rcon.bind", "127.0.0.1");
+        config.put("rcon.port", "12309");
 
         config.put("log.connections", "true");
         config.put("log.sent.packets", "false");
@@ -53,20 +53,13 @@ public class ServerConfiguration {
     }
 
     private static void loadEnvironmentConfiguration() {
-        // Get an InetAddressValidator
-        InetAddressValidator validator = InetAddressValidator.getInstance();
-
         String envBind = System.getenv("KEPLER_BIND");
 
         if (envBind != null) {
-            if (validator.isValid(envBind)) {
-                try {
-                    config.put("bind", InetAddress.getByName(envBind).getHostAddress());
-                } catch (UnknownHostException e) {
-                    // Ignore, will revert to default
-                }
-            } else {
-                log.error("Could not use %s as bind", envBind);
+            try {
+                config.put("bind", InetAddress.getByName(envBind).getHostAddress());
+            } catch (UnknownHostException e) {
+                log.warn("Could not use {} as bind for game server, reverting to default {}", envBind, config.get("bind"));
             }
         }
 
@@ -74,27 +67,28 @@ public class ServerConfiguration {
 
         if (envPort != null) {
             int parsedPort = Integer.parseUnsignedInt(envPort);
-            config.put("server.port", parsedPort > 0 ? Integer.toString(parsedPort) : "12321");
+            if (parsedPort > 0) {
+                config.put("server.port", Integer.toString(parsedPort));
+            }
         }
 
         String envMusPort = System.getenv("KEPLER_MUS_PORT");
 
         if (envMusPort != null) {
             int parsedPort = Integer.parseUnsignedInt(envMusPort);
-            config.put("mus.port", parsedPort > 0 ? Integer.toString(parsedPort) : "12322");
+            if (parsedPort > 0) {
+                config.put("mus.port", Integer.toString(parsedPort));
+            }
         }
 
         String envRconBind = System.getenv("KEPLER_RCON_BIND");
 
         if (envRconBind != null) {
-            if (validator.isValid(envRconBind)) {
-                try {
-                    config.put("rcon.bind", InetAddress.getByName(envRconBind).getHostAddress());
-                } catch (UnknownHostException e) {
-                    // Ignore, will revert to default
-                }
-            } else {
-                log.error("Could not use %s as RCON bind", envRconBind);
+            try {
+                config.put("rcon.bind", InetAddress.getByName(envRconBind).getHostAddress());
+            } catch (UnknownHostException e) {
+                // Ignore, will revert to default
+                log.warn("Could not use {} as bind for RCON server, reverting to default {}", envRconBind, config.get("rcon.bind"));
             }
         }
 
@@ -102,27 +96,28 @@ public class ServerConfiguration {
 
         if (envRconPort != null) {
             int parsedPort = Integer.parseUnsignedInt(envRconPort);
-            config.put("rcon.port", Integer.toString(Integer.parseUnsignedInt(envRconPort)));
+            if (parsedPort > 0) {
+                config.put("rcon.port", Integer.toString(parsedPort));
+            }
         }
 
         String envMysqlHost = System.getenv("MYSQL_HOST");
 
         if (envMysqlHost != null) {
-            if (validator.isValid(envMysqlHost)) {
-                try {
-                    config.put("mysql.hostname", InetAddress.getByName(envMysqlHost).getHostAddress());
-                } catch (UnknownHostException e) {
-                    // Ignore, will revert to default
-                }
-            } else {
-                log.error("Could not use %s as mysql host", envMysqlHost);
+            try {
+                config.put("mysql.hostname", InetAddress.getByName(envMysqlHost).getHostAddress());
+            } catch (UnknownHostException e) {
+                log.warn("Could not use {} as MariaDB host, reverting to default {}", envMysqlHost, config.get("mysql.hostname"));
             }
         }
 
         String envMysqlPort = System.getenv("MYSQL_PORT");
 
         if (envMysqlPort != null) {
-            config.put("mysql.port", Integer.toString(Integer.parseUnsignedInt(envMysqlPort)));
+            int parsedPort = Integer.parseUnsignedInt(envMysqlPort);
+            if (parsedPort > 0) {
+                config.put("mysql.port", Integer.toString(parsedPort));
+            }
         }
 
         String envMysqlUser = System.getenv("MYSQL_USER");
