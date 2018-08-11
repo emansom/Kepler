@@ -1,21 +1,21 @@
-package org.alexdev.kepler.game.item;
+package org.alexdev.kepler.game.item.public_items;
 
+import org.alexdev.kepler.dao.mysql.ItemDao;
+import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.triggers.ItemTrigger;
 import org.alexdev.kepler.game.item.triggers.types.PoolBoothTrigger;
 import org.alexdev.kepler.game.item.triggers.types.PoolEnterTrigger;
 import org.alexdev.kepler.game.item.triggers.types.PoolExitTrigger;
 import org.alexdev.kepler.game.item.triggers.types.PoolLiftTrigger;
 
-import java.io.*;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemPublicParser {
+public class PublicItemParser {
     private static Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
         put("poolExit", new PoolExitTrigger());
         put("poolEnter", new PoolEnterTrigger());
@@ -23,9 +23,52 @@ public class ItemPublicParser {
         put("poolBooth", new PoolBoothTrigger());
     }};
 
-    public static List<Item> getPublicItems(String modelId) {
+    public static List<Item> getPublicItems(int roomId, String modelId) {
         List<Item> items = new ArrayList<>();
-        File file = Paths.get("tools", "gamedata", "public_items", modelId + ".dat").toFile();
+        List<PublicItemData> publicItemData = ItemDao.getPublicItemData(modelId);
+
+        for (PublicItemData itemData : publicItemData) {
+            Item item = new Item();
+            item.setRoomId(roomId);
+            item.setCustomData(itemData.getId());
+            item.getDefinition().setSprite(itemData.getSprite());
+            item.getDefinition().setTopHeight(itemData.getTopHeight());
+            item.getDefinition().setLength(itemData.getLength());
+            item.getDefinition().setWidth(itemData.getWidth());
+            item.setCurrentProgram(itemData.getCurrentProgram());
+
+            if (itemTriggerMap.containsKey(itemData.getSprite())) {
+                item.setItemTrigger(itemTriggerMap.get(itemData.getSprite()));
+            }
+
+            item.getPosition().setX(itemData.getX());
+            item.getPosition().setY(itemData.getY());
+            item.getPosition().setZ(itemData.getZ());
+            item.getPosition().setRotation(itemData.getRotation());
+
+            if (itemData.getBehaviour().length() > 0) {
+                for (String behaviour : itemData.getBehaviour().split(",")) {
+                    item.getDefinition().addBehaviour(ItemBehaviour.valueOf(behaviour.toUpperCase()));
+                }
+            }
+
+            if (item.getDefinition().hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
+                if (item.getItemTrigger() == null) {
+                    item.setItemTrigger(ItemBehaviour.CAN_SIT_ON_TOP.getTrigger());
+                }
+            }
+
+            item.getDefinition().addBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT);
+
+            if (item.getDefinition().getSprite().equals("poolLift") ||
+                item.getDefinition().getSprite().equals("poolBooth")) {
+                item.showProgram("open");
+            }
+
+            items.add(item);
+        }
+
+        /*File file = Paths.get("tools", "gamedata", "public_items", modelId + ".dat").toFile();
 
         if (!file.exists()) {
             return items;
@@ -126,11 +169,48 @@ public class ItemPublicParser {
                     item.getDefinition().setLength(2);
                 }
 
+                Connection sqlConnection = null;
+                PreparedStatement preparedStatement = null;
+
+                String alphabet = "abcdefghijlmnopqrstuvwyz";
+
+                item.getDefinition().getBehaviourList().remove(ItemBehaviour.PUBLIC_SPACE_OBJECT);
+                String[] behaviourList = new String[item.getDefinition().getBehaviourList().size()];
+
+                for (int i = 0; i  < item.getDefinition().getBehaviourList().size(); i++) {
+                    behaviourList[i] = item.getDefinition().getBehaviourList().get(i).name().toLowerCase();
+                }
+
+                try {
+                    sqlConnection = Storage.getStorage().getConnection();
+                    preparedStatement = Storage.getStorage().prepare("INSERT INTO public_items (id, room_model, sprite, x, y, z, rotation, top_height, length, width, behaviour, current_program) " +
+                                    "VALUES (?, ?, ?, ?, ?, ? ,?, ?, ? ,? ,? ,?)", sqlConnection);
+                    preparedStatement.setString(1, alphabet.charAt(ThreadLocalRandom.current().nextInt(0, alphabet.length())) + "" + ThreadLocalRandom.current().nextInt(0, 999));
+                    preparedStatement.setString(2, modelId);
+                    preparedStatement.setString(3, item.getDefinition().getSprite());
+                    preparedStatement.setInt(4, item.getPosition().getX());
+                    preparedStatement.setInt(5, item.getPosition().getY());
+                    preparedStatement.setDouble(6, item.getPosition().getZ());
+                    preparedStatement.setInt(7, item.getPosition().getRotation());
+                    preparedStatement.setDouble(8, item.getDefinition().getTopHeight());
+                    preparedStatement.setInt(9, item.getDefinition().getWidth());
+                    preparedStatement.setInt(10, item.getDefinition().getLength());
+                    preparedStatement.setString(11, String.join(",", behaviourList));
+                    preparedStatement.setString(12, item.getCurrentProgram() != null ? item.getCurrentProgram() : "");
+                    preparedStatement.execute();
+
+                } catch (Exception e) {
+                    Storage.logError(e);
+                } finally {
+                    Storage.closeSilently(preparedStatement);
+                    Storage.closeSilently(sqlConnection);
+                }
+
                 items.add(item);
             }
         } catch (IOException e) {
             return items;
-        }
+        }*/
 
         return items;
     }

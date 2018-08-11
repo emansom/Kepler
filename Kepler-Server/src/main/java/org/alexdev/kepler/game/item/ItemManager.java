@@ -2,7 +2,9 @@ package org.alexdev.kepler.game.item;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.item.public_items.PublicItemData;
 
+import java.util.List;
 import java.util.Map;
 
 public class ItemManager {
@@ -44,7 +46,6 @@ public class ItemManager {
 
         return null;
     }
-
 
     /**
      * Get the {@link ItemManager} instance

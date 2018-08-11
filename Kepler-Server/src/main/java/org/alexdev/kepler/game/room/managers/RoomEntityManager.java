@@ -6,6 +6,7 @@ import org.alexdev.kepler.dao.mysql.RoomRightsDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.public_items.PublicItemParser;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -189,10 +190,7 @@ public class RoomEntityManager {
         this.room.setActive(true);
 
         if (this.room.isPublicRoom()) {
-            for (var item : this.room.getModel().getPublicItems()) {
-                item.setRoomId(this.room.getId());
-                this.room.getItems().add(item);
-            }
+            this.room.getItems().addAll(PublicItemParser.getPublicItems(this.room.getId(), this.room.getModel().getId()));
         } else {
             this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getId()));
         }
