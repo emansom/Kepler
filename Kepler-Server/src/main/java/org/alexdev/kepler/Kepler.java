@@ -145,7 +145,7 @@ public class Kepler {
 
     private static void setupRcon(InetAddressValidator validator) throws IOException {
         // Create the RCON instance
-        rconIP = ServerConfiguration.getString("bind");
+        rconIP = ServerConfiguration.getString("rcon.bind");
         rconPort = ServerConfiguration.getInteger("rcon.port");
 
         // Validate an IPv4 or IPv6 address
