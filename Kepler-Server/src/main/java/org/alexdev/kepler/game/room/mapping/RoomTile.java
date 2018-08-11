@@ -17,8 +17,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class RoomTile {
     private Room room;
     private Position position;
-    private Set<Entity> entities;
-    private List<Item> items;
+    private CopyOnWriteArrayList<Entity> entities;
+    private CopyOnWriteArrayList<Item> items;
 
     private double tileHeight;
     private double defaultHeight;
@@ -30,7 +30,7 @@ public class RoomTile {
         this.position = position;
         this.tileHeight = tileHeight;
         this.defaultHeight = tileHeight;
-        this.entities = new HashSet<>();
+        this.entities = new CopyOnWriteArrayList<>();
         this.items = new CopyOnWriteArrayList<>();
     }
 
@@ -250,7 +250,7 @@ public class RoomTile {
      *
      * @return the list of entities
      */
-    public Set<Entity> getEntities() {
+    public List<Entity> getEntities() {
         return this.entities;
     }
 
