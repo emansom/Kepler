@@ -160,6 +160,7 @@ public class MessageHandler {
         registerEvent(93, new DANCE());
         registerEvent(88, new STOP());
         registerEvent(229, new SET_SOUND_SETTING());
+        registerEvent(117, new GAMECOMMAND());
     }
 
 

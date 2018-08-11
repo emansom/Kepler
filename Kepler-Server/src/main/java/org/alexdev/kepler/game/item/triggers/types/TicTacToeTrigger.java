@@ -5,7 +5,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.games.GameTicTacToe;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomUser;
@@ -17,9 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class TicTacToeTrigger implements ItemTrigger {
+public class TicTacToeTrigger extends GameTrigger {
     private static final Map<int[], int[]> gamePairs =  new HashMap<>() {{
         put(new int[] { 15, 4}, new int[] { 15, 5});
         put(new int[] { 15, 9}, new int[] { 15, 10});
@@ -113,6 +112,7 @@ public class TicTacToeTrigger implements ItemTrigger {
      * @param position the position to look for the game instance
      * @return the game instance, if successful
      */
+    @Override
     public GameTicTacToe getGameInstance(Position position) {
         for (GameTicTacToe instances : this.gameInstances) {
             if (instances.getChairPosition().equals(position) ||
