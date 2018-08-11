@@ -175,6 +175,8 @@ public class RoomEntityManager {
         boolean voted = RoomDao.hasVoted(player.getDetails().getId(), room.getData().getId());
         player.send(new UPDATE_VOTES(voted, room.getData().getRating()));
 
+        // TODO: send pending CFH messages that haven't been sent before as sending when on hotelview doesn't work
+
         RoomDao.saveVisitors(this.room);
     }
 
