@@ -42,21 +42,17 @@ public abstract class GameTrigger implements ItemTrigger {
 
         // Handle game logic from here
         GamehallGame instance = this.getGameInstance(item.getPosition());
-        RoomTile opponentTile = instance.getOpponentTile(roomUser.getPosition());
 
-        if (instance.getGameId() != null) {
+        if (instance == null || instance.getGameId() != null) {
             return; // Game already started
         }
 
-        instance.addPlayer(player);
-
         // Open gameboard if there's a user in the other tile
-        if (opponentTile.getEntities().size() > 0) {
-            instance.createGameId();
-            instance.addPlayer((Player) opponentTile.getEntities().get(0));
+        if (instance.hasPlayersRequired()) {
+            instance.addPlayers();
 
-            player.send(new OPENGAMEBOARD(instance.getGameId(), this.getGameFuseType()));
-            instance.getOpponent(player).send(new OPENGAMEBOARD(instance.getGameId(), this.getGameFuseType()));
+            instance.createGameId();
+            instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
         }
     }
 
@@ -66,23 +62,15 @@ public abstract class GameTrigger implements ItemTrigger {
             return;
         }
 
-        Player player = (Player) entity;
         GamehallGame instance = this.getGameInstance(item.getPosition());
 
-        if (instance == null) {
-            return;
+        if (instance == null || instance.getGameId() == null) {
+            return; // Game hasn't started
         }
 
         // Close the game
         if (instance.getGameId() != null) {
-            player.send(new CLOSEGAMEBOARD(instance.getGameId(), this.getGameFuseType()));
-
-            Player opponent = instance.getOpponent(player);
-
-            if (opponent != null) {
-                opponent.send(new CLOSEGAMEBOARD(instance.getGameId(), this.getGameFuseType()));
-            }
-
+            instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
             instance.resetGameId();
             instance.removePlayers();
         }
@@ -96,9 +84,10 @@ public abstract class GameTrigger implements ItemTrigger {
      */
     public GamehallGame getGameInstance(Position position) {
         for (GamehallGame instances : this.gameInstances) {
-            if (instances.getChairPosition().equals(position) ||
-                    instances.getOpponentPosition().equals(position)) {
-                return instances;
+            for (RoomTile roomTile : instances.getTiles()) {
+                if (roomTile.getPosition().equals(position)) {
+                    return instances;
+                }
             }
         }
 
@@ -108,10 +97,5 @@ public abstract class GameTrigger implements ItemTrigger {
     /**
      * Gets the list of seats and their pairs as coordinates
      */
-    public abstract Map<int[], int[]> getChairPairs();
-
-    /**
-     * Get FUSE game type
-     */
-    public abstract String getGameFuseType();
+    public abstract List<List<int[]>> getChairGroups();
 }

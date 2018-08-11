@@ -5,24 +5,24 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.messages.types.MessageComposer;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public abstract class GamehallGame {
     private String gameId;
     private int roomId;
 
-    private Position chairPosition;
-    private Position opponentPosition;
+    private List<int[]> chairs;
+    private List<Player> players;
 
-    private Player firstPlayer;
-    private Player secondPlayer;
-
-    public GamehallGame(int roomId, int[] chairPosition, int[] opponentPosition) {
+    public GamehallGame(int roomId, List<int[]> chairs) {
         this.roomId = roomId;
-        this.chairPosition = new Position(chairPosition[0], chairPosition[1]);
-        this.opponentPosition = new Position(opponentPosition[0], opponentPosition[1]);
+        this.chairs = chairs;
+        this.players = new ArrayList<>();
     }
 
     /**
@@ -66,85 +66,103 @@ public abstract class GamehallGame {
     }
 
     /**
-     * Get the chair tile for this position.
+     * Get the opponents (not including the user supplied).
      *
-     * @return the room tile, if successful
+     * @param player the player to exclude
+     * @return
      */
-    public RoomTile getChairTile() {
-        return this.getTile(this.chairPosition);
+    public List<Player> getOpponents(Player player) {
+        return this.players.stream().filter(p -> p.getEntityId() != player.getEntityId()).collect(Collectors.toList());
     }
 
     /**
-     * Get the opponent tile for this position.
+     * Send a packet to all opponents except the user supplied
      *
-     * @return the opponent tile, if successful
+     * @param player the player to exclude
+     * @param messageComposer the message to send
      */
-    public RoomTile getOpponentTile(Position position) {
-        return this.chairPosition.equals(position) ? this.getTile(this.opponentPosition) : this.getTile(this.chairPosition);
-    }
-
-    /**
-     * Get the room tile for the specified position
-     *
-     * @param position the position
-     * @return the room tile, if successful
-     */
-    private RoomTile getTile(Position position) {
-        Room room = this.getRoom();
-
-        if (room != null) {
-            return room.getMapping().getTile(position);
+    public void sendToOpponents(Player player, MessageComposer messageComposer) {
+        for (Player p : this.getOpponents(player)) {
+            p.send(messageComposer);
         }
-
-        return null;
     }
 
     /**
-     * Get the chair opposition that this instance is running in.
+     * Send a packet to everyone playing
      *
-     * @return the chair position.
+     * @param messageComposer the packet to send
      */
-    public Position getChairPosition() {
-        return chairPosition;
-    }
-
-    /**
-     * Get the opponent position that this instance is running in.
-     *
-     * @return the opponent position.
-     */
-    public Position getOpponentPosition() {
-        return opponentPosition;
-    }
-
-    /**
-     * Get the opponent, aka the player which isn't the player in the parameters.
-     *
-     * @param player the player to not return
-     * @return the opponent they're playing
-     */
-    public Player getOpponent(Player player) {
-        if (this.firstPlayer == player) {
-            return this.secondPlayer;
+    public void sendToEveryone(MessageComposer messageComposer) {
+        for (Player p : this.players) {
+            p.send(messageComposer);
         }
-
-        return firstPlayer;
     }
+
     /**
      * Add a player, will automatically assign it to the first or second player.
      *
      * @param player the player to add
      */
     public void addPlayer(Player player) {
-        if (this.firstPlayer == null) {
-            this.firstPlayer = player;
+        if (this.players.contains(player)) {
             return;
         }
 
-        if (this.secondPlayer == null) {
-            this.secondPlayer = player;
-            return;
+        this.players.add(player);
+    }
+
+    /**
+     * Adds all players it finds from the chairs into the list.
+     */
+    public void addPlayers() {
+        for (RoomTile roomTile : this.getTiles()) {
+            if (roomTile.getEntities().size() > 0) {
+                this.players.add((Player) roomTile.getEntities().get(0));
+            }
         }
+    }
+
+    /**
+     * Get if the server has the correct amount of players required before the game starts.
+     *
+     * @return true, if successful
+     */
+    public boolean hasPlayersRequired() {
+        int players = 0;
+
+        for (RoomTile roomTile : this.getTiles()) {
+            if (roomTile.getEntities().size() > 0) {
+                players++;
+            }
+        }
+
+        return players >= 2;
+    }
+
+    /**
+     * Return the room tiles for this room.
+     *
+     * @return the list of room tiles
+     */
+    public List<RoomTile> getTiles() {
+        List<RoomTile> tiles = new ArrayList<>();
+        Room room = this.getRoom();
+
+        if (room == null) {
+            return tiles;
+        }
+
+        for (var coord : this.chairs) {
+            RoomTile roomTile = room.getMapping().getTile(coord[0], coord[1]);
+
+            if (roomTile == null) {
+                continue;
+            }
+
+            tiles.add(roomTile);
+        }
+
+        return tiles;
     }
 
     /**
@@ -152,7 +170,14 @@ public abstract class GamehallGame {
      * the game ends.
      */
     public void removePlayers() {
-        this.firstPlayer = null;
-        this.secondPlayer = null;
+        this.players.clear();
     }
+
+
+    /**
+     * Get FUSE game type
+     *
+     * @return the game type
+     */
+    public abstract String getGameFuseType();
 }

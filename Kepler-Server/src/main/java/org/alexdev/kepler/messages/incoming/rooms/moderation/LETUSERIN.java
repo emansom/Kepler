@@ -1,4 +1,4 @@
-package org.alexdev.kepler.messages.incoming.rooms;
+package org.alexdev.kepler.messages.incoming.rooms.moderation;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
