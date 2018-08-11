@@ -40,7 +40,32 @@ public class ChessTrigger extends GameTrigger {
      */
     @Override
     public List<List<int[]>> getChairPairs() {
-        return new ArrayList<>();
+        return new ArrayList<>() {{
+            add(new ArrayList<>() {{
+                add(new int[] { 2, 7});
+                add(new int[] { 2, 9});
+            }});
+
+            add(new ArrayList<>() {{
+                add(new int[] { 15, 9});
+                add(new int[] { 15, 10});
+            }});
+
+            add(new ArrayList<>() {{
+                add(new int[] { 15, 14});
+                add(new int[] { 15, 15});
+            }});
+
+            add(new ArrayList<>() {{
+                add(new int[] { 10, 4});
+                add(new int[] { 10, 5});
+            }});
+
+            add(new ArrayList<>() {{
+                add(new int[] { 10, 9});
+                add(new int[] { 10,10});
+            }});
+        }};
     }
 
     /**

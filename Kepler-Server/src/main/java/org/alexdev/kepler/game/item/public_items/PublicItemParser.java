@@ -23,7 +23,11 @@ public class PublicItemParser {
             put("poolLift", new PoolLiftTrigger());
             put("poolBooth", new PoolBoothTrigger());
             put("gamehall_chair_wood", ticTacToeTrigger);
-            put("gamehall_chair_green", chessTrigger);
+
+            if (modelId.equals("hallC")) {
+                put("gamehall_chair_green", chessTrigger);
+                put("chess_king_chair", chessTrigger);
+            }
         }};
 
         int itemId = 0;

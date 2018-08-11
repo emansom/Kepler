@@ -172,4 +172,12 @@ public abstract class GamehallGame {
     public void removePlayers() {
         this.players.clear();
     }
+
+
+    /**
+     * Get FUSE game type
+     *
+     * @return the game type
+     */
+    public abstract String getGameFuseType();
 }

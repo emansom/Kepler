@@ -88,13 +88,4 @@ public class TicTacToeTrigger extends GameTrigger {
             }});
         }};
     }
-
-    /**
-     * Get FUSE game type
-     *
-     * @return the game type
-     */
-    public String getGameFuseType() {
-        return "TicTacToe";
-    }
 }
