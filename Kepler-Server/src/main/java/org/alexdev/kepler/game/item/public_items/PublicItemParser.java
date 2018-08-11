@@ -3,12 +3,8 @@ package org.alexdev.kepler.game.item.public_items;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.item.triggers.types.TicTacToeTrigger;
+import org.alexdev.kepler.game.item.triggers.types.*;
 import org.alexdev.kepler.game.item.triggers.ItemTrigger;
-import org.alexdev.kepler.game.item.triggers.types.PoolBoothTrigger;
-import org.alexdev.kepler.game.item.triggers.types.PoolEnterTrigger;
-import org.alexdev.kepler.game.item.triggers.types.PoolExitTrigger;
-import org.alexdev.kepler.game.item.triggers.types.PoolLiftTrigger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,12 +14,16 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class PublicItemParser {
     public static List<Item> getPublicItems(int roomId, String modelId) {
+        TicTacToeTrigger ticTacToeTrigger = new TicTacToeTrigger(roomId);
+        ChessTrigger chessTrigger = new ChessTrigger(roomId);
+
         Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
             put("poolExit", new PoolExitTrigger());
             put("poolEnter", new PoolEnterTrigger());
             put("poolLift", new PoolLiftTrigger());
             put("poolBooth", new PoolBoothTrigger());
-            put("gamehall_chair_wood", new TicTacToeTrigger(roomId));
+            put("gamehall_chair_wood", ticTacToeTrigger);
+            put("gamehall_chair_green", chessTrigger);
         }};
 
         int itemId = 0;

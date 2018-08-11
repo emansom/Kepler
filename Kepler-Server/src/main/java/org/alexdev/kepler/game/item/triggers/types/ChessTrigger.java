@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TicTacToeTrigger extends GameTrigger {
-    public TicTacToeTrigger(int roomId) {
+public class ChessTrigger extends GameTrigger {
+    public ChessTrigger(int roomId) {
         for (var kvp : this.getChairPairs()) {
             this.gameInstances.add(new GameTicTacToe(roomId, kvp));
         }
@@ -40,53 +40,7 @@ public class TicTacToeTrigger extends GameTrigger {
      */
     @Override
     public List<List<int[]>> getChairPairs() {
-        return new ArrayList<>() {{
-           add(new ArrayList<>() {{
-               add(new int[] { 15, 4});
-               add(new int[] { 15, 5});
-           }});
-
-            add(new ArrayList<>() {{
-                add(new int[] { 15, 9});
-                add(new int[] { 15, 10});
-            }});
-
-            add(new ArrayList<>() {{
-                add(new int[] { 15, 14});
-                add(new int[] { 15, 15});
-            }});
-
-            add(new ArrayList<>() {{
-                add(new int[] { 10, 4});
-                add(new int[] { 10, 5});
-            }});
-
-            add(new ArrayList<>() {{
-                add(new int[] { 10, 9});
-                add(new int[] { 10,10});
-            }});
-
-            add(new ArrayList<>() {{
-                add(new int[] { 10, 14});
-                add(new int[] { 10, 15});
-            }});
-
-
-            add(new ArrayList<>() {{
-                add(new int[] { 5, 4});
-                add(new int[] { 5, 5});
-            }});
-
-            add(new ArrayList<>() {{
-                add(new int[] { 5, 9});
-                add(new int[] { 5, 10});
-            }});
-
-            add(new ArrayList<>() {{
-                add(new int[] { 5, 14});
-                add(new int[] { 5, 15});
-            }});
-        }};
+        return new ArrayList<>();
     }
 
     /**
@@ -95,6 +49,6 @@ public class TicTacToeTrigger extends GameTrigger {
      * @return the game type
      */
     public String getGameFuseType() {
-        return "TicTacToe";
+        return "Chess";
     }
 }
