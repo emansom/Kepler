@@ -42,15 +42,22 @@ public abstract class GameTrigger implements ItemTrigger {
         GamehallGame instance = this.getGameInstance(item.getPosition());
 
         if (instance == null || (instance.getPlayers().size() >= instance.getMaximumPeopleRequired())) {
-            return; // Game already started
+            return;
+        }
+
+        if (instance.getGameId() != null) {
+            int newPlayerCount = instance.getPlayers().size() + 1;
+
+            if (newPlayerCount >= instance.getMinimumPeopleRequired()) {
+                player.send(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType())); // Player joined mid-game
+            }
         }
 
         instance.getPlayers().add(player);
 
-        if (instance.getGameId() != null) {
-            player.send(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType())); // Player joined mid-game
-        } else {
-            if (instance.hasPlayersRequired()) {
+        if (instance.getGameId() == null) {
+            System.out.println("Calling: " + instance.hasPlayersRequired());
+            if (instance.hasPlayersRequired()) { // New game started
                 instance.createGameId();
                 instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
             }
@@ -66,19 +73,22 @@ public abstract class GameTrigger implements ItemTrigger {
         Player player = (Player) entity;
         GamehallGame instance = this.getGameInstance(item.getPosition());
 
-        if (instance == null || instance.getGameId() == null) {
-            return; // Game hasn't started
+        if (instance == null) {
+            return;
+        }
+
+        if (instance.getGameId() != null) { // If game has started
+            int newPlayerCount = instance.getPlayers().size() - 1;
+
+            if (newPlayerCount >= instance.getMinimumPeopleRequired()) {
+                player.send(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+            } else {
+                instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+                instance.resetGameId();
+            }
         }
 
         instance.getPlayers().remove(player);
-
-        if (instance.hasPlayersRequired()) {
-            player.send(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
-        } else {
-            instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
-            instance.resetGameId();
-            //instance.removePlayers();
-        }
     }
 
     /**
