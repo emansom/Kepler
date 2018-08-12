@@ -8,6 +8,16 @@ public class GameBattleShip extends GamehallGame {
     }
 
     @Override
+    public int getMaximumPeopleRequired() {
+        return 2;
+    }
+
+    @Override
+    public int getMinimumPeopleRequired() {
+        return 2;
+    }
+
+    @Override
     public String getGameFuseType() {
         return "BattleShip";
     }

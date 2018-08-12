@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
+import org.alexdev.kepler.game.games.GamehallGame;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
@@ -33,11 +34,13 @@ public class GAMECOMMAND implements MessageEvent {
         }
 
         GameTrigger trigger = (GameTrigger) currentItem.getItemTrigger();
+        GamehallGame game = trigger.getGameInstance(roomUser.getPosition());
 
         String gameId = contents[0];
         String command = contents[1];
 
         if (command.equals("CLOSE")) {
+            System.out.println("CLOSE COMMAND 1");
             trigger.onEntityLeave(player, roomUser, currentItem);
         }
     }

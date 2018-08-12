@@ -40,38 +40,29 @@ public class ChessTrigger extends GameTrigger {
     public List<List<int[]>> getChairGroups() {
         return new ArrayList<>() {{
             add(new ArrayList<>() {{
-                add(new int[] { 2, 7});
-                add(new int[] { 2, 9});
+                add(new int[]{2, 7});
+                add(new int[]{2, 9});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 6, 14});
-                add(new int[] { 4, 10});
+                add(new int[]{6, 14});
+                add(new int[]{4, 10});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 12, 14});
-                add(new int[] { 12, 12});
+                add(new int[]{12, 14});
+                add(new int[]{12, 12});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 13, 7});
-                add(new int[] { 13, 5});
+                add(new int[]{13, 7});
+                add(new int[]{13, 5});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 7, 3});
-                add(new int[] { 9, 3});
+                add(new int[]{7, 3});
+                add(new int[]{9, 3});
             }});
         }};
-    }
-
-    /**
-     * Get FUSE game type
-     *
-     * @return the game type
-     */
-    public String getGameFuseType() {
-        return "Chess";
     }
 }

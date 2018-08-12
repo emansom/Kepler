@@ -70,7 +70,7 @@ public class NettyServer  {
                 Log.getErrorLogger().error("Failed to start server on address: {}:{}", this.getIp(), this.getPort());
                 Log.getErrorLogger().error("Please double check there's no programs using the same port, and you have set the correct IP address to listen on.", this.getIp(), this.getPort());
             } else {
-                log.info("Server is listening on {}:{}", this.getIp(), this.getPort());
+                log.info("Game server is listening on {}:{}", this.getIp(), this.getPort());
             }
         });
     }

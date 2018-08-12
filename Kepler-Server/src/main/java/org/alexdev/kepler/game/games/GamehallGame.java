@@ -1,5 +1,9 @@
 package org.alexdev.kepler.game.games;
 
+import gherkin.lexer.En;
+import gherkin.lexer.Pl;
+import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
@@ -39,7 +43,7 @@ public abstract class GamehallGame {
      * Generate the unique game ID instance for this pair.
      */
     public void createGameId() {
-        String alphabet = "abcdefghijlmnopqrstuvwyz";
+        String alphabet = "abcdefghijlmnopqrstuvwyz1234567890";
         StringBuilder gameId = new StringBuilder();
 
         for (int i = 0; i < 6; i++) {
@@ -47,6 +51,10 @@ public abstract class GamehallGame {
         }
 
         this.gameId = gameId.toString();
+
+        for (Player player : this.players) {
+            player.getRoomUser().setCurrentGameId(this.gameId);
+        }
     }
 
     /**
@@ -78,7 +86,7 @@ public abstract class GamehallGame {
     /**
      * Send a packet to all opponents except the user supplied
      *
-     * @param player the player to exclude
+     * @param player          the player to exclude
      * @param messageComposer the message to send
      */
     public void sendToOpponents(Player player, MessageComposer messageComposer) {
@@ -98,28 +106,8 @@ public abstract class GamehallGame {
         }
     }
 
-    /**
-     * Add a player, will automatically assign it to the first or second player.
-     *
-     * @param player the player to add
-     */
-    public void addPlayer(Player player) {
-        if (this.players.contains(player)) {
-            return;
-        }
-
-        this.players.add(player);
-    }
-
-    /**
-     * Adds all players it finds from the chairs into the list.
-     */
-    public void addPlayers() {
-        for (RoomTile roomTile : this.getTiles()) {
-            if (roomTile.getEntities().size() > 0) {
-                this.players.add((Player) roomTile.getEntities().get(0));
-            }
-        }
+    public List<Player> getPlayers() {
+        return this.players;
     }
 
     /**
@@ -128,15 +116,40 @@ public abstract class GamehallGame {
      * @return true, if successful
      */
     public boolean hasPlayersRequired() {
-        int players = 0;
+        return this.players.size() >= this.getMinimumPeopleRequired();
+    }
+
+    public List<Player> addPlayers() {
+        List<Player> newPlayers = new ArrayList<>();
 
         for (RoomTile roomTile : this.getTiles()) {
-            if (roomTile.getEntities().size() > 0) {
-                players++;
+            if (roomTile.getEntities().isEmpty()) {
+                continue;
             }
+
+            Entity entity = roomTile.getEntities().get(0);
+
+            if (entity.getType() != EntityType.PLAYER) {
+                continue;
+            }
+
+            if (entity.getRoomUser().getCurrentGameId() != null) {
+                continue;
+            }
+
+            Player player = (Player) entity;
+
+            if (this.players.contains(player)) {
+                continue;
+            }
+
+            player.getRoomUser().setCurrentGameId(this.gameId);
+
+            this.players.add(player);
+            newPlayers.add(player);
         }
 
-        return players >= 2;
+        return newPlayers;
     }
 
     /**
@@ -173,11 +186,24 @@ public abstract class GamehallGame {
         this.players.clear();
     }
 
-
     /**
      * Get FUSE game type
      *
      * @return the game type
      */
     public abstract String getGameFuseType();
+
+    /**
+     * Get the minimum people required for a game to start
+     *
+     * @return the required amount of people
+     */
+    public abstract int getMinimumPeopleRequired();
+
+    /**
+     * Get the maximum people required before no one else is allowed to join
+     *
+     * @return the max people required
+     */
+    public abstract int getMaximumPeopleRequired();
 }

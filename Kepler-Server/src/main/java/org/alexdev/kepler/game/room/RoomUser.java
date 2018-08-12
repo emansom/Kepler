@@ -57,6 +57,8 @@ public class RoomUser {
     private List<Item> tradeItems;
     private boolean tradeAccept;
 
+    private String currentGameId;
+
     public RoomUser(Entity entity) {
         this.entity = entity;
         this.tradeItems = new ArrayList<>();
@@ -787,5 +789,13 @@ public class RoomUser {
 
     public void setRollingData(RollingData rollingData) {
         this.rollingData = rollingData;
+    }
+
+    public String getCurrentGameId() {
+        return currentGameId;
+    }
+
+    public void setCurrentGameId(String currentGameId) {
+        this.currentGameId = currentGameId;
     }
 }

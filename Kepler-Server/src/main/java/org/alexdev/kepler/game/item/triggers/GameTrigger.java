@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.item.triggers;
 
+import gherkin.lexer.En;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -41,16 +42,26 @@ public abstract class GameTrigger implements ItemTrigger {
         // Handle game logic from here
         GamehallGame instance = this.getGameInstance(item.getPosition());
 
-        if (instance == null || instance.getGameId() != null) {
-            return; // Game already started
+        if (instance == null || (instance.getPlayers().size() >= instance.getMaximumPeopleRequired())) {
+            return;
         }
 
-        // Open gameboard if there's a user in the other tile
-        if (instance.hasPlayersRequired()) {
-            instance.addPlayers();
+        List<Player> joinedPlayers = instance.addPlayers();
 
-            instance.createGameId();
-            instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+        if (instance.getGameId() != null) {
+            if (instance.getPlayers().size() >= instance.getMinimumPeopleRequired()) {
+
+                for (Player p : joinedPlayers) {
+                    p.send(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType())); // Player joined mid-game
+                }
+            }
+        }
+
+        if (instance.getGameId() == null) {
+            if (instance.hasPlayersRequired()) { // New game started
+                instance.createGameId();
+                instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+            }
         }
     }
 
@@ -60,17 +71,32 @@ public abstract class GameTrigger implements ItemTrigger {
             return;
         }
 
+        Player player = (Player) entity;
         GamehallGame instance = this.getGameInstance(item.getPosition());
 
-        if (instance == null || instance.getGameId() == null) {
-            return; // Game hasn't started
+        if (instance == null) {
+            return;
         }
 
-        // Close the game
-        if (instance.getGameId() != null) {
-            instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+        if (roomUser.getCurrentGameId() == null) {
+            return;
+        }
+
+        if (instance.getGameId() != null) { // If game has started
+            int newPlayerCount = instance.getPlayers().size() - 1;
+
+            if (newPlayerCount >= instance.getMinimumPeopleRequired()) {
+                player.send(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+            } else {
+                instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+            }
+        }
+
+        instance.getPlayers().remove(player);
+        roomUser.setCurrentGameId(null);
+
+        if (!instance.hasPlayersRequired()) {
             instance.resetGameId();
-            instance.removePlayers();
         }
     }
 

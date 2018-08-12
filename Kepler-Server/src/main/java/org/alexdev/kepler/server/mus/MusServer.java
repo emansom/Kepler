@@ -70,7 +70,7 @@ public class MusServer {
                 Log.getErrorLogger().error("Failed to start MUS server on address: {}:{}", this.getIp(), this.getPort());
                 Log.getErrorLogger().error("Please double check there's no programs using the same port, and you have set the correct IP address to listen on.", this.getIp(), this.getPort());
             } else {
-                log.info("MUS Server is listening on {}:{}", this.getIp(), this.getPort());
+                log.info("MultiUserServer (MUS) is listening on {}:{}", this.getIp(), this.getPort());
             }
         });
     }

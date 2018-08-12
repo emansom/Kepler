@@ -39,50 +39,50 @@ public class TicTacToeTrigger extends GameTrigger {
     @Override
     public List<List<int[]>> getChairGroups() {
         return new ArrayList<>() {{
-           add(new ArrayList<>() {{
-               add(new int[] { 15, 4});
-               add(new int[] { 15, 5});
-           }});
-
             add(new ArrayList<>() {{
-                add(new int[] { 15, 9});
-                add(new int[] { 15, 10});
+                add(new int[]{15, 4});
+                add(new int[]{15, 5});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 15, 14});
-                add(new int[] { 15, 15});
+                add(new int[]{15, 9});
+                add(new int[]{15, 10});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 10, 4});
-                add(new int[] { 10, 5});
+                add(new int[]{15, 14});
+                add(new int[]{15, 15});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 10, 9});
-                add(new int[] { 10,10});
+                add(new int[]{10, 4});
+                add(new int[]{10, 5});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 10, 14});
-                add(new int[] { 10, 15});
+                add(new int[]{10, 9});
+                add(new int[]{10, 10});
+            }});
+
+            add(new ArrayList<>() {{
+                add(new int[]{10, 14});
+                add(new int[]{10, 15});
             }});
 
 
             add(new ArrayList<>() {{
-                add(new int[] { 5, 4});
-                add(new int[] { 5, 5});
+                add(new int[]{5, 4});
+                add(new int[]{5, 5});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 5, 9});
-                add(new int[] { 5, 10});
+                add(new int[]{5, 9});
+                add(new int[]{5, 10});
             }});
 
             add(new ArrayList<>() {{
-                add(new int[] { 5, 14});
-                add(new int[] { 5, 15});
+                add(new int[]{5, 14});
+                add(new int[]{5, 15});
             }});
         }};
     }

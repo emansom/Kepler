@@ -7,12 +7,17 @@ public class GameChess extends GamehallGame {
         super(roomId, chairs);
     }
 
+    @Override
+    public int getMaximumPeopleRequired() {
+        return 2;
+    }
 
-    /**
-     * Get FUSE game type
-     *
-     * @return the game type
-     */
+    @Override
+    public int getMinimumPeopleRequired() {
+        return 2;
+    }
+
+    @Override
     public String getGameFuseType() {
         return "Chess";
     }

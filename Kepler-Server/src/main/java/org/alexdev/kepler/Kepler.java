@@ -117,9 +117,9 @@ public class Kepler {
             // Get an InetAddressValidator
             InetAddressValidator validator = InetAddressValidator.getInstance();
 
-            setupServer(validator);
             setupRcon(validator);
             setupMus(validator);
+            setupServer(validator);
 
             Runtime.getRuntime().addShutdownHook(new Thread(Kepler::dispose));
         } catch (Exception e) {
@@ -132,7 +132,7 @@ public class Kepler {
         serverPort = ServerConfiguration.getInteger("server.port");
 
         if (!validator.isValid(serverIP)) {
-            log.error("%s is not a valid server IP", serverIP);
+            log.error("The server address supplied '{}' is not a valid IP", rconIP);
             return;
         }
 
@@ -150,7 +150,7 @@ public class Kepler {
 
         // Validate an IPv4 or IPv6 address
         if (!validator.isValid(rconIP)) {
-            log.error("%s is not a valid IP", rconIP);
+            log.error("The RCON address supplied '{}' is not a valid IP", rconIP);
             return;
         }
 
@@ -167,7 +167,7 @@ public class Kepler {
 
         if (musServerIP.length() > 0) {
             if (!validator.isValid(musServerIP)) {
-                log.error("%s is not a valid IP", musServerIP);
+                log.error("The MUS address supplied '{}' is not a valid IP", rconIP);
                 return;
             }
 
