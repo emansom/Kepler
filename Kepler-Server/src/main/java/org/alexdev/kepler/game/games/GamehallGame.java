@@ -78,7 +78,7 @@ public abstract class GamehallGame {
     /**
      * Send a packet to all opponents except the user supplied
      *
-     * @param player the player to exclude
+     * @param player          the player to exclude
      * @param messageComposer the message to send
      */
     public void sendToOpponents(Player player, MessageComposer messageComposer) {
@@ -98,28 +98,8 @@ public abstract class GamehallGame {
         }
     }
 
-    /**
-     * Add a player, will automatically assign it to the first or second player.
-     *
-     * @param player the player to add
-     */
-    public void addPlayer(Player player) {
-        if (this.players.contains(player)) {
-            return;
-        }
-
-        this.players.add(player);
-    }
-
-    /**
-     * Adds all players it finds from the chairs into the list.
-     */
-    public void addPlayers() {
-        for (RoomTile roomTile : this.getTiles()) {
-            if (roomTile.getEntities().size() > 0) {
-                this.players.add((Player) roomTile.getEntities().get(0));
-            }
-        }
+    public List<Player> getPlayers() {
+        return this.players;
     }
 
     /**
@@ -128,15 +108,7 @@ public abstract class GamehallGame {
      * @return true, if successful
      */
     public boolean hasPlayersRequired() {
-        int players = 0;
-
-        for (RoomTile roomTile : this.getTiles()) {
-            if (roomTile.getEntities().size() > 0) {
-                players++;
-            }
-        }
-
-        return players >= 2;
+        return this.players.size() >= this.getMinimumPeopleRequired();
     }
 
     /**
@@ -173,11 +145,24 @@ public abstract class GamehallGame {
         this.players.clear();
     }
 
-
     /**
      * Get FUSE game type
      *
      * @return the game type
      */
     public abstract String getGameFuseType();
+
+    /**
+     * Get the minimum people required for a game to start
+     *
+     * @return the required amount of people
+     */
+    public abstract int getMinimumPeopleRequired();
+
+    /**
+     * Get the maximum people required before no one else is allowed to join
+     *
+     * @return the max people required
+     */
+    public abstract int getMaximumPeopleRequired();
 }

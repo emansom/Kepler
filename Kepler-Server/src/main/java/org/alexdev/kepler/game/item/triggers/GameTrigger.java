@@ -41,16 +41,19 @@ public abstract class GameTrigger implements ItemTrigger {
         // Handle game logic from here
         GamehallGame instance = this.getGameInstance(item.getPosition());
 
-        if (instance == null || instance.getGameId() != null) {
+        if (instance == null || (instance.getPlayers().size() >= instance.getMaximumPeopleRequired())) {
             return; // Game already started
         }
 
-        // Open gameboard if there's a user in the other tile
-        if (instance.hasPlayersRequired()) {
-            instance.addPlayers();
+        instance.getPlayers().add(player);
 
-            instance.createGameId();
-            instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+        if (instance.getGameId() != null) {
+            player.send(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType())); // Player joined mid-game
+        } else {
+            if (instance.hasPlayersRequired()) {
+                instance.createGameId();
+                instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+            }
         }
     }
 
@@ -60,14 +63,18 @@ public abstract class GameTrigger implements ItemTrigger {
             return;
         }
 
+        Player player = (Player) entity;
         GamehallGame instance = this.getGameInstance(item.getPosition());
 
         if (instance == null || instance.getGameId() == null) {
             return; // Game hasn't started
         }
 
-        // Close the game
-        if (instance.getGameId() != null) {
+        instance.getPlayers().remove(player);
+
+        if (instance.hasPlayersRequired()) {
+            player.send(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+        } else {
             instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
             instance.resetGameId();
             instance.removePlayers();

@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.item.public_items;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.item.triggers.games.PokerTrigger;
 import org.alexdev.kepler.game.item.triggers.generic.*;
 import org.alexdev.kepler.game.item.triggers.ItemTrigger;
 import org.alexdev.kepler.game.item.triggers.games.BattleShipsTrigger;
@@ -19,6 +20,7 @@ public class PublicItemParser {
         TicTacToeTrigger ticTacToeTrigger = new TicTacToeTrigger(roomId);
         ChessTrigger chessTrigger = new ChessTrigger(roomId);
         BattleShipsTrigger battleShipsTrigger = new BattleShipsTrigger(roomId);
+        PokerTrigger pokerTrigger = new PokerTrigger(roomId);
 
         Map<String, ItemTrigger> itemTriggerMap = new HashMap<>() {{
             put("poolExit", new PoolExitTrigger());
@@ -34,6 +36,10 @@ public class PublicItemParser {
 
             if (modelId.equals("hallB")) {
                 put("gamehall_chair_green", battleShipsTrigger);
+            }
+
+            if (modelId.equals("hallD")) {
+                put("gamehall_chair_green", pokerTrigger);
             }
         }};
 

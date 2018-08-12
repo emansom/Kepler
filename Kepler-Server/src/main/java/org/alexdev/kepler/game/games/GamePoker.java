@@ -2,14 +2,14 @@ package org.alexdev.kepler.game.games;
 
 import java.util.List;
 
-public class GameTicTacToe extends GamehallGame {
-    public GameTicTacToe(int roomId, List<int[]> chairs) {
-        super(roomId, chairs);
+public class GamePoker extends GamehallGame {
+    public GamePoker(int roomId, List<int[]> kvp) {
+        super(roomId, kvp);
     }
 
     @Override
     public int getMaximumPeopleRequired() {
-        return 2;
+        return 4;
     }
 
     @Override
@@ -19,6 +19,6 @@ public class GameTicTacToe extends GamehallGame {
 
     @Override
     public String getGameFuseType() {
-        return "TicTacToe";
+        return "Poker";
     }
 }
