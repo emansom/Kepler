@@ -79,11 +79,8 @@ public abstract class GameTrigger implements ItemTrigger {
         }
 
         if (roomUser.getCurrentGameId() == null) {
-            System.out.println("CLOSE COMMAND 2");
             return;
         }
-
-        System.out.println("called 123");
 
         if (instance.getGameId() != null) { // If game has started
             int newPlayerCount = instance.getPlayers().size() - 1;
