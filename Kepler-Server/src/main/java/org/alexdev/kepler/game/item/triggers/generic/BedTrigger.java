@@ -46,8 +46,9 @@ public class BedTrigger implements ItemTrigger {
 
             roomUser.getPosition().setRotation(item.getPosition().getRotation());
             roomUser.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
-            roomUser.setNeedsUpdate(true);
         }
+
+        roomUser.setNeedsUpdate(true);
     }
 
     @Override
