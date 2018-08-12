@@ -181,7 +181,7 @@ public class Kepler {
 
             for (Player p : PlayerManager.getInstance().getPlayers()) {
                 // First send fancy maintenance popup to client
-                // (disconnect parameter denotes if the fancy popup is used or the more uglier one)
+                // (disconnect parameter denotes if the ugly popup is used or the more fancy one)
                 p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), false));
 
                 // Now disconnect the player
