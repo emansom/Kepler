@@ -5,19 +5,21 @@ import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
+import org.mariadb.jdbc.internal.util.PidFactory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GameTicTacToe extends GamehallGame {
-    private static char[] validSides = new char[] {
-        'O', 'X'
+    private static final int MAX_WIDTH = 23;
+    private static final int MAX_LENGTH = 24;
+
+    private static char[] validSides = new char[]{
+            'O', 'X'
     };
 
     private List<Player> playersInGame;
     private Map<Player, Character> playerSides;
+    private char[][] gameMap;
 
     public GameTicTacToe(int roomId, List<int[]> chairs) {
         super(roomId, chairs);
@@ -33,6 +35,7 @@ public class GameTicTacToe extends GamehallGame {
     public void gameStop() {
         this.playersInGame.clear();
         this.playerSides.clear();
+        this.gameMap = null;
     }
 
     @Override
@@ -59,12 +62,9 @@ public class GameTicTacToe extends GamehallGame {
             this.playerSides.put(player, side);
             this.playersInGame.add(player);
 
-            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE", String.valueOf(side)}));
-
             String[] playerNames = this.getPlayerNames();
 
-            // If only 1 player has chosen their side, then said that one only, when the 2nd player choses, both panels
-            // will be updated the current teammate playing.
+            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE", String.valueOf(side)}));
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
@@ -72,10 +72,52 @@ public class GameTicTacToe extends GamehallGame {
             if (this.playersInGame.size() != 2) {
                 return;
             }
-            String[] playerNames = this.getPlayerNames();
-            this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "BOARDDATA", playerNames[0], playerNames[1], ""}));
+
+            this.restartMap();
+            this.broadcastMap();
             return;
         }
+
+        if (command.equals("SETSECTOR")) {
+            int Y = Integer.parseInt(args[0]);
+            int X = Integer.parseInt(args[1]);
+
+            if (X >= MAX_WIDTH || Y >= MAX_LENGTH) {
+                return;
+            }
+
+            this.gameMap[X][Y] = this.playerSides.get(player);
+            this.broadcastMap();
+        }
+    }
+
+    private void restartMap() {
+        this.gameMap = new char[MAX_WIDTH][MAX_LENGTH];
+
+        for (int X = 0; X < MAX_WIDTH; X++) {
+            for (int Y = 0; Y < MAX_LENGTH; Y++) {
+                this.gameMap[X][Y] = '0';
+            }
+        }
+    }
+
+    public void broadcastMap() {
+        StringBuilder boardData = new StringBuilder();
+
+        for (char[] mapData : this.gameMap) {
+            for (char mapLetter : mapData) {
+                if (mapLetter == 0) {
+                    boardData.append("0");
+                } else {
+                    boardData.append(mapLetter);
+                }
+            }
+
+            boardData.append((char)13);
+        }
+
+        String[] playerNames = this.getPlayerNames();
+        this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "BOARDDATA", playerNames[0], playerNames[1], boardData.toString()}));
     }
 
     /**
@@ -85,7 +127,7 @@ public class GameTicTacToe extends GamehallGame {
      * @return the player names
      */
     private String[] getPlayerNames() {
-        String[] playerNames = new String[] { "", ""};
+        String[] playerNames = new String[]{"", ""};
 
         for (int i = 0; i < this.playersInGame.size(); i++) {
             playerNames[i] = this.playersInGame.get(i).getDetails().getName();
@@ -117,7 +159,7 @@ public class GameTicTacToe extends GamehallGame {
 
     @Override
     public int getMinimumPeopleRequired() {
-        return 2;
+        return 1;
     }
 
     @Override

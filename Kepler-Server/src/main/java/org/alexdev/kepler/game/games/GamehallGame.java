@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
@@ -30,7 +31,14 @@ public abstract class GamehallGame {
         this.players = new CopyOnWriteArrayList<>();
     }
 
+    /**
+     * Handler for when the game starts.
+     */
     public abstract void gameStart();
+
+    /**
+     * Handler for when the game stops.
+     */
     public abstract void gameStop();
 
     /**
@@ -91,7 +99,7 @@ public abstract class GamehallGame {
      * Get the opponents (not including the user supplied).
      *
      * @param player the player to exclude
-     * @return
+     * @return the list of opponents
      */
     public List<Player> getOpponents(Player player) {
         return this.players.stream().filter(p -> p.getEntityId() != player.getEntityId()).collect(Collectors.toList());
@@ -100,7 +108,7 @@ public abstract class GamehallGame {
     /**
      * Send a packet to all opponents except the user supplied
      *
-     * @param player          the player to exclude
+     * @param player the player to exclude
      * @param messageComposer the message to send
      */
     public void sendToOpponents(Player player, MessageComposer messageComposer) {
@@ -120,6 +128,11 @@ public abstract class GamehallGame {
         }
     }
 
+    /**
+     * Get the list of players at each table, this list dictates who is actually at a table. Create your own list
+     * in each {@link GamehallGame} implementation for currently active players, for example look at {@link GameTicTacToe}
+     * @return the list of players at each table
+     */
     public List<Player> getPlayers() {
         return this.players;
     }
@@ -203,7 +216,12 @@ public abstract class GamehallGame {
         return tiles;
     }
 
-    public boolean hasPosition(Position position) {
+    /**
+     * If this position is invalid, as in, the position is a chair to play on
+     * @param position the position
+     * @return true, if successful
+     */
+    private boolean hasPosition(Position position) {
         for (RoomTile roomTile : this.getTiles()) {
             if (roomTile.getPosition().equals(position)) {
                 return true;

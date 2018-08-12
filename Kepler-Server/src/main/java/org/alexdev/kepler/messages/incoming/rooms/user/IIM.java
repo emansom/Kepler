@@ -51,7 +51,7 @@ public class IIM implements MessageEvent {
         String arguments = contents.replace(gameId + " " + command, "");
 
         if (arguments.startsWith(" ")) {
-            arguments = arguments.substring(1);
+            arguments = arguments.trim();
         }
 
         game.handleCommand(player, room, player.getRoomUser().getCurrentItem(), command, arguments.split(" "));
