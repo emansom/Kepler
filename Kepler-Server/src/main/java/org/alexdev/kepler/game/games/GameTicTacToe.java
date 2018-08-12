@@ -76,6 +76,10 @@ public class GameTicTacToe extends GamehallGame {
         }
 
         if (command.equals("SETSECTOR")) {
+            if (this.playersInGame.size() < this.getMinimumPeopleRequired()) {
+                return; // Can't place objects until other player has joined.
+            }
+
             if (!this.playerSides.containsKey(player)) {
                 return;
             }
@@ -167,7 +171,7 @@ public class GameTicTacToe extends GamehallGame {
 
     @Override
     public int getMinimumPeopleRequired() {
-        return 1;
+        return 2;
     }
 
     @Override
