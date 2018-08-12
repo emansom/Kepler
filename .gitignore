@@ -16,6 +16,8 @@ gradlew
 gradlew.bat
 run.bat
 
+/tools/db/schema.sql
+
 config.ini
 locale.ini
 game.ini
