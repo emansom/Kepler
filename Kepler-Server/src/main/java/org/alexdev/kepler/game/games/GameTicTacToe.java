@@ -65,7 +65,7 @@ public class GameTicTacToe extends GamehallGame {
 
             String[] playerNames = this.getPlayerNames();
 
-            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE", String.valueOf(side)}));
+            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(side)}));
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
@@ -76,8 +76,18 @@ public class GameTicTacToe extends GamehallGame {
         }
 
         if (command.equals("SETSECTOR")) {
-            int Y = Integer.parseInt(args[0]);
-            int X = Integer.parseInt(args[1]);
+            if (!this.playerSides.containsKey(player)) {
+                return;
+            }
+
+            char side = args[0].charAt(0);
+
+            if (this.playerSides.get(player) != side) {
+                return;
+            }
+
+            int Y = Integer.parseInt(args[1]);
+            int X = Integer.parseInt(args[2]);
 
             if (X >= MAX_WIDTH || Y >= MAX_LENGTH) {
                 return;
@@ -127,7 +137,8 @@ public class GameTicTacToe extends GamehallGame {
         String[] playerNames = new String[]{"", ""};
 
         for (int i = 0; i < this.playersInGame.size(); i++) {
-            playerNames[i] = this.playersInGame.get(i).getDetails().getName();
+            Player player = this.playersInGame.get(i);
+            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player);
         }
 
         return playerNames;
