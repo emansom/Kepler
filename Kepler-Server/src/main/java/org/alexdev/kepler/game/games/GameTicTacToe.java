@@ -29,6 +29,7 @@ public class GameTicTacToe extends GamehallGame {
     public void gameStart() {
         this.playersInGame = new ArrayList<>();
         this.playerSides = new HashMap<>();
+        this.restartMap();
     }
 
     @Override
@@ -69,10 +70,6 @@ public class GameTicTacToe extends GamehallGame {
         }
 
         if (command.equals("RESTART")) {
-            if (this.playersInGame.size() != 2) {
-                return;
-            }
-
             this.restartMap();
             this.broadcastMap();
             return;
@@ -83,6 +80,10 @@ public class GameTicTacToe extends GamehallGame {
             int X = Integer.parseInt(args[1]);
 
             if (X >= MAX_WIDTH || Y >= MAX_LENGTH) {
+                return;
+            }
+
+            if (this.gameMap == null) {
                 return;
             }
 
@@ -106,11 +107,7 @@ public class GameTicTacToe extends GamehallGame {
 
         for (char[] mapData : this.gameMap) {
             for (char mapLetter : mapData) {
-                if (mapLetter == 0) {
-                    boardData.append("0");
-                } else {
-                    boardData.append(mapLetter);
-                }
+                boardData.append(mapLetter);
             }
 
             boardData.append((char)13);
