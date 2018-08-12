@@ -61,25 +61,37 @@ public class GameTicTacToe extends GamehallGame {
 
             player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE", String.valueOf(side)}));
 
-            String[] playerNames = new String[this.playersInGame.size()];
-
-            for (int i = 0; i < this.playersInGame.size(); i++) {
-                playerNames[i] = this.playersInGame.get(i).getDetails().getName();
-            }
+            String[] playerNames = this.getPlayerNames();
 
             // If only 1 player has chosen their side, then said that one only, when the 2nd player choses, both panels
             // will be updated the current teammate playing.
-            if (playerNames.length == 2) {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
-            } else {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0]}));
-            }
+            this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
         if (command.equals("RESTART")) {
-            // TODO: Clear game field
+            if (this.playersInGame.size() != 2) {
+                return;
+            }
+            String[] playerNames = this.getPlayerNames();
+            this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "BOARDDATA", playerNames[0], playerNames[1], ""}));
             return;
         }
+    }
+
+    /**
+     * Get the names of the people currently playing, always returns an array with
+     * a length of two, if the name is blank there's no player.
+     *
+     * @return the player names
+     */
+    private String[] getPlayerNames() {
+        String[] playerNames = new String[] { "", ""};
+
+        for (int i = 0; i < this.playersInGame.size(); i++) {
+            playerNames[i] = this.playersInGame.get(i).getDetails().getName();
+        }
+
+        return playerNames;
     }
 
     /**
