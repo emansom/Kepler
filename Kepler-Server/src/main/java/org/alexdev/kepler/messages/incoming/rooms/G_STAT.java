@@ -19,16 +19,18 @@ public class G_STAT implements MessageEvent {
         }
 
         Room room = player.getRoomUser().getRoom();
-        room.refreshRights(player);
 
-        //player.getRoomUser().setStatus(StatusType.CAMERA, " 20", 60, StatusType.BLANK, 10, 1);
+        // Only refresh rights when in private room
+        if (!room.isPublicRoom()) {
+            room.refreshRights(player);
+        }
 
         player.send(new USER_STATUSES(room.getEntities()));
         player.getRoomUser().setNeedsUpdate(true);
 
         for (Item item : room.getItems()) {
             if (item.getCurrentProgramValue().length() > 0) {
-                player.send(new SHOWPROGRAM(new String[] { item.getCurrentProgram(), item.getCurrentProgramValue() } ));
+                player.send(new SHOWPROGRAM(new String[] { item.getCurrentProgram(), item.getCurrentProgramValue() }));
             }
 
             // If item is requiring an update, apply animations etc
