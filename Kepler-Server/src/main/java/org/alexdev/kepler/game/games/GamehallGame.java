@@ -233,4 +233,16 @@ public abstract class GamehallGame {
      * @return the max people required
      */
     public abstract int getMaximumPeopleRequired();
+
+    /**
+     * Restarts the game.
+     *
+     * @param trigger the trigger used for this game piece
+     * @param item the item that the user is sitting on
+     */
+    public void restartGame(GameTrigger trigger, Item item){
+        for (Player player : this.players) {
+            trigger.onEntityLeave(player, player.getRoomUser(), item);
+        }
+    }
 }

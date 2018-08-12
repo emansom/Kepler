@@ -4,7 +4,9 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ public class GameTicTacToe extends GamehallGame {
         'O', 'X'
     };
 
+    private List<Player> playersInGame;
     private Map<Player, Character> playerSides;
 
     public GameTicTacToe(int roomId, List<int[]> chairs) {
@@ -22,11 +25,13 @@ public class GameTicTacToe extends GamehallGame {
 
     @Override
     public void gameStart() {
+        this.playersInGame = new ArrayList<>();
         this.playerSides = new HashMap<>();
     }
 
     @Override
     public void gameStop() {
+        this.playersInGame.clear();
         this.playerSides.clear();
     }
 
@@ -47,10 +52,36 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (getPlayerBySide(side) != null) {
+                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
                 return;
             }
 
             this.playerSides.put(player, side);
+            this.playersInGame.add(player);
+
+            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE", String.valueOf(side)}));
+
+            String[] playerNames = new String[this.playersInGame.size()];
+
+            for (int i = 0; i < this.playersInGame.size(); i++) {
+                playerNames[i] = this.playersInGame.get(i).getDetails().getName();
+            }
+
+            // If only 1 player has chosen their side, then said that one only, when the 2nd player choses, both panels
+            // will be updated the current teammate playing.
+            if (playerNames.length == 2) {
+                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
+            } else {
+                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0]}));
+            }
+        }
+
+        // Only allow restart game if the game has ended, but users can still end game if they walk away/disconnect etc
+        if (command.equals("RESTART")) {
+            if (this.playersInGame.isEmpty()) {
+                this.restartGame(trigger, item);
+            }
+            return;
         }
     }
 
@@ -77,7 +108,7 @@ public class GameTicTacToe extends GamehallGame {
 
     @Override
     public int getMinimumPeopleRequired() {
-        return 1;
+        return 2;
     }
 
     @Override
