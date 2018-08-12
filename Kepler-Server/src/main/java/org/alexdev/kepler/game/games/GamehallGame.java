@@ -144,8 +144,9 @@ public abstract class GamehallGame {
             }
 
             player.getRoomUser().setCurrentGameId(this.gameId);
-            this.players.add(player);
 
+            this.players.add(player);
+            newPlayers.add(player);
         }
 
         return newPlayers;
