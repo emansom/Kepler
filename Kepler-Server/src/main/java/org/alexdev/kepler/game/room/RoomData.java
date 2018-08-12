@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.room;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.Normalizer;
@@ -59,7 +60,8 @@ public class RoomData {
     }
 
     public void applyModelSettings() {
-        if (GameConfiguration.getInstance().getBoolean("debug")) {
+        if (ServerConfiguration.getBoolean("debug")) {
+            this.navigatorHide = false;
             return;
         }
 
