@@ -3,7 +3,7 @@ package org.alexdev.kepler.messages.incoming.messenger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.messenger.FOLLOW_ERROR;
-import org.alexdev.kepler.messages.outgoing.messenger.FOLLOW_REQUEST;
+import org.alexdev.kepler.messages.outgoing.messenger.ROOMFORWARD;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -54,6 +54,6 @@ public class FOLLOW_FRIEND implements MessageEvent {
         boolean isPublic = friend.getRoomUser().getRoom().isPublicRoom();
         int roomId = friend.getRoomUser().getRoom().getId();
 
-        player.send(new FOLLOW_REQUEST(isPublic, roomId));
+        player.send(new ROOMFORWARD(isPublic, roomId));
     }
 }
