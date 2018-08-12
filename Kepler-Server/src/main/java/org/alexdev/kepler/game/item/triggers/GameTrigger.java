@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.item.triggers;
 
-import gherkin.lexer.En;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -46,7 +45,7 @@ public abstract class GameTrigger implements ItemTrigger {
             return;
         }
 
-        List<Player> joinedPlayers = instance.addPlayers();
+        List<Player> joinedPlayers = instance.refreshPlayers();
 
         if (instance.getGameId() != null) {
             if (instance.getPlayers().size() >= instance.getMinimumPeopleRequired()) {

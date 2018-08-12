@@ -172,8 +172,11 @@ public class RoomEntityManager {
             player.send(new FLATPROPERTY("floor", this.room.getData().getFloor()));
         }
 
-        boolean voted = RoomDao.hasVoted(player.getDetails().getId(), room.getData().getId());
-        player.send(new UPDATE_VOTES(voted, room.getData().getRating()));
+        // Don't let the room owner vote on it's own room
+        boolean voted = this.room.getData().getOwnerId() == player.getDetails().getId()
+                || RoomDao.hasVoted(player.getDetails().getId(), room.getData().getId());
+
+        player.send(new UPDATE_VOTES(voted, this.room.getData().getRating()));
 
         // TODO: send pending CFH messages that haven't been sent before as sending when on hotelview doesn't work
 
