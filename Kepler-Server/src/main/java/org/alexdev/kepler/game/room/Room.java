@@ -15,6 +15,7 @@ import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
 import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUAROWNER;
 import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUARECONTROLLER;
+import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUNOTCONTROLLER;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
@@ -104,6 +105,8 @@ public class Room {
 
         if (hasRights(player.getDetails().getId())) {
             player.send(new YOUARECONTROLLER());
+        } else {
+            player.send(new YOUNOTCONTROLLER());
         }
 
         if (isOwner(player.getDetails().getId())) {
