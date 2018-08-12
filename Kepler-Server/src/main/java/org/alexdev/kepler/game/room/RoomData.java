@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.util.StringUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.StringUtils;
 
 import java.text.Normalizer;
@@ -58,6 +59,10 @@ public class RoomData {
     }
 
     public void applyModelSettings() {
+        if (GameConfiguration.getInstance().getBoolean("debug")) {
+            return;
+        }
+
         if (this.model.equals("rooftop_2")
                 || this.model.equals("old_skool1")
                 || this.model.equals("malja_bar_b")
