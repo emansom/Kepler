@@ -17,6 +17,11 @@ public class ROOM_RATING implements MessageEvent {
             return;
         }
 
+        // Room owner is not allowed to vote on his own room
+        if (room.getData().getOwnerId() == player.getDetails().getId()) {
+            return;
+        }
+
         int answer = reader.readInt();
 
         if (answer != 1 && answer != -1) {
