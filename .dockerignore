@@ -12,11 +12,18 @@
 .idea/workspace.xml
 /*.jar
 
+# ignore all *.class files in all folders, including build root
+**/*.class
+target/
+
+# ignore all markdown files
+*.md
+
 gradlew
 gradlew.bat
 run.bat
 
-/tools/db/schema.sql
+/tools/db
 
 config.ini
 locale.ini

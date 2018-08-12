@@ -23,7 +23,7 @@ public class RoomData {
     private String ccts;
     private int wallpaper;
     private int floor;
-    private boolean showName;
+    private boolean showOwnerName;
     private boolean superUsers;
     private int accessType;
     private String password;
@@ -48,7 +48,7 @@ public class RoomData {
         this.ccts = ccts;
         this.wallpaper = wallpaper;
         this.floor = floor;
-        this.showName = showName;
+        this.showOwnerName = showName;
         this.superUsers = superUsers;
         this.accessType = accessType;
         this.password = password;
@@ -250,12 +250,12 @@ public class RoomData {
         this.floor = floor;
     }
 
-    public boolean showName() {
-        return showName;
+    public boolean showOwnerName() {
+        return showOwnerName;
     }
 
-    public void setShowName(boolean showName) {
-        this.showName = showName;
+    public void setShowOwnerName(boolean showName) {
+        this.showOwnerName = showName;
     }
 
     public boolean allowSuperUsers() {

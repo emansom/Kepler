@@ -10,6 +10,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.FLAT_LETIN;
 import org.alexdev.kepler.messages.outgoing.user.LOCALISED_ERROR;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.StringUtil;
 
 public class TRYFLAT implements MessageEvent {
     @Override
@@ -19,11 +20,22 @@ public class TRYFLAT implements MessageEvent {
         String contents = reader.contents();
         String password = "";
 
+        // Check if data has been sent by client
+        if (contents.length() == 0) {
+            return;
+        }
+
+        // Client sends non-standard delimiters here, parsing..
         if (contents.contains("/")) {
-            roomId = Integer.parseInt(contents.split("/")[0]);
+            String roomIdStr = contents.split("/")[0];
+
+            if (StringUtil.isNumber(roomIdStr)) {
+                roomId = Integer.parseInt(roomIdStr);
+            }
+
             password = contents.split("/")[1];
         } else {
-            roomId = Integer.parseInt(reader.contents());
+            roomId = Integer.parseInt(contents);
         }
 
         Room room = RoomManager.getInstance().getRoomById(roomId);

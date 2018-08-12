@@ -3,11 +3,11 @@ package org.alexdev.kepler.messages.outgoing.messenger;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class FOLLOW_REQUEST extends MessageComposer {
+public class ROOMFORWARD extends MessageComposer {
     private final boolean isPublic;
     private final int roomId;
 
-    public FOLLOW_REQUEST(boolean isPublic, int roomId) {
+    public ROOMFORWARD(boolean isPublic, int roomId) {
         this.isPublic = isPublic;
         this.roomId = roomId;
     }
