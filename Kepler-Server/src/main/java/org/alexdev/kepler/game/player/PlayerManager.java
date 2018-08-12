@@ -2,8 +2,10 @@ package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSED;
 import org.alexdev.kepler.util.DateUtil;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -130,8 +132,13 @@ public class PlayerManager {
      * Close and dispose all users.
      */
     public void dispose() {
-        for (Player player : this.getPlayers()) {
-            player.kickFromServer(true);
+        for (Player p : this.getPlayers()) {
+            // First send fancy maintenance popup to client
+            // (disconnect parameter denotes if the ugly popup is used or the more fancy one)
+            p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), false));
+
+            // Now disconnect the player
+            p.kickFromServer(true);
         }
     }
 
