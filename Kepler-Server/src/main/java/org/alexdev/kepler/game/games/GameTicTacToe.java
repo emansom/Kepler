@@ -106,6 +106,9 @@ public class GameTicTacToe extends GamehallGame {
         }
     }
 
+    /**
+     * Reset the game map.
+     */
     private void restartMap() {
         this.gameMap = new char[MAX_WIDTH][MAX_LENGTH];
 
@@ -116,6 +119,9 @@ public class GameTicTacToe extends GamehallGame {
         }
     }
 
+    /**
+     * Send the game map to the opponents.
+     */
     public void broadcastMap() {
         StringBuilder boardData = new StringBuilder();
 
