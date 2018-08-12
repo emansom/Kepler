@@ -75,8 +75,8 @@ public class RoomData {
                 || this.model.equals("hallway11")
                 || this.model.equals("hallA")
                 || this.model.equals("hallB")
-                || this.model.equals("hallC")) {
-                //|| this.model.equals("hallD")) {
+                || this.model.equals("hallC")
+                || this.model.equals("hallD")) {
             this.navigatorHide = true;
         }
 
