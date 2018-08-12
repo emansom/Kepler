@@ -98,6 +98,16 @@ public class GameConfiguration {
     }
 
     /**
+     * Get value from configuration and cast to a long.
+     *
+     * @param key the key to use
+     * @return value as long
+     */
+    public long getLong(String key) {
+        return Long.parseLong(config.getOrDefault(key, "0"));
+    }
+
+    /**
      * Reset all game configuration values.
      */
     public static void reset() {
