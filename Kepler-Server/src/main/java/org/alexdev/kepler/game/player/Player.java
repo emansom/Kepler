@@ -278,16 +278,15 @@ public class Player extends Entity {
      * Get rid of the player from the server.
      */
     public void kickFromServer(boolean closeSocket) {
-        //this.dispose();
-
         try {
             this.network.send(new HOTEL_LOGOUT(LogoutReason.DISCONNECT));
 
             if (closeSocket) {
                 this.network.disconnect();
             }
-        } catch (Exception ignored) { }
-
+        } catch (Exception ignored) {
+            // Ignore
+        }
     }
 
     /**
