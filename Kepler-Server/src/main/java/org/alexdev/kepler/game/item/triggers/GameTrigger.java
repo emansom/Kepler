@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.item.triggers;
 
+import gherkin.lexer.En;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -45,18 +46,18 @@ public abstract class GameTrigger implements ItemTrigger {
             return;
         }
 
-        if (instance.getGameId() != null) {
-            int newPlayerCount = instance.getPlayers().size() + 1;
+        List<Player> joinedPlayers = instance.addPlayers();
 
-            if (newPlayerCount >= instance.getMinimumPeopleRequired()) {
-                player.send(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType())); // Player joined mid-game
+        if (instance.getGameId() != null) {
+            if (instance.getPlayers().size() >= instance.getMinimumPeopleRequired()) {
+
+                for (Player p : joinedPlayers) {
+                    p.send(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType())); // Player joined mid-game
+                }
             }
         }
 
-        instance.getPlayers().add(player);
-
         if (instance.getGameId() == null) {
-            System.out.println("Calling: " + instance.hasPlayersRequired());
             if (instance.hasPlayersRequired()) { // New game started
                 instance.createGameId();
                 instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
@@ -77,6 +78,13 @@ public abstract class GameTrigger implements ItemTrigger {
             return;
         }
 
+        if (roomUser.getCurrentGameId() == null) {
+            System.out.println("CLOSE COMMAND 2");
+            return;
+        }
+
+        System.out.println("called 123");
+
         if (instance.getGameId() != null) { // If game has started
             int newPlayerCount = instance.getPlayers().size() - 1;
 
@@ -84,11 +92,15 @@ public abstract class GameTrigger implements ItemTrigger {
                 player.send(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
             } else {
                 instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
-                instance.resetGameId();
             }
         }
 
         instance.getPlayers().remove(player);
+        roomUser.setCurrentGameId(null);
+
+        if (!instance.hasPlayersRequired()) {
+            instance.resetGameId();
+        }
     }
 
     /**

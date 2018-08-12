@@ -40,6 +40,7 @@ public class GAMECOMMAND implements MessageEvent {
         String command = contents[1];
 
         if (command.equals("CLOSE")) {
+            System.out.println("CLOSE COMMAND 1");
             trigger.onEntityLeave(player, roomUser, currentItem);
         }
     }

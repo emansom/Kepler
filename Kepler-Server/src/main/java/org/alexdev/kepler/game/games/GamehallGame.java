@@ -1,5 +1,9 @@
 package org.alexdev.kepler.game.games;
 
+import gherkin.lexer.En;
+import gherkin.lexer.Pl;
+import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
@@ -47,6 +51,10 @@ public abstract class GamehallGame {
         }
 
         this.gameId = gameId.toString();
+
+        for (Player player : this.players) {
+            player.getRoomUser().setCurrentGameId(this.gameId);
+        }
     }
 
     /**
@@ -109,6 +117,38 @@ public abstract class GamehallGame {
      */
     public boolean hasPlayersRequired() {
         return this.players.size() >= this.getMinimumPeopleRequired();
+    }
+
+    public List<Player> addPlayers() {
+        List<Player> newPlayers = new ArrayList<>();
+
+        for (RoomTile roomTile : this.getTiles()) {
+            if (roomTile.getEntities().isEmpty()) {
+                continue;
+            }
+
+            Entity entity = roomTile.getEntities().get(0);
+
+            if (entity.getType() != EntityType.PLAYER) {
+                continue;
+            }
+
+            if (entity.getRoomUser().getCurrentGameId() != null) {
+                continue;
+            }
+
+            Player player = (Player) entity;
+
+            if (this.players.contains(player)) {
+                continue;
+            }
+
+            player.getRoomUser().setCurrentGameId(this.gameId);
+            this.players.add(player);
+
+        }
+
+        return newPlayers;
     }
 
     /**
