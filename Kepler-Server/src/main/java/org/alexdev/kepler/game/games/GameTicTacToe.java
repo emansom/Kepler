@@ -5,20 +5,40 @@ import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
-import org.mariadb.jdbc.internal.util.PidFactory;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class GameTicTacToe extends GamehallGame {
+    private static class GameToken {
+        private char token;
+        private char winningToken;
+
+        private GameToken(char token, char winningToken) {
+            this.token = token;
+            this.winningToken = winningToken;
+        }
+
+        private char getToken() {
+            return token;
+        }
+
+        private char getWinningToken() {
+            return winningToken;
+        }
+    }
+
     private static final int MAX_WIDTH = 23;
     private static final int MAX_LENGTH = 24;
 
-    private static char[] validSides = new char[]{
-            'O', 'X'
+    private static GameToken[] gameTokens = new GameToken[]{
+            new GameToken('O', 'q'),
+            new GameToken('X', '+')
     };
 
+
     private List<Player> playersInGame;
-    private Map<Player, Character> playerSides;
+    private Map<Player, GameToken> playerSides;
     private char[][] gameMap;
 
     public GameTicTacToe(int roomId, List<int[]> chairs) {
@@ -49,23 +69,30 @@ public class GameTicTacToe extends GamehallGame {
         }
 
         if (command.equals("CHOOSETYPE")) {
-            char side = args[0].charAt(0);
+            char sideChosen = args[0].charAt(0);
+            GameToken token = null;
 
-            if (side != validSides[0] && side != validSides[1]) {
+            for (GameToken side : gameTokens) {
+                if (side.getToken() == sideChosen) {
+                    token = side;
+                }
+            }
+
+            if (token == null) {
                 return;
             }
 
-            if (getPlayerBySide(side) != null) {
+            if (getPlayerBySide(sideChosen) != null) {
                 this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
                 return;
             }
 
-            this.playerSides.put(player, side);
+            this.playerSides.put(player, token);
             this.playersInGame.add(player);
 
             String[] playerNames = this.getPlayerNames();
 
-            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(side)}));
+            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(token.getToken())}));
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
@@ -86,7 +113,7 @@ public class GameTicTacToe extends GamehallGame {
 
             char side = args[0].charAt(0);
 
-            if (this.playerSides.get(player) != side) {
+            if (this.playerSides.get(player).getToken() != side) {
                 return;
             }
 
@@ -101,7 +128,7 @@ public class GameTicTacToe extends GamehallGame {
                 return;
             }
 
-            this.gameMap[X][Y] = this.playerSides.get(player);
+            this.gameMap[X][Y] = this.playerSides.get(player).getToken();
             this.broadcastMap();
         }
     }
@@ -148,7 +175,7 @@ public class GameTicTacToe extends GamehallGame {
 
         for (int i = 0; i < this.playersInGame.size(); i++) {
             Player player = this.playersInGame.get(i);
-            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player);
+            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player).getToken();
         }
 
         return playerNames;
@@ -162,7 +189,7 @@ public class GameTicTacToe extends GamehallGame {
      */
     public Player getPlayerBySide(char side) {
         for (var kvp : this.playerSides.entrySet()) {
-            if (kvp.getValue() == side) {
+            if (kvp.getValue().getToken() == side) {
                 return kvp.getKey();
             }
         }
