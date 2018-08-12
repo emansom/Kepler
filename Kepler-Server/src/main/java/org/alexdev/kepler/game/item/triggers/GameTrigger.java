@@ -77,7 +77,7 @@ public abstract class GameTrigger implements ItemTrigger {
         } else {
             instance.sendToEveryone(new CLOSEGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
             instance.resetGameId();
-            instance.removePlayers();
+            //instance.removePlayers();
         }
     }
 
