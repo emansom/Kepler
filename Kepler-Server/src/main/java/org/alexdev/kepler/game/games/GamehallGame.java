@@ -4,12 +4,14 @@ import gherkin.lexer.En;
 import gherkin.lexer.Pl;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
+import javax.print.attribute.standard.PDLOverrideSupported;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -119,7 +121,18 @@ public abstract class GamehallGame {
         return this.players.size() >= this.getMinimumPeopleRequired();
     }
 
-    public List<Player> addPlayers() {
+    /**
+     * Refresh players currently playing.
+     *
+     * @return the list of new players found
+     */
+    public List<Player> refreshPlayers() {
+        this.players.forEach(p -> {
+            if (p.getRoomUser().getRoom() == null || !this.hasPosition(p.getRoomUser().getPosition())) {
+                this.players.remove(p);
+            }
+        });
+
         List<Player> newPlayers = new ArrayList<>();
 
         for (RoomTile roomTile : this.getTiles()) {
@@ -176,6 +189,16 @@ public abstract class GamehallGame {
         }
 
         return tiles;
+    }
+
+    public boolean hasPosition(Position position) {
+        for (RoomTile roomTile : this.getTiles()) {
+            if (roomTile.getPosition().equals(position)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
