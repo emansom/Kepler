@@ -1,9 +1,9 @@
 package org.alexdev.kepler.game.games;
 
-import gherkin.lexer.En;
-import gherkin.lexer.Pl;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -11,7 +11,6 @@ import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
-import javax.print.attribute.standard.PDLOverrideSupported;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -22,14 +21,24 @@ public abstract class GamehallGame {
     private String gameId;
     private int roomId;
 
-    private List<int[]> chairs;
+    private List<int[]> chairCoordinates;
     private List<Player> players;
 
-    public GamehallGame(int roomId, List<int[]> chairs) {
+    public GamehallGame(int roomId, List<int[]> chairCoordinateList) {
         this.roomId = roomId;
-        this.chairs = chairs;
+        this.chairCoordinates = chairCoordinateList;
         this.players = new CopyOnWriteArrayList<>();
     }
+
+    /**
+     * Handle the incoming packet data from the game commands.
+     *
+     * @param player the player doing the command
+     * @param room the room the game is in
+     * @param item the item that the player is sitting on
+     * @param args the arguments
+     */
+    public abstract void handleCommand(Player player, Room room, Item item, String command, String[] args);
 
     /**
      * Gets the unique game ID instance for this pair. Will
@@ -178,7 +187,7 @@ public abstract class GamehallGame {
             return tiles;
         }
 
-        for (var coord : this.chairs) {
+        for (var coord : this.chairCoordinates) {
             RoomTile roomTile = room.getMapping().getTile(coord[0], coord[1]);
 
             if (roomTile == null) {
@@ -199,14 +208,6 @@ public abstract class GamehallGame {
         }
 
         return false;
-    }
-
-    /**
-     * Set the first and second player to null for when
-     * the game ends.
-     */
-    public void removePlayers() {
-        this.players.clear();
     }
 
     /**

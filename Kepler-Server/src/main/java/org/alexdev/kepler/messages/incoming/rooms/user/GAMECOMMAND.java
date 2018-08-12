@@ -12,7 +12,8 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class GAMECOMMAND implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        String[] contents = reader.contents().split(" ");
+        String contents = reader.contents();
+        String[] commandArgs = reader.contents().split(" ");
 
         RoomUser roomUser = player.getRoomUser();
 
@@ -36,12 +37,18 @@ public class GAMECOMMAND implements MessageEvent {
         GameTrigger trigger = (GameTrigger) currentItem.getItemTrigger();
         GamehallGame game = trigger.getGameInstance(roomUser.getPosition());
 
-        String gameId = contents[0];
-        String command = contents[1];
-
-        if (command.equals("CLOSE")) {
-            System.out.println("CLOSE COMMAND 1");
-            trigger.onEntityLeave(player, roomUser, currentItem);
+        if (game == null) {
+            return;
         }
+
+        String gameId = commandArgs[0];
+        String command = commandArgs[1];
+
+        if (!gameId.equals(game.getGameId())) {
+            return;
+        }
+
+        String[] arguments = contents.replace(gameId + " " + command + " ", "").split(" ");
+        game.handleCommand(player, room, player.getRoomUser().getCurrentItem(), command, arguments);
     }
 }
