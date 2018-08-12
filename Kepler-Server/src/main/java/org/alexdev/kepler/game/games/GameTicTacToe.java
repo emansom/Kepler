@@ -76,7 +76,6 @@ public class GameTicTacToe extends GamehallGame {
             }
         }
 
-        // Only allow restart game if the game has ended, but users can still end game if they walk away/disconnect etc
         if (command.equals("RESTART")) {
             // TODO: Clear game field
             return;
