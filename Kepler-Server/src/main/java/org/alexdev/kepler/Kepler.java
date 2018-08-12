@@ -10,12 +10,14 @@ import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.MessageHandler;
+import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSED;
 import org.alexdev.kepler.server.mus.MusServer;
 import org.alexdev.kepler.server.mus.connection.MusClient;
 import org.alexdev.kepler.server.netty.NettyServer;
@@ -32,6 +34,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalTime;
 
 public class Kepler {
 
@@ -184,6 +187,17 @@ public class Kepler {
 
             log.info("Shutting down server!");
             isShutdown = true;
+
+            for (Player p : PlayerManager.getInstance().getPlayers()) {
+                // First send fancy maintenance popup to client
+                p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), false));
+
+                // Then send less fancy disconnect popup
+                p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), true));
+
+                // Now disconnect the player
+                p.kickFromServer(true);
+            }
 
             // TODO: all the managers
             PlayerManager.getInstance().dispose();

@@ -14,6 +14,8 @@ import org.alexdev.kepler.messages.outgoing.handshake.RIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.messages.outgoing.user.HOTEL_LOGOUT;
+import org.alexdev.kepler.messages.outgoing.user.HOTEL_LOGOUT.LogoutReason;
 import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
@@ -279,6 +281,8 @@ public class Player extends Entity {
         //this.dispose();
 
         try {
+            this.network.send(new HOTEL_LOGOUT(LogoutReason.DISCONNECT));
+
             if (closeSocket) {
                 this.network.disconnect();
             }
