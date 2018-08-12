@@ -1,9 +1,7 @@
 package org.alexdev.kepler;
 
-import com.goterl.lazycode.lazysodium.interfaces.PwHash;
 import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.commands.CommandManager;
@@ -28,12 +26,10 @@ import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.LoggingConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.commons.validator.routines.InetAddressValidator;
 
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalTime;
 
 public class Kepler {
@@ -68,25 +64,8 @@ public class Kepler {
             LoggingConfiguration.checkLoggingConfig();
             ServerConfiguration.load("server.ini");
 
-            /*byte[] pw = "lol".getBytes(StandardCharsets.UTF_8);
-            byte[] outputHash = new byte[PwHash.STR_BYTES];
-            PwHash.Native pwHash = (PwHash.Native) PlayerDao.LIB_SODIUM;
-
-            boolean success = pwHash.cryptoPwHashStr(
-                    outputHash,
-                    pw,
-                    pw.length,
-                    PwHash.OPSLIMIT_INTERACTIVE,
-                    PwHash.MEMLIMIT_INTERACTIVE
-            );
-
-            System.out.println(new String(outputHash));*/
-
             log = LoggerFactory.getLogger(Kepler.class);
             ResourceLeakDetector.setLevel(ResourceLeakDetector.Level.ADVANCED);
-
-            // TODO: The "Standard" ASCII from
-            // http://patorjk.com/software/taag/#p=display&f=Standard&t=Kepler
 
             System.out.println("  _  __          _           \n" +
                     " | |/ /___ _ __ | | ___ _ __ \n" +
@@ -117,12 +96,9 @@ public class Kepler {
             MessageHandler.getInstance();
             TextsManager.getInstance();
 
-            // Get an InetAddressValidator
-            InetAddressValidator validator = InetAddressValidator.getInstance();
-
-            setupRcon(validator);
-            setupMus(validator);
-            setupServer(validator);
+            setupRcon();
+            setupMus();
+            setupServer();
 
             Runtime.getRuntime().addShutdownHook(new Thread(Kepler::dispose));
         } catch (Exception e) {
@@ -130,56 +106,71 @@ public class Kepler {
         }
     }
 
-    private static void setupServer(InetAddressValidator validator) throws UnknownHostException {
-        serverIP = ServerConfiguration.getString("bind");
-        serverPort = ServerConfiguration.getInteger("server.port");
+    private static void setupServer() throws UnknownHostException {
+        String gameBind = ServerConfiguration.getString("bind");
 
-        if (!validator.isValid(serverIP)) {
-            log.error("The server address supplied '{}' is not a valid IP", rconIP);
+        if (gameBind.length() == 0) {
+            log.error("Game/FUSE (Habbo Emulation) server bind address is not provided");
             return;
         }
 
-        serverIP = InetAddress.getByName(serverIP).getHostAddress();
+        serverPort = ServerConfiguration.getInteger("server.port");
+
+        if (serverPort == 0) {
+            log.error("Game/FUSE (Habbo Emulation) server port not provided");
+            return;
+        }
+
+        serverIP = InetAddress.getByName(gameBind).getHostAddress();
 
         server = new NettyServer(serverIP, serverPort);
         server.createSocket();
         server.bind();
     }
 
-    private static void setupRcon(InetAddressValidator validator) throws IOException {
+    private static void setupRcon() throws IOException {
         // Create the RCON instance
-        rconIP = ServerConfiguration.getString("rcon.bind");
+        String rconBind = ServerConfiguration.getString("rcon.bind");
+
+        if (rconBind.length() == 0) {
+            log.error("Remote Control (RCON) server bind address is not provided");
+            return;
+        }
+
         rconPort = ServerConfiguration.getInteger("rcon.port");
 
-        // Validate an IPv4 or IPv6 address
-        if (!validator.isValid(rconIP)) {
-            log.error("The RCON address supplied '{}' is not a valid IP", rconIP);
+        if (rconPort == 0) {
+            log.error("Remote Control (RCON) server port not provided");
             return;
         }
 
         // getByName parses IPv6, IPv4 and DNS all in one go
-        rconIP = InetAddress.getByName(rconIP).getHostAddress();
+        rconIP = InetAddress.getByName(rconBind).getHostAddress();
 
         rcon = new RconServer(rconIP, rconPort);
         rcon.listen();
     }
 
-    private static void setupMus(InetAddressValidator validator) throws UnknownHostException {
-        musServerIP = ServerConfiguration.getString("bind");
+    private static void setupMus() throws UnknownHostException {
+        String musBind = ServerConfiguration.getString("bind");
+
+        if (musBind.length() == 0) {
+            log.error("Multi User Server (MUS) bind address is not provided");
+            return;
+        }
+
         musServerPort = ServerConfiguration.getInteger("mus.port");
 
-        if (musServerIP.length() > 0) {
-            if (!validator.isValid(musServerIP)) {
-                log.error("The MUS address supplied '{}' is not a valid IP", rconIP);
-                return;
-            }
-
-            musServerIP = InetAddress.getByName(musServerIP).getHostAddress();
-
-            musServer = new MusServer(musServerIP, musServerPort);
-            musServer.createSocket();
-            musServer.bind();
+        if (musServerPort == 0) {
+            log.error("Multi User Server (MUS) port not provided");
+            return;
         }
+
+        musServerIP = InetAddress.getByName(musBind).getHostAddress();
+
+        musServer = new MusServer(musServerIP, musServerPort);
+        musServer.createSocket();
+        musServer.bind();
     }
 
     private static void dispose() {
@@ -190,10 +181,8 @@ public class Kepler {
 
             for (Player p : PlayerManager.getInstance().getPlayers()) {
                 // First send fancy maintenance popup to client
+                // (disconnect parameter denotes if the fancy popup is used or the more uglier one)
                 p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), false));
-
-                // Then send less fancy disconnect popup
-                p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), true));
 
                 // Now disconnect the player
                 p.kickFromServer(true);
