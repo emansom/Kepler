@@ -35,6 +35,8 @@ public class ServerConfiguration {
         // Default settings
         config.put("bind", "127.0.0.1");
         config.put("server.port", "12321");
+        config.put("server.limit.bandwidth", "false");//String.valueOf(40*1024));
+        config.put("server.limit.bandwidth.amount", String.valueOf(40*1024));
         config.put("mus.port", "12322");
         config.put("rcon.bind", "127.0.0.1");
         config.put("rcon.port", "12309");
@@ -150,6 +152,8 @@ public class ServerConfiguration {
         writer.println("");
         writer.println("[Server]");
         writer.println("server.port=" + config.get("server.port"));
+        writer.println("server.limit.bandwidth=" + config.get("server.limit.bandwidth"));
+        writer.println("server.limit.bandwidth.amount=" + config.get("server.limit.bandwidth.amount"));
         writer.println("");
         writer.println("[Rcon]");
         writer.println("rcon.bind=" + config.get("rcon.bind"));
