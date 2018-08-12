@@ -55,7 +55,7 @@ public class StringUtil {
      */
     public static boolean isNumber(Object object) {
         try {
-            Integer.valueOf(object.toString());
+            Integer.parseInt(object.toString());
             return true;
         } catch (NumberFormatException e) {
             return false;
