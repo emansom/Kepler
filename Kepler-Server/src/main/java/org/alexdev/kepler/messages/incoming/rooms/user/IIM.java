@@ -48,7 +48,12 @@ public class IIM implements MessageEvent {
             return;
         }
 
-        String[] arguments = contents.replace(gameId + " " + command + " ", "").split(" ");
-        game.handleCommand(player, room, player.getRoomUser().getCurrentItem(), command, arguments);
+        String arguments = contents.replace(gameId + " " + command, "");
+
+        if (arguments.startsWith(" ")) {
+            arguments = arguments.substring(1);
+        }
+
+        game.handleCommand(player, room, player.getRoomUser().getCurrentItem(), command, arguments.split(" "));
     }
 }
