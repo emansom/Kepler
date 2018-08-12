@@ -30,6 +30,9 @@ public abstract class GamehallGame {
         this.players = new CopyOnWriteArrayList<>();
     }
 
+    public abstract void gameStart();
+    public abstract void gameStop();
+
     /**
      * Handle the incoming packet data from the game commands.
      *

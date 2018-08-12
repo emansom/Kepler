@@ -9,7 +9,7 @@ import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class GAMECOMMAND implements MessageEvent {
+public class IIM implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
         String contents = reader.contents();

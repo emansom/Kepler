@@ -13,6 +13,12 @@ public class GameBattleShip extends GamehallGame {
     }
 
     @Override
+    public void gameStart() { }
+
+    @Override
+    public void gameStop() { }
+
+    @Override
     public void handleCommand(Player player, Room room, Item item, String command, String[] args) {
         GameTrigger trigger = (GameTrigger) item.getItemTrigger();
 

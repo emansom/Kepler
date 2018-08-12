@@ -60,6 +60,7 @@ public abstract class GameTrigger implements ItemTrigger {
             if (instance.hasPlayersRequired()) { // New game started
                 instance.createGameId();
                 instance.sendToEveryone(new OPENGAMEBOARD(instance.getGameId(), instance.getGameFuseType()));
+                instance.gameStart();
             }
         }
     }
@@ -96,6 +97,7 @@ public abstract class GameTrigger implements ItemTrigger {
 
         if (!instance.hasPlayersRequired()) {
             instance.resetGameId();
+            instance.gameStop();
         }
     }
 
