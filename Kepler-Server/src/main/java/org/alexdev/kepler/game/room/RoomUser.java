@@ -77,6 +77,7 @@ public class RoomUser {
         this.goal = null;
         this.room = null;
         this.rollingData = null;
+        this.currentGameId = null;
 
         this.isWalkingAllowed = true;
         this.isWalking = false;
