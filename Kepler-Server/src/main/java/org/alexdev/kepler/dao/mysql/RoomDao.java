@@ -231,7 +231,7 @@ public class RoomDao {
             preparedStatement.setInt(1, room.getData().getCategoryId());
             preparedStatement.setString(2, room.getData().getName());
             preparedStatement.setString(3, room.getData().getDescription());
-            preparedStatement.setBoolean(4, room.getData().showName());
+            preparedStatement.setBoolean(4, room.getData().showOwnerName());
             preparedStatement.setBoolean(5, room.getData().allowSuperUsers());
             preparedStatement.setInt(6, room.getData().getAccessTypeId());
             preparedStatement.setString(7, room.getData().getPassword());

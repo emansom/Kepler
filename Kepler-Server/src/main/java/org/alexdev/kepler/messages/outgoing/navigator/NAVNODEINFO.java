@@ -70,7 +70,7 @@ public class NAVNODEINFO extends MessageComposer {
                 response.writeInt(room.getId());
                 response.writeString(room.getData().getName());
 
-                if (room.isOwner(this.viewer.getEntityId())|| room.getData().showName() || this.viewer.hasFuse("fuse_see_all_roomowners")) {
+                if (room.isOwner(this.viewer.getEntityId())|| room.getData().showOwnerName() || this.viewer.hasFuse("fuse_see_all_roomowners")) {
                     response.writeString(room.getData().getOwnerName());
                 } else {
                     response.writeString("-");

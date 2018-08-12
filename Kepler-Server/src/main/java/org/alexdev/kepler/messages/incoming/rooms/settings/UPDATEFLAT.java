@@ -41,7 +41,7 @@ public class UPDATEFLAT implements MessageEvent {
 
         room.getData().setName(roomName);
         room.getData().setAccessType(accessTypeId);
-        room.getData().setShowName(showOwner);
+        room.getData().setShowOwnerName(showOwner);
         RoomDao.save(room);
     }
 }

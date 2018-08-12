@@ -20,16 +20,16 @@ public class FLATINFO extends MessageComposer {
         response.writeInt(this.room.getData().getAccessTypeId());
         response.writeInt(this.room.getId());
 
-        if (this.room.isOwner(player.getEntityId())|| this.room.getData().showName() || this.player.hasFuse("fuse_see_all_roomowners")) {
+        if (this.room.isOwner(player.getEntityId())|| this.room.getData().showOwnerName() || this.player.hasFuse("fuse_see_all_roomowners")) {
             response.writeString(this.room.getData().getOwnerName());
         } else {
             response.writeString("-");
         }
 
-        response.writeString(this.room.getModel().getName());
+        response.writeString(this.room.getModel().getName()); // Is called "marker" in Lingo code
         response.writeString(this.room.getData().getName());
         response.writeString(this.room.getData().getDescription());
-        response.writeBool(this.room.getData().showName());
+        response.writeBool(this.room.getData().showOwnerName());
         response.writeBool(this.room.getCategory().hasAllowTrading()); // Allow trading
         response.writeInt(this.room.getData().getVisitorsNow());
         response.writeInt(this.room.getData().getVisitorsMax());

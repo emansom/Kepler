@@ -24,7 +24,7 @@ public class RECOMMENDED_ROOM_LIST extends MessageComposer {
             response.writeInt(room.getId());
             response.writeString(room.getData().getName());
 
-            if (room.isOwner(this.player.getEntityId()) || room.getData().showName() || this.player.hasFuse("fuse_see_all_roomowners")) {
+            if (room.isOwner(this.player.getEntityId()) || room.getData().showOwnerName() || this.player.hasFuse("fuse_see_all_roomowners")) {
                 response.writeString(room.getData().getOwnerName());
             } else {
                 response.writeString("-");
