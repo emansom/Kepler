@@ -28,7 +28,7 @@ public class RconServer {
                 .build()
                 .start();
 
-        log.info("RCON is listening on " + ip + ":" + port);
+        log.info("Remote Control (RCON) server is listening on " + ip + ":" + port);
     }
 
     public void dispose() throws InterruptedException {
