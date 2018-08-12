@@ -365,6 +365,11 @@ public class RoomDao {
 
             if (resultSet.next()) {
                 rating = resultSet.getInt("rating");
+
+                // Make sure negative numbers are not returned
+                if (rating < 0) {
+                    rating = 0;
+                }
             }
 
         } catch (Exception e) {
