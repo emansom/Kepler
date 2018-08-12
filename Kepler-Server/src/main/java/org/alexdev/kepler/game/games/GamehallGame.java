@@ -43,7 +43,7 @@ public abstract class GamehallGame {
      * Generate the unique game ID instance for this pair.
      */
     public void createGameId() {
-        String alphabet = "abcdefghijlmnopqrstuvwyz";
+        String alphabet = "abcdefghijlmnopqrstuvwyz1234567890";
         StringBuilder gameId = new StringBuilder();
 
         for (int i = 0; i < 6; i++) {
