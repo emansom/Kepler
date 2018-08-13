@@ -12,6 +12,7 @@ import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.handshake.RIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
+import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSING;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.HOTEL_LOGOUT;
@@ -77,6 +78,10 @@ public class Player extends Entity {
             alertMessage = alertMessage.replace("%username%", this.details.getName());
 
             this.send(new ALERT(alertMessage));
+        }
+
+        if (PlayerManager.getInstance().isMaintenance()) {
+            this.send(new INFO_HOTEL_CLOSING(PlayerManager.getInstance().getMaintenanceAt()));
         }
 
         this.messenger.sendStatusUpdate();

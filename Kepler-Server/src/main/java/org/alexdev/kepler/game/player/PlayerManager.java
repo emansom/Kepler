@@ -24,6 +24,7 @@ public class PlayerManager {
 
     private boolean isMaintenanceShutdown;
     private Thread shutdownTimeout;
+    private Duration maintenanceAt;
 
     public PlayerManager() {
         this.players = new CopyOnWriteArrayList<>();
@@ -138,29 +139,30 @@ public class PlayerManager {
      *
      * @param untilShutdown when to shutdown
      */
-    public void enqueueMaintenanceShutdown(Duration untilShutdown) {
+    public void planMaintenance(Duration maintenanceAt) {
         // Interrupt current timeout to set new maintenance countdown
         if (this.shutdownTimeout != null) {
             this.shutdownTimeout.interrupt();
         }
 
         // Start timeout that will trigger the shutdown hook
-        this.shutdownTimeout = GameScheduler.getInstance().timeout(() -> System.exit(0), untilShutdown.toMillis());
+        this.shutdownTimeout = GameScheduler.getInstance().timeout(() -> System.exit(0), maintenanceAt.toMillis());
         this.shutdownTimeout.start();
 
         // Let other Kepler components know we are in maintenance mode
         this.isMaintenanceShutdown = true;
+        this.maintenanceAt = maintenanceAt;
 
         // Notify all users of shutdown timeout
         for (Player p : this.players) {
-            p.send(new INFO_HOTEL_CLOSING(untilShutdown));
+            p.send(new INFO_HOTEL_CLOSING(maintenanceAt));
         }
     }
 
     /**
      * Cancel shutdown timeout
      */
-    public void cancelMaintenanceShutdown() {
+    public void cancelMaintenance() {
         this.shutdownTimeout.interrupt();
     }
 
@@ -217,10 +219,18 @@ public class PlayerManager {
     }
 
     /**
+     * Get duration until shutdown
+     * @return duration until shutdown
+     */
+    public Duration getMaintenanceAt() {
+        return this.maintenanceAt;
+    }
+
+    /**
      * Get maintenance shutdown status
      * @return the maintenance shutdown status
      */
-    public boolean isMaintenanceShutdown() {
+    public boolean isMaintenance() {
         return this.isMaintenanceShutdown;
     }
 

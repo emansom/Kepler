@@ -35,7 +35,7 @@ public class ShutdownCommand extends Command {
 
         // Abort maintenance shutdown if provided argument is either cancel, off or stop (case insensitive)
         if (args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("stop")) {
-            PlayerManager.getInstance().cancelMaintenanceShutdown();
+            PlayerManager.getInstance().cancelMaintenance();
             player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Cancelled shutdown"));
             return;
         }
@@ -51,7 +51,7 @@ public class ShutdownCommand extends Command {
         }
 
         // Enqueue maintenance shutdown
-        PlayerManager.getInstance().enqueueMaintenanceShutdown(Duration.ofMinutes(minutes));
+        PlayerManager.getInstance().planMaintenance(Duration.ofMinutes(minutes));
 
         // Let callee know Kepler is shutting down in X minutes
         player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Shutting down in " + minutes + " minute(s)"));
