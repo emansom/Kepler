@@ -24,7 +24,7 @@ public class SAVE_SONG_EDIT implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!room.isOwner(player.getEntityId())) {
+        if (!room.isOwner(player.getEntityId()) && !player.hasFuse("fuse_any_room_controller")) {
             return;
         }
 

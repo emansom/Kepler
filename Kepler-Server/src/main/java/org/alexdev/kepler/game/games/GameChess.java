@@ -9,10 +9,12 @@ import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class GameChess extends GamehallGame {
     private static class GameToken {
@@ -142,7 +144,6 @@ public class GameChess extends GamehallGame {
                 return;
             }
 
-
             Move move = new Move(fromSquare, toSquare);
             boolean isLegalMove = false;
 
@@ -154,9 +155,25 @@ public class GameChess extends GamehallGame {
 
             if (isLegalMove) {
                 this.board.doMove(move, true);
+
+                if (this.board.isDraw()) {
+                    this.gameFinished = true;
+                    this.showChat(null, "The chess game has ended in a draw");
+                    return;
+                } else if (this.board.isStaleMate()) {
+                    this.gameFinished = true;
+                    this.showChat(null, "The chess game has encountered a stalemate");
+                    return;
+                } else if (this.board.isMated()) {
+                    this.gameFinished = true;
+                    this.showChat(null, player.getDetails().getName() + " has won the chess game");
+                    return;
+                }
+
+                this.swapTurns(player);
             }
 
-            this.swapTurns(player);
+            player.getRoomUser().getTimerManager().resetRoomTimer();
             this.broadcastMap();
         }
 
@@ -248,6 +265,15 @@ public class GameChess extends GamehallGame {
         return playerNames;
     }
 
+    private void showChat(Player player, String chat) {
+        for (Player p : this.playersInGame) {
+            if (player != null && p == player) {
+                continue;
+            }
+
+            p.send(new CHAT_MESSAGE(CHAT_MESSAGE.ChatMessageType.CHAT, p.getRoomUser().getInstanceId(), chat));
+        }
+    }
 
     /**
      * Swap who's turn it is to play.
@@ -278,7 +304,7 @@ public class GameChess extends GamehallGame {
         };
 
         if (this.playersInGame.size() > 0) {
-            this.nextTurn = this.playersInGame.get(0);
+            this.nextTurn = this.getPlayerBySide('w'); // White always goes first, according to chess rules.
         }
 
         this.gameFinished = false;

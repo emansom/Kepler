@@ -103,14 +103,15 @@ public class Room {
             player.send(new YOUNOTCONTROLLER());
         }
 
-        if (isOwner(player.getDetails().getId())) {
+        if (isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
             player.send(new YOUAROWNER());
             rightsValue = "useradmin";
         }
 
+
         player.getRoomUser().removeStatus(StatusType.FLAT_CONTROL);
 
-        if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId())) {
+        if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
             player.getRoomUser().setStatus(StatusType.FLAT_CONTROL, rightsValue);
         }
 

@@ -49,7 +49,7 @@ public class TRYFLAT implements MessageEvent {
         }
 
         if (!player.hasFuse("fuse_enter_locked_rooms")) {
-            if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId())) {
+            if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
 
                 if (rangDoorbell(room, player)) {
                     player.send(new DOORBELL_WAIT());
@@ -60,7 +60,7 @@ public class TRYFLAT implements MessageEvent {
                 return;
             }
 
-            if (room.getData().getAccessTypeId() == 2 && !room.isOwner(player.getDetails().getId())) {
+            if (room.getData().getAccessTypeId() == 2 && !room.isOwner(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
                 if (!password.equals(room.getData().getPassword())) {
                     player.send(new LOCALISED_ERROR("Incorrect flat password"));
                     return;

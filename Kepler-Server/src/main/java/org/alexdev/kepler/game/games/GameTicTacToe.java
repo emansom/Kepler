@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class GameTicTacToe extends GamehallGame {
     private static class GameToken {
@@ -187,6 +188,7 @@ public class GameTicTacToe extends GamehallGame {
                 this.swapTurns(player);
             }
 
+            player.getRoomUser().getTimerManager().resetRoomTimer();
             this.broadcastMap();
         }
     }
@@ -220,7 +222,7 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             for (Player player : this.playersInGame) {
-                player.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
+                player.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves"));
             }
 
         }

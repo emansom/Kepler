@@ -40,7 +40,7 @@ public class RoomTimerManager {
      *
      * @param afkTimer the timer to override
      */
-    public void resetRoomTimer(int afkTimer) {
+    public void resetRoomTimer(long afkTimer) {
         this.afkTimer = DateUtil.getCurrentTimeSeconds() + afkTimer;
         this.sleepTimer = DateUtil.getCurrentTimeSeconds() + GameConfiguration.getInstance().getInteger("sleep.timer.seconds");
 
