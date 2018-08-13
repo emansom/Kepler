@@ -22,7 +22,7 @@ public class GamePoker extends GamehallGame {
     public void handleCommand(Player player, Room room, Item item, String command, String[] args) {
         GameTrigger trigger = (GameTrigger) item.getItemTrigger();
 
-        if (args[0].equals("CLOSE")) {
+        if (command.equals("CLOSE")) {
             trigger.onEntityLeave(player, player.getRoomUser(), item);
             return;
         }
