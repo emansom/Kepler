@@ -5,6 +5,8 @@ import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +14,46 @@ import java.util.List;
 import java.util.Map;
 
 public class GameTicTacToe extends GamehallGame {
-    private static char[] validSides = new char[] {
-        'O', 'X'
-    };
+    private static class GameToken {
+        private char token;
+        private char winningToken;
+        private int moves;
+
+        private GameToken(char token, char winningToken) {
+            this.token = token;
+            this.winningToken = winningToken;
+            this.moves = 0;
+        }
+
+        private char getToken() {
+            return token;
+        }
+
+        private char getWinningToken() {
+            return winningToken;
+        }
+
+        private int getMoves() {
+            return moves;
+        }
+
+        private void incrementMoves() {
+            this.moves = this.moves + 1;
+        }
+    }
+
+    private static final int NUM_IN_ROW = 5;
+    private static final int MAX_WIDTH = 23;
+    private static final int MAX_LENGTH = 24;
+
+    private GameToken[] gameTokens;
 
     private List<Player> playersInGame;
     private Map<Player, Character> playerSides;
+
+    private boolean gameFinished;
+    private char[][] gameMap;
+    private Player nextTurn;
 
     public GameTicTacToe(int roomId, List<int[]> chairs) {
         super(roomId, chairs);
@@ -27,12 +63,15 @@ public class GameTicTacToe extends GamehallGame {
     public void gameStart() {
         this.playersInGame = new ArrayList<>();
         this.playerSides = new HashMap<>();
+
+        this.restartMap();
     }
 
     @Override
     public void gameStop() {
         this.playersInGame.clear();
         this.playerSides.clear();
+        this.gameMap = null;
     }
 
     @Override
@@ -45,37 +84,301 @@ public class GameTicTacToe extends GamehallGame {
         }
 
         if (command.equals("CHOOSETYPE")) {
-            char side = args[0].charAt(0);
+            char sideChosen = args[0].charAt(0);
 
-            if (side != validSides[0] && side != validSides[1]) {
+            if (this.getToken(sideChosen) == null) {
                 return;
             }
 
-            if (getPlayerBySide(side) != null) {
+            if (getPlayerBySide(sideChosen) != null) {
                 this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
                 return;
             }
 
-            this.playerSides.put(player, side);
+            this.playerSides.put(player, sideChosen);
             this.playersInGame.add(player);
-
-            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE", String.valueOf(side)}));
 
             String[] playerNames = this.getPlayerNames();
 
-            // If only 1 player has chosen their side, then said that one only, when the 2nd player choses, both panels
-            // will be updated the current teammate playing.
+            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
         if (command.equals("RESTART")) {
-            if (this.playersInGame.size() != 2) {
-                return;
-            }
-            String[] playerNames = this.getPlayerNames();
-            this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "BOARDDATA", playerNames[0], playerNames[1], ""}));
+            this.restartMap();
+            this.broadcastMap();
             return;
         }
+
+        if (command.equals("SETSECTOR")) {
+            if (this.playersInGame.size() < this.getMinimumPeopleRequired()) {
+                return; // Can't place objects until other player has joined.
+            }
+
+            if (!this.playerSides.containsKey(player)) {
+                return;
+            }
+
+            if (this.nextTurn != player) {
+                return;
+            }
+
+            if (this.gameFinished) {
+                return;
+            }
+
+            char side = args[0].charAt(0);
+
+            if (this.playerSides.get(player) != side) {
+                return;
+            }
+
+            int Y = Integer.parseInt(args[1]);
+            int X = Integer.parseInt(args[2]);
+
+            if (X >= MAX_WIDTH || Y >= MAX_LENGTH) {
+                return;
+            }
+
+            if (this.gameMap == null) {
+                return;
+            }
+
+            GameToken token = this.getToken(this.playerSides.get(player));
+            token.incrementMoves();
+
+            this.gameMap[X][Y] = token.getToken();
+
+            this.broadcastMap();
+            this.swapTurns(player);
+
+            Pair<Character, List<int[]>> variables = this.hasGameFinished();
+
+            if (variables != null) {
+                this.gameFinished = true;
+                this.announceWinningSide(variables);
+            }
+        }
+    }
+
+    /**
+     * Announce the winning side, change the characters to their winning symbols, and says
+     * how many moves it took.
+     *
+     * @param variables the winning character and coordinates of winning tiles
+     */
+    private void announceWinningSide(Pair<Character, List<int[]>> variables) {
+        GameToken token = null;
+
+        for (GameToken side : gameTokens) {
+            if (side.getToken() == variables.getKey()) {
+                token = side;
+            }
+        }
+
+        if (token != null) {
+            for (int[] coord : variables.getValue()) {
+                this.gameMap[coord[0]][coord[1]] = token.getWinningToken();
+            }
+
+            this.broadcastMap();
+
+            Player winner = this.getPlayerBySide(token.getToken());
+
+            for (Player player : this.playersInGame) {
+                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
+            }
+
+        }
+    }
+
+    /**
+     * Check for the winner.
+     *
+     * @return a variable containing the character who won, and the coords of the winning tiles
+     */
+    private Pair<Character, List<int[]>> hasGameFinished() {
+        List<int[]> winningCoordinates = new ArrayList<>();
+
+        // Check rows across
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < NUM_IN_ROW; k++) {
+                    if ((j + k) >= MAX_LENGTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[i][j + k];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{i, j + k});
+                    }
+
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
+        // Check rows down
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < NUM_IN_ROW; k++) {
+                    if ((i + k) >= MAX_WIDTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[i + k][j];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{i + k, j});
+                    }
+
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
+        // Check top left to bottom right
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < NUM_IN_ROW; k++) {
+                    if ((i + k) >= MAX_WIDTH || (j + k) >= MAX_WIDTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[i + k][j + k];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{i + k, j + k});
+                    }
+
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
+        // Check top right to bottom left
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < NUM_IN_ROW; k++) {
+                    int newX = i - k;
+                    int newY = j + k;
+
+                    if (newX < 0) {
+                        continue;
+                    }
+
+                    if (newX >= MAX_WIDTH || newY >= MAX_WIDTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[newX][newY];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{newX, newY});
+                    }
+
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void swapTurns(Player player) {
+        Player nextPlayer = null;
+
+        if (this.nextTurn == player) {
+            for (Player p :  this.playersInGame) {
+                if (p != player) {
+                    nextPlayer = p;
+                }
+            }
+        }
+
+        this.nextTurn = nextPlayer;
+    }
+
+    /**
+     * Reset the game map.
+     */
+    private void restartMap() {
+        this.gameTokens = new GameToken[]{
+                new GameToken('O', 'q'),
+                new GameToken('X', '+')
+        };
+
+        if (this.playersInGame.size() > 0) {
+            this.nextTurn = this.playersInGame.get(0);
+        }
+
+        this.gameFinished = false;
+        this.gameMap = new char[MAX_WIDTH][MAX_LENGTH];
+
+        for (int X = 0; X < MAX_WIDTH; X++) {
+            for (int Y = 0; Y < MAX_LENGTH; Y++) {
+                this.gameMap[X][Y] = '0';
+            }
+        }
+    }
+
+    /**
+     * Send the game map to the opponents.
+     */
+    private void broadcastMap() {
+        StringBuilder boardData = new StringBuilder();
+
+        for (char[] mapData : this.gameMap) {
+            for (char mapLetter : mapData) {
+                boardData.append(mapLetter);
+            }
+
+            boardData.append((char)13);
+        }
+
+        String[] playerNames = this.getPlayerNames();
+        this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "BOARDDATA", playerNames[0], playerNames[1], boardData.toString()}));
     }
 
     /**
@@ -85,10 +388,11 @@ public class GameTicTacToe extends GamehallGame {
      * @return the player names
      */
     private String[] getPlayerNames() {
-        String[] playerNames = new String[] { "", ""};
+        String[] playerNames = new String[]{"", ""};
 
         for (int i = 0; i < this.playersInGame.size(); i++) {
-            playerNames[i] = this.playersInGame.get(i).getDetails().getName();
+            Player player = this.playersInGame.get(i);
+            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player);
         }
 
         return playerNames;
@@ -100,7 +404,7 @@ public class GameTicTacToe extends GamehallGame {
      * @param side the side used
      * @return the player instance, if successful
      */
-    public Player getPlayerBySide(char side) {
+    private Player getPlayerBySide(char side) {
         for (var kvp : this.playerSides.entrySet()) {
             if (kvp.getValue() == side) {
                 return kvp.getKey();
@@ -108,6 +412,25 @@ public class GameTicTacToe extends GamehallGame {
         }
 
         return null;
+    }
+
+    /**
+     * Get token instance by character.
+     *
+     * @param side the character to compare against
+     * @return the instance, if successful
+     */
+    private GameToken getToken(char side) {
+        GameToken token = null;
+
+        for (GameToken t : gameTokens) {
+            if (t.getToken() == side) {
+                token = t;
+                break;
+            }
+        }
+
+        return token;
     }
 
     @Override
