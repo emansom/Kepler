@@ -10,7 +10,6 @@ import org.alexdev.kepler.messages.outgoing.user.currencies.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -126,20 +125,6 @@ public class GameScheduler implements Runnable {
      */
     public static ScheduledExecutorService createNewScheduler() {
         return Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
-    }
-
-    public Thread timeout(Runnable runnable, long delay) {
-        return new Thread(() -> {
-            try {
-                Thread.sleep(delay);
-                runnable.run();
-            } catch (Exception e) {
-                // Ignore InterrupedException
-                if (!(e instanceof InterruptedException)) {
-                    e.printStackTrace();
-                }
-            }
-        });
     }
 
     /**

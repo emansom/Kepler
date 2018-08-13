@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerManager {
@@ -23,7 +24,7 @@ public class PlayerManager {
     private long dailyPlayerPeak;
 
     private boolean isMaintenanceShutdown;
-    private Thread shutdownTimeout;
+    private ScheduledFuture<?> shutdownTimeout;
 
     public PlayerManager() {
         this.players = new CopyOnWriteArrayList<>();
@@ -141,12 +142,12 @@ public class PlayerManager {
     public void enqueueMaintenanceShutdown(Duration untilShutdown) {
         // Interrupt current timeout to set new maintenance countdown
         if (this.shutdownTimeout != null) {
-            this.shutdownTimeout.interrupt();
+            this.cancelMaintenanceShutdown();
         }
 
         // Start timeout that will trigger the shutdown hook
-        this.shutdownTimeout = GameScheduler.getInstance().timeout(() -> System.exit(0), untilShutdown.toMillis());
-        this.shutdownTimeout.start();
+        this.shutdownTimeout = GameScheduler.getInstance().getSchedulerService().schedule(() -> System.exit(0), untilShutdown.toMillis(), TimeUnit.MILLISECONDS);
+        //this.shutdownTimeout.start();
 
         // Let other Kepler components know we are in maintenance mode
         this.isMaintenanceShutdown = true;
@@ -161,7 +162,7 @@ public class PlayerManager {
      * Cancel shutdown timeout
      */
     public void cancelMaintenanceShutdown() {
-        this.shutdownTimeout.interrupt();
+        this.shutdownTimeout.cancel(true);
     }
 
     /**
