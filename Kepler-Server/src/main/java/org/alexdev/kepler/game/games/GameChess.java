@@ -160,15 +160,15 @@ public class GameChess extends GamehallGame {
 
                 if (this.board.isDraw()) {
                     this.gameFinished = true;
-                    this.showChat(null, "The chess game has ended in a draw!");
+                    this.showChat(null, "The chess game has ended in a draw");
                     return;
                 } else if (this.board.isStaleMate()) {
                     this.gameFinished = true;
-                    this.showChat(null, "The chess game has encountered in a stalemate!");
+                    this.showChat(null, "The chess game has encountered a stalemate");
                     return;
                 } else if (this.board.isMated()) {
                     this.gameFinished = true;
-                    this.showChat(null, "Player " + player.getDetails().getName() + " has won the chess game!");
+                    this.showChat(null, "Player " + player.getDetails().getName() + " has won the chess game");
                     return;
                 }
 

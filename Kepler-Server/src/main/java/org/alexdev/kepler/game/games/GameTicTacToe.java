@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class GameTicTacToe extends GamehallGame {
     private static class GameToken {
@@ -99,6 +100,7 @@ public class GameTicTacToe extends GamehallGame {
             this.playerSides.put(player, sideChosen);
             this.playersInGame.add(player);
 
+            player.getRoomUser().getTimerManager().resetRoomTimer(TimeUnit.MINUTES.toSeconds(60)); // Give user an hour to play Tic Tac Toe
             player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
 
             // Select the other side for the player
@@ -115,6 +117,7 @@ public class GameTicTacToe extends GamehallGame {
                 for (Player otherPlayer : this.getPlayers()) {
                     if (otherPlayer != player) {
                         otherPlayer.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(otherToken.getToken())}));
+                        otherPlayer.getRoomUser().getTimerManager().resetRoomTimer(TimeUnit.MINUTES.toSeconds(60)); // Give user an hour to play Tic Tac Toe
                         this.playersInGame.add(otherPlayer);
                         this.playerSides.put(otherPlayer, otherToken.getToken());
                         break;
