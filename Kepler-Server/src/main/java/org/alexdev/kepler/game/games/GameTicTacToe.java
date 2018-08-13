@@ -438,7 +438,7 @@ public class GameTicTacToe extends GamehallGame {
 
         for (int i = 0; i < this.playersInGame.size(); i++) {
             Player player = this.playersInGame.get(i);
-            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player);
+            playerNames[i] = this.playerSides.get(player) + " " + player.getDetails().getName();
         }
 
         return playerNames;
