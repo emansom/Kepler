@@ -110,14 +110,14 @@ public class Kepler {
         String gameBind = ServerConfiguration.getString("bind");
 
         if (gameBind.length() == 0) {
-            log.error("Game/FUSE (Habbo Emulation) server bind address is not provided");
+            log.error("Game server bind address is not provided");
             return;
         }
 
         serverPort = ServerConfiguration.getInteger("server.port");
 
         if (serverPort == 0) {
-            log.error("Game/FUSE (Habbo Emulation) server port not provided");
+            log.error("Game server port not provided");
             return;
         }
 
