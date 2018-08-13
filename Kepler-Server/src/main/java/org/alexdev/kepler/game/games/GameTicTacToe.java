@@ -222,7 +222,7 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             for (Player player : this.playersInGame) {
-                player.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
+                player.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves"));
             }
 
         }
