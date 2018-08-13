@@ -5,18 +5,24 @@ import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GameTicTacToe extends GamehallGame {
     private static class GameToken {
         private char token;
         private char winningToken;
+        private int moves;
 
         private GameToken(char token, char winningToken) {
             this.token = token;
             this.winningToken = winningToken;
+            this.moves = 0;
         }
 
         private char getToken() {
@@ -26,19 +32,25 @@ public class GameTicTacToe extends GamehallGame {
         private char getWinningToken() {
             return winningToken;
         }
+
+        private int getMoves() {
+            return moves;
+        }
+
+        private void incrementMoves() {
+            this.moves = this.moves + 1;
+        }
     }
 
     private static final int MAX_WIDTH = 23;
     private static final int MAX_LENGTH = 24;
 
-    private static GameToken[] gameTokens = new GameToken[]{
-            new GameToken('O', 'q'),
-            new GameToken('X', '+')
-    };
-
+    private GameToken[] gameTokens;
 
     private List<Player> playersInGame;
     private Map<Player, GameToken> playerSides;
+
+    private boolean gameFinished;
     private char[][] gameMap;
 
     public GameTicTacToe(int roomId, List<int[]> chairs) {
@@ -49,6 +61,7 @@ public class GameTicTacToe extends GamehallGame {
     public void gameStart() {
         this.playersInGame = new ArrayList<>();
         this.playerSides = new HashMap<>();
+
         this.restartMap();
     }
 
@@ -111,6 +124,10 @@ public class GameTicTacToe extends GamehallGame {
                 return;
             }
 
+            if (this.gameFinished) {
+                return;
+            }
+
             char side = args[0].charAt(0);
 
             if (this.playerSides.get(player).getToken() != side) {
@@ -128,15 +145,127 @@ public class GameTicTacToe extends GamehallGame {
                 return;
             }
 
-            this.gameMap[X][Y] = this.playerSides.get(player).getToken();
+            GameToken token = this.playerSides.get(player);
+            token.incrementMoves();
+
+            System.out.println("token : " + token.getMoves());
+
+            this.gameMap[X][Y] = token.getToken();
             this.broadcastMap();
+
+            Pair<Character, List<int[]>> variables = this.hasGameFinished();
+
+            if (variables != null) {
+                this.gameFinished = true;
+                this.announceWinningSide(variables);
+            }
         }
+    }
+
+    private void announceWinningSide(Pair<Character, List<int[]>> variables) {
+        GameToken token = null;
+
+        for (GameToken side : gameTokens) {
+            if (side.getToken() == variables.getKey()) {
+                token = side;
+            }
+        }
+
+        if (token != null) {
+            for (int[] coord : variables.getValue()) {
+                this.gameMap[coord[0]][coord[1]] = token.getWinningToken();
+            }
+
+            this.broadcastMap();
+
+            Player winner = this.getPlayerBySide(token.getToken());
+
+            for (Player player : this.playersInGame) {
+                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
+            }
+
+        }
+    }
+
+    /**
+     * Check for the winner.
+     *
+     * @return a variable containing the character who won, and the coords of the winning tiles
+     */
+    public Pair<Character, List<int[]>> hasGameFinished() {
+        List<int[]> winningCoordinates = new ArrayList<>();
+
+        // Check rows across
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < 5; k++) {
+                    if ((j + k) >= MAX_LENGTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[i][j + k];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{i, j + k});
+                    }
+
+                    if (winningCoordinates.size() >= 5) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
+        // Check rows down
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < 5; k++) {
+                    if ((i + k) >= MAX_WIDTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[i + k][j];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{i + k, j});
+                    }
+
+                    if (winningCoordinates.size() >= 5) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
+        return null;
     }
 
     /**
      * Reset the game map.
      */
     private void restartMap() {
+        this.gameTokens = new GameToken[]{
+                new GameToken('O', 'q'),
+                new GameToken('X', '+')
+        };
+
+        this.gameFinished = false;
         this.gameMap = new char[MAX_WIDTH][MAX_LENGTH];
 
         for (int X = 0; X < MAX_WIDTH; X++) {
