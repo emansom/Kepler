@@ -24,6 +24,16 @@ public class MessengerUser {
         this.applyUserDetails(userId, username, figure, consoleMotto, sex, lastOnline);
     }
 
+    /**
+     * Geneic method for applying details, used from both constructors.
+     *
+     * @param userId the id of the user
+     * @param username the name of the user
+     * @param figure the figure of the user
+     * @param consoleMotto the console motto of the user
+     * @param sex the sex of the user
+     * @param lastOnline the last time the user was online in Unix time
+     */
     private void applyUserDetails(int userId, String username, String figure, String consoleMotto, String sex, long lastOnline) {
         this.userId = userId;
         this.username = StringUtil.filterInput(username, true);
@@ -33,7 +43,11 @@ public class MessengerUser {
         this.consoleMotto = StringUtil.filterInput(consoleMotto, true);
     }
 
-
+    /**
+     * Serialise the player, used for console search and friends list.
+     *
+     * @param response the response to serialise for
+     */
     public void serialise(NettyResponse response) {
         Player player = PlayerManager.getInstance().getPlayerById(this.userId);
 

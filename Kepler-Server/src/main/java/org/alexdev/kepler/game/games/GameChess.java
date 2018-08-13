@@ -70,7 +70,7 @@ public class GameChess extends GamehallGame {
                 return;
             }
 
-            if (getPlayerBySide(sideChosen) != null) {
+            if (this.getPlayerBySide(sideChosen) != null) {
                 player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
                 return;
             }
