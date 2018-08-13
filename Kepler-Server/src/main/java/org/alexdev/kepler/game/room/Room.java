@@ -113,6 +113,8 @@ public class Room {
         if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId())) {
             player.getRoomUser().setStatus(StatusType.FLAT_CONTROL, rightsValue);
         }
+
+        player.getRoomUser().setNeedsUpdate(true);
     }
 
     /**

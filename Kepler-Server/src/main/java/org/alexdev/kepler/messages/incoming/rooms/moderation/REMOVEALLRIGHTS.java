@@ -26,7 +26,6 @@ public class REMOVEALLRIGHTS implements MessageEvent {
 
         for (Player roomPlayer : room.getEntityManager().getPlayers()) {
             room.refreshRights(roomPlayer);
-            roomPlayer.getRoomUser().setNeedsUpdate(true);
         }
 
         RoomRightsDao.deleteRoomRights(room.getData());
