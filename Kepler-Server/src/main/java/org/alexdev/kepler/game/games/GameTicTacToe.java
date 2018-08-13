@@ -221,8 +221,8 @@ public class GameTicTacToe extends GamehallGame {
 
                     char newLetter = this.gameMap[i][j + k];
 
-                    if (newLetter != '0') {
-                        letter = newLetter;
+                    if (newLetter != '0' && newLetter == letter) {
+                        //letter = newLetter;
                         winningCoordinates.add(new int[]{i, j + k});
                     }
 
@@ -250,8 +250,7 @@ public class GameTicTacToe extends GamehallGame {
 
                     char newLetter = this.gameMap[i + k][j];
 
-                    if (newLetter != '0') {
-                        letter = newLetter;
+                    if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{i + k, j});
                     }
 
@@ -279,8 +278,7 @@ public class GameTicTacToe extends GamehallGame {
 
                     char newLetter = this.gameMap[i + k][j + k];
 
-                    if (newLetter != '0') {
-                        letter = newLetter;
+                    if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{i + k, j + k});
                     }
 
