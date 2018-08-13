@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.badges.AVAILABLE_BADGES;
 import org.alexdev.kepler.messages.outgoing.rooms.badges.USER_BADGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -46,32 +47,32 @@ public class GiveBadgeCommand extends Command {
         Player targetUser = PlayerManager.getInstance().getPlayerByName(args[0]);
 
         if (targetUser == null) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Could not find user: " + args[0]));
+            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Could not find user: " + args[0]));
             return;
         }
 
         if (args.length == 1) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Badge code not provided"));
+            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Badge code not provided"));
             return;
         }
 
         String badge = args[1];
 
         if (badge.length() != 3) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Badge codes have a length of three characters."));
+            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Badge codes have a length of three characters."));
             return;
         }
 
         // Badge should be alphanumeric
         if (!StringUtil.isAlphaNumeric(badge)) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Badge code provided not alphanumeric."));
+            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Badge code provided not alphanumeric."));
             return;
         }
 
         // Check if characters are uppercase
         for (int i=0; i < badge.length(); i++) {
             if (!Character.isUpperCase(badge.charAt(i)) && !Character.isDigit(badge.charAt(i))) {
-                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Badge code should be uppercase."));
+                player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Badge code should be uppercase."));
                 return;
             }
         }
@@ -81,7 +82,7 @@ public class GiveBadgeCommand extends Command {
 
         // Check if user already owns badge
         if (badges.contains(badge)) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "User " + targetDetails.getName() + " already owns this badge."));
+            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "User " + targetDetails.getName() + " already owns this badge."));
             return;
         }
 
@@ -89,7 +90,7 @@ public class GiveBadgeCommand extends Command {
 
         // Check if badge code is a rank badge
         if (rankBadges.contains(badge)) {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "This badge belongs to a certain rank. If you would like to give " + targetDetails.getName() + " this badge, increase their rank."));
+            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "This badge belongs to a certain rank. If you would like to give " + targetDetails.getName() + " this badge, increase their rank."));
             return;
         }
 
@@ -118,7 +119,7 @@ public class GiveBadgeCommand extends Command {
         PlayerDao.saveCurrentBadge(targetDetails);
         PlayerDao.addBadge(targetDetails.getId(), badge);
 
-        player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Badge " + badge + " added to user " + targetDetails.getName()));
+        player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Badge " + badge + " added to user " + targetDetails.getName()));
     }
 
     @Override

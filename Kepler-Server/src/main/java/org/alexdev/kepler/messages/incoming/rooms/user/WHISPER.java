@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -26,10 +27,7 @@ public class WHISPER implements MessageEvent {
             return;
         }
 
-        CHAT_MESSAGE chatMessage = new CHAT_MESSAGE(
-                CHAT_MESSAGE.type.WHISPER,
-                player.getRoomUser().getInstanceId(),
-                message);
+        CHAT_MESSAGE chatMessage = new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), message);
 
         player.send(chatMessage);
         player.getRoomUser().getTimerManager().resetRoomTimer();
@@ -39,7 +37,7 @@ public class WHISPER implements MessageEvent {
         if (whisperUser != null) {
             whisperUser.send(chatMessage);
         } else {
-            player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "User not found. Whisper not sent."));
+            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "User not found. Whisper not sent."));
         }
     }
 }

@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 
 public class ResetVoteCommand extends Command {
     @Override
@@ -27,7 +28,7 @@ public class ResetVoteCommand extends Command {
             return;
         }
 
-        player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.WHISPER, player.getRoomUser().getInstanceId(), "Your vote for this room has been removed"));
+        player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Your vote for this room has been removed"));
 
         Room room = player.getRoomUser().getRoom();
 

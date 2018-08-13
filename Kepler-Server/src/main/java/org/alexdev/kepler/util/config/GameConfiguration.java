@@ -54,6 +54,8 @@ public class GameConfiguration {
         config.put("profile.editing", "true");
         config.put("vouchers.enabled", "true");
 
+        config.put("shutdown.minutes", "1");
+
     }
 
     /**
