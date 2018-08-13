@@ -64,12 +64,6 @@ public class Room {
      * @return true, if successful
      */
     public boolean isOwner(int ownerId) {
-        Player player = PlayerManager.getInstance().getPlayerById(ownerId);
-
-        if (player != null && player.hasFuse("fuse_any_room_controller")) {
-            return true;
-        }
-
         return this.roomData.getOwnerId() == ownerId;
     }
 
