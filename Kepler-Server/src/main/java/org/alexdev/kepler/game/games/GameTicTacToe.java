@@ -251,6 +251,71 @@ public class GameTicTacToe extends GamehallGame {
             }
         }
 
+        // Check top left to bottom right
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < NUM_IN_ROW; k++) {
+                    if ((i + k) >= MAX_WIDTH || (j + k) >= MAX_WIDTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[i + k][j + k];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{i + k, j + k});
+                    }
+
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
+        // Check top right to bottom left
+        for (int i = 0; i < MAX_WIDTH; i++) {
+            for (int j = 0; j < MAX_LENGTH; j++) {
+                char letter = this.gameMap[i][j];
+                winningCoordinates.clear();
+
+                if (letter == '0') {
+                    continue;
+                }
+
+                for (int k = 0; k < NUM_IN_ROW; k++) {
+                    int newX = i - k;
+                    int newY = j + k;
+
+                    if (newX < 0) {
+                        continue;
+                    }
+
+                    if (newX >= MAX_WIDTH || newY >= MAX_WIDTH) {
+                        continue;
+                    }
+
+                    char newLetter = this.gameMap[newX][newY];
+
+                    if (newLetter != '0') {
+                        letter = newLetter;
+                        winningCoordinates.add(new int[]{newX, newY});
+                    }
+
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
+                        return Pair.of(letter, winningCoordinates);
+                    }
+                }
+            }
+        }
+
         return null;
     }
 
