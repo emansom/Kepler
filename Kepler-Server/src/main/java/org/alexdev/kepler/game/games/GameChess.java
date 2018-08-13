@@ -1,6 +1,9 @@
 package org.alexdev.kepler.game.games;
 
 import com.github.bhlangonijr.chesslib.*;
+import com.github.bhlangonijr.chesslib.move.Move;
+import com.github.bhlangonijr.chesslib.move.MoveGenerator;
+import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import groovy.transform.Synchronized;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
@@ -103,6 +106,30 @@ public class GameChess extends GamehallGame {
             this.broadcastMap();
         }
 
+        if (command.equals("MOVEPIECE")) {
+            Square fromSquare = Square.valueOf(args[0].toUpperCase());
+            Square toSquare = Square.valueOf(args[1].toUpperCase());
+
+            if (fromSquare == toSquare) {
+                return;
+            }
+
+            Move move = new Move(fromSquare, toSquare);
+            boolean isLegalMove = false;
+
+            try {
+                var moveList = MoveGenerator.generateLegalMoves(this.board);
+                isLegalMove = moveList.contains(move);
+
+            } catch (MoveGeneratorException e) { }
+
+            if (isLegalMove) {
+                this.board.doMove(move, true);
+            }
+
+            this.broadcastMap();
+        }
+
         if (command.equals("RESTART")) {
             this.restartMap();
             this.broadcastMap();
@@ -141,6 +168,12 @@ public class GameChess extends GamehallGame {
         this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "PIECEDATA", playerNames[0], playerNames[1], boardData.toString()}));
     }
 
+    /**
+     * Get the CCT type of chess piece by the piece type supplied.
+     *
+     * @param pieceType the piece type instance
+     * @return the CCT type, else it defaults to Rook
+     */
     public String getChessPiece(PieceType pieceType) {
         if (pieceType == PieceType.BISHOP) {
             return "cr";
