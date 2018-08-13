@@ -24,6 +24,8 @@ public class PlayerManager {
     private long dailyPlayerPeak;
 
     private boolean isMaintenanceShutdown;
+    private Duration maintenanceAt;
+
     private ScheduledFuture<?> shutdownTimeout;
 
     public PlayerManager() {
@@ -137,31 +139,31 @@ public class PlayerManager {
     /**
      * Start shutdown timeout
      *
-     * @param untilShutdown when to shutdown
+     * @param maintenanceAt when to shutdown
      */
-    public void enqueueMaintenanceShutdown(Duration untilShutdown) {
+    public void planMaintenance(Duration maintenanceAt) {
         // Interrupt current timeout to set new maintenance countdown
         if (this.shutdownTimeout != null) {
-            this.cancelMaintenanceShutdown();
+            this.cancelMaintenance();
         }
 
         // Start timeout that will trigger the shutdown hook
-        this.shutdownTimeout = GameScheduler.getInstance().getSchedulerService().schedule(() -> System.exit(0), untilShutdown.toMillis(), TimeUnit.MILLISECONDS);
-        //this.shutdownTimeout.start();
+        this.shutdownTimeout = GameScheduler.getInstance().getSchedulerService().schedule(() -> System.exit(0), maintenanceAt.toMillis(), TimeUnit.MILLISECONDS);
 
         // Let other Kepler components know we are in maintenance mode
         this.isMaintenanceShutdown = true;
+        this.maintenanceAt = maintenanceAt;
 
         // Notify all users of shutdown timeout
         for (Player p : this.players) {
-            p.send(new INFO_HOTEL_CLOSING(untilShutdown));
+            p.send(new INFO_HOTEL_CLOSING(maintenanceAt));
         }
     }
 
     /**
      * Cancel shutdown timeout
      */
-    public void cancelMaintenanceShutdown() {
+    public void cancelMaintenance() {
         this.shutdownTimeout.cancel(true);
     }
 
@@ -218,10 +220,18 @@ public class PlayerManager {
     }
 
     /**
+     * Get duration until shutdown
+     * @return duration until shutdown
+     */
+    public Duration getMaintenanceAt() {
+        return this.maintenanceAt;
+    }
+
+    /**
      * Get maintenance shutdown status
      * @return the maintenance shutdown status
      */
-    public boolean isMaintenanceShutdown() {
+    public boolean isMaintenance() {
         return this.isMaintenanceShutdown;
     }
 
