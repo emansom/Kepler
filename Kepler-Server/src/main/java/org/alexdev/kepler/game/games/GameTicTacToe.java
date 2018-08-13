@@ -145,8 +145,6 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             GameToken token = this.getToken(this.playerSides.get(player));
-            token.incrementMoves();
-
             this.gameMap[X][Y] = token.getToken();
 
             this.broadcastMap();
@@ -158,6 +156,8 @@ public class GameTicTacToe extends GamehallGame {
                 this.gameFinished = true;
                 this.announceWinningSide(variables);
             }
+
+            token.incrementMoves();
         }
     }
 
