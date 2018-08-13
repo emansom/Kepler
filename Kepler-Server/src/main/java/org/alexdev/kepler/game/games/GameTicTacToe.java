@@ -178,15 +178,16 @@ public class GameTicTacToe extends GamehallGame {
 
             this.gameMap[X][Y] = token.getToken();
 
-            this.swapTurns(player);
-            this.broadcastMap();
-
             Pair<Character, List<int[]>> variables = this.hasGameFinished();
 
             if (variables != null) {
                 this.gameFinished = true;
                 this.announceWinningSide(variables);
+            } else {
+                this.swapTurns(player);
             }
+
+            this.broadcastMap();
         }
     }
 
