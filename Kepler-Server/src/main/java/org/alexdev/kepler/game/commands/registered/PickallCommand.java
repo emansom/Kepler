@@ -31,7 +31,7 @@ public class PickallCommand extends Command {
             return;
         }
 
-        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId())) {
+        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId()) && !player.hasFuse("fuse_any_room_controller")) {
             return;
         }
         

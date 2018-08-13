@@ -18,7 +18,7 @@ public class FLATPROPBYITEM implements MessageEvent {
             return;
         }
 
-        if (!room.isOwner(player.getDetails().getId())) {
+        if (!room.isOwner(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
             return;
         }
 

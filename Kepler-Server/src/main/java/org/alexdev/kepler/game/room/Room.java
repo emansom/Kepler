@@ -64,12 +64,6 @@ public class Room {
      * @return true, if successful
      */
     public boolean isOwner(int ownerId) {
-        Player player = PlayerManager.getInstance().getPlayerById(ownerId);
-
-        if (player != null && player.hasFuse("fuse_any_room_controller")) {
-            return true;
-        }
-
         return this.roomData.getOwnerId() == ownerId;
     }
 
@@ -109,14 +103,15 @@ public class Room {
             player.send(new YOUNOTCONTROLLER());
         }
 
-        if (isOwner(player.getDetails().getId())) {
+        if (isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
             player.send(new YOUAROWNER());
             rightsValue = "useradmin";
         }
 
+
         player.getRoomUser().removeStatus(StatusType.FLAT_CONTROL);
 
-        if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId())) {
+        if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
             player.getRoomUser().setStatus(StatusType.FLAT_CONTROL, rightsValue);
         }
     }

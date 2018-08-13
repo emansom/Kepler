@@ -18,7 +18,7 @@ public class REMOVEALLRIGHTS implements MessageEvent {
             return;
         }
 
-        if (!room.isOwner(player.getEntityId())) {
+        if (!room.isOwner(player.getEntityId()) && !player.hasFuse("fuse_any_room_controller")) {
             return;
         }
 
