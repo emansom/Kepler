@@ -29,6 +29,6 @@ public class REMOVEALLRIGHTS implements MessageEvent {
             roomPlayer.getRoomUser().setNeedsUpdate(true);
         }
 
-        RoomRightsDao.deleteRoomRights(roomId);
+        RoomRightsDao.deleteRoomRights(room.getData());
     }
 }

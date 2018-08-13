@@ -36,6 +36,6 @@ public class REMOVERIGHTS implements MessageEvent {
         room.refreshRights(target);
 
         target.getRoomUser().setNeedsUpdate(true);
-        RoomRightsDao.removeRights(userId, room.getId());
+        RoomRightsDao.removeRights(target.getDetails(), room.getData());
     }
 }

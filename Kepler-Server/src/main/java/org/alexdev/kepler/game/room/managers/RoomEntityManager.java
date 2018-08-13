@@ -174,7 +174,7 @@ public class RoomEntityManager {
 
         // Don't let the room owner vote on it's own room
         boolean voted = this.room.getData().getOwnerId() == player.getDetails().getId()
-                || RoomDao.hasVoted(player.getDetails().getId(), room.getData().getId());
+                || RoomDao.hasVoted(player.getDetails(), this.room.getData());
 
         player.send(new UPDATE_VOTES(voted, this.room.getData().getRating()));
 
@@ -196,11 +196,11 @@ public class RoomEntityManager {
         if (this.room.isPublicRoom()) {
             this.room.getItems().addAll(PublicItemParser.getPublicItems(this.room.getId(), this.room.getModel().getId()));
         } else {
-            this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getId()));
+            this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getData()));
         }
 
-        this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getId()));
-        this.room.getData().setRating(RoomDao.getRating(this.room.getId()));
+        this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getData()));
+        this.room.getData().setRating(RoomDao.getRating(this.room.getData()));
 
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();
