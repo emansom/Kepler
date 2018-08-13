@@ -54,7 +54,7 @@ public class ShutdownCommand extends Command {
         PlayerManager.getInstance().enqueueMaintenanceShutdown(Duration.ofMinutes(minutes));
 
         // Let callee know Kepler is shutting down in X minutes
-        player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Shutting down in " + minutes + " minutes"));
+        player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Shutting down in " + minutes + " minute(s)"));
     }
 
     @Override
