@@ -117,6 +117,7 @@ public class GameTicTacToe extends GamehallGame {
                         otherPlayer.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(otherToken.getToken())}));
                         this.playersInGame.add(otherPlayer);
                         this.playerSides.put(otherPlayer, otherToken.getToken());
+                        break;
                     }
                 }
             }
