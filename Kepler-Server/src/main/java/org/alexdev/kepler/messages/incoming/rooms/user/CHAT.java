@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 import org.alexdev.kepler.messages.outgoing.rooms.user.TYPING_STATUS;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -50,7 +51,7 @@ public class CHAT implements MessageEvent {
 
                 if (distX < 9 && distY < 9) {// User can hear
                     if (distX <= 6 && distY <= 6) {// User can hear full message
-                        roomPlayer.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), message));
+                        roomPlayer.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), message));
                     } else {
                         int garbleIntensity = distX;
 
@@ -73,15 +74,15 @@ public class CHAT implements MessageEvent {
                             }
                         }
 
-                        roomPlayer.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), new String(garbleMessage)));
+                        roomPlayer.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), new String(garbleMessage)));
                     }
                 } else {
                     // Disappearing chat bubble
-                    roomPlayer.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), ""));
+                    roomPlayer.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), ""));
                 }
             }
         } else {
-            room.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), message));
+            room.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), message));
         }
     }
 }

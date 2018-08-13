@@ -52,7 +52,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
         Player player = new Player(new NettyPlayerNetwork(ctx.channel(), this.server.getConnectionIds().getAndIncrement()));
         ctx.channel().attr(Player.PLAYER_KEY).set(player);
 
-        if (!this.server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
+        if (!this.server.getChannels().add(ctx.channel()) || Kepler.isShuttingdown()) {
             Log.getErrorLogger().error("Could not accept connection from {}", NettyPlayerNetwork.getIpAddress(ctx.channel()));
             ctx.close();
             return;

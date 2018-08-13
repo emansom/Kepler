@@ -128,6 +128,20 @@ public class GameScheduler implements Runnable {
         return Executors.newScheduledThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
+    public Thread timeout(Runnable runnable, long delay) {
+        return new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            } catch (Exception e) {
+                // Ignore InterrupedException
+                if (!(e instanceof InterruptedException)) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
     /**
      * Gets the instance
      *
