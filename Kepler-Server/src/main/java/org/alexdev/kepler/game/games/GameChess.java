@@ -4,15 +4,12 @@ import com.github.bhlangonijr.chesslib.*;
 import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
-import groovy.transform.Synchronized;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
-import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,8 +27,11 @@ public class GameChess extends GamehallGame {
         }
     }
 
+    private boolean gameFinished;
+
     private Board board;
     private GameToken[] gameTokens;
+    private Player nextTurn;
 
     private List<Player> playersInGame;
     private HashMap<Player, GameToken> playerSides;
@@ -75,6 +75,11 @@ public class GameChess extends GamehallGame {
                 return;
             }
 
+            if (this.gameFinished) {
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                return;
+            }
+
             player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
 
             GameToken token = this.getToken(sideChosen);
@@ -103,16 +108,40 @@ public class GameChess extends GamehallGame {
                 }
             }
 
+            this.restartMap();
             this.broadcastMap();
         }
 
         if (command.equals("MOVEPIECE")) {
+            if (this.nextTurn != player) {
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                this.broadcastMap();
+                return;
+            }
+
+            if (this.gameFinished) {
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                this.broadcastMap();
+                return;
+            }
+
+            if (this.playersInGame.size() < this.getMinimumPeopleRequired()) {
+                this.broadcastMap();
+                return; // Can't place objects until other player has joined.
+            }
+
+            if (!this.playerSides.containsKey(player)) {
+                this.broadcastMap();
+                return;
+            }
+
             Square fromSquare = Square.valueOf(args[0].toUpperCase());
             Square toSquare = Square.valueOf(args[1].toUpperCase());
 
             if (fromSquare == toSquare) {
                 return;
             }
+
 
             Move move = new Move(fromSquare, toSquare);
             boolean isLegalMove = false;
@@ -127,6 +156,7 @@ public class GameChess extends GamehallGame {
                 this.board.doMove(move, true);
             }
 
+            this.swapTurns(player);
             this.broadcastMap();
         }
 
@@ -164,7 +194,7 @@ public class GameChess extends GamehallGame {
 
         }
 
-        String[] playerNames = this.getPlayerNames();
+        String[] playerNames = this.getCurrentlyPlaying();
         this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "PIECEDATA", playerNames[0], playerNames[1], boardData.toString()}));
     }
 
@@ -199,20 +229,43 @@ public class GameChess extends GamehallGame {
     }
 
     /**
-     * Get the names of the people currently playing, always returns an array with
-     * a length of two, if the name is blank there's no player.
+     * Get the name of the user(s) currently playing as an array for the packet
      *
-     * @return the player names
+     * @return the array with player name
      */
-    private String[] getPlayerNames() {
+    private String[] getCurrentlyPlaying() {
         String[] playerNames = new String[]{"", ""};
 
-        for (int i = 0; i < this.playersInGame.size(); i++) {
+        /*for (int i = 0; i < this.playersInGame.size(); i++) {
             Player player = this.playersInGame.get(i);
             playerNames[i] = Character.toUpperCase(this.playerSides.get(player).getToken()) + " " + player.getDetails().getName();
+        }*/
+
+        if (this.nextTurn != null) {
+            playerNames[0] = Character.toUpperCase(this.playerSides.get(this.nextTurn).getToken()) + " " + this.nextTurn.getDetails().getName();
         }
 
         return playerNames;
+    }
+
+
+    /**
+     * Swap who's turn it is to play.
+     *
+     * @param player the player to swap away from
+     */
+    private void swapTurns(Player player) {
+        Player nextPlayer = null;
+
+        if (this.nextTurn == player) {
+            for (Player p :  this.playersInGame) {
+                if (p != player) {
+                    nextPlayer = p;
+                }
+            }
+        }
+
+        this.nextTurn = nextPlayer;
     }
 
     /**
@@ -224,6 +277,11 @@ public class GameChess extends GamehallGame {
                 new GameToken('b')
         };
 
+        if (this.playersInGame.size() > 0) {
+            this.nextTurn = this.playersInGame.get(0);
+        }
+
+        this.gameFinished = false;
         this.board = new Board();
     }
 

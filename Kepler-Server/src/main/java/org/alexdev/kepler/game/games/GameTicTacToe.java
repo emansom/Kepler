@@ -122,7 +122,7 @@ public class GameTicTacToe extends GamehallGame {
                 }
             }
 
-            String[] playerNames = this.getPlayerNames();
+            String[] playerNames = this.getCurrentlyPlaying();
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
@@ -178,8 +178,8 @@ public class GameTicTacToe extends GamehallGame {
 
             this.gameMap[X][Y] = token.getToken();
 
-            this.broadcastMap();
             this.swapTurns(player);
+            this.broadcastMap();
 
             Pair<Character, List<int[]>> variables = this.hasGameFinished();
 
@@ -423,22 +423,25 @@ public class GameTicTacToe extends GamehallGame {
             boardData.append((char)13);
         }
 
-        String[] playerNames = this.getPlayerNames();
+        String[] playerNames = this.getCurrentlyPlaying();
         this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "BOARDDATA", playerNames[0], playerNames[1], boardData.toString()}));
     }
 
     /**
-     * Get the names of the people currently playing, always returns an array with
-     * a length of two, if the name is blank there's no player.
+     * Get the name of the user(s) currently playing as an array for the packet
      *
-     * @return the player names
+     * @return the array with player name
      */
-    private String[] getPlayerNames() {
+    private String[] getCurrentlyPlaying() {
         String[] playerNames = new String[]{"", ""};
 
-        for (int i = 0; i < this.playersInGame.size(); i++) {
+        /*for (int i = 0; i < this.playersInGame.size(); i++) {
             Player player = this.playersInGame.get(i);
-            playerNames[i] = this.playerSides.get(player) + " " + player.getDetails().getName();
+            playerNames[i] = Character.toUpperCase(this.playerSides.get(player).getToken()) + " " + player.getDetails().getName();
+        }*/
+
+        if (this.nextTurn != null) {
+            playerNames[0] = Character.toUpperCase(this.playerSides.get(this.nextTurn)) + " " + this.nextTurn.getDetails().getName();
         }
 
         return playerNames;
