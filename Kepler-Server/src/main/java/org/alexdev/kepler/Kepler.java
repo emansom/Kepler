@@ -133,14 +133,14 @@ public class Kepler {
         String rconBind = ServerConfiguration.getString("rcon.bind");
 
         if (rconBind.length() == 0) {
-            log.error("Remote Control (RCON) server bind address is not provided");
+            log.error("Remote control (RCON) server bind address is not provided");
             return;
         }
 
         rconPort = ServerConfiguration.getInteger("rcon.port");
 
         if (rconPort == 0) {
-            log.error("Remote Control (RCON) server port not provided");
+            log.error("Remote control (RCON) server port not provided");
             return;
         }
 
