@@ -213,6 +213,10 @@ public class GameTicTacToe extends GamehallGame {
 
             Player winner = this.getPlayerBySide(token.getToken());
 
+            if (winner == null) {
+                return;
+            }
+
             for (Player player : this.playersInGame) {
                 player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
             }
