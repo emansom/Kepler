@@ -247,6 +247,7 @@ public class GameTicTacToe extends GamehallGame {
 
                     if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{i, j + k});
+                        letter = newLetter;
 
                         if (winningCoordinates.size() >= NUM_IN_ROW) {
                             return Pair.of(letter, winningCoordinates);
@@ -277,6 +278,7 @@ public class GameTicTacToe extends GamehallGame {
 
                     if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{i + k, j});
+                        letter = newLetter;
 
                         if (winningCoordinates.size() >= NUM_IN_ROW) {
                             return Pair.of(letter, winningCoordinates);
@@ -307,6 +309,7 @@ public class GameTicTacToe extends GamehallGame {
 
                     if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{i + k, j + k});
+                        letter = newLetter;
 
                         if (winningCoordinates.size() >= NUM_IN_ROW) {
                             return Pair.of(letter, winningCoordinates);
@@ -344,6 +347,7 @@ public class GameTicTacToe extends GamehallGame {
 
                     if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{newX, newY});
+                        letter = newLetter;
 
                         if (winningCoordinates.size() >= NUM_IN_ROW) {
                             return Pair.of(letter, winningCoordinates);
