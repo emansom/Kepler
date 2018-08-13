@@ -146,7 +146,7 @@ public class PlayerManager {
     public void planMaintenance(Duration maintenanceAt) {
         // Interrupt current timeout to set new maintenance countdown
         if (this.shutdownTimeout != null) {
-            this.cancelMaintenance();
+            this.shutdownTimeout.cancel(true);
         }
 
         // Start timeout that will trigger the shutdown hook
