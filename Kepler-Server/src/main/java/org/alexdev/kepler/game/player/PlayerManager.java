@@ -165,6 +165,7 @@ public class PlayerManager {
      */
     public void cancelMaintenance() {
         this.shutdownTimeout.cancel(true);
+        this.isMaintenanceShutdown = false;
     }
 
     /**
