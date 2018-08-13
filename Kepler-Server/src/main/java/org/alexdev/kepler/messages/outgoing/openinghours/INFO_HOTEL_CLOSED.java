@@ -7,6 +7,8 @@ import java.time.LocalTime;
 
 public class INFO_HOTEL_CLOSED extends MessageComposer {
     private final LocalTime openTime;
+
+    // Denotes if the ugly popup is used or the more fancy one
     private final boolean disconnect;
 
     public INFO_HOTEL_CLOSED(LocalTime openTime, boolean disconnect) {

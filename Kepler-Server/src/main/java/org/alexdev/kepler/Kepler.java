@@ -179,15 +179,6 @@ public class Kepler {
             log.info("Shutting down server!");
             isShutdown = true;
 
-            for (Player p : PlayerManager.getInstance().getPlayers()) {
-                // First send fancy maintenance popup to client
-                // (disconnect parameter denotes if the fancy popup is used or the more uglier one)
-                p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), false));
-
-                // Now disconnect the player
-                p.kickFromServer(true);
-            }
-
             // TODO: all the managers
             PlayerManager.getInstance().dispose();
 
