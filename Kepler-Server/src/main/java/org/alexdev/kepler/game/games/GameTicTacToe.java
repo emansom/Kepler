@@ -92,7 +92,7 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (getPlayerBySide(sideChosen) != null) {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
                 return;
             }
 
@@ -142,12 +142,12 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (this.nextTurn != player) {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
             if (this.gameFinished) {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
@@ -169,7 +169,7 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (this.gameMap[X][Y] != '0') {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
