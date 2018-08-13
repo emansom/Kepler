@@ -82,7 +82,6 @@ public class GameChess extends GamehallGame {
                 return;
             }
 
-            player.getRoomUser().getTimerManager().resetRoomTimer(TimeUnit.MINUTES.toSeconds(60)); // Give user an hour to play chess
             player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
 
             GameToken token = this.getToken(sideChosen);
@@ -104,7 +103,6 @@ public class GameChess extends GamehallGame {
                 for (Player otherPlayer : this.getPlayers()) {
                     if (otherPlayer != player) {
                         otherPlayer.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(otherToken.getToken())}));
-                        otherPlayer.getRoomUser().getTimerManager().resetRoomTimer(TimeUnit.MINUTES.toSeconds(60)); // Give user an hour to play chess
                         this.playersInGame.add(otherPlayer);
                         this.playerSides.put(otherPlayer, otherToken);
                         break;
@@ -175,6 +173,7 @@ public class GameChess extends GamehallGame {
                 this.swapTurns(player);
             }
 
+            player.getRoomUser().getTimerManager().resetRoomTimer();
             this.broadcastMap();
         }
 
