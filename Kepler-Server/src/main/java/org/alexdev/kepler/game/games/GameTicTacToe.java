@@ -91,8 +91,8 @@ public class GameTicTacToe extends GamehallGame {
                 return;
             }
 
-            if (getPlayerBySide(sideChosen) != null) {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
+            if (this.getPlayerBySide(sideChosen) != null) {
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"}));
                 return;
             }
 
@@ -122,7 +122,7 @@ public class GameTicTacToe extends GamehallGame {
                 }
             }
 
-            String[] playerNames = this.getPlayerNames();
+            String[] playerNames = this.getCurrentlyPlaying();
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
@@ -142,12 +142,12 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (this.nextTurn != player) {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
             if (this.gameFinished) {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
@@ -169,7 +169,7 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (this.gameMap[X][Y] != '0') {
-                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
+                player.send(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
@@ -178,8 +178,8 @@ public class GameTicTacToe extends GamehallGame {
 
             this.gameMap[X][Y] = token.getToken();
 
-            this.broadcastMap();
             this.swapTurns(player);
+            this.broadcastMap();
 
             Pair<Character, List<int[]>> variables = this.hasGameFinished();
 
@@ -213,6 +213,10 @@ public class GameTicTacToe extends GamehallGame {
             this.broadcastMap();
 
             Player winner = this.getPlayerBySide(token.getToken());
+
+            if (winner == null) {
+                return;
+            }
 
             for (Player player : this.playersInGame) {
                 player.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
@@ -363,7 +367,12 @@ public class GameTicTacToe extends GamehallGame {
         return null;
     }
 
-    public void swapTurns(Player player) {
+    /**
+     * Swap who's turn it is to play.
+     *
+     * @param player the player to swap away from
+     */
+    private void swapTurns(Player player) {
         Player nextPlayer = null;
 
         if (this.nextTurn == player) {
@@ -414,22 +423,25 @@ public class GameTicTacToe extends GamehallGame {
             boardData.append((char)13);
         }
 
-        String[] playerNames = this.getPlayerNames();
+        String[] playerNames = this.getCurrentlyPlaying();
         this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "BOARDDATA", playerNames[0], playerNames[1], boardData.toString()}));
     }
 
     /**
-     * Get the names of the people currently playing, always returns an array with
-     * a length of two, if the name is blank there's no player.
+     * Get the name of the user(s) currently playing as an array for the packet
      *
-     * @return the player names
+     * @return the array with player name
      */
-    private String[] getPlayerNames() {
+    private String[] getCurrentlyPlaying() {
         String[] playerNames = new String[]{"", ""};
 
-        for (int i = 0; i < this.playersInGame.size(); i++) {
+        /*for (int i = 0; i < this.playersInGame.size(); i++) {
             Player player = this.playersInGame.get(i);
-            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player);
+            playerNames[i] = Character.toUpperCase(this.playerSides.get(player).getToken()) + " " + player.getDetails().getName();
+        }*/
+
+        if (this.nextTurn != null) {
+            playerNames[0] = Character.toUpperCase(this.playerSides.get(this.nextTurn)) + " " + this.nextTurn.getDetails().getName();
         }
 
         return playerNames;

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 public class PlayerManager {
@@ -23,8 +24,9 @@ public class PlayerManager {
     private long dailyPlayerPeak;
 
     private boolean isMaintenanceShutdown;
-    private Thread shutdownTimeout;
     private Duration maintenanceAt;
+
+    private ScheduledFuture<?> shutdownTimeout;
 
     public PlayerManager() {
         this.players = new CopyOnWriteArrayList<>();
@@ -137,17 +139,16 @@ public class PlayerManager {
     /**
      * Start shutdown timeout
      *
-     * @param untilShutdown when to shutdown
+     * @param maintenanceAt when to shutdown
      */
     public void planMaintenance(Duration maintenanceAt) {
         // Interrupt current timeout to set new maintenance countdown
         if (this.shutdownTimeout != null) {
-            this.shutdownTimeout.interrupt();
+            this.cancelMaintenance();
         }
 
         // Start timeout that will trigger the shutdown hook
-        this.shutdownTimeout = GameScheduler.getInstance().timeout(() -> System.exit(0), maintenanceAt.toMillis());
-        this.shutdownTimeout.start();
+        this.shutdownTimeout = GameScheduler.getInstance().getSchedulerService().schedule(() -> System.exit(0), maintenanceAt.toMillis(), TimeUnit.MILLISECONDS);
 
         // Let other Kepler components know we are in maintenance mode
         this.isMaintenanceShutdown = true;
@@ -163,7 +164,7 @@ public class PlayerManager {
      * Cancel shutdown timeout
      */
     public void cancelMaintenance() {
-        this.shutdownTimeout.interrupt();
+        this.shutdownTimeout.cancel(true);
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games;
 
+import com.github.bhlangonijr.chesslib.PieceType;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;

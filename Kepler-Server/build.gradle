@@ -24,6 +24,7 @@ repositories {
     maven {
         url  "https://dl.bintray.com/terl/lazysodium-maven"
     }
+    maven { url 'https://jitpack.io' }
     mavenCentral()
 }
 
@@ -35,6 +36,7 @@ def protobufVersion = '3.5.1'
 def protocVersion = '3.5.1-1'
 
 dependencies {
+    implementation 'com.github.bhlangonijr:chesslib:1.1.1'
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
     // https://mvnrepository.com/artifact/com.zaxxer/HikariCP
