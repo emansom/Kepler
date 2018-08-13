@@ -178,8 +178,10 @@ public class RoomEntityManager {
 
         player.send(new UPDATE_VOTES(voted, this.room.getData().getRating()));
 
-        // TODO: send pending CFH messages that haven't been sent before as sending when on hotelview doesn't work
+        // Let friends know I entered this room by updating their console :)
+        player.getMessenger().sendStatusUpdate();
 
+        // Save increased visitor count of this room
         RoomDao.saveVisitors(this.room);
     }
 
