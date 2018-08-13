@@ -1,15 +1,17 @@
 package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSED;
+import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSING;
 import org.alexdev.kepler.util.DateUtil;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -19,6 +21,9 @@ public class PlayerManager {
 
     private long timeUntilNextReset;
     private long dailyPlayerPeak;
+
+    private boolean isMaintenanceShutdown;
+    private Thread shutdownTimeout;
 
     public PlayerManager() {
         this.players = new CopyOnWriteArrayList<>();
@@ -129,12 +134,42 @@ public class PlayerManager {
     }
 
     /**
+     * Start shutdown timeout
+     *
+     * @param untilShutdown when to shutdown
+     */
+    public void enqueueMaintenanceShutdown(Duration untilShutdown) {
+        // Interrupt current timeout to set new maintenance countdown
+        if (this.shutdownTimeout != null) {
+            this.shutdownTimeout.interrupt();
+        }
+
+        // Start timeout that will trigger the shutdown hook
+        this.shutdownTimeout = GameScheduler.getInstance().timeout(() -> System.exit(0), untilShutdown.toMillis());
+        this.shutdownTimeout.start();
+
+        // Let other Kepler components know we are in maintenance mode
+        this.isMaintenanceShutdown = true;
+
+        // Notify all users of shutdown timeout
+        for (Player p : this.players) {
+            p.send(new INFO_HOTEL_CLOSING(untilShutdown));
+        }
+    }
+
+    /**
+     * Cancel shutdown timeout
+     */
+    public void cancelMaintenanceShutdown() {
+        this.shutdownTimeout.interrupt();
+    }
+
+    /**
      * Close and dispose all users.
      */
     public void dispose() {
-        for (Player p : this.getPlayers()) {
-            // First send fancy maintenance popup to client
-            // (disconnect parameter denotes if the ugly popup is used or the more fancy one)
+        for (Player p : this.players) {
+            // Send fancy maintenance alert if we're shutting down
             p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), false));
 
             // Now disconnect the player
@@ -148,7 +183,7 @@ public class PlayerManager {
      * @return the collection of players
      */
     public List<Player> getPlayers() {
-        return new ArrayList<>(this.players);
+        return this.players;
     }
 
     /**
@@ -173,8 +208,20 @@ public class PlayerManager {
         return activePlayers;
     }
 
+    /**
+     * Get daily player peak
+     * @return the daily player peak
+     */
     public long getDailyPlayerPeak() {
-        return dailyPlayerPeak;
+        return this.dailyPlayerPeak;
+    }
+
+    /**
+     * Get maintenance shutdown status
+     * @return the maintenance shutdown status
+     */
+    public boolean isMaintenanceShutdown() {
+        return this.isMaintenanceShutdown;
     }
 
     /**

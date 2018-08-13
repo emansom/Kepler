@@ -46,7 +46,7 @@ public class MusConnectionHandler extends SimpleChannelInboundHandler<MusMessage
 
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) {
-        if (!this.server.getChannels().add(ctx.channel()) || Kepler.getIsShutdown()) {
+        if (!this.server.getChannels().add(ctx.channel()) || Kepler.isShuttingdown()) {
             Log.getErrorLogger().error("Could not accept MUS connection from {}", ctx.channel().remoteAddress().toString().replace("/", "").split(":")[0]);
             ctx.close();
             return;

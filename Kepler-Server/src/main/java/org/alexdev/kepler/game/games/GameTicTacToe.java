@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
+import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -218,7 +219,7 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             for (Player player : this.playersInGame) {
-                player.send(new CHAT_MESSAGE(CHAT_MESSAGE.type.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
+                player.send(new CHAT_MESSAGE(ChatMessageType.CHAT, player.getRoomUser().getInstanceId(), winner.getDetails().getName() + " has won the game in " + token.getMoves() + " moves!"));
             }
 
         }

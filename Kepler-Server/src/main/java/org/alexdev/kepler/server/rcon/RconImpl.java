@@ -20,7 +20,7 @@ public class RconImpl extends RconImplBase {
      */
     @Override
     public void ping(Empty request, StreamObserver<Response> responseObserver) {
-        boolean online = !Kepler.getIsShutdown();
+        boolean online = !Kepler.isShuttingdown();
         Response reply = Response.newBuilder().setOk(online).build();
 
         responseObserver.onNext(reply);

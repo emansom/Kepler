@@ -4,24 +4,28 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class CHAT_MESSAGE extends MessageComposer {
-    public enum type {
+    public enum ChatMessageType {
         CHAT (24), // @X
         SHOUT (26), // @Z
         WHISPER (25); // @Y
 
         private final short header;
 
-        type(int header) {
+        ChatMessageType(int header) {
             this.header = (short) header;
+        }
+
+        public short getHeader() {
+            return header;
         }
     }
 
-    private final type chatMessageType;
+    private final ChatMessageType type;
     private final int instanceId;
     private final String message;
 
-    public CHAT_MESSAGE(type chatMessageType, int instanceId, String message) {
-        this.chatMessageType = chatMessageType;
+    public CHAT_MESSAGE(ChatMessageType type, int instanceId, String message) {
+        this.type = type;
         this.instanceId = instanceId;
         this.message = message;
     }
@@ -34,6 +38,6 @@ public class CHAT_MESSAGE extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return this.chatMessageType.header;
+        return this.type.getHeader();
     }
 }
