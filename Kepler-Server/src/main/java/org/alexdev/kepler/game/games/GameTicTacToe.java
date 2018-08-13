@@ -42,13 +42,14 @@ public class GameTicTacToe extends GamehallGame {
         }
     }
 
+    private static final int NUM_IN_ROW = 5;
     private static final int MAX_WIDTH = 23;
     private static final int MAX_LENGTH = 24;
 
     private GameToken[] gameTokens;
 
     private List<Player> playersInGame;
-    private Map<Player, GameToken> playerSides;
+    private Map<Player, Character> playerSides;
 
     private boolean gameFinished;
     private char[][] gameMap;
@@ -83,15 +84,8 @@ public class GameTicTacToe extends GamehallGame {
 
         if (command.equals("CHOOSETYPE")) {
             char sideChosen = args[0].charAt(0);
-            GameToken token = null;
 
-            for (GameToken side : gameTokens) {
-                if (side.getToken() == sideChosen) {
-                    token = side;
-                }
-            }
-
-            if (token == null) {
+            if (this.getToken(sideChosen) == null) {
                 return;
             }
 
@@ -100,12 +94,12 @@ public class GameTicTacToe extends GamehallGame {
                 return;
             }
 
-            this.playerSides.put(player, token);
+            this.playerSides.put(player, sideChosen);
             this.playersInGame.add(player);
 
             String[] playerNames = this.getPlayerNames();
 
-            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(token.getToken())}));
+            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
@@ -130,7 +124,7 @@ public class GameTicTacToe extends GamehallGame {
 
             char side = args[0].charAt(0);
 
-            if (this.playerSides.get(player).getToken() != side) {
+            if (this.playerSides.get(player) != side) {
                 return;
             }
 
@@ -145,10 +139,8 @@ public class GameTicTacToe extends GamehallGame {
                 return;
             }
 
-            GameToken token = this.playerSides.get(player);
+            GameToken token = this.getToken(this.playerSides.get(player));
             token.incrementMoves();
-
-            System.out.println("token : " + token.getMoves());
 
             this.gameMap[X][Y] = token.getToken();
             this.broadcastMap();
@@ -162,6 +154,12 @@ public class GameTicTacToe extends GamehallGame {
         }
     }
 
+    /**
+     * Announce the winning side, change the characters to their winning symbols, and says
+     * how many moves it took.
+     *
+     * @param variables the winning character and coordinates of winning tiles
+     */
     private void announceWinningSide(Pair<Character, List<int[]>> variables) {
         GameToken token = null;
 
@@ -192,7 +190,7 @@ public class GameTicTacToe extends GamehallGame {
      *
      * @return a variable containing the character who won, and the coords of the winning tiles
      */
-    public Pair<Character, List<int[]>> hasGameFinished() {
+    private Pair<Character, List<int[]>> hasGameFinished() {
         List<int[]> winningCoordinates = new ArrayList<>();
 
         // Check rows across
@@ -205,7 +203,7 @@ public class GameTicTacToe extends GamehallGame {
                     continue;
                 }
 
-                for (int k = 0; k < 5; k++) {
+                for (int k = 0; k < NUM_IN_ROW; k++) {
                     if ((j + k) >= MAX_LENGTH) {
                         continue;
                     }
@@ -217,7 +215,7 @@ public class GameTicTacToe extends GamehallGame {
                         winningCoordinates.add(new int[]{i, j + k});
                     }
 
-                    if (winningCoordinates.size() >= 5) {
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
                         return Pair.of(letter, winningCoordinates);
                     }
                 }
@@ -234,7 +232,7 @@ public class GameTicTacToe extends GamehallGame {
                     continue;
                 }
 
-                for (int k = 0; k < 5; k++) {
+                for (int k = 0; k < NUM_IN_ROW; k++) {
                     if ((i + k) >= MAX_WIDTH) {
                         continue;
                     }
@@ -246,7 +244,7 @@ public class GameTicTacToe extends GamehallGame {
                         winningCoordinates.add(new int[]{i + k, j});
                     }
 
-                    if (winningCoordinates.size() >= 5) {
+                    if (winningCoordinates.size() >= NUM_IN_ROW) {
                         return Pair.of(letter, winningCoordinates);
                     }
                 }
@@ -278,7 +276,7 @@ public class GameTicTacToe extends GamehallGame {
     /**
      * Send the game map to the opponents.
      */
-    public void broadcastMap() {
+    private void broadcastMap() {
         StringBuilder boardData = new StringBuilder();
 
         for (char[] mapData : this.gameMap) {
@@ -304,7 +302,7 @@ public class GameTicTacToe extends GamehallGame {
 
         for (int i = 0; i < this.playersInGame.size(); i++) {
             Player player = this.playersInGame.get(i);
-            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player).getToken();
+            playerNames[i] = player.getDetails().getName() + " " + this.playerSides.get(player);
         }
 
         return playerNames;
@@ -316,14 +314,33 @@ public class GameTicTacToe extends GamehallGame {
      * @param side the side used
      * @return the player instance, if successful
      */
-    public Player getPlayerBySide(char side) {
+    private Player getPlayerBySide(char side) {
         for (var kvp : this.playerSides.entrySet()) {
-            if (kvp.getValue().getToken() == side) {
+            if (kvp.getValue() == side) {
                 return kvp.getKey();
             }
         }
 
         return null;
+    }
+
+    /**
+     * Get token instance by character.
+     *
+     * @param side the character to compare against
+     * @return the instance, if successful
+     */
+    private GameToken getToken(char side) {
+        GameToken token = null;
+
+        for (GameToken t : gameTokens) {
+            if (t.getToken() == side) {
+                token = t;
+                break;
+            }
+        }
+
+        return token;
     }
 
     @Override
@@ -333,7 +350,7 @@ public class GameTicTacToe extends GamehallGame {
 
     @Override
     public int getMinimumPeopleRequired() {
-        return 2;
+        return 1;
     }
 
     @Override
