@@ -98,8 +98,9 @@ public class GameTicTacToe extends GamehallGame {
             this.playerSides.put(player, sideChosen);
             this.playersInGame.add(player);
 
-            String[] playerNames = this.getPlayerNames();;
+            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
 
+            // Select the other side for the player
             GameToken otherToken = null;
 
             for (GameToken other : gameTokens) {
@@ -108,8 +109,6 @@ public class GameTicTacToe extends GamehallGame {
                     break;
                 }
             }
-
-            player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
 
             if (otherToken != null) {
                 for (Player otherPlayer : this.getPlayers()) {
@@ -122,6 +121,7 @@ public class GameTicTacToe extends GamehallGame {
                 }
             }
 
+            String[] playerNames = this.getPlayerNames();
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
