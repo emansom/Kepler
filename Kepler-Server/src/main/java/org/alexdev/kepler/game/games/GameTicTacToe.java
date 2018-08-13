@@ -53,6 +53,7 @@ public class GameTicTacToe extends GamehallGame {
 
     private boolean gameFinished;
     private char[][] gameMap;
+    private Player nextTurn;
 
     public GameTicTacToe(int roomId, List<int[]> chairs) {
         super(roomId, chairs);
@@ -118,6 +119,10 @@ public class GameTicTacToe extends GamehallGame {
                 return;
             }
 
+            if (this.nextTurn != player) {
+                return;
+            }
+
             if (this.gameFinished) {
                 return;
             }
@@ -143,7 +148,9 @@ public class GameTicTacToe extends GamehallGame {
             token.incrementMoves();
 
             this.gameMap[X][Y] = token.getToken();
+
             this.broadcastMap();
+            this.swapTurns(player);
 
             Pair<Character, List<int[]>> variables = this.hasGameFinished();
 
@@ -319,6 +326,20 @@ public class GameTicTacToe extends GamehallGame {
         return null;
     }
 
+    public void swapTurns(Player player) {
+        Player nextPlayer = null;
+
+        if (this.nextTurn == player) {
+            for (Player p :  this.playersInGame) {
+                if (p != player) {
+                    nextPlayer = p;
+                }
+            }
+        }
+
+        this.nextTurn = nextPlayer;
+    }
+
     /**
      * Reset the game map.
      */
@@ -327,6 +348,10 @@ public class GameTicTacToe extends GamehallGame {
                 new GameToken('O', 'q'),
                 new GameToken('X', '+')
         };
+
+        if (this.playersInGame.size() > 0) {
+            this.nextTurn = this.playersInGame.get(0);
+        }
 
         this.gameFinished = false;
         this.gameMap = new char[MAX_WIDTH][MAX_LENGTH];
@@ -415,7 +440,7 @@ public class GameTicTacToe extends GamehallGame {
 
     @Override
     public int getMinimumPeopleRequired() {
-        return 1;
+        return 2;
     }
 
     @Override
