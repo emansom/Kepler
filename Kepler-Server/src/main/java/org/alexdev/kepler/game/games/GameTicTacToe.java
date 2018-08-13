@@ -367,7 +367,12 @@ public class GameTicTacToe extends GamehallGame {
         return null;
     }
 
-    public void swapTurns(Player player) {
+    /**
+     * Swap who's turn it is to play.
+     *
+     * @param player the player to swap away from
+     */
+    private void swapTurns(Player player) {
         Player nextPlayer = null;
 
         if (this.nextTurn == player) {
