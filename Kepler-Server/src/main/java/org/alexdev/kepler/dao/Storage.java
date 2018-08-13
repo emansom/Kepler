@@ -20,15 +20,15 @@ public class Storage {
 
     private static Storage storage;
     private static Logger log = LoggerFactory.getLogger(Storage.class);
-    
+
     private Storage(String host, int port, String username, String password, String db) {
         try {
             HikariConfig config = new HikariConfig();
             config.setDriverClassName("org.mariadb.jdbc.Driver");
-            config.setJdbcUrl("jdbc:mariadb://" + host + ":"  + port + "/" + db);
+            config.setJdbcUrl("jdbc:mariadb://" + host + ":" + port + "/" + db);
             config.setUsername(username);
             config.setPassword(password);
-            
+
             config.setPoolName("processing");
 
             // No martinmine/Leon/other Habbotards, you don't know better.
@@ -38,26 +38,27 @@ public class Storage {
             // Thus we don't need the * 2 described there
             config.setMaximumPoolSize(Runtime.getRuntime().availableProcessors() + 1);
             config.setMinimumIdle(1);
-            
+
             config.addDataSourceProperty("cachePrepStmts", "true");
             config.addDataSourceProperty("prepStmtCacheSize", "250");
             config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
-            config.addDataSourceProperty("characterEncoding","utf8");
-            config.addDataSourceProperty("useUnicode","true");
-            config.addDataSourceProperty("useSSL","false");
-            config.addDataSourceProperty("serverTimezone","UTC");
+            config.addDataSourceProperty("characterEncoding", "utf8");
+            config.addDataSourceProperty("useUnicode", "true");
+            config.addDataSourceProperty("useSSL", "false");
+            config.addDataSourceProperty("serverTimezone", "UTC");
             config.addDataSourceProperty("sessionVariables", "sql_mode='STRICT_TRANS_TABLES,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'");
 
             this.ds = new HikariDataSource(config);
             this.isConnected = true;
 
         } catch (Exception ex) {
-        	Storage.logError(ex);
+            Storage.logError(ex);
         }
     }
 
     /**
      * Tries to connect to its data access object service
+     *
      * @return boolean - if connection was successful or not
      */
     public static boolean connect() {
@@ -85,27 +86,27 @@ public class Storage {
      * @param ex the exception to log
      */
     public static void logError(Exception ex) {
-    	Log.getErrorLogger().error("Error when executing MySQL query: ", ex);
-	}
+        Log.getErrorLogger().error("Error when executing MySQL query: ", ex);
+    }
 
-	/**
+    /**
      * Prepare.
      *
      * @param query the query
-     * @param conn the conn
+     * @param conn  the conn
      * @return the prepared statement
      * @throws SQLException the SQL exception
      */
     public PreparedStatement prepare(String query, Connection conn) throws SQLException {
         try {
             return conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         return null;
     }
-    
+
     /**
      * Execute.
      *
@@ -128,7 +129,7 @@ public class Storage {
             Storage.closeSilently(sqlConnection);
         }
     }
-    
+
     /**
      * Gets the string.
      *
@@ -137,7 +138,7 @@ public class Storage {
      */
     public String getString(String query) {
         String value = null;
-        
+
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -147,7 +148,7 @@ public class Storage {
             preparedStatement = this.prepare(query, sqlConnection);
             resultSet = preparedStatement.executeQuery();
             resultSet.next();
-            
+
             value = resultSet.getString(query.split(" ")[1]);
 
         } catch (Exception e) {
@@ -203,7 +204,9 @@ public class Storage {
     public static void closeSilently(ResultSet resultSet) {
         try {
             resultSet.close();
-        } catch (Exception e) { }
+        } catch (Exception e) {
+            logError(e);
+        }
     }
 
     /**
@@ -214,8 +217,9 @@ public class Storage {
     public static void closeSilently(PreparedStatement preparedStatement) {
         try {
             preparedStatement.close();
-        } catch (Exception e) { }
-        
+        } catch (Exception e) {
+            logError(e);
+        }
     }
 
     /**
@@ -226,19 +230,21 @@ public class Storage {
     public static void closeSilently(Connection sqlConnection) {
         try {
             sqlConnection.close();
-        } catch (Exception e) { }
-        
+        } catch (Exception e) {
+            logError(e);
+        }
     }
 
     /**
      * Returns the raw access to the data access object functions
+     *
      * @return {@link Storage} class
      */
     public static Storage getStorage() {
         return storage;
     }
 
-	public static Logger getLogger() {
-		return log;
-	}
+    public static Logger getLogger() {
+        return log;
+    }
 }
