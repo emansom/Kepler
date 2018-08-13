@@ -99,9 +99,30 @@ public class GameTicTacToe extends GamehallGame {
             this.playerSides.put(player, sideChosen);
             this.playersInGame.add(player);
 
-            String[] playerNames = this.getPlayerNames();
-
             player.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(sideChosen)}));
+
+            // Select the other side for the player
+            GameToken otherToken = null;
+
+            for (GameToken other : gameTokens) {
+                if (other.getToken() != sideChosen) {
+                    otherToken = other;
+                    break;
+                }
+            }
+
+            if (otherToken != null) {
+                for (Player otherPlayer : this.getPlayers()) {
+                    if (otherPlayer != player) {
+                        otherPlayer.send(new ITEMMSG(new String[]{this.getGameId(), "SELECTTYPE " + String.valueOf(otherToken.getToken())}));
+                        this.playersInGame.add(otherPlayer);
+                        this.playerSides.put(otherPlayer, otherToken.getToken());
+                        break;
+                    }
+                }
+            }
+
+            String[] playerNames = this.getPlayerNames();
             this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "OPPONENTS", playerNames[0], playerNames[1]}));
         }
 
@@ -121,10 +142,12 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (this.nextTurn != player) {
+                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
             if (this.gameFinished) {
+                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
@@ -146,6 +169,7 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (this.gameMap[X][Y] != '0') {
+                this.sendToEveryone(new ITEMMSG(new String[]{this.getGameId(), "TYPERESERVED"})); // Alert/error sound!
                 return;
             }
 
@@ -223,12 +247,14 @@ public class GameTicTacToe extends GamehallGame {
                     char newLetter = this.gameMap[i][j + k];
 
                     if (newLetter != '0' && newLetter == letter) {
-                        //letter = newLetter;
                         winningCoordinates.add(new int[]{i, j + k});
-                    }
+                        letter = newLetter;
 
-                    if (winningCoordinates.size() >= NUM_IN_ROW) {
-                        return Pair.of(letter, winningCoordinates);
+                        if (winningCoordinates.size() >= NUM_IN_ROW) {
+                            return Pair.of(letter, winningCoordinates);
+                        }
+                    } else {
+                        winningCoordinates.clear();
                     }
                 }
             }
@@ -253,10 +279,13 @@ public class GameTicTacToe extends GamehallGame {
 
                     if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{i + k, j});
-                    }
+                        letter = newLetter;
 
-                    if (winningCoordinates.size() >= NUM_IN_ROW) {
-                        return Pair.of(letter, winningCoordinates);
+                        if (winningCoordinates.size() >= NUM_IN_ROW) {
+                            return Pair.of(letter, winningCoordinates);
+                        }
+                    } else {
+                        winningCoordinates.clear();
                     }
                 }
             }
@@ -281,10 +310,13 @@ public class GameTicTacToe extends GamehallGame {
 
                     if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{i + k, j + k});
-                    }
+                        letter = newLetter;
 
-                    if (winningCoordinates.size() >= NUM_IN_ROW) {
-                        return Pair.of(letter, winningCoordinates);
+                        if (winningCoordinates.size() >= NUM_IN_ROW) {
+                            return Pair.of(letter, winningCoordinates);
+                        }
+                    } else {
+                        winningCoordinates.clear();
                     }
                 }
             }
@@ -314,13 +346,15 @@ public class GameTicTacToe extends GamehallGame {
 
                     char newLetter = this.gameMap[newX][newY];
 
-                    if (newLetter != '0') {
-                        letter = newLetter;
+                    if (newLetter != '0' && newLetter == letter) {
                         winningCoordinates.add(new int[]{newX, newY});
-                    }
+                        letter = newLetter;
 
-                    if (winningCoordinates.size() >= NUM_IN_ROW) {
-                        return Pair.of(letter, winningCoordinates);
+                        if (winningCoordinates.size() >= NUM_IN_ROW) {
+                            return Pair.of(letter, winningCoordinates);
+                        }
+                    } else {
+                        winningCoordinates.clear();
                     }
                 }
             }
