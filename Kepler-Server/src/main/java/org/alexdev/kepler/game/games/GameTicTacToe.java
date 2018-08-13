@@ -43,7 +43,7 @@ public class GameTicTacToe extends GamehallGame {
         }
     }
 
-    private static final int NUM_IN_ROW = 5;
+    private static final int NUM_IN_ROW = 7;
     private static final int MAX_WIDTH = 23;
     private static final int MAX_LENGTH = 24;
 
@@ -142,6 +142,10 @@ public class GameTicTacToe extends GamehallGame {
             }
 
             if (this.gameMap == null) {
+                return;
+            }
+
+            if (this.gameMap[X][Y] != '0') {
                 return;
             }
 
