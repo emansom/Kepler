@@ -18,7 +18,7 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
-        if (!room.hasRights(player.getDetails().getId())) {
+        if (!room.hasRights(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
             return;
         }
 
