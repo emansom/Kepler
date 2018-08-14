@@ -95,19 +95,18 @@ public class Room {
      * @param player the player to refresh the rights for
      */
     public void refreshRights(Player player) {
-        String rightsValue = "";
-
         if (hasRights(player.getDetails().getId())) {
             player.send(new YOUARECONTROLLER());
         } else {
             player.send(new YOUNOTCONTROLLER());
         }
 
+        String rightsValue = "";
+
         if (isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
             player.send(new YOUAROWNER());
             rightsValue = "useradmin";
         }
-
 
         player.getRoomUser().removeStatus(StatusType.FLAT_CONTROL);
 
