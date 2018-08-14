@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class HelpCommand extends Command {
 
         int pageId = 1;
 
-        if (args.length > 0 && StringUtil.isNumber(args[0])) {
+        if (args.length > 0 && StringUtils.isNumeric(args[0])) {
             pageId = Integer.parseInt(args[0]);
         }
 

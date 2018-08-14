@@ -11,6 +11,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -41,7 +42,7 @@ public class RainbowDimmerCommand extends Command {
         int tickInterval = 5;
 
         if (args.length == 1) {
-            if (!StringUtil.isNumber(args[0])) {
+            if (!StringUtils.isNumeric(args[0])) {
                 player.send(new ALERT("Please specify the amount of seconds inbetween the colours changing as a number"));
                 return;
             } else {

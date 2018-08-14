@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 public class SETSTUFFDATA implements MessageEvent {
     @Override
@@ -119,7 +120,7 @@ public class SETSTUFFDATA implements MessageEvent {
                 if (itemData.equals("x")) {
                     newData = itemData;
                 } else {
-                    if (StringUtil.isNumber(itemData)) {
+                    if (StringUtils.isNumeric(itemData)) {
                         int stateId = Integer.parseInt(itemData);
 
                         if (stateId >= 0 && stateId <= 99) {
