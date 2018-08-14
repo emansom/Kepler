@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -83,7 +84,7 @@ public class PlayerDetails {
         this.firstClubSubscription = firstClubSubscription;
         this.clubExpiration = clubExpiration;
 
-        if (!StringUtil.isAlphaNumeric(currentBadge) || currentBadge.length() != 3) {
+        if (!StringUtils.isAlphanumeric(currentBadge) || currentBadge.length() != 3) {
             currentBadge = ""; // TODO: Log warning
         }
 

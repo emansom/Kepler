@@ -1,6 +1,5 @@
 package org.alexdev.kepler.util;
 
-import java.security.SecureRandom;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,13 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class StringUtil {
-
-    private static SecureRandom secureRandom;
-
-    static {
-        secureRandom = new SecureRandom();
-    }
-
     /**
      * Checks if is null or empty.
      *
@@ -46,42 +38,6 @@ public class StringUtil {
         input = Normalizer.normalize(input, Normalizer.Form.NFD);
         return input;
     }
-
-    /**
-     * Checks if is number.
-     *
-     * @param object the object
-     * @return true, if is number
-     */
-    public static boolean isNumber(Object object) {
-        try {
-            Integer.parseInt(object.toString());
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Checks if is alpha numeric.
-     *
-     * @param word the word
-     * @return true, if is alpha numeric
-     */
-    public static boolean isAlphaNumeric(String word) {
-        return word.matches("[A-Za-z0-9]+");
-    }
-
-    /**
-     * Removes the non alpha numeric.
-     *
-     * @param caption the caption
-     * @return the string
-     */
-    public static String removeNonAlphaNumeric(String caption) {
-        return caption.replaceAll("[^A-Za-z0-9]", "");
-    }
-
 
     /**
      * Paginate a list of items.
@@ -129,14 +85,5 @@ public class StringUtil {
      */
     public static List<String> split(String str, String delim) {
         return new ArrayList<>(Arrays.asList(str.split(delim)));
-    }
-
-    /**
-     * Gets the random.
-     *
-     * @return the random
-     */
-    public static SecureRandom getRandom() {
-        return secureRandom;
     }
 }

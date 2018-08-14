@@ -11,6 +11,7 @@ import org.alexdev.kepler.messages.outgoing.user.LOCALISED_ERROR;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 public class TRYFLAT implements MessageEvent {
     @Override
@@ -29,7 +30,7 @@ public class TRYFLAT implements MessageEvent {
         if (contents.contains("/")) {
             String roomIdStr = contents.split("/")[0];
 
-            if (StringUtil.isNumber(roomIdStr)) {
+            if (StringUtils.isNumeric(roomIdStr)) {
                 roomId = Integer.parseInt(roomIdStr);
             }
 

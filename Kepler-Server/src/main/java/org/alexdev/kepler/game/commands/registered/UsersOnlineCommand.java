@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -27,7 +28,7 @@ public class UsersOnlineCommand extends Command {
         int pageNumber = 1;
         int maxPlayersPerPage = 10;
 
-        if (args.length > 0 && StringUtil.isNumber(args[0])) {
+        if (args.length > 0 && StringUtils.isNumeric(args[0])) {
             pageNumber = Integer.parseInt(args[0]);
         }
 

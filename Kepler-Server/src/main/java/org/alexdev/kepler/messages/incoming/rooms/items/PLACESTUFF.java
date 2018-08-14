@@ -10,6 +10,7 @@ import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 import java.sql.SQLException;
 
@@ -22,12 +23,21 @@ public class PLACESTUFF implements MessageEvent {
             return;
         }
 
-        if (!room.hasRights(player.getDetails().getId())) {
+        if (!room.hasRights(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
             return;
         }
 
         String content = reader.contents();
         String[] data = content.split(" ");
+
+        if (data.length == 0) {
+            return;
+        }
+
+        // Make sure provided data is numeric
+        if (!StringUtils.isNumeric(data[0])) {
+            return;
+        }
 
         int itemId = Integer.parseInt(data[0]);
         Item item = player.getInventory().getItem(itemId);
@@ -53,11 +63,11 @@ public class PLACESTUFF implements MessageEvent {
                 room.getMapping().addItem(sticky);
 
                 // Set custom data as 1 for 1 post-it, if for some reason they have no number for the post-it.
-                if (!StringUtil.isNumber(item.getCustomData())) {
+                if (!StringUtils.isNumeric(item.getCustomData())) {
                     item.setCustomData("1");
                 }
 
-                if (StringUtil.isNumber(item.getCustomData())) {
+                if (StringUtils.isNumeric(item.getCustomData())) {
                     int totalStickies = Integer.parseInt(item.getCustomData()) - 1;
 
                     if (totalStickies <= 0) {
