@@ -13,7 +13,6 @@ import org.alexdev.kepler.messages.outgoing.rooms.badges.USER_BADGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
-import org.alexdev.kepler.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;

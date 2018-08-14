@@ -27,7 +27,7 @@ import org.alexdev.kepler.server.mus.streams.MusPropList;
 import org.alexdev.kepler.server.mus.streams.MusTypes;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
