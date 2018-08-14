@@ -46,8 +46,9 @@ public class SETSTUFFDATA implements MessageEvent {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 
-        if (item.hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) &&
-                !room.hasRights(player.getEntityId())) {
+        if (item.hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION)
+                && !room.hasRights(player.getEntityId())
+                && !player.hasFuse("fuse_any_room_controller")) {
             return;
         }
 
