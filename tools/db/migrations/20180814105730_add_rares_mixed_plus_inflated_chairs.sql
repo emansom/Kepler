@@ -5,7 +5,7 @@ INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `n
 INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `name_index`, `link_list`, `name`, `layout`, `image_headline`, `image_teasers`, `body`, `label_pick`, `label_extra_s`, `label_extra_t`) VALUES
 (44, 44, 5, 1, 'Rares Mixed', '', 'Rares Mixed', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL);
 
-UPDATE `catalogue_items` SET `page_id` = '44' WHERE `catalogue_items`.`id` = 185;
+INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`, `definition_id`, `item_specialspriteid`, `package_name`, `package_description`, `is_package`) VALUES (NULL, 'rare_poster_pedobear', '44', '1', '25', '251', '1338', NULL, NULL, '0');
 
 INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `top_height`, `behaviour`) VALUES
 (708, 'rubberchair*1', '#4193D6,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
