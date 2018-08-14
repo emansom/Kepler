@@ -38,6 +38,6 @@ public class ASSIGNRIGHTS implements MessageEvent {
         room.refreshRights(target);
 
         target.getRoomUser().setNeedsUpdate(true);
-        RoomRightsDao.addRights(userId, room.getId());
+        RoomRightsDao.addRights(target.getDetails(), room.getData());
     }
 }

@@ -32,11 +32,11 @@ public class ResetVoteCommand extends Command {
 
         Room room = player.getRoomUser().getRoom();
 
-        RoomDao.removeVote(player.getEntityId(), room.getId());
-        room.getData().setRating(RoomDao.getRating(room.getId()));
+        RoomDao.removeVote(player.getDetails(), room.getData());
+        room.getData().setRating(RoomDao.getRating(room.getData()));
 
         for (Player p : room.getEntityManager().getPlayers()) {
-            boolean voted = RoomDao.hasVoted(p.getDetails().getId(), room.getId());
+            boolean voted = RoomDao.hasVoted(p.getDetails(), room.getData());
             p.send(new UPDATE_VOTES(voted, room.getData().getRating()));
         }
     }

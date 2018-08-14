@@ -3,8 +3,10 @@ package org.alexdev.kepler.game.player;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.room.enums.StatusType;
+import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSED;
 import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSING;
+import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.DateUtil;
 
 import java.time.Duration;
@@ -144,7 +146,7 @@ public class PlayerManager {
     public void planMaintenance(Duration maintenanceAt) {
         // Interrupt current timeout to set new maintenance countdown
         if (this.shutdownTimeout != null) {
-            this.cancelMaintenance();
+            this.shutdownTimeout.cancel(true);
         }
 
         // Start timeout that will trigger the shutdown hook
@@ -164,7 +166,16 @@ public class PlayerManager {
      * Cancel shutdown timeout
      */
     public void cancelMaintenance() {
+        // Cancel current timeout
         this.shutdownTimeout.cancel(true);
+
+        // Let other Kepler components know we are no longer in maintenance mode
+        this.isMaintenanceShutdown = false;
+
+        // Notify all users maintenance has been cancelled
+        for (Player p : this.players) {
+            p.send(new ALERT(TextsManager.getInstance().getValue("maintenance_cancelled")));
+        }
     }
 
     /**

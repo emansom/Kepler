@@ -166,7 +166,7 @@ public class GameChess extends GamehallGame {
                     return;
                 } else if (this.board.isMated()) {
                     this.gameFinished = true;
-                    this.showChat(null, "Player " + player.getDetails().getName() + " has won the chess game");
+                    this.showChat(null, player.getDetails().getName() + " has won the chess game");
                     return;
                 }
 

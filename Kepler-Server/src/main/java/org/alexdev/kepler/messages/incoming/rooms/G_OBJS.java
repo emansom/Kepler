@@ -24,8 +24,6 @@ public class G_OBJS implements MessageEvent {
         player.sendQueued(new ACTIVE_OBJECTS(room));
         player.flush();
 
-        player.getMessenger().sendStatusUpdate();
-
         /*player.send(new MessageComposer() {
             @Override
             public void compose(NettyResponse response) {

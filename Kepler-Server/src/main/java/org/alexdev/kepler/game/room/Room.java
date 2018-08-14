@@ -114,6 +114,8 @@ public class Room {
         if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
             player.getRoomUser().setStatus(StatusType.FLAT_CONTROL, rightsValue);
         }
+
+        player.getRoomUser().setNeedsUpdate(true);
     }
 
     /**

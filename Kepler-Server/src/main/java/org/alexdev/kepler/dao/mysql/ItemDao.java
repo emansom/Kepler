@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.public_items.PublicItemData;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.room.RoomData;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -205,7 +206,7 @@ public class ItemDao {
      * @param roomId the id of the user to get the inventory for
      * @return the list of items
      */
-    public static List<Item> getRoomItems(int roomId) {
+    public static List<Item> getRoomItems(RoomData roomData) {
         List<Item> items = new ArrayList<>();
 
         Connection sqlConnection = null;
@@ -215,7 +216,7 @@ public class ItemDao {
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("SELECT * FROM items WHERE room_id = ?", sqlConnection);
-            preparedStatement.setInt(1, roomId);
+            preparedStatement.setInt(1, roomData.getId());
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {

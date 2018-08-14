@@ -19,11 +19,7 @@ public class TextsManager {
      * @return the external text value
      */
     public String getValue(String key) {
-        if (this.textsMap.containsKey(key)) {
-            return this.textsMap.get(key);
-        }
-
-        return "";
+        return this.textsMap.getOrDefault(key, "");
     }
 
     /**
