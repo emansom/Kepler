@@ -1,7 +1,7 @@
 version: '3.2'
 services:
     kepler:
-        image: ewout/kepler:1.0.64
+        image: ewout/kepler:1.0.65
         restart: always
         environment:
             KEPLER_BIND: 0.0.0.0
