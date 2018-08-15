@@ -159,14 +159,6 @@ public class RoomPlayer extends RoomEntity {
         isWalking = walking;
     }
 
-    public boolean isBeingKicked() {
-        return beingKicked;
-    }
-
-    public void setBeingKicked(boolean beingKicked) {
-        this.beingKicked = beingKicked;
-    }
-
     @Override
     public boolean isNeedsUpdate() {
         return needsUpdate;
