@@ -1,12 +1,17 @@
 package org.alexdev.kepler.messages.incoming.catalogue;
 
+import org.alexdev.kepler.game.catalogue.CatalogueItem;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.catalogue.CataloguePage;
+import org.alexdev.kepler.game.catalogue.RareManager;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.catalogue.CATALOGUE_PAGE;
 import org.alexdev.kepler.messages.outgoing.catalogue.CATALOGUE_PAGES;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.config.GameConfiguration;
+
+import java.util.List;
 
 public class GCAP implements MessageEvent {
     @Override
@@ -20,9 +25,17 @@ public class GCAP implements MessageEvent {
         }
 
         if (player.getDetails().getRank() >= cataloguePage.getMinRole()) {
+            List<CatalogueItem> catalogueItemList = CatalogueManager.getInstance().getCataloguePageItems(cataloguePage.getId());
+
+            if (RareManager.getInstance().getCurrentRare() != null &&
+                    cataloguePage.getId() == GameConfiguration.getInstance().getInteger("rare.cycle.page.id")) {
+
+                catalogueItemList = List.of(RareManager.getInstance().getCurrentRare());
+            }
+
             player.send(new CATALOGUE_PAGE(
                     cataloguePage,
-                    CatalogueManager.getInstance().getCataloguePageItems(cataloguePage.getId())));
+                    catalogueItemList));
         }
     }
 }
