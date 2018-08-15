@@ -3,8 +3,8 @@ package org.alexdev.kepler.game.triggers.games;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.gamehalls.GamePoker;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.triggers.GameTrigger;
-import org.alexdev.kepler.game.room.RoomUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +17,18 @@ public class PokerTrigger extends GameTrigger {
     }
 
     @Override
-    public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-        super.onEntityStep(entity, roomUser, item, customArgs);
+    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
+        super.onEntityStep(entity, roomEntity, item, customArgs);
     }
 
     @Override
-    public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-        super.onEntityStop(entity, roomUser, item, customArgs);
+    public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
+        super.onEntityStop(entity, roomEntity, item, customArgs);
     }
 
     @Override
-    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-        super.onEntityLeave(entity, roomUser, item, customArgs);
+    public void onEntityLeave(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
+        super.onEntityLeave(entity, roomEntity, item, customArgs);
     }
 
     /**

@@ -1,13 +1,11 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
@@ -38,7 +36,7 @@ public class EntityTask implements Runnable {
                         && entity.getRoomUser().getRoom() == this.room) {
 
                     this.processEntity(entity);
-                    RoomUser roomEntity = entity.getRoomUser();
+                    RoomEntity roomEntity = entity.getRoomUser();
 
                     if (roomEntity.isNeedsUpdate()) {
                         roomEntity.setNeedsUpdate(false);
@@ -61,65 +59,65 @@ public class EntityTask implements Runnable {
      * @param entity the entity
      */
     private void processEntity(Entity entity) {
-        RoomUser roomUser = entity.getRoomUser();
+        RoomEntity roomEntity = entity.getRoomUser();
 
-        Position position = roomUser.getPosition();
-        Position goal = roomUser.getGoal();
+        Position position = roomEntity.getPosition();
+        Position goal = roomEntity.getGoal();
 
-        if (roomUser.isWalking()) {
+        if (roomEntity.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
-            if (roomUser.getNextPosition() != null) {
-                roomUser.getPosition().setX(roomUser.getNextPosition().getX());
-                roomUser.getPosition().setY(roomUser.getNextPosition().getY());
-                roomUser.updateNewHeight(roomUser.getNextPosition());
+            if (roomEntity.getNextPosition() != null) {
+                roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
+                roomEntity.getPosition().setY(roomEntity.getNextPosition().getY());
+                roomEntity.updateNewHeight(roomEntity.getNextPosition());
 
-                if (roomUser.getCurrentItem() != null) {
-                    if (roomUser.getCurrentItem().getItemTrigger() != null) {
-                        roomUser.getCurrentItem().getItemTrigger().onEntityStep(entity, roomUser, roomUser.getCurrentItem());
+                if (roomEntity.getCurrentItem() != null) {
+                    if (roomEntity.getCurrentItem().getItemTrigger() != null) {
+                        roomEntity.getCurrentItem().getItemTrigger().onEntityStep(entity, roomEntity, roomEntity.getCurrentItem());
                     }
                 }
             }
 
             // We still have more tiles left, so lets continue moving
-            if (roomUser.getPath().size() > 0) {
-                Position next = roomUser.getPath().pop();
+            if (roomEntity.getPath().size() > 0) {
+                Position next = roomEntity.getPath().pop();
 
                 // Tile was invalid after we started walking, so lets try again!
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
                     entity.getRoomUser().getPath().clear();
-                    roomUser.walkTo(goal.getX(), goal.getY());
+                    roomEntity.walkTo(goal.getX(), goal.getY());
                     this.processEntity(entity);
                     return;
                 }
 
                 // Set up trigger for leaving a current item
-                if (roomUser.getCurrentItem() != null) {
-                    if (roomUser.getCurrentItem().getItemTrigger() != null) {
-                        roomUser.getCurrentItem().getItemTrigger().onEntityLeave(entity, roomUser, roomUser.getCurrentItem());
+                if (roomEntity.getCurrentItem() != null) {
+                    if (roomEntity.getCurrentItem().getItemTrigger() != null) {
+                        roomEntity.getCurrentItem().getItemTrigger().onEntityLeave(entity, roomEntity, roomEntity.getCurrentItem());
                     }
                 }
 
-                RoomTile previousTile = roomUser.getTile();
+                RoomTile previousTile = roomEntity.getTile();
                 previousTile.removeEntity(entity);
 
-                RoomTile nextTile = roomUser.getRoom().getMapping().getTile(next);
+                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(next);
                 nextTile.addEntity(entity);
 
-                roomUser.removeStatus(StatusType.LAY);
-                roomUser.removeStatus(StatusType.SIT);
+                roomEntity.removeStatus(StatusType.LAY);
+                roomEntity.removeStatus(StatusType.SIT);
 
                 int rotation = Rotation.calculateWalkDirection(position.getX(), position.getY(), next.getX(), next.getY());
                 double height = this.room.getMapping().getTile(next).getWalkingHeight();
 
-                roomUser.getPosition().setRotation(rotation);
-                roomUser.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
-                roomUser.setNextPosition(next);
+                roomEntity.getPosition().setRotation(rotation);
+                roomEntity.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
+                roomEntity.setNextPosition(next);
             } else {
-                roomUser.stopWalking();
+                roomEntity.stopWalking();
             }
 
             // If we're walking, make sure to tell the server
-            roomUser.setNeedsUpdate(true);
+            roomEntity.setNeedsUpdate(true);
         }
     }
 }

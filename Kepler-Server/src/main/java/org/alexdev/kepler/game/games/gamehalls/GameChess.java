@@ -5,9 +5,9 @@ import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.triggers.GameTrigger;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 

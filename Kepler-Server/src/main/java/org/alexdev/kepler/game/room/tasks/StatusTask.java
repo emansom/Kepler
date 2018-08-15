@@ -1,6 +1,8 @@
 package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
@@ -40,8 +42,12 @@ public class StatusTask implements Runnable {
     private void processEntity(Entity entity) {
         List<String> toRemove = new ArrayList<>();
 
-        this.processHeadRotation(entity);
-        this.processChatBubble(entity);
+        if (entity.getType() == EntityType.PLAYER) {
+            Player player = (Player) entity;
+
+            this.processHeadRotation(player);
+            this.processChatBubble(player);
+        }
 
         // Use walk to next tile if on pool queue
         PoolHandler.checkPoolQueue(entity);
@@ -87,7 +93,7 @@ public class StatusTask implements Runnable {
         }
     }
 
-    private void processChatBubble(Entity entity) {
+    private void processChatBubble(Player entity) {
         if (entity.getRoomUser().getTimerManager().getChatBubbleTimer() != -1 &&
                 DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getTimerManager().getChatBubbleTimer()) {
 
@@ -98,7 +104,7 @@ public class StatusTask implements Runnable {
     }
 
 
-    private void processHeadRotation(Entity entity) {
+    private void processHeadRotation(Player entity) {
         if (entity.getRoomUser().getTimerManager().getLookTimer() != -1 &&
                 DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getTimerManager().getLookTimer()) {
 

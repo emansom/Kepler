@@ -1,22 +1,22 @@
 package org.alexdev.kepler.game.room.managers;
 
 import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
 public class RoomTimerManager {
     private Entity entity;
-    private RoomUser roomUser;
+    private RoomEntity roomEntity;
     private int lookTimer;
     private long afkTimer;
     private long sleepTimer;
     private long chatBubbleTimer;
 
-    public RoomTimerManager(RoomUser roomUser) {
-        this.roomUser = roomUser;
-        this.entity = roomUser.getEntity();
+    public RoomTimerManager(RoomEntity roomEntity) {
+        this.roomEntity = roomEntity;
+        this.entity = roomEntity.getEntity();
     }
 
     /**
@@ -45,9 +45,9 @@ public class RoomTimerManager {
         this.sleepTimer = DateUtil.getCurrentTimeSeconds() + GameConfiguration.getInstance().getInteger("sleep.timer.seconds");
 
         // If the user was sleeping, remove the sleep and tell the room cycle to update our character
-        if (this.roomUser.containsStatus(StatusType.SLEEP)) {
-            this.roomUser.removeStatus(StatusType.SLEEP);
-            this.roomUser.setNeedsUpdate(true);
+        if (this.roomEntity.containsStatus(StatusType.SLEEP)) {
+            this.roomEntity.removeStatus(StatusType.SLEEP);
+            this.roomEntity.setNeedsUpdate(true);
         }
     }
 

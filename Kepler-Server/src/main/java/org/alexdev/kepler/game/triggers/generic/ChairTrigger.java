@@ -2,42 +2,42 @@ package org.alexdev.kepler.game.triggers.generic;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
-import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.util.StringUtil;
 
 public class ChairTrigger implements GenericTrigger {
     @Override
-    public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
 
     }
 
     @Override
-    public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
         boolean isRolling = false;
 
         if (customArgs.length > 0) {
             isRolling = (boolean)customArgs[0];
         }
 
-        int headRotation = roomUser.getPosition().getHeadRotation();
-        roomUser.getPosition().setRotation(item.getPosition().getRotation());
+        int headRotation = roomEntity.getPosition().getHeadRotation();
+        roomEntity.getPosition().setRotation(item.getPosition().getRotation());
 
-        roomUser.removeStatus(StatusType.DANCE);
-        roomUser.setStatus(StatusType.SIT, StringUtil.format(item.getDefinition().getTopHeight()));
+        roomEntity.removeStatus(StatusType.DANCE);
+        roomEntity.setStatus(StatusType.SIT, StringUtil.format(item.getDefinition().getTopHeight()));
 
         if (isRolling) {
-            if (roomUser.getTimerManager().getLookTimer() > -1) {
-                roomUser.getPosition().setHeadRotation(headRotation);
+            if (roomEntity.getTimerManager().getLookTimer() > -1) {
+                roomEntity.getPosition().setHeadRotation(headRotation);
             }
         }
 
-        roomUser.setNeedsUpdate(true);
+        roomEntity.setNeedsUpdate(true);
     }
 
     @Override
-    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityLeave(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
 
     }
 }

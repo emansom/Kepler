@@ -7,7 +7,7 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.games.gamehalls.GamehallGame;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.messages.outgoing.rooms.games.CLOSEGAMEBOARD;
 import org.alexdev.kepler.messages.outgoing.rooms.games.OPENGAMEBOARD;
@@ -23,12 +23,12 @@ public abstract class GameTrigger implements GenericTrigger {
     }
 
     @Override
-    public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
 
     }
 
     @Override
-    public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
             return;
         }
@@ -36,7 +36,7 @@ public abstract class GameTrigger implements GenericTrigger {
         Player player = (Player) entity;
 
         // Call default sitting trigger
-        ItemBehaviour.CAN_SIT_ON_TOP.getTrigger().onEntityStop(entity, roomUser, item, customArgs);
+        ItemBehaviour.CAN_SIT_ON_TOP.getTrigger().onEntityStop(entity, roomEntity, item, customArgs);
 
         // Handle game logic from here
         GamehallGame instance = this.getGameInstance(item.getPosition());
@@ -66,7 +66,7 @@ public abstract class GameTrigger implements GenericTrigger {
     }
 
     @Override
-    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityLeave(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
             return;
         }
@@ -78,7 +78,7 @@ public abstract class GameTrigger implements GenericTrigger {
             return;
         }
 
-        if (roomUser.getCurrentGameId() == null) {
+        if (player.getRoomUser().getCurrentGameId() == null) {
             return;
         }
 
@@ -93,7 +93,7 @@ public abstract class GameTrigger implements GenericTrigger {
         }
 
         instance.getPlayers().remove(player);
-        roomUser.setCurrentGameId(null);
+        player.getRoomUser().setCurrentGameId(null);
 
         if (!instance.hasPlayersRequired()) {
             instance.resetGameId();

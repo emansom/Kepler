@@ -3,12 +3,15 @@ package org.alexdev.kepler.game.item.public_items;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.triggers.games.PokerTrigger;
-import org.alexdev.kepler.game.triggers.generic.*;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.triggers.games.BattleShipsTrigger;
 import org.alexdev.kepler.game.triggers.games.ChessTrigger;
+import org.alexdev.kepler.game.triggers.games.PokerTrigger;
 import org.alexdev.kepler.game.triggers.games.TicTacToeTrigger;
+import org.alexdev.kepler.game.triggers.generic.PoolBoothTrigger;
+import org.alexdev.kepler.game.triggers.generic.PoolEnterTrigger;
+import org.alexdev.kepler.game.triggers.generic.PoolExitTrigger;
+import org.alexdev.kepler.game.triggers.generic.PoolLiftTrigger;
 
 import java.util.ArrayList;
 import java.util.HashMap;

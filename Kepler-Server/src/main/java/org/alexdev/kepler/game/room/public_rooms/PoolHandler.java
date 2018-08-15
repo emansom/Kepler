@@ -1,18 +1,12 @@
 package org.alexdev.kepler.game.room.public_rooms;
 
-import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.enums.StatusType;
-import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.RoomUser;
-import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.messages.outgoing.rooms.pool.JUMPINGPLACE_OK;
-import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
-import org.alexdev.kepler.messages.outgoing.user.currencies.TICKET_BALANCE;
 
 public class PoolHandler {
 
@@ -53,20 +47,20 @@ public class PoolHandler {
      * @param exit whether it was exiting or entering the ladder, to add or remove swimming
      */
     public static void warpSwim(Item item, Entity entity, Position warp, Position goal, boolean exit) {
-        RoomUser roomUser = entity.getRoomUser();
-        roomUser.getTile().removeEntity(entity);
+        RoomEntity roomEntity = entity.getRoomUser();
+        roomEntity.getTile().removeEntity(entity);
 
         Room room = entity.getRoomUser().getRoom();
 
         if (exit) {
-            roomUser.removeStatus(StatusType.SWIM);
+            roomEntity.removeStatus(StatusType.SWIM);
         } else {
-            roomUser.setStatus(StatusType.SWIM, "");
+            roomEntity.setStatus(StatusType.SWIM, "");
         }
 
-        roomUser.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp).getTileHeight()));
-        roomUser.setWalking(true);
-        roomUser.walkTo(goal.getX(), goal.getY());
+        roomEntity.setNextPosition(new Position(warp.getX(), warp.getY(), room.getMapping().getTile(warp).getTileHeight()));
+        roomEntity.setWalking(true);
+        roomEntity.walkTo(goal.getX(), goal.getY());
 
         item.showProgram(null);
     }

@@ -3,7 +3,6 @@ package org.alexdev.kepler.game.room.public_rooms.walkways;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.game.room.RoomUser;
 
 import java.util.ArrayList;
 import java.util.List;

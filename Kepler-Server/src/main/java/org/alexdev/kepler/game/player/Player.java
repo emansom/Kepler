@@ -9,7 +9,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
 import org.alexdev.kepler.game.messenger.Messenger;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomPlayer;
 import org.alexdev.kepler.messages.outgoing.handshake.RIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
@@ -30,7 +30,7 @@ public class Player extends Entity {
 
     private Logger log;
     private PlayerDetails details;
-    private RoomUser roomUser;
+    private RoomPlayer roomEntity;
     private Messenger messenger;
     private Inventory inventory;
 
@@ -41,7 +41,7 @@ public class Player extends Entity {
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
-        this.roomUser = new RoomUser(this);
+        this.roomEntity = new RoomPlayer(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
         this.pingOK = true;
         this.disconnected = false;
@@ -137,10 +137,10 @@ public class Player extends Entity {
         this.send(new USER_OBJECT(this.details));
 
         // Send refresh to room if inside room
-        var room = this.roomUser.getRoom();
+        var room = this.roomEntity.getRoom();
 
         if (room != null) {
-            room.send(new FIGURE_CHANGE(this.roomUser.getInstanceId(), this.details));
+            room.send(new FIGURE_CHANGE(this.roomEntity.getInstanceId(), this.details));
         }
     }
 
@@ -207,8 +207,8 @@ public class Player extends Entity {
     }
 
     @Override
-    public RoomUser getRoomUser() {
-        return this.roomUser;
+    public RoomPlayer getRoomUser() {
+        return this.roomEntity;
     }
 
     public Inventory getInventory() {
@@ -295,8 +295,8 @@ public class Player extends Entity {
     @Override
     public void dispose() {
         if (this.loggedIn) {
-            if (this.roomUser.getRoom() != null) {
-                this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
+            if (this.roomEntity.getRoom() != null) {
+                this.roomEntity.getRoom().getEntityManager().leaveRoom(this, false);
             }
 
 

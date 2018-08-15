@@ -1,18 +1,19 @@
-package org.alexdev.kepler.game.room;
+package org.alexdev.kepler.game.room.entities;
 
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.roller.RollingData;
-import org.alexdev.kepler.game.triggers.GenericTrigger;
-import org.alexdev.kepler.game.pathfinder.Rotation;
-import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.enums.StatusType;
-import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.pathfinder.Rotation;
+import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.enums.DrinkType;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.managers.RoomTimerManager;
 import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
@@ -25,45 +26,34 @@ import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-public class RoomUser {
+public abstract class RoomEntity {
     private Entity entity;
     private Position position;
     private Position goal;
     private Position nextPosition;
     private Room room;
+
     private RollingData rollingData;
     private RoomTimerManager timerManager;
-
-    private int instanceId;
-    private int authenticateId;
-    private int authenticateTelporterId;
 
     private Map<String, RoomUserStatus> statuses;
     private LinkedList<Position> path;
 
-    private boolean isWalkingAllowed;
+    private int instanceId;
     private boolean isWalking;
-    private boolean beingKicked;
     private boolean needsUpdate;
-    private boolean isTyping;
-    private boolean isDiving;
 
-    private Player tradePartner;
-    private List<Item> tradeItems;
-    private boolean tradeAccept;
-
-    private String currentGameId;
-
-    public RoomUser(Entity entity) {
+    public RoomEntity(Entity entity) {
         this.entity = entity;
-        this.tradeItems = new ArrayList<>();
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
-        this.authenticateTelporterId = -1;
         this.timerManager = new RoomTimerManager(this);
         this.reset();
     }
@@ -71,51 +61,12 @@ public class RoomUser {
     public void reset() {
         this.statuses.clear();
         this.path.clear();
-
         this.nextPosition = null;
         this.goal = null;
         this.room = null;
         this.rollingData = null;
-        this.currentGameId = null;
-
-        this.isWalkingAllowed = true;
         this.isWalking = false;
-        this.beingKicked = false;
-        this.isTyping = false;
-        this.isDiving = false;
-
         this.instanceId = -1;
-        this.authenticateId = -1;
-        this.timerManager.resetTimers();
-
-        if (this.entity.getType() == EntityType.PLAYER) {
-            RoomTradeManager.close(this);
-        }
-    }
-
-    /**
-     * Kick a user from the room.
-     *
-     * @param allowWalking whether the user can interrupt themselves walking towards the door
-     */
-    public void kick(boolean allowWalking) {
-        Position doorLocation = this.room.getModel().getDoorLocation();
-
-        // If we're standing in the door, immediately leave room
-        if (this.position.equals(doorLocation)) {
-            room.getEntityManager().leaveRoom(this.entity, true);
-            return;
-        }
-
-        // Attempt to walk to the door
-        this.walkTo(doorLocation.getX(), doorLocation.getY());
-        this.isWalkingAllowed = allowWalking;
-        this.beingKicked = !allowWalking;
-
-        // If user isn't walking, leave immediately
-        if (!this.isWalking) {
-            this.room.getEntityManager().leaveRoom(this.entity, true);
-        }
     }
 
     /**
@@ -126,10 +77,6 @@ public class RoomUser {
      */
     public void walkTo(int X, int Y) {
         if (this.room == null) {
-            return;
-        }
-
-        if (this.beingKicked) {
             return;
         }
 
@@ -163,7 +110,6 @@ public class RoomUser {
         if (path.size() > 0) {
             this.path = path;
             this.isWalking = true;
-            this.timerManager.resetRoomTimer();
         }
     }
 
@@ -177,41 +123,7 @@ public class RoomUser {
         this.nextPosition = null;
         this.removeStatus(StatusType.MOVE);
 
-        WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this.room, this.position);
-
-        if (entrance != null) {
-            Room room = WalkwaysManager.getInstance().getWalkwayRoom(entrance.getModelTo());
-
-            if (room != null) {
-                room.getEntityManager().enterRoom(this.entity, entrance.getDestination());
-                return;
-            }
-
-        }
-
-        boolean enteredDoor = false;
-        Position doorPosition = this.room.getModel().getDoorLocation();
-
-        if (doorPosition.equals(this.position)) {
-            enteredDoor = true;
-        }
-
-        if (this.room.isPublicRoom()) {
-            if (WalkwaysManager.getInstance().getWalkway(this.room, doorPosition) != null) {
-                enteredDoor = false;
-            }
-        }
-
-        // Leave room if the tile is the door and we are in a flat or we're being kicked
-        if (enteredDoor || this.beingKicked) {
-            this.room.getEntityManager().leaveRoom(this.entity, true);
-            return;
-        }
-
         this.invokeItem(false);
-
-        // Use walk to next tile if on pool queue
-        PoolHandler.checkPoolQueue(this.entity);
     }
     /**
      * Triggers the current item that the player has walked on top of.
@@ -233,7 +145,7 @@ public class RoomUser {
         }
 
         if (item != null) {
-            GenericTrigger trigger = item.getItemTrigger();
+            var trigger = item.getItemTrigger();
 
             if (trigger != null) {
                 item.getItemTrigger().onEntityStop(this.entity, this, item, isRolling);
@@ -439,7 +351,7 @@ public class RoomUser {
             if (player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                 continue;
             }
-            
+
             player.getRoomUser().look(this.position);
         }
     }
@@ -449,13 +361,12 @@ public class RoomUser {
      *
      * @param towards the coordinate direction to look towards
      */
-    private void look(Position towards) {
+    public void look(Position towards) {
         if (this.isWalking) {
             return;
         }
 
         this.position.setHeadRotation(Rotation.getHeadRotation(this.position.getRotation(), this.position, towards));
-        this.timerManager.beginLookTimer();
         this.needsUpdate = true;
     }
 
@@ -557,7 +468,6 @@ public class RoomUser {
      * Removes the status.
      *
      * @param status the status
-     * @return if the user contained the status
      */
     public void removeStatus(StatusType status) {
         this.statuses.remove(status.getStatusCode());
@@ -679,10 +589,6 @@ public class RoomUser {
         this.room = room;
     }
 
-    public RoomTimerManager getTimerManager() {
-        return timerManager;
-    }
-
     public int getInstanceId() {
         return instanceId;
     }
@@ -697,14 +603,6 @@ public class RoomUser {
 
     public LinkedList<Position> getPath() {
         return path;
-    }
-
-    public boolean isWalkingAllowed() {
-        return isWalkingAllowed;
-    }
-
-    public void setWalkingAllowed(boolean walkingAllowed) {
-        isWalkingAllowed = walkingAllowed;
     }
 
     public boolean isWalking() {
@@ -723,62 +621,6 @@ public class RoomUser {
         this.needsUpdate = needsUpdate;
     }
 
-    public boolean isBeingKicked() {
-        return beingKicked;
-    }
-
-    public int getAuthenticateId() {
-        return authenticateId;
-    }
-
-    public void setAuthenticateId(int authenticateId) {
-        this.authenticateId = authenticateId;
-    }
-
-    public boolean isTyping() {
-        return isTyping;
-    }
-
-    public void setTyping(boolean typing) {
-        isTyping = typing;
-    }
-
-    public boolean isDiving() {
-        return isDiving;
-    }
-
-    public void setDiving(boolean diving) {
-        isDiving = diving;
-    }
-
-    public Player getTradePartner() {
-        return tradePartner;
-    }
-
-    public void setTradePartner(Player tradePartner) {
-        this.tradePartner = tradePartner;
-    }
-
-    public boolean hasAcceptedTrade() {
-        return tradeAccept;
-    }
-
-    public void setTradeAccept(boolean tradeAccept) {
-        this.tradeAccept = tradeAccept;
-    }
-
-    public List<Item> getTradeItems() {
-        return tradeItems;
-    }
-
-    public int getAuthenticateTelporterId() {
-        return authenticateTelporterId;
-    }
-
-    public void setAuthenticateTelporterId(int authenticateTelporterId) {
-        this.authenticateTelporterId = authenticateTelporterId;
-    }
-
     public RollingData getRollingData() {
         return rollingData;
     }
@@ -787,11 +629,7 @@ public class RoomUser {
         this.rollingData = rollingData;
     }
 
-    public String getCurrentGameId() {
-        return currentGameId;
-    }
-
-    public void setCurrentGameId(String currentGameId) {
-        this.currentGameId = currentGameId;
+    public RoomTimerManager getTimerManager() {
+        return timerManager;
     }
 }
