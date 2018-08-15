@@ -138,7 +138,7 @@ public class MessageHandler {
         registerEvent(64, new G_STAT());
         registerEvent(63, new G_ITEMS());
         registerEvent(98, new LETUSERIN());
-        registerEvent(261, new ROOM_RATING());
+        registerEvent(261, new RATEFLAT());
     }
 
     /**
