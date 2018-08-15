@@ -32,7 +32,6 @@ public class KICK implements MessageEvent {
                 || room.getRights().contains(player.getEntityId())
                 || player.hasFuse("fuse_kick")) {
 
-            target.getRoomUser().setBeingKicked(true);
             target.getRoomUser().kick(false);
         }
     }
