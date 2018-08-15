@@ -46,7 +46,7 @@ public class ChessTrigger extends GameTrigger {
 
             add(new ArrayList<>() {{
                 add(new int[]{6, 14});
-                add(new int[]{4, 10});
+                add(new int[]{4, 14});
             }});
 
             add(new ArrayList<>() {{
