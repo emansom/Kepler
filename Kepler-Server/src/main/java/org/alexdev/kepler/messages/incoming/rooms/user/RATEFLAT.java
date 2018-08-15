@@ -8,7 +8,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class ROOM_RATING implements MessageEvent {
+public class RATEFLAT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
         Room room = player.getRoomUser().getRoom();
