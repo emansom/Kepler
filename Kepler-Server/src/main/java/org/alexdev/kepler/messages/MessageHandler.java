@@ -7,7 +7,7 @@ import org.alexdev.kepler.messages.incoming.club.*;
 import org.alexdev.kepler.messages.incoming.inventory.*;
 import org.alexdev.kepler.messages.incoming.catalogue.*;
 import org.alexdev.kepler.messages.incoming.messenger.*;
-import org.alexdev.kepler.messages.incoming.moderation.MODERATORACTION;
+import org.alexdev.kepler.messages.incoming.moderation.*;
 import org.alexdev.kepler.messages.incoming.navigator.*;
 import org.alexdev.kepler.messages.incoming.purse.*;
 import org.alexdev.kepler.messages.incoming.rooms.*;
@@ -18,6 +18,7 @@ import org.alexdev.kepler.messages.incoming.rooms.items.*;
 import org.alexdev.kepler.messages.incoming.rooms.moderation.*;
 import org.alexdev.kepler.messages.incoming.rooms.pool.*;
 import org.alexdev.kepler.messages.incoming.rooms.settings.*;
+import org.alexdev.kepler.messages.incoming.rooms.teleporter.*;
 import org.alexdev.kepler.messages.incoming.rooms.user.*;
 import org.alexdev.kepler.messages.incoming.songs.*;
 import org.alexdev.kepler.messages.incoming.trade.*;
@@ -51,6 +52,7 @@ public class MessageHandler {
         registerRoomPoolPackets();
         registerRoomSettingsPackets();
         registerRoomItemPackets();
+        registerRoomTeleporterPackets();
         registerRoomModerationPackets();
         registerGameModerationPackets();
         registerMessengerPackets();
@@ -202,14 +204,20 @@ public class MessageHandler {
         registerEvent(76, new THROW_DICE());
         registerEvent(77, new DICE_OFF());
         registerEvent(247, new SPIN_WHEEL_OF_FORTUNE());
-        registerEvent(81, new INTODOOR());
-        registerEvent(28, new GETDOORFLAT());
-        registerEvent(82, new DOORGOIN());
-        registerEvent(54, new GOVIADOOR());
         registerEvent(341, new MSG_ROOMDIMMER_GET_PRESETS());
         registerEvent(342, new MSG_ROOMDIMMER_SET_PRESET());
         registerEvent(343, new MSG_ROOMDIMMER_CHANGE_STATE());
         registerEvent(78, new PRESENTOPEN());
+    }
+
+    /**
+     * Register room teleporter packets
+     */
+    public void registerRoomTeleporterPackets() {
+        registerEvent(81, new INTODOOR());
+        registerEvent(28, new GETDOORFLAT());
+        registerEvent(82, new DOORGOIN());
+        registerEvent(54, new GOVIADOOR());
     }
 
     /**
