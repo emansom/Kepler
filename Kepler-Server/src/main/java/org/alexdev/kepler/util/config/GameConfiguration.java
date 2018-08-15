@@ -56,6 +56,12 @@ public class GameConfiguration {
 
         config.put("shutdown.minutes", "1");
 
+        config.put("rare.cycle.page.id", "2");
+        config.put("rare.cycle.refresh.timeunit", "HOURS");
+        config.put("rare.cycle.refresh.interval", "2");
+
+        config.put("rare.cycle.reuse.timeunit", "DAYS");
+        config.put("rare.cycle.reuse.interval", "3");
     }
 
     /**

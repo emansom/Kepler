@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
+import org.alexdev.kepler.game.catalogue.RareManager;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -93,6 +94,14 @@ public class GameScheduler implements Runnable {
                         p.send(new CREDIT_BALANCE(p.getDetails()));
                     }
                 }
+            }
+
+            // Rare cycle management
+            TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
+            long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+
+            if (this.tickRate.get() % interval == 0) { // Save every 30 seconds
+                RareManager.getInstance().selectNewRare();
             }
 
         } catch (Exception ex) {

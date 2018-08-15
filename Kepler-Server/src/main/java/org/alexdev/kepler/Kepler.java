@@ -5,6 +5,7 @@ import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
+import org.alexdev.kepler.game.catalogue.RareManager;
 import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.game.games.GameChess;
 import org.alexdev.kepler.game.item.ItemManager;
@@ -85,6 +86,7 @@ public class Kepler {
             WalkwaysManager.getInstance();
             ItemManager.getInstance();
             CatalogueManager.getInstance();
+            RareManager.getInstance();
             RoomModelManager.getInstance();
             RoomManager.getInstance();
             PlayerManager.getInstance();
