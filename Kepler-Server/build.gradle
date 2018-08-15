@@ -1,3 +1,8 @@
+plugins {
+    id 'com.google.cloud.tools.jib' version '0.9.8'
+    id "org.jetbrains.intellij" version "0.3.5"
+}
+
 apply plugin: 'java'
 apply plugin: 'application'
 
@@ -7,11 +12,6 @@ targetCompatibility = "1.10"
 def grpcVersion = '1.12.0'
 def protobufVersion = '3.5.1'
 def protocVersion = '3.5.1-1'
-
-plugins {
-    id 'com.google.cloud.tools.jib' version '0.9.8'
-    id "org.jetbrains.intellij" version "0.3.5"
-}
 
 mainClassName = 'org.alexdev.kepler.Kepler'
 
