@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 11, 2018 at 03:17 AM
--- Server version: 10.3.7-MariaDB
--- PHP Version: 7.2.6
+-- Generation Time: Aug 15, 2018 at 03:20 PM
+-- Server version: 10.2.15-MariaDB
+-- PHP Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -630,7 +630,28 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (583, 'table_plasto_square*6', 16, 1, 3, 502, 0, NULL, NULL, 0),
 (584, 'table_plasto_square*7', 16, 1, 3, 507, 0, NULL, NULL, 0),
 (585, 'table_plasto_square*8', 16, 1, 3, 512, 0, NULL, NULL, 0),
-(586, 'table_plasto_square*9', 16, 1, 3, 517, 0, NULL, NULL, 0);
+(586, 'table_plasto_square*9', 16, 1, 3, 517, 0, NULL, NULL, 0),
+(587, 'rubber_chair*1', 43, 0, 25, 708, 0, NULL, NULL, 0),
+(588, 'rubber_chair*2', 43, 0, 25, 709, 0, NULL, NULL, 0),
+(589, 'rubber_chair*3', 43, 0, 25, 710, 0, NULL, NULL, 0),
+(590, 'rubber_chair*4', 43, 0, 25, 711, 0, NULL, NULL, 0),
+(591, 'rubber_chair*5', 43, 0, 25, 712, 0, NULL, NULL, 0),
+(592, 'rubber_chair*6', 43, 0, 25, 713, 0, NULL, NULL, 0),
+(593, 'rubber_chair*7', 43, 0, 25, 714, 0, NULL, NULL, 0),
+(594, 'rubber_chair*8', 43, 0, 25, 715, 0, NULL, NULL, 0),
+(595, 'spyro', 44, 0, 25, 716, 0, NULL, NULL, 0),
+(596, 'throne', 44, 0, 50, 107, 0, NULL, NULL, 0),
+(597, 'rare_daffodil_rug', 44, 0, 25, 717, 0, NULL, NULL, 0),
+(598, 'md_limukaappi', 44, 0, 25, 718, 0, NULL, NULL, 0),
+(599, 'samovar', 44, 0, 30, 719, 0, NULL, NULL, 0),
+(600, 'redhologram', 44, 0, 20, 720, 0, NULL, NULL, 0),
+(601, 'typingmachine', 44, 0, 20, 721, 0, NULL, NULL, 0),
+(602, 'hologram', 44, 0, 20, 722, 0, NULL, NULL, 0),
+(603, 'prize1', 44, 0, 15, 723, 0, NULL, NULL, 0),
+(604, 'prize2', 44, 0, 15, 724, 0, NULL, NULL, 0),
+(605, 'prize3', 44, 0, 15, 725, 0, NULL, NULL, 0),
+(606, 'rare_snow_rug', 44, 0, 25, 726, 0, NULL, NULL, 0),
+(607, 'rare_poster_pedobear', 44, 1, 25, 251, 1338, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -738,7 +759,9 @@ INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `n
 (39, 39, 5, 1, 'Elephants', '', 'Elephants', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
 (40, 40, 5, 1, 'Fans', '', 'Fans', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
 (41, 3, 1, 1, 'Camera', 'Camera2', 'Camera', 'ctlg_camera1', 'catalog_camera_headline1', 'campic_cam,campic_film,', 'With your Camera you can take pictures of just about anything in the hotel - your friend on the loo (hehe), your best dive in the Lido, or your room when you\'ve got it just right!<br><br>A camera costs 10 Credits (two free photos included).', NULL, NULL, '1:When you\'ve used your free photos, you\'ll need to buy more. Each roll of film takes five photos. Your Camera will show how much film you have left and loads the next roll automatically.<br><br>Each Film (5 photos) costs:'),
-(42, 3, 1, 0, 'Camera2', '', 'Camera', 'ctlg_camera2', 'catalog_camera_headline1', 'campic_help,', 'CAMERA FUNCTIONS<br><br>1. Press this button to take a photo.<br>2. Photo cancel - for when you\'ve chopped off your friend\'s head!<br>3. Zoom in and out.<br>4. Photo counter - shows how much film you have left<br>5. Caption Box - write your caption before saving the photo.<br>6. Save - this moves the photo to your giant.<br>You can give photos to your friends, or put them on the wall like posters.', NULL, NULL, NULL);
+(42, 3, 1, 0, 'Camera2', '', 'Camera', 'ctlg_camera2', 'catalog_camera_headline1', 'campic_help,', 'CAMERA FUNCTIONS<br><br>1. Press this button to take a photo.<br>2. Photo cancel - for when you\'ve chopped off your friend\'s head!<br>3. Zoom in and out.<br>4. Photo counter - shows how much film you have left<br>5. Caption Box - write your caption before saving the photo.<br>6. Save - this moves the photo to your giant.<br>You can give photos to your friends, or put them on the wall like posters.', NULL, NULL, NULL),
+(43, 43, 5, 1, 'Inflatable Chairs', '', 'Inflatable Chairs', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(44, 44, 5, 1, 'Rares Mixed', '', 'Rares Mixed', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -5855,7 +5878,26 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (704, 'chair_plasty*8', '#ffffff,#c38d1a,#ffffff,#c38d1a', 1, 1, 1, 'can_sit_on_top'),
 (705, 'chair_plasty*9', '#ffffff,#533e10,#ffffff,#533e10', 1, 1, 1, 'can_sit_on_top'),
 (706, 'chair_plasty*10', '#ffffff,#CC2815,#ffffff,#CC2815', 1, 1, 1, 'can_sit_on_top'),
-(707, 'chair_plasty*11', '#ffffff,#FF97BA,#ffffff,#FF97BA', 1, 1, 1, 'can_sit_on_top');
+(707, 'chair_plasty*11', '#ffffff,#FF97BA,#ffffff,#FF97BA', 1, 1, 1, 'can_sit_on_top'),
+(708, 'rubberchair*1', '#4193D6,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(709, 'rubberchair*2', '#FF8B8B,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(710, 'rubberchair*3', '#FF8000,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(711, 'rubberchair*4', '#00E5E2,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(712, 'rubberchair*5', '#A1DC67,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(713, 'rubberchair*6', '#B357FF,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(714, 'rubberchair*7', '#CFCFCF,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(715, 'rubberchair*8', '#333333,#FFFFFF,#FFFFFF', 1, 1, 1, 'can_sit_on_top'),
+(716, 'spyro', '0,0,0', 1, 1, 0, 'solid'),
+(717, 'rare_daffodil_rug', '0,0,0', 2, 2, 0.4, 'can_stand_on_top,can_stack_on_top,place_roller_on_top'),
+(718, 'md_limukaappi', '0,0,0', 1, 1, 0, 'solid'),
+(719, 'samovar', '0,0,0', 1, 1, 0, 'solid'),
+(720, 'redhologram', '0,0,0', 1, 1, 0, 'solid,custom_data_on_off'),
+(721, 'typingmachine', '0,0,0', 1, 1, 0, 'solid'),
+(722, 'hologram', '0,0,0', 1, 1, 0, 'solid,custom_data_on_off'),
+(723, 'prize1', '0,0,0', 1, 1, 0, 'solid'),
+(724, 'prize2', '0,0,0', 1, 1, 0, 'solid'),
+(725, 'prize3', '0,0,0', 1, 1, 0, 'solid'),
+(726, 'rare_snowrug', '0,0,0', 2, 2, 0, 'can_stand_on_top,can_stack_on_top');
 
 -- --------------------------------------------------------
 
@@ -9333,6 +9375,17 @@ INSERT INTO `rank_fuserights` (`min_rank`, `fuseright`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `rare_cycle`
+--
+
+CREATE TABLE `rare_cycle` (
+  `sale_code` varchar(255) NOT NULL,
+  `reuse_time` bigint(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `rooms`
 --
 
@@ -9662,7 +9715,10 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180807135756'),
 ('20180809133417'),
 ('20180810195924'),
-('20180810204747');
+('20180810204747'),
+('20180814105730'),
+('20180815123433'),
+('20180815133155');
 
 -- --------------------------------------------------------
 
@@ -9837,6 +9893,12 @@ ALTER TABLE `messenger_messages`
   ADD UNIQUE KEY `id` (`id`);
 
 --
+-- Indexes for table `rare_cycle`
+--
+ALTER TABLE `rare_cycle`
+  ADD PRIMARY KEY (`sale_code`);
+
+--
 -- Indexes for table `rooms`
 --
 ALTER TABLE `rooms`
@@ -9903,7 +9965,7 @@ ALTER TABLE `users_badges`
 -- AUTO_INCREMENT for table `catalogue_items`
 --
 ALTER TABLE `catalogue_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=587;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=608;
 
 --
 -- AUTO_INCREMENT for table `items`
@@ -9915,7 +9977,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=708;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=727;
 
 --
 -- AUTO_INCREMENT for table `messenger_messages`
