@@ -130,7 +130,7 @@ public class RoomUser {
             return;
         }
 
-        if (!this.isWalkingAllowed) {
+        if (this.beingKicked) {
             return;
         }
 
@@ -722,10 +722,6 @@ public class RoomUser {
 
     public void setNeedsUpdate(boolean needsUpdate) {
         this.needsUpdate = needsUpdate;
-    }
-
-    public void setBeingKicked(boolean beingKicked) {
-        this.beingKicked = beingKicked;
     }
 
     public boolean isBeingKicked() {
