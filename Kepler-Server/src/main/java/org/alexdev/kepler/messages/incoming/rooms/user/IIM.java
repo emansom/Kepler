@@ -1,6 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
-import org.alexdev.kepler.game.games.GamehallGame;
+import org.alexdev.kepler.game.games.gamehalls.GamehallGame;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;

@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.games;
+package org.alexdev.kepler.game.games.gamehalls;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
