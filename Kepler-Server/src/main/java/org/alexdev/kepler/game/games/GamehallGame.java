@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.games;
 
-import com.github.bhlangonijr.chesslib.PieceType;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
@@ -10,7 +9,6 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
