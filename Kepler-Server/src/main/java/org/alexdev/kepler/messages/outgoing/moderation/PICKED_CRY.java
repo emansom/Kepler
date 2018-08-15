@@ -20,6 +20,6 @@ public class PICKED_CRY extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 149;
+        return 149; // "BU"
     }
 }

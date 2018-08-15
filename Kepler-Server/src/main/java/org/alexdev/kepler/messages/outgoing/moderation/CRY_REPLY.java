@@ -12,11 +12,11 @@ public class CRY_REPLY extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeString(message);
+        response.writeString(this.message);
     }
 
     @Override
     public short getHeader() {
-        return 274;
+        return 274; // "DR"
     }
 }
