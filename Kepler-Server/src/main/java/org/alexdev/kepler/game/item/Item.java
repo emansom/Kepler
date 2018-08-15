@@ -5,7 +5,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.roller.RollingData;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -43,7 +43,7 @@ public class Item {
     private boolean requiresUpdate;
 
     private RollingData rollingData;
-    private ItemTrigger itemTrigger;
+    private GenericTrigger itemTrigger;
 
     public Item() {
         this.id = 0;
@@ -536,11 +536,11 @@ public class Item {
         this.rollingData = rollingData;
     }
 
-    public ItemTrigger getItemTrigger() {
+    public GenericTrigger getItemTrigger() {
         return itemTrigger;
     }
 
-    public void setItemTrigger(ItemTrigger itemTrigger) {
+    public void setItemTrigger(GenericTrigger itemTrigger) {
         this.itemTrigger = itemTrigger;
     }
 

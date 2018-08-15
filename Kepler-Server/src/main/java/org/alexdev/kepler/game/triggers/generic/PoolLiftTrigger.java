@@ -1,16 +1,16 @@
-package org.alexdev.kepler.game.item.triggers.generic;
+package org.alexdev.kepler.game.triggers.generic;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.JUMPINGPLACE_OK;
 import org.alexdev.kepler.messages.outgoing.user.currencies.TICKET_BALANCE;
 
-public class PoolLiftTrigger implements ItemTrigger {
+public class PoolLiftTrigger implements GenericTrigger {
     @Override
     public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
 

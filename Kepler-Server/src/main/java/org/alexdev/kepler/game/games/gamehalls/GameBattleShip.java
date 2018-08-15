@@ -1,7 +1,7 @@
 package org.alexdev.kepler.game.games.gamehalls;
 
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.GameTrigger;
+import org.alexdev.kepler.game.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 

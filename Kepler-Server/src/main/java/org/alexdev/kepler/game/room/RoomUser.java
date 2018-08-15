@@ -5,7 +5,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.roller.RollingData;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -23,7 +23,6 @@ import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.room.tasks.WaveTask;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
-import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.*;
@@ -234,7 +233,7 @@ public class RoomUser {
         }
 
         if (item != null) {
-            ItemTrigger trigger = item.getItemTrigger();
+            GenericTrigger trigger = item.getItemTrigger();
 
             if (trigger != null) {
                 item.getItemTrigger().onEntityStop(this.entity, this, item, isRolling);

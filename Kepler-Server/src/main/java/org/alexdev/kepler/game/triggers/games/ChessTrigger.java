@@ -1,9 +1,9 @@
-package org.alexdev.kepler.game.item.triggers.games;
+package org.alexdev.kepler.game.triggers.games;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.games.gamehalls.GameChess;
-import org.alexdev.kepler.game.item.triggers.GameTrigger;
+import org.alexdev.kepler.game.triggers.GameTrigger;
 import org.alexdev.kepler.game.room.RoomUser;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.item.triggers;
+package org.alexdev.kepler.game.triggers;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -15,7 +15,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.games.OPENGAMEBOARD;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GameTrigger implements ItemTrigger {
+public abstract class GameTrigger implements GenericTrigger {
     protected List<GamehallGame> gameInstances;
 
     public GameTrigger() {

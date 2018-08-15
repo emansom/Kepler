@@ -1,8 +1,8 @@
-package org.alexdev.kepler.game.item.triggers.generic;
+package org.alexdev.kepler.game.triggers.generic;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -12,7 +12,7 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BedTrigger implements ItemTrigger {
+public class BedTrigger implements GenericTrigger {
     @Override
     public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
 

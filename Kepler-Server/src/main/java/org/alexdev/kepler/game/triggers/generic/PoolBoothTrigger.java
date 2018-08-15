@@ -1,14 +1,14 @@
-package org.alexdev.kepler.game.item.triggers.generic;
+package org.alexdev.kepler.game.triggers.generic;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
 
-public class PoolBoothTrigger implements ItemTrigger {
+public class PoolBoothTrigger implements GenericTrigger {
     @Override
     public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
 
