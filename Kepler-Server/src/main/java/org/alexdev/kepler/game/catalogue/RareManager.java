@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.bouncycastle.asn1.cms.Time;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -65,8 +66,8 @@ public class RareManager {
      * Selects a new rare, adds it to the database so it can only be selected once every X interval defined (default is 3 days).
      */
     public void selectNewRare() throws SQLException {
-        TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-        long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+        TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
+        long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
 
         List<String> toRemove = new ArrayList<>();
 
@@ -103,6 +104,14 @@ public class RareManager {
             }
 
             this.currentRare = rare;
+
+            // Handle override by using "rare.cycle.reuse.CATALOGUE_SALE_CODE.timeunit" and "rare.cycle.reuse.CATALOGUE_SALE_CODE.interval"
+            String overrideUnit = GameConfiguration.getInstance().getString("rare.cycle.reuse." + rare.getSaleCode() + ".timeunit", null);
+
+            if (overrideUnit != null) {
+                reuseTimeUnit = TimeUnit.valueOf(overrideUnit);
+                interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.reuse." + rare.getSaleCode() + ".interval"));
+            }
 
             // Add rare to expiry table so it can't be used for a certain X number of days
             this.daysSinceUsed.put(rare.getDefinition().getSprite(), DateUtil.getCurrentTimeSeconds() + interval);
