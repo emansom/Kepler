@@ -15,7 +15,9 @@ public class USER_CANCEL_TYPING implements MessageEvent {
             return;
         }
 
+        player.getRoomUser().getTimerManager().stopChatBubbleTimer();
         player.getRoomUser().setTyping(false);
+
         room.send(new TYPING_STATUS(player.getRoomUser().getInstanceId(), player.getRoomUser().isTyping()));
     }
 }
