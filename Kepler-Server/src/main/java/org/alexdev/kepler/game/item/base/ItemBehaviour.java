@@ -33,7 +33,8 @@ public enum ItemBehaviour {
     WHEEL_OF_FORTUNE,
     ROOMDIMMER,
     PRESENT,
-    PHOTO;
+    PHOTO,
+    PLACE_ROLLER_ON_TOP;
 
 
     private ItemTrigger trigger;

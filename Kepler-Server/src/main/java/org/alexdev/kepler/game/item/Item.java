@@ -352,8 +352,8 @@ public class Item {
      */
     private boolean canPlaceOnTop(Item item, Item tileItem) {
         // Don't allow putting rollers on top of stackable objects
-        if (item.hasBehaviour(ItemBehaviour.ROLLER) && tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
-            if (tileItem.getDefinition().getTopHeight() >= 0.1) {
+        if (item.hasBehaviour(ItemBehaviour.ROLLER) && tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && !tileItem.hasBehaviour(ItemBehaviour.PLACE_ROLLER_ON_TOP)) {
+            if (tileItem.getDefinition().getTopHeight() > 0.2) {
                 return false;
             }
         }
