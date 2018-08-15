@@ -1,4 +1,4 @@
-package org.alexdev.kepler.messages.incoming.rooms.items;
+package org.alexdev.kepler.messages.incoming.rooms.teleporter;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;

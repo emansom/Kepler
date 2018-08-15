@@ -2,7 +2,7 @@ package org.alexdev.kepler.game.item.triggers.games;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.games.GameTicTacToe;
+import org.alexdev.kepler.game.games.gamehalls.GameTicTacToe;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.room.RoomUser;
 

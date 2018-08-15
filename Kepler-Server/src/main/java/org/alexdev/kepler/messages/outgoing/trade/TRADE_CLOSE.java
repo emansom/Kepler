@@ -11,6 +11,6 @@ public class TRADE_CLOSE extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 110;
+        return 110; // "An"
     }
 }

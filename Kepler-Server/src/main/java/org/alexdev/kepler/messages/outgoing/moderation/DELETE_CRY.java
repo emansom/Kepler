@@ -13,11 +13,11 @@ public class DELETE_CRY extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeString(cfh.getCallId());
+        response.writeString(this.cfh.getCallId());
     }
 
     @Override
     public short getHeader() {
-        return 273;
+        return 273; // "DQ"
     }
 }

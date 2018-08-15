@@ -22,7 +22,7 @@ public class ShutdownCommand extends Command {
 
     @Override
     public void addArguments() {
-        this.arguments.add("minutes");
+        /*this.arguments.add("minutes");*/
     }
 
     @Override
@@ -34,17 +34,23 @@ public class ShutdownCommand extends Command {
         Player player = (Player) entity;
 
         // Abort maintenance shutdown if provided argument is either cancel, off or stop (case insensitive)
-        if (args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("stop")) {
-            PlayerManager.getInstance().cancelMaintenance();
-            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Cancelled shutdown"));
-            return;
+        if (args.length > 0) {
+            if (args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("stop")) {
+                PlayerManager.getInstance().cancelMaintenance();
+                player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Cancelled shutdown"));
+                return;
+            }
         }
 
         long minutes;
 
         // Try parsing minutes argument, use default if failed
         try {
-            minutes = Long.parseLong(args[0]);
+            if (args.length > 0) {
+                minutes = Long.parseLong(args[0]);
+            } else {
+                minutes = GameConfiguration.getInstance().getLong("shutdown.minutes");
+            }
         } catch (NumberFormatException e) {
             minutes = GameConfiguration.getInstance().getLong("shutdown.minutes");
             player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Failed to parse minutes provided to shutdown command, defaulting to " + minutes + " minute(s)"));
@@ -59,6 +65,6 @@ public class ShutdownCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "Shutdown Kepler";
+        return "<minutes> - Shutdown Kepler";
     }
 }
