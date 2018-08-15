@@ -48,8 +48,4 @@ public enum ItemBehaviour {
     public ItemTrigger getTrigger() {
         return trigger;
     }
-
-    public void setTrigger(ItemTrigger trigger) {
-        this.trigger = trigger;
-    }
 }

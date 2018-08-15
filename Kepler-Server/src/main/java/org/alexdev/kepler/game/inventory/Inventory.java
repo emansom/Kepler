@@ -27,6 +27,9 @@ public class Inventory {
         this.refreshPagination();
     }
 
+    /**
+     * Refreshes the pagination by making the most recently bought items appear first.
+     */
     private void refreshPagination() {
         this.items.sort(Comparator.comparingDouble(Item::getId).reversed());
         this.paginatedItems = StringUtil.paginate(this.items, MAX_ITEMS_PER_PAGE);

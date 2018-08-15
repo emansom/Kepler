@@ -10,8 +10,6 @@ import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.outgoing.user.MODERATOR_ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
-import org.alexdev.kepler.util.encoding.FuseMessage;
-import org.alexdev.kepler.util.encoding.VL64Encoding;
 
 import java.util.List;
 

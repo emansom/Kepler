@@ -1,6 +1,5 @@
 package org.alexdev.kepler.util;
 
-import java.security.SecureRandom;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,12 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 public class StringUtil {
-
-    private static SecureRandom secureRandom;
-
-    static {
-        secureRandom = new SecureRandom();
-    }
 
     /**
      * Checks if is null or empty.
@@ -73,17 +66,6 @@ public class StringUtil {
     }
 
     /**
-     * Removes the non alpha numeric.
-     *
-     * @param caption the caption
-     * @return the string
-     */
-    public static String removeNonAlphaNumeric(String caption) {
-        return caption.replaceAll("[^A-Za-z0-9]", "");
-    }
-
-
-    /**
      * Paginate a list of items.
      *
      * @param <T> the generic type
@@ -129,14 +111,5 @@ public class StringUtil {
      */
     public static List<String> split(String str, String delim) {
         return new ArrayList<>(Arrays.asList(str.split(delim)));
-    }
-
-    /**
-     * Gets the random.
-     *
-     * @return the random
-     */
-    public static SecureRandom getRandom() {
-        return secureRandom;
     }
 }

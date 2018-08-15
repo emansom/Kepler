@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.games;
+package org.alexdev.kepler.game.games.gamehalls;
 
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 public class GameTicTacToe extends GamehallGame {
     private static class GameToken {

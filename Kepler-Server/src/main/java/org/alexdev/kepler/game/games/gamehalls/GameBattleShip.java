@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.games;
+package org.alexdev.kepler.game.games.gamehalls;
 
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.triggers.GameTrigger;
@@ -7,8 +7,8 @@ import org.alexdev.kepler.game.room.Room;
 
 import java.util.List;
 
-public class GamePoker extends GamehallGame {
-    public GamePoker(int roomId, List<int[]> kvp) {
+public class GameBattleShip extends GamehallGame {
+    public GameBattleShip(int roomId, List<int[]> kvp) {
         super(roomId, kvp);
     }
 
@@ -30,7 +30,7 @@ public class GamePoker extends GamehallGame {
 
     @Override
     public int getMaximumPeopleRequired() {
-        return 4;
+        return 2;
     }
 
     @Override
@@ -40,6 +40,6 @@ public class GamePoker extends GamehallGame {
 
     @Override
     public String getGameFuseType() {
-        return "Poker";
+        return "BattleShip";
     }
 }

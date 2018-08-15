@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.games;
+package org.alexdev.kepler.game.games.gamehalls;
 
 import com.github.bhlangonijr.chesslib.*;
 import com.github.bhlangonijr.chesslib.move.Move;
@@ -14,7 +14,6 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 public class GameChess extends GamehallGame {
     private static class GameToken {

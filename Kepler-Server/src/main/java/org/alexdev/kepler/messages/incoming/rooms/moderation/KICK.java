@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.rooms.moderation;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -25,8 +26,12 @@ public class KICK implements MessageEvent {
             return;
         }
 
-        if (player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) || player.hasFuse("fuse_kick")) {
-            target.getRoomUser().setBeingKicked(true);
+        Room room = player.getRoomUser().getRoom();
+
+        if (room.isOwner(player.getEntityId())
+                || room.getRights().contains(player.getEntityId())
+                || player.hasFuse("fuse_kick")) {
+
             target.getRoomUser().kick(false);
         }
     }
