@@ -19,9 +19,6 @@ public class RoomPlayer extends RoomEntity {
     private int authenticateId;
     private int authenticateTelporterId;
 
-    private boolean isWalkingAllowed;
-    private boolean isWalking;
-    private boolean beingKicked;
     private boolean needsUpdate;
     private boolean isTyping;
     private boolean isDiving;
@@ -44,10 +41,6 @@ public class RoomPlayer extends RoomEntity {
     @Override
     public void reset() {
         super.reset();
-
-        this.isWalkingAllowed = true;
-        this.isWalking = false;
-        this.beingKicked = false;
         this.isTyping = false;
         this.isDiving = false;
 
@@ -56,66 +49,9 @@ public class RoomPlayer extends RoomEntity {
         RoomTradeManager.close(this);
     }
 
-    /**
-     * Kick a user from the room.
-     *
-     * @param allowWalking whether the user can interrupt themselves walking towards the door
-     */
-    public void kick(boolean allowWalking) {
-        Position doorLocation = this.getRoom().getModel().getDoorLocation();
-
-        // If we're standing in the door, immediately leave room
-        if (this.getPosition().equals(doorLocation)) {
-            this.getRoom().getEntityManager().leaveRoom(this.player, true);
-            return;
-        }
-
-        // Attempt to walk to the door
-        this.walkTo(doorLocation.getX(), doorLocation.getY());
-        this.isWalkingAllowed = allowWalking;
-        this.beingKicked = !allowWalking;
-
-        // If user isn't walking, leave immediately
-        if (!this.isWalking) {
-            this.getRoom().getEntityManager().leaveRoom(this.player, true);
-        }
-    }
-
     @Override
     public void stopWalking() {
         super.stopWalking();
-
-        if (!this.beingKicked) {
-            WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this.getRoom(), this.getPosition());
-
-            if (entrance != null) {
-                Room room = WalkwaysManager.getInstance().getWalkwayRoom(entrance.getModelTo());
-
-                if (room != null) {
-                    room.getEntityManager().enterRoom(this.player, entrance.getDestination());
-                    return;
-                }
-            }
-        }
-
-        boolean leaveRoom = this.beingKicked;
-        Position doorPosition = this.getRoom().getModel().getDoorLocation();
-
-        if (doorPosition.equals(this.getPosition())) {
-            leaveRoom = true;
-        }
-
-        if (this.getRoom().isPublicRoom()) {
-            if (WalkwaysManager.getInstance().getWalkway(this.getRoom(), doorPosition) != null) {
-                leaveRoom = false;
-            }
-        }
-
-        // Leave room if the tile is the door and we are in a flat or we're being kicked
-        if (leaveRoom || this.beingKicked) {
-            this.getRoom().getEntityManager().leaveRoom(this.player, true);
-            return;
-        }
     }
 
     public RoomTimerManager getTimerManager() {
@@ -136,24 +72,6 @@ public class RoomPlayer extends RoomEntity {
 
     public void setAuthenticateTelporterId(int authenticateTelporterId) {
         this.authenticateTelporterId = authenticateTelporterId;
-    }
-
-    public boolean isWalkingAllowed() {
-        return isWalkingAllowed;
-    }
-
-    public void setWalkingAllowed(boolean walkingAllowed) {
-        isWalkingAllowed = walkingAllowed;
-    }
-
-    @Override
-    public boolean isWalking() {
-        return isWalking;
-    }
-
-    @Override
-    public void setWalking(boolean walking) {
-        isWalking = walking;
     }
 
     @Override
