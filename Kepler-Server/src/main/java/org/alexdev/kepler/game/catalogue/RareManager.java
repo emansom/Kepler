@@ -37,8 +37,6 @@ public class RareManager {
             TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.reuse.timeunit"));
             long reuseInterval = GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval");
 
-            System.out.println(reuseInterval);
-
             TimeUnit refreshTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
             long refreshInterval = GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval");
 
