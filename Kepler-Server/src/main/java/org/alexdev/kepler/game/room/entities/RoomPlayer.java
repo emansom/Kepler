@@ -19,7 +19,6 @@ public class RoomPlayer extends RoomEntity {
     private int authenticateId;
     private int authenticateTelporterId;
 
-    private boolean needsUpdate;
     private boolean isTyping;
     private boolean isDiving;
 
@@ -72,16 +71,6 @@ public class RoomPlayer extends RoomEntity {
 
     public void setAuthenticateTelporterId(int authenticateTelporterId) {
         this.authenticateTelporterId = authenticateTelporterId;
-    }
-
-    @Override
-    public boolean isNeedsUpdate() {
-        return needsUpdate;
-    }
-
-    @Override
-    public void setNeedsUpdate(boolean needsUpdate) {
-        this.needsUpdate = needsUpdate;
     }
 
     public boolean isTyping() {
