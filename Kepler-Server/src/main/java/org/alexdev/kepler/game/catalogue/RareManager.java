@@ -35,15 +35,20 @@ public class RareManager {
             this.loadRares();
 
             TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.reuse.timeunit"));
-            long reuseInterval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval"));
+            long reuseInterval = GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval");
+
+            System.out.println(reuseInterval);
 
             TimeUnit refreshTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-            long refreshInterval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+            long refreshInterval = GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval");
 
             long refreshTime = -1;
 
             if (this.currentRare != null) {
-                refreshTime = (this.currentRareTime - reuseTimeUnit.toSeconds(reuseInterval)) + refreshTimeUnit.toSeconds(refreshInterval);
+                long reuseInSeconds = reuseTimeUnit.toSeconds(reuseInterval);
+                long refreshInSeconds = refreshTimeUnit.toSeconds(refreshInterval);
+
+                refreshTime = (this.currentRareTime - reuseInSeconds) + refreshInSeconds;
             }
 
             // If there was no current rare, or the current rare time ran out, then cycle to the next rare
