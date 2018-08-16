@@ -112,7 +112,7 @@ public class RoomEntityManager {
             RoomManager.getInstance().addRoom(this.room);
         }
 
-        entity.getRoomUser().getTimerManager().resetRoomTimer();
+        entity.getRoomUser().reset();
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.generateUniqueId());
 

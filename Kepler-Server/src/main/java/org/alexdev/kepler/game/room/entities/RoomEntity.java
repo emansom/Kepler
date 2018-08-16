@@ -58,7 +58,6 @@ public abstract class RoomEntity {
         this.statuses = new ConcurrentHashMap<>();
         this.path = new LinkedList<>();
         this.timerManager = new RoomTimerManager(this);
-        this.reset();
     }
 
     public void reset() {
@@ -72,6 +71,7 @@ public abstract class RoomEntity {
         this.isWalkingAllowed = true;
         this.beingKicked = false;
         this.instanceId = -1;
+        this.timerManager.resetRoomTimer();
     }
 
     /**

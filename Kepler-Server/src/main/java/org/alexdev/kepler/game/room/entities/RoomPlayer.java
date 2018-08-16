@@ -17,7 +17,6 @@ import java.util.List;
 
 public class RoomPlayer extends RoomEntity {
     private Player player;
-    private RoomTimerManager timerManager;
 
     private int authenticateId;
     private int authenticateTelporterId;
@@ -35,9 +34,7 @@ public class RoomPlayer extends RoomEntity {
         super(player);
         this.player = player;
         this.authenticateTelporterId = -1;
-
         this.tradeItems = new ArrayList<>();
-        this.timerManager = new RoomTimerManager(this);
     }
 
     @Override
@@ -45,9 +42,8 @@ public class RoomPlayer extends RoomEntity {
         super.reset();
         this.isTyping = false;
         this.isDiving = false;
-
         this.authenticateId = -1;
-        this.timerManager.resetTimers();
+
         RoomTradeManager.close(this);
     }
 
@@ -56,7 +52,7 @@ public class RoomPlayer extends RoomEntity {
         boolean walking = super.walkTo(X, Y);
 
         if (walking) {
-            this.timerManager.resetRoomTimer();
+            this.getTimerManager().resetRoomTimer();
         }
 
         return walking;
@@ -85,10 +81,6 @@ public class RoomPlayer extends RoomEntity {
         if (this.getRoom() != null) {
             this.getRoom().send(new FIGURE_CHANGE(this.getInstanceId(), this.player.getDetails()));
         }
-    }
-
-    public RoomTimerManager getTimerManager() {
-        return timerManager;
     }
 
     public int getAuthenticateId() {
