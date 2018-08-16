@@ -69,16 +69,6 @@ public class Pathfinder {
 
         // Only check these below if the user is in a pool room.
         if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_")) {
-            // Let people to walk to the next tile if they were on a previous tile in the diving deck
-            if (fromItem != null && toItem != null) {
-                if (entity.getRoomUser().getRoom().getModel().getName().equals("pool_b")) {
-                    if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
-                            toItem.getDefinition().getSprite().equals("queue_tile2")) {
-                        return true;
-                    }
-                }
-            }
-
             if (toItem != null) {
                 // Check if they have swimmers before trying to enter pool
                 if (toItem.getDefinition().getSprite().equals("poolEnter") ||
@@ -107,18 +97,6 @@ public class Pathfinder {
                         return false;
                     } else {
                         return !toItem.getDefinition().getSprite().equals("poolLift") || entity.getDetails().getPoolFigure().length() > 0;
-                    }
-                }
-
-                // Don't allow people to enter the queue from any coordinate, and don't allow
-                // if they don't have a ticket or have swimmers.
-                if (entity.getRoomUser().getRoom().getModel().getName().equals("pool_b") &&
-                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
-
-                    if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
-                        return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;
-                    } else {
-                        return false;
                     }
                 }
             }

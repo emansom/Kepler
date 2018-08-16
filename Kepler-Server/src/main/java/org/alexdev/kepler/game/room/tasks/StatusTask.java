@@ -49,9 +49,6 @@ public class StatusTask implements Runnable {
             this.processChatBubble(player);
         }
 
-        // Use walk to next tile if on pool queue
-        PoolHandler.checkPoolQueue(entity);
-
         for (var kvp : entity.getRoomUser().getStatuses().entrySet()) {
             String key = kvp.getKey();
             RoomUserStatus rus = kvp.getValue();

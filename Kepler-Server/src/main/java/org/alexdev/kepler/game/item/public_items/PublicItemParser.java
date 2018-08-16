@@ -4,14 +4,11 @@ import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
+import org.alexdev.kepler.game.triggers.furniture.*;
 import org.alexdev.kepler.game.triggers.games.BattleShipsTrigger;
 import org.alexdev.kepler.game.triggers.games.ChessTrigger;
 import org.alexdev.kepler.game.triggers.games.PokerTrigger;
 import org.alexdev.kepler.game.triggers.games.TicTacToeTrigger;
-import org.alexdev.kepler.game.triggers.furniture.PoolBoothTrigger;
-import org.alexdev.kepler.game.triggers.furniture.PoolEnterTrigger;
-import org.alexdev.kepler.game.triggers.furniture.PoolExitTrigger;
-import org.alexdev.kepler.game.triggers.furniture.PoolLiftTrigger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +27,7 @@ public class PublicItemParser {
             put("poolEnter", new PoolEnterTrigger());
             put("poolLift", new PoolLiftTrigger());
             put("poolBooth", new PoolBoothTrigger());
+            put("queue_tile2", new PoolQueueTrigger());
             put("gamehall_chair_wood", ticTacToeTrigger);
 
             if (modelId.equals("hallC")) {

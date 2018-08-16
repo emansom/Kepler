@@ -111,17 +111,4 @@ public class PoolHandler {
             }
         }
     }
-
-    public static void checkPoolQueue(Entity entity) {
-        if (entity.getRoomUser().isWalking()) {
-            return;
-        }
-
-        if (entity.getRoomUser().getCurrentItem() != null) {
-            if (entity.getRoomUser().getCurrentItem().getDefinition().getSprite().equals("queue_tile2")) {
-                Position front =  entity.getRoomUser().getCurrentItem().getPosition().getSquareInFront();
-                entity.getRoomUser().walkTo(front.getX(), front.getY());
-            }
-        }
-    }
 }
