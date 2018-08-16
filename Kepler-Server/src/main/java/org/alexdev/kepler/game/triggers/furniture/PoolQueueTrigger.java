@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
+import org.alexdev.kepler.messages.outgoing.user.currencies.NO_TICKETS;
 
 public class PoolQueueTrigger extends GenericTrigger {
 
@@ -44,6 +45,8 @@ public class PoolQueueTrigger extends GenericTrigger {
                     break;
                 }
             }
+
+            player.send(new NO_TICKETS());
         }
     }
 
