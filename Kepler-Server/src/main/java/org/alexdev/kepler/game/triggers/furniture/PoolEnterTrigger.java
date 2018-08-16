@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.triggers.generic;
+package org.alexdev.kepler.game.triggers.furniture;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -8,7 +8,7 @@ import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 
-public class PoolExitTrigger implements GenericTrigger {
+public class PoolEnterTrigger implements GenericTrigger {
     @Override
     public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
@@ -18,28 +18,23 @@ public class PoolExitTrigger implements GenericTrigger {
         Position warp = null;
         Position goal = null;
 
-        if (item.getPosition().getX() == 21 && item.getPosition().getY() == 28) {
-            warp = new Position(20, 28);
-            goal = new Position(19, 28);
+        if (item.getPosition().getX() == 20 && item.getPosition().getY() == 28) {
+            warp = new Position(21, 28);
+            goal = new Position(22, 28);
         }
 
-        if (item.getPosition().getX() == 17 && item.getPosition().getY() == 22) {
-            warp = new Position(17, 21);
-            goal = new Position(17, 20);
+        if (item.getPosition().getX() == 17 && item.getPosition().getY() == 21) {
+            warp = new Position(16, 22);
+            goal = new Position(16, 23);
         }
 
-        if (item.getPosition().getX() == 31 && item.getPosition().getY() == 11) {
-            warp = new Position(31, 10);
-            goal = new Position(31, 9);
-        }
-
-        if (item.getPosition().getX() == 20 && item.getPosition().getY() == 19) {
-            warp = new Position(19, 19);
-            goal = new Position(18, 19);
+        if (item.getPosition().getX() == 31 && item.getPosition().getY() == 10) {
+            warp = new Position(30, 11);
+            goal = new Position(30, 12);
         }
 
         if (warp != null) {
-            PoolHandler.warpSwim(item, entity, warp, goal, true);
+            PoolHandler.warpSwim(item, entity, warp, goal, false);
         }
     }
 

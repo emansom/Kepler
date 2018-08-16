@@ -8,10 +8,10 @@ import org.alexdev.kepler.game.triggers.games.BattleShipsTrigger;
 import org.alexdev.kepler.game.triggers.games.ChessTrigger;
 import org.alexdev.kepler.game.triggers.games.PokerTrigger;
 import org.alexdev.kepler.game.triggers.games.TicTacToeTrigger;
-import org.alexdev.kepler.game.triggers.generic.PoolBoothTrigger;
-import org.alexdev.kepler.game.triggers.generic.PoolEnterTrigger;
-import org.alexdev.kepler.game.triggers.generic.PoolExitTrigger;
-import org.alexdev.kepler.game.triggers.generic.PoolLiftTrigger;
+import org.alexdev.kepler.game.triggers.furniture.PoolBoothTrigger;
+import org.alexdev.kepler.game.triggers.furniture.PoolEnterTrigger;
+import org.alexdev.kepler.game.triggers.furniture.PoolExitTrigger;
+import org.alexdev.kepler.game.triggers.furniture.PoolLiftTrigger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
