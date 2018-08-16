@@ -19,7 +19,6 @@ public class DICE_VALUE extends MessageComposer {
         response.write(this.itemId);
 
         if (!this.spin) {
-            // TODO: figure out why * 38 is needed
             if (this.randomNumber > 0) {
                 response.write(" " + ((this.itemId * 38) + this.randomNumber));
             } else {

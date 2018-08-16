@@ -97,11 +97,11 @@ public class NavigatorDao {
     public static int createRoom(int ownerId, String roomName, String roomModel, boolean roomShowName, int accessType) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
 
         int roomId = 0;
 
         try {
-
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("INSERT INTO rooms (owner_id, name, description, model, showname, password, accesstype) VALUES (?,?,?,?,?, '', ?)", sqlConnection);
             preparedStatement.setInt(1, ownerId);
@@ -111,17 +111,16 @@ public class NavigatorDao {
             preparedStatement.setBoolean(5, roomShowName);
             preparedStatement.setInt(6, accessType);
             preparedStatement.executeUpdate();
+            resultSet = preparedStatement.getGeneratedKeys();
 
-            ResultSet row = preparedStatement.getGeneratedKeys();
-
-            if (row != null && row.next()) {
-                roomId = row.getInt(1);
+            if (resultSet.next()) {
+                roomId = resultSet.getInt(1);
             }
-
         } catch (SQLException e) {
             Storage.logError(e);
             throw e;
         } finally {
+            Storage.closeSilently(resultSet);
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }

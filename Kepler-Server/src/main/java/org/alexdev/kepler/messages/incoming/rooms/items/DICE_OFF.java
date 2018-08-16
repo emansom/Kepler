@@ -5,7 +5,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.messages.outgoing.rooms.items.DICE_VALUE;
 import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -17,8 +17,8 @@ import org.apache.commons.lang3.StringUtils;
 public class DICE_OFF implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        RoomUser roomUser = player.getRoomUser();
-        Room room = roomUser.getRoom();
+        RoomEntity roomEntity = player.getRoomUser();
+        Room room = roomEntity.getRoom();
 
         if (room == null) {
             return;
@@ -42,7 +42,7 @@ public class DICE_OFF implements MessageEvent {
             return;
         }
 
-        if (!roomUser.getTile().touches(item.getTile())) {
+        if (!roomEntity.getTile().touches(item.getTile())) {
             return;
         }
 

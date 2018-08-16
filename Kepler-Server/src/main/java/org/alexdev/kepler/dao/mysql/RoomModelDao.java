@@ -24,7 +24,7 @@ public class RoomModelDao {
             while (resultSet.next()) {
                 RoomModel roomModel = new RoomModel(resultSet.getString("model_id"), resultSet.getString("model_name"),
                         resultSet.getInt("door_x"), resultSet.getInt("door_y"), resultSet.getDouble("door_z"),
-                        resultSet.getInt("door_dir"), resultSet.getString("heightmap"));
+                        resultSet.getInt("door_dir"), resultSet.getString("heightmap"), resultSet.getString("trigger_class"));
 
                 roomModel.parse();
                 roomModels.put(roomModel.getId(), roomModel);

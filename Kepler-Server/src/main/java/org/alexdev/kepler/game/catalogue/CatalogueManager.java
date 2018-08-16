@@ -118,12 +118,12 @@ public class CatalogueManager {
     }
 
     /**
-     * Get catalogue packages list.
+     * Get catalogue items list.
      *
-     * @return the list of catalogue packages
+     * @return the list of items packages
      */
-    public List<CataloguePackage> getCataloguePackages() {
-        return cataloguePackageList;
+    public List<CatalogueItem> getCatalogueItems() {
+        return catalogueItemList;
     }
 
     /**

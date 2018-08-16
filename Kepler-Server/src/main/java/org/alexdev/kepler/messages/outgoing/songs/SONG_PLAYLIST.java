@@ -31,6 +31,6 @@ public class SONG_PLAYLIST extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 323;
+        return 323; // "EC"
     }
 }

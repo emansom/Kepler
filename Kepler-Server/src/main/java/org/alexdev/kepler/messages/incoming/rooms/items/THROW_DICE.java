@@ -1,29 +1,26 @@
 package org.alexdev.kepler.messages.incoming.rooms.items;
 
-import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.tasks.DiceTask;
-import org.alexdev.kepler.game.room.tasks.WaveTask;
 import org.alexdev.kepler.messages.outgoing.rooms.items.DICE_VALUE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 
 public class THROW_DICE implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        RoomUser roomUser = player.getRoomUser();
-        Room room = roomUser.getRoom();
+        RoomEntity roomEntity = player.getRoomUser();
+        Room room = roomEntity.getRoom();
 
         if (room == null) {
             return;
@@ -53,7 +50,7 @@ public class THROW_DICE implements MessageEvent {
         }
 
         // Check if user is next to dice
-        if (!roomUser.getTile().touches(item.getTile())) {
+        if (!roomEntity.getTile().touches(item.getTile())) {
             return;
         }
 

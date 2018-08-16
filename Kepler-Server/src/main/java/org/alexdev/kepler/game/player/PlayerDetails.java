@@ -93,6 +93,18 @@ public class PlayerDetails {
         this.allowStalking = allowStalking;
         this.soundEnabled = soundEnabled;
         this.tutorialFinished = tutorialFinished;
+
+        if (this.credits < 0) {
+            this.credits = 0;
+        }
+
+        if (this.tickets < 0) {
+            this.tickets = 0;
+        }
+
+        if (this.film < 0) {
+            this.film = 0;
+        }
     }
 
     public void loadBadges() {

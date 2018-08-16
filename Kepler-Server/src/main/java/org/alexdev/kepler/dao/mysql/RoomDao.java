@@ -15,7 +15,11 @@ import java.util.List;
 public class RoomDao {
 
     public static void resetVisitors() {
-        Storage.getStorage().execute("UPDATE rooms SET visitors_now = 0 WHERE visitors_now > 0");
+        try {
+            Storage.getStorage().execute("UPDATE rooms SET visitors_now = 0 WHERE visitors_now > 0");
+        } catch (SQLException e) {
+            Storage.logError(e);
+        }
     }
 
     /**

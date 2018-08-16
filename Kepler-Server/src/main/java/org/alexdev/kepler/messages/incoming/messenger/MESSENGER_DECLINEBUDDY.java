@@ -7,9 +7,11 @@ import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.sql.SQLException;
+
 public class MESSENGER_DECLINEBUDDY implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         reader.readInt(); // Junk wtf
 
         int amount = reader.readInt();

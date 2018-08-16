@@ -2,13 +2,14 @@ package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.items.BROADCAST_TELEPORTER;
 
 public class WalkingAllowedDelay implements Runnable {
-    private final Entity entity;
+    private final Player entity;
 
-    public WalkingAllowedDelay(Entity entity) {
+    public WalkingAllowedDelay(Player entity) {
         this.entity = entity;
     }
 

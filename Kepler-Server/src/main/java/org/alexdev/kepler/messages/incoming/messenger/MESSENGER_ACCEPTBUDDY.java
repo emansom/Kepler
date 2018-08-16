@@ -8,9 +8,11 @@ import org.alexdev.kepler.messages.outgoing.messenger.NEW_FRIEND;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.sql.SQLException;
+
 public class MESSENGER_ACCEPTBUDDY implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         int amount = reader.readInt();
 
         for (int i = 0; i < amount; i++) {

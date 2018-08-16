@@ -14,21 +14,21 @@ public class CALL_FOR_HELP extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeString(cfh.getCallId());
-        response.writeInt(cfh.getCategory());
-        response.writeString(cfh.getFormattedRequestTime());
-        response.writeString(cfh.getCaller());
-        response.writeString(cfh.getMessage());
-        response.writeString(cfh.getCaller());
-        response.writeString(cfh.getRoomName());
+        response.writeString(this.cfh.getCallId());
+        response.writeInt(this.cfh.getCategory());
+        response.writeString(this.cfh.getFormattedRequestTime());
+        response.writeString(this.cfh.getCaller());
+        response.writeString(this.cfh.getMessage());
+        response.writeString(this.cfh.getCaller());
+        response.writeString(this.cfh.getRoomName());
         response.writeInt(1); // TODO: find out what this is
         response.writeString("Marker"); // TODO: find out what this is
-        response.writeInt(cfh.getRoomId());
-        response.writeString(cfh.getRoomOwner());
+        response.writeInt(this.cfh.getRoomId());
+        response.writeString(this.cfh.getRoomOwner());
     }
 
     @Override
     public short getHeader() {
-        return 148; // BT
+        return 148; // "BT"
     }
 }

@@ -3,7 +3,7 @@ package org.alexdev.kepler.game.room.managers;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomPlayer;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.messages.outgoing.trade.TRADE_CLOSE;
 import org.alexdev.kepler.messages.outgoing.trade.TRADE_ITEMS;
@@ -17,36 +17,36 @@ public class RoomTradeManager {
      * Close trade window, called when user leaves room, or closes
      * the trade window. Will close the partners trade window too.
      *
-     * @param roomUser the room user to close the trade window for
+     * @param roomEntity the room user to close the trade window for
      */
-    public static void close(RoomUser roomUser) {
-        Player player = (Player) roomUser.getEntity();
+    public static void close(RoomPlayer roomEntity) {
+        Player player = (Player) roomEntity.getEntity();
 
-        if (roomUser.getTradePartner() != null) {
+        if (roomEntity.getTradePartner() != null) {
             player.send(new TRADE_CLOSE());
             player.getInventory().getView("new");
 
-            roomUser.getTradePartner().send(new TRADE_CLOSE());
-            roomUser.getTradePartner().getInventory().getView("new");
+            roomEntity.getTradePartner().send(new TRADE_CLOSE());
+            roomEntity.getTradePartner().getInventory().getView("new");
 
-            reset(roomUser.getTradePartner().getRoomUser());
+            reset(roomEntity.getTradePartner().getRoomUser());
         }
 
-        reset(roomUser);
+        reset(roomEntity);
     }
 
     /**
      * Resets all trade variables.
      *
-     * @param roomUser the room user to reset the trade variables for
+     * @param roomEntity the room user to reset the trade variables for
      */
-    private static void reset(RoomUser roomUser) {
-        roomUser.getTradeItems().clear();
-        roomUser.setTradeAccept(false);
-        roomUser.setTradePartner(null);
+    private static void reset(RoomPlayer roomEntity) {
+        roomEntity.getTradeItems().clear();
+        roomEntity.setTradeAccept(false);
+        roomEntity.setTradePartner(null);
 
-        roomUser.removeStatus(StatusType.TRADE);
-        roomUser.setNeedsUpdate(true);
+        roomEntity.removeStatus(StatusType.TRADE);
+        roomEntity.setNeedsUpdate(true);
     }
 
     /**

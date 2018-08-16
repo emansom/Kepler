@@ -1,11 +1,11 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
-import org.alexdev.kepler.game.games.GamehallGame;
+import org.alexdev.kepler.game.games.gamehalls.GamehallGame;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
+import org.alexdev.kepler.game.triggers.GameTrigger;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -15,14 +15,14 @@ public class IIM implements MessageEvent {
         String contents = reader.contents();
         String[] commandArgs = reader.contents().split(" ");
 
-        RoomUser roomUser = player.getRoomUser();
+        RoomEntity roomEntity = player.getRoomUser();
 
-        if (roomUser.getRoom() == null) {
+        if (roomEntity.getRoom() == null) {
             return;
         }
 
-        Room room = roomUser.getRoom();
-        Item currentItem = roomUser.getCurrentItem();
+        Room room = roomEntity.getRoom();
+        Item currentItem = roomEntity.getCurrentItem();
 
         // If we're on a current item and the current item has a valid trigger
         if (currentItem == null) {
@@ -35,7 +35,7 @@ public class IIM implements MessageEvent {
         }
 
         GameTrigger trigger = (GameTrigger) currentItem.getItemTrigger();
-        GamehallGame game = trigger.getGameInstance(roomUser.getPosition());
+        GamehallGame game = trigger.getGameInstance(roomEntity.getPosition());
 
         if (game == null) {
             return;

@@ -1,8 +1,8 @@
 package org.alexdev.kepler.game.item.base;
 
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
-import org.alexdev.kepler.game.item.triggers.generic.BedTrigger;
-import org.alexdev.kepler.game.item.triggers.generic.ChairTrigger;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
+import org.alexdev.kepler.game.triggers.furniture.BedTrigger;
+import org.alexdev.kepler.game.triggers.furniture.ChairTrigger;
 
 public enum ItemBehaviour {
     SOLID,
@@ -33,23 +33,20 @@ public enum ItemBehaviour {
     WHEEL_OF_FORTUNE,
     ROOMDIMMER,
     PRESENT,
-    PHOTO;
+    PHOTO,
+    PLACE_ROLLER_ON_TOP;
 
 
-    private ItemTrigger trigger;
+    private GenericTrigger trigger;
 
     ItemBehaviour() {
         trigger = null;
     }
-    ItemBehaviour(ItemTrigger trigger) {
+    ItemBehaviour(GenericTrigger trigger) {
         this.trigger = trigger;
     }
 
-    public ItemTrigger getTrigger() {
+    public GenericTrigger getTrigger() {
         return trigger;
-    }
-
-    public void setTrigger(ItemTrigger trigger) {
-        this.trigger = trigger;
     }
 }
