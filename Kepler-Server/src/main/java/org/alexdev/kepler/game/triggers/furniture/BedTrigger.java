@@ -12,11 +12,7 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BedTrigger implements GenericTrigger {
-    @Override
-    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
-
-    }
+public class BedTrigger extends GenericTrigger {
 
     @Override
     public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {

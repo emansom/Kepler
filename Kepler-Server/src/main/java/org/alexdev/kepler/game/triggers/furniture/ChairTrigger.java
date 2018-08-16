@@ -7,11 +7,7 @@ import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.util.StringUtil;
 
-public class ChairTrigger implements GenericTrigger {
-    @Override
-    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
-
-    }
+public class ChairTrigger extends GenericTrigger {
 
     @Override
     public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {

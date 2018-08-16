@@ -8,7 +8,8 @@ import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 
-public class PoolEnterTrigger implements GenericTrigger {
+public class PoolEnterTrigger extends GenericTrigger {
+
     @Override
     public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {

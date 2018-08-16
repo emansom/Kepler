@@ -15,16 +15,11 @@ import org.alexdev.kepler.messages.outgoing.rooms.games.OPENGAMEBOARD;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GameTrigger implements GenericTrigger {
+public abstract class GameTrigger extends GenericTrigger {
     protected List<GamehallGame> gameInstances;
 
     public GameTrigger() {
         this.gameInstances = new ArrayList<>();
-    }
-
-    @Override
-    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
-
     }
 
     @Override

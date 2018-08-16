@@ -10,11 +10,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.JUMPINGPLACE_OK;
 import org.alexdev.kepler.messages.outgoing.user.currencies.TICKET_BALANCE;
 
-public class PoolLiftTrigger implements GenericTrigger {
-    @Override
-    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
-
-    }
+public class PoolLiftTrigger extends GenericTrigger {
 
     @Override
     public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {

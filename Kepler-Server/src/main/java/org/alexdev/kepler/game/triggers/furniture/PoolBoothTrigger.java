@@ -8,11 +8,7 @@ import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.OPEN_UIMAKOPPI;
 
-public class PoolBoothTrigger implements GenericTrigger {
-    @Override
-    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
-
-    }
+public class PoolBoothTrigger extends GenericTrigger {
 
     @Override
     public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {

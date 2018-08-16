@@ -58,11 +58,6 @@ public class RoomPlayer extends RoomEntity {
         return walking;
     }
 
-    @Override
-    public void stopWalking() {
-        super.stopWalking();
-    }
-
     /**
      * Refreshes user appearance
      */
