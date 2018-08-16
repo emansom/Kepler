@@ -20,18 +20,25 @@ public class RareManager {
     private Map<String, Long> daysSinceUsed;
 
     private CatalogueItem currentRare;
+    private Long currentRareTime;
 
     public RareManager() {
         try {
             this.daysSinceUsed = RareDao.getActiveBlockedRares();
 
             if (this.daysSinceUsed.size() > 0) {
-                this.currentRare = CatalogueManager.getInstance().getCatalogueItem(RareDao.getCurrentRare()); // Get the active item
+                var currentItemData = RareDao.getCurrentRare();
+                this.currentRare = CatalogueManager.getInstance().getCatalogueItem(currentItemData.getKey());
+                this.currentRareTime = DateUtil.getCurrentTimeSeconds() - currentItemData.getValue(); // Get the active item
             }
 
             this.loadRares();
 
-            if (this.currentRare == null) {
+            TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
+            long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+
+            // If there was no current rare, of the current rare time ran out, then cycle to the next rare
+            if (this.currentRare == null || this.currentRareTime > rareManagerUnit.toSeconds(interval)) {
                 this.selectNewRare();
             }
         } catch (Exception ex) {
