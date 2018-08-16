@@ -29,16 +29,16 @@ public class RareManager {
             if (this.daysSinceUsed.size() > 0) {
                 var currentItemData = RareDao.getCurrentRare();
                 this.currentRare = CatalogueManager.getInstance().getCatalogueItem(currentItemData.getKey());
-                this.currentRareTime = currentItemData.getValue() - DateUtil.getCurrentTimeSeconds(); // Get the active item
+                this.currentRareTime = currentItemData.getValue(); // Get the active item
             }
 
             this.loadRares();
 
-            TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-            long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+            TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
+            long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
 
-            // If there was no current rare, of the current rare time ran out, then cycle to the next rare
-            if (this.currentRare == null || this.currentRareTime > rareManagerUnit.toSeconds(interval)) {
+            // If there was no current rare, or the current rare time ran out, then cycle to the next rare
+            if (this.currentRare == null || (this.currentRare != null && (DateUtil.getCurrentTimeSeconds() + reuseTimeUnit.toSeconds(interval)) > this.currentRareTime)) {
                 this.selectNewRare();
             }
         } catch (Exception ex) {
