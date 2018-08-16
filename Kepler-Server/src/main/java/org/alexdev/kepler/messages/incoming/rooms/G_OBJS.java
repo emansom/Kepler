@@ -26,30 +26,8 @@ public class G_OBJS implements MessageEvent {
 
         player.getMessenger().sendStatusUpdate();
 
-        /*player.send(new MessageComposer() {
-            @Override
-            public void compose(NettyResponse response) {
-                response.writeInt(0);
-            }
-
-            @Override
-            public short getHeader() {
-                return 231;
-            }
-        });
-
-        player.send(new MessageComposer() {
-            @Override
-            public void compose(NettyResponse response) {
-                response.writeInt(0);
-                response.writeInt(0);
-                response.writeInt(0);
-            }
-
-            @Override
-            public short getHeader() {
-                return 232;
-            }
-        });*/
+        if (room.getModel().getModelTrigger() != null) {
+            room.getModel().getModelTrigger().onRoomEntry(player, player.getRoomUser());
+        }
     }
 }
