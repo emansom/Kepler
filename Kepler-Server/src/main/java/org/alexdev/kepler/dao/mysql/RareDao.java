@@ -93,7 +93,7 @@ public class RareDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT sale_code FROM rare_cycle ORDER BY reuse_time DESC LIMIT 1", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT sale_code, reuse_time FROM rare_cycle ORDER BY reuse_time DESC LIMIT 1", sqlConnection);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
