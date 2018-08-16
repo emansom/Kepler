@@ -2,7 +2,9 @@ package org.alexdev.kepler.game.triggers.rooms;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
+import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 
 import java.util.List;
@@ -87,10 +89,14 @@ public class DivingDeckTrigger extends GenericTrigger {
             PoolCamera task = (PoolCamera) room.getTaskManager().getTask("DivingCamera");
             player.send(new SHOWPROGRAM(new String[]{"cam1", "targetcamera", String.valueOf(task.getPlayer().getRoomUser().getInstanceId())}));
             player.send(new SHOWPROGRAM(new String[]{"cam1", "setcamera", String.valueOf(task.getCameraType())}));
-            return;
+        } else {
+            room.getTaskManager().scheduleTask("DivingCamera", new PoolCamera(room), 0, 8, TimeUnit.SECONDS);
         }
 
-        room.getTaskManager().scheduleTask("DivingCamera", new PoolCamera(room), 0, 8, TimeUnit.SECONDS);
+        if (player.getRoomUser().getPosition().getZ() == 1.0) { // User entered room from the other pool
+            player.getRoomUser().setStatus(StatusType.SWIM, "");
+            player.getRoomUser().setNeedsUpdate(true);
+        }
     }
 
     @Override
