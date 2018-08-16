@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.managers;
 
+import gherkin.lexer.Ru;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.EntityTask;
@@ -76,6 +77,20 @@ public class RoomTaskManager {
             this.processTasks.get(taskName).getLeft().cancel(false);
             this.processTasks.remove(taskName);
         }
+    }
+
+    /**
+     * Gets the task by the task name
+     *
+     * @param taskName the task name to locate task
+     * @return the task instance
+     */
+    public Runnable getTask(String taskName) {
+        if (this.processTasks.containsKey(taskName)) {
+            return this.processTasks.get(taskName).getValue();
+        }
+
+        return null;
     }
 
     /**
