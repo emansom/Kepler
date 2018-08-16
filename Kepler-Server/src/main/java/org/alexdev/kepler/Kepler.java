@@ -106,9 +106,9 @@ public class Kepler {
     }
 
     private static void setupServer() throws UnknownHostException {
-        String gameBind = ServerConfiguration.getString("bind");
+        String serverIP = ServerConfiguration.getString("bind");
 
-        if (gameBind.length() == 0) {
+        if (serverIP.length() == 0) {
             log.error("Game server bind address is not provided");
             return;
         }
@@ -119,8 +119,6 @@ public class Kepler {
             log.error("Game server port not provided");
             return;
         }
-
-        serverIP = InetAddress.getByName(gameBind).getHostAddress();
 
         server = new NettyServer(serverIP, serverPort);
         server.createSocket();
@@ -143,10 +141,7 @@ public class Kepler {
             return;
         }
 
-        // getByName parses IPv6, IPv4 and DNS all in one go
-        rconIP = InetAddress.getByName(rconBind).getHostAddress();
-
-        rcon = new RconServer(rconIP, rconPort);
+        rcon = new RconServer(rconBind, rconPort);
         rcon.listen();
     }
 
@@ -165,9 +160,7 @@ public class Kepler {
             return;
         }
 
-        musServerIP = InetAddress.getByName(musBind).getHostAddress();
-
-        musServer = new MusServer(musServerIP, musServerPort);
+        musServer = new MusServer(musBind, musServerPort);
         musServer.createSocket();
         musServer.bind();
     }
