@@ -29,7 +29,7 @@ public class RareManager {
             if (this.daysSinceUsed.size() > 0) {
                 var currentItemData = RareDao.getCurrentRare();
                 this.currentRare = CatalogueManager.getInstance().getCatalogueItem(currentItemData.getKey());
-                this.currentRareTime = DateUtil.getCurrentTimeSeconds() - currentItemData.getValue(); // Get the active item
+                this.currentRareTime = currentItemData.getValue() - DateUtil.getCurrentTimeSeconds(); // Get the active item
             }
 
             this.loadRares();
