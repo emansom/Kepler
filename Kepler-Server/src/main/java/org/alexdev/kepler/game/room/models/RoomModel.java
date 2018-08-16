@@ -2,11 +2,8 @@ package org.alexdev.kepler.game.room.models;
 
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
-import org.alexdev.kepler.game.triggers.GameTrigger;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.util.StringUtil;
-
-import java.lang.reflect.InvocationTargetException;
 
 public class RoomModel {
     private String modelId;
@@ -35,7 +32,7 @@ public class RoomModel {
 
         if (!StringUtil.isNullOrEmpty(triggerClass)) {
             try {
-                Class<?> clazz = Class.forName("org.alexdev.kepler.game.triggers.rooms." + triggerClass);
+                Class<?> clazz = Class.forName("org.alexdev.kepler.game.room.triggers.rooms." + triggerClass);
                 this.modelTrigger = (GenericTrigger) clazz.getDeclaredConstructor().newInstance();
             } catch (Exception e) {
                 e.printStackTrace();

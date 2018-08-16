@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.triggers.furniture;
+package org.alexdev.kepler.game.item.triggers;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;

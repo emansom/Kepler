@@ -1,8 +1,8 @@
 package org.alexdev.kepler.game.item.base;
 
 import org.alexdev.kepler.game.triggers.GenericTrigger;
-import org.alexdev.kepler.game.triggers.furniture.BedTrigger;
-import org.alexdev.kepler.game.triggers.furniture.ChairTrigger;
+import org.alexdev.kepler.game.item.triggers.BedTrigger;
+import org.alexdev.kepler.game.item.triggers.ChairTrigger;
 
 public enum ItemBehaviour {
     SOLID,
