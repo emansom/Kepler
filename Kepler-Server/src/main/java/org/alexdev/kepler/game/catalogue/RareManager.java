@@ -34,8 +34,8 @@ public class RareManager {
 
             this.loadRares();
 
-            TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-            long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+            TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.reuse.timeunit"));
+            long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval"));
 
             // If there was no current rare, or the current rare time ran out, then cycle to the next rare
             if (this.currentRare == null || (this.currentRare != null && (DateUtil.getCurrentTimeSeconds() + reuseTimeUnit.toSeconds(interval)) > this.currentRareTime)) {
@@ -73,8 +73,8 @@ public class RareManager {
      * Selects a new rare, adds it to the database so it can only be selected once every X interval defined (default is 3 days).
      */
     public void selectNewRare() throws SQLException {
-        TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-        long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+        TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.reuse.timeunit"));
+        long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval"));
 
         List<String> toRemove = new ArrayList<>();
 
