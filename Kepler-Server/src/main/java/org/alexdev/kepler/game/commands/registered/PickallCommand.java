@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
@@ -16,7 +17,7 @@ import java.util.List;
 public class PickallCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add(Fuseright.DEFAULT);
     }
 
     @Override
@@ -31,7 +32,7 @@ public class PickallCommand extends Command {
             return;
         }
 
-        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId()) && !player.hasFuse("fuse_any_room_controller")) {
+        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
         

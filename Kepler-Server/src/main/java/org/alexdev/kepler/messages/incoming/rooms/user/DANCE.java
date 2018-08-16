@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms.user;
 
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -28,7 +29,7 @@ public class DANCE implements MessageEvent {
         if (StringUtil.isNullOrEmpty(content)) {
             player.getRoomUser().setStatus(StatusType.DANCE, "");
         } else {
-            if (!player.hasFuse("fuse_use_club_dance")) {
+            if (!player.hasFuse(Fuseright.USE_CLUB_DANCE)) {
                 return;
             }
 

@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.catalogue;
 
+import org.alexdev.kepler.game.player.PlayerRank;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.HashMap;
@@ -7,7 +8,7 @@ import java.util.Map;
 
 public class CataloguePage {
     private int id;
-    private int minRole;
+    private PlayerRank minRole;
     private boolean indexVisible;
     private String nameIndex;
     private String linkList;
@@ -20,7 +21,7 @@ public class CataloguePage {
     private String labelExtra_s;
     private Map<String, String> labelExtra;
 
-    public CataloguePage(int id, int minRole, boolean indexVisible, String nameIndex, String linkedList, String name, String layout, String imageHeadline, String imageTeasers, String body, String labelPick, String labelExtra_s, String labelExtra_t) {
+    public CataloguePage(int id, PlayerRank minRole, boolean indexVisible, String nameIndex, String linkedList, String name, String layout, String imageHeadline, String imageTeasers, String body, String labelPick, String labelExtra_s, String labelExtra_t) {
         this.id = id;
         this.minRole = minRole;
         this.indexVisible = indexVisible;
@@ -57,11 +58,11 @@ public class CataloguePage {
         this.id = id;
     }
 
-    public int getMinRole() {
+    public PlayerRank getMinRole() {
         return minRole;
     }
 
-    public void setMinRole(int minRole) {
+    public void setMinRole(PlayerRank minRole) {
         this.minRole = minRole;
     }
 

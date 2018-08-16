@@ -49,7 +49,7 @@ public class GRPC implements MessageEvent {
 
         Optional<CataloguePage> pageStream = CatalogueManager.getInstance().getCataloguePages().stream().filter(p -> p.getId() == item.getPageId()).findFirst();
 
-        if (!pageStream.isPresent() || pageStream.get().getMinRole() > player.getDetails().getRank()) {
+        if (!pageStream.isPresent() || pageStream.get().getMinRole().getRankId() > player.getDetails().getRank().getRankId()) {
             return;
         }
 

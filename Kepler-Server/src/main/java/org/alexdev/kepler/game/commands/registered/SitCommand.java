@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
@@ -14,7 +15,7 @@ public class SitCommand extends Command {
 
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add(Fuseright.DEFAULT);
     }
 
     @Override

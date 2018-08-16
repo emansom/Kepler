@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.rooms.settings;
 
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -20,7 +21,7 @@ public class FLATINFO extends MessageComposer {
         response.writeInt(this.room.getData().getAccessTypeId());
         response.writeInt(this.room.getId());
 
-        if (this.room.isOwner(player.getEntityId())|| this.room.getData().showOwnerName() || this.player.hasFuse("fuse_see_all_roomowners")) {
+        if (this.room.isOwner(player.getEntityId())|| this.room.getData().showOwnerName() || this.player.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
             response.writeString(this.room.getData().getOwnerName());
         } else {
             response.writeString("-");

@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms.settings;
 
 import org.alexdev.kepler.dao.mysql.NavigatorDao;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
@@ -49,7 +50,7 @@ public class CREATEFLAT implements MessageEvent {
                 !modelType.equals("c") &&
                 !modelType.equals("d") &&
                 !modelType.equals("f") &&
-                !player.hasFuse("fuse_use_special_room_layouts")) {
+                !player.hasFuse(Fuseright.USE_SPECIAL_ROOM_LAYOUTS)) {
             return; // Fuck off, scripter.
         }
 

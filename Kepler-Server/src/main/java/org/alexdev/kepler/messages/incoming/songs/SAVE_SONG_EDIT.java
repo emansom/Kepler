@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.songs;
 
 import org.alexdev.kepler.dao.mysql.SongMachineDao;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.song.Song;
@@ -24,7 +25,7 @@ public class SAVE_SONG_EDIT implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!room.isOwner(player.getEntityId()) && !player.hasFuse("fuse_any_room_controller")) {
+        if (!room.isOwner(player.getEntityId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 

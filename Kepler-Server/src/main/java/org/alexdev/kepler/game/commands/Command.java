@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.moderation.Fuseright;
 
 public abstract class Command {
    
-    protected List<String> permissions;
+    protected List<Fuseright> permissions;
     protected List<String> arguments;
     
     public Command() {
@@ -47,8 +48,8 @@ public abstract class Command {
      *
      * @return the permissions
      */
-    public String[] getPermissions() {
-        return this.permissions.parallelStream().toArray(String[]::new);
+    public List<Fuseright> getPermissions() {
+        return this.permissions;
     }
 
     /**

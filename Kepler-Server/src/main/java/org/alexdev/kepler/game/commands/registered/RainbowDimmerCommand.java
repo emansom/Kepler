@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.RainbowTask;
@@ -18,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class RainbowDimmerCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add(Fuseright.DEFAULT);
     }
 
     @Override
@@ -35,7 +36,7 @@ public class RainbowDimmerCommand extends Command {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId()) && !player.hasFuse("fuse_any_room_controller")) {
+        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 

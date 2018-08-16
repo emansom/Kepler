@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms.moderation;
 
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.texts.TextsManager;
@@ -20,12 +21,12 @@ public class KICK implements MessageEvent {
             return; // Can't kick yourself!
         }
 
-        if (target.hasFuse("fuse_kick")) {
+        if (target.hasFuse(Fuseright.KICK)) {
             player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
             return;
         }
 
-        if (player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) || player.hasFuse("fuse_kick")) {
+        if (player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) || player.hasFuse(Fuseright.KICK)) {
             target.getRoomUser().setBeingKicked(true);
             target.getRoomUser().kick(false);
         }

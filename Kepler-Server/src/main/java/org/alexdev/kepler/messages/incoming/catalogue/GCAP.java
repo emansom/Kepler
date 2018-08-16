@@ -19,7 +19,7 @@ public class GCAP implements MessageEvent {
             return;
         }
 
-        if (player.getDetails().getRank() >= cataloguePage.getMinRole()) {
+        if (player.getDetails().getRank().getRankId() >= cataloguePage.getMinRole().getRankId()) {
             player.send(new CATALOGUE_PAGE(
                     cataloguePage,
                     CatalogueManager.getInstance().getCataloguePageItems(cataloguePage.getId())));

@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -48,7 +49,7 @@ public class SETSTUFFDATA implements MessageEvent {
 
         if (item.hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION)
                 && !room.hasRights(player.getEntityId())
-                && !player.hasFuse("fuse_any_room_controller")) {
+                && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 

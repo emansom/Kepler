@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
 import org.alexdev.kepler.game.messenger.Messenger;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.handshake.RIGHTS;
@@ -24,6 +25,8 @@ import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class Player extends Entity {
     public static final AttributeKey<Player> PLAYER_KEY = AttributeKey.valueOf("Player");
@@ -121,10 +124,13 @@ public class Player extends Entity {
      * Send fuseright permissions for player.
      */
     public void refreshFuserights() {
-        this.send(new RIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
-                this.details.hasClubSubscription(),
-                this.details.getRank()))
-        );
+        List<Fuseright> fuserights = FuserightsManager.getInstance().getFuserightsForRank(this.details.getRank());
+
+        if (this.getDetails().hasClubSubscription()) {
+            fuserights.addAll(FuserightsManager.getInstance().getClubFuserights());
+        }
+
+        this.send(new RIGHTS(fuserights));
     }
 
     /**
@@ -156,10 +162,8 @@ public class Player extends Entity {
      * @return true, if successful
      */
     @Override
-    public boolean hasFuse(String fuse) {
-        return FuserightsManager.getInstance().hasFuseright(fuse,
-                this.details.getRank(),
-                this.details.hasClubSubscription());
+    public boolean hasFuse(Fuseright fuse) {
+        return FuserightsManager.getInstance().hasFuseright(fuse, this.details.getRank());
     }
 
     /**

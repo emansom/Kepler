@@ -1,10 +1,7 @@
 package org.alexdev.kepler.util;
 
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class StringUtil {
     /**
@@ -47,8 +44,8 @@ public class StringUtil {
      * @param chunkSize the chunk size
      * @return the list
      */
-    public static <T> LinkedHashMap<Integer, List<T>> paginate(List<T> originalList, int chunkSize) {
-        LinkedHashMap<Integer, List<T>> chunks = new LinkedHashMap<>();
+    public static <T> Map<Integer, List<T>> paginate(List<T> originalList, int chunkSize) {
+        Map<Integer, List<T>> chunks = new LinkedHashMap<>();
         List<List<T>> listOfChunks = new ArrayList<>();
 
         for (int i = 0; i < originalList.size() / chunkSize; i++) {

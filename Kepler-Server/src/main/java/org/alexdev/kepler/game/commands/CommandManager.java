@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.commands.clientside.EventsCommand;
 import org.alexdev.kepler.game.commands.clientside.FurniCommand;
 import org.alexdev.kepler.game.commands.registered.*;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
@@ -97,9 +98,8 @@ public class CommandManager {
      * @return true, if successful
      */
     public boolean hasCommandPermission(Entity entity, Command cmd) {
-        if (cmd.getPermissions().length > 0) {
-
-            for (String permission : cmd.getPermissions()) {
+        if (cmd.getPermissions().size() > 0) {
+            for (Fuseright permission : cmd.getPermissions()) {
                 if (entity.hasFuse(permission)) {
                     return true;
                 }

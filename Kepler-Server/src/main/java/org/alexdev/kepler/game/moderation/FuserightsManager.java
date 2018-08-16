@@ -1,49 +1,51 @@
 package org.alexdev.kepler.game.moderation;
 
-import org.alexdev.kepler.dao.mysql.FuserightsDao;
-import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerRank;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 public class FuserightsManager {
     private static FuserightsManager instance;
-    
-    private List<String> habboClubFuses;
-    private HashMap<String, Integer> fuserights;
+
+    private List<Fuseright> fuserights;
 
     public FuserightsManager() {
-        this.fuserights = FuserightsDao.getFuserights();
-        this.habboClubFuses = new ArrayList<>();
-        this.habboClubFuses.add("fuse_extended_buddylist");
-        this.habboClubFuses.add("fuse_habbo_chooser");
-        this.habboClubFuses.add("fuse_furni_chooser");
-        this.habboClubFuses.add("fuse_room_queue_club");
-        this.habboClubFuses.add("fuse_priority_access");
-        this.habboClubFuses.add("fuse_use_special_room_layouts");
-        this.habboClubFuses.add("fuse_use_club_dance");
-        this.habboClubFuses.add("fuse_use_club_outfits");
+        this.fuserights = new ArrayList<>();
+
+        for (Fuseright fuse : Fuseright.values()) {
+            this.fuserights.add(fuse);
+        }
     }
 
     /**
      * Get the available fuserights for user.
      *
-     * @param hasClubMembership whether or not the user has Habbo club
      * @param minimumRank the minimum rank to see the fuseright
      * @return the lsit of fuserights
      */
-    public List<String> getAvailableFuserights(boolean hasClubMembership, int minimumRank) {
-        List<String> fuses = new ArrayList<>();
+    public List<Fuseright> getFuserightsForRank(PlayerRank minimumRank) {
+        List<Fuseright> fuses = new ArrayList<>();
 
-        for (var kvp : this.fuserights.entrySet()) {
-            if (minimumRank >= kvp.getValue()) {
-                fuses.add(kvp.getKey());
+        for (Fuseright f : this.fuserights) {
+            if (minimumRank.getRankId() >= f.getMinimumRank().getRankId()) {
+                fuses.add(f);
             }
         }
 
+        return fuses;
+    }
+
+    /*
+     * Get available fuserights for users with a club subscription
+     */
+    public List<Fuseright> getClubFuserights() {
+        List<Fuseright> fuses = new ArrayList<>();
+
         // If we have habbo club, add the habbo club fuserights...
-        if (hasClubMembership) {
-            fuses.addAll(this.habboClubFuses);
+        for (Fuseright f : this.fuserights) {
+            if (f.isClubOnly()) {
+                fuses.add(f);
+            }
         }
 
         return fuses;
@@ -52,18 +54,13 @@ public class FuserightsManager {
     /**
      * Get if the rank has a fuseright.
      *
-     * @param fuse the fuse to check against
+     * @param fuse        the fuse to check against
      * @param minimumRank the rank to check with
-     * @param hasClubMembership whether or not we have Habbo club, check permissions.
      * @return true, if successful
      */
-    public boolean hasFuseright(String fuse, int minimumRank, boolean hasClubMembership) {
-        if (hasClubMembership && this.habboClubFuses.contains(fuse)) { // If we have habbo club, check for habbo club fuserights...
-            return true;
-        }
-
-        for (var kvp : this.fuserights.entrySet()) {
-            if (minimumRank >= kvp.getValue() && kvp.getKey().equals(fuse)) {
+    public boolean hasFuseright(Fuseright fuse, PlayerRank minimumRank) {
+        for (Fuseright f : this.fuserights) {
+            if (minimumRank.getRankId() >= f.getMinimumRank().getRankId() && f == fuse) {
                 return true;
             }
         }

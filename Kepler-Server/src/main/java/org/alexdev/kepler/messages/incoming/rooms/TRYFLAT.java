@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
 import org.alexdev.kepler.dao.mysql.RoomDao;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
@@ -49,8 +50,8 @@ public class TRYFLAT implements MessageEvent {
             return;
         }
 
-        if (!player.hasFuse("fuse_enter_locked_rooms")) {
-            if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
+        if (!player.hasFuse(Fuseright.ENTER_LOCKED_ROOMS)) {
+            if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
 
                 if (rangDoorbell(room, player)) {
                     player.send(new DOORBELL_WAIT());
@@ -61,7 +62,7 @@ public class TRYFLAT implements MessageEvent {
                 return;
             }
 
-            if (room.getData().getAccessTypeId() == 2 && !room.isOwner(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
+            if (room.getData().getAccessTypeId() == 2 && !room.isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
                 if (!password.equals(room.getData().getPassword())) {
                     player.send(new LOCALISED_ERROR("Incorrect flat password"));
                     return;
@@ -69,9 +70,6 @@ public class TRYFLAT implements MessageEvent {
             }
         }
 
-        /*if (player.getRoomUser().getRoom() != null) {
-            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player);
-        }*/
         player.getRoomUser().setAuthenticateId(roomId);
         player.send(new FLAT_LETIN());
     }
