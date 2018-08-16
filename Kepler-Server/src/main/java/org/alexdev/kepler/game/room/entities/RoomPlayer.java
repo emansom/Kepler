@@ -44,6 +44,7 @@ public class RoomPlayer extends RoomEntity {
     @Override
     public void reset() {
         super.reset();
+
         this.isWalkingAllowed = true;
         this.isWalking = false;
         this.beingKicked = false;
@@ -52,7 +53,6 @@ public class RoomPlayer extends RoomEntity {
 
         this.authenticateId = -1;
         this.timerManager.resetTimers();
-
         RoomTradeManager.close(this);
     }
 
@@ -85,33 +85,34 @@ public class RoomPlayer extends RoomEntity {
     public void stopWalking() {
         super.stopWalking();
 
-        WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this.getRoom(), this.getPosition());
+        if (!this.beingKicked) {
+            WalkwaysEntrance entrance = WalkwaysManager.getInstance().getWalkway(this.getRoom(), this.getPosition());
 
-        if (entrance != null) {
-            Room room = WalkwaysManager.getInstance().getWalkwayRoom(entrance.getModelTo());
+            if (entrance != null) {
+                Room room = WalkwaysManager.getInstance().getWalkwayRoom(entrance.getModelTo());
 
-            if (room != null) {
-                room.getEntityManager().enterRoom(this.player, entrance.getDestination());
-                return;
+                if (room != null) {
+                    room.getEntityManager().enterRoom(this.player, entrance.getDestination());
+                    return;
+                }
             }
-
         }
 
-        boolean enteredDoor = false;
+        boolean leaveRoom = this.beingKicked;
         Position doorPosition = this.getRoom().getModel().getDoorLocation();
 
         if (doorPosition.equals(this.getPosition())) {
-            enteredDoor = true;
+            leaveRoom = true;
         }
 
         if (this.getRoom().isPublicRoom()) {
             if (WalkwaysManager.getInstance().getWalkway(this.getRoom(), doorPosition) != null) {
-                enteredDoor = false;
+                leaveRoom = false;
             }
         }
 
         // Leave room if the tile is the door and we are in a flat or we're being kicked
-        if (enteredDoor || this.beingKicked) {
+        if (leaveRoom || this.beingKicked) {
             this.getRoom().getEntityManager().leaveRoom(this.player, true);
             return;
         }
@@ -119,10 +120,6 @@ public class RoomPlayer extends RoomEntity {
 
     public RoomTimerManager getTimerManager() {
         return timerManager;
-    }
-
-    public void setTimerManager(RoomTimerManager timerManager) {
-        this.timerManager = timerManager;
     }
 
     public int getAuthenticateId() {
