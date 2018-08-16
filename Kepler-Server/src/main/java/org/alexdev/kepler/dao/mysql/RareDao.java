@@ -36,7 +36,7 @@ public class RareDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("DELETE FROM rare_cycle WHERE sprite = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM rare_cycle WHERE sale_code = ?", sqlConnection);
             sqlConnection.setAutoCommit(false);
 
             for (String sprite : sprites) {
