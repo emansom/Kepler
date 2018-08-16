@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.room.managers.RoomTimerManager;
 import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
+import org.alexdev.kepler.game.room.tasks.StatusTask;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 
@@ -56,6 +57,14 @@ public class RoomPlayer extends RoomEntity {
         }
 
         return walking;
+    }
+
+    @Override
+    public void stopWalking() {
+        super.stopWalking();
+
+        // When they stop walking, check if the player is on a pool lido queue and walk to the next one
+        StatusTask.processPoolQueue(this.player);
     }
 
     /**
