@@ -59,7 +59,7 @@ public class RoomPlayer extends RoomEntity {
             this.timerManager.resetRoomTimer();
         }
 
-        return false;
+        return walking;
     }
 
     @Override
