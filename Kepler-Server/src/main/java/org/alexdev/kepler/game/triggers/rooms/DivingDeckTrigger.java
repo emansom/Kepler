@@ -27,7 +27,7 @@ public class DivingDeckTrigger extends GenericTrigger {
                 return;
             }
 
-            int cameraType = ThreadLocalRandom.current().nextInt(0, 2);
+            int cameraType = ThreadLocalRandom.current().nextInt(0, 3);
 
             switch (cameraType) {
                 case 0: {
