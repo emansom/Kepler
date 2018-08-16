@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room.entities;
 
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
@@ -8,6 +9,8 @@ import org.alexdev.kepler.game.room.managers.RoomTimerManager;
 import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
+import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
+import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,26 @@ public class RoomPlayer extends RoomEntity {
     @Override
     public void stopWalking() {
         super.stopWalking();
+    }
+
+    /**
+     * Refreshes user appearance
+     */
+    public void refreshAppearance() {
+        var newDetails = PlayerDao.getDetails(this.player.getDetails().getId());
+
+        // Reload figure, gender and motto
+        this.player.getDetails().setFigure(newDetails.getFigure());
+        this.player.getDetails().setSex(newDetails.getSex());
+        this.player.getDetails().setMotto(newDetails.getMotto());
+
+        // Send refresh to user
+        this.player.send(new USER_OBJECT(this.player.getDetails()));
+
+        // Send refresh to room if inside room
+        if (this.getRoom() != null) {
+            this.getRoom().send(new FIGURE_CHANGE(this.getInstanceId(), this.player.getDetails()));
+        }
     }
 
     public RoomTimerManager getTimerManager() {

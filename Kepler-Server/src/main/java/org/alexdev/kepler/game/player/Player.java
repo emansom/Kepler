@@ -123,28 +123,6 @@ public class Player extends Entity {
     }
 
     /**
-     * Refreshes user appearance
-     */
-    public void refreshAppearance() {
-        var newDetails = PlayerDao.getDetails(this.details.getId());
-
-        // Reload figure, gender and motto
-        this.details.setFigure(newDetails.getFigure());
-        this.details.setSex(newDetails.getSex());
-        this.details.setMotto(newDetails.getMotto());
-
-        // Send refresh to user
-        this.send(new USER_OBJECT(this.details));
-
-        // Send refresh to room if inside room
-        var room = this.roomEntity.getRoom();
-
-        if (room != null) {
-            room.send(new FIGURE_CHANGE(this.roomEntity.getInstanceId(), this.details));
-        }
-    }
-
-    /**
      * Check if the player has a permission for a rank.
      *
      * @param fuse the permission

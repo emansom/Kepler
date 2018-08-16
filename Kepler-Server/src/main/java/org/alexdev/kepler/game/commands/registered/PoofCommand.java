@@ -23,7 +23,7 @@ public class PoofCommand extends Command {
             return;
         }
 
-        player.refreshAppearance();
+        player.getRoomUser().refreshAppearance();
     }
 
     @Override
