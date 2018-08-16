@@ -23,7 +23,7 @@ public class DivingDeckTrigger extends GenericTrigger {
         public void run() {
             if (this.player == null) {
                 this.spectateNewPlayer();
-                this.newCameraMode();
+                this.newCameraMode(-1);
                 return;
             }
 
@@ -35,7 +35,11 @@ public class DivingDeckTrigger extends GenericTrigger {
                     break;
                 }
                 case 1: {
-                    this.newCameraMode();
+                    this.newCameraMode(1);
+                    break;
+                }
+                case 2: {
+                    this.newCameraMode(2);
                     break;
                 }
             }
@@ -53,9 +57,9 @@ public class DivingDeckTrigger extends GenericTrigger {
         /**
          * Creates a new camera mode for the camera and sends it to all the users.
          */
-        private void newCameraMode() {
-            this.cameraType = ThreadLocalRandom.current().nextInt(1, 3);
-            this.room.send(new SHOWPROGRAM(new String[]{"cam1", "setcamera", String.valueOf(cameraType)}));
+        private void newCameraMode(int mode) {
+            this.cameraType = mode > 0 ? mode : ThreadLocalRandom.current().nextInt(1, 3);
+            this.room.send(new SHOWPROGRAM(new String[]{"cam1", "setcamera", String.valueOf(this.cameraType)}));
         }
 
         /**
