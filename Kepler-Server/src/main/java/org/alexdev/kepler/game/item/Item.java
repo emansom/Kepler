@@ -407,13 +407,13 @@ public class Item {
     }
 
     public ItemDefinition getDefinition() {
-        if (this.definition != null) {
+        if (this.definition != null) { // Used for public room items
             return this.definition;
         }
 
+        // Always use ItemManager to retrieve private flat definitions
         return ItemManager.getInstance().getDefinition(this.definitionId);
     }
-
 
     public void setDefinitionId(int definitionId) {
         this.definition = null;
@@ -488,10 +488,6 @@ public class Item {
         return currentProgramValue;
     }
 
-    public void setCurrentProgramValue(String currentProgramValue) {
-        this.currentProgramValue = currentProgramValue;
-    }
-
     public Room getRoom() {
         return RoomManager.getInstance().getRoomById(this.roomId);
     }
@@ -510,14 +506,6 @@ public class Item {
 
     public void setItemBelow(Item itemBelow) {
         this.itemBelow = itemBelow;
-    }
-
-    public Item getItemAbove() {
-        return itemAbove;
-    }
-
-    public void setItemAbove(Item itemAbove) {
-        this.itemAbove = itemAbove;
     }
 
     public boolean getRequiresUpdate() {
