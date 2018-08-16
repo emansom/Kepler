@@ -9,9 +9,11 @@ import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.sql.SQLException;
+
 public class FLATPROPBYITEM implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         Room room = player.getRoomUser().getRoom();
 
         if (room == null) {
@@ -43,10 +45,10 @@ public class FLATPROPBYITEM implements MessageEvent {
             room.getData().setFloor(value);
         }
 
-        room.send(new FLATPROPERTY(property, value));
-        player.getInventory().getItems().remove(item);
-
         ItemDao.deleteItem(itemId);
         RoomDao.saveDecorations(room);
+
+        room.send(new FLATPROPERTY(property, value));
+        player.getInventory().getItems().remove(item);
     }
 }

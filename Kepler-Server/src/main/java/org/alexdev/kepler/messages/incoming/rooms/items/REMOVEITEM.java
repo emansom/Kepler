@@ -7,9 +7,11 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.sql.SQLException;
+
 public class REMOVEITEM implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         Room room = player.getRoomUser().getRoom();
 
         if (room == null) {
@@ -27,7 +29,7 @@ public class REMOVEITEM implements MessageEvent {
             return;
         }
 
-        room.getMapping().removeItem(item);
         ItemDao.deleteItem(item.getId());
+        room.getMapping().removeItem(item);
     }
 }

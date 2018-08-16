@@ -20,18 +20,37 @@ public class RareManager {
     private Map<String, Long> daysSinceUsed;
 
     private CatalogueItem currentRare;
+    private Long currentRareTime;
 
     public RareManager() {
         try {
             this.daysSinceUsed = RareDao.getActiveBlockedRares();
 
             if (this.daysSinceUsed.size() > 0) {
-                this.currentRare = CatalogueManager.getInstance().getCatalogueItem(RareDao.getCurrentRare()); // Get the active item
+                var currentItemData = RareDao.getCurrentRare();
+                this.currentRare = CatalogueManager.getInstance().getCatalogueItem(currentItemData.getKey());
+                this.currentRareTime = currentItemData.getValue(); // Get the active item
             }
 
             this.loadRares();
 
-            if (this.currentRare == null) {
+            TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.reuse.timeunit"));
+            long reuseInterval = GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval");
+
+            TimeUnit refreshTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
+            long refreshInterval = GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval");
+
+            long refreshTime = -1;
+
+            if (this.currentRare != null) {
+                long reuseInSeconds = reuseTimeUnit.toSeconds(reuseInterval);
+                long refreshInSeconds = refreshTimeUnit.toSeconds(refreshInterval);
+
+                refreshTime = (this.currentRareTime - reuseInSeconds) + refreshInSeconds;
+            }
+
+            // If there was no current rare, or the current rare time ran out, then cycle to the next rare
+            if (this.currentRare == null || (this.currentRare != null && (DateUtil.getCurrentTimeSeconds() > refreshTime))) {
                 this.selectNewRare();
             }
         } catch (Exception ex) {
@@ -66,8 +85,8 @@ public class RareManager {
      * Selects a new rare, adds it to the database so it can only be selected once every X interval defined (default is 3 days).
      */
     public void selectNewRare() throws SQLException {
-        TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-        long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+        TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.reuse.timeunit"));
+        long interval = reuseTimeUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval"));
 
         List<String> toRemove = new ArrayList<>();
 

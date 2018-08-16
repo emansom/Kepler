@@ -3,6 +3,7 @@ package org.alexdev.kepler.dao.mysql;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.Photo;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.sql.*;
 import java.util.LinkedHashMap;
@@ -36,7 +37,7 @@ public class RareDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("DELETE FROM rare_cycle WHERE sprite = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("DELETE FROM rare_cycle WHERE sale_code = ?", sqlConnection);
             sqlConnection.setAutoCommit(false);
 
             for (String sprite : sprites) {
@@ -83,20 +84,20 @@ public class RareDao {
         return rares;
     }
 
-    public static String getCurrentRare() throws SQLException {
+    public static Pair<String, Long> getCurrentRare() throws SQLException {
+        Pair<String, Long> itemData = null;
+
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
 
-        String itemSaleCode = null;
-
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT sale_code FROM rare_cycle ORDER BY reuse_time DESC LIMIT 1", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("SELECT sale_code, reuse_time FROM rare_cycle ORDER BY reuse_time DESC LIMIT 1", sqlConnection);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                itemSaleCode = resultSet.getString("sale_code");
+                itemData = Pair.of(resultSet.getString("sale_code"), resultSet.getLong("reuse_time"));
             }
         } catch (Exception e) {
             Storage.logError(e);
@@ -106,6 +107,6 @@ public class RareDao {
             Storage.closeSilently(sqlConnection);
         }
 
-        return itemSaleCode;
+        return itemData;
     }
 }
