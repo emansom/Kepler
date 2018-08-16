@@ -10,9 +10,11 @@ import org.alexdev.kepler.messages.outgoing.messenger.FRIEND_REQUEST;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.sql.SQLException;
+
 public class MESSENGER_REQUESTBUDDY implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         int userId = PlayerDao.getId(reader.readString());
 
         if (userId == -1 || userId == player.getDetails().getId()) {

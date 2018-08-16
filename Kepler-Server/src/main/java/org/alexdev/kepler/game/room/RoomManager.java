@@ -1,7 +1,9 @@
 package org.alexdev.kepler.game.room;
 
+import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -15,7 +17,7 @@ public class RoomManager {
 
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
-        RoomDao.resetVisitors();
+            RoomDao.resetVisitors();
     }
 
     /**

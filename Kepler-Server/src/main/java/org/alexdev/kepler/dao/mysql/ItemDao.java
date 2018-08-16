@@ -240,7 +240,7 @@ public class ItemDao {
      *
      * @param itemId the id of the item to delete it
      */
-    public static void deleteItem(int itemId) {
+    public static void deleteItem(int itemId) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -250,8 +250,9 @@ public class ItemDao {
             preparedStatement.setInt(1, itemId);
             preparedStatement.execute();
 
-        } catch (Exception e) {
-            Storage.logError(e);
+        } catch (Exception ex) {
+            Storage.logError(ex);
+            throw ex;
         } finally {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
@@ -263,7 +264,7 @@ public class ItemDao {
      *
      * @param items the list of items
      */
-    public static void deleteItems(Collection<Item> items) {
+    public static void deleteItems(Collection<Item> items) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -280,8 +281,9 @@ public class ItemDao {
             preparedStatement.executeBatch();
             sqlConnection.setAutoCommit(true);
 
-        } catch (Exception e) {
-            Storage.logError(e);
+        } catch (Exception ex) {
+            Storage.logError(ex);
+            throw ex;
         } finally {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);

@@ -12,17 +12,18 @@ import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DELETEFLAT implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         int roomId = Integer.parseInt(reader.contents());
         delete(roomId, player.getDetails().getId());
     }
 
-    public static void delete(int roomId, int userId) {
+    public static void delete(int roomId, int userId) throws SQLException {
         Room room = RoomManager.getInstance().getRoomById(roomId);
 
         if (room == null) {
