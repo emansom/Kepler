@@ -177,7 +177,7 @@ public class CurrencyDao {
      */
     public static void decreaseCredits(PlayerDetails details, int amount) {
         if (details.getCredits() == 0) {
-            return;
+            amount = 0;
         }
 
         Connection conn = null;
@@ -306,7 +306,7 @@ public class CurrencyDao {
      */
     public static void decreaseTickets(PlayerDetails details, int amount) {
         if (details.getTickets() == 0) {
-            return;
+            amount = 0;
         }
 
         Connection conn = null;
@@ -435,7 +435,7 @@ public class CurrencyDao {
      */
     public static void decreaseFilm(PlayerDetails details, int amount) {
         if (details.getFilm() == 0) {
-            return;
+            amount = 0;
         }
 
         Connection conn = null;
