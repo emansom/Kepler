@@ -105,13 +105,13 @@ public abstract class RoomEntity {
      * @param X the X coordinates
      * @param Y the Y coordinate
      */
-    public void walkTo(int X, int Y) {
+    public boolean walkTo(int X, int Y) {
         if (this.room == null) {
-            return;
+            return false;
         }
 
         if (SunTerraceHandler.isRedirected(this, X, Y)) {
-            return;
+            return false;
         }
 
         if (this.nextPosition != null) {
@@ -125,14 +125,14 @@ public abstract class RoomEntity {
 
         if (tile == null) {
             //System.out.println("User requested " + X + ", " + Y + " from " + this.position);
-            return;
+            return false;
         }
 
         this.goal = new Position(X, Y);
         //System.out.println("User requested " + this.goal + " from " + this.position + " with item " + (tile.getHighestItem() != null ? tile.getHighestItem().getDefinition().getSprite() : "NULL"));
 
         if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
-            return;
+            return false;
         }
 
         LinkedList<Position> path = Pathfinder.makePath(this.entity);
@@ -140,7 +140,10 @@ public abstract class RoomEntity {
         if (path.size() > 0) {
             this.path = path;
             this.isWalking = true;
+            return true;
         }
+
+        return false;
     }
 
     /**

@@ -52,6 +52,17 @@ public class RoomPlayer extends RoomEntity {
     }
 
     @Override
+    public boolean walkTo(int X, int Y) {
+        boolean walking = super.walkTo(X, Y);
+
+        if (walking) {
+            this.timerManager.resetRoomTimer();
+        }
+
+        return false;
+    }
+
+    @Override
     public void stopWalking() {
         super.stopWalking();
     }
