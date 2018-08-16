@@ -176,7 +176,7 @@ public class CurrencyDao {
      * @param details the player details
      */
     public static void decreaseCredits(PlayerDetails details, int amount) {
-        if (details.getCredits() == 0) {
+        if (details.getCredits() <= 0) {
             amount = 0;
         }
 
@@ -305,7 +305,7 @@ public class CurrencyDao {
      * @param details the player details
      */
     public static void decreaseTickets(PlayerDetails details, int amount) {
-        if (details.getTickets() == 0) {
+        if (details.getTickets() <= 0) {
             amount = 0;
         }
 
@@ -434,7 +434,7 @@ public class CurrencyDao {
      * @param details the player details
      */
     public static void decreaseFilm(PlayerDetails details, int amount) {
-        if (details.getFilm() == 0) {
+        if (details.getFilm() <= 0) {
             amount = 0;
         }
 
