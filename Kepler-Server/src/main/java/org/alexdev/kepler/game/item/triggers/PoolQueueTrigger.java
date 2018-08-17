@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
@@ -23,11 +24,14 @@ public class PoolQueueTrigger extends GenericTrigger {
         if (player.getDetails().getTickets() == 0 ||
             player.getDetails().getPoolFigure().isEmpty()) {
 
-            int rotation = player.getRoomUser().getPosition().getRotation() / 2 * 2;
+            int rotation = (player.getRoomUser().getPosition().getRotation() % 2 == 0) ?
+                    (player.getRoomUser().getPosition().getRotation()) :
+                    (player.getRoomUser().getPosition().getRotation() / 2 * 2);
+
             Position temp = new Position(player.getRoomUser().getPosition().getX(), player.getRoomUser().getPosition().getY(), rotation);
 
             Position[] positionsToCheck = new Position[]{
-                    temp.getSquareInFront(),
+                    //temp.getSquareInFront(),
                     temp.getSquareRight(),
                     temp.getSquareLeft(),
                     temp.getSquareBehind()
@@ -40,8 +44,11 @@ public class PoolQueueTrigger extends GenericTrigger {
                     continue;
                 }
 
+                Position copy = nextTile.getPosition().copy();
+                copy.setRotation(Rotation.calculateWalkDirection(player.getRoomUser().getPosition(), copy));
+
                 if (nextTile.getHighestItem() == null) {
-                    player.getRoomUser().walkTo(nextTile.getPosition().getX(), nextTile.getPosition().getY());
+                    player.getRoomUser().warp(nextTile.getPosition(), false);
                     break;
                 }
             }

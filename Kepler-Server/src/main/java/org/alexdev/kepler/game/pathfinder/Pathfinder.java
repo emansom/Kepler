@@ -88,6 +88,15 @@ public class Pathfinder {
                     return false;
                 }
 
+                // Don't allow users to cut people in queue, force them to garound
+                if (toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                    RoomTile tile = room.getMapping().getTile(entity.getRoomUser().getGoal());
+
+                    if (tile.getHighestItem() == null || !tile.getHighestItem().getDefinition().getSprite().equals("queue_tile2")) {
+                        return false;
+                    }
+                }
+
                 // Don't allow people to enter the booth if it's closed, or don't allow
                 // if they attempt to use the pool lift without swimmers
                 if (toItem.getDefinition().getSprite().equals("poolBooth") ||

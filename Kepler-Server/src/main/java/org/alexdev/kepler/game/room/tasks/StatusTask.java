@@ -100,11 +100,11 @@ public class StatusTask implements Runnable {
      * @param player the player to force walking
      */
     public static void processPoolQueue(Player player) {
-        if (!player.getRoomUser().getRoom().getModel().getName().equals("pool_b")) {
+        if (player.getDetails().getTickets() == 0) {
             return;
         }
 
-        if (player.getDetails().getTickets() == 0) {
+        if (player.getRoomUser().getRoom() != null && !player.getRoomUser().getRoom().getModel().getName().equals("pool_b")) {
             return;
         }
 
