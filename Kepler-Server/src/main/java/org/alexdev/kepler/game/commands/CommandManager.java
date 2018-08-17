@@ -83,7 +83,7 @@ public class CommandManager {
         if (message.startsWith(":") && message.length() > 1) {
 
             String commandName = message.split(":")[1].split(" ")[0];
-            Command cmd = getCommand(commandName);
+            Command cmd = this.getCommand(commandName);
 
             if (cmd != null) {
                 return this.hasCommandPermission(entity, cmd);
@@ -122,7 +122,7 @@ public class CommandManager {
      */
     public void invokeCommand(Entity entity, String message) {
         String commandName = message.split(":")[1].split(" ")[0];
-        Command cmd = getCommand(commandName);
+        Command cmd = this.getCommand(commandName);
 
         String[] args = new String[0];
 
