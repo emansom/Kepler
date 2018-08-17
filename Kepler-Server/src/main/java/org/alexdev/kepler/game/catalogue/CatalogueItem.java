@@ -115,6 +115,11 @@ public class CatalogueItem {
     public int getPrice() {
         return price;
     }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public int getItemSpecialId() {
         return itemSpecialId;
     }

@@ -34,12 +34,15 @@ public class CommandManager {
         this.commands.put(new String[] { "usersonline", "whosonline" }, new UsersOnlineCommand());
         this.commands.put(new String[] { "rgb", "rainbow" }, new RainbowDimmerCommand());
         this.commands.put(new String[] { "idle", "afk" }, new AfkCommand());
-        this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
-        this.commands.put(new String[] { "reload" }, new ReloadCommand());
-        this.commands.put(new String[] { "packet" }, new PacketTestCommand());
         this.commands.put(new String[] { "motto" }, new ChangeMottoCommand());
         this.commands.put(new String[] { "resetvote" }, new ResetVoteCommand());
+
+        // Staff commands
+        this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
+        this.commands.put(new String[] { "packet" }, new PacketTestCommand());
+        this.commands.put(new String[] { "reload" }, new ReloadCommand());
         this.commands.put(new String[] { "shutdown" }, new ShutdownCommand());
+        this.commands.put(new String[] { "setprice" }, new SetItemPriceCommand());
 
         // Add client-side commands to list
         this.commands.put(new String[] { "chooser" }, new ChooserCommand());
