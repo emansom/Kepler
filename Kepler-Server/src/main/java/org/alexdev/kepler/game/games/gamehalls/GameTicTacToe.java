@@ -3,7 +3,7 @@ package org.alexdev.kepler.game.games.gamehalls;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.triggers.GameTrigger;
+import org.alexdev.kepler.game.games.triggers.GameTrigger;
 import org.alexdev.kepler.messages.outgoing.rooms.games.ITEMMSG;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;

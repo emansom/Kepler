@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.triggers;
+package org.alexdev.kepler.game.games.triggers;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.messages.outgoing.rooms.games.CLOSEGAMEBOARD;
 import org.alexdev.kepler.messages.outgoing.rooms.games.OPENGAMEBOARD;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GameTrigger extends GenericTrigger {
-    protected List<GamehallGame> gameInstances;
+    private List<GamehallGame> gameInstances;
 
     public GameTrigger() {
         this.gameInstances = new ArrayList<>();
@@ -112,6 +113,15 @@ public abstract class GameTrigger extends GenericTrigger {
         }
 
         return null;
+    }
+
+    /**
+     * Get all game instances.
+     *
+     * @return the list of game instances
+     */
+    public List<GamehallGame> getGameInstances() {
+        return gameInstances;
     }
 
     /**

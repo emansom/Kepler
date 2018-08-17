@@ -1,9 +1,7 @@
-package org.alexdev.kepler.game.triggers.rooms;
+package org.alexdev.kepler.game.room.triggers;
 
-import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 
 public class SpaceCafeTrigger extends GenericTrigger {

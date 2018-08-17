@@ -122,4 +122,26 @@ public class CatalogueDao {
 
         return packages;
     }
+
+    /**
+     * Save catalogue item price.
+     */
+    public static void setPrice(String saleCode, int price) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE catalogue_items SET price = ? WHERE sale_code = ?", sqlConnection);
+            preparedStatement.setInt(1, price);
+            preparedStatement.setString(2, saleCode);
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+    }
 }

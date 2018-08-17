@@ -1,10 +1,9 @@
-package org.alexdev.kepler.game.triggers.games;
+package org.alexdev.kepler.game.games.triggers;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.gamehalls.GamePoker;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
-import org.alexdev.kepler.game.triggers.GameTrigger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 public class PokerTrigger extends GameTrigger {
     public PokerTrigger(int roomId) {
         for (var kvp : this.getChairGroups()) {
-            this.gameInstances.add(new GamePoker(roomId, kvp));
+            this.getGameInstances().add(new GamePoker(roomId, kvp));
         }
     }
 

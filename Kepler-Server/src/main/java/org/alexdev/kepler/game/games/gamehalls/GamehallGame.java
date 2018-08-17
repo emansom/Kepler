@@ -8,7 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.game.triggers.GameTrigger;
+import org.alexdev.kepler.game.games.triggers.GameTrigger;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
