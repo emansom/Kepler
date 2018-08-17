@@ -102,7 +102,7 @@ public class DivingDeckTrigger extends GenericTrigger {
             player.send(new SHOWPROGRAM(new String[]{"cam1", "targetcamera", String.valueOf(task.getPlayer().getRoomUser().getInstanceId())}));
             player.send(new SHOWPROGRAM(new String[]{"cam1", "setcamera", String.valueOf(task.getCameraType())}));
         } else {
-            room.getTaskManager().scheduleTask("DivingCamera", new PoolCamera(room), 0, 8, TimeUnit.SECONDS);
+            room.getTaskManager().scheduleTask("DivingCamera", new PoolCamera(room), 0, 4, TimeUnit.SECONDS);
         }
 
         if (player.getRoomUser().getPosition().getZ() == 1.0) { // User entered room from the other pool

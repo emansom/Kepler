@@ -17,7 +17,7 @@ public class RooftopRumbleTrigger extends GenericTrigger {
             return;
         }
 
-        room.getTaskManager().scheduleTask("DivingCamera", new DivingDeckTrigger.PoolCamera(room), 0, 8, TimeUnit.SECONDS);
+        room.getTaskManager().scheduleTask("DivingCamera", new DivingDeckTrigger.PoolCamera(room), 0, 4, TimeUnit.SECONDS);
     }
 
     @Override
