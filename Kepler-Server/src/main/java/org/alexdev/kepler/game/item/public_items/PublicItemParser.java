@@ -5,7 +5,6 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.triggers.*;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
-import org.alexdev.kepler.game.item.triggers.furniture.*;
 import org.alexdev.kepler.game.games.triggers.BattleShipsTrigger;
 import org.alexdev.kepler.game.games.triggers.ChessTrigger;
 import org.alexdev.kepler.game.games.triggers.PokerTrigger;
