@@ -51,7 +51,20 @@ public class DivingDeckTrigger extends GenericTrigger {
          */
         private void spectateNewPlayer() {
             List<Player> playerList = this.room.getEntityManager().getPlayers();
-            this.player = playerList.get(ThreadLocalRandom.current().nextInt(0, playerList.size()));
+
+            if (playerList.size() > 1) {
+                Player found = playerList.get(ThreadLocalRandom.current().nextInt(0, playerList.size()));
+
+                if (found.getEntityId() == this.player.getEntityId()) {
+                    spectateNewPlayer();
+                    return;
+                }
+
+                this.player = found;
+            } else {
+                this.player = playerList.get(0);
+            }
+
             this.room.send(new SHOWPROGRAM(new String[]{"cam1", "targetcamera", String.valueOf(this.player.getRoomUser().getInstanceId())}));
         }
 
