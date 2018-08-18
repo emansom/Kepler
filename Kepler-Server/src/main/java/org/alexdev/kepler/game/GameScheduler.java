@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
+import org.alexdev.kepler.dao.mysql.SettingsDao;
 import org.alexdev.kepler.game.catalogue.RareManager;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
@@ -11,6 +12,7 @@ import org.alexdev.kepler.messages.outgoing.user.currencies.CREDIT_BALANCE;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -96,16 +98,28 @@ public class GameScheduler implements Runnable {
                 }
             }
 
-            // Rare cycle management
-            TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-            long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
-
-            if (this.tickRate.get() % interval == 0) { // Save every 30 seconds
-                RareManager.getInstance().selectNewRare();
-            }
+            this.performRareManagerJob();
 
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameScheduler crashed: ", ex);
+        }
+    }
+
+    private void performRareManagerJob() throws SQLException {
+        // Rare cycle management
+        TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
+        long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+
+        RareManager.getInstance().getTick().incrementAndGet();
+
+        // Save tick time every 60 seconds...
+        if (this.tickRate.get() % 60 == 0) {
+            RareManager.getInstance().saveTick();
+        }
+
+        // Select new rare
+        if (RareManager.getInstance().getTick().get() >= interval) {
+            RareManager.getInstance().selectNewRare();
         }
     }
 
