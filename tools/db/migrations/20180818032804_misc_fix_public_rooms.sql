@@ -119,5 +119,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
 ('v342', 'pizza', 'invisible_table', 14, 11, 0, 0, 0.002, 2, 2, 'solid,invisible', '');
 
+UPDATE `rooms_models` SET `heightmap` = 'xxxxxxxxxxxxxx44|xxxx444444444444|xxxx444444444444|xxxx444444444444|xxxx444444444444|xxxx444444444444|xxxxxxxxxxxxx333|1111111111111222|1111111111111111|1111111111111111|1111111111111111|1111111111111111|1111111111111111|1111111111111111|1111111111111111|1111111111111111|1111111111111111|1111111111111111|1111111111111111|111111111xxxxxxx|xxx11111xxxxxxxx|11111111xxxxxxxx|11111111xxxxxxxx|11111111xxxxxxxx|11111111xxxxxxxx' WHERE `model_id` = 'malja_bar_a';
+
 -- migrate:down
 
