@@ -11,10 +11,7 @@ public class FuserightsManager {
 
     public FuserightsManager() {
         this.fuserights = new ArrayList<>();
-
-        for (Fuseright fuse : Fuseright.values()) {
-            this.fuserights.add(fuse);
-        }
+        this.fuserights.addAll(Arrays.asList(Fuseright.values()));
     }
 
     /**
