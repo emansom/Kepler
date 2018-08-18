@@ -26,7 +26,8 @@ public class PoolQueueTrigger extends GenericTrigger {
             oldPosition.setRotation(2); // Make user face this way, like the original Lido behaviour
             player.getRoomUser().stopWalking();
             player.getRoomUser().warp(oldPosition, false);
-            //player.send(new NO_TICKETS());
+            
+            player.send(new NO_TICKETS());
         }
     }
 
