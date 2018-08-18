@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 18, 2018 at 04:04 AM
+-- Generation Time: Aug 18, 2018 at 07:55 AM
 -- Server version: 10.3.7-MariaDB
 -- PHP Version: 7.2.6
 
@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dev`
+-- Database: `kepler`
 --
 
 -- --------------------------------------------------------
@@ -7137,7 +7137,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('q595', 'cr_staff', 'crs_sofag_mid', 3, 2, 0, 4, 1, 1, 1, 'can_sit_on_top', ''),
 ('z137', 'cr_staff', 'crs_sofag_mid', 4, 2, 0, 4, 1, 1, 1, 'can_sit_on_top', ''),
 ('h452', 'cr_staff', 'crs_sofag_end', 5, 2, 0, 4, 1, 1, 1, 'can_sit_on_top', ''),
-('r333', 'cr_staff', 'crs_roundwoodtable', 12, 4, 0, 2, 0.001, 1, 1, 'extra_parameter', ''),
+('r333', 'cr_staff', 'crs_roundwoodtable', 12, 4, 0, 2, 0.001, 2, 2, 'extra_parameter', ''),
 ('r325', 'cr_staff', 'crs_woodchair', 15, 4, 0, 6, 1, 1, 1, 'can_sit_on_top', ''),
 ('e162', 'cr_staff', 'crs_woodchair', 10, 5, 0, 2, 1, 1, 1, 'can_sit_on_top', ''),
 ('m242', 'cr_staff', 'crs_woodchair', 15, 6, 0, 6, 1, 1, 1, 'can_sit_on_top', ''),
@@ -7147,7 +7147,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('e701', 'cr_staff', 'crs_woodchair', 5, 9, 0, 2, 1, 1, 1, 'can_sit_on_top', ''),
 ('m96', 'cr_staff', 'crs_fridge', 0, 10, 0, 0, 0.001, 1, 1, 'solid', ''),
 ('h872', 'cr_staff', 'ctable2', 7, 10, 0, 2, 0.001, 1, 1, 'solid', ''),
-('d375', 'cr_staff', 'crs_woodtable_end', 13, 10, 0, 1, 0.001, 1, 1, 'extra_parameter', ''),
+('d375', 'cr_staff', 'crs_woodtable_end', 13, 10, 0, 1, 0.001, 2, 3, 'extra_parameter', ''),
 ('y812', 'cr_staff', 'crs_woodtable_start', 14, 10, 0, 2, 0.001, 1, 1, 'extra_parameter', ''),
 ('o101', 'cr_staff', 'crs_woodchair', 5, 11, 0, 2, 1, 1, 1, 'can_sit_on_top', ''),
 ('d490', 'cr_staff', 'crs_box', 1, 12, 0, 2, 0.001, 1, 1, 'solid', ''),
@@ -9326,7 +9326,39 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('j332', 'hallD', 'streetlight', 0, 15, 1, 0, 0.001, 1, 1, 'solid', ''),
 ('w621', 'hallD', 'streetlight', 8, 1, 1, 0, 0.001, 1, 1, 'solid', ''),
 ('o742', 'hallD', 'streetlight', 14, 1, 1, 0, 0.001, 1, 1, 'solid', ''),
-('t546', 'pub_a', 'bar_gate', 9, 9, 2, 0, 0.001, 1, 1, 'solid,invisible', '');
+('t546', 'pub_a', 'bar_gate', 9, 9, 2, 0, 0.001, 1, 1, 'solid,invisible', ''),
+('g243', 'md_a', 'poolEnter', 11, 11, 7, 2, 0.001, 1, 1, 'can_stand_on_top,invisible', ''),
+('n678', 'md_a', 'poolExit', 12, 11, 4, 6, 0.001, 1, 1, 'can_stand_on_top,invisible', ''),
+('h317', 'md_a', 'poolExit', 12, 12, 4, 6, 0.001, 1, 1, 'can_stand_on_top,invisible', ''),
+('t743', 'hallD', 'streetlight', 0, 9, 1, 0, 0.001, 1, 1, 'solid', ''),
+('j332', 'hallD', 'streetlight', 0, 15, 1, 0, 0.001, 1, 1, 'solid', ''),
+('w621', 'hallD', 'streetlight', 8, 1, 1, 0, 0.001, 1, 1, 'solid', ''),
+('o742', 'hallD', 'streetlight', 14, 1, 1, 0, 0.001, 1, 1, 'solid', ''),
+('t546', 'pub_a', 'bar_gate', 9, 9, 2, 0, 0.001, 1, 1, 'solid,invisible', ''),
+('j635', 'bar_b', 'djtable', 16, 22, 4, 0, 0.001, 1, 2, 'solid,invisible', ''),
+('b523', 'library', 'invisible_table', 28, 28, 1, 0, 0.001, 2, 2, 'solid,invisible', ''),
+('j725', 'tearoom', 'invisible_table', 2, 7, 3, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('d646', 'tearoom', 'invisible_table', 2, 13, 3, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('r452', 'tearoom', 'invisible_table', 16, 10, 3, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('y233', 'tearoom', 'invisible_table', 19, 3, 3, 0, 0.002, 1, 1, 'solid,invisible', ''),
+('c323', 'tearoom', 'invisible_table', 14, 3, 3, 0, 0.002, 1, 1, 'solid,invisible', ''),
+('f522', 'cr_staff', 'invisible_table', 6, 8, 1, 0, 0.001, 3, 6, 'solid,invisible', ''),
+('b545', 'sport', 'invisible_barrier', 11, 14, 1, 0, 0.002, 1, 4, 'solid,invisible', ''),
+('y423', 'cafe_ole', 'invisible_table', 4, 17, 1, 0, 0.002, 2, 3, 'solid,invisible', ''),
+('v682', 'cafe_ole', 'invisible_table', 12, 16, 1, 0, 0.002, 2, 3, 'solid,invisible', ''),
+('l032', 'cafe_ole', 'invisible_table', 15, 1, 1, 0, 0.002, 2, 3, 'solid,invisible', ''),
+('j246', 'cafe_ole', 'invisible_table', 9, 5, 1, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('r563', 'malja_bar_a', 'invisible_table', 6, 3, 4, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('m743', 'malja_bar_a', 'invisible_table', 7, 14, 1, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('w662', 'malja_bar_a', 'invisible_table', 13, 15, 1, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('b742', 'malja_bar_a', 'invisible_table', 1, 16, 1, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('d334', 'malja_bar_b', 'invisible_table', 4, 1, 3, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('ml43', 'malja_bar_b', 'invisible_table', 2, 17, 3, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('x343', 'pizza', 'invisible_table', 1, 17, 1, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('x562', 'pizza', 'invisible_table', 1, 9, 1, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('w434', 'pizza', 'invisible_table', 12, 21, 1, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('f422', 'pizza', 'invisible_table', 14, 4, 0, 0, 0.002, 2, 2, 'solid,invisible', ''),
+('v342', 'pizza', 'invisible_table', 14, 11, 0, 0, 0.002, 2, 2, 'solid,invisible', '');
 
 -- --------------------------------------------------------
 
