@@ -114,12 +114,7 @@ public abstract class RoomEntity {
             return false;
         }
 
-        if (this.nextPosition != null) {
-            this.position.setX(this.nextPosition.getX());
-            this.position.setY(this.nextPosition.getY());
-            this.updateNewHeight(this.position);
-            this.needsUpdate = true;
-        }
+        handleNextStep();
 
         RoomTile tile = this.room.getMapping().getTile(X, Y);
 
@@ -144,6 +139,29 @@ public abstract class RoomEntity {
         }
 
         return false;
+    }
+
+    /**
+     * Handle the next step in a pathfinder.
+     */
+    public void handleNextStep() {
+        if (this.nextPosition != null) {
+            RoomTile nextTile = this.room.getMapping().getTile(this.nextPosition);
+
+            if (nextTile.getHighestItem() != null) {
+                if (nextTile.getHighestItem().getItemTrigger() != null) {
+                    nextTile.getHighestItem().getItemTrigger().onEntityStep(entity, this, this.getCurrentItem(), this.position.copy());
+                }
+            }
+
+            if (this.nextPosition != null) {
+                this.position.setX(this.nextPosition.getX());
+                this.position.setY(this.nextPosition.getY());
+                this.updateNewHeight(this.position);
+            }
+
+            //this.needsUpdate = true;
+        }
     }
 
     /**
