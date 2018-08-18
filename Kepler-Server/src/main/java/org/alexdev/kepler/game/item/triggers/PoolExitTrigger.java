@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
+import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
@@ -12,6 +13,10 @@ public class PoolExitTrigger extends GenericTrigger {
     @Override
     public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Position oldPosition, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
+            return;
+        }
+
+        if (!entity.getRoomUser().containsStatus(StatusType.SWIM)) {
             return;
         }
 
@@ -37,6 +42,13 @@ public class PoolExitTrigger extends GenericTrigger {
             warp = new Position(19, 19);
             goal = new Position(18, 19);
         }
+
+        if ((item.getPosition().getX() == 12 && item.getPosition().getY() == 11) ||
+                (item.getPosition().getX() == 12 && item.getPosition().getY() == 12)) {
+            warp = new Position(11, 11);
+            goal = new Position(10, 11);
+        }
+
 
         if (warp != null) {
             PoolHandler.warpSwim(item, entity, warp, goal, true);

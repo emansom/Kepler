@@ -34,8 +34,8 @@ public enum ItemBehaviour {
     ROOMDIMMER,
     PRESENT,
     PHOTO,
-    PLACE_ROLLER_ON_TOP;
-
+    PLACE_ROLLER_ON_TOP,
+    INVISIBLE;
 
     private GenericTrigger trigger;
 

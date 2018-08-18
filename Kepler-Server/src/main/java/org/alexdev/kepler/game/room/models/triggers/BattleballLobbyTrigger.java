@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.room.triggers;
+package org.alexdev.kepler.game.room.models.triggers;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;

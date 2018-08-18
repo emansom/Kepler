@@ -10,8 +10,8 @@ import java.util.List;
 public class OBJECTS_WORLD extends MessageComposer {
     private final List<Item> items;
 
-    public OBJECTS_WORLD(Room room) {
-        this.items = room.getItemManager().getPublicItems();
+    public OBJECTS_WORLD(List<Item> items) {
+        this.items = items;
     }
 
     @Override

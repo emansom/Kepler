@@ -32,8 +32,7 @@ public class RoomModel {
 
         if (!StringUtil.isNullOrEmpty(triggerClass)) {
             try {
-                Class<?> clazz = Class.forName("org.alexdev.kepler.game.room.triggers." + triggerClass);
-                this.modelTrigger = (GenericTrigger) clazz.getDeclaredConstructor().newInstance();
+                this.modelTrigger = RoomModelTriggerType.valueOf(triggerClass.toUpperCase()).getRoomTrigger();
             } catch (Exception e) {
                 e.printStackTrace();
             }
