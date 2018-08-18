@@ -38,11 +38,80 @@ UPDATE public_items SET behaviour = 'can_sit_on_top',top_height = '1.0' WHERE sp
 
 UPDATE public_items SET behaviour = 'can_sit_on_top',top_height = '1.0' WHERE sprite IN ('gate_table','gate_table1','gate_table2','gate_table3');
 
-INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
-('b523', 'library', 'invisible_table', 28, 28, 1, 0, 0.001, 2, 2, 'solid,invisible', '');
 
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
 ('j635', 'bar_b', 'djtable', 16, 22, 4, 0, 0.001, 1, 2, 'solid,invisible', '');
+
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('b523', 'library', 'invisible_table', 28, 28, 1, 0, 0.001, 2, 2, 'solid,invisible', '');
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('j725', 'tearoom', 'invisible_table', 2, 7, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('d646', 'tearoom', 'invisible_table', 2, 13, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('r452', 'tearoom', 'invisible_table', 16, 10, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('f522', 'cr_staff', 'invisible_table', 6, 8, 1, 0, 0.001, 3, 6, 'solid,invisible', '');
+UPDATE public_items SET length = 2, width = 3 WHERE id = 'd375' AND room_model = 'cr_staff';
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('b545', 'sport', 'invisible_barrier', 11, 14, 1, 0, 0.002, 1, 4, 'solid,invisible', '');
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('y423', 'cafe_ole', 'invisible_table', 4, 17, 1, 0, 0.002, 2, 3, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('v682', 'cafe_ole', 'invisible_table', 12, 16, 1, 0, 0.002, 2, 3, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('l032', 'cafe_ole', 'invisible_table', 15, 1, 1, 0, 0.002, 2, 3, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('j246', 'cafe_ole', 'invisible_table', 9, 5, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('r563', 'malja_bar_a', 'invisible_table', 6, 3, 4, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('m743', 'malja_bar_a', 'invisible_table', 7, 14, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('w662', 'malja_bar_a', 'invisible_table', 13, 15, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('b742', 'malja_bar_a', 'invisible_table', 1, 16, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('d334', 'malja_bar_b', 'invisible_table', 4, 1, 3, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('ml43', 'malja_bar_b', 'invisible_table', 2, 17, 3, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('x343', 'pizza', 'invisible_table', 1, 17, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('x562', 'pizza', 'invisible_table', 1, 9, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('w434', 'pizza', 'invisible_table', 12, 21, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('f422', 'pizza', 'invisible_table', 14, 4, 0, 0, 0.002, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('v342', 'pizza', 'invisible_table', 14, 11, 0, 0, 0.002, 2, 2, 'solid,invisible', '');
 
 -- migrate:down
 
