@@ -25,36 +25,7 @@ public class PoolQueueTrigger extends GenericTrigger {
         if (player.getDetails().getTickets() == 0 || player.getDetails().getPoolFigure().isEmpty()) {
             player.getRoomUser().stopWalking();
             player.getRoomUser().warp(oldPosition, false);
-
             player.send(new NO_TICKETS());
-            /*int rotation = (player.getRoomUser().getPosition().getRotation() % 2 == 0) ?
-                    (player.getRoomUser().getPosition().getRotation()) :
-                    (player.getRoomUser().getPosition().getRotation() / 2 * 2);
-
-            Position temp = new Position(player.getRoomUser().getPosition().getX(), player.getRoomUser().getPosition().getY(), rotation);
-
-            Position[] positionsToCheck = new Position[]{
-                    //temp.getSquareInFront(),
-                    temp.getSquareRight(),
-                    temp.getSquareLeft(),
-                    temp.getSquareBehind()
-            };
-
-            for (var nextPosition : positionsToCheck) {
-                RoomTile nextTile = player.getRoomUser().getRoom().getMapping().getTile(nextPosition);
-
-                if (nextTile == null) {
-                    continue;
-                }
-
-                Position copy = nextTile.getPosition().copy();
-                copy.setRotation(Rotation.calculateWalkDirection(player.getRoomUser().getPosition(), copy));
-
-                if (nextTile.getHighestItem() == null) {
-                    player.getRoomUser().warp(nextTile.getPosition(), false);
-                    break;
-                }
-            }*/
         }
     }
 
