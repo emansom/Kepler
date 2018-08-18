@@ -130,6 +130,7 @@ public class Player extends Entity {
             fuserights.addAll(FuserightsManager.getInstance().getClubFuserights());
         }
 
+        fuserights.removeIf(fuse -> !fuse.getFuseright().startsWith("fuse_"));
         this.send(new RIGHTS(fuserights));
     }
 
