@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.rooms.items;
 
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -18,7 +19,7 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
-        if (!room.hasRights(player.getDetails().getId())) {
+        if (!room.hasRights(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 
@@ -55,8 +56,8 @@ public class MOVESTUFF implements MessageEvent {
         }
 
         if ((oldPosition.getX() == x &&
-            oldPosition.getY() == y &&
-            oldPosition.getRotation() == rotation) || !item.isValidMove(item, room, x, y, rotation)) {
+                oldPosition.getY() == y &&
+                oldPosition.getRotation() == rotation) || !item.isValidMove(item, room, x, y, rotation)) {
             // Send item update even though we cancelled, otherwise the client will be confused.
             player.send(new MOVE_FLOORITEM(item));
             return;

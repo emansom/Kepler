@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -50,7 +51,7 @@ public class GRPC implements MessageEvent {
         if (RareManager.getInstance().getCurrentRare() != null && item != RareManager.getInstance().getCurrentRare()) {
             Optional<CataloguePage> pageStream = CatalogueManager.getInstance().getCataloguePages().stream().filter(p -> p.getId() == item.getPageId()).findFirst();
 
-            if (!pageStream.isPresent() || pageStream.get().getMinRole() > player.getDetails().getRank()) {
+            if (!pageStream.isPresent() || pageStream.get().getMinRole().getRankId() > player.getDetails().getRank().getRankId()) {
                 return;
             }
         }
@@ -58,7 +59,7 @@ public class GRPC implements MessageEvent {
         var currentRare = RareManager.getInstance().getCurrentRare();
 
         if (currentRare != null && currentRare == item) {
-            if (!player.hasFuse("fuse_credits")) {
+            if (!player.hasFuse(Fuseright.CREDITS)) {
                 price = RareManager.getInstance().getRareCost().get(currentRare);
             }
         }

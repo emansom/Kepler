@@ -4,18 +4,21 @@ import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UsersOnlineCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add(Fuseright.DEFAULT);
     }
 
     @Override
@@ -27,12 +30,12 @@ public class UsersOnlineCommand extends Command {
         int pageNumber = 1;
         int maxPlayersPerPage = 10;
 
-        if (args.length > 0 && StringUtil.isNumber(args[0])) {
+        if (args.length > 0 && StringUtils.isNumeric(args[0])) {
             pageNumber = Integer.parseInt(args[0]);
         }
 
         List<Player> players = PlayerManager.getInstance().getPlayers();
-        LinkedHashMap<Integer, List<Player>> paginatedPlayers = StringUtil.paginate(players, maxPlayersPerPage);
+        Map<Integer, List<Player>> paginatedPlayers = StringUtil.paginate(players, maxPlayersPerPage);
 
         if (!paginatedPlayers.containsKey(pageNumber - 1)) {
             pageNumber = 1;

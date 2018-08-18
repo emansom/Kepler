@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -13,14 +14,14 @@ import org.alexdev.kepler.messages.outgoing.rooms.badges.USER_BADGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageType;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
-import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 
 public class GiveBadgeCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("fuse_administrator_access");
+        this.permissions.add(Fuseright.ADMINISTRATOR_ACCESS);
     }
 
     @Override
@@ -64,7 +65,7 @@ public class GiveBadgeCommand extends Command {
         }
 
         // Badge should be alphanumeric
-        if (!StringUtil.isAlphaNumeric(badge)) {
+        if (!StringUtils.isAlphanumeric(badge)) {
             player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Badge code provided not alphanumeric."));
             return;
         }

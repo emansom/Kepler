@@ -85,7 +85,7 @@ public class CallForHelpManager {
      */
     void sendToModerators(MessageComposer message) {
         for (Player p : PlayerManager.getInstance().getPlayers()) {
-            if (p.hasFuse("fuse_receive_calls_for_help")) {
+            if (p.hasFuse(Fuseright.RECEIVE_CALLS_FOR_HELP)) {
                 p.send(message);
             }
         }

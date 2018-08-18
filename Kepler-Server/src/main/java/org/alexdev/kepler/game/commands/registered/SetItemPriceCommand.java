@@ -1,20 +1,20 @@
 package org.alexdev.kepler.game.commands.registered;
 
-import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import org.alexdev.kepler.dao.mysql.CatalogueDao;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
-import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 
 public class SetItemPriceCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("fuse_administrator_access");
+        this.permissions.add(Fuseright.ADMINISTRATOR_ACCESS);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SetItemPriceCommand extends Command {
         }
 
 
-        if (!StringUtil.isNumber(args[1])) {
+        if (!StringUtils.isNumeric(args[1])) {
             player.send(new ALERT("You did not enter a number!")); // TODO: Add locale
             return;
         }

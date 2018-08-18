@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.navigator;
 
+import org.alexdev.kepler.game.player.PlayerRank;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 
@@ -9,11 +10,11 @@ public class NavigatorCategory {
     private String name;
     private boolean publicSpaces;
     private boolean allowTrading;
-    private int minimumRoleAccess;
-    private int minimumRoleSetFlat;
+    private PlayerRank minimumRoleAccess;
+    private PlayerRank minimumRoleSetFlat;
     private boolean isNode;
 
-    public NavigatorCategory(int id, int parentId, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat, boolean isNode) {
+    public NavigatorCategory(int id, int parentId, String name, boolean publicSpaces, boolean allowTrading, PlayerRank minimumRoleAccess, PlayerRank minimumRoleSetFlat, boolean isNode) {
         this.id = id;
         this.parentId = parentId;
         this.name = name;
@@ -68,11 +69,11 @@ public class NavigatorCategory {
         return allowTrading;
     }
 
-    public int getMinimumRoleAccess() {
+    public PlayerRank getMinimumRoleAccess() {
         return minimumRoleAccess;
     }
 
-    public int getMinimumRoleSetFlat() {
+    public PlayerRank getMinimumRoleSetFlat() {
         return minimumRoleSetFlat;
     }
 

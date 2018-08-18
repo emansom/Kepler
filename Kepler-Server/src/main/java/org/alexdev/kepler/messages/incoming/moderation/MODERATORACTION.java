@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.moderation;
 
 import org.alexdev.kepler.dao.mysql.ModerationDao;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.moderation.ModerationActionType;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -22,9 +23,10 @@ public class MODERATORACTION implements MessageEvent {
         String alertMessage = reader.readString();
         String notes = reader.readString();
 
+        // TODO: refactor this if-else mess in something more syntactically pleasing
         if (commandCat == 0) {
             // User Command
-            if (commandId == 0 && player.hasFuse("fuse_room_alert")) {
+            if (commandId == 0 && player.hasFuse(Fuseright.ROOM_ALERT)) {
                 String alertUser = reader.readString();
 
                 Player target = PlayerManager.getInstance().getPlayerByName(alertUser);
@@ -35,7 +37,7 @@ public class MODERATORACTION implements MessageEvent {
                 } else {
                     player.send(new ALERT("Target user is not online."));
                 }
-            } else if (commandId == 1 && player.hasFuse("fuse_kick")) {
+            } else if (commandId == 1 && player.hasFuse(Fuseright.KICK)) {
                 // Kick
                 String alertUser = reader.readString();
                 Player target = PlayerManager.getInstance().getPlayerByName(alertUser);
@@ -45,7 +47,7 @@ public class MODERATORACTION implements MessageEvent {
                         return; // Can't kick yourself!
                     }
 
-                    if (target.hasFuse("fuse_kick")) {
+                    if (target.hasFuse(Fuseright.KICK)) {
                         player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
                         return;
                     }
@@ -58,13 +60,13 @@ public class MODERATORACTION implements MessageEvent {
                 } else {
                     player.send(new ALERT("Target user is not online."));
                 }
-            } else if (commandId == 2 && player.hasFuse("fuse_ban")) {
+            } else if (commandId == 2 && player.hasFuse(Fuseright.BAN)) {
                 //Ban
                 // TODO: Banning
             }
         } else if (commandCat == 1) {
             // Room Command
-            if (commandId == 0 && player.hasFuse("fuse_room_alert")) {
+            if (commandId == 0 && player.hasFuse(Fuseright.ROOM_ALERT)) {
                 List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
 
                 for (Player target : players) {
@@ -72,12 +74,13 @@ public class MODERATORACTION implements MessageEvent {
                 }
 
                 ModerationDao.addLog(ModerationActionType.ROOM_ALERT, player.getEntityId(), -1, alertMessage, notes);
-            } else if (commandId == 1 && player.hasFuse("fuse_room_kick")) {
+            } else if (commandId == 1 && player.hasFuse(Fuseright.ROOM_KICK)) {
                 // Room Kick
                 List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
 
                 for (Player target : players) {
-                    if (target.hasFuse("fuse_room_kick")) {
+                    // Don't kick other moderators
+                    if (target.hasFuse(Fuseright.ROOM_KICK)) {
                         continue;
                     }
 

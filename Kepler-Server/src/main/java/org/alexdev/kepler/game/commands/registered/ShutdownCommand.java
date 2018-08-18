@@ -1,10 +1,10 @@
 package org.alexdev.kepler.game.commands.registered;
 
-
 import org.alexdev.kepler.Kepler;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
@@ -17,7 +17,7 @@ import java.time.Duration;
 public class ShutdownCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("fuse_administrator_access");
+        this.permissions.add(Fuseright.ADMINISTRATOR_ACCESS);
     }
 
     @Override
@@ -36,7 +36,7 @@ public class ShutdownCommand extends Command {
         // Abort maintenance shutdown if provided argument is either cancel, off or stop (case insensitive)
         if (args.length > 0) {
             if (args[0].equalsIgnoreCase("cancel") || args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("stop")) {
-                PlayerManager.getInstance().cancelMaintenanceShutdown();
+                PlayerManager.getInstance().cancelMaintenance();
                 player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Cancelled shutdown"));
                 return;
             }
@@ -57,7 +57,7 @@ public class ShutdownCommand extends Command {
         }
 
         // Enqueue maintenance shutdown
-        PlayerManager.getInstance().enqueueMaintenanceShutdown(Duration.ofMinutes(minutes));
+        PlayerManager.getInstance().planMaintenance(Duration.ofMinutes(minutes));
 
         // Let callee know Kepler is shutting down in X minutes
         player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Shutting down in " + minutes + " minute(s)"));

@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +23,7 @@ public class PlayerDetails {
     // Currencies
     private int tickets;
     private int film;
-    private int rank;
+    private PlayerRank rank;
 
     // Club
     private long firstClubSubscription;
@@ -67,7 +68,7 @@ public class PlayerDetails {
      * @param allowStalking  allow stalking/following
      * @param soundEnabled   allow playing music from soundmachines
      */
-    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, PlayerRank rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished) {
         this.id = id;
         this.username = StringUtil.filterInput(username, true);
         this.figure = StringUtil.filterInput(figure, true); // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
@@ -83,7 +84,7 @@ public class PlayerDetails {
         this.firstClubSubscription = firstClubSubscription;
         this.clubExpiration = clubExpiration;
 
-        if (!StringUtil.isAlphaNumeric(currentBadge) || currentBadge.length() != 3) {
+        if (!StringUtils.isAlphanumeric(currentBadge) || currentBadge.length() != 3) {
             currentBadge = ""; // TODO: Log warning
         }
 
@@ -200,11 +201,11 @@ public class PlayerDetails {
         this.film = film;
     }
 
-    public int getRank() {
-        return rank;
+    public PlayerRank getRank() {
+        return this.rank;
     }
 
-    public void setRank(int rank) {
+    public void setRank(PlayerRank rank) {
         this.rank = rank;
     }
 

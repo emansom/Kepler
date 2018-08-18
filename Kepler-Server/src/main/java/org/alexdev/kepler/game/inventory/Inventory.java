@@ -16,7 +16,7 @@ public class Inventory {
     private Player player;
     private List<Item> items;
 
-    private LinkedHashMap<Integer, List<Item>> paginatedItems;
+    private Map<Integer, List<Item>> paginatedItems;
     private int handStripPageIndex;
 
     public Inventory(Player player) {

@@ -85,7 +85,7 @@ public class RareManager {
 
         for (CataloguePage cataloguePage : CatalogueManager.getInstance().getCataloguePages()) {
             // Skip pages where normal users can access
-            if (!(cataloguePage.getMinRole() > 1)) {
+            if (!(cataloguePage.getMinRole().getRankId() > 1)) {
                 continue;
             }
 

@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages.incoming.rooms;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.FLATPROPERTY;
@@ -20,7 +21,7 @@ public class FLATPROPBYITEM implements MessageEvent {
             return;
         }
 
-        if (!room.isOwner(player.getDetails().getId()) && !player.hasFuse("fuse_any_room_controller")) {
+        if (!room.isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 

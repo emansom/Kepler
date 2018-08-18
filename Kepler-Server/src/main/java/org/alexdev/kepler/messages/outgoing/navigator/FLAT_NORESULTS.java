@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.navigator;
 
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -22,7 +23,7 @@ public class FLAT_NORESULTS extends MessageComposer {
             response.writeDelimeter(room.getId(), (char) 9);
             response.writeDelimeter(room.getData().getName(), (char) 9);
 
-            if (room.isOwner(this.player.getEntityId()) || room.getData().showOwnerName() || this.player.hasFuse("fuse_see_all_roomowners")) {
+            if (room.isOwner(this.player.getEntityId()) || room.getData().showOwnerName() || this.player.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
                 response.writeDelimeter(room.getData().getOwnerName(), (char) 9);
             } else {
                 response.writeDelimeter("-", (char) 9);

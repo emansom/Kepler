@@ -21,7 +21,7 @@ public class SETFLATCAT implements MessageEvent {
             return;
         }
 
-        if (category.getMinimumRoleSetFlat() > player.getDetails().getRank()) {
+        if (category.getMinimumRoleSetFlat().getRankId() > player.getDetails().getRank().getRankId()) {
             return;
         }
 

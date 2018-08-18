@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms.moderation;
 
 import org.alexdev.kepler.dao.mysql.RoomRightsDao;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
@@ -18,7 +19,7 @@ public class REMOVEALLRIGHTS implements MessageEvent {
             return;
         }
 
-        if (!room.isOwner(player.getEntityId()) && !player.hasFuse("fuse_any_room_controller")) {
+        if (!room.isOwner(player.getEntityId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 
@@ -26,9 +27,8 @@ public class REMOVEALLRIGHTS implements MessageEvent {
 
         for (Player roomPlayer : room.getEntityManager().getPlayers()) {
             room.refreshRights(roomPlayer);
-            roomPlayer.getRoomUser().setNeedsUpdate(true);
         }
 
-        RoomRightsDao.deleteRoomRights(roomId);
+        RoomRightsDao.deleteRoomRights(room.getData());
     }
 }

@@ -24,7 +24,7 @@ public class GCAP implements MessageEvent {
             return;
         }
 
-        if (player.getDetails().getRank() >= cataloguePage.getMinRole()) {
+        if (player.getDetails().getRank().getRankId() >= cataloguePage.getMinRole().getRankId()) {
             List<CatalogueItem> catalogueItemList = CatalogueManager.getInstance().getCataloguePageItems(cataloguePage.getId());
 
             if (RareManager.getInstance().getCurrentRare() != null &&

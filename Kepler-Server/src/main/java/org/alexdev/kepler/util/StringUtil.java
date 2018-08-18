@@ -1,13 +1,9 @@
 package org.alexdev.kepler.util;
 
 import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.*;
 
 public class StringUtil {
-
     /**
      * Checks if is null or empty.
      *
@@ -41,31 +37,6 @@ public class StringUtil {
     }
 
     /**
-     * Checks if is number.
-     *
-     * @param object the object
-     * @return true, if is number
-     */
-    public static boolean isNumber(Object object) {
-        try {
-            Integer.parseInt(object.toString());
-            return true;
-        } catch (NumberFormatException e) {
-            return false;
-        }
-    }
-
-    /**
-     * Checks if is alpha numeric.
-     *
-     * @param word the word
-     * @return true, if is alpha numeric
-     */
-    public static boolean isAlphaNumeric(String word) {
-        return word.matches("[A-Za-z0-9]+");
-    }
-
-    /**
      * Paginate a list of items.
      *
      * @param <T> the generic type
@@ -73,8 +44,8 @@ public class StringUtil {
      * @param chunkSize the chunk size
      * @return the list
      */
-    public static <T> LinkedHashMap<Integer, List<T>> paginate(List<T> originalList, int chunkSize) {
-        LinkedHashMap<Integer, List<T>> chunks = new LinkedHashMap<>();
+    public static <T> Map<Integer, List<T>> paginate(List<T> originalList, int chunkSize) {
+        Map<Integer, List<T>> chunks = new LinkedHashMap<>();
         List<List<T>> listOfChunks = new ArrayList<>();
 
         for (int i = 0; i < originalList.size() / chunkSize; i++) {

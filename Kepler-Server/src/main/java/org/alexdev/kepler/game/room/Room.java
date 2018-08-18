@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -95,25 +96,26 @@ public class Room {
      * @param player the player to refresh the rights for
      */
     public void refreshRights(Player player) {
-        String rightsValue = "";
-
         if (hasRights(player.getDetails().getId())) {
             player.send(new YOUARECONTROLLER());
         } else {
             player.send(new YOUNOTCONTROLLER());
         }
 
-        if (isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
+        String rightsValue = "";
+
+        if (isOwner(player.getDetails().getId()) || player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             player.send(new YOUAROWNER());
             rightsValue = "useradmin";
         }
 
-
         player.getRoomUser().removeStatus(StatusType.FLAT_CONTROL);
 
-        if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId()) || player.hasFuse("fuse_any_room_controller")) {
+        if (hasRights(player.getDetails().getId()) || isOwner(player.getDetails().getId()) || player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             player.getRoomUser().setStatus(StatusType.FLAT_CONTROL, rightsValue);
         }
+
+        player.getRoomUser().setNeedsUpdate(true);
     }
 
     /**

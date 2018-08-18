@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.models;
 
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.apache.commons.lang3.StringUtils;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -60,7 +61,7 @@ public class RoomModel {
             for (int x = 0; x < this.mapSizeX; x++) {
                 String tile = Character.toString(line.charAt(x));
 
-                if (StringUtil.isNumber(tile)) {
+                if (StringUtils.isNumeric(tile)) {
                     this.tileStates[x][y] = RoomTileState.OPEN;
                     this.tileHeights[x][y] = Double.parseDouble(tile);
                 } else {
