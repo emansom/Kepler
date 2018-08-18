@@ -59,16 +59,21 @@ public class Pathfinder {
         Item fromItem = fromTile.getHighestItem();
         Item toItem = toTile.getHighestItem();
 
-        if (oldHeight - 4 >= newHeight) {
-            return fromItem != null && fromItem.hasBehaviour(ItemBehaviour.TELEPORTER);
+        if (oldHeight - 3 >= newHeight) {
+            return fromItem != null && (fromItem.hasBehaviour(ItemBehaviour.TELEPORTER)
+                    || fromItem.getDefinition().getSprite().equals("poolEnter")
+                    || fromItem.getDefinition().getSprite().equals("poolExit"));
         }
 
         if (oldHeight + 1.5 <= newHeight) {
-            return toItem != null && toItem.hasBehaviour(ItemBehaviour.TELEPORTER);
+            return toItem != null && (toItem.hasBehaviour(ItemBehaviour.TELEPORTER)
+                    || toItem.getDefinition().getSprite().equals("poolEnter")
+                    || toItem.getDefinition().getSprite().equals("poolExit"));
         }
 
         // Only check these below if the user is in a pool room.
-        if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_")) {
+        if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_") ||
+            entity.getRoomUser().getRoom().getModel().getName().equals("md_a")) {
             if (toItem != null) {
                 // Check if they have swimmers before trying to enter pool
                 if (toItem.getDefinition().getSprite().equals("poolEnter") ||
@@ -86,6 +91,15 @@ public class Pathfinder {
                 if (!entity.getRoomUser().containsStatus(StatusType.SWIM) &&
                     toItem.getDefinition().getSprite().equals("poolExit")) {
                     return false;
+                }
+
+                // Don't allow users to cut people in queue, force them to garound
+                if (toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                    RoomTile tile = room.getMapping().getTile(entity.getRoomUser().getGoal());
+
+                    if (tile.getHighestItem() == null || !tile.getHighestItem().getDefinition().getSprite().equals("queue_tile2")) {
+                        return false;
+                    }
                 }
 
                 // Don't allow people to enter the booth if it's closed, or don't allow

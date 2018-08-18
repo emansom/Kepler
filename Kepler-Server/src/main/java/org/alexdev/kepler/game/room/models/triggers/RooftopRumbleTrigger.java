@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.room.triggers;
+package org.alexdev.kepler.game.room.models.triggers;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -17,7 +17,7 @@ public class RooftopRumbleTrigger extends GenericTrigger {
             return;
         }
 
-        room.getTaskManager().scheduleTask("DivingCamera", new DivingDeckTrigger.PoolCamera(room), 0, 8, TimeUnit.SECONDS);
+        room.getTaskManager().scheduleTask("DivingCamera", new DivingDeckTrigger.PoolCamera(room), 0, 4, TimeUnit.SECONDS);
     }
 
     @Override

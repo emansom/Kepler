@@ -65,6 +65,18 @@ public class GameConfiguration {
 
         config.put("rare.cycle.reuse.throne.timeunit", "DAYS");
         config.put("rare.cycle.reuse.throne.interval", "7");
+
+        config.put("rare.cycle.handout.hours.12","28,29,31,32,33,34,35,36,40,43");
+        config.put("rare.cycle.handout.hours.24","30,37,38,39,44");
+    }
+
+    /**
+     * Get the configuration map.
+     *
+     * @return the configuration map
+     */
+    public Map<String, String> getConfig() {
+        return config;
     }
 
     /**

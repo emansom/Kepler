@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.room.triggers;
+package org.alexdev.kepler.game.room.models.triggers;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -51,7 +51,20 @@ public class DivingDeckTrigger extends GenericTrigger {
          */
         private void spectateNewPlayer() {
             List<Player> playerList = this.room.getEntityManager().getPlayers();
-            this.player = playerList.get(ThreadLocalRandom.current().nextInt(0, playerList.size()));
+
+            if (playerList.size() > 1) {
+                Player found = playerList.get(ThreadLocalRandom.current().nextInt(0, playerList.size()));
+
+                if (found.getEntityId() == this.player.getEntityId()) {
+                    spectateNewPlayer();
+                    return;
+                }
+
+                this.player = found;
+            } else {
+                this.player = playerList.get(0);
+            }
+
             this.room.send(new SHOWPROGRAM(new String[]{"cam1", "targetcamera", String.valueOf(this.player.getRoomUser().getInstanceId())}));
         }
 
@@ -89,7 +102,7 @@ public class DivingDeckTrigger extends GenericTrigger {
             player.send(new SHOWPROGRAM(new String[]{"cam1", "targetcamera", String.valueOf(task.getPlayer().getRoomUser().getInstanceId())}));
             player.send(new SHOWPROGRAM(new String[]{"cam1", "setcamera", String.valueOf(task.getCameraType())}));
         } else {
-            room.getTaskManager().scheduleTask("DivingCamera", new PoolCamera(room), 0, 8, TimeUnit.SECONDS);
+            room.getTaskManager().scheduleTask("DivingCamera", new PoolCamera(room), 0, 4, TimeUnit.SECONDS);
         }
 
         if (player.getRoomUser().getPosition().getZ() == 1.0) { // User entered room from the other pool

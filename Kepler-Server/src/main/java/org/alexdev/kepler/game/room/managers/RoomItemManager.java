@@ -40,6 +40,10 @@ public class RoomItemManager {
         List<Item> items = new ArrayList<>();
 
         for (Item item : this.room.getItems()) {
+            if (item.hasBehaviour(ItemBehaviour.INVISIBLE)) {
+                continue;
+            }
+
             if (!item.hasBehaviour(ItemBehaviour.PUBLIC_SPACE_OBJECT)) {
                 continue;
             }

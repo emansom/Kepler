@@ -20,7 +20,7 @@ public class G_OBJS implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        player.sendQueued(new OBJECTS_WORLD(room));
+        player.sendQueued(new OBJECTS_WORLD(room.getItemManager().getPublicItems()));
         player.sendQueued(new ACTIVE_OBJECTS(room));
         player.flush();
 

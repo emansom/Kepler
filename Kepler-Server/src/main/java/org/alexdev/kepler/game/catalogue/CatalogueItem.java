@@ -139,4 +139,14 @@ public class CatalogueItem {
     public List<CataloguePackage> getPackages() {
         return packages;
     }
+
+
+    /**
+     * Copy the catalogue item instance so we can set prices that won't affect the main instance.
+     *
+     * @return the new catalogue item instance
+     */
+    public CatalogueItem copy() {
+        return new CatalogueItem(this.saleCode, this.pageId, this.orderId, this.price, this.definition.getId(), this.itemSpecialId, this.packageName, this.packageDescription, this.isPackage);
+    }
 }
