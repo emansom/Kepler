@@ -1,38 +1,16 @@
-.inertia.toml
-.secrets
-.kepler-secrets
-.gradle/
-.idea/
-/out/
-**.iml
-/gradle/
-/build/
-/bin/
-/cmake-build-debug/
-.idea/workspace.xml
-/*.jar
+# Ignore everything
+**
 
-# ignore all *.class files in all folders, including build root
-**/*.class
-target/
+# Don't ignore Kepler-Server directory
+!/Kepler-Server
+#!/Kepler-Server/src
+#!/Kepler-Server/src/**
+#!/Kepler-Server/libs
+#!/Kepler-Server/libs/**
+#!/Kepler-Server/build.gradle
 
-# ignore all markdown files
-*.md
+# Don't ignore tools directory
+!/tools
 
-gradlew
-gradlew.bat
-run.bat
-
-/tools/db
-
-config.ini
-locale.ini
-game.ini
-server.ini
-log4j.properties
-
-Kepler-Server-all.jar
-
-server.log
-error.log
-.env
+# Don't ignore settings.gradle
+!/settings.gradle
