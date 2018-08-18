@@ -100,7 +100,7 @@ public class StatusTask implements Runnable {
      * @param player the player to force walking
      */
     public static void processPoolQueue(Player player) {
-        if (player.getDetails().getTickets() == 0) {
+        if (player.getDetails().getTickets() == 0 || player.getDetails().getPoolFigure().isEmpty()) {
             return;
         }
 

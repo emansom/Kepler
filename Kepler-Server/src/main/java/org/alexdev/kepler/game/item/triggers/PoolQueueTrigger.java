@@ -23,9 +23,10 @@ public class PoolQueueTrigger extends GenericTrigger {
         Player player = (Player)entity;
 
         if (player.getDetails().getTickets() == 0 || player.getDetails().getPoolFigure().isEmpty()) {
+            oldPosition.setRotation(2); // Make user face this way, like the original Lido behaviour
             player.getRoomUser().stopWalking();
             player.getRoomUser().warp(oldPosition, false);
-            player.send(new NO_TICKETS());
+            //player.send(new NO_TICKETS());
         }
     }
 
@@ -36,6 +37,10 @@ public class PoolQueueTrigger extends GenericTrigger {
         }
 
         Player player = (Player)entity;
+
+        if (player.getDetails().getTickets() == 0 || player.getDetails().getPoolFigure().isEmpty()) {
+            return;
+        }
 
         // When they stop walking, check if the player is on a pool lido queue and walk to the next one
         StatusTask.processPoolQueue(player);
