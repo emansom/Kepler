@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.incoming.games.GETINSTANCELIST;
 import org.alexdev.kepler.messages.incoming.club.*;
 import org.alexdev.kepler.messages.incoming.inventory.*;
 import org.alexdev.kepler.messages.incoming.catalogue.*;
@@ -60,6 +61,7 @@ public class MessageHandler {
         registerInventoryPackets();
         registerTradePackets();
         registerSongPackets();
+        registerGamePackets();
     }
 
     /**
@@ -303,6 +305,13 @@ public class MessageHandler {
         registerEvent(248, new DELETE_SONG());
         registerEvent(241, new EDIT_SONG());
         registerEvent(242, new SAVE_SONG_EDIT());
+    }
+
+    /**
+     * Register games packets
+     */
+    private void registerGamePackets() {
+        registerEvent(159, new GETINSTANCELIST());
     }
 
     /**
