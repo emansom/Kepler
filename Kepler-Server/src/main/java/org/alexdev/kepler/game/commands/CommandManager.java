@@ -44,6 +44,7 @@ public class CommandManager {
         this.commands.put(new String[] { "reload" }, new ReloadCommand());
         this.commands.put(new String[] { "shutdown" }, new ShutdownCommand());
         this.commands.put(new String[] { "setprice" }, new SetItemPriceCommand());
+        this.commands.put(new String[] { "setconfig" }, new SetConfigCommand());
 
         // Add client-side commands to list
         this.commands.put(new String[] { "chooser" }, new ChooserCommand());
