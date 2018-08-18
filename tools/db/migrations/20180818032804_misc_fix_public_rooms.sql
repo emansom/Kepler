@@ -49,11 +49,11 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 
 
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
-('j725', 'tearoom', 'invisible_table', 2, 7, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+('j725', 'tearoom', 'invisible_table', 2, 7, 3, 0, 0.002, 2, 2, 'solid,invisible', '');
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
-('d646', 'tearoom', 'invisible_table', 2, 13, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+('d646', 'tearoom', 'invisible_table', 2, 13, 3, 0, 0.002, 2, 2, 'solid,invisible', '');
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
-('r452', 'tearoom', 'invisible_table', 16, 10, 1, 0, 0.002, 2, 2, 'solid,invisible', '');
+('r452', 'tearoom', 'invisible_table', 16, 10, 3, 0, 0.002, 2, 2, 'solid,invisible', '');
 
 
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
