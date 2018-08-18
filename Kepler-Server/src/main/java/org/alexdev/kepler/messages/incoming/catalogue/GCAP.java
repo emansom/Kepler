@@ -30,7 +30,11 @@ public class GCAP implements MessageEvent {
             if (RareManager.getInstance().getCurrentRare() != null &&
                     cataloguePage.getId() == GameConfiguration.getInstance().getInteger("rare.cycle.page.id")) {
 
-                catalogueItemList = List.of(RareManager.getInstance().getCurrentRare());
+                var currentRare = RareManager.getInstance().getCurrentRare();
+
+                var rareItem = currentRare.copy();
+                rareItem.setPrice(RareManager.getInstance().getRareCost().get(currentRare));
+                catalogueItemList = List.of(rareItem);
             }
 
             player.send(new CATALOGUE_PAGE(

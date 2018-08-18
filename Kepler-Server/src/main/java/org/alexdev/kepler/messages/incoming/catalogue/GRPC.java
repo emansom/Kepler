@@ -44,6 +44,8 @@ public class GRPC implements MessageEvent {
             return;
         }
 
+        int price = item.getPrice();
+
         // If the item is not a buyable special rare, then check if they can actually buy it
         if (RareManager.getInstance().getCurrentRare() != null && item != RareManager.getInstance().getCurrentRare()) {
             Optional<CataloguePage> pageStream = CatalogueManager.getInstance().getCataloguePages().stream().filter(p -> p.getId() == item.getPageId()).findFirst();
@@ -53,7 +55,15 @@ public class GRPC implements MessageEvent {
             }
         }
 
-        if (item.getPrice() > player.getDetails().getCredits()) {
+        var currentRare = RareManager.getInstance().getCurrentRare();
+
+        if (currentRare != null && currentRare == item) {
+            if (!player.hasFuse("fuse_credits")) {
+                price = RareManager.getInstance().getRareCost().get(currentRare);
+            }
+        }
+
+        if (price > player.getDetails().getCredits()) {
             player.send(new NO_CREDITS());
             return;
         }
@@ -124,7 +134,7 @@ public class GRPC implements MessageEvent {
             }
         }
 
-        CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());
+        CurrencyDao.decreaseCredits(player.getDetails(), price);
         player.send(new CREDIT_BALANCE(player.getDetails()));
     }
 

@@ -2,27 +2,45 @@ package org.alexdev.kepler.game.catalogue;
 
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.dao.mysql.RareDao;
-import org.alexdev.kepler.game.GameScheduler;
-import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
-import org.bouncycastle.asn1.cms.Time;
 
 import java.sql.SQLException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class RareManager {
     private static RareManager instance;
 
     private LinkedList<CatalogueItem> rareList;
+    private Map<CatalogueItem, Integer> rareCost;
     private Map<String, Long> daysSinceUsed;
 
     private CatalogueItem currentRare;
     private Long currentRareTime;
 
     public RareManager() {
+        this.rareCost = new HashMap<>();
+
+        for (var kvp : GameConfiguration.getInstance().getConfig().entrySet()) {
+            String key = kvp.getKey();
+            String value = kvp.getValue();
+
+            if (!key.startsWith("rare.cycle.handout.hours.")) {
+                continue;
+            }
+
+            int hours = Integer.parseInt(key.split("\\.")[4]);
+
+            for (String strPageId : value.split(",")) {
+                int pageId = Integer.parseInt(strPageId);
+
+                for (CatalogueItem item : CatalogueManager.getInstance().getCataloguePageItems(pageId)) {
+                    this.rareCost.put(item, getHandoutAmountInHours(hours));
+                }
+            }
+        }
+
         try {
             this.daysSinceUsed = RareDao.getActiveBlockedRares();
 
@@ -53,6 +71,7 @@ public class RareManager {
             if (this.currentRare == null || (this.currentRare != null && (DateUtil.getCurrentTimeSeconds() > refreshTime))) {
                 this.selectNewRare();
             }
+
         } catch (Exception ex) {
             Storage.logError(ex);
         }
@@ -141,6 +160,22 @@ public class RareManager {
     }
 
     /**
+     * Get the credit amount handout but in hours.
+     *
+     * @param hours the hours to select for
+     * @return the amount of rareCost
+     */
+    public int getHandoutAmountInHours(int hours) {
+        TimeUnit unit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("credits.scheduler.timeunit"));
+        long interval = unit.toMinutes(GameConfiguration.getInstance().getInteger("credits.scheduler.interval"));
+
+        long minutesInHour = 60;
+        long minutes = minutesInHour / interval;
+
+        return (int) ((hours * minutes) * GameConfiguration.getInstance().getInteger("credits.scheduler.amount"));
+    }
+
+    /**
      * Remove the colour tag from the sprite name. eg pillow*1 to pillow, used for
      * comparing the same items which are just different colours.
      *
@@ -157,6 +192,15 @@ public class RareManager {
      */
     public CatalogueItem getCurrentRare() {
         return currentRare;
+    }
+
+    /**
+     * Get the rares costs.
+     *
+     * @return the map of rares costs
+     */
+    public Map<CatalogueItem, Integer> getRareCost() {
+        return rareCost;
     }
 
     /**
