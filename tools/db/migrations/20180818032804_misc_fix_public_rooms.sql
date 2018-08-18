@@ -38,5 +38,11 @@ UPDATE public_items SET behaviour = 'can_sit_on_top',top_height = '1.0' WHERE sp
 
 UPDATE public_items SET behaviour = 'can_sit_on_top',top_height = '1.0' WHERE sprite IN ('gate_table','gate_table1','gate_table2','gate_table3');
 
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('b523', 'library', 'invisible_table', 28, 28, 1, 0, 0.001, 2, 2, 'solid,invisible', '');
+
+INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
+('j635', 'bar_b', 'djtable', 16, 22, 4, 0, 0.001, 1, 2, 'solid,invisible', '');
+
 -- migrate:down
 
