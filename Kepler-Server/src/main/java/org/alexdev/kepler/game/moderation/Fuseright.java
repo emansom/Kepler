@@ -6,13 +6,22 @@ public enum Fuseright {
     // Basic fuses that apply to all users
     DEFAULT("default", PlayerRank.NORMAL),
     LOGIN("fuse_login", PlayerRank.NORMAL),
-    MUTE("fuse_mute", PlayerRank.NORMAL),
-    KICK("fuse_kick", PlayerRank.NORMAL),
     TRADE("fuse_trade", PlayerRank.NORMAL),
     BUY_CREDITS("fuse_buy_credits", PlayerRank.NORMAL),
     BUY_CREDITS_FUSE_LOGIN("fuse_buy_credits_fuse_login", PlayerRank.NORMAL),
+    ROOM_QUEUE_DEFAULT("fuse_room_queue_default", PlayerRank.NORMAL),
+
+    // Hobba fuses
+    MUTE("fuse_mute", PlayerRank.HOBBA),
+    KICK("fuse_kick", PlayerRank.HOBBA),
+    RECEIVE_CALLS_FOR_HELP("fuse_receive_calls_for_help", PlayerRank.HOBBA),
+
+    // Superhobba fuses
+    REMOVE_PHOTOS("fuse_remove_photos", PlayerRank.SUPERHOBBA),
+    REMOVE_STICKIES("fuse_remove_stickies", PlayerRank.SUPERHOBBA),
 
     // Moderator fuses
+    MOD("fuse_mod", PlayerRank.MODERATOR),
     MODERATOR_ACCESS("fuse_moderator_access", PlayerRank.MODERATOR),
     CHAT_LOG("fuse_chat_log", PlayerRank.MODERATOR),
     ROOM_ALERT("fuse_room_alert", PlayerRank.MODERATOR),
@@ -21,17 +30,15 @@ public enum Fuseright {
     ENTER_FULL_ROOMS("fuse_enter_full_rooms", PlayerRank.MODERATOR),
     ENTER_LOCKED_ROOMS("fuse_enter_locked_rooms", PlayerRank.MODERATOR),
     SEE_ALL_ROOMOWNERS("fuse_see_all_roomowners", PlayerRank.MODERATOR), // Not sure if this is the correct fuse
-    REMOVE_PHOTOS("fuse_remove_photos", PlayerRank.SUPERHOBBA),
     SEARCH_USERS("fuse_search_users", PlayerRank.MODERATOR),
     BAN("fuse_ban", PlayerRank.MODERATOR),
-
-    // Hobba fuses
-    RECEIVE_CALLS_FOR_HELP("fuse_receive_calls_for_help", PlayerRank.HOBBA),
 
     // Administrator fuses
     ADMINISTRATOR_ACCESS("fuse_administrator_access", PlayerRank.ADMINISTRATOR),
     ANY_ROOM_CONTROLLER("fuse_any_room_controller", PlayerRank.ADMINISTRATOR),
     PICK_UP_ANY_FURNI("fuse_pick_up_any_furni", PlayerRank.ADMINISTRATOR),
+    SEE_FLAT_IDS("fuse_see_flat_ids", PlayerRank.ADMINISTRATOR),
+    CREDITS("fuse_credits", PlayerRank.ADMINISTRATOR),
 
     // Club fuses, these fuses do not apply to any rank
     PRIORITY_ACCESS("fuse_priority_access", PlayerRank.RANKLESS_CLUBONLY),
