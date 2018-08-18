@@ -24,7 +24,7 @@ public class FuserightsManager {
         List<Fuseright> fuses = new ArrayList<>();
 
         for (Fuseright f : this.fuserights) {
-            if (minimumRank.getRankId() >= f.getMinimumRank().getRankId()) {
+            if (minimumRank.getRankId() >= f.getMinimumRank().getRankId() && !f.isClubOnly()) {
                 fuses.add(f);
             }
         }
