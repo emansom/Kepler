@@ -63,8 +63,9 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
 ('f522', 'cr_staff', 'invisible_table', 6, 8, 1, 0, 0.001, 3, 6, 'solid,invisible', '');
-UPDATE public_items SET length = 2, width = 3 WHERE id = 'd375' AND room_model = 'cr_staff';
 
+UPDATE public_items SET length = 2, width = 3 WHERE id = 'd375' AND room_model = 'cr_staff';
+UPDATE public_items SET length = 2, width = 2 WHERE id = 'r333' AND room_model = 'cr_staff';
 
 INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotation`, `top_height`, `length`, `width`, `behaviour`, `current_program`) VALUES
 ('b545', 'sport', 'invisible_barrier', 11, 14, 1, 0, 0.002, 1, 4, 'solid,invisible', '');
