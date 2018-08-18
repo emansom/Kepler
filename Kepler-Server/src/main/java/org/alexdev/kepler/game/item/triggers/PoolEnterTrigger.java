@@ -11,7 +11,7 @@ import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 public class PoolEnterTrigger extends GenericTrigger {
 
     @Override
-    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
+    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Position oldPosition, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
             return;
         }

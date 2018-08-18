@@ -59,14 +59,6 @@ public class RoomPlayer extends RoomEntity {
         return walking;
     }
 
-    @Override
-    public void stopWalking() {
-        super.stopWalking();
-
-        // When they stop walking, check if the player is on a pool lido queue and walk to the next one
-        StatusTask.processPoolQueue(this.player);
-    }
-
     /**
      * Refreshes user appearance
      */

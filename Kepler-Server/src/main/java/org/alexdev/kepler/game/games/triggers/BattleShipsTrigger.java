@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.games.triggers;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.games.gamehalls.GameBattleShip;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
 
 import java.util.ArrayList;
@@ -16,8 +17,8 @@ public class BattleShipsTrigger extends GameTrigger {
     }
 
     @Override
-    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
-        super.onEntityStep(entity, roomEntity, item, customArgs);
+    public void onEntityStep(Entity entity, RoomEntity roomEntity, Item item, Position oldPosition, Object... customArgs) {
+        super.onEntityStep(entity, roomEntity, item, oldPosition, customArgs);
     }
 
     @Override

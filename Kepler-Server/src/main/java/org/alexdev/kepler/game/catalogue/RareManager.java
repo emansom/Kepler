@@ -134,6 +134,8 @@ public class RareManager {
 
             // Add rare to expiry table so it can't be used for a certain X number of days
             this.daysSinceUsed.put(rare.getDefinition().getSprite(), DateUtil.getCurrentTimeSeconds() + interval);
+
+            RareDao.removeRares(List.of(rare.getDefinition().getSprite()));
             RareDao.addRare(rare.getDefinition().getSprite(), DateUtil.getCurrentTimeSeconds() + interval);
         }
     }
