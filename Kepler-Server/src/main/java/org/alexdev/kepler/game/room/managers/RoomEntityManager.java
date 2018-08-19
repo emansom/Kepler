@@ -146,15 +146,11 @@ public class RoomEntityManager {
                 Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
 
                 if (linkedTeleporter != null) {
-                    entryPosition = linkedTeleporter.getPosition().copy();
-
-                    new TeleporterTask(
-                            linkedTeleporter,
-                            entity,
-                            this.room).run();
+                    TeleporterTask teleporterTask = new TeleporterTask(linkedTeleporter, entity, this.room);
+                    teleporterTask.run();
 
                     player.getRoomUser().setWalkingAllowed(true);
-                    entity.getRoomUser().setPosition(entryPosition);
+                    entity.getRoomUser().setPosition(linkedTeleporter.getPosition().copy());
                 }
             }
 
