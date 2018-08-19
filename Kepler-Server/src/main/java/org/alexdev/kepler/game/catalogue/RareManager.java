@@ -2,15 +2,18 @@ package org.alexdev.kepler.game.catalogue;
 
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.dao.mysql.RareDao;
+import org.alexdev.kepler.dao.mysql.SettingsDao;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class RareManager {
     private static RareManager instance;
+    private final String RARE_TICK_SETTING = "rare.cycle.tick.time";
 
     private LinkedList<CatalogueItem> rareList;
     private Map<CatalogueItem, Integer> rareCost;
@@ -18,9 +21,11 @@ public class RareManager {
 
     private CatalogueItem currentRare;
     private Long currentRareTime;
+    private AtomicLong tickTime;
 
     public RareManager() {
         this.rareCost = new HashMap<>();
+        this.tickTime = new AtomicLong(GameConfiguration.getInstance().getLong(RARE_TICK_SETTING));
 
         for (var kvp : GameConfiguration.getInstance().getConfig().entrySet()) {
             String key = kvp.getKey();
@@ -52,23 +57,8 @@ public class RareManager {
 
             this.loadRares();
 
-            TimeUnit reuseTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.reuse.timeunit"));
-            long reuseInterval = GameConfiguration.getInstance().getInteger("rare.cycle.reuse.interval");
-
-            TimeUnit refreshTimeUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-            long refreshInterval = GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval");
-
-            long refreshTime = -1;
-
-            if (this.currentRare != null) {
-                long reuseInSeconds = reuseTimeUnit.toSeconds(reuseInterval);
-                long refreshInSeconds = refreshTimeUnit.toSeconds(refreshInterval);
-
-                refreshTime = (this.currentRareTime - reuseInSeconds) + refreshInSeconds;
-            }
-
             // If there was no current rare, or the current rare time ran out, then cycle to the next rare
-            if (this.currentRare == null || (this.currentRare != null && (DateUtil.getCurrentTimeSeconds() > refreshTime))) {
+            if (this.currentRare == null) {
                 this.selectNewRare();
             }
 
@@ -156,6 +146,9 @@ public class RareManager {
 
             RareDao.removeRares(List.of(rare.getDefinition().getSprite()));
             RareDao.addRare(rare.getDefinition().getSprite(), DateUtil.getCurrentTimeSeconds() + interval);
+
+            this.tickTime.set(0);
+            this.saveTick();
         }
     }
 
@@ -214,5 +207,21 @@ public class RareManager {
         }
 
         return instance;
+    }
+
+    /**
+     * Get the current tick.
+     * @return the tick time
+     */
+    public AtomicLong getTick() {
+        return tickTime;
+    }
+
+    /**
+     * Save the tick time to database
+     */
+    public void saveTick() {
+        GameConfiguration.getInstance().getConfig().put(RARE_TICK_SETTING, String.valueOf(RareManager.getInstance().getTick().get()));
+        SettingsDao.updateSetting(RARE_TICK_SETTING, GameConfiguration.getInstance().getString(RARE_TICK_SETTING));
     }
 }

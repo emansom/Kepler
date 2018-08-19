@@ -18,18 +18,17 @@ public class ChairTrigger extends GenericTrigger {
         }
 
         int headRotation = roomEntity.getPosition().getHeadRotation();
-        roomEntity.getPosition().setRotation(item.getPosition().getRotation());
 
+        roomEntity.getPosition().setRotation(item.getPosition().getRotation());
         roomEntity.removeStatus(StatusType.DANCE);
         roomEntity.setStatus(StatusType.SIT, StringUtil.format(item.getDefinition().getTopHeight()));
+        roomEntity.setNeedsUpdate(true);
 
         if (isRolling) {
             if (roomEntity.getTimerManager().getLookTimer() > -1) {
                 roomEntity.getPosition().setHeadRotation(headRotation);
             }
         }
-
-        roomEntity.setNeedsUpdate(true);
     }
 
     @Override

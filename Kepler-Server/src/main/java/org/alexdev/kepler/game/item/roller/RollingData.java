@@ -10,6 +10,7 @@ public class RollingData {
     private Entity entity;
     private Position fromPosition;
     private Position nextPosition;
+    private double displayHeight;
     private double heightUpdate;
 
     public RollingData(Entity entity, Item roller, Position fromPosition, Position nextPosition) {
@@ -50,5 +51,13 @@ public class RollingData {
 
     public Position getFromPosition() {
         return fromPosition;
+    }
+
+    public double getDisplayHeight() {
+        return displayHeight;
+    }
+
+    public void setDisplayHeight(double displayHeight) {
+        this.displayHeight = displayHeight;
     }
 }
