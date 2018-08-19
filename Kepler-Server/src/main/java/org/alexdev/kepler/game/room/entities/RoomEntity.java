@@ -149,8 +149,6 @@ public abstract class RoomEntity {
         this.position.setX(this.nextPosition.getX());
         this.position.setY(this.nextPosition.getY());
         this.updateNewHeight(this.position);
-        this.needsUpdate = true;
-        this.nextPosition = null;
 
         if (this.getCurrentItem() != null) {
             if (this.getCurrentItem().getItemTrigger() != null) {
@@ -158,7 +156,8 @@ public abstract class RoomEntity {
             }
         }
 
-
+        this.needsUpdate = true;
+        this.nextPosition = null;
     }
 
     /**
