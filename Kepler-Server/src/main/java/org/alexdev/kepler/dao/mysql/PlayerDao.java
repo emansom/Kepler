@@ -291,12 +291,11 @@ public class PlayerDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("UPDATE users SET figure = ?, pool_figure = ?, sex = ?, rank = ? WHERE id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", sqlConnection);
             preparedStatement.setString(1, details.getFigure());
             preparedStatement.setString(2, details.getPoolFigure());
             preparedStatement.setString(3, Character.toString(details.getSex()));
-            preparedStatement.setString(4, details.getRank().getName());
-            preparedStatement.setInt(5, details.getId());
+            preparedStatement.setInt(4, details.getId());
             preparedStatement.execute();
 
         } catch (Exception e) {
