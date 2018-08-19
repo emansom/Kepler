@@ -181,7 +181,8 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             }
         }
 
-        room.send(new SLIDE_OBJECT(entity, nextPosition, roller.getId(), displayNextHeight));
+        entity.getRoomUser().getRollingData().getNextPosition().setZ(displayNextHeight);
+        //room.send(new SLIDE_OBJECT(entity, nextPosition, roller.getId(), displayNextHeight));
 
         if (!sittingOnGround) {
             entity.getRoomUser().invokeItem(true); // Invoke the current tile item if they're not sitting on rollers.
