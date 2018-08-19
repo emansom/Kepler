@@ -20,6 +20,10 @@ public class PoolExitTrigger extends GenericTrigger {
             return;
         }
 
+        if (customArgs.length > 0) {
+            return;
+        }
+
         Position warp = null;
         Position goal = null;
 
