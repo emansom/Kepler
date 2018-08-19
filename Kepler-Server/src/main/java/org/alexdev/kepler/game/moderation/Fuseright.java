@@ -41,16 +41,16 @@ public enum Fuseright {
     CREDITS("fuse_credits", PlayerRank.ADMINISTRATOR),
 
     // Club fuses, these fuses do not apply to any rank
-    PRIORITY_ACCESS("fuse_priority_access", PlayerRank.RANKLESS_CLUBONLY),
-    USE_SPECIAL_ROOM_LAYOUTS("fuse_use_special_room_layouts", PlayerRank.RANKLESS_CLUBONLY),
-    USE_CLUB_OUTFITS("fuse_use_club_outfits", PlayerRank.RANKLESS_CLUBONLY),
-    USE_CLUB_OUTFITS_DEFAULT("fuse_use_club_outfits_default", PlayerRank.RANKLESS_CLUBONLY),
-    USE_CLUB_BADGE("fuse_use_club_badge", PlayerRank.RANKLESS_CLUBONLY),
-    USE_CLUB_DANCE("fuse_use_club_dance", PlayerRank.RANKLESS_CLUBONLY),
-    USER_LIST_COMMAND("fuse_habbo _chooser", PlayerRank.RANKLESS_CLUBONLY),
-    FURNI_LIST_COMMAND("fuse_furni_chooser", PlayerRank.RANKLESS_CLUBONLY),
-    EXTENDED_BUDDYLIST("fuse_extended_buddylist", PlayerRank.RANKLESS_CLUBONLY),
-    ROOM_QUEUE_CLUB("fuse_room_queue_club", PlayerRank.RANKLESS_CLUBONLY),
+    PRIORITY_ACCESS("fuse_priority_access", true),
+    USE_SPECIAL_ROOM_LAYOUTS("fuse_use_special_room_layouts", true),
+    USE_CLUB_OUTFITS("fuse_use_club_outfits", true),
+    USE_CLUB_OUTFITS_DEFAULT("fuse_use_club_outfits_default", true),
+    USE_CLUB_BADGE("fuse_use_club_badge", true),
+    USE_CLUB_DANCE("fuse_use_club_dance", true),
+    USER_LIST_COMMAND("fuse_habbo _chooser", true),
+    FURNI_LIST_COMMAND("fuse_furni_chooser", true),
+    EXTENDED_BUDDYLIST("fuse_extended_buddylist", true),
+    ROOM_QUEUE_CLUB("fuse_room_queue_club", true),
 
     // Housekeeping fuses
     HOUSEKEEPING_INTRA("housekeeping_intra", PlayerRank.HOBBA),
@@ -78,10 +78,18 @@ public enum Fuseright {
 
     private final String fuseright;
     private final PlayerRank minimumRank;
+    private final boolean requiresClub;
 
     Fuseright(String fuseright, PlayerRank minimumRank) {
         this.fuseright = fuseright;
         this.minimumRank = minimumRank;
+        this.requiresClub = false;
+    }
+
+    Fuseright(String fuseright, boolean requiresClub) {
+        this.fuseright = fuseright;
+        this.minimumRank = null;
+        this.requiresClub = requiresClub;
     }
 
     public String getFuseright() {
@@ -89,7 +97,7 @@ public enum Fuseright {
     }
 
     public boolean isClubOnly() {
-        return this.getMinimumRank() == PlayerRank.RANKLESS_CLUBONLY;
+        return this.requiresClub;
     }
 
     public PlayerRank getMinimumRank() {
