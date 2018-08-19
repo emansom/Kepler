@@ -181,7 +181,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             }
         }
 
-        entity.getRoomUser().getRollingData().getNextPosition().setZ(displayNextHeight);
+        entity.getRoomUser().getRollingData().setDisplayHeight(displayNextHeight);//setZ(displayNextHeight);
         //room.send(new SLIDE_OBJECT(entity, nextPosition, roller.getId(), displayNextHeight));
 
         if (!sittingOnGround) {

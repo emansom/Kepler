@@ -40,7 +40,7 @@ public class SLIDE_OBJECT extends MessageComposer {
             response.writeInt(2);
             response.writeInt(this.rollingEntity.getRoomUser().getInstanceId());
             response.writeString(StringUtil.format(this.rollingEntity.getRoomUser().getRollingData().getFromPosition().getZ()));
-            response.writeString(StringUtil.format(this.rollingEntity.getRoomUser().getRollingData().getNextPosition().getZ()));
+            response.writeString(StringUtil.format(this.rollingEntity.getRoomUser().getRollingData().getDisplayHeight()));
         }
     }
 
