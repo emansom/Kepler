@@ -46,7 +46,7 @@ public class ReloadCommand extends Command {
             CatalogueManager.reset();
 
             // Regenerate collision map with proper height differences (if they changed).
-            player.getRoomUser().getRoom().getMapping().regenerateItemCollision();
+            player.getRoomUser().getRoom().getMapping().regenerateCollisionMap();
 
             componentName = "Catalogue and item definitions";
         }

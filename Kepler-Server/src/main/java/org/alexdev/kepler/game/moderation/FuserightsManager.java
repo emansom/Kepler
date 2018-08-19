@@ -55,8 +55,7 @@ public class FuserightsManager {
     /**
      * Get if the rank has a fuseright.
      *
-     * @param fuse        the fuse to check against
-     * @param minimumRank the rank to check with
+     * @param fuse the fuse to check against
      * @return true, if successful
      */
     public boolean hasFuseright(Fuseright fuse, PlayerDetails details) {

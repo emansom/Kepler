@@ -53,7 +53,7 @@ public class RoomTile {
         }
 
         if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
-            return entity != null && tile.containsEntity(entity);
+            return entity == null || tile.containsEntity(entity);
         }
 
         if (!tile.hasWalkableFurni()) {
@@ -209,40 +209,6 @@ public class RoomTile {
      */
     public void setHighestItem(Item highestItem) {
         this.highestItem = highestItem;
-    }
-
-    /**
-     * Set the above item the current item for this tile.
-     *
-     * @return the item above
-     */
-    public Item getItemAbove(Item tileItem) {
-        int index = this.items.indexOf(tileItem);
-
-        try {
-            return this.items.get(index + 1);
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-
-        }
-
-        return null;
-    }
-
-    /**
-     * Set the item below the current item for this tile.
-     *
-     * @return the item below
-     */
-    public Item getItemBelow(Item tileItem) {
-        int index = this.items.indexOf(tileItem);
-
-        try {
-            return this.items.get(index - 1);
-        } catch (ArrayIndexOutOfBoundsException ignored) {
-
-        }
-
-        return null;
     }
 
     /**
