@@ -200,7 +200,8 @@ public abstract class RoomEntity {
             this.position.setZ(height);
         }
 
-        Item item = isRolling ? this.room.getMapping().getTile(this.rollingData.getFromPosition()).getHighestItem() : this.getCurrentItem();
+        Item item = isRolling ? this.room.getMapping().getTile(this.rollingData.getNextPosition()).getHighestItem()
+                : this.getCurrentItem();
 
         if (item == null || (!item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || !item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP))) {
             if (this.containsStatus(StatusType.SIT) || this.containsStatus(StatusType.LAY)) {
