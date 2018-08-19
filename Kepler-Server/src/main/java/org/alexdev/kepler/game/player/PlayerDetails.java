@@ -68,7 +68,7 @@ public class PlayerDetails {
      * @param allowStalking  allow stalking/following
      * @param soundEnabled   allow playing music from soundmachines
      */
-    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, PlayerRank rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished) {
         this.id = id;
         this.username = StringUtil.filterInput(username, true);
         this.figure = StringUtil.filterInput(figure, true); // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
@@ -79,7 +79,7 @@ public class PlayerDetails {
         this.credits = credits;
         this.tickets = tickets;
         this.film = film;
-        this.rank = rank;
+        this.rank = PlayerRank.getRankForId(rank);
         this.lastOnline = lastOnline;
         this.firstClubSubscription = firstClubSubscription;
         this.clubExpiration = clubExpiration;
