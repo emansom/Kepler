@@ -38,7 +38,6 @@ public class FuserightsManager {
     public List<Fuseright> getClubFuserights() {
         List<Fuseright> fuses = new ArrayList<>();
 
-        // If we have habbo club, add the habbo club fuserights...
         for (Fuseright f : this.fuserights) {
             if (f.isClubOnly()) {
                 fuses.add(f);
