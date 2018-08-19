@@ -202,8 +202,6 @@ public abstract class RoomEntity {
 
         Item item = /*isRolling ? this.room.getMapping().getTile(this.rollingData.getNextPosition()).getHighestItem() : */this.getCurrentItem();
 
-        int headRotation = this.position.getHeadRotation();
-
         if (item == null || (!item.hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP) || !item.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP))) {
             if (this.containsStatus(StatusType.SIT) || this.containsStatus(StatusType.LAY)) {
                 this.removeStatus(StatusType.SIT);
@@ -216,12 +214,6 @@ public abstract class RoomEntity {
 
             if (trigger != null) {
                 item.getItemTrigger().onEntityStop(this.entity, this, item, isRolling);
-            }
-        }
-
-        if (isRolling) {
-            if (this.timerManager.getLookTimer() > -1) {
-                this.position.setHeadRotation(headRotation);
             }
         }
 
@@ -440,6 +432,7 @@ public abstract class RoomEntity {
         }
 
         this.position.setHeadRotation(Rotation.getHeadRotation(this.position.getRotation(), this.position, towards));
+        this.timerManager.beginLookTimer();
         this.needsUpdate = true;
     }
 
