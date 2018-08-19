@@ -30,8 +30,8 @@ public class PoolEnterTrigger extends GenericTrigger {
         }
 
         if (item.getPosition().getX() == 17 && item.getPosition().getY() == 21) {
-            warp = new Position(16, 22);
-            goal = new Position(16, 23);
+            warp = new Position(17, 22);
+            goal = new Position(17, 23);
         }
 
         if (item.getPosition().getX() == 31 && item.getPosition().getY() == 10) {
