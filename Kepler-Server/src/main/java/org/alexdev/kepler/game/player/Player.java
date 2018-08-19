@@ -142,7 +142,7 @@ public class Player extends Entity {
      */
     @Override
     public boolean hasFuse(Fuseright fuse) {
-        return FuserightsManager.getInstance().hasFuseright(fuse, this.details.getRank());
+        return FuserightsManager.getInstance().hasFuseright(fuse, this.details);
     }
 
     /**

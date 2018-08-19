@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.moderation;
 
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerRank;
 
 import java.util.*;
@@ -24,7 +25,11 @@ public class FuserightsManager {
         List<Fuseright> fuses = new ArrayList<>();
 
         for (Fuseright f : this.fuserights) {
-            if (minimumRank.getRankId() >= f.getMinimumRank().getRankId() && !f.isClubOnly()) {
+            if (f.getMinimumRank() == null || f.isClubOnly()) {
+                continue;
+            }
+
+            if (minimumRank.getRankId() >= f.getMinimumRank().getRankId()) {
                 fuses.add(f);
             }
         }
@@ -54,10 +59,22 @@ public class FuserightsManager {
      * @param minimumRank the rank to check with
      * @return true, if successful
      */
-    public boolean hasFuseright(Fuseright fuse, PlayerRank minimumRank) {
+    public boolean hasFuseright(Fuseright fuse, PlayerDetails details) {
         for (Fuseright f : this.fuserights) {
-            if (minimumRank.getRankId() >= f.getMinimumRank().getRankId() && f == fuse) {
+            if (f.getMinimumRank() == null) {
+                continue;
+            }
+
+            if (details.getRank().getRankId() >= f.getMinimumRank().getRankId() && f == fuse) {
                 return true;
+            }
+        }
+
+        if (details.hasClubSubscription()) {
+            for (Fuseright f : this.fuserights) {
+                if (f.isClubOnly() && f == fuse) {
+                    return true;
+                }
             }
         }
 

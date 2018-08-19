@@ -2,7 +2,6 @@ package org.alexdev.kepler.game.player;
 
 public enum PlayerRank {
     RANKLESS(0),
-    RANKLESS_CLUBONLY(0),
     NORMAL(1),
     COMMUNITY_MANAGER(2),
     GUIDE(3),
