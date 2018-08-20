@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.room;
 
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -22,7 +23,9 @@ import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.game.room.tasks.WaveTask;
 import org.alexdev.kepler.game.texts.TextsManager;
+import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
+import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
@@ -342,6 +345,15 @@ public class RoomUser {
             this.removeStatus(StatusType.CARRY_DRINK);
             this.removeStatus(StatusType.CARRY_FOOD);
             this.needsUpdate = true;
+        }
+    }
+
+    /**
+     * Refreshes user appearance
+     */
+    public void poof() {
+        if (this.room != null) {
+            this.room.send(new FIGURE_CHANGE(this.instanceId, this.getEntity().getDetails()));
         }
     }
 

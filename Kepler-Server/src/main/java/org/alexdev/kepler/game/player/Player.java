@@ -127,9 +127,6 @@ public class Player extends Entity {
         );
     }
 
-    /**
-     * Refreshes user appearance
-     */
     public void refreshAppearance() {
         var newDetails = PlayerDao.getDetails(this.details.getId());
 
@@ -141,12 +138,8 @@ public class Player extends Entity {
         // Send refresh to user
         this.send(new USER_OBJECT(this.details));
 
-        // Send refresh to room if inside room
-        var room = this.roomUser.getRoom();
-
-        if (room != null) {
-            room.send(new FIGURE_CHANGE(this.roomUser.getInstanceId(), this.details));
-        }
+        // Poof
+        this.roomUser.poof();
     }
 
     /**
