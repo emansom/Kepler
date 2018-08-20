@@ -34,7 +34,6 @@ public class KICK implements MessageEvent {
             return;
         }
 
-        target.getRoomUser().setBeingKicked(true);
         target.getRoomUser().kick(false);
     }
 }

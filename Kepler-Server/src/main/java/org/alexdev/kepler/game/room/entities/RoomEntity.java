@@ -707,14 +707,6 @@ public abstract class RoomEntity {
         return timerManager;
     }
 
-    public boolean isBeingKicked() {
-        return beingKicked;
-    }
-
-    public void setBeingKicked(boolean beingKicked) {
-        this.beingKicked = beingKicked;
-    }
-
     public boolean isWalkingAllowed() {
         return isWalkingAllowed;
     }
