@@ -65,19 +65,6 @@ public class MessageHandler {
     }
 
     /**
-     * Register game moderation packets.
-     */
-    private void registerGameModerationPackets(){
-        registerEvent(200, new MODERATORACTION());
-        registerEvent(237, new REQUEST_CFH());
-        registerEvent(86, new SUBMIT_CFH());
-        registerEvent(48, new PICK_CALLFORHELP());
-        registerEvent(199, new MESSAGETOCALLER());
-        registerEvent(198, new CHANGECALLCATEGORY());
-        registerEvent(238, new DELETE_CRY());
-    }
-
-    /**
      * Register handshake packets.
      */
     private void registerHandshakePackets() {
@@ -240,6 +227,19 @@ public class MessageHandler {
         registerEvent(96, new ASSIGNRIGHTS());
         registerEvent(97, new REMOVERIGHTS());
         registerEvent(155, new REMOVEALLRIGHTS());
+    }
+
+    /**
+     * Register game moderation packets.
+     */
+    private void registerGameModerationPackets(){
+        registerEvent(200, new MODERATORACTION());
+        registerEvent(237, new REQUEST_CFH());
+        registerEvent(86, new SUBMIT_CFH());
+        registerEvent(48, new PICK_CALLFORHELP());
+        registerEvent(199, new MESSAGETOCALLER());
+        registerEvent(198, new CHANGECALLCATEGORY());
+        registerEvent(238, new DELETE_CRY());
     }
 
     /**
