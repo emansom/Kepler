@@ -3,6 +3,7 @@ package org.alexdev.kepler.messages.incoming.rooms.dimmer;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.MoodlightDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
@@ -23,7 +24,7 @@ public class MSG_ROOMDIMMER_CHANGE_STATE implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!room.hasRights(player.getDetails().getId())) {
+        if (!room.isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 
