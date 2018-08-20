@@ -49,6 +49,7 @@ public class CREATEFLAT implements MessageEvent {
                 !modelType.equals("b") &&
                 !modelType.equals("c") &&
                 !modelType.equals("d") &&
+                !modelType.equals("e") &&
                 !modelType.equals("f") &&
                 !player.hasFuse(Fuseright.USE_SPECIAL_ROOM_LAYOUTS)) {
             return; // Fuck off, scripter.
