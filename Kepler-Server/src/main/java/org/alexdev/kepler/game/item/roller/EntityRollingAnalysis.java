@@ -3,12 +3,11 @@ package org.alexdev.kepler.game.item.roller;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDEOBJECTBUNDLE;
 
 public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
     @Override
@@ -181,7 +180,7 @@ public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
             }
         }
 
-        room.send(new SLIDE_OBJECT(entity, nextPosition, roller.getId(), displayNextHeight));
+        room.send(new SLIDEOBJECTBUNDLE(entity, nextPosition, roller.getId(), displayNextHeight));
 
         if (!sittingOnGround) {
             entity.getRoomUser().invokeItem(true); // Invoke the current tile item if they're not sitting on rollers.
