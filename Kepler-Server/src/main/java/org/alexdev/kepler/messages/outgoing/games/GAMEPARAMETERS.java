@@ -12,6 +12,7 @@ public class GAMEPARAMETERS extends MessageComposer {
                 new GameParameter("fieldType", true, "1", 1, 5),
                 new GameParameter("numTeams", true, "2", 2, 4),
                 new GameParameter("allowedPowerups", true,"1,2,3,4,5,6,7,8"),
+                //new GameParameter("gameLengthChoice", true, "1", 1, 3),
                 new GameParameter("name", true, "")
         };
 
