@@ -109,6 +109,35 @@ public class DateUtil {
         return null;
     }
 
+    /**
+     * Convert seconds to readable English.
+     *
+     * @param input the seconds input
+     * @return the seconds represented as words
+     */
+    public static String getReadableSeconds(long input) {
+        try {
+            //long different = System.currentTimeMillis() - (timestamp * 1000);
+            long numberOfDays;
+            long numberOfHours;
+            long numberOfMinutes;
+            long numberOfSeconds;
+
+            numberOfDays = input / 86400;
+            numberOfHours = (input % 86400 ) / 3600 ;
+            numberOfMinutes = ((input % 86400 ) % 3600 ) / 60;
+            numberOfSeconds = ((input % 86400 ) % 3600 ) % 60  ;
+
+            return numberOfDays + " days, " + numberOfHours + " hours, " + numberOfMinutes + " minutes, " + numberOfSeconds + " seconds";
+
+        } catch (Exception e){
+            Log.getErrorLogger().error("Error occurred: ", e);
+        }
+
+        return null;
+    }
+
+
 
     /**
      * Gets the current time in seconds.

@@ -169,6 +169,30 @@ public class RareManager {
     }
 
     /**
+     * Tick manager for checking expiry of the rare on sale.
+     *
+     * @param tickTime the global tick counter instance
+     * @throws SQLException for when selectNewRare() fails
+     */
+    public void performRareManagerJob(AtomicLong tickTime) throws SQLException {
+        // Rare cycle management
+        TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
+        long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
+
+        RareManager.getInstance().getTick().incrementAndGet();
+
+        // Save tick time every 60 seconds...
+        if (tickTime.get() % 60 == 0) {
+            RareManager.getInstance().saveTick();
+        }
+
+        // Select new rare
+        if (RareManager.getInstance().getTick().get() >= interval) {
+            RareManager.getInstance().selectNewRare();
+        }
+    }
+
+    /**
      * Remove the colour tag from the sprite name. eg pillow*1 to pillow, used for
      * comparing the same items which are just different colours.
      *

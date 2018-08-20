@@ -98,30 +98,13 @@ public class GameScheduler implements Runnable {
                 }
             }
 
-            this.performRareManagerJob();
-
+            RareManager.getInstance().performRareManagerJob(this.tickRate);
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameScheduler crashed: ", ex);
         }
     }
 
-    private void performRareManagerJob() throws SQLException {
-        // Rare cycle management
-        TimeUnit rareManagerUnit = TimeUnit.valueOf(GameConfiguration.getInstance().getString("rare.cycle.refresh.timeunit"));
-        long interval = rareManagerUnit.toSeconds(GameConfiguration.getInstance().getInteger("rare.cycle.refresh.interval"));
 
-        RareManager.getInstance().getTick().incrementAndGet();
-
-        // Save tick time every 60 seconds...
-        if (this.tickRate.get() % 60 == 0) {
-            RareManager.getInstance().saveTick();
-        }
-
-        // Select new rare
-        if (RareManager.getInstance().getTick().get() >= interval) {
-            RareManager.getInstance().selectNewRare();
-        }
-    }
 
     /**
      * Gets the scheduler service.
