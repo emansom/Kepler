@@ -387,6 +387,11 @@ public class Item {
                 if (item.getDefinition().getLength() > 1 || item.getDefinition().getWidth() > 1) {
                     return false;
                 }
+
+                // Don't allow placing gates on rollers
+                if (item.hasBehaviour(ItemBehaviour.DOOR)) {
+                    return false;
+                }
             }
         }
 
