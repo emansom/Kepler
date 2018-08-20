@@ -1,23 +1,19 @@
-package org.alexdev.kepler.game.item.triggers.generic;
+package org.alexdev.kepler.game.item.triggers;
 
 import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.messages.outgoing.rooms.pool.JUMPINGPLACE_OK;
 import org.alexdev.kepler.messages.outgoing.user.currencies.TICKET_BALANCE;
 
-public class PoolLiftTrigger implements ItemTrigger {
-    @Override
-    public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-
-    }
+public class PoolLiftTrigger extends GenericTrigger {
 
     @Override
-    public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
         if (entity.getType() != EntityType.PLAYER) {
             return;
         }
@@ -36,8 +32,8 @@ public class PoolLiftTrigger implements ItemTrigger {
     }
 
     @Override
-    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-        if (roomUser.isWalking()) {
+    public void onEntityLeave(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
+        if (roomEntity.isWalking()) {
             return;
         }
 

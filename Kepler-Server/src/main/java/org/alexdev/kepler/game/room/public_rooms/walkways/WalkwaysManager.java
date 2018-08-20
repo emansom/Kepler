@@ -3,7 +3,6 @@ package org.alexdev.kepler.game.room.public_rooms.walkways;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.game.room.RoomUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +28,10 @@ public class WalkwaysManager {
 
         this.addWalkway("pool_a", "pool_b", "19,3 20,4 21,5 22,6 23,7 24,8 25,9 26,10 27,11 28,12", null);
         this.addWalkway("pool_b", "pool_a", "0,13 1,14 2,15 3,16 4,17 5,18 6,19 7,20 8,21 9,22 10,23 11,24 12,25", "23,7,7,5");
+
+        this.addWalkway("pool_a", "pool_b", "30,14 31,15 32,16 33,17 34,18 35,19 36,20 37,21 38,22 39,23", "18,30,1,1");
+        this.addWalkway("pool_b", "pool_a", "13,26 14,27 15,28 16,29 17,30 18,31 19,32 20,33 21,34", "34,19,1,5");
+
 
         // Lower Hallways
         this.addWalkway("hallway2", "hallway0", "0,6 0,7 0,8 0,9", "29,3,1,6");

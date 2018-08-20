@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.catalogue;
 
 import org.alexdev.kepler.dao.mysql.CatalogueDao;
+import org.alexdev.kepler.game.player.PlayerRank;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,16 +93,37 @@ public class CatalogueManager {
      * @return the list of catalogue pages
      */
     public List<CataloguePage> getCataloguePages() {
-        return cataloguePageList;
+        return this.cataloguePageList;
     }
 
     /**
-     * Get catalogue packages list.
+     * Get catalogue page list for a certain rank
      *
-     * @return the list of catalogue packages
+     * @return the list of catalogue pages
      */
-    public List<CataloguePackage> getCataloguePackages() {
-        return cataloguePackageList;
+    public List<CataloguePage> getPagesForRank(PlayerRank minimumRank) {
+        List<CataloguePage> cataloguePagesForRank = new ArrayList<>();
+
+        for (CataloguePage page : this.cataloguePageList) {
+            if (!page.isIndexVisible()) {
+                continue;
+            }
+
+            if (minimumRank.getRankId() >= page.getMinRole().getRankId()) {
+                cataloguePagesForRank.add(page);
+            }
+        }
+
+        return cataloguePagesForRank;
+    }
+
+    /**
+     * Get catalogue items list.
+     *
+     * @return the list of items packages
+     */
+    public List<CatalogueItem> getCatalogueItems() {
+        return catalogueItemList;
     }
 
     /**

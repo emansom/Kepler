@@ -2,8 +2,9 @@ package org.alexdev.kepler.game.room.models;
 
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
-
 import org.apache.commons.lang3.StringUtils;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
+import org.alexdev.kepler.util.StringUtil;
 
 public class RoomModel {
     private String modelId;
@@ -19,7 +20,9 @@ public class RoomModel {
     private RoomTileState[][] tileStates;
     private double[][] tileHeights;
 
-    public RoomModel(String modelId, String modelName, int doorX, int doorY, double doorZ, int doorRotation, String heightmap) {
+    private GenericTrigger modelTrigger;
+
+    public RoomModel(String modelId, String modelName, int doorX, int doorY, double doorZ, int doorRotation, String heightmap, String triggerClass) {
         this.modelId = modelId;
         this.modelName = modelName;
         this.doorX = doorX;
@@ -27,6 +30,14 @@ public class RoomModel {
         this.doorZ = doorZ;
         this.doorRotation = doorRotation;
         this.heightmap = heightmap.replace("|", "\r");
+
+        if (!StringUtil.isNullOrEmpty(triggerClass)) {
+            try {
+                this.modelTrigger = RoomModelTriggerType.valueOf(triggerClass.toUpperCase()).getRoomTrigger();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -135,5 +146,9 @@ public class RoomModel {
 
     public String getHeightmap() {
         return heightmap;
+    }
+
+    public GenericTrigger getModelTrigger() {
+        return modelTrigger;
     }
 }

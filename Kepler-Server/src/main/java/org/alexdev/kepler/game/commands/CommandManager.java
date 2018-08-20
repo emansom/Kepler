@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.commands.clientside.EventsCommand;
 import org.alexdev.kepler.game.commands.clientside.FurniCommand;
 import org.alexdev.kepler.game.commands.registered.*;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
@@ -34,12 +35,16 @@ public class CommandManager {
         this.commands.put(new String[] { "usersonline", "whosonline" }, new UsersOnlineCommand());
         this.commands.put(new String[] { "rgb", "rainbow" }, new RainbowDimmerCommand());
         this.commands.put(new String[] { "idle", "afk" }, new AfkCommand());
-        this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
-        this.commands.put(new String[] { "reload" }, new ReloadCommand());
-        this.commands.put(new String[] { "packet" }, new PacketTestCommand());
         this.commands.put(new String[] { "motto" }, new ChangeMottoCommand());
         this.commands.put(new String[] { "resetvote" }, new ResetVoteCommand());
+
+        // Staff commands
+        this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
+        this.commands.put(new String[] { "packet" }, new PacketTestCommand());
+        this.commands.put(new String[] { "reload" }, new ReloadCommand());
         this.commands.put(new String[] { "shutdown" }, new ShutdownCommand());
+        this.commands.put(new String[] { "setprice" }, new SetItemPriceCommand());
+        this.commands.put(new String[] { "setconfig" }, new SetConfigCommand());
 
         // Add client-side commands to list
         this.commands.put(new String[] { "chooser" }, new ChooserCommand());
@@ -79,7 +84,7 @@ public class CommandManager {
         if (message.startsWith(":") && message.length() > 1) {
 
             String commandName = message.split(":")[1].split(" ")[0];
-            Command cmd = getCommand(commandName);
+            Command cmd = this.getCommand(commandName);
 
             if (cmd != null) {
                 return this.hasCommandPermission(entity, cmd);
@@ -97,9 +102,8 @@ public class CommandManager {
      * @return true, if successful
      */
     public boolean hasCommandPermission(Entity entity, Command cmd) {
-        if (cmd.getPermissions().length > 0) {
-
-            for (String permission : cmd.getPermissions()) {
+        if (cmd.getPermissions().size() > 0) {
+            for (Fuseright permission : cmd.getPermissions()) {
                 if (entity.hasFuse(permission)) {
                     return true;
                 }
@@ -119,7 +123,7 @@ public class CommandManager {
      */
     public void invokeCommand(Entity entity, String message) {
         String commandName = message.split(":")[1].split(" ")[0];
-        Command cmd = getCommand(commandName);
+        Command cmd = this.getCommand(commandName);
 
         String[] args = new String[0];
 

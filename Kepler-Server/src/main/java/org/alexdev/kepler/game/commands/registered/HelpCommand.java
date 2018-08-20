@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.commands.registered;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
 import org.alexdev.kepler.util.StringUtil;
@@ -14,7 +15,7 @@ import java.util.Map;
 public class HelpCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add(Fuseright.DEFAULT);
     }
 
     @Override

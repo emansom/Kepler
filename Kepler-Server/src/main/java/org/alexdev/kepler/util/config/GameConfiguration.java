@@ -56,6 +56,28 @@ public class GameConfiguration {
 
         config.put("shutdown.minutes", "1");
 
+        config.put("rare.cycle.tick.time", "0");
+        config.put("rare.cycle.page.id", "2");
+        config.put("rare.cycle.refresh.timeunit", "HOURS");
+        config.put("rare.cycle.refresh.interval", "2");
+
+        config.put("rare.cycle.reuse.timeunit", "DAYS");
+        config.put("rare.cycle.reuse.interval", "3");
+
+        config.put("rare.cycle.reuse.throne.timeunit", "DAYS");
+        config.put("rare.cycle.reuse.throne.interval", "7");
+
+        config.put("rare.cycle.handout.hours.12","28,29,31,32,33,34,35,36,40,43");
+        config.put("rare.cycle.handout.hours.24","30,37,38,39,44");
+    }
+
+    /**
+     * Get the configuration map.
+     *
+     * @return the configuration map
+     */
+    public Map<String, String> getConfig() {
+        return config;
     }
 
     /**
@@ -87,6 +109,17 @@ public class GameConfiguration {
      */
     public String getString(String key) {
         return config.getOrDefault(key, key);
+    }
+
+    /**
+     * Get value from configuration with default value
+     *
+     * @param key the key to use
+     * @param def the default value
+     * @return value
+     */
+    public String getString(String key, String def) {
+        return config.getOrDefault(key, def);
     }
 
     /**

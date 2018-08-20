@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDEOBJECTBUNDLE;
 import org.alexdev.kepler.util.config.GameConfiguration;
 
@@ -167,11 +168,11 @@ public class ItemRollingAnalysis implements RollingAnalysis<Item> {
         roomTile = room.getMapping().getTile(fromPosition);
         roomTile.setDisableWalking(true);*/
 
-        room.send(new SLIDEOBJECTBUNDLE(item, nextPosition, roller.getId(), nextPosition.getZ()));
+        //room.send(new SLIDE_OBJECT(item, nextPosition, roller.getId(), nextPosition.getZ()));
 
         item.getPosition().setX(nextPosition.getX());
         item.getPosition().setY(nextPosition.getY());
         item.getPosition().setZ(nextPosition.getZ());
-        item.setRollingData(new RollingData(item, roller, fromPosition, nextPosition));
+        //item.setRollingData(new RollingData(item, roller, fromPosition, nextPosition));
     }
 }

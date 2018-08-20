@@ -5,7 +5,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.roller.RollingData;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -43,7 +43,7 @@ public class Item {
     private boolean requiresUpdate;
 
     private RollingData rollingData;
-    private ItemTrigger itemTrigger;
+    private GenericTrigger itemTrigger;
 
     public Item() {
         this.id = 0;
@@ -352,7 +352,7 @@ public class Item {
      */
     private boolean canPlaceOnTop(Item item, Item tileItem) {
         // Don't allow putting rollers on top of stackable objects
-        if (item.hasBehaviour(ItemBehaviour.ROLLER) && tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+        if (item.hasBehaviour(ItemBehaviour.ROLLER) && tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && !tileItem.hasBehaviour(ItemBehaviour.PLACE_ROLLER_ON_TOP)) {
             if (tileItem.getDefinition().getTopHeight() >= 0.1) {
                 return false;
             }
@@ -407,13 +407,13 @@ public class Item {
     }
 
     public ItemDefinition getDefinition() {
-        if (this.definition != null) {
+        if (this.definition != null) { // Used for public room items
             return this.definition;
         }
 
+        // Always use ItemManager to retrieve private flat definitions
         return ItemManager.getInstance().getDefinition(this.definitionId);
     }
-
 
     public void setDefinitionId(int definitionId) {
         this.definition = null;
@@ -488,10 +488,6 @@ public class Item {
         return currentProgramValue;
     }
 
-    public void setCurrentProgramValue(String currentProgramValue) {
-        this.currentProgramValue = currentProgramValue;
-    }
-
     public Room getRoom() {
         return RoomManager.getInstance().getRoomById(this.roomId);
     }
@@ -512,14 +508,6 @@ public class Item {
         this.itemBelow = itemBelow;
     }
 
-    public Item getItemAbove() {
-        return itemAbove;
-    }
-
-    public void setItemAbove(Item itemAbove) {
-        this.itemAbove = itemAbove;
-    }
-
     public boolean getRequiresUpdate() {
         return requiresUpdate;
     }
@@ -536,11 +524,11 @@ public class Item {
         this.rollingData = rollingData;
     }
 
-    public ItemTrigger getItemTrigger() {
+    public GenericTrigger getItemTrigger() {
         return itemTrigger;
     }
 
-    public void setItemTrigger(ItemTrigger itemTrigger) {
+    public void setItemTrigger(GenericTrigger itemTrigger) {
         this.itemTrigger = itemTrigger;
     }
 

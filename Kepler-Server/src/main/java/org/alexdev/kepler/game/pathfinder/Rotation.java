@@ -22,6 +22,10 @@ public class Rotation {
         return rotation;
     }
 
+    public static int calculateWalkDirection(Position from, Position to) {
+        return calculateWalkDirection(from.getX(), from.getY(), to.getX(), to.getY());
+    }
+
     public static int calculateWalkDirection(int x, int y, int to_x, int to_y) {
         if (x == to_x) {
             if (y < to_y)

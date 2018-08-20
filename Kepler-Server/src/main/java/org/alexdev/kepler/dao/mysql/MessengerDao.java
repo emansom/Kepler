@@ -134,7 +134,7 @@ public class MessengerDao {
      * @param toId   the to id
      * @return true, if successful
      */
-    public static boolean newRequest(int fromId, int toId) {
+    public static boolean newRequest(int fromId, int toId) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
         boolean success = false;
@@ -148,8 +148,9 @@ public class MessengerDao {
                 preparedStatement.setInt(2, fromId);
                 preparedStatement.execute();
                 success = true;
-            } catch (SQLException e) {
-                Storage.logError(e);
+            } catch (SQLException ex) {
+                Storage.logError(ex);
+                throw ex;
             } finally {
                 Storage.closeSilently(preparedStatement);
                 Storage.closeSilently(sqlConnection);
@@ -166,7 +167,7 @@ public class MessengerDao {
      * @param toId   the to id
      * @return true, if successful
      */
-    public static boolean requestExists(int fromId, int toId) {
+    public static boolean requestExists(int fromId, int toId) throws SQLException {
         boolean exists = false;
 
         Connection sqlConnection = null;
@@ -182,8 +183,9 @@ public class MessengerDao {
                 exists = true;
             }
 
-        } catch (Exception e) {
-            Storage.logError(e);
+        } catch (Exception ex) {
+            Storage.logError(ex);
+            throw ex;
         } finally {
             Storage.closeSilently(resultSet);
             Storage.closeSilently(preparedStatement);
@@ -199,7 +201,7 @@ public class MessengerDao {
      * @param fromId the from id
      * @param toId   the to id
      */
-    public static void removeRequest(int fromId, int toId) {
+    public static void removeRequest(int fromId, int toId) throws SQLException {
         Storage.getStorage().execute("DELETE FROM messenger_requests WHERE from_id = " + fromId + " AND to_id = " + toId);
     }
 
@@ -209,7 +211,7 @@ public class MessengerDao {
      * @param toId the friend id
      * @param fromId   the user id
      */
-    public static void removeFriend(int toId, int fromId) {
+    public static void removeFriend(int toId, int fromId) throws SQLException {
         Storage.getStorage().execute("DELETE FROM messenger_friends WHERE (from_id = " + fromId + " AND to_id = " + toId + ") OR (from_id = " + fromId + " AND to_id = " + toId + ")");
     }
 
@@ -219,7 +221,7 @@ public class MessengerDao {
      * @param fromId the sender
      * @param toId the receiver
      */
-    public static void newFriend(int fromId, int toId) {
+    public static void newFriend(int fromId, int toId) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -230,8 +232,9 @@ public class MessengerDao {
             preparedStatement.setInt(2, toId);
             preparedStatement.executeUpdate();
 
-        } catch (SQLException e) {
-            Storage.logError(e);
+        } catch (SQLException ex) {
+            Storage.logError(ex);
+            throw ex;
         } finally {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
@@ -321,7 +324,7 @@ public class MessengerDao {
      *
      * @param messageId the message id to reset
      */
-    public static void markMessageRead(int messageId) {
+    public static void markMessageRead(int messageId) throws SQLException {
         Storage.getStorage().execute("UPDATE messenger_messages SET unread = 0 WHERE id = " + messageId);
     }
 }

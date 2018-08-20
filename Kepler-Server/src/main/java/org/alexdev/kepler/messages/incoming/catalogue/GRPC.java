@@ -4,14 +4,12 @@ import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.dao.mysql.TeleporterDao;
-import org.alexdev.kepler.game.catalogue.CatalogueItem;
-import org.alexdev.kepler.game.catalogue.CatalogueManager;
-import org.alexdev.kepler.game.catalogue.CataloguePackage;
-import org.alexdev.kepler.game.catalogue.CataloguePage;
+import org.alexdev.kepler.game.catalogue.*;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
@@ -47,13 +45,26 @@ public class GRPC implements MessageEvent {
             return;
         }
 
-        Optional<CataloguePage> pageStream = CatalogueManager.getInstance().getCataloguePages().stream().filter(p -> p.getId() == item.getPageId()).findFirst();
+        int price = item.getPrice();
 
-        if (!pageStream.isPresent() || pageStream.get().getMinRole() > player.getDetails().getRank()) {
-            return;
+        // If the item is not a buyable special rare, then check if they can actually buy it
+        if (RareManager.getInstance().getCurrentRare() != null && item != RareManager.getInstance().getCurrentRare()) {
+            Optional<CataloguePage> pageStream = CatalogueManager.getInstance().getCataloguePages().stream().filter(p -> p.getId() == item.getPageId()).findFirst();
+
+            if (!pageStream.isPresent() || pageStream.get().getMinRole().getRankId() > player.getDetails().getRank().getRankId()) {
+                return;
+            }
         }
 
-        if (item.getPrice() > player.getDetails().getCredits()) {
+        var currentRare = RareManager.getInstance().getCurrentRare();
+
+        if (currentRare != null && currentRare == item) {
+            if (!player.hasFuse(Fuseright.CREDITS)) {
+                price = RareManager.getInstance().getRareCost().get(currentRare);
+            }
+        }
+
+        if (price > player.getDetails().getCredits()) {
             player.send(new NO_CREDITS());
             return;
         }
@@ -124,7 +135,7 @@ public class GRPC implements MessageEvent {
             }
         }
 
-        CurrencyDao.decreaseCredits(player.getDetails(), item.getPrice());
+        CurrencyDao.decreaseCredits(player.getDetails(), price);
         player.send(new CREDIT_BALANCE(player.getDetails()));
     }
 

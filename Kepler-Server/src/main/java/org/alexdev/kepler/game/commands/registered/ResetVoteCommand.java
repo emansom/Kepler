@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
@@ -13,7 +14,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE.ChatMessageT
 public class ResetVoteCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add(Fuseright.DEFAULT);
     }
 
     @Override

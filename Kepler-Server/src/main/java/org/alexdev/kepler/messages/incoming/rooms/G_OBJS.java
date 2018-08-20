@@ -20,34 +20,14 @@ public class G_OBJS implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        player.sendQueued(new OBJECTS_WORLD(room));
+        player.sendQueued(new OBJECTS_WORLD(room.getItemManager().getPublicItems()));
         player.sendQueued(new ACTIVE_OBJECTS(room));
         player.flush();
 
-        /*player.send(new MessageComposer() {
-            @Override
-            public void compose(NettyResponse response) {
-                response.writeInt(0);
-            }
+        player.getMessenger().sendStatusUpdate();
 
-            @Override
-            public short getHeader() {
-                return 231;
-            }
-        });
-
-        player.send(new MessageComposer() {
-            @Override
-            public void compose(NettyResponse response) {
-                response.writeInt(0);
-                response.writeInt(0);
-                response.writeInt(0);
-            }
-
-            @Override
-            public short getHeader() {
-                return 232;
-            }
-        });*/
+        if (room.getModel().getModelTrigger() != null) {
+            room.getModel().getModelTrigger().onRoomEntry(player, room);
+        }
     }
 }

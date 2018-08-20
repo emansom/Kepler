@@ -8,8 +8,9 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.inventory.Inventory;
 import org.alexdev.kepler.game.messenger.Messenger;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomPlayer;
 import org.alexdev.kepler.messages.outgoing.handshake.RIGHTS;
 import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
 import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSING;
@@ -25,13 +26,15 @@ import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class Player extends Entity {
     public static final AttributeKey<Player> PLAYER_KEY = AttributeKey.valueOf("Player");
     private final NettyPlayerNetwork network;
 
     private Logger log;
     private PlayerDetails details;
-    private RoomUser roomUser;
+    private RoomPlayer roomEntity;
     private Messenger messenger;
     private Inventory inventory;
 
@@ -42,7 +45,7 @@ public class Player extends Entity {
     public Player(NettyPlayerNetwork nettyPlayerNetwork) {
         this.network = nettyPlayerNetwork;
         this.details = new PlayerDetails();
-        this.roomUser = new RoomUser(this);
+        this.roomEntity = new RoomPlayer(this);
         this.log = LoggerFactory.getLogger("Connection " + this.network.getConnectionId());
         this.pingOK = true;
         this.disconnected = false;
@@ -121,25 +124,14 @@ public class Player extends Entity {
      * Send fuseright permissions for player.
      */
     public void refreshFuserights() {
-        this.send(new RIGHTS(FuserightsManager.getInstance().getAvailableFuserights(
-                this.details.hasClubSubscription(),
-                this.details.getRank()))
-        );
-    }
+        List<Fuseright> fuserights = FuserightsManager.getInstance().getFuserightsForRank(this.details.getRank());
 
-    public void refreshAppearance() {
-        var newDetails = PlayerDao.getDetails(this.details.getId());
+        if (this.getDetails().hasClubSubscription()) {
+            fuserights.addAll(FuserightsManager.getInstance().getClubFuserights());
+        }
 
-        // Reload figure, gender and motto
-        this.details.setFigure(newDetails.getFigure());
-        this.details.setSex(newDetails.getSex());
-        this.details.setMotto(newDetails.getMotto());
-
-        // Send refresh to user
-        this.send(new USER_OBJECT(this.details));
-
-        // Poof
-        this.roomUser.poof();
+        fuserights.removeIf(fuse -> !fuse.getFuseright().startsWith("fuse_"));
+        this.send(new RIGHTS(fuserights));
     }
 
     /**
@@ -149,10 +141,8 @@ public class Player extends Entity {
      * @return true, if successful
      */
     @Override
-    public boolean hasFuse(String fuse) {
-        return FuserightsManager.getInstance().hasFuseright(fuse,
-                this.details.getRank(),
-                this.details.hasClubSubscription());
+    public boolean hasFuse(Fuseright fuse) {
+        return FuserightsManager.getInstance().hasFuseright(fuse, this.details);
     }
 
     /**
@@ -205,8 +195,8 @@ public class Player extends Entity {
     }
 
     @Override
-    public RoomUser getRoomUser() {
-        return this.roomUser;
+    public RoomPlayer getRoomUser() {
+        return this.roomEntity;
     }
 
     public Inventory getInventory() {
@@ -293,8 +283,8 @@ public class Player extends Entity {
     @Override
     public void dispose() {
         if (this.loggedIn) {
-            if (this.roomUser.getRoom() != null) {
-                this.roomUser.getRoom().getEntityManager().leaveRoom(this, false);
+            if (this.roomEntity.getRoom() != null) {
+                this.roomEntity.getRoom().getEntityManager().leaveRoom(this, false);
             }
 
 

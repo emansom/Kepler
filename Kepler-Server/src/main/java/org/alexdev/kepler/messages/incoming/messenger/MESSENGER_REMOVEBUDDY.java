@@ -7,9 +7,11 @@ import org.alexdev.kepler.messages.outgoing.messenger.REMOVE_FRIEND;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.sql.SQLException;
+
 public class MESSENGER_REMOVEBUDDY implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) {
+    public void handle(Player player, NettyRequest reader) throws SQLException {
         reader.readInt();
         int userId = reader.readInt();
 

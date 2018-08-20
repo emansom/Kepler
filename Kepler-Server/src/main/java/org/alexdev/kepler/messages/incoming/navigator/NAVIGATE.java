@@ -28,7 +28,7 @@ public class NAVIGATE implements MessageEvent {
             return;
         }
 
-        if (category.getMinimumRoleAccess() > player.getDetails().getRank()) {
+        if (category.getMinimumRoleAccess().getRankId() > player.getDetails().getRank().getRankId()) {
             return;
         }
 
@@ -71,7 +71,7 @@ public class NAVIGATE implements MessageEvent {
         }
 
         RoomManager.getInstance().sortRooms(rooms);
-        player.send(new NAVNODEINFO(player, category, rooms, hideFull, subCategories, categoryCurrentVisitors, categoryMaxVisitors, player.getDetails().getRank()));
+        player.send(new NAVNODEINFO(player, category, rooms, hideFull, subCategories, categoryCurrentVisitors, categoryMaxVisitors, player.getDetails().getRank().getRankId()));
 
     }
 }

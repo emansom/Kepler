@@ -59,26 +59,21 @@ public class Pathfinder {
         Item fromItem = fromTile.getHighestItem();
         Item toItem = toTile.getHighestItem();
 
-        if (oldHeight - 4 >= newHeight) {
-            return fromItem != null && fromItem.hasBehaviour(ItemBehaviour.TELEPORTER);
+        if (oldHeight - 3 >= newHeight) {
+            return fromItem != null && (fromItem.hasBehaviour(ItemBehaviour.TELEPORTER)
+                    || fromItem.getDefinition().getSprite().equals("poolEnter")
+                    || fromItem.getDefinition().getSprite().equals("poolExit"));
         }
 
         if (oldHeight + 1.5 <= newHeight) {
-            return toItem != null && toItem.hasBehaviour(ItemBehaviour.TELEPORTER);
+            return toItem != null && (toItem.hasBehaviour(ItemBehaviour.TELEPORTER)
+                    || toItem.getDefinition().getSprite().equals("poolEnter")
+                    || toItem.getDefinition().getSprite().equals("poolExit"));
         }
 
         // Only check these below if the user is in a pool room.
-        if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_")) {
-            // Let people to walk to the next tile if they were on a previous tile in the diving deck
-            if (fromItem != null && toItem != null) {
-                if (entity.getRoomUser().getRoom().getModel().getName().equals("pool_b")) {
-                    if (fromItem.getDefinition().getSprite().equals("queue_tile2") &&
-                            toItem.getDefinition().getSprite().equals("queue_tile2")) {
-                        return true;
-                    }
-                }
-            }
-
+        if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_") ||
+            entity.getRoomUser().getRoom().getModel().getName().equals("md_a")) {
             if (toItem != null) {
                 // Check if they have swimmers before trying to enter pool
                 if (toItem.getDefinition().getSprite().equals("poolEnter") ||
@@ -98,6 +93,15 @@ public class Pathfinder {
                     return false;
                 }
 
+                // Don't allow users to cut people in queue, force them to garound
+                if (toItem.getDefinition().getSprite().equals("queue_tile2")) {
+                    RoomTile tile = room.getMapping().getTile(entity.getRoomUser().getGoal());
+
+                    if (tile.getHighestItem() == null || !tile.getHighestItem().getDefinition().getSprite().equals("queue_tile2")) {
+                        return false;
+                    }
+                }
+
                 // Don't allow people to enter the booth if it's closed, or don't allow
                 // if they attempt to use the pool lift without swimmers
                 if (toItem.getDefinition().getSprite().equals("poolBooth") ||
@@ -107,18 +111,6 @@ public class Pathfinder {
                         return false;
                     } else {
                         return !toItem.getDefinition().getSprite().equals("poolLift") || entity.getDetails().getPoolFigure().length() > 0;
-                    }
-                }
-
-                // Don't allow people to enter the queue from any coordinate, and don't allow
-                // if they don't have a ticket or have swimmers.
-                if (entity.getRoomUser().getRoom().getModel().getName().equals("pool_b") &&
-                    toItem.getDefinition().getSprite().equals("queue_tile2")) {
-
-                    if (toItem.getPosition().getX() == 21 && toItem.getPosition().getY() == 9) {
-                        return entity.getDetails().getTickets() > 0 && entity.getDetails().getPoolFigure().length() > 0;
-                    } else {
-                        return false;
                     }
                 }
             }

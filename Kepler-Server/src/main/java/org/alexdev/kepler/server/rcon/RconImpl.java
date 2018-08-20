@@ -77,7 +77,7 @@ public class RconImpl extends RconImplBase {
         Player user = PlayerManager.getInstance().getPlayerById(request.getUserId());
 
         if (user != null) {
-            user.refreshAppearance();
+            user.getRoomUser().refreshAppearance();
         }
 
         Response reply = Response.newBuilder().setOk(true).build();

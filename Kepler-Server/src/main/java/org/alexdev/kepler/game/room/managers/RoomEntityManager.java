@@ -112,7 +112,7 @@ public class RoomEntityManager {
             RoomManager.getInstance().addRoom(this.room);
         }
 
-        entity.getRoomUser().getTimerManager().resetRoomTimer();
+        entity.getRoomUser().reset();
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.generateUniqueId());
 
@@ -130,10 +130,17 @@ public class RoomEntityManager {
         }
 
         entity.getRoomUser().setPosition(entryPosition);
-        entity.getRoomUser().setAuthenticateId(-1);
 
-        if (entity.getRoomUser().getAuthenticateTelporterId() != -1) {
-            Item teleporter = ItemDao.getItem(entity.getRoomUser().getAuthenticateTelporterId());
+        // From this point onwards we send packets for the user to enter
+        if (entity.getType() != EntityType.PLAYER) {
+            return;
+        }
+
+        Player player = (Player) entity;
+        player.getRoomUser().setAuthenticateId(-1);
+
+        if (player.getRoomUser().getAuthenticateTelporterId() != -1) {
+            Item teleporter = ItemDao.getItem(player.getRoomUser().getAuthenticateTelporterId());
 
             if (teleporter != null) {
                 Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
@@ -146,20 +153,13 @@ public class RoomEntityManager {
                             entity,
                             this.room).run();
 
-                    entity.getRoomUser().setWalkingAllowed(true);
+                    player.getRoomUser().setWalkingAllowed(true);
                     entity.getRoomUser().setPosition(entryPosition);
                 }
             }
 
-            entity.getRoomUser().setAuthenticateTelporterId(-1);
+            player.getRoomUser().setAuthenticateTelporterId(-1);
         }
-
-        // From this point onwards we send packets for the user to enter
-        if (entity.getType() != EntityType.PLAYER) {
-            return;
-        }
-
-        Player player = (Player) entity;
 
         player.send(new ROOM_URL());
         player.send(new ROOM_READY(this.room.getId(), this.room.getModel().getName()));
@@ -224,6 +224,14 @@ public class RoomEntityManager {
         if (entity.getRoomUser().getCurrentItem() != null) {
             if (entity.getRoomUser().getCurrentItem().getItemTrigger() != null) {
                 entity.getRoomUser().getCurrentItem().getItemTrigger().onEntityLeave(entity, entity.getRoomUser(), entity.getRoomUser().getCurrentItem());
+            }
+        }
+
+        if (entity.getType() == EntityType.PLAYER) {
+            Player player = (Player) entity;
+
+            if (this.room.getModel().getModelTrigger() != null) {
+                this.room.getModel().getModelTrigger().onRoomLeave(player, this.room);
             }
         }
 

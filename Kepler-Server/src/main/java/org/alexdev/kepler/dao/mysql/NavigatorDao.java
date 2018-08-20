@@ -2,6 +2,7 @@ package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
+import org.alexdev.kepler.game.player.PlayerRank;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.util.DateUtil;
 
@@ -23,32 +24,32 @@ public class NavigatorDao {
     public static HashMap<Integer, NavigatorCategory> getCategories() {
         HashMap<Integer, NavigatorCategory> categories = new HashMap<>();
 
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet row = null;
 
         try {
-            sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM rooms_categories ORDER BY order_id ASC ", sqlConnection);
-            resultSet = preparedStatement.executeQuery();
+            conn = Storage.getStorage().getConnection();
+            stmt = Storage.getStorage().prepare("SELECT * FROM rooms_categories ORDER BY order_id ASC ", conn);
+            row = stmt.executeQuery();
 
-            //public NavigatorCategory(int id, String name, boolean publicSpaces, boolean allowTrading, int minimumRoleAccess, int minimumRoleSetFlat) {
-            while (resultSet.next()) {
+            while (row.next()) {
                 NavigatorCategory category = new NavigatorCategory(
-                        resultSet.getInt("id"), resultSet.getInt("parent_id"), resultSet.getString("name"),
-                        resultSet.getBoolean("public_spaces"), resultSet.getBoolean("allow_trading"),
-                        resultSet.getInt("minrole_access"), resultSet.getInt("minrole_setflatcat"), resultSet.getBoolean("isnode")
+                        row.getInt("id"), row.getInt("parent_id"), row.getString("name"),
+                        row.getBoolean("public_spaces"), row.getBoolean("allow_trading"),
+                        PlayerRank.getRankForId(row.getInt("minrole_access")),
+                        PlayerRank.getRankForId(row.getInt("minrole_setflatcat")),
+                        row.getBoolean("isnode")
                 );
 
                 categories.put(category.getId(), category);
             }
-
         } catch (Exception e) {
             Storage.logError(e);
         } finally {
-            Storage.closeSilently(resultSet);
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
+            Storage.closeSilently(row);
+            Storage.closeSilently(stmt);
+            Storage.closeSilently(conn);
         }
 
         return categories;
@@ -57,7 +58,7 @@ public class NavigatorDao {
     /**
      * Get the list of recent rooms from database set by limit and category id.
      *
-     * @param limit the maximum amount of usrs
+     * @param limit      the maximum amount of usrs
      * @param categoryId the rooms to find under this category id
      * @return the list of recent rooms
      */
@@ -96,11 +97,11 @@ public class NavigatorDao {
     public static int createRoom(int ownerId, String roomName, String roomModel, boolean roomShowName, int accessType) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
 
         int roomId = 0;
 
         try {
-
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("INSERT INTO rooms (owner_id, name, description, model, showname, password, accesstype) VALUES (?,?,?,?,?, '', ?)", sqlConnection);
             preparedStatement.setInt(1, ownerId);
@@ -110,17 +111,16 @@ public class NavigatorDao {
             preparedStatement.setBoolean(5, roomShowName);
             preparedStatement.setInt(6, accessType);
             preparedStatement.executeUpdate();
+            resultSet = preparedStatement.getGeneratedKeys();
 
-            ResultSet row = preparedStatement.getGeneratedKeys();
-
-            if (row != null && row.next()) {
-                roomId = row.getInt(1);
+            if (resultSet.next()) {
+                roomId = resultSet.getInt(1);
             }
-
         } catch (SQLException e) {
             Storage.logError(e);
             throw e;
         } finally {
+            Storage.closeSilently(resultSet);
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }

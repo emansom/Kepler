@@ -1,6 +1,10 @@
 package org.alexdev.kepler.game.room.tasks;
 
+import gherkin.lexer.Pl;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
@@ -40,11 +44,13 @@ public class StatusTask implements Runnable {
     private void processEntity(Entity entity) {
         List<String> toRemove = new ArrayList<>();
 
-        this.processHeadRotation(entity);
-        this.processChatBubble(entity);
+        if (entity.getType() == EntityType.PLAYER) {
+            Player player = (Player) entity;
 
-        // Use walk to next tile if on pool queue
-        PoolHandler.checkPoolQueue(entity);
+            processHeadRotation(player);
+            processChatBubble(player);
+            processPoolQueue(player);
+        }
 
         for (var kvp : entity.getRoomUser().getStatuses().entrySet()) {
             String key = kvp.getKey();
@@ -87,24 +93,61 @@ public class StatusTask implements Runnable {
         }
     }
 
-    private void processChatBubble(Entity entity) {
-        if (entity.getRoomUser().getTimerManager().getChatBubbleTimer() != -1 &&
-                DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getTimerManager().getChatBubbleTimer()) {
+    /**
+     * Make the user walk to the next tile on a pool lido queue, if they're in the diving deck and
+     * they have tickets.
+     *
+     * @param player the player to force walking
+     */
+    public static void processPoolQueue(Player player) {
+        if (player.getDetails().getTickets() == 0 || player.getDetails().getPoolFigure().isEmpty()) {
+            return;
+        }
 
-            entity.getRoomUser().setTyping(false);
-            entity.getRoomUser().getTimerManager().stopChatBubbleTimer();
-            entity.getRoomUser().getRoom().send(new TYPING_STATUS(entity.getRoomUser().getInstanceId(), false));
+        if (player.getRoomUser().getRoom() != null && !player.getRoomUser().getRoom().getModel().getName().equals("pool_b")) {
+            return;
+        }
+
+        if (player.getRoomUser().isWalking()) {
+            return;
+        }
+
+        if (player.getRoomUser().getCurrentItem() != null) {
+            if (player.getRoomUser().getCurrentItem().getDefinition().getSprite().equals("queue_tile2")) {
+                Position front = player.getRoomUser().getCurrentItem().getPosition().getSquareInFront();
+                player.getRoomUser().walkTo(front.getX(), front.getY());
+            }
+        }
+    }
+
+    /**
+     * Check the chat bubble timer expiry.
+     *
+     * @param player the player to check for
+     */
+    public static void processChatBubble(Player player) {
+        if (player.getRoomUser().getTimerManager().getChatBubbleTimer() != -1 &&
+                DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getChatBubbleTimer()) {
+
+            player.getRoomUser().setTyping(false);
+            player.getRoomUser().getTimerManager().stopChatBubbleTimer();
+            player.getRoomUser().getRoom().send(new TYPING_STATUS(player.getRoomUser().getInstanceId(), false));
         }
     }
 
 
-    private void processHeadRotation(Entity entity) {
-        if (entity.getRoomUser().getTimerManager().getLookTimer() != -1 &&
-                DateUtil.getCurrentTimeSeconds() > entity.getRoomUser().getTimerManager().getLookTimer()) {
+    /**
+     * Check head rotation expiry.
+     * 
+     * @param player the player to check for
+     */
+    public static void processHeadRotation(Player player) {
+        if (player.getRoomUser().getTimerManager().getLookTimer() != -1 &&
+                DateUtil.getCurrentTimeSeconds() > player.getRoomUser().getTimerManager().getLookTimer()) {
 
-            entity.getRoomUser().getTimerManager().stopLookTimer();
-            entity.getRoomUser().getPosition().setHeadRotation(entity.getRoomUser().getPosition().getBodyRotation());
-            entity.getRoomUser().setNeedsUpdate(true);
+            player.getRoomUser().getTimerManager().stopLookTimer();
+            player.getRoomUser().getPosition().setHeadRotation(player.getRoomUser().getPosition().getBodyRotation());
+            player.getRoomUser().setNeedsUpdate(true);
         }
     }
 }

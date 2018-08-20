@@ -4,6 +4,7 @@ import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.catalogue.CatalogueItem;
 import org.alexdev.kepler.game.catalogue.CataloguePackage;
 import org.alexdev.kepler.game.catalogue.CataloguePage;
+import org.alexdev.kepler.game.player.PlayerRank;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -21,20 +22,20 @@ public class CatalogueDao {
     public static List<CataloguePage> getPages() {
         List<CataloguePage> pages = new ArrayList<>();
 
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet row = null;
 
         try {
-            sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM catalogue_pages ORDER BY order_id ASC", sqlConnection);
-            resultSet = preparedStatement.executeQuery();
+            conn = Storage.getStorage().getConnection();
+            stmt = Storage.getStorage().prepare("SELECT * FROM catalogue_pages ORDER BY order_id ASC", conn);
+            row = stmt.executeQuery();
 
-            while (resultSet.next()) {
-                CataloguePage page = new CataloguePage(resultSet.getInt("id"), resultSet.getInt("min_role"), resultSet.getBoolean("index_visible"),
-                        resultSet.getString("name_index"), resultSet.getString("link_list"), resultSet.getString("name"), resultSet.getString("layout"),
-                        resultSet.getString("image_headline"), resultSet.getString("image_teasers"), resultSet.getString("body"),
-                        resultSet.getString("label_pick"), resultSet.getString("label_extra_s"), resultSet.getString("label_extra_t"));
+            while (row.next()) {
+                CataloguePage page = new CataloguePage(row.getInt("id"), PlayerRank.getRankForId(row.getInt("min_role")), row.getBoolean("index_visible"),
+                        row.getString("name_index"), row.getString("link_list"), row.getString("name"), row.getString("layout"),
+                        row.getString("image_headline"), row.getString("image_teasers"), row.getString("body"),
+                        row.getString("label_pick"), row.getString("label_extra_s"), row.getString("label_extra_t"));
 
                 pages.add(page);
             }
@@ -42,9 +43,9 @@ public class CatalogueDao {
         } catch (Exception e) {
             Storage.logError(e);
         } finally {
-            Storage.closeSilently(resultSet);
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
+            Storage.closeSilently(row);
+            Storage.closeSilently(stmt);
+            Storage.closeSilently(conn);
         }
 
         return pages;
@@ -120,5 +121,27 @@ public class CatalogueDao {
         }
 
         return packages;
+    }
+
+    /**
+     * Save catalogue item price.
+     */
+    public static void setPrice(String saleCode, int price) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("UPDATE catalogue_items SET price = ? WHERE sale_code = ?", sqlConnection);
+            preparedStatement.setInt(1, price);
+            preparedStatement.setString(2, saleCode);
+            preparedStatement.execute();
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
     }
 }

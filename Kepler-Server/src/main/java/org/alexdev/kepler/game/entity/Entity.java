@@ -1,8 +1,8 @@
 package org.alexdev.kepler.game.entity;
 
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.PlayerDetails;
-import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.RoomUser;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
 
 public abstract class Entity {
 
@@ -12,7 +12,7 @@ public abstract class Entity {
      * @param permission the permission
      * @return true, if successful
      */
-    public abstract boolean hasFuse(String permission);
+    public abstract boolean hasFuse(Fuseright permission);
     
     /**
      * Gets the details.
@@ -35,7 +35,7 @@ public abstract class Entity {
      *
      * @return the room user
      */
-    public abstract RoomUser getRoomUser();
+    public abstract RoomEntity getRoomUser();
     
     /**
      * Gets the type.

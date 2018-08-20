@@ -5,6 +5,7 @@ import io.netty.util.ResourceLeakDetector;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.catalogue.CatalogueManager;
+import org.alexdev.kepler.game.catalogue.RareManager;
 import org.alexdev.kepler.game.commands.CommandManager;
 import org.alexdev.kepler.game.item.ItemManager;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
@@ -84,6 +85,7 @@ public class Kepler {
             WalkwaysManager.getInstance();
             ItemManager.getInstance();
             CatalogueManager.getInstance();
+            RareManager.getInstance();
             RoomModelManager.getInstance();
             RoomManager.getInstance();
             PlayerManager.getInstance();
@@ -105,9 +107,9 @@ public class Kepler {
     }
 
     private static void setupServer() throws UnknownHostException {
-        String gameBind = ServerConfiguration.getString("bind");
+        String serverIP = ServerConfiguration.getString("bind");
 
-        if (gameBind.length() == 0) {
+        if (serverIP.length() == 0) {
             log.error("Game server bind address is not provided");
             return;
         }
@@ -118,8 +120,6 @@ public class Kepler {
             log.error("Game server port not provided");
             return;
         }
-
-        serverIP = InetAddress.getByName(gameBind).getHostAddress();
 
         server = new NettyServer(serverIP, serverPort);
         server.createSocket();
@@ -142,10 +142,7 @@ public class Kepler {
             return;
         }
 
-        // getByName parses IPv6, IPv4 and DNS all in one go
-        rconIP = InetAddress.getByName(rconBind).getHostAddress();
-
-        rcon = new RconServer(rconIP, rconPort);
+        rcon = new RconServer(rconBind, rconPort);
         rcon.listen();
     }
 
@@ -164,9 +161,7 @@ public class Kepler {
             return;
         }
 
-        musServerIP = InetAddress.getByName(musBind).getHostAddress();
-
-        musServer = new MusServer(musServerIP, musServerPort);
+        musServer = new MusServer(musBind, musServerPort);
         musServer.createSocket();
         musServer.bind();
     }

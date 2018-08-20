@@ -1,10 +1,10 @@
-package org.alexdev.kepler.game.item.triggers.generic;
+package org.alexdev.kepler.game.item.triggers;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.ItemTrigger;
+import org.alexdev.kepler.game.room.entities.RoomEntity;
+import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
-import org.alexdev.kepler.game.room.RoomUser;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.util.StringUtil;
@@ -12,17 +12,13 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BedTrigger implements ItemTrigger {
-    @Override
-    public void onEntityStep(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-
-    }
+public class BedTrigger extends GenericTrigger {
 
     @Override
-    public void onEntityStop(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
-        if (!this.isValidPillowTile(item, roomUser.getPosition())) {
+    public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
+        if (!this.isValidPillowTile(item, roomEntity.getPosition())) {
             for (Position tile : this.getValidPillowTiles(item)) {
-                if (!RoomTile.isValidTile(roomUser.getRoom(), entity, tile)) {
+                if (!RoomTile.isValidTile(roomEntity.getRoom(), entity, tile)) {
                     continue;
                 }
 
@@ -37,21 +33,21 @@ public class BedTrigger implements ItemTrigger {
             }
         }
 
-        if (this.isValidPillowTile(item, roomUser.getPosition())) {
-            roomUser.removeStatus(StatusType.CARRY_ITEM);
-            roomUser.removeStatus(StatusType.CARRY_FOOD);
-            roomUser.removeStatus(StatusType.CARRY_DRINK);
-            roomUser.removeStatus(StatusType.DANCE);
+        if (this.isValidPillowTile(item, roomEntity.getPosition())) {
+            roomEntity.removeStatus(StatusType.CARRY_ITEM);
+            roomEntity.removeStatus(StatusType.CARRY_FOOD);
+            roomEntity.removeStatus(StatusType.CARRY_DRINK);
+            roomEntity.removeStatus(StatusType.DANCE);
 
-            roomUser.getPosition().setRotation(item.getPosition().getRotation());
-            roomUser.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
+            roomEntity.getPosition().setRotation(item.getPosition().getRotation());
+            roomEntity.setStatus(StatusType.LAY, StringUtil.format(item.getDefinition().getTopHeight()));
         }
 
-        roomUser.setNeedsUpdate(true);
+        roomEntity.setNeedsUpdate(true);
     }
 
     @Override
-    public void onEntityLeave(Entity entity, RoomUser roomUser, Item item, Object... customArgs) {
+    public void onEntityLeave(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
 
     }
 

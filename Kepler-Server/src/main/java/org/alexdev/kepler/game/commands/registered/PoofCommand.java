@@ -3,12 +3,13 @@ package org.alexdev.kepler.game.commands.registered;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
 
 public class PoofCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add("default");
+        this.permissions.add(Fuseright.DEFAULT);
     }
 
     @Override
@@ -23,7 +24,7 @@ public class PoofCommand extends Command {
             return;
         }
 
-        player.refreshAppearance();
+        player.getRoomUser().refreshAppearance();
     }
 
     @Override

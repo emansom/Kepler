@@ -20,7 +20,7 @@ public class GETUSERFLATCATS implements MessageEvent {
                 continue;
             }
 
-            if (category.getMinimumRoleAccess() > player.getDetails().getRank()) {
+            if (category.getMinimumRoleAccess().getRankId() > player.getDetails().getRank().getRankId()) {
                 continue;
             }
 

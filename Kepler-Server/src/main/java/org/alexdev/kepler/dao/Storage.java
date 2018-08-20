@@ -112,7 +112,7 @@ public class Storage {
      *
      * @param query the query
      */
-    public void execute(String query) {
+    public void execute(String query) throws SQLException {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
@@ -122,8 +122,9 @@ public class Storage {
             preparedStatement = this.prepare(query, sqlConnection);
             preparedStatement.execute();
 
-        } catch (Exception e) {
-            Storage.logError(e);
+        } catch (Exception ex) {
+            Storage.logError(ex);
+            throw ex;
         } finally {
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);

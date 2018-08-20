@@ -3,12 +3,12 @@ package org.alexdev.kepler.game.games.gamehalls;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
-import org.alexdev.kepler.game.item.triggers.GameTrigger;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.game.games.triggers.GameTrigger;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
@@ -165,16 +165,15 @@ public abstract class GamehallGame {
             }
 
             Entity entity = roomTile.getEntities().get(0);
+            Player player = (Player) entity;
 
             if (entity.getType() != EntityType.PLAYER) {
                 continue;
             }
 
-            if (entity.getRoomUser().getCurrentGameId() != null) {
+            if (player.getRoomUser().getCurrentGameId() != null) {
                 continue;
             }
-
-            Player player = (Player) entity;
 
             if (this.players.contains(player)) {
                 continue;
