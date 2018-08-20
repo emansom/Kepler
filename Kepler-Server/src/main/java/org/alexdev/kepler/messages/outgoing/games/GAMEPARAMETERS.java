@@ -14,6 +14,52 @@ public class GAMEPARAMETERS extends MessageComposer {
                 new GameParameter("allowedPowerups", true,"1,2,3,4,5,6,7,8"),
                 new GameParameter("name", true, "")
         };
+
+        /*
+
+        For snowstorm:
+
+        on setNumberOfTeams(me, tValue)
+          tOldElem = "gs_radio_" & pGameParameters.getAt("numTeams") & "teams"
+          tNewElem = "gs_radio_" & tValue & "teams"
+          pGameParameters.setAt("numTeams", tValue)
+          pRenderObj.updateRadioButton("", [tOldElem])
+          pRenderObj.updateRadioButton(tNewElem, [])
+          return(1)
+          exit
+        end
+
+        on setGameLength(me, tValue)
+          tOldElem = "gs_radio_gamelength_" & pGameParameters.getAt("gameLengthChoice")
+          tNewElem = "gs_radio_gamelength_" & tValue
+          pGameParameters.setAt("gameLengthChoice", tValue)
+          pRenderObj.updateRadioButton("", [tOldElem])
+          pRenderObj.updateRadioButton(tNewElem, [])
+          return(1)
+          exit
+        end
+
+        on setFieldType(me, tValue)
+          pGameParameters.setAt("fieldType", integer(tValue))
+          tWndObj = getWindow(pMainWindowId)
+          tDropDown = tWndObj.getElement("gs_dropmenu_gamefield")
+          if not ilk(tDropDown, #instance) then
+            return(error(me, "Unable to retrieve dropdown:" && tDropDown, #setFieldType))
+          end if
+          tFieldTxtItems = []
+          tFieldKeyItems = []
+          i = 1
+          repeat while i <= 7
+            tFieldTxtItems.setAt(i, getText("sw_fieldname_" & i))
+            tFieldKeyItems.setAt(i, string(i))
+            i = 1 + i
+          end repeat
+          tDropDown.updateData(tFieldTxtItems, tFieldKeyItems, void(), tValue)
+          return(1)
+          exit
+end
+
+         */
     }
 
     @Override
