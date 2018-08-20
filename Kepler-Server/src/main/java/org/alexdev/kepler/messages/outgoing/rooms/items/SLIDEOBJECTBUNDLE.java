@@ -34,9 +34,9 @@ public class SLIDEOBJECTBUNDLE extends MessageComposer {
         }
 
         response.writeInt(this.roller.getId());
+        response.writeInt(this.rollingEntity != null ? 2 : 0);
 
         if (this.rollingEntity != null) {
-            response.writeInt(2);
             response.writeInt(this.rollingEntity.getRoomUser().getInstanceId());
             response.writeString(StringUtil.format(this.rollingEntity.getRoomUser().getRollingData().getFromPosition().getZ()));
             response.writeString(StringUtil.format(this.rollingEntity.getRoomUser().getRollingData().getDisplayHeight()));

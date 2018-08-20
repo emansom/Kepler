@@ -115,10 +115,18 @@ public abstract class RoomEntity {
         }
 
         if (this.nextPosition != null) {
+            Position oldPosition = this.position.copy();
+
             this.position.setX(this.nextPosition.getX());
             this.position.setY(this.nextPosition.getY());
             this.updateNewHeight(this.position);
-            this.needsUpdate = true;
+
+            if (this.getCurrentItem() != null) {
+                if (this.getCurrentItem().getItemTrigger() != null) {
+                    this.getCurrentItem().getItemTrigger().onEntityStep(entity, this, this.getCurrentItem(), oldPosition, false);
+                }
+            }
+
         }
 
         RoomTile tile = this.room.getMapping().getTile(X, Y);

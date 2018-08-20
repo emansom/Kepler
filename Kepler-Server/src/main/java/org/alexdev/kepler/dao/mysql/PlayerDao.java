@@ -291,12 +291,11 @@ public class PlayerDao {
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("UPDATE users SET figure = ?, pool_figure = ?, sex = ?, rank = ? WHERE id = ?", sqlConnection);
+            preparedStatement = Storage.getStorage().prepare("UPDATE users SET figure = ?, pool_figure = ?, sex = ? WHERE id = ?", sqlConnection);
             preparedStatement.setString(1, details.getFigure());
             preparedStatement.setString(2, details.getPoolFigure());
             preparedStatement.setString(3, Character.toString(details.getSex()));
-            preparedStatement.setString(4, details.getRank().getName());
-            preparedStatement.setInt(5, details.getId());
+            preparedStatement.setInt(4, details.getId());
             preparedStatement.execute();
 
         } catch (Exception e) {
@@ -505,7 +504,7 @@ public class PlayerDao {
         details.fill(row.getInt("id"), row.getString("username"), row.getString("figure"),
                 row.getString("pool_figure"), row.getInt("credits"), row.getString("motto"),
                 row.getString("console_motto"), row.getString("sex"), row.getInt("tickets"),
-                row.getInt("film"), PlayerRank.getRankForId(row.getInt("rank")), row.getLong("last_online"),
+                row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
                 row.getBoolean("badge_active"), row.getBoolean("allow_stalking"),
                 row.getBoolean("sound_enabled"), row.getBoolean("tutorial_finished"));

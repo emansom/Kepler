@@ -146,15 +146,11 @@ public class RoomEntityManager {
                 Item linkedTeleporter = this.room.getItemManager().getById(teleporter.getTeleporterId());
 
                 if (linkedTeleporter != null) {
-                    entryPosition = linkedTeleporter.getPosition().copy();
-
-                    new TeleporterTask(
-                            linkedTeleporter,
-                            entity,
-                            this.room).run();
+                    TeleporterTask teleporterTask = new TeleporterTask(linkedTeleporter, entity, this.room);
+                    teleporterTask.run();
 
                     player.getRoomUser().setWalkingAllowed(true);
-                    entity.getRoomUser().setPosition(entryPosition);
+                    entity.getRoomUser().setPosition(linkedTeleporter.getPosition().copy());
                 }
             }
 
@@ -173,9 +169,7 @@ public class RoomEntityManager {
         }
 
         // Don't let the room owner vote on it's own room
-        boolean voted = this.room.getData().getOwnerId() == player.getDetails().getId()
-                || RoomDao.hasVoted(player.getDetails(), this.room.getData());
-
+        boolean voted = this.room.isOwner(player.getEntityId()) || RoomDao.hasVoted(player.getDetails(), this.room.getData());
         player.send(new UPDATE_VOTES(voted, this.room.getData().getRating()));
 
         // Let friends know I entered this room by updating their console :)

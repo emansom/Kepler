@@ -47,7 +47,7 @@ public enum Fuseright {
     USE_CLUB_OUTFITS_DEFAULT("fuse_use_club_outfits_default", true),
     USE_CLUB_BADGE("fuse_use_club_badge", true),
     USE_CLUB_DANCE("fuse_use_club_dance", true),
-    USER_LIST_COMMAND("fuse_habbo _chooser", true),
+    USER_LIST_COMMAND("fuse_habbo_chooser", true),
     FURNI_LIST_COMMAND("fuse_furni_chooser", true),
     EXTENDED_BUDDYLIST("fuse_extended_buddylist", true),
     ROOM_QUEUE_CLUB("fuse_room_queue_club", true),

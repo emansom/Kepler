@@ -34,6 +34,7 @@ public class RoomPlayer extends RoomEntity {
     public RoomPlayer(Player player) {
         super(player);
         this.player = player;
+        this.authenticateId = -1;
         this.authenticateTelporterId = -1;
         this.tradeItems = new ArrayList<>();
     }
@@ -43,8 +44,6 @@ public class RoomPlayer extends RoomEntity {
         super.reset();
         this.isTyping = false;
         this.isDiving = false;
-        this.authenticateId = -1;
-
         RoomTradeManager.close(this);
     }
 

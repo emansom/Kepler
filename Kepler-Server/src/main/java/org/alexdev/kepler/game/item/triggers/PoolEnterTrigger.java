@@ -21,6 +21,11 @@ public class PoolEnterTrigger extends GenericTrigger {
             return;
         }
 
+        // Don't handle step event from RoomUser when changing paths
+        if (customArgs.length > 0) {
+            return;
+        }
+
         Position warp = null;
         Position goal = null;
 

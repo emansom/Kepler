@@ -54,7 +54,7 @@ public class RoomMapping {
     /**
      * Regenerate the item collision map only.
      */
-    public void regenerateItemCollision() {
+    private void regenerateItemCollision() {
         try {
             for (RoomTile tile : this.tileList) {
                 tile.setHighestItem(null);
@@ -135,7 +135,7 @@ public class RoomMapping {
     /**
      * Regenerate the entity collision map only.
      */
-    public void regenerateEntityCollision() {
+    private void regenerateEntityCollision() {
         for (RoomTile tile : this.tileList) {
             tile.getEntities().clear();
         }
@@ -171,7 +171,7 @@ public class RoomMapping {
             }
         } else {
             this.handleItemAdjustment(item, false);
-            this.regenerateItemCollision();
+            this.regenerateCollisionMap();
 
             this.room.send(new PLACE_FLOORITEM(item));
         }
@@ -197,7 +197,7 @@ public class RoomMapping {
 
         if (!item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.handleItemAdjustment(item, isRotation);
-            this.regenerateItemCollision();
+            this.regenerateCollisionMap();
 
             this.room.send(new MOVE_FLOORITEM(item));
         }
@@ -221,7 +221,7 @@ public class RoomMapping {
         if (item.hasBehaviour(ItemBehaviour.WALL_ITEM)) {
             this.room.send(new REMOVE_WALLITEM(item));
         } else {
-            this.regenerateItemCollision();
+            this.regenerateCollisionMap();
             this.room.send(new REMOVE_FLOORITEM(item));
         }
 

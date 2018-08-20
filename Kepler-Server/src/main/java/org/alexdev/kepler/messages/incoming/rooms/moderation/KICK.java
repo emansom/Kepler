@@ -12,24 +12,37 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class KICK implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        Player target = PlayerManager.getInstance().getPlayerByName(reader.contents());
+        String playerName = reader.contents();
+
+        Player target = PlayerManager.getInstance().getPlayerByName(playerName);
 
         if (target == null) {
+            if (player.hasFuse(Fuseright.KICK)) {
+                player.send(new ALERT("Could not kick " + playerName + " because the player instance was not found"));
+            }
             return;
         }
 
+        Room room = player.getRoomUser().getRoom();
+
         if (target.getEntityId() == player.getEntityId()) {
+            if (player.hasFuse(Fuseright.KICK)) {
+                player.send(new ALERT("Could not kick " + playerName + " because otherwise you'd be kicking yourself"));
+            }
             return; // Can't kick yourself!
         }
 
-        if (target.hasFuse(Fuseright.KICK)) {
+        if (target.hasFuse(Fuseright.KICK) || room.isOwner(target.getEntityId())) {
             player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
             return;
         }
 
-        if (player.getRoomUser().getRoom().hasRights(player.getDetails().getId()) || player.hasFuse(Fuseright.KICK)) {
-            target.getRoomUser().setBeingKicked(true);
-            target.getRoomUser().kick(false);
+        if (!room.hasRights(player.getEntityId()) && !player.hasFuse(Fuseright.KICK)) {
+            player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
+            return;
         }
+
+        target.getRoomUser().setBeingKicked(true);
+        target.getRoomUser().kick(false);
     }
 }
