@@ -18,18 +18,23 @@ public class KICK implements MessageEvent {
             return;
         }
 
+        Room room = player.getRoomUser().getRoom();
+
         if (target.getEntityId() == player.getEntityId()) {
             return; // Can't kick yourself!
         }
 
-        if (target.hasFuse(Fuseright.KICK)) {
+        if (target.hasFuse(Fuseright.KICK) || room.isOwner(target.getEntityId())) {
             player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
             return;
         }
 
-        if (player.getRoomUser().getRoom().hasRights(player.getDetails().getId()) || player.hasFuse(Fuseright.KICK)) {
-            target.getRoomUser().setBeingKicked(true);
-            target.getRoomUser().kick(false);
+        if (!room.hasRights(player.getEntityId()) && !player.hasFuse(Fuseright.KICK)) {
+            player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
+            return;
         }
+
+        target.getRoomUser().setBeingKicked(true);
+        target.getRoomUser().kick(false);
     }
 }
