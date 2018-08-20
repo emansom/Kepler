@@ -22,6 +22,14 @@ public class NAVIGATE implements MessageEvent {
         boolean hideFull = reader.readInt() == 1;
         int categoryId = reader.readInt();
 
+        if (categoryId >= 1000) { // Public room follow, there should not any categories with an ID of 1000 or over... lol
+            Room room = RoomManager.getInstance().getRoomById(categoryId - 1000);
+
+            if (room != null) {
+                categoryId = room.getCategory().getId();
+            }
+        }
+
         NavigatorCategory category = NavigatorManager.getInstance().getCategoryById(categoryId);
 
         if (category == null) {

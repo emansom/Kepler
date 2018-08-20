@@ -54,6 +54,10 @@ public class FOLLOW_FRIEND implements MessageEvent {
         boolean isPublic = friend.getRoomUser().getRoom().isPublicRoom();
         int roomId = friend.getRoomUser().getRoom().getId();
 
+        if (isPublic) { // Some weird offset shit required...
+            roomId = roomId + 1000;
+        }
+
         player.send(new ROOMFORWARD(isPublic, roomId));
     }
 }
