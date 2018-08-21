@@ -6,9 +6,11 @@ import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.tasks.TeleporterTask;
 import org.alexdev.kepler.game.room.tasks.WalkingAllowedDelay;
 import org.alexdev.kepler.messages.outgoing.rooms.items.BROADCAST_TELEPORTER;
+import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.TELEPORTER_INIT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -37,29 +39,43 @@ public class GETDOORFLAT implements MessageEvent {
             return;
         }
 
-        // If their current item is the teleporters linked them, authenticate them so they can teleport back when double clicking.
-        if (player.getRoomUser().getCurrentItem() != null) {
-            if (player.getRoomUser().getCurrentItem().getId() == item.getId() ||
-                player.getRoomUser().getCurrentItem().getId() == linkedTeleporter.getId()) {
-                player.getRoomUser().setAuthenticateTelporterId(item.getId());
-            }
-        }
-
-        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId()) {
+        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId() && !item.getPosition().equals(player.getRoomUser().getPosition())) {
             return;
         }
 
-        room.send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
+        player.getRoomUser().setAuthenticateTelporterId(item.getId());
+        player.getRoomUser().setWalkingAllowed(false);
 
-        if (linkedTeleporter.getRoomId() != room.getId()) {
-            player.send(new TELEPORTER_INIT(item.getTeleporterId(), linkedTeleporter.getRoomId()));
+        // Kick out user from teleporter if link is broken
+        if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
+            item.setCustomData("TRUE");
+            item.updateStatus();
+
+            player.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
+            player.getRoomUser().setWalkingAllowed(true);
+            return;
+        }
+
+        if (linkedTeleporter.getRoomId() == room.getId()) {
+            room.send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
+
+            // Initial warp to the next teleporter
+            GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+                player.getRoomUser().warp(linkedTeleporter.getPosition().copy(), false);
+                room.send(new BROADCAST_TELEPORTER(linkedTeleporter, player.getDetails().getName(), true));
+            }, 1000, TimeUnit.MILLISECONDS);
+
+            // Walk out of the teleporter
+            GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+                linkedTeleporter.setCustomData("TRUE");
+                linkedTeleporter.updateStatus();
+
+                player.getRoomUser().walkTo(linkedTeleporter.getPosition().getSquareInFront().getX(), linkedTeleporter.getPosition().getSquareInFront().getY());
+                player.getRoomUser().setWalkingAllowed(true);
+            }, 2000, TimeUnit.MILLISECONDS);
+
         } else {
-            GameScheduler.getInstance().getSchedulerService().schedule(new TeleporterTask(
-                    room.getItemManager().getById(item.getTeleporterId()),
-                    player,
-                    room),1000, TimeUnit.MILLISECONDS);
-
-            GameScheduler.getInstance().getSchedulerService().schedule(new WalkingAllowedDelay(player),1500, TimeUnit.MILLISECONDS);
+            room.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
         }
     }
 }

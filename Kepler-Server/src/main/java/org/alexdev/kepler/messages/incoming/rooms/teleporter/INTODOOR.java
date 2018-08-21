@@ -8,39 +8,45 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.apache.commons.lang3.StringUtils;
 
 public class INTODOOR implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        Room room = player.getRoomUser().getRoom();
+        try {
+            Room room = player.getRoomUser().getRoom();
 
-        if (room == null) {
+            if (room == null) {
+                return;
+            }
+
+            String contents = reader.contents();
+
+            if (!StringUtils.isNumeric(contents)) {
+                return;
+            }
+
+            Item item = room.getItemManager().getById(Integer.parseInt(contents));
+
+            if (item == null || !item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+                return;
+            }
+
+            Item linkedTeleporter = ItemDao.getItem(item.getTeleporterId());
+
+            if (linkedTeleporter == null) {
+                return;
+            }
+
+            if (!item.getPosition().getSquareInFront().equals(player.getRoomUser().getPosition())) {
             return;
+            }
+
+            player.getRoomUser().setAuthenticateTelporterId(item.getId());
+            player.getRoomUser().walkTo(item.getPosition().getX(), item.getPosition().getY());
+            player.getRoomUser().setWalkingAllowed(false);
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-
-        int itemId = Integer.parseInt(reader.contents());
-        Item item = room.getItemManager().getById(itemId);
-
-        if (item == null || !item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
-            return;
-        }
-
-//        if (!item.getPosition().getSquareInFront().equals(player.getRoomUser().getPosition())) {
-//            return;
-//        }
-
-        Item linkedTeleporter = ItemDao.getItem(item.getTeleporterId());
-
-        if (linkedTeleporter == null) {
-            return;
-        }
-
-        if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
-            return;
-        }
-
-        player.getRoomUser().setAuthenticateTelporterId(item.getId());
-        player.getRoomUser().walkTo(item.getPosition().getX(), item.getPosition().getY());
-        player.getRoomUser().setWalkingAllowed(false);
     }
 }
