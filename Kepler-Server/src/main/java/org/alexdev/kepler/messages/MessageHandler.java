@@ -113,6 +113,7 @@ public class MessageHandler {
         registerEvent(151, new GETUSERFLATCATS());
         registerEvent(264, new RECOMMENDED_ROOMS());
         registerEvent(17, new SRCHF());
+        registerEvent(154, new GETSPACENODEUSERS());
     }
 
     /**
