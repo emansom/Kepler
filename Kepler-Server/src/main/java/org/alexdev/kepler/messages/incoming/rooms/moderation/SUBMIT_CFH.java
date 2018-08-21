@@ -8,7 +8,10 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class SUBMIT_CFH implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-        // TODO: check if inside room
+        if (player.getRoomUser().getRoom() == null) {
+            return;
+        }
+
         String message = reader.readString();
 
         if (message.length() == 0) {

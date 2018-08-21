@@ -7,6 +7,8 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.items.IDATA;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.StringUtil;
+import org.apache.commons.lang.StringUtils;
 
 public class G_IDATA implements MessageEvent {
     @Override
@@ -14,6 +16,12 @@ public class G_IDATA implements MessageEvent {
         Room room = player.getRoomUser().getRoom();
 
         if (room == null) {
+            return;
+        }
+
+        String contents = reader.contents();
+
+        if (!StringUtils.isNumeric(contents)) {
             return;
         }
 

@@ -16,7 +16,7 @@ public class KICK implements MessageEvent {
 
         Player target = PlayerManager.getInstance().getPlayerByName(playerName);
 
-        if (target == null) {
+        if (target == null || target.getRoomUser().getRoom() == null) {
             return;
         }
 
