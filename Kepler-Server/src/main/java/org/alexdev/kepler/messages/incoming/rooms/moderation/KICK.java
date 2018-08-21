@@ -33,11 +33,13 @@ public class KICK implements MessageEvent {
 
         // Don't allow kicking if they have permissions to kick too
         if (target.hasFuse(Fuseright.KICK)) {
+            player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
             return;
         }
 
         // Don't allow kicking if you don't have room rights and don't have fuse rights
         if (!room.hasRights(player.getDetails().getId()) && !player.hasFuse(Fuseright.KICK)) {
+            player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
             return;
         }
 
