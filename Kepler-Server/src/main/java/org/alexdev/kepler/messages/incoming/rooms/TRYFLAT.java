@@ -78,7 +78,7 @@ public class TRYFLAT implements MessageEvent {
         boolean sentWithRights = false;
 
         for (Player user : room.getEntityManager().getPlayers()) {
-            if (!room.hasRights(user.getEntityId())) {
+            if (!room.hasRights(user.getDetails().getId())) {
                 continue;
             }
 

@@ -410,7 +410,7 @@ public abstract class RoomEntity {
             players = new ArrayList<>();
 
             for (Player player : this.room.getEntityManager().getPlayers()) {
-                if (player.getEntityId() == this.entity.getEntityId()) {
+                if (player.getDetails().getId() == this.entity.getDetails().getId()) {
                     continue;
                 }
 

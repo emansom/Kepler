@@ -32,7 +32,7 @@ public class PickallCommand extends Command {
             return;
         }
 
-        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
+        if (!player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
         
@@ -51,7 +51,7 @@ public class PickallCommand extends Command {
         }
 
         for (Item item : itemsToPickup) {
-            item.setOwnerId(player.getEntityId());
+            item.setOwnerId(player.getDetails().getId());
 
             player.getRoomUser().getRoom().getMapping().removeItem(item);
             player.getInventory().getItems().add(item);

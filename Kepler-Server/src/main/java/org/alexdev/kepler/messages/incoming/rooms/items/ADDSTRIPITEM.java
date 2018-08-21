@@ -36,7 +36,7 @@ public class ADDSTRIPITEM implements MessageEvent {
             return; // The client does not allow picking up post-it's, thus neither will the server
         }
 
-        item.setOwnerId(player.getEntityId());
+        item.setOwnerId(player.getDetails().getId());
         room.getMapping().removeItem(item);
 
         player.getInventory().getItems().add(item);

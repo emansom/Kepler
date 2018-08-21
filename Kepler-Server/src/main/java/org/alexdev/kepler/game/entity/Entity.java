@@ -20,16 +20,7 @@ public abstract class Entity {
      * @return the details
      */
     public abstract PlayerDetails getDetails();
-    
-    /**
-     * Gets the player id
-     * 
-     * @return the id
-     */
-    public int getEntityId() {
-        return this.getDetails().getId();
-    }
-    
+
     /**
      * Gets the room user.
      *

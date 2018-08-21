@@ -17,7 +17,7 @@ public class LETUSERIN implements MessageEvent {
             return;
         }
 
-        if (!room.hasRights(player.getEntityId())) {
+        if (!room.hasRights(player.getDetails().getId())) {
             return;
         }
 

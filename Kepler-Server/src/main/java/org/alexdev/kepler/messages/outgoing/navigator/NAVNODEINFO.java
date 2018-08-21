@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -55,7 +56,7 @@ public class NAVNODEINFO extends MessageComposer {
                     door = Integer.parseInt(data[1]);
                 }
 
-                response.writeInt(room.getId() + 1000);
+                response.writeInt(room.getId() + RoomManager.PUBLIC_ROOM_OFFSET);
                 response.writeInt(1);
                 response.writeString(room.getData().getName());
                 response.writeInt(room.getData().getTotalVisitorsNow());
@@ -71,7 +72,7 @@ public class NAVNODEINFO extends MessageComposer {
                 response.writeInt(room.getId());
                 response.writeString(room.getData().getName());
 
-                if (room.isOwner(this.viewer.getEntityId())|| room.getData().showOwnerName() || this.viewer.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
+                if (room.isOwner(this.viewer.getDetails().getId())|| room.getData().showOwnerName() || this.viewer.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
                     response.writeString(room.getData().getOwnerName());
                 } else {
                     response.writeString("-");

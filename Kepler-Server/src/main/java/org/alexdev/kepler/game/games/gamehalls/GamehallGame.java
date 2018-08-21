@@ -101,7 +101,7 @@ public abstract class GamehallGame {
      * @return the list of opponents
      */
     public List<Player> getOpponents(Player player) {
-        return this.players.stream().filter(p -> p.getEntityId() != player.getEntityId()).collect(Collectors.toList());
+        return this.players.stream().filter(p -> p.getDetails().getId() != player.getDetails().getId()).collect(Collectors.toList());
     }
 
     /**

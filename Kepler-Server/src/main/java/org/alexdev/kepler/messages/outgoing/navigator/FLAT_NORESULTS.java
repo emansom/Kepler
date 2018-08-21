@@ -23,7 +23,7 @@ public class FLAT_NORESULTS extends MessageComposer {
             response.writeDelimeter(room.getId(), (char) 9);
             response.writeDelimeter(room.getData().getName(), (char) 9);
 
-            if (room.isOwner(this.player.getEntityId()) || room.getData().showOwnerName() || this.player.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
+            if (room.isOwner(this.player.getDetails().getId()) || room.getData().showOwnerName() || this.player.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
                 response.writeDelimeter(room.getData().getOwnerName(), (char) 9);
             } else {
                 response.writeDelimeter("-", (char) 9);

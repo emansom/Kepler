@@ -1,5 +1,7 @@
 package org.alexdev.kepler.game.room.models.triggers;
 
+import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
@@ -49,13 +51,13 @@ public class DivingDeckTrigger extends GenericTrigger {
         /**
          * Finds a new player to spectate on the camera.
          */
-        private void spectateNewPlayer() {
+        public void spectateNewPlayer() {
             List<Player> playerList = this.room.getEntityManager().getPlayers();
 
             if (playerList.size() > 1) {
                 Player found = playerList.get(ThreadLocalRandom.current().nextInt(0, playerList.size()));
 
-                if (found.getEntityId() == this.player.getEntityId()) {
+                if (found.getDetails().getId() == this.player.getDetails().getId()) {
                     spectateNewPlayer();
                     return;
                 }
@@ -71,7 +73,7 @@ public class DivingDeckTrigger extends GenericTrigger {
         /**
          * Creates a new camera mode for the camera and sends it to all the users.
          */
-        private void newCameraMode(int mode) {
+        public void newCameraMode(int mode) {
             this.cameraType = mode > 0 ? mode : ThreadLocalRandom.current().nextInt(1, 3);
             this.room.send(new SHOWPROGRAM(new String[]{"cam1", "setcamera", String.valueOf(this.cameraType)}));
         }
@@ -96,7 +98,13 @@ public class DivingDeckTrigger extends GenericTrigger {
     }
 
     @Override
-    public void onRoomEntry(Player player, Room room, Object... customArgs) {
+    public void onRoomEntry(Entity entity, Room room, Object... customArgs) {
+        if (entity.getType() != EntityType.PLAYER) {
+            return;
+        }
+
+        Player player = (Player)entity;
+
         if (room.getTaskManager().hasTask("DivingCamera")) {
             PoolCamera task = (PoolCamera) room.getTaskManager().getTask("DivingCamera");
             player.send(new SHOWPROGRAM(new String[]{"cam1", "targetcamera", String.valueOf(task.getPlayer().getRoomUser().getInstanceId())}));
@@ -112,7 +120,17 @@ public class DivingDeckTrigger extends GenericTrigger {
     }
 
     @Override
-    public void onRoomLeave(Player player, Room room, Object... customArgs)  {
+    public void onRoomLeave(Entity entity, Room room, Object... customArgs)  {
+        if (entity.getType() != EntityType.PLAYER) {
+            return;
+        }
 
+        Player player = (Player)entity;
+
+        DivingDeckTrigger.PoolCamera task = (DivingDeckTrigger.PoolCamera) room.getTaskManager().getTask("DivingCamera");
+
+        if (task.getPlayer() == player) {
+            task.spectateNewPlayer();
+        }
     }
 }
