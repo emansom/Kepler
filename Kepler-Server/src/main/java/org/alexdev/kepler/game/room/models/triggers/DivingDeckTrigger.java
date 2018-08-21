@@ -51,7 +51,7 @@ public class DivingDeckTrigger extends GenericTrigger {
         /**
          * Finds a new player to spectate on the camera.
          */
-        private void spectateNewPlayer() {
+        public void spectateNewPlayer() {
             List<Player> playerList = this.room.getEntityManager().getPlayers();
 
             if (playerList.size() > 1) {
@@ -73,7 +73,7 @@ public class DivingDeckTrigger extends GenericTrigger {
         /**
          * Creates a new camera mode for the camera and sends it to all the users.
          */
-        private void newCameraMode(int mode) {
+        public void newCameraMode(int mode) {
             this.cameraType = mode > 0 ? mode : ThreadLocalRandom.current().nextInt(1, 3);
             this.room.send(new SHOWPROGRAM(new String[]{"cam1", "setcamera", String.valueOf(this.cameraType)}));
         }
@@ -127,5 +127,10 @@ public class DivingDeckTrigger extends GenericTrigger {
 
         Player player = (Player)entity;
 
+        DivingDeckTrigger.PoolCamera task = (DivingDeckTrigger.PoolCamera) room.getTaskManager().getTask("DivingCamera");
+
+        if (task.getPlayer() == player) {
+            task.spectateNewPlayer();
+        }
     }
 }

@@ -36,5 +36,10 @@ public class RooftopRumbleTrigger extends GenericTrigger {
 
         Player player = (Player)entity;
 
+        DivingDeckTrigger.PoolCamera task = (DivingDeckTrigger.PoolCamera) room.getTaskManager().getTask("DivingCamera");
+
+        if (task.getPlayer() == player) {
+            task.spectateNewPlayer();
+        }
     }
 }
