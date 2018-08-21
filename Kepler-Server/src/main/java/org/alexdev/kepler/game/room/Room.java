@@ -69,18 +69,31 @@ public class Room {
     }
 
     /**
-     * Get if the player has rights.
+     * Get if the player has rights, include super users is enabled to true
      *
      * @param userId the user id to check if they have rights
      * @return true, if successful
      */
     public boolean hasRights(int userId) {
+        return hasRights(userId, true);
+    }
+
+    /**
+     * Get if the player has rights.
+     *
+     * @param userId the user id to check if they have rights
+     * @param includeSuperUsers check if the room allows all users rights or not
+     * @return true, if successful
+     */
+    public boolean hasRights(int userId, boolean includeSuperUsers) {
         if (this.isOwner(userId)) {
             return true;
         }
 
-        if (this.roomData.allowSuperUsers()) {
-            return true;
+        if (includeSuperUsers) {
+            if (this.roomData.allowSuperUsers()) {
+                return true;
+            }
         }
 
         if (this.rights.contains(userId)) {

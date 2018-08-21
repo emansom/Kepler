@@ -51,7 +51,7 @@ public class TRYFLAT implements MessageEvent {
         }
 
         if (!player.hasFuse(Fuseright.ENTER_LOCKED_ROOMS) && player.getRoomUser().getAuthenticateId() != roomId) {
-            if (room.getData().getAccessTypeId() == 1 && !room.isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
+            if (room.getData().getAccessTypeId() == 1 && !room.hasRights(player.getDetails().getId(), false) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
 
                 if (rangDoorbell(room, player)) {
                     player.send(new DOORBELL_WAIT());
