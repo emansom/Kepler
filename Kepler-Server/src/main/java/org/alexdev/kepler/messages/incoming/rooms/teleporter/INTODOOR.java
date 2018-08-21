@@ -30,6 +30,11 @@ public class INTODOOR implements MessageEvent {
             return;
         }
 
+        if (player.getRoomUser().getAuthenticateTelporterId() != -1) {
+            return;
+        }
+
+
         Item linkedTeleporter = ItemDao.getItem(item.getTeleporterId());
 
         if (linkedTeleporter == null) {
@@ -37,6 +42,7 @@ public class INTODOOR implements MessageEvent {
         }
 
         if (!item.getPosition().getSquareInFront().equals(player.getRoomUser().getPosition())) {
+            System.out.println("LOL 123");
             return;
         }
 

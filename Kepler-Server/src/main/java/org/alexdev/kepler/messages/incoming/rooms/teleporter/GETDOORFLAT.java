@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.tasks.TeleporterTask;
 import org.alexdev.kepler.game.room.tasks.WalkingAllowedDelay;
 import org.alexdev.kepler.messages.outgoing.rooms.items.BROADCAST_TELEPORTER;
@@ -39,22 +40,23 @@ public class GETDOORFLAT implements MessageEvent {
             return;
         }
 
-        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId() && !item.getPosition().equals(player.getRoomUser().getPosition())) {
-            return;
+        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId()) {
+            // If the tile in front is invalid and the link isn't broken, let the user teleport back
+            if (RoomTile.isValidTile(room, player, item.getPosition().getSquareInFront())) {
+                if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) != null) {
+                    return;
+                }
+            }
         }
 
-        player.getRoomUser().setAuthenticateTelporterId(item.getId());
-        player.getRoomUser().setWalkingAllowed(false);
+        player.getRoomUser().setAuthenticateTelporterId(-1);
 
         // Kick out user from teleporter if link is broken
         if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
-            item.setCustomData("TRUE");
-            item.updateStatus();
-
-            player.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
-            player.getRoomUser().setWalkingAllowed(true);
             return;
         }
+
+        player.getRoomUser().setWalkingAllowed(false);
 
         if (linkedTeleporter.getRoomId() == room.getId()) {
             room.send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
@@ -71,10 +73,16 @@ public class GETDOORFLAT implements MessageEvent {
                 linkedTeleporter.updateStatus();
 
                 player.getRoomUser().walkTo(linkedTeleporter.getPosition().getSquareInFront().getX(), linkedTeleporter.getPosition().getSquareInFront().getY());
-                player.getRoomUser().setWalkingAllowed(true);
             }, 2000, TimeUnit.MILLISECONDS);
 
+            // Finally let user walk
+            GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+                player.getRoomUser().setWalkingAllowed(true);
+            }, 2500, TimeUnit.MILLISECONDS);
+
+
         } else {
+            player.getRoomUser().setAuthenticateTelporterId(item.getId()); // Needed for cross room-entry
             room.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
         }
     }

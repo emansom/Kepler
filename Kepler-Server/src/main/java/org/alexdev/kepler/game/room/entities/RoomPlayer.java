@@ -1,10 +1,13 @@
 package org.alexdev.kepler.game.room.entities;
 
+import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.managers.RoomTimerManager;
 import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
@@ -56,6 +59,29 @@ public class RoomPlayer extends RoomEntity {
         }
 
         return walking;
+    }
+
+    @Override
+    public void stopWalking() {
+        super.stopWalking();
+
+        Item item = this.getCurrentItem();
+
+        if (item != null) {
+            // Kick out user from teleporter if link is broken
+            if (item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+                Item linkedTeleporter = ItemDao.getItem(item.getTeleporterId());
+
+                if (linkedTeleporter == null || RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
+                    item.setCustomData("TRUE");
+                    item.updateStatus();
+
+                    player.getRoomUser().walkTo(item.getPosition().getSquareInFront().getX(), item.getPosition().getSquareInFront().getY());
+                    player.getRoomUser().setWalkingAllowed(true);
+                    return;
+                }
+            }
+        }
     }
 
     /**
