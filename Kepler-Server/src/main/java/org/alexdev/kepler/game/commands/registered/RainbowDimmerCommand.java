@@ -36,7 +36,7 @@ public class RainbowDimmerCommand extends Command {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!player.getRoomUser().getRoom().isOwner(player.getEntityId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
+        if (!player.getRoomUser().getRoom().isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 

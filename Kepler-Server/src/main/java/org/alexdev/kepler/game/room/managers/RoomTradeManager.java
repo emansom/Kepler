@@ -87,7 +87,7 @@ public class RoomTradeManager {
             tradePartner.getInventory().getItems().remove(item);
             player.getInventory().getItems().add(item);
 
-            item.setOwnerId(player.getEntityId());
+            item.setOwnerId(player.getDetails().getId());
             itemsToUpdate.add(item);
         }
 

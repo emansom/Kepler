@@ -55,7 +55,7 @@ public class DivingDeckTrigger extends GenericTrigger {
             if (playerList.size() > 1) {
                 Player found = playerList.get(ThreadLocalRandom.current().nextInt(0, playerList.size()));
 
-                if (found.getEntityId() == this.player.getEntityId()) {
+                if (found.getDetails().getId() == this.player.getDetails().getId()) {
                     spectateNewPlayer();
                     return;
                 }

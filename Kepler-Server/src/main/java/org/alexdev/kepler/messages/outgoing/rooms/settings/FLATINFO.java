@@ -21,7 +21,7 @@ public class FLATINFO extends MessageComposer {
         response.writeInt(this.room.getData().getAccessTypeId());
         response.writeInt(this.room.getId());
 
-        if (this.room.isOwner(player.getEntityId())|| this.room.getData().showOwnerName() || this.player.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
+        if (this.room.isOwner(player.getDetails().getId())|| this.room.getData().showOwnerName() || this.player.hasFuse(Fuseright.SEE_ALL_ROOMOWNERS)) {
             response.writeString(this.room.getData().getOwnerName());
         } else {
             response.writeString("-");

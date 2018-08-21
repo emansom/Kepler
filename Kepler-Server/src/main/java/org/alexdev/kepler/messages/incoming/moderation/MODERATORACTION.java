@@ -33,7 +33,7 @@ public class MODERATORACTION implements MessageEvent {
 
                 if (target != null) {
                     target.send(new MODERATOR_ALERT(alertMessage));
-                    ModerationDao.addLog(ModerationActionType.ALERT_USER, player.getEntityId(), target.getEntityId(), alertMessage, notes);
+                    ModerationDao.addLog(ModerationActionType.ALERT_USER, player.getDetails().getId(), target.getDetails().getId(), alertMessage, notes);
                 } else {
                     player.send(new ALERT("Target user is not online."));
                 }
@@ -43,7 +43,7 @@ public class MODERATORACTION implements MessageEvent {
                 Player target = PlayerManager.getInstance().getPlayerByName(alertUser);
 
                 if (target != null) {
-                    if (target.getEntityId() == player.getEntityId()) {
+                    if (target.getDetails().getId() == player.getDetails().getId()) {
                         return; // Can't kick yourself!
                     }
 
@@ -56,7 +56,7 @@ public class MODERATORACTION implements MessageEvent {
                     target.send(new HOTEL_VIEW());
                     target.send(new MODERATOR_ALERT(alertMessage));
 
-                    ModerationDao.addLog(ModerationActionType.KICK_USER, player.getEntityId(), target.getEntityId(), alertMessage, notes);
+                    ModerationDao.addLog(ModerationActionType.KICK_USER, player.getDetails().getId(), target.getDetails().getId(), alertMessage, notes);
                 } else {
                     player.send(new ALERT("Target user is not online."));
                 }
@@ -73,7 +73,7 @@ public class MODERATORACTION implements MessageEvent {
                     target.send(new MODERATOR_ALERT(alertMessage));
                 }
 
-                ModerationDao.addLog(ModerationActionType.ROOM_ALERT, player.getEntityId(), -1, alertMessage, notes);
+                ModerationDao.addLog(ModerationActionType.ROOM_ALERT, player.getDetails().getId(), -1, alertMessage, notes);
             } else if (commandId == 1 && player.hasFuse(Fuseright.ROOM_KICK)) {
                 // Room Kick
                 List<Player> players = player.getRoomUser().getRoom().getEntityManager().getPlayers();
@@ -89,7 +89,7 @@ public class MODERATORACTION implements MessageEvent {
                     target.send(new HOTEL_VIEW());
                     target.send(new MODERATOR_ALERT(alertMessage));
 
-                    ModerationDao.addLog(ModerationActionType.ROOM_KICK, player.getEntityId(), -1, alertMessage, notes);
+                    ModerationDao.addLog(ModerationActionType.ROOM_KICK, player.getDetails().getId(), -1, alertMessage, notes);
                 }
             }
         }

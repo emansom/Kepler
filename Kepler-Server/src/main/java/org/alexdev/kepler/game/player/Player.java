@@ -2,7 +2,6 @@ package org.alexdev.kepler.game.player;
 
 import io.netty.util.AttributeKey;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
-
 import org.alexdev.kepler.game.club.ClubSubscription;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -11,14 +10,10 @@ import org.alexdev.kepler.game.messenger.Messenger;
 import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.moderation.FuserightsManager;
 import org.alexdev.kepler.game.room.entities.RoomPlayer;
-import org.alexdev.kepler.messages.outgoing.handshake.RIGHTS;
-import org.alexdev.kepler.messages.outgoing.handshake.LOGIN;
-import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSING;
-import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
-import org.alexdev.kepler.messages.outgoing.user.ALERT;
-import org.alexdev.kepler.messages.outgoing.user.HOTEL_LOGOUT;
-import org.alexdev.kepler.messages.outgoing.user.HOTEL_LOGOUT.LogoutReason;
-import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
+import org.alexdev.kepler.messages.outgoing.handshake.*;
+import org.alexdev.kepler.messages.outgoing.openinghours.*;
+import org.alexdev.kepler.messages.outgoing.user.*;
+import org.alexdev.kepler.messages.outgoing.user.HOTEL_LOGOUT.*;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -30,11 +25,12 @@ import java.util.List;
 
 public class Player extends Entity {
     public static final AttributeKey<Player> PLAYER_KEY = AttributeKey.valueOf("Player");
+
     private final NettyPlayerNetwork network;
+    private final PlayerDetails details;
+    private final RoomPlayer roomEntity;
 
     private Logger log;
-    private PlayerDetails details;
-    private RoomPlayer roomEntity;
     private Messenger messenger;
     private Inventory inventory;
 

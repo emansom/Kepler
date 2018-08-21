@@ -17,6 +17,6 @@ public class SET_TUTORIAL_MODE implements MessageEvent {
         boolean finishedTutorial = (tutorialMode == 0);
 
         player.getDetails().setTutorialFinished(finishedTutorial);
-        TutorialDao.updateTutorialMode(player.getEntityId(), finishedTutorial);
+        TutorialDao.updateTutorialMode(player.getDetails().getId(), finishedTutorial);
     }
 }

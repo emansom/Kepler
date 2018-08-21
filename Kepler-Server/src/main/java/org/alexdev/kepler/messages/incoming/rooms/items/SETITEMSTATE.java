@@ -41,7 +41,7 @@ public class SETITEMSTATE implements MessageEvent {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 
-        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) && !room.hasRights(player.getEntityId())) {
+        if (item.getDefinition().hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION) && !room.hasRights(player.getDetails().getId())) {
             return;
         }
 

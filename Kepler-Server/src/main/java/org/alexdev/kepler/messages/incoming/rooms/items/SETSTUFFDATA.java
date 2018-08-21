@@ -49,7 +49,7 @@ public class SETSTUFFDATA implements MessageEvent {
 
 
         if (item.hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION)
-                && !room.hasRights(player.getEntityId())
+                && !room.hasRights(player.getDetails().getId())
                 && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }

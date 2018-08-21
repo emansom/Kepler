@@ -19,7 +19,7 @@ public class SAVE_SONG_NEW implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
-        if (!room.isOwner(player.getEntityId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
+        if (!room.isOwner(player.getDetails().getId()) && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
             return;
         }
 
@@ -33,7 +33,7 @@ public class SAVE_SONG_NEW implements MessageEvent {
         String title = StringUtil.filterInput(reader.readString(), true);
         String data = StringUtil.filterInput(reader.readString(), true);
 
-        SongMachineDao.addSong(player.getEntityId(),
+        SongMachineDao.addSong(player.getDetails().getId(),
                 room.getItemManager().getSoundMachine().getId(),
                 title,
                 calculateSongLength(data),

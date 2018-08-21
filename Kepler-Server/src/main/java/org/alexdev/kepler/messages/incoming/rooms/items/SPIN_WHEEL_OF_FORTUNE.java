@@ -23,7 +23,7 @@ public class SPIN_WHEEL_OF_FORTUNE implements MessageEvent {
             return;
         }
 
-        if (!room.hasRights(player.getEntityId())) {
+        if (!room.hasRights(player.getDetails().getId())) {
             return;
         }
 
