@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomManager {
-    public static final int PUBLIC_ROOM_OFFSET = 1000;
+    public static final int PUBLIC_ROOM_OFFSET = 1000; // Used as the "port" for the public room, in NAVNODEINFO and friend following
     private static RoomManager instance = null;
 
     private ConcurrentHashMap<Integer, Room> roomMap;
 
     public RoomManager() {
         this.roomMap = new ConcurrentHashMap<>();
-            RoomDao.resetVisitors();
+        RoomDao.resetVisitors();
     }
 
     /**
