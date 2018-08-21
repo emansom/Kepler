@@ -49,6 +49,7 @@ public class GETDOORFLAT implements MessageEvent {
             }
         }
 
+        // Needed so players can't spam teleports
         player.getRoomUser().setAuthenticateTelporterId(-1);
 
         // Kick out user from teleporter if link is broken

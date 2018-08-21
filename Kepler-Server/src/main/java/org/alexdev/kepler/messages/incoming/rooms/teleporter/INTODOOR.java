@@ -42,7 +42,6 @@ public class INTODOOR implements MessageEvent {
         }
 
         if (!item.getPosition().getSquareInFront().equals(player.getRoomUser().getPosition())) {
-            System.out.println("LOL 123");
             return;
         }
 
