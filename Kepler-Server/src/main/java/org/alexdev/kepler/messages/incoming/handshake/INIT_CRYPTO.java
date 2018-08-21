@@ -9,6 +9,10 @@ public class INIT_CRYPTO implements MessageEvent {
 
     @Override
     public void handle(Player player, NettyRequest reader) {
+        if (player.isLoggedIn()) {
+            return;
+        }
+
         player.send(new CRYPTO_PARAMETERS());
     }
 }

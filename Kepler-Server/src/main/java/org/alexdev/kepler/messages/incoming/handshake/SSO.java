@@ -10,6 +10,10 @@ public class SSO implements MessageEvent {
 
     @Override
     public void handle(Player player, NettyRequest reader) {
+        if (player.isLoggedIn()) {
+            return;
+        }
+
         String ticket = reader.readString();
 
         if (!PlayerDao.loginTicket(player, ticket)) {

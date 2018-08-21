@@ -11,6 +11,10 @@ public class TRY_LOGIN implements MessageEvent {
 
     @Override
     public void handle(Player player, NettyRequest reader) {
+        if (player.isLoggedIn()) {
+            return;
+        }
+        
         String username = StringUtil.filterInput(reader.readString(), true);
         String password = StringUtil.filterInput(reader.readString(), true);
 
