@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomManager {
+    public static final int PUBLIC_ROOM_OFFSET = 1000;
     private static RoomManager instance = null;
 
     private ConcurrentHashMap<Integer, Room> roomMap;

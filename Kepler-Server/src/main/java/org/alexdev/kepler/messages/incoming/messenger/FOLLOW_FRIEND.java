@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.messenger;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.messages.outgoing.messenger.FOLLOW_ERROR;
 import org.alexdev.kepler.messages.outgoing.messenger.ROOMFORWARD;
 import org.alexdev.kepler.messages.types.MessageEvent;
@@ -55,7 +56,7 @@ public class FOLLOW_FRIEND implements MessageEvent {
         int roomId = friend.getRoomUser().getRoom().getId();
 
         if (isPublic) { // Some weird offset shit required...
-            roomId = roomId + 1000;
+            roomId = roomId + RoomManager.PUBLIC_ROOM_OFFSET;
         }
 
         player.send(new ROOMFORWARD(isPublic, roomId));
