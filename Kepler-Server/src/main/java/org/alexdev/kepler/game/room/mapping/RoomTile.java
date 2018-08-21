@@ -69,6 +69,47 @@ public class RoomTile {
     }
 
     /**
+     * Gets if the tile was valid, but if there's chairs in the way it will not be valid.
+     *
+     * @param entity the entity checking
+     * @param position the position of the tile
+     * @return true, if successful
+     */
+    public static boolean isValidDiagonalTile(Room room, Entity entity, Position position) {
+        if (room == null) {
+            return false;
+        }
+
+        RoomTile tile = room.getMapping().getTile(position);
+
+        if (tile == null) {
+            return false;
+        }
+
+        if (tile.getEntities().size() > 0) { // Allow walk if you exist already in the tile
+            return entity == null || tile.containsEntity(entity);
+        }
+
+        if (tile.getHighestItem() != null) {
+            if (tile.getHighestItem().hasBehaviour(ItemBehaviour.CAN_SIT_ON_TOP)) {
+                return false;
+            }
+
+            if (!tile.getHighestItem().isWalkable()) {
+                return false;
+            }
+
+            if (entity != null) {
+                return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
+            }
+
+            return true;
+        }
+
+        return true;
+    }
+
+    /**
      * Checks if current tile touches target tile
      */
     public boolean touches(RoomTile targetTile) {

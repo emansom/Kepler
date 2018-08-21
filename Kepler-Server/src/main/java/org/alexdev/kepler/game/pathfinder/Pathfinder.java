@@ -120,8 +120,8 @@ public class Pathfinder {
         if (current.getX() != tmp.getX() &&
             current.getY() != tmp.getY()) {
 
-            boolean firstValidTile = RoomTile.isValidTile(room, entity, new Position(tmp.getX(), current.getY()));
-            boolean secondValidTile = RoomTile.isValidTile(room, entity, new Position(current.getX(), tmp.getY()));
+            boolean firstValidTile = RoomTile.isValidDiagonalTile(room, entity, new Position(tmp.getX(), current.getY()));
+            boolean secondValidTile = RoomTile.isValidDiagonalTile(room, entity, new Position(current.getX(), tmp.getY()));
 
             if (!firstValidTile && !secondValidTile) {
                 return false;
