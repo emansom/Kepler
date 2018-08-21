@@ -47,6 +47,7 @@ public class SETSTUFFDATA implements MessageEvent {
             return; // Prevent dice rigging, scripting trophies, post-its, etc.
         }
 
+
         if (item.hasBehaviour(ItemBehaviour.REQUIRES_RIGHTS_FOR_INTERACTION)
                 && !room.hasRights(player.getEntityId())
                 && !player.hasFuse(Fuseright.ANY_ROOM_CONTROLLER)) {
@@ -57,15 +58,21 @@ public class SETSTUFFDATA implements MessageEvent {
             if (!item.getTile().touches(player.getRoomUser().getTile())) {
                 Position nextPosition = item.getPosition().getSquareInFront();
 
-                if (!RoomTile.isValidTile(room, player, nextPosition)) {
-                    nextPosition = item.getTile().getNextAvailablePosition(player);
-                }
+                // TODO: Look into why everyone receives the door close packet, in the meantime, disable the check for teleporters, otherwise everyone will work towards the teleporter
+                if (!item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
 
-                player.getRoomUser().walkTo(
-                        nextPosition.getX(),
-                        nextPosition.getY()
-                );
-                return;
+
+                    if (!RoomTile.isValidTile(room, player, nextPosition)) {
+                        nextPosition = item.getTile().getNextAvailablePosition(player);
+                    }
+
+                    player.getRoomUser().walkTo(
+                            nextPosition.getX(),
+                            nextPosition.getY()
+                    );
+
+                    return;
+                }
             }
         }
 
@@ -128,6 +135,11 @@ public class SETSTUFFDATA implements MessageEvent {
         }
 
         if (newData == null) {
+            return;
+        }
+
+        // Don't process if the new data is the same as the old data
+        if (item.getCustomData().equals(newData)) {
             return;
         }
 
