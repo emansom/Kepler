@@ -17,28 +17,27 @@ public class KICK implements MessageEvent {
         Player target = PlayerManager.getInstance().getPlayerByName(playerName);
 
         if (target == null) {
-            if (player.hasFuse(Fuseright.KICK)) {
-                player.send(new ALERT("Could not kick " + playerName + " because the player instance was not found"));
-            }
             return;
         }
 
         Room room = player.getRoomUser().getRoom();
 
         if (target.getDetails().getId() == player.getDetails().getId()) {
-            if (player.hasFuse(Fuseright.KICK)) {
-                player.send(new ALERT("Could not kick " + playerName + " because otherwise you'd be kicking yourself"));
-            }
             return; // Can't kick yourself!
         }
 
-        if (target.hasFuse(Fuseright.KICK) || room.isOwner(target.getDetails().getId())) {
-            player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
+        // Don't allow kicking room owners if you aren't a moderator
+        if (room.isOwner(target.getDetails().getId()) && !player.hasFuse(Fuseright.KICK)) {
             return;
         }
 
+        // Don't allow kicking if they have permissions to kick too
+        if (target.hasFuse(Fuseright.KICK)) {
+            return;
+        }
+
+        // Don't allow kicking if you don't have room rights and don't have fuse rights
         if (!room.hasRights(player.getDetails().getId()) && !player.hasFuse(Fuseright.KICK)) {
-            player.send(new ALERT(TextsManager.getInstance().getValue("modtool_rankerror")));
             return;
         }
 
