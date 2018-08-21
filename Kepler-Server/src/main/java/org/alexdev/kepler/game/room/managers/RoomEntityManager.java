@@ -221,12 +221,9 @@ public class RoomEntityManager {
             }
         }
 
-        if (entity.getType() == EntityType.PLAYER) {
-            Player player = (Player) entity;
-
-            if (this.room.getModel().getModelTrigger() != null) {
-                this.room.getModel().getModelTrigger().onRoomLeave(player, this.room);
-            }
+        // Trigger for leaving room
+        if (this.room.getModel().getModelTrigger() != null) {
+            this.room.getModel().getModelTrigger().onRoomLeave(entity, this.room);
         }
 
         RoomTile tile = entity.getRoomUser().getTile();
