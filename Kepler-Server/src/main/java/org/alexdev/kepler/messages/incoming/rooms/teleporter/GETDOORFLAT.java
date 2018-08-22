@@ -55,6 +55,7 @@ public class GETDOORFLAT implements MessageEvent {
         // Kick out user from teleporter if link is broken
         if (RoomManager.getInstance().getRoomById(item.getRoomId()) == null ||
             RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
+            player.getRoomUser().setWalkingAllowed(true);
             return;
         }
 
