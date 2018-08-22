@@ -102,12 +102,6 @@ public class RoomTile {
             if (!tile.getHighestItem().isWalkable()) {
                 return false;
             }
-
-            if (entity != null) {
-                return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
-            }
-
-            return true;
         }
 
         return true;
