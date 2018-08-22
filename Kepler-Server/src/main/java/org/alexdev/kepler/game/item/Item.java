@@ -130,17 +130,23 @@ public class Item {
             entitiesToUpdate.addAll(tile.getEntities());
         }
 
-        for (Entity entity : entitiesToUpdate) {
-            // Reset any entities who were teleporting while the teleporter was picked up
-            if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+        // Reset any entities who were teleporting while the teleporter was picked up
+        if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+            for (Entity entity : this.getRoom().getEntities()) {
                 if (entity.getType() == EntityType.PLAYER) {
 
                     Player player = (Player) entity;
-                    player.getRoomUser().setAuthenticateTelporterId(-1);
-                    player.getRoomUser().setWalkingAllowed(true);
+
+                    if (entity.getRoomUser().getPosition().equals(this.position) || player.getRoomUser().getAuthenticateTelporterId() == id) {
+                        player.getRoomUser().setAuthenticateTelporterId(-1);
+                        player.getRoomUser().setWalkingAllowed(true);
+                    }
                 }
             }
 
+        }
+
+        for (Entity entity : entitiesToUpdate) {
             entity.getRoomUser().invokeItem(false);
         }
     }
