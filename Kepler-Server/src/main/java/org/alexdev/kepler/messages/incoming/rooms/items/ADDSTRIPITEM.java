@@ -36,7 +36,7 @@ public class ADDSTRIPITEM implements MessageEvent {
             return; // The client does not allow picking up post-it's, thus neither will the server
         }
 
-        if (!item.isTeleporterMoveable(true)) {
+        if (!item.isTeleporterMoveable()) {
             return;
         }
 

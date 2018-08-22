@@ -63,7 +63,7 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
-        if (!item.isTeleporterMoveable(true)) {
+        if (!item.isTeleporterMoveable()) {
             return;
         }
 

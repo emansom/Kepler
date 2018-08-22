@@ -156,10 +156,9 @@ public class Item {
      * Gets if the teleporter can be moved, if the pair is broken then the teleporter
      * is also considered moveable.
      *
-     * @param acrossRoomsOnly should we only check if the teleporter pair is across rooms
      * @return if it is moveable
      */
-    public boolean isTeleporterMoveable(boolean acrossRoomsOnly) {
+    public boolean isTeleporterMoveable() {
         if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
             Item linkedTeleporter = ItemDao.getItem(this.teleporterId);
 
@@ -167,7 +166,7 @@ public class Item {
                 return true;
             }
 
-            if (!acrossRoomsOnly && linkedTeleporter.getRoomId() == roomId) {
+            if (linkedTeleporter.getRoomId() == roomId) {
                 return true;
             }
 
