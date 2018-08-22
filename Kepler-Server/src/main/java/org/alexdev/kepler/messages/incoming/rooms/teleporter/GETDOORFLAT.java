@@ -53,7 +53,8 @@ public class GETDOORFLAT implements MessageEvent {
         player.getRoomUser().setAuthenticateTelporterId(-1);
 
         // Kick out user from teleporter if link is broken
-        if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
+        if (RoomManager.getInstance().getRoomById(item.getRoomId()) == null ||
+            RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
             return;
         }
 
