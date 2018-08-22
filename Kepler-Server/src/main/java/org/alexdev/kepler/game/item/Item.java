@@ -2,9 +2,11 @@ package org.alexdev.kepler.game.item;
 
 import org.alexdev.kepler.dao.mysql.TeleporterDao;
 import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.roller.RollingData;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -118,7 +120,7 @@ public class Item {
             }
         }
 
-        for (Position position :  AffectedTile.getAffectedTiles(this)) {
+        for (Position position : AffectedTile.getAffectedTiles(this)) {
             RoomTile tile = this.getRoom().getMapping().getTile(position);
 
             if (tile == null) {
@@ -129,6 +131,16 @@ public class Item {
         }
 
         for (Entity entity : entitiesToUpdate) {
+            // Reset any entities who were teleporting while the teleporter was picked up
+            if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
+                if (entity.getType() == EntityType.PLAYER) {
+
+                    Player player = (Player) entity;
+                    player.getRoomUser().setAuthenticateTelporterId(-1);
+                    player.getRoomUser().setWalkingAllowed(true);
+                }
+            }
+
             entity.getRoomUser().invokeItem(false);
         }
     }
