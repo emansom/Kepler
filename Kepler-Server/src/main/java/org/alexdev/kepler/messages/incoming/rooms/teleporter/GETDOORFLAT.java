@@ -59,18 +59,27 @@ public class GETDOORFLAT implements MessageEvent {
         }
 
         player.getRoomUser().setWalkingAllowed(false);
+        player.getRoomUser().setAuthenticateTelporterId(itemId);
 
         if (linkedTeleporter.getRoomId() == room.getId()) {
             room.send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
 
             // Initial warp to the next teleporter
             GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+                if (player.getRoomUser().getAuthenticateTelporterId() == -1) {
+                    return;
+                }
+
                 player.getRoomUser().warp(linkedTeleporter.getPosition().copy(), false);
                 room.send(new BROADCAST_TELEPORTER(linkedTeleporter, player.getDetails().getName(), true));
             }, 1000, TimeUnit.MILLISECONDS);
 
             // Walk out of the teleporter
             GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+                if (player.getRoomUser().getAuthenticateTelporterId() == -1) {
+                    return;
+                }
+
                 linkedTeleporter.setCustomData("TRUE");
                 linkedTeleporter.updateStatus();
 
@@ -79,13 +88,17 @@ public class GETDOORFLAT implements MessageEvent {
 
             // Finally let user walk
             GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+                if (player.getRoomUser().getAuthenticateTelporterId() == -1) {
+                    return;
+                }
+
                 player.getRoomUser().setWalkingAllowed(true);
+                player.getRoomUser().setAuthenticateTelporterId(-1);
             }, 2500, TimeUnit.MILLISECONDS);
-            return;
+
         } else {
-            player.getRoomUser().setAuthenticateTelporterId(item.getId()); // Needed for cross room-entry
+            //player.getRoomUser().setAuthenticateTelporterId(item.getId()); // Needed for cross room-entry
             room.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
-            return;
         }
     }
 }
