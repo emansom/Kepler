@@ -41,7 +41,7 @@ public class RoomEntityManager {
      * @return the unique ID
      */
     public int generateUniqueId() {
-        int uniqueId = ThreadLocalRandom.current().nextInt(0, 9999);
+        int uniqueId = ThreadLocalRandom.current().nextInt(0, 99999);
 
         while (getByInstanceId(uniqueId) != null) {
             uniqueId = generateUniqueId();
@@ -116,8 +116,10 @@ public class RoomEntityManager {
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.generateUniqueId());
 
-        if (!this.room.isActive()) {
-            this.initialiseRoom();
+        if (entity.getType() == EntityType.PLAYER) {
+            if (!this.room.isActive()) {
+                this.initialiseRoom();
+            }
         }
 
         this.room.getEntities().add(entity);
