@@ -144,7 +144,6 @@ public class Room {
 
         this.isActive = false;
         this.roomTaskManager.stopTasks();
-        this.roomEntityManager.getInstanceIdCounter().set(0);
 
         this.items.clear();
         this.rights.clear();

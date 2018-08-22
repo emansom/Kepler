@@ -27,11 +27,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
     private Room room;
-    private AtomicInteger instanceIdCounter;
 
     public RoomEntityManager(Room room) {
         this.room = room;
-        this.instanceIdCounter = new AtomicInteger(0);
     }
 
     /**
@@ -253,14 +251,5 @@ public class RoomEntityManager {
 
         player.getMessenger().sendStatusUpdate();
         RoomDao.saveVisitors(this.room);
-    }
-
-    /**
-     * Get the atomic integer counter for instance ids.
-     *
-     * @return the instance id counter
-     */
-    public AtomicInteger getInstanceIdCounter() {
-        return this.instanceIdCounter;
     }
 }
