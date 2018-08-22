@@ -12,7 +12,7 @@ import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDEOBJECTBUNDLE;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
@@ -97,7 +97,7 @@ public class RollerTask implements Runnable {
 
             // Send roller packets
             for (RollerEntry entry : rollerEntries) {
-                this.room.send(new SLIDE_OBJECT(entry.getRoller(), entry.getRollingItems(), entry.getRollingEntity()));
+                this.room.send(new SLIDEOBJECTBUNDLE(entry.getRoller(), entry.getRollingItems(), entry.getRollingEntity()));
             }
 
             if (itemsRolling.size() > 0) {

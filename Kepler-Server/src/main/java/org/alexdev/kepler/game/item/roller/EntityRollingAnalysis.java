@@ -8,7 +8,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDEOBJECTBUNDLE;
 
 public class EntityRollingAnalysis implements RollingAnalysis<Entity> {
     @Override
