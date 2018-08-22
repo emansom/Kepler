@@ -84,6 +84,15 @@ public class RoomPlayer extends RoomEntity {
         }
     }
 
+    @Override
+    public void kick(boolean allowWalking) {
+        super.kick(allowWalking);
+
+        // Remove authentications
+        this.authenticateId = -1;
+        this.authenticateTelporterId = -1;
+    }
+
     /**
      * Refreshes user appearance
      */

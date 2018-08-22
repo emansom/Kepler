@@ -55,7 +55,6 @@ public class GETDOORFLAT implements MessageEvent {
         // Kick out user from teleporter if link is broken
         if (RoomManager.getInstance().getRoomById(item.getRoomId()) == null ||
             RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
-            player.getRoomUser().setWalkingAllowed(true);
             return;
         }
 
@@ -82,11 +81,11 @@ public class GETDOORFLAT implements MessageEvent {
             GameScheduler.getInstance().getSchedulerService().schedule(() -> {
                 player.getRoomUser().setWalkingAllowed(true);
             }, 2500, TimeUnit.MILLISECONDS);
-
-
+            return;
         } else {
             player.getRoomUser().setAuthenticateTelporterId(item.getId()); // Needed for cross room-entry
             room.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
+            return;
         }
     }
 }

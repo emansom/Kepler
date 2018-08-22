@@ -14,6 +14,10 @@ public class GOAWAY implements MessageEvent {
             return;
         }
 
+        if (!player.getRoomUser().isWalkingAllowed()) {
+            return;
+        }
+
         Room room = player.getRoomUser().getRoom();
 
         if (room.isPublicRoom()) {

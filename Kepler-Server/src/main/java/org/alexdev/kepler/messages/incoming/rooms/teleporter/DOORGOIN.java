@@ -13,20 +13,12 @@ import org.alexdev.kepler.server.netty.streams.NettyRequest;
 public class DOORGOIN implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
-        Room room = player.getRoomUser().getRoom();
-
-        if (room == null) {
-            return;
-        }
-
         int itemId = Integer.parseInt(reader.contents());
-        Item item = room.getItemManager().getById(itemId);
 
-        if (item == null || !item.hasBehaviour(ItemBehaviour.TELEPORTER)) {
-            return;
-        }
+        Room room = player.getRoomUser().getRoom();
+        Item item = player.getRoomUser().getRoom().getItemManager().getById(itemId);
 
-        if (!item.getPosition().equals(player.getRoomUser().getPosition())) {
+        if (room == null || item == null) {
             return;
         }
 
@@ -40,6 +32,6 @@ public class DOORGOIN implements MessageEvent {
             return;
         }
 
-        room.send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
+        player.getRoomUser().getRoom().send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
     }
 }
