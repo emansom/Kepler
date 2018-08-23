@@ -125,6 +125,10 @@ public class DivingDeckTrigger extends GenericTrigger {
             return;
         }
 
+        if (room.getEntityManager().getPlayers().isEmpty()) {
+            return;
+        }
+
         Player player = (Player)entity;
 
         DivingDeckTrigger.PoolCamera task = (DivingDeckTrigger.PoolCamera) room.getTaskManager().getTask("DivingCamera");
