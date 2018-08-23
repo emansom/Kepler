@@ -17,7 +17,7 @@ public class DOORGOIN implements MessageEvent {
 
         if (player.getRoomUser().getAuthenticateTelporterId() == itemId) {
             Item item = player.getRoomUser().getRoom().getItemManager().getById(itemId);
-            player.getRoomUser().getRoom().send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
+            player.getRoomUser().getRoom().send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), false));
         }
     }
 }

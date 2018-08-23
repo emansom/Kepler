@@ -90,8 +90,7 @@ public class GETDOORFLAT implements MessageEvent {
             }, 2500, TimeUnit.MILLISECONDS);
 
         } else {
-            //player.getRoomUser().setAuthenticateTelporterId(item.getId()); // Needed for cross room-entry
-            room.send(new TELEPORTER_INIT(item.getId(), linkedTeleporter.getRoomId()));
+            player.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
         }
     }
 }
