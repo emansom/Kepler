@@ -60,7 +60,7 @@ public class RoomData {
     }
 
     public void applyModelSettings() {
-        if (ServerConfiguration.getBoolean("debug")) {
+        if (GameConfiguration.getInstance().getBoolean("navigator.show.hidden.rooms")) {
             this.navigatorHide = false;
             return;
         }

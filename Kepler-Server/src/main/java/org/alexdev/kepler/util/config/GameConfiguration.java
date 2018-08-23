@@ -56,6 +56,9 @@ public class GameConfiguration {
 
         config.put("shutdown.minutes", "1");
 
+        config.put("reset.sso.after.login", "true");
+        config.put("navigator.show.hidden.rooms", "false");
+
         config.put("rare.cycle.tick.time", "0");
         config.put("rare.cycle.page.id", "2");
         config.put("rare.cycle.refresh.timeunit", "HOURS");
