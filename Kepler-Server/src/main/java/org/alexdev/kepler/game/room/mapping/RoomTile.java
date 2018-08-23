@@ -60,13 +60,13 @@ public class RoomTile {
             return entity == null || tile.containsEntity(entity);
         }
 
+
         if (!tile.hasWalkableFurni()) {
             if (entity != null) {
                 return tile.getHighestItem().getPosition().equals(entity.getRoomUser().getPosition());
             }
 
             return false;
-
         }
 
         return true;

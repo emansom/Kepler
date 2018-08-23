@@ -37,17 +37,13 @@ public class GETDOORFLAT implements MessageEvent {
             return;
         }
 
-        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId()) {
-            // If the tile in front is invalid and the link isn't broken, let the user teleport back
-            if (RoomTile.isValidTile(room, player, item.getPosition().getSquareInFront())) {
-                if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) != null) {
-                    return;
-                }
-            }
+        if (!player.getRoomUser().getPosition().equals(item.getPosition())
+                && !player.getRoomUser().getGoal().equals(item.getPosition())) {
+            return;
         }
 
-        // Needed so players can't spam teleports
-        player.getRoomUser().setAuthenticateTelporterId(-1);
+        player.getRoomUser().getGoal().setX(-1);
+        player.getRoomUser().getGoal().setY(-1);
 
         // Kick out user from teleporter if link is broken
         if (RoomManager.getInstance().getRoomById(item.getRoomId()) == null ||
