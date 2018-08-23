@@ -54,9 +54,6 @@ public class GameConfiguration {
         config.put("profile.editing", "true");
         config.put("vouchers.enabled", "true");
 
-        config.put("reset.sso.after.login", "true");
-        config.put("navigator.show.hidden.rooms", "false");
-
         config.put("shutdown.minutes", "1");
 
         config.put("rare.cycle.tick.time", "0");
