@@ -15,23 +15,9 @@ public class DOORGOIN implements MessageEvent {
     public void handle(Player player, NettyRequest reader) {
         int itemId = Integer.parseInt(reader.contents());
 
-        Room room = player.getRoomUser().getRoom();
-        Item item = player.getRoomUser().getRoom().getItemManager().getById(itemId);
-
-        if (room == null || item == null) {
-            return;
+        if (player.getRoomUser().getAuthenticateTelporterId() == itemId) {
+            Item item = player.getRoomUser().getRoom().getItemManager().getById(itemId);
+            player.getRoomUser().getRoom().send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), false));
         }
-
-        Item linkedTeleporter = ItemDao.getItem(item.getTeleporterId());
-
-        if (linkedTeleporter == null) {
-            return;
-        }
-
-        if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
-            return;
-        }
-
-        player.getRoomUser().getRoom().send(new BROADCAST_TELEPORTER(item, player.getDetails().getName(), true));
     }
 }

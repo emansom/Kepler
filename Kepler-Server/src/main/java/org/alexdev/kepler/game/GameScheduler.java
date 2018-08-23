@@ -68,11 +68,12 @@ public class GameScheduler implements Runnable {
                     }
 
                     // If they're not sleeping (aka, active) and their next handout expired, give them their credits!
-                    if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
-                        if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
+                    if (DateUtil.getCurrentTimeSeconds() > player.getDetails().getNextHandout()) {
+                        if (!player.getRoomUser().containsStatus(StatusType.SLEEP)) {
                             this.creditsHandoutQueue.put(player);
-                            player.getDetails().resetNextHandout();
                         }
+
+                        player.getDetails().resetNextHandout();
                     }
                 }
             }

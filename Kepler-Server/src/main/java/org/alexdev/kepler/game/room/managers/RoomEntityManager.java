@@ -27,11 +27,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
     private Room room;
-    private AtomicInteger instanceIdCounter;
 
     public RoomEntityManager(Room room) {
         this.room = room;
-        this.instanceIdCounter = new AtomicInteger(0);
     }
 
     /**
@@ -41,7 +39,7 @@ public class RoomEntityManager {
      * @return the unique ID
      */
     public int generateUniqueId() {
-        int uniqueId = ThreadLocalRandom.current().nextInt(0, 9999);
+        int uniqueId = ThreadLocalRandom.current().nextInt(0, 99999);
 
         while (getByInstanceId(uniqueId) != null) {
             uniqueId = generateUniqueId();
@@ -116,8 +114,10 @@ public class RoomEntityManager {
         entity.getRoomUser().setRoom(this.room);
         entity.getRoomUser().setInstanceId(this.generateUniqueId());
 
-        if (!this.room.isActive()) {
-            this.initialiseRoom();
+        if (entity.getType() == EntityType.PLAYER) {
+            if (!this.room.isActive()) {
+                this.initialiseRoom();
+            }
         }
 
         this.room.getEntities().add(entity);
@@ -251,14 +251,5 @@ public class RoomEntityManager {
 
         player.getMessenger().sendStatusUpdate();
         RoomDao.saveVisitors(this.room);
-    }
-
-    /**
-     * Get the atomic integer counter for instance ids.
-     *
-     * @return the instance id counter
-     */
-    public AtomicInteger getInstanceIdCounter() {
-        return this.instanceIdCounter;
     }
 }

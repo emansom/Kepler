@@ -8,10 +8,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.game.room.tasks.TeleporterTask;
-import org.alexdev.kepler.game.room.tasks.WalkingAllowedDelay;
 import org.alexdev.kepler.messages.outgoing.rooms.items.BROADCAST_TELEPORTER;
-import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.TELEPORTER_INIT;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -40,17 +37,13 @@ public class GETDOORFLAT implements MessageEvent {
             return;
         }
 
-        if (player.getRoomUser().getAuthenticateTelporterId() != item.getId()) {
-            // If the tile in front is invalid and the link isn't broken, let the user teleport back
-            if (RoomTile.isValidTile(room, player, item.getPosition().getSquareInFront())) {
-                if (RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) != null) {
-                    return;
-                }
-            }
+        if (!player.getRoomUser().getPosition().equals(item.getPosition())
+                && !player.getRoomUser().getGoal().equals(item.getPosition())) {
+            return;
         }
 
-        // Needed so players can't spam teleports
-        player.getRoomUser().setAuthenticateTelporterId(-1);
+        player.getRoomUser().getGoal().setX(-1);
+        player.getRoomUser().getGoal().setY(-1);
 
         // Kick out user from teleporter if link is broken
         if (RoomManager.getInstance().getRoomById(item.getRoomId()) == null ||
@@ -71,7 +64,7 @@ public class GETDOORFLAT implements MessageEvent {
                 }
 
                 player.getRoomUser().warp(linkedTeleporter.getPosition().copy(), false);
-                room.send(new BROADCAST_TELEPORTER(linkedTeleporter, player.getDetails().getName(), true));
+                room.send(new BROADCAST_TELEPORTER(linkedTeleporter, player.getDetails().getName(), false));
             }, 1000, TimeUnit.MILLISECONDS);
 
             // Walk out of the teleporter
@@ -97,8 +90,7 @@ public class GETDOORFLAT implements MessageEvent {
             }, 2500, TimeUnit.MILLISECONDS);
 
         } else {
-            //player.getRoomUser().setAuthenticateTelporterId(item.getId()); // Needed for cross room-entry
-            room.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
+            player.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
         }
     }
 }
