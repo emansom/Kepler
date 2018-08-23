@@ -50,8 +50,6 @@ public class ServerConfiguration {
         config.put("mysql.username", "kepler");
         config.put("mysql.password", "verysecret");
         config.put("mysql.database", "kepler");
-
-        config.put("debug", "false");
     }
 
     private static void loadEnvironmentConfiguration() {

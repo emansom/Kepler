@@ -59,7 +59,7 @@ public class Player extends Entity {
         PlayerManager.getInstance().addPlayer(this); // Add new connection
         PlayerDao.saveLastOnline(this.getDetails());
 
-        if (!ServerConfiguration.getBoolean("debug")) {
+        if (GameConfiguration.getInstance().getBoolean("reset.sso.after.login")) {
             PlayerDao.clearSSOTicket(this.details.getId()); // Protect against replay attacks
         }
 

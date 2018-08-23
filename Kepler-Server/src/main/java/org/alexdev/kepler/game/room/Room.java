@@ -31,6 +31,7 @@ public class Room {
     private RoomTaskManager roomTaskManager;
 
     private boolean isActive;
+    private int followRedirect;
 
     private List<Entity> entities;
     private List<Item> items;
@@ -275,5 +276,24 @@ public class Room {
      */
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    /**
+     * Gets the main room id for room following, used for when someone follows
+     * a friend into a room which requires a user to walk to it from entering the main room.
+     *
+     * @return the follow redirect room id
+     */
+    public int getFollowRedirect() {
+        return followRedirect;
+    }
+
+    /**
+     * Set the follow redirect room id.
+     *
+     * @param followRedirect the room id to set
+     */
+    public void setFollowRedirect(int followRedirect) {
+        this.followRedirect = followRedirect;
     }
 }
