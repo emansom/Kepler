@@ -64,7 +64,7 @@ public class GETDOORFLAT implements MessageEvent {
                 }
 
                 player.getRoomUser().warp(linkedTeleporter.getPosition().copy(), false);
-                room.send(new BROADCAST_TELEPORTER(linkedTeleporter, player.getDetails().getName(), true));
+                room.send(new BROADCAST_TELEPORTER(linkedTeleporter, player.getDetails().getName(), false));
             }, 1000, TimeUnit.MILLISECONDS);
 
             // Walk out of the teleporter
@@ -91,7 +91,7 @@ public class GETDOORFLAT implements MessageEvent {
 
         } else {
             //player.getRoomUser().setAuthenticateTelporterId(item.getId()); // Needed for cross room-entry
-            room.send(new TELEPORTER_INIT(linkedTeleporter.getId(), linkedTeleporter.getRoomId()));
+            room.send(new TELEPORTER_INIT(item.getId(), linkedTeleporter.getRoomId()));
         }
     }
 }
