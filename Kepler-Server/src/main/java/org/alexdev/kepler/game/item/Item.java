@@ -303,18 +303,7 @@ public class Item {
                 response.writeString(StringUtil.format(this.position.getZ()));
                 response.writeString(definition.getColour());
                 response.writeString("");
-
-                int customId = 0;
-
-                if (this.hasBehaviour(ItemBehaviour.ROLLER)) {
-                    customId = 2; // Required 2 for rollers to enable animation when rollers are used!
-                }
-
-                if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
-                    customId = teleporterId;
-                }
-
-                response.writeInt(customId);
+                response.writeInt(this.hasBehaviour(ItemBehaviour.ROLLER) ? 2 : 0); // Required 2 for rollers to enable animation when rollers are used!
 
                 if (this.hasBehaviour(ItemBehaviour.PRESENT)) {
                     String[] presentData = this.customData.split(Character.toString((char)9));
