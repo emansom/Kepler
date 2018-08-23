@@ -2,7 +2,6 @@ package org.alexdev.kepler.messages.incoming.messenger;
 
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
-import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.messages.outgoing.messenger.FOLLOW_ERROR;
 import org.alexdev.kepler.messages.outgoing.messenger.ROOMFORWARD;
@@ -57,12 +56,6 @@ public class FOLLOW_FRIEND implements MessageEvent {
         int roomId = friend.getRoomUser().getRoom().getId();
 
         if (isPublic) { // Some weird offset shit required...
-            Room room = RoomManager.getInstance().getRoomById(roomId);
-
-            if (room.getData().isNavigatorHide()) {
-                roomId = room.getFollowRedirect();
-            }
-
             roomId = roomId + RoomManager.PUBLIC_ROOM_OFFSET;
         }
 

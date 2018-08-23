@@ -22,15 +22,11 @@ public class NAVIGATE implements MessageEvent {
         boolean hideFull = reader.readInt() == 1;
         int categoryId = reader.readInt();
 
-        boolean isRoomFollow = false;
-
         if (categoryId >= RoomManager.PUBLIC_ROOM_OFFSET) { // Public room follow, there should not any categories with an ID of 1000 or over... lol
             Room room = RoomManager.getInstance().getRoomById(categoryId - RoomManager.PUBLIC_ROOM_OFFSET);
 
             if (room != null) {
                 categoryId = room.getCategory().getId();
-                isRoomFollow = true;
-                hideFull = false;
             }
         }
 
@@ -54,18 +50,16 @@ public class NAVIGATE implements MessageEvent {
 
         if (category.isPublicSpaces()) {
             for (Room room : RoomManager.getInstance().replaceQueryRooms(RoomDao.getRoomsByUserId(0))) {
+                if (room.getData().isNavigatorHide()) {
+                    continue;
+                }
+
                 if (room.getData().getCategoryId() != category.getId()) {
                     continue;
                 }
 
-                if (!isRoomFollow) {
-                    if (room.getData().isNavigatorHide()) {
-                        continue;
-                    }
-
-                    if (hideFull && (room.getData().getVisitorsNow() >= room.getData().getVisitorsMax())) {
-                        continue;
-                    }
+                if (hideFull && (room.getData().getVisitorsNow() >= room.getData().getVisitorsMax())) {
+                    continue;
                 }
 
                 rooms.add(room);

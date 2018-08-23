@@ -5,37 +5,10 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class WalkwaysManager {
     private static WalkwaysManager instance;
-    private static Map<String, String> walkwayMap = new HashMap<>() {{
-        put("rooftop_2", "rooftop");
-        put("old_skool1", "old_skool0");
-        put("malja_bar_b", "malja_bar_a");
-        put("bar_b", "bar_a");
-        put("pool_b", "pool_a");
-
-        put("hallway0", "hallway2");
-        put("hallway1", "hallway2");
-        put("hallway3", "hallway2");
-        put("hallway4", "hallway2");
-        put("hallway5", "hallway2");
-
-        put("hallway6", "hallway9");
-        put("hallway7", "hallway9");
-        put("hallway8", "hallway9");
-        put("hallway10", "hallway9");
-        put("hallway11", "hallway9");
-
-        put("hallA", "entryhall");
-        put("hallB", "entryhall");
-        put("hallC", "entryhall");
-        put("hallD", "entryhall");
-    }};
-
     private List<WalkwaysEntrance> walkways;
 
     public WalkwaysManager() {
@@ -187,15 +160,5 @@ public class WalkwaysManager {
         }
 
         return instance;
-    }
-
-    /**
-     * Get the map of walkways by the sub model being the key and the parent room
-     * being the value.
-     *
-     * @return the map of walkways
-     */
-    public static Map<String, String> getWalkwayMap() {
-        return walkwayMap;
     }
 }
