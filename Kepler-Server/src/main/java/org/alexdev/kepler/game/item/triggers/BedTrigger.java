@@ -16,24 +16,31 @@ public class BedTrigger extends GenericTrigger {
 
     @Override
     public void onEntityStop(Entity entity, RoomEntity roomEntity, Item item, Object... customArgs) {
-        if (!this.isValidPillowTile(item, roomEntity.getPosition())) {
-            for (Position tile : this.getValidPillowTiles(item)) {
+        Position destination = entity.getRoomUser().getPosition().copy();
+
+        if (!isValidPillowTile(item, roomEntity.getPosition())) {
+            for (Position tile : getValidPillowTiles(item)) {
                 if (!RoomTile.isValidTile(roomEntity.getRoom(), entity, tile)) {
                     continue;
                 }
 
                 if (item.getPosition().getRotation() == 0) {
-                    entity.getRoomUser().getPosition().setY(tile.getY());
-
+                    destination.setY(tile.getY());
                 } else {
-                    entity.getRoomUser().getPosition().setX(tile.getX());
+                    destination.setX(tile.getX());
                 }
 
                 break;
             }
         }
 
-        if (this.isValidPillowTile(item, roomEntity.getPosition())) {
+        if (isValidPillowTile(item, destination)) {
+            if (!RoomTile.isValidTile(roomEntity.getRoom(), roomEntity.getEntity(), destination)) {
+                return;
+            }
+
+            entity.getRoomUser().warp(destination, false);
+
             roomEntity.removeStatus(StatusType.CARRY_ITEM);
             roomEntity.removeStatus(StatusType.CARRY_FOOD);
             roomEntity.removeStatus(StatusType.CARRY_DRINK);
@@ -58,7 +65,7 @@ public class BedTrigger extends GenericTrigger {
      * @param entityPosition the entity position to check against
      * @return true, if successful
      */
-    public boolean isValidPillowTile(Item item, Position entityPosition) {
+    public static boolean isValidPillowTile(Item item, Position entityPosition) {
         if (entityPosition.equals(item.getPosition())) {
             return true;
         } else {
@@ -78,7 +85,7 @@ public class BedTrigger extends GenericTrigger {
      * @param item the item to check for
      * @return the list of valid coordinates
      */
-    public List<Position> getValidPillowTiles(Item item) {
+    public static List<Position> getValidPillowTiles(Item item) {
         List<Position> tiles = new ArrayList<>();
         tiles.add(new Position(item.getPosition().getX(), item.getPosition().getY()));
 
