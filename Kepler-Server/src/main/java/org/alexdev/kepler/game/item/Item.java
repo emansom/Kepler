@@ -146,48 +146,9 @@ public class Item {
             }
         }
 
-
         for (Entity entity : entitiesToUpdate) {
             entity.getRoomUser().invokeItem(false);
         }
-    }
-
-    /**
-     * Gets if the teleporter can be moved, if the pair is broken then the teleporter
-     * is also considered moveable, only checks if the teleporters are across different rooms.
-     * 
-     * This is because if you try to pick it up while using a teleporter across rooms, the client will refuse to send another
-     * teleport request and you'll be unable to use teleporters until you relog.
-     *
-     * @return if it is moveable
-     */
-    public boolean isTeleporterMoveable() {
-        if (this.hasBehaviour(ItemBehaviour.TELEPORTER)) {
-            Item linkedTeleporter = ItemDao.getItem(this.teleporterId);
-
-            if (linkedTeleporter == null || RoomManager.getInstance().getRoomById(linkedTeleporter.getRoomId()) == null) {
-                return true;
-            }
-
-            if (linkedTeleporter.getRoomId() == roomId) {
-                return true;
-            }
-
-            for (Entity entity : this.getRoom().getEntities()) {
-                if (entity.getType() == EntityType.PLAYER) {
-
-                    Player player = (Player) entity;
-
-                    if (entity.getRoomUser().getPosition().equals(this.position) || player.getRoomUser().getAuthenticateTelporterId() == id) {
-                        //player.getRoomUser().setAuthenticateTelporterId(-1);
-                        //player.getRoomUser().setWalkingAllowed(true);//
-                        return false;
-                    }
-                }
-            }
-        }
-
-        return true;
     }
 
     /**

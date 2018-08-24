@@ -63,10 +63,6 @@ public class MOVESTUFF implements MessageEvent {
             return;
         }
 
-        if (!item.isTeleporterMoveable()) {
-            return;
-        }
-
         item.getPosition().setX(x);
         item.getPosition().setY(y);
         item.getPosition().setRotation(rotation);

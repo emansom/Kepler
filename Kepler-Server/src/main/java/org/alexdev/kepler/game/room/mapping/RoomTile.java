@@ -9,12 +9,34 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class RoomTile {
+    private static List<Position> ignorePoolTiles = new ArrayList<>() {{
+        add(new Position(20, 28));
+        add(new Position(19, 28));
+        add(new Position(17, 21));
+        add(new Position(17, 20));
+        add(new Position(31, 10));
+        add(new Position(31, 9));
+        add(new Position(19, 19));
+        add(new Position(18, 19));
+        add(new Position(11, 11));
+        add(new Position(10, 11));
+        add(new Position(21, 28));
+        add(new Position(22, 28));
+        add(new Position(16, 22));
+        add(new Position(16, 23));
+        add(new Position(30, 11));
+        add(new Position(30, 12));
+        add(new Position(12, 11));
+        add(new Position(13, 12));
+    }};
+    
     private Room room;
     private Position position;
     private CopyOnWriteArrayList<Entity> entities;
@@ -162,6 +184,17 @@ public class RoomTile {
 
             if (destination != null) {
                 return;
+            }
+
+            if (this.room.getModel().getName().equals("pool_a") ||
+                    this.room.getModel().getName().equals("pool_b") ||
+                    this.room.getModel().getName().equals("md_a")) {
+
+                for (Position pos : ignorePoolTiles) {
+                    if (pos.equals(this.position)) {
+                        return;
+                    }
+                }
             }
         }
 

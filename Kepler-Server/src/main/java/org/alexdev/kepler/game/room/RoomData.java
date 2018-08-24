@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.config.ServerConfiguration;
@@ -60,31 +61,8 @@ public class RoomData {
     }
 
     public void applyModelSettings() {
-        if (ServerConfiguration.getBoolean("debug")) {
-            this.navigatorHide = false;
+        if (GameConfiguration.getInstance().getBoolean("navigator.show.hidden.rooms")) {
             return;
-        }
-
-        if (this.model.equals("rooftop_2")
-                || this.model.equals("old_skool1")
-                || this.model.equals("malja_bar_b")
-                || this.model.equals("bar_b")
-                || this.model.equals("pool_b")
-                || this.model.equals("hallway0")
-                || this.model.equals("hallway1")
-                || this.model.equals("hallway3")
-                || this.model.equals("hallway4")
-                || this.model.equals("hallway5")
-                || this.model.equals("hallway6")
-                || this.model.equals("hallway7")
-                || this.model.equals("hallway8")
-                || this.model.equals("hallway10")
-                || this.model.equals("hallway11")
-                || this.model.equals("hallA")
-                || this.model.equals("hallB")
-                || this.model.equals("hallC")
-                || this.model.equals("hallD")) {
-            this.navigatorHide = true;
         }
 
         if (this.model.equals("rooftop")) {
@@ -130,6 +108,22 @@ public class RoomData {
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway7"));
             this.childRooms.add(RoomManager.getInstance().getRoomByModel("hallway6"));
         }
+    }
+
+
+    public boolean isNavigatorHide() {
+        if (GameConfiguration.getInstance().getBoolean("navigator.show.hidden.rooms")) {
+            return false;
+        }
+
+        Room parentModel = RoomManager.getInstance().getRoomByModel(WalkwaysManager.getWalkwayMap().get(this.model));
+
+        if (parentModel != null) {
+            room.setFollowRedirect(parentModel.getId());
+            return true;
+        }
+
+        return false;
     }
 
     public int getTotalVisitorsNow() {
@@ -308,10 +302,6 @@ public class RoomData {
 
     public void setVisitorsMax(int visitorsMax) {
         this.visitorsMax = visitorsMax;
-    }
-
-    public boolean isNavigatorHide() {
-        return navigatorHide;
     }
 
     public int getRating(){
