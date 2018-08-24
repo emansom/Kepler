@@ -76,7 +76,7 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
             player.dispose();
 
             //if (ServerConfiguration.getBoolean("log.connections")) {
-            log.info("[{}] Disonnection from {} ", player.getNetwork().getConnectionId(), NettyPlayerNetwork.getIpAddress(ctx.channel()));
+            log.info("[{}] Disconnection from {} ", player.getNetwork().getConnectionId(), NettyPlayerNetwork.getIpAddress(ctx.channel()));
             //}
         }
     }
