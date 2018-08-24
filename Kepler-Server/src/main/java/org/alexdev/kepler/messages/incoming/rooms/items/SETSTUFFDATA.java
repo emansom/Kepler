@@ -138,11 +138,6 @@ public class SETSTUFFDATA implements MessageEvent {
             return;
         }
 
-        // Don't process if the new data is the same as the old data
-        if (item.getCustomData().equals(newData)) {
-            return;
-        }
-
         item.setCustomData(newData);
         item.updateStatus();
 
