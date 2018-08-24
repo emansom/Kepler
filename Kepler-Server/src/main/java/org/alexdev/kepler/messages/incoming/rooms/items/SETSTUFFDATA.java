@@ -141,11 +141,6 @@ public class SETSTUFFDATA implements MessageEvent {
         item.setCustomData(newData);
         item.updateStatus();
 
-        // Don't process if the new data is the same as the old data
-        if (item.getCustomData().equals(newData)) {
-            return;
-        }
-
         if (!item.getDefinition().hasBehaviour(ItemBehaviour.CUSTOM_DATA_TRUE_FALSE)) {
             ItemDao.updateItem(item);
         }
