@@ -132,7 +132,7 @@ public class Pathfinder {
         if (!current.equals(room.getModel().getDoorLocation())) {
             if (toItem != null) {
                 if (isFinalMove) {
-                    return toItem.isWalkable();
+                    return toItem.isWalkable(tmp);
                 } else {
                     return toItem.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP) || toItem.isGateOpen();
                 }

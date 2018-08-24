@@ -121,7 +121,7 @@ public class RoomTile {
                 return false;
             }
 
-            if (!tile.getHighestItem().isWalkable()) {
+            if (!tile.getHighestItem().isWalkable(position)) {
                 return false;
             }
         }
@@ -143,7 +143,7 @@ public class RoomTile {
      */
     public boolean hasWalkableFurni() {
         if (this.highestItem != null) {
-            return this.highestItem.isWalkable();
+            return this.highestItem.isWalkable(this.position);
         }
 
         return true;
