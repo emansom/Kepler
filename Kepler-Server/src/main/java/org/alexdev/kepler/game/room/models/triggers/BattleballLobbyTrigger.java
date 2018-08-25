@@ -7,7 +7,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.messages.outgoing.games.LOUNGEINFO;
-import org.alexdev.kepler.messages.outgoing.games.PLAYERRANKS;
+import org.alexdev.kepler.messages.outgoing.games.GAMEPLAYERINFO;
 
 public class BattleballLobbyTrigger extends GenericTrigger {
     private final GameType gameType;
@@ -25,7 +25,7 @@ public class BattleballLobbyTrigger extends GenericTrigger {
         Player player = (Player) entity;
 
         player.send(new LOUNGEINFO());
-        player.send(new PLAYERRANKS(this.gameType, room.getEntityManager().getPlayers()));
+        player.send(new GAMEPLAYERINFO(this.gameType, room.getEntityManager().getPlayers()));
     }
 
     @Override

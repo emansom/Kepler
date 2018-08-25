@@ -8,11 +8,11 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.List;
 
-public class PLAYERRANKS extends MessageComposer {
+public class GAMEPLAYERINFO extends MessageComposer {
     private final List<Player> players;
     private final GameType type;
 
-    public PLAYERRANKS(GameType type, List<Player> players) {
+    public GAMEPLAYERINFO(GameType type, List<Player> players) {
         this.type = type;
         this.players = players;
     }
