@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.games.GAMEDELETED;
 import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
 import org.alexdev.kepler.messages.outgoing.games.GAMELOCATION;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -62,10 +63,56 @@ public class Game {
         this.gameState = GameState.STARTED;
 
         this.room = new Room();
-        this.room.getData().fill(id, "Battleball Arena", "");
+        this.room.getData().fill(this.id, "Battleball Arena", "");
         this.room.setRoomModel(GameManager.getInstance().getModel(this.gameType, this.mapId));
 
         this.send(new GAMELOCATION());
+    }
+
+    /**
+     * Make the player leave the game, abort the game if the owner leaves
+     *
+     * @param gamePlayer the game player to leave
+     */
+    public void leaveGame(GamePlayer gamePlayer, boolean hotelView) {
+        if (this.gameCreator == gamePlayer.getUserId()) {
+            this.abort(gamePlayer, hotelView);
+            return;
+        } else {
+            this.send(new GAMEDELETED());
+            this.movePlayer(gamePlayer.getPlayer(), gamePlayer.getTeamId(), -1);
+
+            if (this.gameState == GameState.STARTED) {
+                gamePlayer.getGame().getRoom().getEntityManager().leaveRoom(gamePlayer.getPlayer(), hotelView);
+            }
+
+            gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
+        }
+
+        // Not enough players left, after game started, delete the game
+        if (this.gameState == GameState.STARTED && !this.canGameStart()) {
+            this.abort(null, true);
+        }
+    }
+
+    private void abort(GamePlayer gamePlayer, boolean hotelView) {
+        this.send(new GAMEDELETED());
+
+        for (GameTeam team : this.teamPlayers.values()) {
+            for (GamePlayer p : team.getPlayerList()) {
+                if (this.gameState == GameState.STARTED) {
+                    if (p == gamePlayer) {
+                        continue;
+                    }
+
+                    p.getGame().getRoom().getEntityManager().leaveRoom(p.getPlayer(), true);
+                }
+
+                p.getPlayer().getRoomUser().setGamePlayer(null);
+            }
+        }
+
+        GameManager.getInstance().getGames().remove(this);
     }
 
     /**
@@ -112,6 +159,7 @@ public class Game {
             gamePlayer.setTeamId(toTeamId);
         } else {
             this.teamPlayers.get(gamePlayer.getTeamId()).getPlayerList().remove(gamePlayer);
+            player.getRoomUser().setGamePlayer(null);
         }
 
         this.send(new GAMEINSTANCE(this));

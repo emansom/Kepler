@@ -5,6 +5,7 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.RoomRightsDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.public_items.PublicItemParser;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -251,5 +252,14 @@ public class RoomEntityManager {
 
         player.getMessenger().sendStatusUpdate();
         RoomDao.saveVisitors(this.room);
+
+        // Leave game handler for Battleball/Snowstorm
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        if (gamePlayer != null) {
+            if (this.room.getModel().getName().contains("_arena_")) { // If we entered a different room then leave game
+                gamePlayer.getGame().leaveGame(gamePlayer, hotelView);
+            }
+        }
     }
 }
