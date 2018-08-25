@@ -1,18 +1,26 @@
 package org.alexdev.kepler.game.games;
 
+import com.github.bhlangonijr.chesslib.game.Game;
 import org.alexdev.kepler.dao.mysql.GameDao;
+import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.RoomManager;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class GameManager {
     private static GameManager instance = null;
+
+    private AtomicInteger idTracker;
     private List<GameRank> rankList;
+    private List<Game> games;
 
     public GameManager() {
         this.rankList = GameDao.getRanks();
+        this.games = new ArrayList<>();
+        this.idTracker = new AtomicInteger(0);
     }
 
     /**
@@ -59,5 +67,23 @@ public class GameManager {
         }
 
         return instance;
+    }
+
+    /**
+     * Creates a new game id for the game
+     *
+     * @return the game id
+     */
+    public int createId() {
+        return idTracker.incrementAndGet();
+    }
+
+    /**
+     * Gets the list of currently active games
+     *
+     * @return the list of games
+     */
+    public List<Game> getGames() {
+        return games;
     }
 }

@@ -12,6 +12,8 @@ import org.alexdev.kepler.messages.outgoing.games.LOUNGEINFO;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
+import java.util.Map;
+
 public class SnowStormLobbyTrigger extends GameLobbyTrigger {
     @Override
     public void onRoomEntry(Entity entity, Room room, Object... customArgs) {
@@ -32,6 +34,11 @@ public class SnowStormLobbyTrigger extends GameLobbyTrigger {
         }
 
         Player player = (Player) entity;
+
+    }
+
+    @Override
+    public void createGame(Player gameCreator, Map<String, Object> gameParameters) {
 
     }
 

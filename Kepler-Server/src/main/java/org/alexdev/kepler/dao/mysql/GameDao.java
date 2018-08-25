@@ -1,19 +1,16 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.game.games.GameRank;
+import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.game.player.PlayerDetails;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameDao {
     public static List<GameRank> getRanks() {

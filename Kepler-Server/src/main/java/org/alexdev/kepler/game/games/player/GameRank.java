@@ -1,4 +1,6 @@
-package org.alexdev.kepler.game.games;
+package org.alexdev.kepler.game.games.player;
+
+import org.alexdev.kepler.game.games.GameType;
 
 public class GameRank {
     private final int id;
