@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
@@ -23,7 +24,8 @@ public class Game {
     private String name;
 
     private List<Integer> powerUps;
-    private Map<Integer, List<GamePlayer>> teamPlayers;
+    private Map<Integer, GameTeam> teamPlayers;
+    private List<Player> spectators;
 
     private int gameCountdownSeconds = 15;
     private int restartGameSeconds = 1200;
@@ -39,12 +41,35 @@ public class Game {
 
         this.powerUps = new ArrayList<>();
         this.teamPlayers = new ConcurrentHashMap<>();
+        this.spectators = new CopyOnWriteArrayList<>();
 
         for (int i = 0; i < teamAmount; i++) {
-            this.teamPlayers.put(i, new CopyOnWriteArrayList<>());
+            this.teamPlayers.put(i, new GameTeam(i));
         }
 
         this.gameState = GameState.WAITING;
+    }
+
+    /**
+     * Get if there is enough space for this user to switch to the team
+     *
+     * @param teamId the team id to check for
+     * @return true, if successful
+     */
+    public boolean canSwitchTeam(int teamId) {
+        int maxPerTeam = 0;
+
+        if (this.teamAmount == 2) {
+            maxPerTeam = 5;
+        }
+        else if (this.teamAmount == 3) {
+            maxPerTeam = 3;
+        }
+        else if (this.teamAmount == 4) {
+            maxPerTeam = 2;
+        }
+
+        return this.teamPlayers.get(teamId).getPlayerList().size() <= maxPerTeam;
     }
 
     /**
@@ -55,24 +80,20 @@ public class Game {
      * @param toTeamId the team to move to, -1 if just removing user from team
      */
     public void movePlayer(Player player, int fromTeamId, int toTeamId) {
-        GamePlayer gamePlayer = this.getGamePlayer(player.getDetails().getId());
-
-        if (gamePlayer == null) {
-            gamePlayer = createGamePlayer(player);
-        }
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
         if (fromTeamId != -1) {
-            this.teamPlayers.get(fromTeamId).remove(gamePlayer);
+            this.teamPlayers.get(fromTeamId).getPlayerList().remove(gamePlayer);
         }
 
         if (toTeamId != -1) {
-            if (!this.teamPlayers.get(toTeamId).contains(gamePlayer)) {
-                this.teamPlayers.get(toTeamId).add(gamePlayer);
+            if (!this.teamPlayers.get(toTeamId).getPlayerList().contains(gamePlayer)) {
+                this.teamPlayers.get(toTeamId).getPlayerList().add(gamePlayer);
             }
 
             gamePlayer.setTeamId(toTeamId);
         } else {
-            this.teamPlayers.get(gamePlayer.getTeamId()).remove(gamePlayer);
+            this.teamPlayers.get(gamePlayer.getTeamId()).getPlayerList().remove(gamePlayer);
         }
 
         this.send(new GAMEINSTANCE(this));
@@ -84,10 +105,14 @@ public class Game {
      * @param composer the composer to send
      */
     public void send(MessageComposer composer) {
-        for (List<GamePlayer> players : this.teamPlayers.values()) {
-            for (GamePlayer gamePlayer : players) {
+        for (GameTeam team : this.teamPlayers.values()) {
+            for (GamePlayer gamePlayer : team.getPlayerList()) {
                 gamePlayer.getPlayer().send(composer);
             }
+        }
+
+        for (Player player : this.spectators) {
+            player.send(composer);
         }
     }
 
@@ -101,7 +126,7 @@ public class Game {
         int activeTeamCount = 0;
 
         for (int i = 0; i < this.teamAmount; i++) {
-            if (this.teamPlayers.get(i).size() > 0) {
+            if (this.teamPlayers.get(i).getPlayerList().size() > 0) {
                 activeTeamCount++;
             }
         }
@@ -125,8 +150,8 @@ public class Game {
      * @return the game player instance, else if null
      */
     public GamePlayer getGamePlayer(int userId) {
-        for (List<GamePlayer> players : this.teamPlayers.values()) {
-                for (GamePlayer gamePlayer : players) {
+        for (GameTeam team : this.teamPlayers.values()) {
+            for (GamePlayer gamePlayer : team.getPlayerList()) {
                 if (gamePlayer.getUserId() == userId) {
                     return gamePlayer;
                 }
@@ -134,6 +159,10 @@ public class Game {
         }
 
         return null;
+    }
+
+    public List<Player> getSpectators() {
+        return spectators;
     }
 
     public int getId() {
@@ -164,7 +193,7 @@ public class Game {
         return powerUps;
     }
 
-    public Map<Integer, List<GamePlayer>> getTeamPlayers() {
+    public Map<Integer, GameTeam> getTeamPlayers() {
         return teamPlayers;
     }
 

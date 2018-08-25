@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
@@ -58,15 +59,22 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
             return;
         }
 
-        String powerUps = (String) gameParameters.get("allowedPowerups");
-
         Game game = new Game(GameManager.getInstance().createId(), mapId, this.getGameType(), name, teams, gameCreator.getDetails().getId());
+
+        GamePlayer gamePlayer = new GamePlayer(gameCreator);
+        gamePlayer.setGameId(game.getId());
+        gamePlayer.setTeamId(0);
+
+        gameCreator.getRoomUser().setGamePlayer(gamePlayer);
+        game.movePlayer(gameCreator, -1, 0);
+
+        String powerUps = (String) gameParameters.get("allowedPowerups");
 
         for (String powerUp : powerUps.split(",")) {
             game.getPowerUps().add(Integer.parseInt(powerUp));
         }
 
-        game.movePlayer(gameCreator, -1, 0);
+        GameManager.getInstance().getGames().add(game);
     }
 
     @Override

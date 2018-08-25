@@ -1,6 +1,7 @@
 package org.alexdev.kepler.messages.incoming.games;
 
 import com.github.bhlangonijr.chesslib.game.Game;
+import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModelTriggerType;
@@ -22,6 +23,8 @@ public class GETINSTANCELIST implements MessageEvent {
             return;
         }
 
-        player.send(new INSTANCELIST());
+        GameLobbyTrigger gameLobbyTrigger = (GameLobbyTrigger) room.getModel().getModelTrigger();
+
+        player.send(new INSTANCELIST(GameManager.getInstance().getGamesByType(gameLobbyTrigger.getGameType())));
     }
 }

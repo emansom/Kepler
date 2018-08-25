@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.games;
 
-import com.github.bhlangonijr.chesslib.game.Game;
 import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
@@ -45,6 +44,34 @@ public class GameManager {
     }
 
     /**
+     * Gets a game instance by specified game id
+     *
+     * @param gameId the game id used
+     * @return the game instance
+     */
+    public Game getGameById(int gameId) {
+        for (Game game : this.games) {
+            if (game.getId() == gameId) {
+                return game;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the list of games by type
+     *
+     * @param gameType the type of game
+     * @return the list of games
+     */
+    public List<Game> getGamesByType(GameType gameType) {
+        return this.games.stream().filter(
+                game -> game.getGameType() == gameType
+        ).collect(Collectors.toList());
+    }
+
+    /**
      * Get the list of game ranks by type
      *
      * @param gameType the type of game to get the ranks for
@@ -77,6 +104,7 @@ public class GameManager {
     public int createId() {
         return idTracker.incrementAndGet();
     }
+
 
     /**
      * Gets the list of currently active games

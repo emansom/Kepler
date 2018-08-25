@@ -25,11 +25,11 @@ public class GAMEINSTANCE extends MessageComposer {
         // TODO: Special SnowStorm parameters
 
         response.writeInt(this.game.getMapId());
-        response.writeInt(0);
+        response.writeInt(this.game.getSpectators().size());
         response.writeInt(this.game.getTeamAmount());
 
         for (int i = 0; i < this.game.getTeamAmount(); i++) {
-            List<GamePlayer> playerList = this.game.getTeamPlayers().get(i);
+            List<GamePlayer> playerList = this.game.getTeamPlayers().get(i).getPlayerList();
 
             response.writeInt(playerList.size());
 

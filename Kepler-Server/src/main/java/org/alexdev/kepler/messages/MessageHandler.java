@@ -7,6 +7,7 @@ import org.alexdev.kepler.messages.incoming.games.GAMEPARAMETERVALUES;
 import org.alexdev.kepler.messages.incoming.games.GETINSTANCELIST;
 import org.alexdev.kepler.messages.incoming.club.*;
 import org.alexdev.kepler.messages.incoming.games.INITIATECREATEGAME;
+import org.alexdev.kepler.messages.incoming.games.OBSERVEINSTANCE;
 import org.alexdev.kepler.messages.incoming.inventory.*;
 import org.alexdev.kepler.messages.incoming.catalogue.*;
 import org.alexdev.kepler.messages.incoming.messenger.*;
@@ -318,6 +319,7 @@ public class MessageHandler {
         registerEvent(159, new GETINSTANCELIST());
         registerEvent(162, new INITIATECREATEGAME());
         registerEvent(163, new GAMEPARAMETERVALUES());
+        registerEvent(160, new OBSERVEINSTANCE());
     }
 
     /**
