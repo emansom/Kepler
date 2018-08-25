@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game;
+package org.alexdev.kepler.game.games;
 
 public class GameParameter {
     private String name;
@@ -8,10 +8,10 @@ public class GameParameter {
     private int max;
     private String defaultValue;
 
-    public GameParameter(String name, boolean editable, String defaultOption, int min, int max) {
+    public GameParameter(String name, boolean editable, String defaultValue, int min, int max) {
         this.name = name;
         this.editable = editable;
-        this.defaultValue = defaultOption;
+        this.defaultValue = defaultValue;
         this.hasMinMax = true;
         this.min = min;
         this.max = max;

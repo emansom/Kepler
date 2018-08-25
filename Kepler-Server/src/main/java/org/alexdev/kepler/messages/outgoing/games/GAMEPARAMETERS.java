@@ -1,6 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
-import org.alexdev.kepler.game.GameParameter;
+import org.alexdev.kepler.game.games.GameParameter;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 

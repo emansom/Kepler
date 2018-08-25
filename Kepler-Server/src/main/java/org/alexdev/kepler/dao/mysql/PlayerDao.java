@@ -507,6 +507,7 @@ public class PlayerDao {
                 row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
                 row.getBoolean("badge_active"), row.getBoolean("allow_stalking"),
-                row.getBoolean("sound_enabled"), row.getBoolean("tutorial_finished"));
+                row.getBoolean("sound_enabled"), row.getBoolean("tutorial_finished"),
+                row.getInt("battleball_points"), row.getInt("snowstorm_points"));
     }
 }
