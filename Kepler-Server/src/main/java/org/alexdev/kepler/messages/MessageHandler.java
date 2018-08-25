@@ -3,11 +3,8 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.incoming.games.GAMEPARAMETERVALUES;
-import org.alexdev.kepler.messages.incoming.games.GETINSTANCELIST;
+import org.alexdev.kepler.messages.incoming.games.*;
 import org.alexdev.kepler.messages.incoming.club.*;
-import org.alexdev.kepler.messages.incoming.games.INITIATECREATEGAME;
-import org.alexdev.kepler.messages.incoming.games.OBSERVEINSTANCE;
 import org.alexdev.kepler.messages.incoming.inventory.*;
 import org.alexdev.kepler.messages.incoming.catalogue.*;
 import org.alexdev.kepler.messages.incoming.messenger.*;
@@ -320,6 +317,7 @@ public class MessageHandler {
         registerEvent(162, new INITIATECREATEGAME());
         registerEvent(163, new GAMEPARAMETERVALUES());
         registerEvent(160, new OBSERVEINSTANCE());
+        registerEvent(165, new INITIATEJOINGAME());
     }
 
     /**
