@@ -61,14 +61,14 @@ public class Pathfinder {
 
         if (oldHeight - 3 >= newHeight) {
             return fromItem != null && (fromItem.hasBehaviour(ItemBehaviour.TELEPORTER)
-                    || (fromItem.getDefinition().getSprite().equals("poolEnter" )&& !entity.getRoomUser().containsStatus(StatusType.SWIM)) // Allow height difference only if they're heading to exit and swimming
-                    || (fromItem.getDefinition().getSprite().equals("poolExit") && entity.getRoomUser().containsStatus(StatusType.SWIM))); // Allow height difference only if they're heading to entry and  not swimming
+                    || (fromItem.getDefinition().getSprite().equals("poolEnter"))//&& !entity.getRoomUser().containsStatus(StatusType.SWIM)) // Allow height difference only if they're heading to exit and swimming
+                    || (fromItem.getDefinition().getSprite().equals("poolExit")));// && entity.getRoomUser().containsStatus(StatusType.SWIM))); // Allow height difference only if they're heading to entry and  not swimming
         }
 
         if (oldHeight + 1.5 <= newHeight) {
             return toItem != null && (toItem.hasBehaviour(ItemBehaviour.TELEPORTER)
-                    || (toItem.getDefinition().getSprite().equals("poolEnter" )&& !entity.getRoomUser().containsStatus(StatusType.SWIM)) // Allow height difference only if they're heading to exit and swimming
-                    || (toItem.getDefinition().getSprite().equals("poolExit") && entity.getRoomUser().containsStatus(StatusType.SWIM))); // Allow height difference only if they're heading to entry and  not swimming
+                    || (toItem.getDefinition().getSprite().equals("poolEnter"))//&& !entity.getRoomUser().containsStatus(StatusType.SWIM)) // Allow height difference only if they're heading to exit and swimming
+                    || (toItem.getDefinition().getSprite().equals("poolExit")));// && entity.getRoomUser().containsStatus(StatusType.SWIM))); // Allow height difference only if they're heading to entry and  not swimming
         }
 
         // Only check these below if the user is in a pool room.
@@ -132,7 +132,7 @@ public class Pathfinder {
         if (!current.equals(room.getModel().getDoorLocation())) {
             if (toItem != null) {
                 if (isFinalMove) {
-                    return toItem.isWalkable();
+                    return toItem.isWalkable(tmp);
                 } else {
                     return toItem.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP) || toItem.isGateOpen();
                 }

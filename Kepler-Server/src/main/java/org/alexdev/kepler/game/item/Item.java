@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.base.ItemDefinition;
 import org.alexdev.kepler.game.item.roller.RollingData;
+import org.alexdev.kepler.game.item.triggers.BedTrigger;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.game.pathfinder.AffectedTile;
@@ -165,7 +166,7 @@ public class Item {
      *
      * @return true, if successful.
      */
-    public boolean isWalkable() {
+    public boolean isWalkable(Position selectedPosition) {
         if (this.getDefinition().getSprite().equals("poolLift")) {
             return this.currentProgramValue.equals("open");
         }
@@ -179,7 +180,24 @@ public class Item {
         }
 
         if (this.hasBehaviour(ItemBehaviour.CAN_LAY_ON_TOP)) {
-            return true;
+            Position newPosition = null;
+
+            //if (!BedTrigger.isValidPillowTile(this, destination)) {
+            for (Position tile : BedTrigger.getValidPillowTiles(this)) {
+                newPosition = selectedPosition.copy();
+
+                if (this.position.getRotation() == 0) {
+                    newPosition.setY(tile.getY());
+                } else {
+                    newPosition.setX(tile.getX());
+                }
+
+                break;
+
+            }
+           // }
+
+            return newPosition != null && getRoom().getMapping().getTile(newPosition).getEntities().isEmpty();
         }
 
         if (this.hasBehaviour(ItemBehaviour.CAN_STAND_ON_TOP)) {
@@ -335,7 +353,7 @@ public class Item {
 
 
             if (tile.getEntities().size() > 0) {
-                if (!item.isWalkable()) {
+                if (!item.isWalkable(position)) {
                     return false;
                 }
             }
