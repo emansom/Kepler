@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModelTriggerType;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
 import org.alexdev.kepler.messages.outgoing.games.INSTANCELIST;
+import org.alexdev.kepler.messages.outgoing.games.JOINFAILED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -24,7 +25,6 @@ public class GETINSTANCELIST implements MessageEvent {
         }
 
         GameLobbyTrigger gameLobbyTrigger = (GameLobbyTrigger) room.getModel().getModelTrigger();
-
         player.send(new INSTANCELIST(GameManager.getInstance().getGamesByType(gameLobbyTrigger.getGameType())));
     }
 }

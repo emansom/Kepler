@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.games;
 
 import com.github.bhlangonijr.chesslib.game.GameMode;
+import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.player.Player;

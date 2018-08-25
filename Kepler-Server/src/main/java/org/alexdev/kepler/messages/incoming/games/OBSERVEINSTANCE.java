@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
 import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
+import org.alexdev.kepler.messages.outgoing.games.JOINFAILED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -42,14 +43,23 @@ public class OBSERVEINSTANCE implements MessageEvent {
         }
 
         if (game.getGameState() == GameState.WAITING) {
+            if (player.getDetails().getTickets() <= 1) {
+                player.send(new JOINFAILED(JOINFAILED.FailedReason.TICKETS_NEEDED));
+                return;
+            }
+
             // Find team with lowest team members to add to
-            List<GameTeam> temporaryList = new ArrayList<>(game.getTeamPlayers().values());
-            temporaryList.sort(Comparator.comparingInt(team -> team.getPlayerList().size()));
+            List<GameTeam> sortedTeamList = new ArrayList<>(game.getTeamPlayers().values());
+            sortedTeamList.sort(Comparator.comparingInt(team -> team.getPlayerList().size()));
 
             // Select game team
-            GameTeam gameTeam = temporaryList.get(0);
+            GameTeam gameTeam = sortedTeamList.get(0);
 
             if (gameTeam == null) {
+                return;
+            }
+
+            if (!game.canSwitchTeam(gameTeam.getId())) {
                 return;
             }
 
