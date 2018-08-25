@@ -1,10 +1,13 @@
 package org.alexdev.kepler.game.games;
 
+import com.github.bhlangonijr.chesslib.game.GameMode;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
+import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
+import org.alexdev.kepler.messages.outgoing.games.GAMELOCATION;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
@@ -21,6 +24,8 @@ public class Game {
 
     private GameType gameType;
     private GameState gameState;
+    private Room room;
+
     private String name;
 
     private List<Integer> powerUps;
@@ -48,6 +53,19 @@ public class Game {
         }
 
         this.gameState = GameState.WAITING;
+    }
+
+    /**
+     * Method to start the game
+     */
+    public void startGame() {
+        this.gameState = GameState.STARTED;
+
+        this.room = new Room();
+        this.room.getData().fill(id, "Battleball Arena", "");
+        this.room.setRoomModel(GameManager.getInstance().getModel(this.gameType, this.mapId));
+
+        this.send(new GAMELOCATION());
     }
 
     /**
@@ -229,4 +247,7 @@ public class Game {
         this.gameLengthSeconds = gameLengthSeconds;
     }
 
+    public Room getRoom() {
+        return room;
+    }
 }

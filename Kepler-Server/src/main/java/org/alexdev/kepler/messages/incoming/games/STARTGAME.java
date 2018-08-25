@@ -10,9 +10,10 @@ import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class INITIATEJOINGAME implements MessageEvent {
+public class STARTGAME implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
+
         if (player.getRoomUser().getRoom() == null) {
             return;
         }
@@ -31,17 +32,14 @@ public class INITIATEJOINGAME implements MessageEvent {
 
         Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
 
-        if (game == null || game.getGameState() != GameState.WAITING) {
+        if (game.getGameState() != GameState.WAITING) {
             return;
         }
 
-        int instanceId = reader.readInt();
-        int teamId = reader.readInt();
-
-        if (!game.canSwitchTeam(teamId)) {
+        if (game.getGameCreator() != player) {
             return;
         }
 
-        game.movePlayer(player, gamePlayer.getTeamId(), teamId);
+        game.startGame();
     }
 }

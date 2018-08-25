@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Room {
+    private RoomModel roomModel;
     private RoomData roomData;
     private RoomMapping roomMapping;
     private RoomEntityManager roomEntityManager;
@@ -205,7 +206,18 @@ public class Room {
      * @return the room model
      */
     public RoomModel getModel() {
+        if (this.roomModel != null) {
+            return this.roomModel;
+        }
+
         return RoomModelManager.getInstance().getModel(this.roomData.getModel());
+    }
+
+    /**
+     * Set the room model, override the instance
+     */
+    public void setRoomModel(RoomModel roomModel) {
+        this.roomModel = roomModel;
     }
 
     /**

@@ -318,6 +318,7 @@ public class MessageHandler {
         registerEvent(163, new GAMEPARAMETERVALUES());
         registerEvent(160, new OBSERVEINSTANCE());
         registerEvent(165, new INITIATEJOINGAME());
+        registerEvent(170, new STARTGAME());
     }
 
     /**

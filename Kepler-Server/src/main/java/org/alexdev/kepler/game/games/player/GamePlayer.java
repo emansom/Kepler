@@ -1,7 +1,10 @@
 package org.alexdev.kepler.game.games.player;
 
+import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.Room;
 
 public class GamePlayer {
     private Player player;
@@ -19,6 +22,10 @@ public class GamePlayer {
         this.gameId = -1;
         this.score = 0;
         this.position = new Position();
+    }
+
+    public Game getGame() {
+        return GameManager.getInstance().getGameById(this.getGameId());
     }
 
     public Player getPlayer() {

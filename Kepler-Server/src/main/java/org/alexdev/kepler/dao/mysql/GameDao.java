@@ -1,9 +1,11 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
+import org.alexdev.kepler.game.games.mapping.GameMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.game.player.PlayerDetails;
+import org.alexdev.kepler.game.room.models.RoomModel;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -40,6 +42,35 @@ public class GameDao {
         }
 
         return ranks;
+    }
+
+    public static List<RoomModel> getGameMaps() {
+        List<RoomModel> maps = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM games_maps", sqlConnection);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String modelName = (resultSet.getString("type").equalsIgnoreCase("battleball") ? "bb" : "ss") + "_arena_" + resultSet.getInt("id");
+                maps.add(new RoomModel(modelName, modelName, 0, 0, 0, 0, resultSet.getString("heightmap"), null));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+
+        return maps;
     }
 
     /**

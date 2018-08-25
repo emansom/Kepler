@@ -20,10 +20,16 @@ public class ROOM_DIRECTORY implements MessageEvent {
         reader.readBytes(1); // strip 'A'
         int roomId = reader.readInt();
 
-        Room room = RoomManager.getInstance().getRoomById(roomId);
+        Room room = null;
 
-        if (room == null) {
-            return;
+        if (roomId == -1 && player.getRoomUser().getGamePlayer() != null) {
+            room = player.getRoomUser().getGamePlayer().getGame().getRoom();
+        } else {
+            room = RoomManager.getInstance().getRoomById(roomId);
+
+            if (room == null) {
+                return;
+            }
         }
 
         room.getEntityManager().enterRoom(player, null);

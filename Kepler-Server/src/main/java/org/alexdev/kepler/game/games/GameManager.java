@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.games;
 import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.models.RoomModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,10 +15,14 @@ public class GameManager {
 
     private AtomicInteger idTracker;
     private List<GameRank> rankList;
+    private List<RoomModel> modelList;
+
     private List<Game> games;
 
     public GameManager() {
         this.rankList = GameDao.getRanks();
+        this.modelList = GameDao.getGameMaps();
+
         this.games = new ArrayList<>();
         this.idTracker = new AtomicInteger(0);
     }
@@ -113,5 +118,22 @@ public class GameManager {
      */
     public List<Game> getGames() {
         return games;
+    }
+
+    /**
+     * Get model by type and map id
+     *
+     * @return the room model instance
+     */
+    public RoomModel getModel(GameType type, int mapId) {
+        String prefix = (type == GameType.BATTLEBALL ? "bb" : "ss");
+
+        for (RoomModel roomModel : this.modelList) {
+            if (roomModel.getName().equals(prefix + "_arena_" + mapId)) {
+                return roomModel;
+            }
+        }
+
+        return null;
     }
 }
