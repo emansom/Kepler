@@ -95,7 +95,7 @@ public class Game {
         this.room.setRoomModel(roomModel);
 
         for (GameTeam team : this.teamPlayers.values()) {
-            for (GamePlayer p : team.getPlayerList()) {
+            for (GamePlayer p : team.getPlayers()) {
                 p.setEnteringGame(true);
             }
         }
@@ -109,44 +109,31 @@ public class Game {
      * @param gamePlayer the game player to leave
      */
     public void leaveGame(GamePlayer gamePlayer, boolean hotelView) {
-        if (this.gameCreator == gamePlayer.getUserId()) {
+        /*if (this.gameCreator == gamePlayer.getUserId()) {
             this.abort(gamePlayer, hotelView);
             return;
-        } else {
-            this.send(new GAMEDELETED());
-            this.movePlayer(gamePlayer.getPlayer(), gamePlayer.getTeamId(), -1);
+        } else {*/
 
-            if (this.gameState == GameState.STARTED) {
-                gamePlayer.getGame().getRoom().getEntityManager().leaveRoom(gamePlayer.getPlayer(), hotelView);
-            }
+        this.send(new GAMEDELETED());
+        this.movePlayer(gamePlayer.getPlayer(), gamePlayer.getTeamId(), -1);
 
-            gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
+        if (this.gameState == GameState.STARTED) {
+            gamePlayer.getGame().getRoom().getEntityManager().leaveRoom(gamePlayer.getPlayer(), hotelView);
         }
+
+        gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
+
+        if (!this.canGameContinue()) {
+            GameManager.getInstance().getGames().remove(this);
+        }
+
+        /*}
+
 
         // Not enough players left, after game started, delete the game
         if (this.gameState == GameState.STARTED && !this.canGameStart()) {
             this.abort(null, true);
-        }
-    }
-
-    private void abort(GamePlayer gamePlayer, boolean hotelView) {
-        this.send(new GAMEDELETED());
-
-        for (GameTeam team : this.teamPlayers.values()) {
-            for (GamePlayer p : team.getPlayerList()) {
-                if (this.gameState == GameState.STARTED) {
-                    if (p == gamePlayer) {
-                        continue;
-                    }
-
-                    p.getGame().getRoom().getEntityManager().leaveRoom(p.getPlayer(), true);
-                }
-
-                p.getPlayer().getRoomUser().setGamePlayer(null);
-            }
-        }
-
-        GameManager.getInstance().getGames().remove(this);
+        }*/
     }
 
     /**
@@ -168,7 +155,7 @@ public class Game {
             maxPerTeam = 2;
         }
 
-        return this.teamPlayers.get(teamId).getPlayerList().size() <= maxPerTeam;
+        return this.teamPlayers.get(teamId).getActivePlayers().size() < maxPerTeam;
     }
 
     /**
@@ -182,17 +169,23 @@ public class Game {
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
         if (fromTeamId != -1) {
-            this.teamPlayers.get(fromTeamId).getPlayerList().remove(gamePlayer);
+            this.teamPlayers.get(fromTeamId).getPlayers().remove(gamePlayer);
         }
 
         if (toTeamId != -1) {
-            if (!this.teamPlayers.get(toTeamId).getPlayerList().contains(gamePlayer)) {
-                this.teamPlayers.get(toTeamId).getPlayerList().add(gamePlayer);
+            if (!this.teamPlayers.get(toTeamId).getPlayers().contains(gamePlayer)) {
+                this.teamPlayers.get(toTeamId).getPlayers().add(gamePlayer);
             }
 
             gamePlayer.setTeamId(toTeamId);
+            gamePlayer.setInGame(true);
         } else {
-            this.teamPlayers.get(gamePlayer.getTeamId()).getPlayerList().remove(gamePlayer);
+            if (this.gameState == GameState.WAITING) {
+                this.teamPlayers.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
+            } else {
+                gamePlayer.setInGame(false);
+            }
+
             player.getRoomUser().setGamePlayer(null);
         }
 
@@ -206,7 +199,7 @@ public class Game {
      */
     public void send(MessageComposer composer) {
         for (GameTeam team : this.teamPlayers.values()) {
-            for (GamePlayer gamePlayer : team.getPlayerList()) {
+            for (GamePlayer gamePlayer : team.getActivePlayers()) {
                 gamePlayer.getPlayer().send(composer);
             }
         }
@@ -226,12 +219,30 @@ public class Game {
         int activeTeamCount = 0;
 
         for (int i = 0; i < this.teamAmount; i++) {
-            if (this.teamPlayers.get(i).getPlayerList().size() > 0) {
+            if (this.teamPlayers.get(i).getActivePlayers().size() > 0) {
                 activeTeamCount++;
             }
         }
 
         return activeTeamCount > 1;
+    }
+
+    /**
+     * Gets if there's enough players in different teams for the game to continue
+     * (minimum of 1 players)
+     *
+     * @return true, if successful
+     */
+    public boolean canGameContinue() {
+        int activeTeamCount = 0;
+
+        for (int i = 0; i < this.teamAmount; i++) {
+            if (this.teamPlayers.get(i).getActivePlayers().size() > 0) {
+                activeTeamCount++;
+            }
+        }
+
+        return activeTeamCount > 0;
     }
 
     /**
@@ -251,7 +262,7 @@ public class Game {
      */
     public GamePlayer getGamePlayer(int userId) {
         for (GameTeam team : this.teamPlayers.values()) {
-            for (GamePlayer gamePlayer : team.getPlayerList()) {
+            for (GamePlayer gamePlayer : team.getPlayers()) {
                 if (gamePlayer.getUserId() == userId) {
                     return gamePlayer;
                 }

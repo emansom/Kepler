@@ -67,7 +67,10 @@ ALTER TABLE `games_ranks`
 
 ALTER TABLE `games_ranks`
   MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
-COMMIT;
+
+ALTER TABLE `users` 
+  ADD `battleball_points` INT(11) NOT NULL DEFAULT '0' AFTER `tutorial_finished`, 
+  ADD `snowstorm_points` INT(11) NOT NULL DEFAULT '0' AFTER `battleball_points`;
 
 -- migrate:down
 

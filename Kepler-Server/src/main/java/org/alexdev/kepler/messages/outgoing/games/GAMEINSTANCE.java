@@ -29,7 +29,7 @@ public class GAMEINSTANCE extends MessageComposer {
         response.writeInt(this.game.getTeamAmount());
 
         for (int i = 0; i < this.game.getTeamAmount(); i++) {
-            List<GamePlayer> playerList = this.game.getTeamPlayers().get(i).getPlayerList();
+            List<GamePlayer> playerList = this.game.getTeamPlayers().get(i).getPlayers();
 
             response.writeInt(playerList.size());
 

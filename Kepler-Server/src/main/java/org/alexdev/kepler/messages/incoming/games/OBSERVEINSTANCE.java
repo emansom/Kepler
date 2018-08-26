@@ -50,7 +50,7 @@ public class OBSERVEINSTANCE implements MessageEvent {
 
             // Find team with lowest team members to add to
             List<GameTeam> sortedTeamList = new ArrayList<>(game.getTeamPlayers().values());
-            sortedTeamList.sort(Comparator.comparingInt(team -> team.getPlayerList().size()));
+            sortedTeamList.sort(Comparator.comparingInt(team -> team.getPlayers().size()));
 
             // Select game team
             GameTeam gameTeam = sortedTeamList.get(0);

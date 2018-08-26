@@ -14,6 +14,7 @@ public class GamePlayer {
     private Position position;
     private int score;
     private boolean enteringGame;
+    private boolean inGame;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -21,6 +22,8 @@ public class GamePlayer {
         this.teamId = -1;
         this.gameId = -1;
         this.score = 0;
+        this.inGame = false;
+        this.enteringGame = false;
         this.position = new Position();
     }
 
@@ -70,5 +73,13 @@ public class GamePlayer {
 
     public void setEnteringGame(boolean enteringGame) {
         this.enteringGame = enteringGame;
+    }
+
+    public boolean isInGame() {
+        return inGame;
+    }
+
+    public void setInGame(boolean inGame) {
+        this.inGame = inGame;
     }
 }
