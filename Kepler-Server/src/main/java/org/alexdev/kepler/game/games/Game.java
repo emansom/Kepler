@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games;
 
+import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.battleball.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Game {
     private int id;
@@ -38,6 +40,7 @@ public class Game {
     private Map<Integer, GameTeam> teamPlayers;
     private List<Player> spectators;
 
+    private boolean[][] battleballBlockedMap;
     private BattleballTileState[][] battleballTileStates;
     private BattleballTileColour[][] battleballTileColours;
 
@@ -73,6 +76,8 @@ public class Game {
         this.gameState = GameState.STARTED;
 
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
+
+        this.battleballBlockedMap = new boolean[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
         this.battleballTileColours = new BattleballTileColour[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
         this.battleballTileStates = new BattleballTileState[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
 
@@ -84,11 +89,15 @@ public class Game {
 
                 if (tileState == RoomTileState.CLOSED) {
                     this.battleballTileColours[x][y] = BattleballTileColour.DISABLED;
+                    this.battleballBlockedMap[x][y] = true;
                 } else {
                     this.battleballTileColours[x][y] = BattleballTileColour.DEFAULT;
+                    this.battleballBlockedMap[x][y] = false;
                 }
             }
         }
+
+        this.assignSpawnPoints();
 
         this.room = new Room();
         this.room.getData().fill(this.id, "Battleball Arena", "");
@@ -101,6 +110,52 @@ public class Game {
         }
 
         this.send(new GAMELOCATION());
+    }
+
+    private void assignSpawnPoints() {
+        for (GameTeam team : this.teamPlayers.values()) {
+            GameSpawn gameSpawn = GameManager.getInstance().getGameSpawn(this.gameType, this.mapId, team.getId());
+
+            if (gameSpawn == null) {
+                continue;
+            }
+
+            AtomicInteger spawnX = new AtomicInteger(gameSpawn.getX());
+            AtomicInteger spawnY = new AtomicInteger(gameSpawn.getY());
+            AtomicInteger spawnRotation = new AtomicInteger(gameSpawn.getZ());
+
+            boolean flip = false;
+
+            for (GamePlayer p : team.getPlayers()) {
+                try {
+                    findSpawn(flip, spawnX, spawnY, spawnRotation);
+                    flip = (!flip);
+                } catch (Exception ex) {
+                    flip = (!flip);
+                }
+
+                p.getPosition().setX(spawnX.get());
+                p.getPosition().setY(spawnY.get());
+                p.getPosition().setRotation(spawnRotation.get());
+                p.getPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+            }
+        }
+    }
+
+    private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
+        while (this.battleballBlockedMap[spawnX.get()][spawnY.get()]) {
+            if (spawnRotation.get() == 0 || spawnRotation.get() == 2) {
+                if (flip)
+                    spawnX.decrementAndGet();// -= 1;
+                else
+                    spawnX.incrementAndGet();// += 1;
+            } else if (spawnRotation.get() == 4 || spawnRotation.get() == 6) {
+                if (flip)
+                    spawnY.decrementAndGet();// -= 1;
+                else
+                    spawnY.incrementAndGet();// += 1;
+            }
+        }
     }
 
     /**

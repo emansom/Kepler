@@ -26,7 +26,6 @@ public class RoomModelDao {
                         resultSet.getInt("door_x"), resultSet.getInt("door_y"), resultSet.getDouble("door_z"),
                         resultSet.getInt("door_dir"), resultSet.getString("heightmap"), resultSet.getString("trigger_class"));
 
-                roomModel.parse();
                 roomModels.put(roomModel.getId(), roomModel);
             }
 
