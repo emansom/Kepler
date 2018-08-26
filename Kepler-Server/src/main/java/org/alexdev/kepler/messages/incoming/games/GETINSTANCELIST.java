@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
 import org.alexdev.kepler.messages.outgoing.games.INSTANCELIST;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 public class GETINSTANCELIST implements MessageEvent {
     @Override
@@ -22,6 +23,12 @@ public class GETINSTANCELIST implements MessageEvent {
         }
 
         GameLobbyTrigger gameLobbyTrigger = (GameLobbyTrigger) room.getModel().getModelTrigger();
+
+        // Don't show panel and lounge info if create game is disabled
+        if (!GameConfiguration.getInstance().getBoolean(gameLobbyTrigger.getGameType().name().toLowerCase() + ".create.game.enabled")) {
+            return;
+        }
+
         player.send(new INSTANCELIST(GameManager.getInstance().getGamesByType(gameLobbyTrigger.getGameType())));
     }
 }
