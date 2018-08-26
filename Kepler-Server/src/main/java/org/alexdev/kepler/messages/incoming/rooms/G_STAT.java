@@ -18,6 +18,10 @@ public class G_STAT implements MessageEvent {
             return;
         }
 
+        if (player.getRoomUser().getGamePlayer() != null && player.getRoomUser().getGamePlayer().isInGame()) {
+            return; // Not needed for game arenas
+        }
+
         Room room = player.getRoomUser().getRoom();
 
         // Only refresh rights when in private room

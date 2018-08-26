@@ -49,6 +49,8 @@ public class RoomTaskManager {
 
     private void loadGameTasks() {
         Game game = GameManager.getInstance().getGameById(this.room.getId());
+
+        this.scheduleTask("StatusTask", new StatusTask(this.room), 0, 1, TimeUnit.SECONDS);
         this.scheduleTask("GameTask", new GameTask(this.room, game), Game.PREPARING_GAME_SECONDS_LEFT * 1000, 500, TimeUnit.MILLISECONDS);
     }
 
