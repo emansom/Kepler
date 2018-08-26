@@ -29,8 +29,6 @@ public class ROOM_DIRECTORY implements MessageEvent {
         if (roomId == -1 && gamePlayer != null && gamePlayer.isEnteringGame()) {
             room = gamePlayer.getGame().getRoom();
             room.getEntityManager().enterRoom(player, gamePlayer.getPosition());
-
-            player.send(new FULLGAMESTATUS(player.getRoomUser().getGamePlayer().getGame()));
         } else {
             room = RoomManager.getInstance().getRoomById(roomId);
 

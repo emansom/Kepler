@@ -137,10 +137,13 @@ public class Game {
         runnable.setFuture(future);
     }
 
+    /**
+     * Method for when the game begins after the initial preparing game seconds timer
+     */
     private void beginGame() {
         // Stop all players from walking when game starts if they selected a tile
         for (GameTeam team : teamPlayers.values()) {
-            for (GamePlayer p : team.getPlayers()) {
+            for (GamePlayer p : team.getActivePlayers()) {
                 p.getPlayer().getRoomUser().setWalking(false);
             }
         }
@@ -166,6 +169,9 @@ public class Game {
         this.send(new GAMESTART(Game.GAME_LENGTH_SECONDS));
     }
 
+    /**
+     * Assign spawn points to all team members
+     */
     private void assignSpawnPoints() {
         for (GameTeam team : this.teamPlayers.values()) {
             GameSpawn gameSpawn = GameManager.getInstance().getGameSpawn(this.gameType, this.mapId, team.getId());
@@ -192,10 +198,19 @@ public class Game {
                 p.getPosition().setY(spawnY.get());
                 p.getPosition().setRotation(spawnRotation.get());
                 p.getPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+                this.battleballBlockedMap[spawnX.get()][spawnY.get()] = true;
              }
         }
     }
 
+    /**
+     * Find a spawn with given coordinates.
+     *
+     * @param flip whether the integers should get incremented or decremented
+     * @param spawnX the x coord
+     * @param spawnY the y coord
+     * @param spawnRotation the spawn rotation
+     */
     private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
         while (this.battleballBlockedMap[spawnX.get()][spawnY.get()]) {
             if (spawnRotation.get() == 0 || spawnRotation.get() == 2) {
@@ -314,7 +329,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > 0;
+        return activeTeamCount > 1;
     }
 
     /**
