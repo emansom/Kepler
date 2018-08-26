@@ -20,7 +20,7 @@ public class G_HMAP implements MessageEvent {
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
         if (gamePlayer != null) {
-            gamePlayer.getGame().send(new FULLGAMESTATUS(gamePlayer.getGame()));
+            player.send(new FULLGAMESTATUS(gamePlayer.getGame()));
         }
     }
 }
