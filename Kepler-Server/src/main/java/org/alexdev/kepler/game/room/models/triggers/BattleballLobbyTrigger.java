@@ -14,6 +14,7 @@ import org.alexdev.kepler.messages.outgoing.games.LOUNGEINFO;
 import org.alexdev.kepler.messages.outgoing.games.GAMEPLAYERINFO;
 import org.alexdev.kepler.util.StringUtil;
 
+import java.util.List;
 import java.util.Map;
 
 public class BattleballLobbyTrigger extends GameLobbyTrigger {
@@ -26,7 +27,12 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
         Player player = (Player) entity;
 
         player.send(new LOUNGEINFO());
+
+        // Show you everyones score level
         player.send(new GAMEPLAYERINFO(this.getGameType(), room.getEntityManager().getPlayers()));
+
+        // Show everyone your score level
+        room.send(new GAMEPLAYERINFO(this.getGameType(), List.of(player)));
     }
 
     @Override
