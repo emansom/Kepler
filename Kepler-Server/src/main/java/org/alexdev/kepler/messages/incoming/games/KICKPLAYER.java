@@ -38,14 +38,22 @@ public class KICKPLAYER implements MessageEvent {
 
         int instanceId = reader.readInt();
 
+        GamePlayer teamPlayer = null;
+
         for (GameTeam team : game.getTeamPlayers().values()) {
-            for (GamePlayer teamPlayer : team.getActivePlayers()) {
-                if (teamPlayer.getPlayer().getRoomUser().getInstanceId() == instanceId) {
-                    game.leaveGame(teamPlayer);
-                    teamPlayer.getPlayer().send(new CREATEFAILED(CREATEFAILED.FailedReason.KICKED));
+            for (GamePlayer p : team.getActivePlayers()) {
+                if (p.getPlayer().getRoomUser().getInstanceId() == instanceId) {
+                    teamPlayer = p;
                     break;
                 }
             }
         }
+
+        if (teamPlayer == null) {
+            return;
+        }
+
+        game.leaveGame(teamPlayer);
+        teamPlayer.getPlayer().send(new CREATEFAILED(CREATEFAILED.FailedReason.KICKED));
     }
 }
