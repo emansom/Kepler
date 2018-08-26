@@ -13,6 +13,7 @@ import org.alexdev.kepler.game.triggers.GenericTrigger;
 import org.alexdev.kepler.messages.outgoing.games.LOUNGEINFO;
 import org.alexdev.kepler.messages.outgoing.games.GAMEPLAYERINFO;
 import org.alexdev.kepler.util.StringUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,10 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
 
     @Override
     public void createGame(Player gameCreator, Map<String, Object> gameParameters) {
+        if (!GameConfiguration.getInstance().getBoolean("battleball.create.game.enabled")) {
+            return;
+        }
+
         int mapId = (int) gameParameters.get("fieldType");
 
         if (mapId < 1 || mapId > 5) {

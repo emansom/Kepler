@@ -50,6 +50,8 @@ public class GameConfiguration {
         config.put("chat.garbled.text", "true");
         config.put("chat.bubble.timeout.seconds", "15");
 
+        config.put("battleball.create.game.enabled", "false");
+
         config.put("tutorial.enabled", "true");
         config.put("profile.editing", "true");
         config.put("vouchers.enabled", "true");
