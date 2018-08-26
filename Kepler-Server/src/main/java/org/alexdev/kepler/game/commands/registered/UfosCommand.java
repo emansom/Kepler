@@ -74,8 +74,7 @@ public class UfosCommand extends Command {
         }
     }
 
-    public static void createVoiceSpeakMessage(Room room, String text)
-    {
+    public static void createVoiceSpeakMessage(Room room, String text) {
         // 'Speaker'
         Item pItem = new Item();
         pItem.setId(Integer.MAX_VALUE);
