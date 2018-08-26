@@ -38,6 +38,7 @@ public class CommandManager {
         this.commands.put(new String[] { "idle", "afk" }, new AfkCommand());
         this.commands.put(new String[] { "motto" }, new ChangeMottoCommand());
         this.commands.put(new String[] { "ufos" }, new UfosCommand());
+        this.commands.put(new String[] { "talk" }, new TalkCommand());
 
         // Staff commands
         this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
