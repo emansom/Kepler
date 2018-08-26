@@ -41,7 +41,7 @@ public class CHAT implements MessageEvent {
         player.getRoomUser().getTimerManager().resetRoomTimer();
 
         // Make chat hard to read for long distance in public rooms
-        if (room.isPublicRoom() && GameConfiguration.getInstance().getBoolean("chat.garbled.text")) {
+        if (room.isPublicRoom() && GameConfiguration.getInstance().getBoolean("chat.garbled.text") && !room.getModel().getName().contains("_arena_")) {
             int sourceX = player.getRoomUser().getPosition().getX();
             int sourceY = player.getRoomUser().getPosition().getY();
 

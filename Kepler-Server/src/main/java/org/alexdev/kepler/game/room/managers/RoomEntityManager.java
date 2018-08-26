@@ -116,6 +116,15 @@ public class RoomEntityManager {
         entity.getRoomUser().setInstanceId(this.generateUniqueId());
 
         if (entity.getType() == EntityType.PLAYER) {
+            Player player = (Player) entity;
+            GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+            if (gamePlayer != null && gamePlayer.isEnteringGame()) {
+                entity.getRoomUser().setInstanceId(player.getDetails().getId());
+            }
+        }
+
+        if (entity.getType() == EntityType.PLAYER) {
             if (!this.room.isActive()) {
                 this.initialiseRoom();
             }

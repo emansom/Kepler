@@ -13,6 +13,10 @@ public class G_USRS implements MessageEvent {
             return;
         }
 
+        if (player.getRoomUser().getGamePlayer() != null && player.getRoomUser().getGamePlayer().isInGame()) {
+            return; // Not needed for game arenas
+        }
+
         Room room = player.getRoomUser().getRoom();
 
         player.send(new USER_OBJECTS(room.getEntities()));
