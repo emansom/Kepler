@@ -67,7 +67,7 @@ public class OBSERVEINSTANCE implements MessageEvent {
             player.getRoomUser().getGamePlayer().setGameId(game.getId());
             player.getRoomUser().getGamePlayer().setTeamId(gameTeam.getId());
 
-            game.movePlayer(player, -1, gameTeam.getId());
+            game.movePlayer(player.getRoomUser().getGamePlayer(), -1, gameTeam.getId());
             game.send(new GAMEINSTANCE(game));
         }
     }

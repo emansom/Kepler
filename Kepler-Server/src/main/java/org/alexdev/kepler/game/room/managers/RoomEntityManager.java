@@ -264,7 +264,7 @@ public class RoomEntityManager {
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
         if (gamePlayer != null && !gamePlayer.isEnteringGame()) {
-            gamePlayer.getGame().leaveGame(gamePlayer, hotelView);
+            gamePlayer.getGame().leaveGame(gamePlayer);
         }
     }
 }

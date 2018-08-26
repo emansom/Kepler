@@ -108,32 +108,15 @@ public class Game {
      *
      * @param gamePlayer the game player to leave
      */
-    public void leaveGame(GamePlayer gamePlayer, boolean hotelView) {
-        /*if (this.gameCreator == gamePlayer.getUserId()) {
-            this.abort(gamePlayer, hotelView);
-            return;
-        } else {*/
-
-        this.send(new GAMEDELETED());
-        this.movePlayer(gamePlayer.getPlayer(), gamePlayer.getTeamId(), -1);
-
-        if (this.gameState == GameState.STARTED) {
-            gamePlayer.getGame().getRoom().getEntityManager().leaveRoom(gamePlayer.getPlayer(), hotelView);
-        }
-
+    public void leaveGame(GamePlayer gamePlayer) {
         gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
+        gamePlayer.getPlayer().send(new GAMEDELETED());
+
+        this.movePlayer(gamePlayer, gamePlayer.getTeamId(), -1);
 
         if (!this.canGameContinue()) {
             GameManager.getInstance().getGames().remove(this);
         }
-
-        /*}
-
-
-        // Not enough players left, after game started, delete the game
-        if (this.gameState == GameState.STARTED && !this.canGameStart()) {
-            this.abort(null, true);
-        }*/
     }
 
     /**
@@ -161,13 +144,11 @@ public class Game {
     /**
      * Moves a player from one team to another team.
      *
-     * @param player the player to move
+     * @param gamePlayer the player to move
      * @param fromTeamId the team to move from, -1 if just to add to team
      * @param toTeamId the team to move to, -1 if just removing user from team
      */
-    public void movePlayer(Player player, int fromTeamId, int toTeamId) {
-        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
-
+    public void movePlayer(GamePlayer gamePlayer, int fromTeamId, int toTeamId) {
         if (fromTeamId != -1) {
             this.teamPlayers.get(fromTeamId).getPlayers().remove(gamePlayer);
         }
@@ -186,7 +167,7 @@ public class Game {
                 gamePlayer.setInGame(false);
             }
 
-            player.getRoomUser().setGamePlayer(null);
+            gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
         }
 
         this.send(new GAMEINSTANCE(this));

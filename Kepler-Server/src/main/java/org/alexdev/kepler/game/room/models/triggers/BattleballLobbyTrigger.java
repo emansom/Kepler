@@ -72,7 +72,7 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
         gamePlayer.setTeamId(0);
 
         gameCreator.getRoomUser().setGamePlayer(gamePlayer);
-        game.movePlayer(gameCreator, -1, 0);
+        game.movePlayer(gamePlayer, -1, 0);
 
         String powerUps = (String) gameParameters.get("allowedPowerups");
 
