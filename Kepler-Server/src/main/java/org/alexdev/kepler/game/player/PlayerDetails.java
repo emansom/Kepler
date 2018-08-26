@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -43,32 +44,37 @@ public class PlayerDetails {
     private long nextHandout;
     private long lastOnline;
 
+    // Game points
+    private int snowstormPoints;
+    private int battleballPoints;
+
     public PlayerDetails() {
     }
 
     /**
      * Fill the player data for the entity.
-     *
-     * @param id             the id to add
-     * @param username       the username
-     * @param figure         the figure
-     * @param poolFigure     the pool figure
-     * @param credits        the credits
-     * @param motto          the motto
-     * @param consoleMotto   the console motto
-     * @param sex            the sex
-     * @param tickets        the tickets
-     * @param film           the film
-     * @param rank           the rank
-     * @param lastOnline     the last time they were online in a unix timestamp
+     * @param id the id to add
+     * @param username the username
+     * @param figure the figure
+     * @param poolFigure the pool figure
+     * @param credits the credits
+     * @param motto the motto
+     * @param consoleMotto the console motto
+     * @param sex the sex
+     * @param tickets the tickets
+     * @param film the film
+     * @param rank the rank
+     * @param lastOnline the last time they were online in a unix timestamp
      * @param firstClubSubscription the club subscribed date in a unix timestamp
      * @param clubExpiration the club expiration date in a unix timestamp
-     * @param currentBadge   the current badge
-     * @param showBadge      whether the badge is shown or not
-     * @param allowStalking  allow stalking/following
-     * @param soundEnabled   allow playing music from soundmachines
+     * @param currentBadge the current badge
+     * @param showBadge whether the badge is shown or not
+     * @param allowStalking allow stalking/following
+     * @param soundEnabled allow playing sound from client
+     * @param battleballPoints the points accumulated when playing battleball
+     * @param snowstormPoints the points accumulated when playing snowstorm
      */
-    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished, int battleballPoints, int snowstormPoints) {
         this.id = id;
         this.username = StringUtil.filterInput(username, true);
         this.figure = StringUtil.filterInput(figure, true); // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
@@ -83,16 +89,13 @@ public class PlayerDetails {
         this.lastOnline = lastOnline;
         this.firstClubSubscription = firstClubSubscription;
         this.clubExpiration = clubExpiration;
-
-        if (!StringUtils.isAlphanumeric(currentBadge) || currentBadge.length() != 3) {
-            currentBadge = ""; // TODO: Log warning
-        }
-
-        this.currentBadge = currentBadge;
+        this.currentBadge = (!StringUtils.isAlphanumeric(currentBadge) || currentBadge.length() != 3) ? "" : currentBadge;
         this.showBadge = showBadge;
         this.allowStalking = allowStalking;
         this.soundEnabled = soundEnabled;
         this.tutorialFinished = tutorialFinished;
+        this.battleballPoints = battleballPoints;
+        this.snowstormPoints = snowstormPoints;
 
         if (this.credits < 0) {
             this.credits = 0;
@@ -289,5 +292,33 @@ public class PlayerDetails {
 
     public void setTutorialFinished(boolean tutorialFinished) {
         this.tutorialFinished = tutorialFinished;
+    }
+
+    public int getSnowStormPoints() {
+        return snowstormPoints;
+    }
+
+    public void setSnowStormPoints(int snowstormPoints) {
+        this.snowstormPoints = snowstormPoints;
+    }
+
+    public int getBattleballPoints() {
+        return battleballPoints;
+    }
+
+    public void setBattleballPoints(int battleballPoints) {
+        this.battleballPoints = battleballPoints;
+    }
+
+    public int getGamePoints(GameType type) {
+        if (type == GameType.BATTLEBALL) {
+            return this.battleballPoints;
+        }
+
+        if (type == GameType.SNOWSTORM) {
+            return this.snowstormPoints;
+        }
+
+        return -1;
     }
 }

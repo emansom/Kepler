@@ -1,16 +1,19 @@
 package org.alexdev.kepler.messages.incoming.games;
 
+import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.GameState;
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
-import org.alexdev.kepler.messages.outgoing.games.INSTANCELIST;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class GETINSTANCELIST implements MessageEvent {
+public class STARTGAME implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
+
         if (player.getRoomUser().getRoom() == null) {
             return;
         }
@@ -21,7 +24,26 @@ public class GETINSTANCELIST implements MessageEvent {
             return;
         }
 
-        GameLobbyTrigger gameLobbyTrigger = (GameLobbyTrigger) room.getModel().getModelTrigger();
-        player.send(new INSTANCELIST(GameManager.getInstance().getGamesByType(gameLobbyTrigger.getGameType())));
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        if (gamePlayer == null) {
+            return;
+        }
+
+        Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
+
+        if (game.getGameState() != GameState.WAITING) {
+            return;
+        }
+
+        if (game.getGameCreator() != player) {
+            return;
+        }
+
+        if (!game.canGameStart()) {
+            return;
+        }
+
+        game.startGame();
     }
 }

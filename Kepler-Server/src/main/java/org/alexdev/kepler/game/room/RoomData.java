@@ -38,6 +38,16 @@ public class RoomData {
         this.room = room;
     }
 
+    public void fill(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.ownerId = 0;
+        this.ccts = "";
+        this.model = "";
+        this.ownerName = "";
+    }
+
     public void fill(int id, int ownerId, String ownerName, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax, int rating) {
         this.id = id;
         this.ownerId = ownerId;

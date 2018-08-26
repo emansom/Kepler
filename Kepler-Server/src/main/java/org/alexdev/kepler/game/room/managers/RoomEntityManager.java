@@ -5,6 +5,7 @@ import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.dao.mysql.RoomRightsDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.public_items.PublicItemParser;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -177,6 +178,13 @@ public class RoomEntityManager {
 
         // Save increased visitor count of this room
         RoomDao.saveVisitors(this.room);
+
+        // If we were entering a game, we're not anymore
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        if (gamePlayer != null && gamePlayer.isEnteringGame()) {
+            gamePlayer.setEnteringGame(false);
+        }
     }
 
     /**
@@ -251,5 +259,12 @@ public class RoomEntityManager {
 
         player.getMessenger().sendStatusUpdate();
         RoomDao.saveVisitors(this.room);
+
+        // If we left room while in a game, leave the game
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        if (gamePlayer != null && !gamePlayer.isEnteringGame()) {
+            gamePlayer.getGame().leaveGame(gamePlayer);
+        }
     }
 }

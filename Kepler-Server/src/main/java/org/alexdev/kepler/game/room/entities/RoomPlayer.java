@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.entities;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -32,6 +33,7 @@ public class RoomPlayer extends RoomEntity {
     private List<Item> tradeItems;
     private boolean tradeAccept;
 
+    private GamePlayer gamePlayer;
     private String currentGameId;
 
     public RoomPlayer(Player player) {
@@ -171,5 +173,13 @@ public class RoomPlayer extends RoomEntity {
 
     public void setCurrentGameId(String currentGameId) {
         this.currentGameId = currentGameId;
+    }
+
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
+    }
+
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
     }
 }

@@ -3,9 +3,8 @@ package org.alexdev.kepler.messages;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.incoming.games.GETINSTANCELIST;
+import org.alexdev.kepler.messages.incoming.games.*;
 import org.alexdev.kepler.messages.incoming.club.*;
-import org.alexdev.kepler.messages.incoming.games.INITIATECREATEGAME;
 import org.alexdev.kepler.messages.incoming.inventory.*;
 import org.alexdev.kepler.messages.incoming.catalogue.*;
 import org.alexdev.kepler.messages.incoming.messenger.*;
@@ -316,6 +315,12 @@ public class MessageHandler {
     private void registerGamePackets() {
         registerEvent(159, new GETINSTANCELIST());
         registerEvent(162, new INITIATECREATEGAME());
+        registerEvent(163, new GAMEPARAMETERVALUES());
+        registerEvent(160, new OBSERVEINSTANCE());
+        registerEvent(165, new INITIATEJOINGAME());
+        registerEvent(170, new STARTGAME());
+        registerEvent(167, new LEAVEGAME());
+        registerEvent(168, new KICKPLAYER());
     }
 
     /**

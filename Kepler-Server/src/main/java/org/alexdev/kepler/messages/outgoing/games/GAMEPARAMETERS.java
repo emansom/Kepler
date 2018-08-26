@@ -1,20 +1,14 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
-import org.alexdev.kepler.game.GameParameter;
+import org.alexdev.kepler.game.games.GameParameter;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class GAMEPARAMETERS extends MessageComposer {
     private GameParameter[] parameters;
 
-    public GAMEPARAMETERS() {
-        this.parameters = new GameParameter[] {
-                new GameParameter("fieldType", true, "1", 1, 5),
-                new GameParameter("numTeams", true, "2", 2, 4),
-                new GameParameter("allowedPowerups", true,"1,2,3,4,5,6,7,8"),
-                //new GameParameter("gameLengthChoice", true, "1", 1, 3),
-                new GameParameter("name", true, "")
-        };
+    public GAMEPARAMETERS(GameParameter[] gameParameters) {
+        this.parameters = gameParameters;
 
         /*
 

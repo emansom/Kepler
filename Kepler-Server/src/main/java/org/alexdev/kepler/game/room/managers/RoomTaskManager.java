@@ -32,9 +32,13 @@ public class RoomTaskManager {
     public void startTasks() {
         int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
 
-        this.scheduleTask("EntityTask", new EntityTask(this.room), 0,500, TimeUnit.MILLISECONDS);
-        this.scheduleTask("StatusTask", new StatusTask(this.room), 0,1, TimeUnit.SECONDS);
-        this.scheduleTask("RollerTask", new RollerTask(this.room), 1, rollerMillisTask, TimeUnit.MILLISECONDS);
+        this.scheduleTask("EntityTask", new EntityTask(this.room), 0, 500, TimeUnit.MILLISECONDS);
+        this.scheduleTask("StatusTask", new StatusTask(this.room), 0, 1, TimeUnit.SECONDS);
+
+        // Only allow roller tasks to be created for private rooms
+        if (!this.room.isPublicRoom()) {
+            this.scheduleTask("RollerTask", new RollerTask(this.room), 1, rollerMillisTask, TimeUnit.MILLISECONDS);
+        }
     }
 
     /**
