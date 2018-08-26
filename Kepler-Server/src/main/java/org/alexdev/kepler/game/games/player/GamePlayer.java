@@ -9,11 +9,11 @@ import org.alexdev.kepler.game.room.Room;
 public class GamePlayer {
     private Player player;
     private int userId;
-    private int instanceId;
     private int gameId;
     private int teamId;
     private Position position;
-    private int score = 0;
+    private int score;
+    private boolean enteringGame;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -34,10 +34,6 @@ public class GamePlayer {
 
     public int getUserId() {
         return userId;
-    }
-
-    public int getInstanceId() {
-        return instanceId;
     }
 
     public int getTeamId() {
@@ -66,5 +62,13 @@ public class GamePlayer {
 
     public void setGameId(int gameId) {
         this.gameId = gameId;
+    }
+
+    public boolean isEnteringGame() {
+        return enteringGame;
+    }
+
+    public void setEnteringGame(boolean enteringGame) {
+        this.enteringGame = enteringGame;
     }
 }

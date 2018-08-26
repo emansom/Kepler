@@ -32,7 +32,7 @@ public class ServerConfiguration {
     }
 
     private static void setConfigurationDefaults() {
-        // Default settings
+        // DEFAULT settings
         config.put("bind", "127.0.0.1");
         config.put("server.port", "12321");
         config.put("server.limit.bandwidth", "false");//String.valueOf(40*1024));

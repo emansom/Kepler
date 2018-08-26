@@ -1,9 +1,8 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.game.games.mapping.GameMap;
-import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.room.models.RoomModel;
 
@@ -71,6 +70,35 @@ public class GameDao {
 
 
         return maps;
+    }
+
+    public static List<GameSpawn> getGameSpawns() {
+        List<GameSpawn> spawns = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM games_player_spawns", sqlConnection);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                spawns.add(new GameSpawn(resultSet.getInt("team_id"),  resultSet.getInt("map_id"), resultSet.getString("type"),
+                        resultSet.getInt("x"), resultSet.getInt("y"), resultSet.getDouble("z")));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+
+        return spawns;
     }
 
     /**

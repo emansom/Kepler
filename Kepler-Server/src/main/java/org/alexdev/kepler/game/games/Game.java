@@ -1,12 +1,14 @@
 package org.alexdev.kepler.game.games;
 
-import com.github.bhlangonijr.chesslib.game.GameMode;
-import org.alexdev.kepler.dao.mysql.CurrencyDao;
+import org.alexdev.kepler.game.games.battleball.BattleballTileColour;
+import org.alexdev.kepler.game.games.battleball.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.messages.outgoing.games.GAMEDELETED;
 import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
 import org.alexdev.kepler.messages.outgoing.games.GAMELOCATION;
@@ -26,7 +28,9 @@ public class Game {
 
     private GameType gameType;
     private GameState gameState;
+
     private Room room;
+    private RoomModel roomModel;
 
     private String name;
 
@@ -34,9 +38,14 @@ public class Game {
     private Map<Integer, GameTeam> teamPlayers;
     private List<Player> spectators;
 
-    private int gameCountdownSeconds = 15;
-    private int restartGameSeconds = 1200;
-    private int gameLengthSeconds = 180;
+    private BattleballTileState[][] battleballTileStates;
+    private BattleballTileColour[][] battleballTileColours;
+
+    private int preparingGameSecondsLeft = 15;
+
+    public static final int GAME_COUNTDOWN_SECONDS = 15;
+    public static final int RESTART_GAME_SECONDS = 1200;
+    public static final int GAME_LENGTH_SECONDS = 180;
 
     public Game(int id, int mapId, GameType gameType, String name, int teamAmount, int gameCreator) {
         this.id = id;
@@ -63,9 +72,33 @@ public class Game {
     public void startGame() {
         this.gameState = GameState.STARTED;
 
+        this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
+        this.battleballTileColours = new BattleballTileColour[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
+        this.battleballTileStates = new BattleballTileState[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
+
+        for (int y = 0; y < roomModel.getMapSizeY(); y++) {
+            for (int x = 0; x < roomModel.getMapSizeX(); x++) {
+                RoomTileState tileState = roomModel.getTileState(x, y);
+
+                this.battleballTileStates[x][y] = BattleballTileState.DEFAULT;
+
+                if (tileState == RoomTileState.CLOSED) {
+                    this.battleballTileColours[x][y] = BattleballTileColour.DISABLED;
+                } else {
+                    this.battleballTileColours[x][y] = BattleballTileColour.DEFAULT;
+                }
+            }
+        }
+
         this.room = new Room();
         this.room.getData().fill(this.id, "Battleball Arena", "");
-        this.room.setRoomModel(GameManager.getInstance().getModel(this.gameType, this.mapId));
+        this.room.setRoomModel(roomModel);
+
+        for (GameTeam team : this.teamPlayers.values()) {
+            for (GamePlayer p : team.getPlayerList()) {
+                p.setEnteringGame(true);
+            }
+        }
 
         this.send(new GAMELOCATION());
     }
@@ -272,28 +305,20 @@ public class Game {
         return mapId;
     }
 
-    public int getGameCountdownSeconds() {
-        return gameCountdownSeconds;
+    public BattleballTileState[][] getTileStates() {
+        return battleballTileStates;
     }
 
-    public void setGameCountdownSeconds(int gameCountdownSeconds) {
-        this.gameCountdownSeconds = gameCountdownSeconds;
+    public BattleballTileColour[][] getTileColours() {
+        return battleballTileColours;
     }
 
-    public int getRestartGameSeconds() {
-        return restartGameSeconds;
+    public int getPreparingGameSecondsLeft() {
+        return preparingGameSecondsLeft;
     }
 
-    public void setRestartGameSeconds(int restartGameSeconds) {
-        this.restartGameSeconds = restartGameSeconds;
-    }
-
-    public int getGameLengthSeconds() {
-        return gameLengthSeconds;
-    }
-
-    public void setGameLengthSeconds(int gameLengthSeconds) {
-        this.gameLengthSeconds = gameLengthSeconds;
+    public RoomModel getRoomModel() {
+        return roomModel;
     }
 
     public Room getRoom() {

@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.dao.mysql.GameDao;
+import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.models.RoomModel;
@@ -14,17 +15,36 @@ public class GameManager {
     private static GameManager instance = null;
 
     private AtomicInteger idTracker;
+
+    private List<GameSpawn> spawnList;
     private List<GameRank> rankList;
     private List<RoomModel> modelList;
-
     private List<Game> games;
 
     public GameManager() {
         this.rankList = GameDao.getRanks();
         this.modelList = GameDao.getGameMaps();
+        this.spawnList = GameDao.getGameSpawns();
 
         this.games = new ArrayList<>();
         this.idTracker = new AtomicInteger(0);
+    }
+
+    /**
+     * Get the game spawn by gamr type, map id and team id
+     * @param gameType the game type (battleball or snowstorm)
+     * @param mapId the map id
+     * @param teamId the team id
+     * @return the game spawn
+     */
+    public GameSpawn getGameSpawn(GameType gameType, int mapId, int teamId) {
+        for (GameSpawn gameSpawn : this.spawnList) {
+            if ((gameSpawn.getGameType() == gameType) && (gameSpawn.getMapId() == mapId) && (gameSpawn.getTeamId() == teamId)) {
+                return gameSpawn;
+            }
+        }
+
+        return null;
     }
 
     /**

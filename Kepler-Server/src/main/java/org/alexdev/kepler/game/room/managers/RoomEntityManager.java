@@ -178,6 +178,13 @@ public class RoomEntityManager {
 
         // Save increased visitor count of this room
         RoomDao.saveVisitors(this.room);
+
+        // If we were entering a game, we're not anymore
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        if (gamePlayer != null && gamePlayer.isEnteringGame()) {
+            gamePlayer.setEnteringGame(false);
+        }
     }
 
     /**
@@ -253,13 +260,11 @@ public class RoomEntityManager {
         player.getMessenger().sendStatusUpdate();
         RoomDao.saveVisitors(this.room);
 
-        // Leave game handler for Battleball/Snowstorm
+        // If we left room while in a game, leave the game
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
-        if (gamePlayer != null) {
-            if (this.room.getModel().getName().contains("_arena_")) { // If we entered a different room then leave game
-                gamePlayer.getGame().leaveGame(gamePlayer, hotelView);
-            }
+        if (gamePlayer != null && !gamePlayer.isEnteringGame()) {
+            gamePlayer.getGame().leaveGame(gamePlayer, hotelView);
         }
     }
 }
