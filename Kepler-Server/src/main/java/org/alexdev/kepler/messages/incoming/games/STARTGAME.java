@@ -40,6 +40,10 @@ public class STARTGAME implements MessageEvent {
             return;
         }
 
+        if (!game.canGameStart()) {
+            return;
+        }
+
         game.startGame();
     }
 }
