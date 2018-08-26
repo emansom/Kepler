@@ -10,7 +10,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
-import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDE_OBJECT;
+import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDEOBJECTBUNDLE;
 
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -69,7 +69,7 @@ public class UfosCommand extends Command {
                 int destY = ThreadLocalRandom.current().nextInt(-(20 + (pItem.getPosition().getY() * 2)), 20 + (pItem.getPosition().getX() * 2));// + ThreadLocalRandom.current().nextInt(-10, -20);
                 float destZ = ThreadLocalRandom.current().nextInt(-9, 10);
 
-                room.send(new SLIDE_OBJECT(pItem.getPosition(), destX, destY, destZ, pItem.getId()));
+                room.send(new SLIDEOBJECTBUNDLE(pItem.getPosition(), destX, destY, destZ, pItem.getId()));
             //}, 0, incremental += 10, TimeUnit.MILLISECONDS);
         }
     }

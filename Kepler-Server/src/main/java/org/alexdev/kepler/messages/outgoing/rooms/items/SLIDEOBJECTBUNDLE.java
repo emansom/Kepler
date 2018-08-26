@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.outgoing.rooms.items;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.item.Item;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
@@ -10,9 +11,9 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SLIDEOBJECTBUNDLE extends MessageComposer {
-    private final Item roller;
-    private final List<Item> rollingItems;
-    private final Entity rollingEntity;
+    private Item roller;
+    private List<Item> rollingItems;
+    private Entity rollingEntity;
 
     private Position position;
     private int destX;
