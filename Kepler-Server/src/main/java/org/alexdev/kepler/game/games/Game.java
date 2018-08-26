@@ -140,7 +140,7 @@ public class Game {
     private void beginGame() {
         // Stop all players from walking when game starts if they selected a tile
         for (GameTeam team : teamPlayers.values()) {
-            for (GamePlayer p : team.getPlayers()) {
+            for (GamePlayer p : team.getActivePlayers()) {
                 p.getPlayer().getRoomUser().setWalking(false);
             }
         }
@@ -314,7 +314,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > 0;
+        return activeTeamCount > 1;
     }
 
     /**
