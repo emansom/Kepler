@@ -1,9 +1,11 @@
 package org.alexdev.kepler.game.room.managers;
 
-import gherkin.lexer.Ru;
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.EntityTask;
+import org.alexdev.kepler.game.room.tasks.GameTask;
 import org.alexdev.kepler.game.room.tasks.RollerTask;
 import org.alexdev.kepler.game.room.tasks.StatusTask;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -30,15 +32,26 @@ public class RoomTaskManager {
      * Start all needed room tasks, called when there's at least 1 player in the room.
      */
     public void startTasks() {
-        int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
+        if (this.room.getModel().getName().contains("_arena_")) {
+            this.loadGameTasks();
+            return;
+        }
 
         this.scheduleTask("EntityTask", new EntityTask(this.room), 0, 500, TimeUnit.MILLISECONDS);
         this.scheduleTask("StatusTask", new StatusTask(this.room), 0, 1, TimeUnit.SECONDS);
 
         // Only allow roller tasks to be created for private rooms
         if (!this.room.isPublicRoom()) {
+            int rollerMillisTask = GameConfiguration.getInstance().getInteger("roller.tick.default");
             this.scheduleTask("RollerTask", new RollerTask(this.room), 1, rollerMillisTask, TimeUnit.MILLISECONDS);
         }
+    }
+
+    private void loadGameTasks() {
+        Game game = GameManager.getInstance().getGameById(this.room.getId());
+
+        this.scheduleTask("GameTask", new GameTask(this.room, game), Game.PREPARING_GAME_SECONDS_LEFT * 1000, 500, TimeUnit.MILLISECONDS);
+        this.scheduleTask("StatusTask", new StatusTask(this.room), 0, 1, TimeUnit.SECONDS);
     }
 
     /**

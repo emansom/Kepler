@@ -38,13 +38,15 @@ public class RoomModel {
                 e.printStackTrace();
             }
         }
+
+        this.parse();
     }
 
     /**
      * Parse heightmap, add invalid tiles and the tile heights used
      * for walking, stairs, etc.
      */
-    public void parse() {
+    private void parse() {
         String[] lines = this.heightmap.split("\r");
 
         this.mapSizeY = lines.length;

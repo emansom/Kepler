@@ -25,14 +25,15 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
             return;
         }
 
-        Player player = (Player) entity;
+        // Don't show panel and lounge info if create game is disabled
+        if (!GameConfiguration.getInstance().getBoolean(this.getGameType().name().toLowerCase() + ".create.game.enabled")) {
+            return;
+        }
 
+        Player player = (Player) entity;
         player.send(new LOUNGEINFO());
 
-        // Show you everyones score level
         player.send(new GAMEPLAYERINFO(this.getGameType(), room.getEntityManager().getPlayers()));
-
-        // Show everyone your score level
         room.send(new GAMEPLAYERINFO(this.getGameType(), List.of(player)));
     }
 
@@ -48,10 +49,6 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
 
     @Override
     public void createGame(Player gameCreator, Map<String, Object> gameParameters) {
-        if (!GameConfiguration.getInstance().getBoolean("battleball.create.game.enabled")) {
-            return;
-        }
-
         int mapId = (int) gameParameters.get("fieldType");
 
         if (mapId < 1 || mapId > 5) {

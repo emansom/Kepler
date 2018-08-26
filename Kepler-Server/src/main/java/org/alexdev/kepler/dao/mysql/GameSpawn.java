@@ -8,9 +8,9 @@ public class GameSpawn {
     private GameType gameType;
     private int x;
     private int y;
-    private double z;
+    private int z;
 
-    public GameSpawn(int teamId, int mapId, String gameType, int x, int y, double z) {
+    public GameSpawn(int teamId, int mapId, String gameType, int x, int y, int z) {
         this.teamId = teamId;
         this.mapId = mapId;
         this.gameType = GameType.valueOf(gameType.toUpperCase());
@@ -39,7 +39,7 @@ public class GameSpawn {
         return y;
     }
 
-    public double getZ() {
+    public int getZ() {
         return z;
     }
 }

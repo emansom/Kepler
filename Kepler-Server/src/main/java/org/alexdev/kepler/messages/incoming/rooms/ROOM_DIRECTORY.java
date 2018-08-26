@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
@@ -23,9 +24,11 @@ public class ROOM_DIRECTORY implements MessageEvent {
 
         Room room = null;
 
-        if (roomId == -1 && player.getRoomUser().getGamePlayer() != null && player.getRoomUser().getGamePlayer().isEnteringGame()) {
-            room = player.getRoomUser().getGamePlayer().getGame().getRoom();
-            room.getEntityManager().enterRoom(player, null);
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        if (roomId == -1 && gamePlayer != null && gamePlayer.isEnteringGame()) {
+            room = gamePlayer.getGame().getRoom();
+            room.getEntityManager().enterRoom(player, gamePlayer.getPosition());
 
             player.send(new FULLGAMESTATUS(player.getRoomUser().getGamePlayer().getGame()));
         } else {

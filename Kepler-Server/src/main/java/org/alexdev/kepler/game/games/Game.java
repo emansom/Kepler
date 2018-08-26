@@ -1,5 +1,7 @@
 package org.alexdev.kepler.game.games;
 
+import org.alexdev.kepler.dao.mysql.GameSpawn;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -12,13 +14,17 @@ import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.messages.outgoing.games.GAMEDELETED;
 import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
 import org.alexdev.kepler.messages.outgoing.games.GAMELOCATION;
+import org.alexdev.kepler.messages.outgoing.games.GAMESTART;
 import org.alexdev.kepler.messages.types.MessageComposer;
+import org.alexdev.kepler.util.schedule.FutureRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Game {
     private int id;
@@ -38,12 +44,14 @@ public class Game {
     private Map<Integer, GameTeam> teamPlayers;
     private List<Player> spectators;
 
+    private boolean[][] battleballBlockedMap;
     private BattleballTileState[][] battleballTileStates;
     private BattleballTileColour[][] battleballTileColours;
 
-    private int preparingGameSecondsLeft = 15;
+    private AtomicInteger preparingGameSecondsLeft;
+    private AtomicInteger totalSecondsLeft;
 
-    public static final int GAME_COUNTDOWN_SECONDS = 15;
+    public static final int PREPARING_GAME_SECONDS_LEFT = 15;
     public static final int RESTART_GAME_SECONDS = 1200;
     public static final int GAME_LENGTH_SECONDS = 180;
 
@@ -63,6 +71,9 @@ public class Game {
             this.teamPlayers.put(i, new GameTeam(i));
         }
 
+        this.preparingGameSecondsLeft = new AtomicInteger(Game.PREPARING_GAME_SECONDS_LEFT);
+        this.totalSecondsLeft = new AtomicInteger(Game.GAME_LENGTH_SECONDS);
+
         this.gameState = GameState.WAITING;
     }
 
@@ -71,8 +82,9 @@ public class Game {
      */
     public void startGame() {
         this.gameState = GameState.STARTED;
-
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
+
+        this.battleballBlockedMap = new boolean[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
         this.battleballTileColours = new BattleballTileColour[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
         this.battleballTileStates = new BattleballTileState[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
 
@@ -84,11 +96,15 @@ public class Game {
 
                 if (tileState == RoomTileState.CLOSED) {
                     this.battleballTileColours[x][y] = BattleballTileColour.DISABLED;
+                    this.battleballBlockedMap[x][y] = true;
                 } else {
                     this.battleballTileColours[x][y] = BattleballTileColour.DEFAULT;
+                    this.battleballBlockedMap[x][y] = false;
                 }
             }
         }
+
+        this.assignSpawnPoints();
 
         this.room = new Room();
         this.room.getData().fill(this.id, "Battleball Arena", "");
@@ -101,6 +117,99 @@ public class Game {
         }
 
         this.send(new GAMELOCATION());
+
+        // Preparing game seconds countdown
+        FutureRunnable runnable = new FutureRunnable() {
+            public void run() {
+                if (!canGameContinue()) {
+                    this.getFuture().cancel(true);
+                    return;
+                }
+
+                if (preparingGameSecondsLeft.decrementAndGet() == 0) {
+                    this.getFuture().cancel(true);
+                    beginGame();
+                }
+            }
+        };
+
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
+        runnable.setFuture(future);
+    }
+
+    private void beginGame() {
+        // Stop all players from walking when game starts if they selected a tile
+        for (GameTeam team : teamPlayers.values()) {
+            for (GamePlayer p : team.getPlayers()) {
+                p.getPlayer().getRoomUser().setWalking(false);
+            }
+        }
+
+        // Game seconds counter
+        FutureRunnable runnable = new FutureRunnable() {
+            public void run() {
+                if (!canGameContinue()) {
+                    this.getFuture().cancel(true);
+                    return;
+                }
+
+                if (totalSecondsLeft.decrementAndGet() == 0) {
+                    this.getFuture().cancel(true);
+                }
+            }
+        };
+
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
+        runnable.setFuture(future);
+
+        // Send game seconds
+        this.send(new GAMESTART(Game.GAME_LENGTH_SECONDS));
+    }
+
+    private void assignSpawnPoints() {
+        for (GameTeam team : this.teamPlayers.values()) {
+            GameSpawn gameSpawn = GameManager.getInstance().getGameSpawn(this.gameType, this.mapId, team.getId());
+
+            if (gameSpawn == null) {
+                continue;
+            }
+
+            AtomicInteger spawnX = new AtomicInteger(gameSpawn.getX());
+            AtomicInteger spawnY = new AtomicInteger(gameSpawn.getY());
+            AtomicInteger spawnRotation = new AtomicInteger(gameSpawn.getZ());
+
+            boolean flip = false;
+
+            for (GamePlayer p : team.getPlayers()) {
+                try {
+                    findSpawn(flip, spawnX, spawnY, spawnRotation);
+                    flip = (!flip);
+                } catch (Exception ex) {
+                    flip = (!flip);
+                }
+
+                p.getPosition().setX(spawnX.get());
+                p.getPosition().setY(spawnY.get());
+                p.getPosition().setRotation(spawnRotation.get());
+                p.getPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+             }
+        }
+    }
+
+    private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
+        while (this.battleballBlockedMap[spawnX.get()][spawnY.get()]) {
+            if (spawnRotation.get() == 0 || spawnRotation.get() == 2) {
+                if (flip)
+                    spawnX.decrementAndGet();// -= 1;
+                else
+                    spawnX.incrementAndGet();// += 1;
+            } else if (spawnRotation.get() == 4 || spawnRotation.get() == 6) {
+                if (flip)
+                    spawnY.decrementAndGet();// -= 1;
+                else
+                    spawnY.incrementAndGet();// += 1;
+            }
+        }
     }
 
     /**
@@ -164,7 +273,7 @@ public class Game {
             if (this.gameState == GameState.WAITING) {
                 this.teamPlayers.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
             } else {
-                gamePlayer.setInGame(false);
+                gamePlayer.setInGame(false); // Don't remove from team, just show they're no longer in game, for "0" score at the end.
             }
 
             gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
@@ -205,7 +314,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > 1;
+        return activeTeamCount > 0;
     }
 
     /**
@@ -305,8 +414,12 @@ public class Game {
         return battleballTileColours;
     }
 
-    public int getPreparingGameSecondsLeft() {
+    public AtomicInteger getPreparingGameSecondsLeft() {
         return preparingGameSecondsLeft;
+    }
+
+    public AtomicInteger getTotalSecondsLeft() {
+        return totalSecondsLeft;
     }
 
     public RoomModel getRoomModel() {
