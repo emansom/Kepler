@@ -11,7 +11,10 @@ import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.game.room.models.RoomModel;
-import org.alexdev.kepler.messages.outgoing.games.*;
+import org.alexdev.kepler.messages.outgoing.games.GAMEDELETED;
+import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
+import org.alexdev.kepler.messages.outgoing.games.GAMELOCATION;
+import org.alexdev.kepler.messages.outgoing.games.GAMESTART;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
 
@@ -115,11 +118,6 @@ public class Game {
 
         this.send(new GAMELOCATION());
 
-        // Send full game status to every team member (delay it because some peoples internet might be shit)
-        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
-            send(new FULLGAMESTATUS(this));
-        }, 500, TimeUnit.MILLISECONDS);
-
         // Preparing game seconds countdown
         FutureRunnable runnable = new FutureRunnable() {
             public void run() {
@@ -150,10 +148,6 @@ public class Game {
             }
         }
 
-
-        // Send game seconds
-        this.send(new GAMESTART(Game.GAME_LENGTH_SECONDS));
-
         // Game seconds counter
         FutureRunnable runnable = new FutureRunnable() {
             public void run() {
@@ -170,6 +164,9 @@ public class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
         runnable.setFuture(future);
+
+        // Send game seconds
+        this.send(new GAMESTART(Game.GAME_LENGTH_SECONDS));
     }
 
     /**
