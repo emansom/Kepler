@@ -14,8 +14,8 @@ public class FULLGAMESTATUS extends MessageComposer {
     @Override
     public void compose(NettyResponse response) {
         response.writeInt(1);
-        response.writeInt(this.game.getPreparingGameSecondsLeft());
-        response.writeInt(Game.GAME_COUNTDOWN_SECONDS);
+        response.writeInt(this.game.getPreparingGameSecondsLeft().get());
+        response.writeInt(Game.PREPARING_GAME_SECONDS_LEFT);
         response.writeInt(0);
         response.writeInt(this.game.getRoomModel().getMapSizeX());
         response.writeInt(this.game.getRoomModel().getMapSizeY());
