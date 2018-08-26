@@ -42,8 +42,10 @@ public class RoomData {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.model = model;
         this.ownerId = 0;
+        this.ccts = "";
+        this.model = "";
+        this.ownerName = "";
     }
 
     public void fill(int id, int ownerId, String ownerName, int category, String name, String description, String model, String ccts, int wallpaper, int floor, boolean showName, boolean superUsers, int accessType, String password, int visitorsNow, int visitorsMax, int rating) {
