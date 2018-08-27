@@ -162,7 +162,7 @@ public class GameTask implements Runnable {
             BattleballTileColour newColour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
 
             int newPoints = -1;
-            boolean giveEveryonePoints = false;
+            boolean tileLocked = false;
 
             if (state != newState && newState == BattleballTileState.TOUCHED) {
                 newPoints = 2;
@@ -190,11 +190,11 @@ public class GameTask implements Runnable {
 
             if (state != newState && newState == BattleballTileState.SEALED) {
                 newPoints = 14;
-                giveEveryonePoints = true;
+                tileLocked = true;
             }
 
             if (newPoints != -1) {
-                if (!giveEveryonePoints) {
+                if (!tileLocked) {
                     gamePlayer.setScore(gamePlayer.getScore() + newPoints);
                 } else {
                     for (GameTeam gameTeam : this.game.getTeamPlayers().values()) {
@@ -204,10 +204,10 @@ public class GameTask implements Runnable {
                     }
                 }
 
-                System.out.println("ayyy lmao");
-
-                GameTeam team = this.game.getTeamPlayers().get(gamePlayer.getTeamId());
-                //team.setScore(team.getScore() + 1);
+                if (tileLocked) {
+                    GameTeam team = this.game.getTeamPlayers().get(gamePlayer.getTeamId());
+                    team.setScore(team.getScore() + 1);
+                }
             }
 
             updateTiles.add(position.copy());

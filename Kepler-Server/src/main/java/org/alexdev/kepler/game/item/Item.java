@@ -329,18 +329,7 @@ public class Item {
             }
         }
 
-        if (tile.getHighestItem() != null && tile.getHighestItem().getId() != item.getId()) {
-            if (!this.canPlaceOnTop(item, tile.getHighestItem(), false)) {
-                return false;
-            }
-        }
-
-
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
-            if (position.equals(item.getPosition())) {
-                continue;
-            }
-
             tile = room.getMapping().getTile(position);
 
             if (tile == null) {
@@ -353,7 +342,7 @@ public class Item {
 
 
             if (tile.getEntities().size() > 0) {
-                if (!item.isWalkable(position)) {
+                if (!item.isWalkable(new Position(x, y))) {
                     return false;
                 }
             }
@@ -361,17 +350,17 @@ public class Item {
             Item highestItem = tile.getHighestItem();
 
             if (highestItem != null && highestItem.getId() != item.getId()) {
-                if (!this.canPlaceOnTop(item, highestItem, true)) {
+                if (!this.canPlaceOnTop(item, highestItem)) {
                     return false;
                 }
             }
 
-           /* for (Item tileItem : tile.getItems()) {
+            for (Item tileItem : tile.getItems()) {
                 if (tileItem.getId() == item.getId()) {
                     continue;
                 }
 
-                if (!this.canPlaceOnTop(item, tileItem, false)) {
+                if (!this.canPlaceOnTop(item, tileItem)) {
                     return false;
                 }
 
@@ -384,7 +373,7 @@ public class Item {
                         return false; // Item is too big to place on rollers.
                     }
                 }
-            }*/
+            }
         }
 
 
@@ -397,7 +386,7 @@ public class Item {
      * @param tileItem the item to check if they're allowed to place on top of
      * @return true, if successful
      */
-    private boolean canPlaceOnTop(Item item, Item tileItem, boolean checkAffectedTiles) {
+    private boolean canPlaceOnTop(Item item, Item tileItem) {
         // Don't allow putting rollers on top of stackable objects
         if (item.hasBehaviour(ItemBehaviour.ROLLER) && tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && !tileItem.hasBehaviour(ItemBehaviour.PLACE_ROLLER_ON_TOP)) {
             if (tileItem.getDefinition().getTopHeight() >= 0.1) {
@@ -410,29 +399,13 @@ public class Item {
             return true;
         }
 
-        // Allow the affected tile (NOT the main tile) to clip into chairs if the stack height is less than 0.5
-        // The reason why affected tiles are allowed because they won't trigger "stacking" the object
-        if (checkAffectedTiles) {
-            if (item.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && item.getDefinition().getTopHeight() < 0.5) {
-                return true;
-            }
-        } else {
-
-            // If it's the main square, we check that we don't allow items that are more than 1x1 to be placed on rollers
-            if (tileItem.hasBehaviour(ItemBehaviour.ROLLER)) {
-                if (item.getDefinition().getLength() > 1 || item.getDefinition().getWidth() > 1) {
-                    return false;
-                }
-
-                // Don't allow placing gates on rollers
-                if (item.hasBehaviour(ItemBehaviour.DOOR)) {
-                    return false;
-                }
-            }
-        }
-
         // Can't place items on solid objects
         if (tileItem.hasBehaviour(ItemBehaviour.SOLID) && !tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+            return false;
+        }
+
+        // Can't place gates on solid rollers
+        if (tileItem.hasBehaviour(ItemBehaviour.ROLLER) && item.hasBehaviour(ItemBehaviour.DOOR)) {
             return false;
         }
 
