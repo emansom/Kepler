@@ -96,7 +96,8 @@ task fatJar(type: Jar) {
     with jar
 }
 
-// Create jar with no libraries inside of it
+// Create jar with no libraries inside of it, used when creating with "gradle distZip" and
+// libraries are stored in the folder next to it called 'dependency-jars'
 // https://vocon-it.com/2016/11/15/how-to-build-a-lean-jar-file-with-gradle/
 jar {
     manifest {
