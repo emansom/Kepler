@@ -98,3 +98,13 @@ task fatJar(type: Jar) {
 
 // Create jar with no libraries inside of it
 // https://vocon-it.com/2016/11/15/how-to-build-a-lean-jar-file-with-gradle/
+jar {
+    manifest {
+        attributes (
+                'Main-Class': mainClassName,
+                "Class-Path": '. dependency-jars/' + configurations.compile.collect {
+                    it.getName()
+                }.join(' dependency-jars/')
+        )
+    }
+}
