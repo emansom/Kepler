@@ -17,4 +17,14 @@ public enum  BattleballTileColour {
     public int getTileColourId() {
         return tileColourId;
     }
+
+    public static BattleballTileColour getColourById(int id) {
+        for (BattleballTileColour colour : values()) {
+            if (colour.getTileColourId() == id) {
+                return colour;
+            }
+        }
+
+        return null;
+    }
 }

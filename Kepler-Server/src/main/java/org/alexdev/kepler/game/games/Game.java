@@ -51,7 +51,7 @@ public class Game {
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
 
-    public static final int PREPARING_GAME_SECONDS_LEFT = 15;
+    public static final int PREPARING_GAME_SECONDS_LEFT = 10;
     public static final int RESTART_GAME_SECONDS = 1200;
     public static final int GAME_LENGTH_SECONDS = 180;
 
@@ -376,6 +376,15 @@ public class Game {
 
         return null;
     }
+
+    public BattleballTileState[][] getBattleballTileStates() {
+        return battleballTileStates;
+    }
+
+    public BattleballTileColour[][] getBattleballTileColours() {
+        return battleballTileColours;
+    }
+
 
     public List<Player> getSpectators() {
         return spectators;

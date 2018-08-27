@@ -2,6 +2,8 @@ package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.battleball.BattleballTileColour;
+import org.alexdev.kepler.game.games.battleball.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -37,6 +39,8 @@ public class GameTask implements Runnable {
             }
 
             List<GamePlayer> players = new ArrayList<>();
+            List<Position> updateTiles = new ArrayList<>();
+
             Map<GamePlayer, Position> movingPlayers = new HashMap<>();
 
             for (GameTeam gameTeam : this.game.getTeamPlayers().values()) {
@@ -47,7 +51,7 @@ public class GameTask implements Runnable {
                             && player.getRoomUser().getRoom() != null
                             && player.getRoomUser().getRoom() == this.room) {
 
-                        this.processEntity(gamePlayer, movingPlayers);
+                        this.processEntity(gamePlayer, movingPlayers, updateTiles);
                         RoomEntity roomEntity = player.getRoomUser();
 
                         players.add(gamePlayer);
@@ -59,7 +63,7 @@ public class GameTask implements Runnable {
                 }
             }
 
-            this.room.send(new GAMESTATUS(this.game.getTeamPlayers().values(), players, movingPlayers));
+            this.game.send(new GAMESTATUS(this.game, this.game.getTeamPlayers().values(), players, movingPlayers, updateTiles));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }
@@ -68,20 +72,24 @@ public class GameTask implements Runnable {
     /**
      * Process entity.
      */
-    private void processEntity(GamePlayer gamePlayer, Map<GamePlayer, Position> movingPlayers) {
+    private void processEntity(GamePlayer gamePlayer, Map<GamePlayer, Position> movingPlayers, List<Position> updateTiles) {
         Entity entity = (Entity) gamePlayer.getPlayer();
+        Game game = gamePlayer.getGame();
+
         RoomEntity roomEntity = entity.getRoomUser();
 
         Position position = roomEntity.getPosition();
         Position goal = roomEntity.getGoal();
 
         if (roomEntity.isWalking()) {
-
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomEntity.getNextPosition() != null) {
                 roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
                 roomEntity.getPosition().setY(roomEntity.getNextPosition().getY());
                 roomEntity.updateNewHeight(roomEntity.getPosition());
+
+                // Increment tiles...
+                this.incrementTile(gamePlayer, roomEntity.getNextPosition(), updateTiles);
             }
 
             // We still have more tiles left, so lets continue moving
@@ -92,7 +100,7 @@ public class GameTask implements Runnable {
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
                     entity.getRoomUser().getPath().clear();
                     roomEntity.walkTo(goal.getX(), goal.getY());
-                    this.processEntity(gamePlayer, movingPlayers);
+                    this.processEntity(gamePlayer, movingPlayers, updateTiles);
                     return;
                 }
 
@@ -112,6 +120,7 @@ public class GameTask implements Runnable {
                 roomEntity.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomEntity.setNextPosition(next);
 
+                // Add next position if moving
                 movingPlayers.put(gamePlayer, roomEntity.getNextPosition().copy());
             } else {
                 roomEntity.stopWalking();
@@ -119,6 +128,30 @@ public class GameTask implements Runnable {
 
             // If we're walking, make sure to tell the server
             roomEntity.setNeedsUpdate(true);
+        }
+    }
+
+    /***
+     * Increment the tile when the user steps on it
+     *
+     * @param gamePlayer the game player incrementing the tile
+     * @param position the position of the tile
+     * @param updateTiles the list for the tiles to get updated
+     */
+    private void incrementTile(GamePlayer gamePlayer, Position position, List<Position> updateTiles) {
+        BattleballTileState state = this.game.getBattleballTileStates()[position.getX()][position.getY()];
+
+        if (state != BattleballTileState.SEALED) {
+            BattleballTileColour colour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
+
+            if (colour.getTileColourId() == gamePlayer.getTeamId()) {
+                this.game.getBattleballTileStates()[position.getX()][position.getY()] = BattleballTileState.getStateById(state.getTileStateId() + 1);
+            } else {
+                this.game.getBattleballTileStates()[position.getX()][position.getY()] = BattleballTileState.TOUCHED;
+                this.game.getBattleballTileColours()[position.getX()][position.getY()] = BattleballTileColour.getColourById(gamePlayer.getTeamId());
+            }
+
+            updateTiles.add(position.copy());
         }
     }
 }
