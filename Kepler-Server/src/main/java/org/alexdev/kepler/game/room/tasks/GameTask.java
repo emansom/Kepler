@@ -158,6 +158,58 @@ public class GameTask implements Runnable {
                 this.game.getBattleballTileColours()[position.getX()][position.getY()] = BattleballTileColour.getColourById(gamePlayer.getTeamId());
             }
 
+            BattleballTileState newState = this.game.getBattleballTileStates()[position.getX()][position.getY()];
+            BattleballTileColour newColour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
+
+            int newPoints = -1;
+            boolean giveEveryonePoints = false;
+
+            if (state != newState && newState == BattleballTileState.TOUCHED) {
+                newPoints = 2;
+
+                if (colour != newColour) {
+                    newPoints = 4;
+                }
+            }
+
+            if (state != newState && newState == BattleballTileState.CLICKED) {
+                newPoints = 6;
+
+                if (colour != newColour) {
+                    newPoints = 8;
+                }
+            }
+
+            if (state != newState && newState == BattleballTileState.PRESSED) {
+                newPoints = 10;
+
+                if (colour != newColour) {
+                    newPoints = 12;
+                }
+            }
+
+            if (state != newState && newState == BattleballTileState.SEALED) {
+                newPoints = 14;
+                giveEveryonePoints = true;
+            }
+
+            if (newPoints != -1) {
+                if (!giveEveryonePoints) {
+                    gamePlayer.setScore(gamePlayer.getScore() + newPoints);
+                } else {
+                    for (GameTeam gameTeam : this.game.getTeamPlayers().values()) {
+                        for (GamePlayer p : gameTeam.getActivePlayers()) {
+                            p.setScore(gamePlayer.getScore() + newPoints);
+                        }
+                    }
+                }
+
+                System.out.println("ayyy lmao");
+
+                GameTeam team = this.game.getTeamPlayers().get(gamePlayer.getTeamId());
+                //team.setScore(team.getScore() + 1);
+            }
+
             updateTiles.add(position.copy());
         }
     }
