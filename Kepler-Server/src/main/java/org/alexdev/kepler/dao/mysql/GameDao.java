@@ -1,5 +1,6 @@
 package org.alexdev.kepler.dao.mysql;
 
+import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
@@ -58,7 +59,7 @@ public class GameDao {
 
             while (resultSet.next()) {
                 String modelName = (resultSet.getString("type").equalsIgnoreCase("battleball") ? "bb" : "ss") + "_arena_" + resultSet.getInt("id");
-                maps.add(new RoomModel(modelName, modelName, 0, 0, 0, 0, resultSet.getString("heightmap"), null));
+                maps.add(new RoomModel(modelName, modelName, Integer.MAX_VALUE, Integer.MAX_VALUE, Double.MAX_VALUE, 0, resultSet.getString("heightmap"), null));
             }
 
         } catch (Exception e) {
