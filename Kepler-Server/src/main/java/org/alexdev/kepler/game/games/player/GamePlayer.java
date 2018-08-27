@@ -47,7 +47,7 @@ public class GamePlayer {
         this.teamId = teamId;
     }
 
-    public Position getPosition() {
+    public Position getSpawnPosition() {
         return position;
     }
 

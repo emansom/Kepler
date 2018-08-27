@@ -198,10 +198,14 @@ public class Game {
                     flip = (!flip);
                 }
 
-                p.getPosition().setX(spawnX.get());
-                p.getPosition().setY(spawnY.get());
-                p.getPosition().setRotation(spawnRotation.get());
-                p.getPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+                p.getSpawnPosition().setX(spawnX.get());
+                p.getSpawnPosition().setY(spawnY.get());
+                p.getSpawnPosition().setRotation(spawnRotation.get());
+                p.getSpawnPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+
+                p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
+                p.getPlayer().getRoomUser().setInstanceId(p.getPlayer().getDetails().getId());
+
                 this.spawnMap[spawnX.get()][spawnY.get()] = true;
              }
         }

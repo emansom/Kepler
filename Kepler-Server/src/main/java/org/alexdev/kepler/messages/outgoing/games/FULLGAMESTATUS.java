@@ -33,7 +33,7 @@ public class FULLGAMESTATUS extends MessageComposer {
 
         for (var team : this.game.getTeamPlayers().values()) {
             for (var gamePlayer : team.getActivePlayers()) {
-                if (!this.startedGame) {
+                //if (!this.startedGame) {
                     response.writeInt(0); // type, 0 = player
                     response.writeInt(gamePlayer.getPlayer().getDetails().getId());
                     response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
@@ -48,7 +48,7 @@ public class FULLGAMESTATUS extends MessageComposer {
                     response.writeString(gamePlayer.getPlayer().getDetails().getSex());
                     response.writeInt(gamePlayer.getTeamId());
                     response.writeInt(gamePlayer.getPlayer().getRoomUser().getInstanceId());//gamePlayer.getPlayer().getRoomUser().getInstanceId());
-                } else {
+                /*} else {
                     response.writeInt(0); // type, 0 = player
                     response.writeInt(gamePlayer.getPlayer().getDetails().getId());
                     response.writeInt(gamePlayer.getPosition().getX());
@@ -63,7 +63,7 @@ public class FULLGAMESTATUS extends MessageComposer {
                     response.writeString(gamePlayer.getPlayer().getDetails().getSex());
                     response.writeInt(gamePlayer.getTeamId());
                     response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-                }
+                }*/
             }
         }
 
