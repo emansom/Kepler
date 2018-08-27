@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
+import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.models.RoomModel;
@@ -19,12 +20,15 @@ public class GameManager {
     private List<GameSpawn> spawnList;
     private List<GameRank> rankList;
     private List<RoomModel> modelList;
+
     private List<Game> games;
+    private List<BattleballTileMap> battleballTileMaps;
 
     public GameManager() {
         this.rankList = GameDao.getRanks();
         this.modelList = GameDao.getGameMaps();
         this.spawnList = GameDao.getGameSpawns();
+        this.battleballTileMaps = GameDao.getBattleballTileMaps();
 
         this.games = new ArrayList<>();
         this.idTracker = new AtomicInteger(0);
@@ -41,6 +45,22 @@ public class GameManager {
         for (GameSpawn gameSpawn : this.spawnList) {
             if ((gameSpawn.getGameType() == gameType) && (gameSpawn.getMapId() == mapId) && (gameSpawn.getTeamId() == teamId)) {
                 return gameSpawn;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the game spawn by gamr type, map id and team id
+     *
+     * @param mapId the map id
+     * @return the game spawn
+     */
+    public BattleballTileMap getBattleballTileMap(int mapId) {
+        for (BattleballTileMap tileMap : this.battleballTileMaps) {
+            if (tileMap.getMapId() == mapId) {
+                return tileMap;
             }
         }
 

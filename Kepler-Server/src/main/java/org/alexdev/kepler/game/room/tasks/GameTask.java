@@ -139,6 +139,10 @@ public class GameTask implements Runnable {
      * @param updateTiles the list for the tiles to get updated
      */
     private void incrementTile(GamePlayer gamePlayer, Position position, List<Position> updateTiles) {
+        if (!gamePlayer.getGame().getTileMap().isGameTile(position.getX(), position.getY())) {
+            return;
+        }
+
         BattleballTileState state = this.game.getBattleballTileStates()[position.getX()][position.getY()];
         BattleballTileColour colour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
 
