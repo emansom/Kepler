@@ -10,7 +10,7 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class SLIDE_OBJECT extends MessageComposer {
+public class SLIDEOBJECTBUNDLE extends MessageComposer {
     private Item roller;
     private List<Item> rollingItems;
     private Entity rollingEntity;
@@ -21,13 +21,13 @@ public class SLIDE_OBJECT extends MessageComposer {
     private float destZ;
     private int id;
 
-    public SLIDE_OBJECT(Item roller, List<Item> rollingItems, Entity rollingEntity) {
+    public SLIDEOBJECTBUNDLE(Item roller, List<Item> rollingItems, Entity rollingEntity) {
         this.roller = roller;
         this.rollingItems = rollingItems;
         this.rollingEntity = rollingEntity;
     }
 
-    public SLIDE_OBJECT(Position position, int destX, int destY, float destZ, int id) {
+    public SLIDEOBJECTBUNDLE(Position position, int destX, int destY, float destZ, int id) {
         this.position = position.copy();
         this.destX = destX;
         this.destY =destY;
