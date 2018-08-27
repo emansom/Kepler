@@ -16,4 +16,14 @@ public enum BattleballTileState {
     public int getTileStateId() {
         return tileStateId;
     }
+
+    public static BattleballTileState getStateById(int id) {
+        for (BattleballTileState state : values()) {
+            if (state.getTileStateId() == id) {
+                return state;
+            }
+        }
+
+        return null;
+    }
 }

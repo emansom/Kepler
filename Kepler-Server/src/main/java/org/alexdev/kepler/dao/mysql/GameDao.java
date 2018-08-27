@@ -2,6 +2,7 @@ package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.room.models.RoomModel;
@@ -58,6 +59,34 @@ public class GameDao {
             while (resultSet.next()) {
                 String modelName = (resultSet.getString("type").equalsIgnoreCase("battleball") ? "bb" : "ss") + "_arena_" + resultSet.getInt("id");
                 maps.add(new RoomModel(modelName, modelName, 0, 0, 0, 0, resultSet.getString("heightmap"), null));
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+
+        return maps;
+    }
+
+    public static List<BattleballTileMap> getBattleballTileMaps() {
+        List<BattleballTileMap> maps = new ArrayList<>();
+
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM games_maps WHERE type = 'battleball'", sqlConnection);
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                maps.add(new BattleballTileMap(resultSet.getInt("id"), GameType.BATTLEBALL, resultSet.getString("tile_map")));
             }
 
         } catch (Exception e) {
