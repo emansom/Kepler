@@ -140,10 +140,13 @@ public class GameTask implements Runnable {
      */
     private void incrementTile(GamePlayer gamePlayer, Position position, List<Position> updateTiles) {
         BattleballTileState state = this.game.getBattleballTileStates()[position.getX()][position.getY()];
+        BattleballTileColour colour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
+
+        if (colour == BattleballTileColour.DISABLED) {
+            return;
+        }
 
         if (state != BattleballTileState.SEALED) {
-            BattleballTileColour colour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
-
             if (colour.getTileColourId() == gamePlayer.getTeamId()) {
                 this.game.getBattleballTileStates()[position.getX()][position.getY()] = BattleballTileState.getStateById(state.getTileStateId() + 1);
             } else {
