@@ -321,6 +321,7 @@ public class MessageHandler {
         registerEvent(170, new STARTGAME());
         registerEvent(167, new LEAVEGAME());
         registerEvent(168, new KICKPLAYER());
+        registerEvent(171, new GAMEEVENT());
     }
 
     /**

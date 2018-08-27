@@ -2,19 +2,23 @@ package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
+import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
+import org.alexdev.kepler.messages.outgoing.games.GAMESTATUS;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class GameTask implements Runnable {
     private final Room room;
@@ -32,26 +36,30 @@ public class GameTask implements Runnable {
                 return;
             }
 
-            List<Entity> entitiesToUpdate = new ArrayList<>();
+            List<GamePlayer> players = new ArrayList<>();
+            Map<GamePlayer, Position> movingPlayers = new HashMap<>();
 
-            for (Entity entity : this.room.getEntities()) {
-                if (entity != null
-                        && entity.getRoomUser().getRoom() != null
-                        && entity.getRoomUser().getRoom() == this.room) {
+            for (GameTeam gameTeam : this.game.getTeamPlayers().values()) {
+                for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
+                    Player player = gamePlayer.getPlayer();
 
-                    this.processEntity(entity);
-                    RoomEntity roomEntity = entity.getRoomUser();
+                    if (player != null
+                            && player.getRoomUser().getRoom() != null
+                            && player.getRoomUser().getRoom() == this.room) {
 
-                    if (roomEntity.isNeedsUpdate()) {
-                        roomEntity.setNeedsUpdate(false);
-                        entitiesToUpdate.add(entity);
+                        this.processEntity(gamePlayer, movingPlayers);
+                        RoomEntity roomEntity = player.getRoomUser();
+
+                        players.add(gamePlayer);
+
+                        if (roomEntity.isNeedsUpdate()) {
+                            roomEntity.setNeedsUpdate(false);
+                        }
                     }
                 }
             }
 
-            if (entitiesToUpdate.size() > 0) {
-                this.room.send(new USER_STATUSES(entitiesToUpdate));
-            }
+            this.room.send(new GAMESTATUS(this.game.getTeamPlayers().values(), players, movingPlayers));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }
@@ -59,16 +67,16 @@ public class GameTask implements Runnable {
 
     /**
      * Process entity.
-     *
-     * @param entity the entity
      */
-    private void processEntity(Entity entity) {
+    private void processEntity(GamePlayer gamePlayer, Map<GamePlayer, Position> movingPlayers) {
+        Entity entity = (Entity) gamePlayer.getPlayer();
         RoomEntity roomEntity = entity.getRoomUser();
 
         Position position = roomEntity.getPosition();
         Position goal = roomEntity.getGoal();
 
         if (roomEntity.isWalking()) {
+
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomEntity.getNextPosition() != null) {
                 roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
@@ -84,7 +92,7 @@ public class GameTask implements Runnable {
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
                     entity.getRoomUser().getPath().clear();
                     roomEntity.walkTo(goal.getX(), goal.getY());
-                    this.processEntity(entity);
+                    this.processEntity(gamePlayer, movingPlayers);
                     return;
                 }
 
@@ -103,6 +111,8 @@ public class GameTask implements Runnable {
                 roomEntity.getPosition().setRotation(rotation);
                 roomEntity.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomEntity.setNextPosition(next);
+
+                movingPlayers.put(gamePlayer, roomEntity.getNextPosition().copy());
             } else {
                 roomEntity.stopWalking();
             }

@@ -120,7 +120,8 @@ public class RoomEntityManager {
             GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
             if (gamePlayer != null && gamePlayer.isEnteringGame()) {
-                entity.getRoomUser().setInstanceId(player.getDetails().getId());
+                entity.getRoomUser().setInstanceId(player.getDetails().getId()); // Instance ID will always be player id
+                entity.getRoomUser().setWalkingAllowed(false); // Block walking initially when joining game
             }
         }
 
