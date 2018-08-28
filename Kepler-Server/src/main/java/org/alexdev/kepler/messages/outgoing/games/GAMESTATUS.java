@@ -23,6 +23,7 @@ public class GAMESTATUS extends MessageComposer {
     private final List<GamePlayer> players;
     private final Map<GamePlayer, Position> movingPlayers;
     private final List<BattleballTile> updateTiles;
+    private final List<BattleballTile> fillTiles;
 
     public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GamePlayer> players, Map<GamePlayer, Position> movingPlayers, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
         this.game = game;
@@ -30,6 +31,7 @@ public class GAMESTATUS extends MessageComposer {
         this.players = players;
         this.movingPlayers = movingPlayers;
         this.updateTiles = updateTiles;
+        this.fillTiles = fillTiles;
     }
 
     @Override
@@ -56,7 +58,15 @@ public class GAMESTATUS extends MessageComposer {
             response.writeInt(tile.getState().getTileStateId());
         }
 
-        response.writeInt(0); // TODO: Tile filling
+        response.writeInt(this.fillTiles.size());
+
+        for (BattleballTile tile : this.fillTiles) {
+            response.writeInt(tile.getPosition().getX());
+            response.writeInt(tile.getPosition().getY());
+            response.writeInt(tile.getColour().getTileColourId());
+            response.writeInt(tile.getState().getTileStateId());
+        }
+
         response.writeInt(this.gameTeams.size());
 
         for (GameTeam team : this.gameTeams) {

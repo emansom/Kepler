@@ -90,6 +90,14 @@ public class BattleballTile {
                 }
             }
 
+
+            for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, this.position.getX(), this.position.getY())) {
+                filledTile.setColour(this.getColour());
+                filledTile.setState(BattleballTileState.SEALED);
+                fillTiles.add(filledTile);
+            }
+
+
             updateTiles.add(this);
         }
     }

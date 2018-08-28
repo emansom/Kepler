@@ -379,6 +379,14 @@ public class Game {
     }
 
     public BattleballTile getTile(int x, int y) {
+        if (x < 0 || y < 0) {
+            return null;
+        }
+
+        if (x >= this.roomModel.getMapSizeX() || y >= roomModel.getMapSizeY()) {
+            return null;
+        }
+
         return this.battleballTiles[x][y];
     }
 
