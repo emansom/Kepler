@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.battleball.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -35,7 +36,7 @@ public class GameTask implements Runnable {
     public void run() {
         try {
             List<GamePlayer> players = new ArrayList<>();
-            List<Position> updateTiles = new ArrayList<>();
+            List<BattleballTile> updateTiles = new ArrayList<>();
 
             Map<GamePlayer, Position> movingPlayers = new HashMap<>();
 
@@ -68,7 +69,7 @@ public class GameTask implements Runnable {
     /**
      * Process entity.
      */
-    private void processEntity(GamePlayer gamePlayer, Map<GamePlayer, Position> movingPlayers, List<Position> updateTiles) {
+    private void processEntity(GamePlayer gamePlayer, Map<GamePlayer, Position> movingPlayers, List<BattleballTile> updateTiles) {
         Entity entity = (Entity) gamePlayer.getPlayer();
         Game game = gamePlayer.getGame();
 
@@ -134,13 +135,15 @@ public class GameTask implements Runnable {
      * @param position the position of the tile
      * @param updateTiles the list for the tiles to get updated
      */
-    private void incrementTile(GamePlayer gamePlayer, Position position, List<Position> updateTiles) {
-        if (!gamePlayer.getGame().getTileMap().isGameTile(position.getX(), position.getY())) {
+    private void incrementTile(GamePlayer gamePlayer, Position position, List<BattleballTile> updateTiles) {
+        BattleballTile tile = gamePlayer.getGame().getTile(position.getX(), position.getY());
+
+        if (tile.getColour() == BattleballTileColour.DISABLED) {
             return;
         }
 
-        BattleballTileState state = this.game.getBattleballTileStates()[position.getX()][position.getY()];
-        BattleballTileColour colour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
+        BattleballTileState state = tile.getState();
+        BattleballTileColour colour = tile.getColour();
 
         if (colour == BattleballTileColour.DISABLED) {
             return;
@@ -148,14 +151,14 @@ public class GameTask implements Runnable {
 
         if (state != BattleballTileState.SEALED) {
             if (colour.getTileColourId() == gamePlayer.getTeamId()) {
-                this.game.getBattleballTileStates()[position.getX()][position.getY()] = BattleballTileState.getStateById(state.getTileStateId() + 1);
+                tile.setState(BattleballTileState.getStateById(state.getTileStateId() + 1));
             } else {
-                this.game.getBattleballTileStates()[position.getX()][position.getY()] = BattleballTileState.TOUCHED;
-                this.game.getBattleballTileColours()[position.getX()][position.getY()] = BattleballTileColour.getColourById(gamePlayer.getTeamId());
+                tile.setState(BattleballTileState.TOUCHED);
+                tile.setColour(BattleballTileColour.getColourById(gamePlayer.getTeamId()));
             }
 
-            BattleballTileState newState = this.game.getBattleballTileStates()[position.getX()][position.getY()];
-            BattleballTileColour newColour = this.game.getBattleballTileColours()[position.getX()][position.getY()];
+            BattleballTileState newState = tile.getState();
+            BattleballTileColour newColour = tile.getColour();
 
             int newPoints = -1;
             boolean tileLocked = false;
@@ -206,7 +209,7 @@ public class GameTask implements Runnable {
                 }
             }
 
-            updateTiles.add(position.copy());
+            updateTiles.add(tile);
         }
     }
 }

@@ -4,6 +4,8 @@ import gherkin.lexer.En;
 import gherkin.lexer.Pl;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.battleball.BattleballGame;
+import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -20,9 +22,9 @@ public class GAMESTATUS extends MessageComposer {
     private final Collection<GameTeam> gameTeams;
     private final List<GamePlayer> players;
     private final Map<GamePlayer, Position> movingPlayers;
-    private final List<Position> updateTiles;
+    private final List<BattleballTile> updateTiles;
 
-    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GamePlayer> players, Map<GamePlayer, Position> movingPlayers, List<Position> updateTiles) {
+    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GamePlayer> players, Map<GamePlayer, Position> movingPlayers, List<BattleballTile> updateTiles) {
         this.game = game;
         this.gameTeams = gameTeams;
         this.players = players;
@@ -47,11 +49,11 @@ public class GAMESTATUS extends MessageComposer {
 
         response.writeInt(this.updateTiles.size());
 
-        for (Position tile : this.updateTiles) {
-            response.writeInt(tile.getX());
-            response.writeInt(tile.getY());
-            response.writeInt(this.game.getBattleballTileColours()[tile.getX()][tile.getY()].getTileColourId());
-            response.writeInt(this.game.getBattleballTileStates()[tile.getX()][tile.getY()].getTileStateId());
+        for (BattleballTile tile : this.updateTiles) {
+            response.writeInt(tile.getPosition().getX());
+            response.writeInt(tile.getPosition().getY());
+            response.writeInt(tile.getColour().getTileColourId());
+            response.writeInt(tile.getState().getTileStateId());
         }
 
         response.writeInt(0); // TODO: Tile filling
