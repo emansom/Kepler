@@ -19,7 +19,7 @@ public class FULLGAMESTATUS extends MessageComposer {
         this.gamePlayerList = new ArrayList<>();
         this.startedGame = startedGame;
 
-        for (GameTeam team : this.game.getTeamPlayers().values()) {
+        for (GameTeam team : this.game.getTeams().values()) {
             this.gamePlayerList.addAll(team.getActivePlayers());
         }
     }
@@ -31,7 +31,7 @@ public class FULLGAMESTATUS extends MessageComposer {
         response.writeInt(Game.PREPARING_GAME_SECONDS_LEFT);
         response.writeInt(this.gamePlayerList.size());
 
-        for (var team : this.game.getTeamPlayers().values()) {
+        for (var team : this.game.getTeams().values()) {
             for (var gamePlayer : team.getActivePlayers()) {
                 //if (!this.startedGame) {
                     response.writeInt(0); // type, 0 = player

@@ -32,7 +32,7 @@ public class GAMESTATUS extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(this.players.size());
+        response.writeInt(this.players.size()); // TODO: Handle more than just players events (power ups, etc)
 
         for (GamePlayer gamePlayer : this.players) {
             response.writeInt(0); // type, 0 = player
@@ -54,14 +54,14 @@ public class GAMESTATUS extends MessageComposer {
             response.writeInt(this.game.getBattleballTileStates()[tile.getX()][tile.getY()].getTileStateId());
         }
 
-        response.writeInt(0);
+        response.writeInt(0); // TODO: Tile filling
         response.writeInt(this.gameTeams.size());
 
         for (GameTeam team : this.gameTeams) {
             response.writeInt(team.getScore());
         }
 
-        response.writeInt(1);
+        response.writeInt(1); // TODO: Handle more than just player move events (power ups, etc)
         response.writeInt(this.movingPlayers.size());
 
         for (var kvp : this.movingPlayers.entrySet()) {

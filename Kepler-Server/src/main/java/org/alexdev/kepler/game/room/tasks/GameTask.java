@@ -43,7 +43,7 @@ public class GameTask implements Runnable {
 
             Map<GamePlayer, Position> movingPlayers = new HashMap<>();
 
-            for (GameTeam gameTeam : this.game.getTeamPlayers().values()) {
+            for (GameTeam gameTeam : this.game.getTeams().values()) {
                 for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
                     Player player = gamePlayer.getPlayer();
 
@@ -63,7 +63,7 @@ public class GameTask implements Runnable {
                 }
             }
 
-            this.game.send(new GAMESTATUS(this.game, this.game.getTeamPlayers().values(), players, movingPlayers, updateTiles));
+            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), players, movingPlayers, updateTiles));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }
@@ -197,7 +197,7 @@ public class GameTask implements Runnable {
                 if (!tileLocked) {
                     gamePlayer.setScore(gamePlayer.getScore() + newPoints);
                 } else {
-                    for (GameTeam gameTeam : this.game.getTeamPlayers().values()) {
+                    for (GameTeam gameTeam : this.game.getTeams().values()) {
                         for (GamePlayer p : gameTeam.getActivePlayers()) {
                             p.setScore(gamePlayer.getScore() + newPoints);
                         }
@@ -205,7 +205,7 @@ public class GameTask implements Runnable {
                 }
 
                 if (tileLocked) {
-                    GameTeam team = this.game.getTeamPlayers().get(gamePlayer.getTeamId());
+                    GameTeam team = this.game.getTeams().get(gamePlayer.getTeamId());
                     team.setScore(team.getScore() + 1);
                 }
             }

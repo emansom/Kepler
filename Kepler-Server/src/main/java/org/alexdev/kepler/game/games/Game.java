@@ -361,16 +361,6 @@ public class Game {
     }
 
     /**
-     * Create the game player instance for a user
-     *
-     * @param player the player to create the game player instance for
-     * @return the game player instance
-     */
-    public GamePlayer createGamePlayer(Player player) {
-        return new GamePlayer(player);
-    }
-
-    /**
      * Get the game player instance by id
      * @param userId the id to get the player by
      * @return the game player instance, else if null
@@ -395,7 +385,6 @@ public class Game {
         return battleballTileColours;
     }
 
-
     public List<Player> getSpectators() {
         return spectators;
     }
@@ -412,10 +401,6 @@ public class Game {
         return gameState;
     }
 
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
-    }
-
     public String getName() {
         return name;
     }
@@ -428,7 +413,7 @@ public class Game {
         return powerUps;
     }
 
-    public Map<Integer, GameTeam> getTeamPlayers() {
+    public Map<Integer, GameTeam> getTeams() {
         return teamPlayers;
     }
 

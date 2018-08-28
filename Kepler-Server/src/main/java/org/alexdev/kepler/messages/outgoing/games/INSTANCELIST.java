@@ -22,7 +22,6 @@ public class INSTANCELIST extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-
         response.writeInt(this.createdGames.size());
 
         for (Game game : this.createdGames) {
@@ -64,9 +63,9 @@ public class INSTANCELIST extends MessageComposer {
             response.writeInt(game.getTeamAmount());
 
             for (int i = 0; i < game.getTeamAmount(); i++) {
-                response.writeInt(game.getTeamPlayers().get(i).size());
+                response.writeInt(game.getTeams().get(i).size());
 
-                for (GamePlayer gamePlayer : game.getTeamPlayers().get(i)) {
+                for (GamePlayer gamePlayer : game.getTeams().get(i)) {
                     response.writeInt(gamePlayer.getPlayer().getRoomUser().getInstanceId());
                     response.writeString(gamePlayer.getPlayer().getDetails().getName());
                 }
@@ -83,9 +82,9 @@ public class INSTANCELIST extends MessageComposer {
             response.writeInt(game.getTeamAmount());
 
             for (int i = 0; i < game.getTeamAmount(); i++) {
-                response.writeInt(game.getTeamPlayers().get(i).size());
+                response.writeInt(game.getTeams().get(i).size());
 
-                for (GamePlayer gamePlayer : game.getTeamPlayers().get(i)) {
+                for (GamePlayer gamePlayer : game.getTeams().get(i)) {
                     response.writeString(gamePlayer.getPlayer().getDetails().getName());
                 }
             }
@@ -101,10 +100,10 @@ public class INSTANCELIST extends MessageComposer {
             response.writeInt(game.getTeamAmount());
 
             for (int i = 0; i < game.getTeamAmount(); i++) {
-                response.writeInt(game.getTeamPlayers().get(i).size());
+                response.writeInt(game.getTeams().get(i).size());
                 int teamScore = 0;
 
-                for (GamePlayer gamePlayer : game.getTeamPlayers().get(i)) {
+                for (GamePlayer gamePlayer : game.getTeams().get(i)) {
                     response.writeString(gamePlayer.getPlayer().getDetails().getName());
                     response.writeInt(gamePlayer.getScore());
 

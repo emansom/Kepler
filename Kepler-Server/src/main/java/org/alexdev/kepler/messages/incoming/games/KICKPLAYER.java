@@ -40,7 +40,7 @@ public class KICKPLAYER implements MessageEvent {
 
         GamePlayer teamPlayer = null;
 
-        for (GameTeam team : game.getTeamPlayers().values()) {
+        for (GameTeam team : game.getTeams().values()) {
             for (GamePlayer p : team.getActivePlayers()) {
                 if (p.getPlayer().getRoomUser().getInstanceId() == instanceId) {
                     teamPlayer = p;
