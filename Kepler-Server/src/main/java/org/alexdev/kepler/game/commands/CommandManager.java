@@ -35,7 +35,7 @@ public class CommandManager {
         this.commands.put(new String[] { "pickall" }, new PickAllCommand());
         this.commands.put(new String[] { "usersonline", "whosonline" }, new UsersOnlineCommand());
         this.commands.put(new String[] { "rgb", "rainbow" }, new RainbowDimmerCommand());
-        this.commands.put(new String[] { "afk","afk" }, new AfkCommand());
+        this.commands.put(new String[] { "afk", "idle" }, new AfkCommand());
         this.commands.put(new String[] { "motto" }, new ChangeMottoCommand());
         this.commands.put(new String[] { "ufos" }, new UfosCommand());
         this.commands.put(new String[] { "talk" }, new TalkCommand());
