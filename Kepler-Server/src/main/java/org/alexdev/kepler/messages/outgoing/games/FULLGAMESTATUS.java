@@ -72,7 +72,7 @@ public class FULLGAMESTATUS extends MessageComposer {
 
         for (int y = 0; y < this.game.getRoomModel().getMapSizeY(); y++) {
             for (int x = 0; x < this.game.getRoomModel().getMapSizeX(); x++) {
-                response.writeInt(this.game.getTile(x, y).getColour().getTileColourId());
+                response.writeInt(this.game.getTile(x, y).getColour().getColourId());
                 response.writeInt(this.game.getTile(x, y).getState().getTileStateId());
             }
         }

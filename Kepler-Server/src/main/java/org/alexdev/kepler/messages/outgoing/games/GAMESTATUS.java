@@ -1,15 +1,10 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
-import gherkin.lexer.En;
-import gherkin.lexer.Pl;
-import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
-import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -54,7 +49,7 @@ public class GAMESTATUS extends MessageComposer {
         for (BattleballTile tile : this.updateTiles) {
             response.writeInt(tile.getPosition().getX());
             response.writeInt(tile.getPosition().getY());
-            response.writeInt(tile.getColour().getTileColourId());
+            response.writeInt(tile.getColour().getColourId());
             response.writeInt(tile.getState().getTileStateId());
         }
 
@@ -63,7 +58,7 @@ public class GAMESTATUS extends MessageComposer {
         for (BattleballTile tile : this.fillTiles) {
             response.writeInt(tile.getPosition().getX());
             response.writeInt(tile.getPosition().getY());
-            response.writeInt(tile.getColour().getTileColourId());
+            response.writeInt(tile.getColour().getColourId());
             response.writeInt(tile.getState().getTileStateId());
         }
 

@@ -31,7 +31,7 @@ public class BattleballTile {
         }
 
         if (state != BattleballTileState.SEALED) {
-            if (colour.getTileColourId() == gamePlayer.getTeamId()) {
+            if (colour.getColourId() == gamePlayer.getTeamId()) {
                 this.setState(BattleballTileState.getStateById(state.getTileStateId() + 1));
             } else {
                 this.setState(BattleballTileState.TOUCHED);
@@ -90,13 +90,11 @@ public class BattleballTile {
                 }
             }
 
-
-            for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, this.position.getX(), this.position.getY())) {
+            /*for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, this.position.getX(), this.position.getY(), (byte) gamePlayer.getTeamId())) {
                 filledTile.setColour(this.getColour());
                 filledTile.setState(BattleballTileState.SEALED);
                 fillTiles.add(filledTile);
-            }
-
+            }*/
 
             updateTiles.add(this);
         }

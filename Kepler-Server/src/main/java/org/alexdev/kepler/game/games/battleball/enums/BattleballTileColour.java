@@ -14,13 +14,13 @@ public enum  BattleballTileColour {
         this.tileColourId = tileColourId;
     }
 
-    public int getTileColourId() {
+    public int getColourId() {
         return tileColourId;
     }
 
     public static BattleballTileColour getColourById(int id) {
         for (BattleballTileColour colour : values()) {
-            if (colour.getTileColourId() == id) {
+            if (colour.getColourId() == id) {
                 return colour;
             }
         }
