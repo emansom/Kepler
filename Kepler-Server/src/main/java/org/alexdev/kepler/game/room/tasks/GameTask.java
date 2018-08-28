@@ -34,10 +34,6 @@ public class GameTask implements Runnable {
     @Override
     public void run() {
         try {
-            if (this.room.getEntities().isEmpty()) {
-                return;
-            }
-
             List<GamePlayer> players = new ArrayList<>();
             List<Position> updateTiles = new ArrayList<>();
 

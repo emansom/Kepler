@@ -385,10 +385,20 @@ public class Game {
         return battleballTileColours;
     }
 
+    /**
+     * Get the list of specators, the people currently watching the game
+     *
+     * @return the list of spectators
+     */
     public List<Player> getSpectators() {
         return spectators;
     }
 
+    /**
+     * Get the game id
+     *
+     * @return the game id
+     */
     public int getId() {
         return id;
     }
