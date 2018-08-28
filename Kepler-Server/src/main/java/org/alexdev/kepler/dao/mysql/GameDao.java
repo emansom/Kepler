@@ -1,6 +1,5 @@
 package org.alexdev.kepler.dao.mysql;
 
-import com.intellij.openapi.vcs.history.VcsRevisionNumber;
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
