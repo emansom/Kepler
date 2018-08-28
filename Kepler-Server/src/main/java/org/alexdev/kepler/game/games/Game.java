@@ -2,11 +2,13 @@ package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.GameScheduler;
-import org.alexdev.kepler.game.games.battleball.BattleballTileColour;
+import org.alexdev.kepler.game.games.battleball.BattleballTile;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
-import org.alexdev.kepler.game.games.battleball.BattleballTileState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
@@ -45,16 +47,12 @@ public class Game {
     private Map<Integer, GameTeam> teamPlayers;
     private List<Player> spectators;
 
-    private boolean[][] spawnMap;
-
-    private BattleballTileState[][] battleballTileStates;
-    private BattleballTileColour[][] battleballTileColours;
-    private BattleballTileMap tileMap;
+    private BattleballTile[][] battleballTiles;
 
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
 
-    public static final int PREPARING_GAME_SECONDS_LEFT = 10;
+    public static final int PREPARING_GAME_SECONDS_LEFT = 1;
     public static final int RESTART_GAME_SECONDS = 1200;
     public static final int GAME_LENGTH_SECONDS = 180;
 
@@ -87,24 +85,29 @@ public class Game {
         this.gameState = GameState.STARTED;
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
 
-        this.spawnMap = new boolean[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
-        this.battleballTileColours = new BattleballTileColour[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
-        this.battleballTileStates = new BattleballTileState[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
-        this.tileMap = GameManager.getInstance().getBattleballTileMap(this.mapId);
+        BattleballTileMap tileMap = GameManager.getInstance().getBattleballTileMap(this.mapId);
 
-        for (int y = 0; y < roomModel.getMapSizeY(); y++) {
-            for (int x = 0; x < roomModel.getMapSizeX(); x++) {
-                RoomTileState tileState = roomModel.getTileState(x, y);
+        this.battleballTiles = new BattleballTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
 
-                this.battleballTileStates[x][y] = BattleballTileState.DEFAULT;
+        for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
+            for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
+                RoomTileState tileState = this.roomModel.getTileState(x, y);
+                BattleballTile tile = new BattleballTile(new Position(x, y));
+
+                this.battleballTiles[x][y] = tile;
+                tile.setState(BattleballTileState.DEFAULT);
 
                 if (tileState == RoomTileState.CLOSED) {
-                    this.battleballTileColours[x][y] = BattleballTileColour.DISABLED;
-                    this.spawnMap[x][y] = true;
-                } else {
-                    this.battleballTileColours[x][y] = BattleballTileColour.DEFAULT;
-                    this.spawnMap[x][y] = false;
+                    tile.setColour(BattleballTileColour.DISABLED);
+                    continue;
                 }
+
+                if (!tileMap.isGameTile(x, y)) {
+                    tile.setColour(BattleballTileColour.DISABLED);
+                    continue;
+                }
+
+                tile.setColour(BattleballTileColour.DEFAULT);
             }
         }
 
@@ -130,7 +133,7 @@ public class Game {
                     return;
                 }
 
-                if (preparingGameSecondsLeft.decrementAndGet() == 0) {
+                if (preparingGameSecondsLeft.getAndDecrement() == 0) {
                     this.getFuture().cancel(true);
                     beginGame();
                 }
@@ -198,15 +201,17 @@ public class Game {
                     flip = (!flip);
                 }
 
-                p.getPosition().setX(spawnX.get());
-                p.getPosition().setY(spawnY.get());
-                p.getPosition().setRotation(spawnRotation.get());
-                p.getPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
-                this.spawnMap[spawnX.get()][spawnY.get()] = true;
+                p.getSpawnPosition().setX(spawnX.get());
+                p.getSpawnPosition().setY(spawnY.get());
+                p.getSpawnPosition().setRotation(spawnRotation.get());
+                p.getSpawnPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+
+                p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
+                p.getPlayer().getRoomUser().setInstanceId(p.getPlayer().getDetails().getId());
+
+                this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY()).setSpawnOccupied(true);
              }
         }
-
-        this.spawnMap = null;
     }
 
     /**
@@ -218,7 +223,7 @@ public class Game {
      * @param spawnRotation the spawn rotation
      */
     private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
-        while (this.spawnMap[spawnX.get()][spawnY.get()]) {
+        while (this.getTile(spawnX.get(), spawnY.get()).isSpawnOccupied()) {
             if (spawnRotation.get() == 0 || spawnRotation.get() == 2) {
                 if (flip)
                     spawnX.decrementAndGet();// -= 1;
@@ -335,7 +340,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > 1;
+        return activeTeamCount > 0;
     }
 
     /**
@@ -357,16 +362,6 @@ public class Game {
     }
 
     /**
-     * Create the game player instance for a user
-     *
-     * @param player the player to create the game player instance for
-     * @return the game player instance
-     */
-    public GamePlayer createGamePlayer(Player player) {
-        return new GamePlayer(player);
-    }
-
-    /**
      * Get the game player instance by id
      * @param userId the id to get the player by
      * @return the game player instance, else if null
@@ -383,19 +378,32 @@ public class Game {
         return null;
     }
 
-    public BattleballTileState[][] getBattleballTileStates() {
-        return battleballTileStates;
+    public BattleballTile getTile(int x, int y) {
+        if (x < 0 || y < 0) {
+            return null;
+        }
+
+        if (x >= this.roomModel.getMapSizeX() || y >= roomModel.getMapSizeY()) {
+            return null;
+        }
+
+        return this.battleballTiles[x][y];
     }
 
-    public BattleballTileColour[][] getBattleballTileColours() {
-        return battleballTileColours;
-    }
-
-
+    /**
+     * Get the list of specators, the people currently watching the game
+     *
+     * @return the list of spectators
+     */
     public List<Player> getSpectators() {
         return spectators;
     }
 
+    /**
+     * Get the game id
+     *
+     * @return the game id
+     */
     public int getId() {
         return id;
     }
@@ -406,10 +414,6 @@ public class Game {
 
     public GameState getGameState() {
         return gameState;
-    }
-
-    public void setGameState(GameState gameState) {
-        this.gameState = gameState;
     }
 
     public String getName() {
@@ -424,7 +428,7 @@ public class Game {
         return powerUps;
     }
 
-    public Map<Integer, GameTeam> getTeamPlayers() {
+    public Map<Integer, GameTeam> getTeams() {
         return teamPlayers;
     }
 
@@ -434,14 +438,6 @@ public class Game {
 
     public int getMapId() {
         return mapId;
-    }
-
-    public BattleballTileState[][] getTileStates() {
-        return battleballTileStates;
-    }
-
-    public BattleballTileColour[][] getTileColours() {
-        return battleballTileColours;
     }
 
     public AtomicInteger getPreparingGameSecondsLeft() {
@@ -458,9 +454,5 @@ public class Game {
 
     public Room getRoom() {
         return room;
-    }
-
-    public BattleballTileMap getTileMap() {
-        return tileMap;
     }
 }

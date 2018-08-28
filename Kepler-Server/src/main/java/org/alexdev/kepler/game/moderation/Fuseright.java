@@ -32,6 +32,8 @@ public enum Fuseright {
     SEE_ALL_ROOMOWNERS("fuse_see_all_roomowners", PlayerRank.MODERATOR), // Not sure if this is the correct fuse
     SEARCH_USERS("fuse_search_users", PlayerRank.MODERATOR),
     BAN("fuse_ban", PlayerRank.MODERATOR),
+    SEE_CHAT_LOG_LINK("fuse_see_chat_log_link", PlayerRank.MODERATOR),
+    CANCEL_ROOMEVENT("fuse_cancel_roomevent", PlayerRank.MODERATOR),
 
     // Administrator fuses
     ADMINISTRATOR_ACCESS("fuse_administrator_access", PlayerRank.ADMINISTRATOR),

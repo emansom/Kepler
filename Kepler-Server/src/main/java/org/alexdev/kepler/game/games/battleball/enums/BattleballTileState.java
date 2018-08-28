@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.games.battleball;
+package org.alexdev.kepler.game.games.battleball.enums;
 
 public enum BattleballTileState {
     DEFAULT(0),

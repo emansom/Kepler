@@ -1,13 +1,10 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
-import gherkin.lexer.En;
-import gherkin.lexer.Pl;
-import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
-import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -20,19 +17,21 @@ public class GAMESTATUS extends MessageComposer {
     private final Collection<GameTeam> gameTeams;
     private final List<GamePlayer> players;
     private final Map<GamePlayer, Position> movingPlayers;
-    private final List<Position> updateTiles;
+    private final List<BattleballTile> updateTiles;
+    private final List<BattleballTile> fillTiles;
 
-    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GamePlayer> players, Map<GamePlayer, Position> movingPlayers, List<Position> updateTiles) {
+    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GamePlayer> players, Map<GamePlayer, Position> movingPlayers, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
         this.game = game;
         this.gameTeams = gameTeams;
         this.players = players;
         this.movingPlayers = movingPlayers;
         this.updateTiles = updateTiles;
+        this.fillTiles = fillTiles;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(this.players.size());
+        response.writeInt(this.players.size()); // TODO: Handle more than just players events (power ups, etc)
 
         for (GamePlayer gamePlayer : this.players) {
             response.writeInt(0); // type, 0 = player
@@ -47,21 +46,29 @@ public class GAMESTATUS extends MessageComposer {
 
         response.writeInt(this.updateTiles.size());
 
-        for (Position tile : this.updateTiles) {
-            response.writeInt(tile.getX());
-            response.writeInt(tile.getY());
-            response.writeInt(this.game.getBattleballTileColours()[tile.getX()][tile.getY()].getTileColourId());
-            response.writeInt(this.game.getBattleballTileStates()[tile.getX()][tile.getY()].getTileStateId());
+        for (BattleballTile tile : this.updateTiles) {
+            response.writeInt(tile.getPosition().getX());
+            response.writeInt(tile.getPosition().getY());
+            response.writeInt(tile.getColour().getColourId());
+            response.writeInt(tile.getState().getTileStateId());
         }
 
-        response.writeInt(0);
+        response.writeInt(this.fillTiles.size());
+
+        for (BattleballTile tile : this.fillTiles) {
+            response.writeInt(tile.getPosition().getX());
+            response.writeInt(tile.getPosition().getY());
+            response.writeInt(tile.getColour().getColourId());
+            response.writeInt(tile.getState().getTileStateId());
+        }
+
         response.writeInt(this.gameTeams.size());
 
         for (GameTeam team : this.gameTeams) {
             response.writeInt(team.getScore());
         }
 
-        response.writeInt(1);
+        response.writeInt(1); // TODO: Handle more than just player move events (power ups, etc)
         response.writeInt(this.movingPlayers.size());
 
         for (var kvp : this.movingPlayers.entrySet()) {

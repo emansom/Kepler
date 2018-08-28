@@ -25,7 +25,7 @@ public class Pathfinder {
             new Position(-1, -1, 0)
     };
 
-    private static final Position[] MOVE_POINTS = new Position[]{
+    public static final Position[] MOVE_POINTS = new Position[]{
             new Position(0, -1),
             new Position(1, 0),
             new Position(0, 1),
