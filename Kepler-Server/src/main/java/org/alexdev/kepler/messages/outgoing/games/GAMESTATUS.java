@@ -24,7 +24,7 @@ public class GAMESTATUS extends MessageComposer {
     private final Map<GamePlayer, Position> movingPlayers;
     private final List<BattleballTile> updateTiles;
 
-    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GamePlayer> players, Map<GamePlayer, Position> movingPlayers, List<BattleballTile> updateTiles) {
+    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GamePlayer> players, Map<GamePlayer, Position> movingPlayers, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
         this.game = game;
         this.gameTeams = gameTeams;
         this.players = players;
