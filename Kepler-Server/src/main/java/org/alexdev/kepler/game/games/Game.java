@@ -86,13 +86,15 @@ public class Game {
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
 
         BattleballTileMap tileMap = GameManager.getInstance().getBattleballTileMap(this.mapId);
+
         this.battleballTiles = new BattleballTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
 
         for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
             for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
                 RoomTileState tileState = this.roomModel.getTileState(x, y);
-
                 BattleballTile tile = new BattleballTile(new Position(x, y));
+
+                this.battleballTiles[x][y] = tile;
                 tile.setState(BattleballTileState.DEFAULT);
 
                 if (tileState == RoomTileState.CLOSED) {
