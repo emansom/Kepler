@@ -52,9 +52,9 @@ public class Game {
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
 
-    public static final int PREPARING_GAME_SECONDS_LEFT = 2;
-    public static final int RESTART_GAME_SECONDS = 3;
-    public static final int GAME_LENGTH_SECONDS = 5;
+    public static final int PREPARING_GAME_SECONDS_LEFT = 10;
+    public static final int RESTART_GAME_SECONDS = 10;
+    public static final int GAME_LENGTH_SECONDS = 180;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
@@ -420,7 +420,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > 0;
+        return activeTeamCount > 1;
     }
 
     /**
