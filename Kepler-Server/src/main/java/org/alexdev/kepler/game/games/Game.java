@@ -267,7 +267,7 @@ public class Game {
             for (GamePlayer p : team.getPlayers()) {
                 try {
                     findSpawn(flip, spawnX, spawnY, spawnRotation);
-                    flip = (!flip);
+                    //flip = (!flip);
                 } catch (Exception ex) {
                     flip = (!flip);
                 }
@@ -303,17 +303,17 @@ public class Game {
      * @param spawnRotation the spawn rotation
      */
     private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
-        while (this.getTile(spawnX.get(), spawnY.get()).isSpawnOccupied()) {
+        while (this.getTile(spawnX.get(), spawnY.get()) == null || this.getTile(spawnX.get(), spawnY.get()).isSpawnOccupied()) {
             if (spawnRotation.get() == 0 || spawnRotation.get() == 2) {
                 if (flip)
                     spawnX.decrementAndGet();// -= 1;
                 else
-                    spawnX.incrementAndGet();// += 1;
+                    spawnY.incrementAndGet();// += 1;
             } else if (spawnRotation.get() == 4 || spawnRotation.get() == 6) {
                 if (flip)
-                    spawnY.decrementAndGet();// -= 1;
+                    spawnX.incrementAndGet();// -= 1;
                 else
-                    spawnY.incrementAndGet();// += 1;
+                    spawnY.decrementAndGet();// += 1;
             }
         }
     }
