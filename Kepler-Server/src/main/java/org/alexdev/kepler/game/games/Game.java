@@ -59,6 +59,8 @@ public class Game {
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
 
+    private boolean gameStarted;
+
     public Game(int id, int mapId, GameType gameType, String name, int teamAmount, int gameCreator) {
         this.id = id;
         this.mapId = mapId;
@@ -82,6 +84,7 @@ public class Game {
      * Method to initialise the game
      */
     public void initialiseGame() {
+        this.gameStarted = false;
         this.preparingGameSecondsLeft = new AtomicInteger(Game.PREPARING_GAME_SECONDS_LEFT);
         this.totalSecondsLeft = new AtomicInteger(Game.GAME_LENGTH_SECONDS);
 
@@ -150,17 +153,10 @@ public class Game {
 
         this.initialiseGame();
         this.send(new FULLGAMESTATUS(this, false));  // Show users back at teleporting positions
-
-        // Show coloured tiles at the start of the time, needs to be on delay or won't be seen
-        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
-            this.send(new FULLGAMESTATUS(this, false));
-        }, 200, TimeUnit.MILLISECONDS);
+        this.room.getTaskManager().startTasks();
 
         // Start game after "game is about to begin"
-        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
-            this.beginGame();
-            this.room.getTaskManager().startTasks();
-        }, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
+        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
 
         return newPlayers;
     }
@@ -202,6 +198,8 @@ public class Game {
      * Method for when the game begins after the initial preparing game seconds timer
      */
     private void beginGame() {
+        this.gameStarted = true;
+
         // Stop all players from walking when game starts if they selected a tile
         for (GameTeam team : teams.values()) {
             for (GamePlayer p : team.getActivePlayers()) {
@@ -235,6 +233,8 @@ public class Game {
      * Finish game
      */
     private void finishGame() {
+        this.gameStarted = false;
+
         // Kill GameTask, stops people interacting, walking, etc
         if (this.room.getTaskManager().hasTask("GameTask")) {
             this.room.getTaskManager().cancelTask("GameTask");
@@ -585,5 +585,9 @@ public class Game {
 
     public AtomicLong getRestartCountdown() {
         return restartCountdown;
+    }
+
+    public boolean isGameStarted() {
+        return gameStarted;
     }
 }
