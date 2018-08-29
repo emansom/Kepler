@@ -36,4 +36,10 @@ public class GameTeam {
 
         return score;
     }
+
+    public void setSealedTileScore() {
+        for (GamePlayer p : this.getActivePlayers()) {
+            p.setScore(p.getScore() + 14); // 14 because wiki said so
+        }
+    }
 }

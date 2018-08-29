@@ -79,11 +79,8 @@ public class BattleballTile {
                 if (!tileLocked) {
                     gamePlayer.setScore(gamePlayer.getScore() + newPoints);
                 } else {
-                    for (GameTeam gameTeam : gamePlayer.getGame().getTeams().values()) {
-                        for (GamePlayer p : gameTeam.getActivePlayers()) {
-                            p.setScore(p.getScore() + newPoints);
-                        }
-                    }
+                    // Tile got sealed, so increase every team members' points
+                    team.setSealedTileScore();
                 }
             }
 
@@ -93,6 +90,13 @@ public class BattleballTile {
                 }
 
                 for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
+                    if (filledTile.getState() == BattleballTileState.SEALED) {
+                        continue;
+                    }
+
+                    // Tile got sealed, so increase every team members' points
+                    team.setSealedTileScore();
+
                     filledTile.setColour(this.getColour());
                     filledTile.setState(BattleballTileState.SEALED);
                     fillTiles.add(filledTile);
