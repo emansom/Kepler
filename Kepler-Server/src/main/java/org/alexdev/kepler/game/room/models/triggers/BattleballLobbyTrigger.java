@@ -14,6 +14,7 @@ import org.alexdev.kepler.messages.outgoing.games.LOUNGEINFO;
 import org.alexdev.kepler.messages.outgoing.games.GAMEPLAYERINFO;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -79,7 +80,9 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
         String powerUps = (String) gameParameters.get("allowedPowerups");
 
         for (String powerUp : powerUps.split(",")) {
-            game.getPowerUps().add(Integer.parseInt(powerUp));
+            if (StringUtils.isNumeric(powerUp)) {
+                game.getPowerUps().add(Integer.parseInt(powerUp));
+            }
         }
 
         GameManager.getInstance().getGames().add(game);

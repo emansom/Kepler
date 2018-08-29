@@ -278,7 +278,7 @@ public class Game {
                 p.getSpawnPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
 
                 p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
-                p.getPlayer().getRoomUser().setInstanceId(p.getPlayer().getDetails().getId());
+                //p.getPlayer().getRoomUser().setInstanceId(p.getPlayer().getDetails().getId());
                 p.getPlayer().getRoomUser().setWalking(false);
                 p.getPlayer().getRoomUser().setNextPosition(null);
 
