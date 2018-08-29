@@ -52,9 +52,9 @@ public class Game {
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
 
-    public static final int PREPARING_GAME_SECONDS_LEFT = 10;
-    public static final int RESTART_GAME_SECONDS = 30;
-    public static final int GAME_LENGTH_SECONDS = 180;
+    public static final int PREPARING_GAME_SECONDS_LEFT = 2;
+    public static final int RESTART_GAME_SECONDS = 3;
+    public static final int GAME_LENGTH_SECONDS = 5;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
@@ -113,13 +113,13 @@ public class Game {
             }
         }
 
-        this.assignSpawnPoints();
-
         if (this.room == null) {
             this.room = new Room();
             this.room.getData().fill(this.id, "Battleball Arena", "");
             this.room.setRoomModel(roomModel);
         }
+
+        this.assignSpawnPoints();
     }
 
     /**
@@ -149,13 +149,18 @@ public class Game {
         }
 
         this.initialiseGame();
-        this.send(new FULLGAMESTATUS(this, false));
+        this.send(new FULLGAMESTATUS(this, false));  // Show users back at teleporting positions
 
+        // Show coloured tiles at the start of the time, needs to be on delay or won't be seen
+        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+            this.send(new FULLGAMESTATUS(this, false));
+        }, 200, TimeUnit.MILLISECONDS);
+
+        // Start game after "game is about to begin"
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
             this.beginGame();
             this.room.getTaskManager().startTasks();
-        }, this.preparingGameSecondsLeft.get(), TimeUnit.SECONDS);
-
+        }, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);=
 
         return newPlayers;
     }
@@ -277,7 +282,14 @@ public class Game {
                 p.getPlayer().getRoomUser().setWalking(false);
                 p.getPlayer().getRoomUser().setNextPosition(null);
 
-                this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY()).setSpawnOccupied(true);
+                BattleballTile tile = this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY());
+
+                // Don't allow anyone to spawn on this tile
+                tile.setSpawnOccupied(true);
+
+                // Set first interaction on spawn tile, like official Habbo
+                tile.setState(BattleballTileState.TOUCHED);
+                tile.setColour(BattleballTileColour.getColourById(team.getId()));
              }
         }
     }
