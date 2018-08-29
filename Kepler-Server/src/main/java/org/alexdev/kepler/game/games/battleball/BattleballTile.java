@@ -90,10 +90,16 @@ public class BattleballTile {
                 }
             }
 
-            for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, this)) {
-                filledTile.setColour(this.getColour());
-                filledTile.setState(BattleballTileState.SEALED);
-                fillTiles.add(filledTile);
+            for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), this.position)) {
+                if (neighbour == null || neighbour.getState() == BattleballTileState.SEALED || neighbour.getColour() == BattleballTileColour.DISABLED) {
+                    continue;
+                }
+
+                for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
+                    filledTile.setColour(this.getColour());
+                    filledTile.setState(BattleballTileState.SEALED);
+                    fillTiles.add(filledTile);
+                }
             }
 
             updateTiles.add(this);
