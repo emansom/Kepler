@@ -1,4 +1,2 @@
 include 'Kepler-Server'
-
-include 'Kepler-Server'
 project(":Kepler-Server").projectDir = file("Kepler-Server")
