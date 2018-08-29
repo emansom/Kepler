@@ -50,8 +50,8 @@ public class GameTask implements Runnable {
                             && player.getRoomUser().getRoom() != null
                             && player.getRoomUser().getRoom() == this.room) {
 
-                        // Keep setting spawn colour underneath player
-                        if (!this.game.isGameStarted()) {
+                        // Keep setting spawn colour underneath player, only during "this game is starting soon"
+                        if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
                             BattleballTile tile = this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
 
                             // Set first interaction on spawn tile, like official Habbo

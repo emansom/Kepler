@@ -60,6 +60,7 @@ public class Game {
     private FutureRunnable gameTimerRunnable;
 
     private boolean gameStarted;
+    private boolean gameFinished;
 
     public Game(int id, int mapId, GameType gameType, String name, int teamAmount, int gameCreator) {
         this.id = id;
@@ -85,6 +86,8 @@ public class Game {
      */
     public void initialiseGame() {
         this.gameStarted = false;
+        this.gameFinished = false;
+
         this.preparingGameSecondsLeft = new AtomicInteger(Game.PREPARING_GAME_SECONDS_LEFT);
         this.totalSecondsLeft = new AtomicInteger(Game.GAME_LENGTH_SECONDS);
 
@@ -234,6 +237,7 @@ public class Game {
      */
     private void finishGame() {
         this.gameStarted = false;
+        this.gameFinished = true;
 
         // Kill GameTask, stops people interacting, walking, etc
         if (this.room.getTaskManager().hasTask("GameTask")) {
@@ -590,4 +594,9 @@ public class Game {
     public boolean isGameStarted() {
         return gameStarted;
     }
+
+    public boolean isGameFinished() {
+        return gameFinished;
+    }
+
 }
