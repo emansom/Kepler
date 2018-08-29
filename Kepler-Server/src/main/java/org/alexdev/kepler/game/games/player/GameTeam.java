@@ -6,12 +6,11 @@ import java.util.stream.Collectors;
 
 public class GameTeam {
     private int id;
-    private int score;
+    private int loopScore;
     private List<GamePlayer> playerList;
 
     public GameTeam(int id) {
         this.id = id;
-        this.score = 0;
         this.playerList = new CopyOnWriteArrayList<>();
     }
 
@@ -29,10 +28,12 @@ public class GameTeam {
     }
 
     public int getScore() {
-        return score;
-    }
+        int score = 0;
 
-    public void setScore(int score) {
-        this.score = score;
+        for (GamePlayer gamePlayer : this.getActivePlayers()) {
+            score += gamePlayer.getScore();
+        }
+
+        return score;
     }
 }

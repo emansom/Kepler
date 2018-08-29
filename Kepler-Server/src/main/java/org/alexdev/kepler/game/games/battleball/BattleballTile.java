@@ -26,6 +26,8 @@ public class BattleballTile {
         BattleballTileState state = this.getState();
         BattleballTileColour colour = this.getColour();
 
+        GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
+
         if (colour == BattleballTileColour.DISABLED) {
             return;
         }
@@ -79,14 +81,9 @@ public class BattleballTile {
                 } else {
                     for (GameTeam gameTeam : gamePlayer.getGame().getTeams().values()) {
                         for (GamePlayer p : gameTeam.getActivePlayers()) {
-                            p.setScore(gamePlayer.getScore() + newPoints);
+                            p.setScore(p.getScore() + newPoints);
                         }
                     }
-                }
-
-                if (tileLocked) {
-                    GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
-                    team.setScore(team.getScore() + 1);
                 }
             }
 
