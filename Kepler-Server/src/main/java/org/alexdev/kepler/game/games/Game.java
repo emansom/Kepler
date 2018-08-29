@@ -160,7 +160,7 @@ public class Game {
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
             this.beginGame();
             this.room.getTaskManager().startTasks();
-        }, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);=
+        }, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
 
         return newPlayers;
     }
