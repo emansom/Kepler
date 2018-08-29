@@ -3,6 +3,8 @@ package org.alexdev.kepler.game.room.tasks;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -47,6 +49,16 @@ public class GameTask implements Runnable {
                     if (player != null
                             && player.getRoomUser().getRoom() != null
                             && player.getRoomUser().getRoom() == this.room) {
+
+                        // Keep setting spawn colour underneath player, only during "this game is starting soon"
+                        if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
+                            BattleballTile tile = this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
+
+                            // Set first interaction on spawn tile, like official Habbo
+                            tile.setState(BattleballTileState.TOUCHED);
+                            tile.setColour(BattleballTileColour.getColourById(gamePlayer.getTeamId()));
+                            updateTiles.add(tile);
+                        }
 
                         this.processEntity(gamePlayer, movingPlayers, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
