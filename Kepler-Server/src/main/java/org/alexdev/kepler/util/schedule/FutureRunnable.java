@@ -12,4 +12,11 @@ public abstract class FutureRunnable implements Runnable {
     public void setFuture(Future<?> future) {
         this.future = future;
     }
+
+    public void cancelFuture() {
+        if (this.future != null) {
+            this.future.cancel(true);
+            this.future = null;
+        }
+    }
 }
