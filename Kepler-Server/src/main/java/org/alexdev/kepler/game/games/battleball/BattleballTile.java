@@ -90,11 +90,11 @@ public class BattleballTile {
                 }
             }
 
-            /*for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, this.position.getX(), this.position.getY(), (byte) gamePlayer.getTeamId())) {
+            for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, this)) {
                 filledTile.setColour(this.getColour());
                 filledTile.setState(BattleballTileState.SEALED);
                 fillTiles.add(filledTile);
-            }*/
+            }
 
             updateTiles.add(this);
         }

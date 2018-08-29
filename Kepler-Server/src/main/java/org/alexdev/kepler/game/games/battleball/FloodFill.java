@@ -10,27 +10,29 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import java.util.*;
 
 public class FloodFill {
-    public static Collection<BattleballTile> getFill(GamePlayer gamePlayer, int x, int y, final byte teamId) {
+    public static Collection<BattleballTile> getFill(GamePlayer gamePlayer, BattleballTile startTile) {
         HashSet<BattleballTile> closed = new HashSet<>();
 
         ArrayDeque<BattleballTile> stack = new ArrayDeque<>();
-        stack.add(gamePlayer.getGame().getTile(x, y));
+        stack.add(startTile);
 
         while (stack.size() > 0) {
             BattleballTile tile = stack.pollLast();
 
             if (tile != null) {
-                for (BattleballTile p : neighbours(gamePlayer.getGame(), tile.getPosition())) {
-                    if (p == null) {
-                        continue;
+                for (BattleballTile loopTile : neighbours(gamePlayer.getGame(), tile.getPosition())) {
+                    if (loopTile == null) {
+                        closed.clear();
+                        return closed;
                     }
 
-                    if (p.getColour() == BattleballTileColour.DISABLED) {
-                        continue;
+                    if (loopTile.getColour() == BattleballTileColour.DISABLED) {
+                        closed.clear();
+                        return closed;
                     }
 
-                    if ((p.getColour().getColourId() != teamId || p.getState() != BattleballTileState.SEALED) && !closed.contains(p) && !stack.contains(p)) {
-                        stack.addFirst(p);
+                    if ((loopTile.getColour().getColourId() != gamePlayer.getTeamId() || loopTile.getState() != BattleballTileState.SEALED) && !closed.contains(loopTile) && !stack.contains(loopTile)) {
+                        stack.addFirst(loopTile);
                     }
                 }
 
@@ -41,7 +43,7 @@ public class FloodFill {
         return closed;
     }
 
-    private static HashSet<BattleballTile> neighbours(Game game, Position position) {
+    public static HashSet<BattleballTile> neighbours(Game game, Position position) {
         HashSet<BattleballTile> battleballTiles = new HashSet<>();
 
         for (Position point : Pathfinder.MOVE_POINTS) {
