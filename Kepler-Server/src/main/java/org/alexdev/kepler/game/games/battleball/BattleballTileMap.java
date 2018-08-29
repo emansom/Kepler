@@ -37,6 +37,11 @@ public class BattleballTileMap {
                 } else {
                     this.battleballTileMap[x][y] = false;
                 }
+
+                // Temporary fix for the two tiles on Sky Peak
+                if (mapId == 1 && ((x == 24 && y == 17) || (x == 24 && y == 18))) {
+                    this.battleballTileMap[x][y] = true;
+                }
             }
         }
     }
