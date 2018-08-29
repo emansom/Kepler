@@ -18,7 +18,7 @@ public class BattleballTile {
         this.position = position;
     }
 
-    public void incrementTile(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
+    public void incrementTile(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         if (this.getColour() == BattleballTileColour.DISABLED) {
             return;
         }
@@ -89,17 +89,21 @@ public class BattleballTile {
                     continue;
                 }
 
-                for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
-                    if (filledTile.getState() == BattleballTileState.SEALED) {
-                        continue;
+                var fillTiles = FloodFill.getFill(gamePlayer, neighbour);
+
+                if (fillTiles.size() > 1) {
+                    for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
+                        if (filledTile.getState() == BattleballTileState.SEALED) {
+                            continue;
+                        }
+
+                        // Tile got sealed, so increase every team members' points
+                        team.setSealedTileScore();
+
+                        filledTile.setColour(this.getColour());
+                        filledTile.setState(BattleballTileState.SEALED);
+                        updateFillTiles.add(filledTile);
                     }
-
-                    // Tile got sealed, so increase every team members' points
-                    team.setSealedTileScore();
-
-                    filledTile.setColour(this.getColour());
-                    filledTile.setState(BattleballTileState.SEALED);
-                    fillTiles.add(filledTile);
                 }
             }
 
