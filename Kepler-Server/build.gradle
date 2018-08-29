@@ -10,7 +10,6 @@ apply plugin: 'idea'
 sourceCompatibility = "1.10"
 targetCompatibility = "1.10"
 
-
 def grpcVersion = '1.12.0'
 def protobufVersion = '3.5.1'
 def protocVersion = '3.5.1-1'
@@ -99,3 +98,13 @@ task fatJar(type: Jar) {
 // Create jar with no libraries inside of it, used when creating with "gradle distZip" and
 // libraries are then to be stored in the folder next to it called 'dependency-jars'
 // https://vocon-it.com/2016/11/15/how-to-build-a-lean-jar-file-with-gradle/
+jar {
+    manifest {
+        attributes (
+                'Main-Class': mainClassName,
+                "Class-Path": '. dependency-jars/' + configurations.compile.collect {
+                    it.getName()
+                }.join(' dependency-jars/')
+        )
+    }
+}
