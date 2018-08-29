@@ -52,9 +52,9 @@ public class Game {
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
 
-    public static final int PREPARING_GAME_SECONDS_LEFT = 1;
+    public static final int PREPARING_GAME_SECONDS_LEFT = 10;
     public static final int RESTART_GAME_SECONDS = 30;
-    public static final int GAME_LENGTH_SECONDS = 4;
+    public static final int GAME_LENGTH_SECONDS = 180;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
@@ -142,6 +142,7 @@ public class Game {
             for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
                 gamePlayer.setScore(0);
                 gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
+                gamePlayer.setClickedRestart(false);
 
                 newPlayers.add(gamePlayer);
             }
@@ -221,9 +222,6 @@ public class Game {
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.gameTimerRunnable, 0, 1, TimeUnit.SECONDS);
         this.gameTimerRunnable.setFuture(future);
 
-        // Restart countdown
-        this.restartCountdown = new AtomicLong(DateUtil.getCurrentTimeSeconds() + Game.RESTART_GAME_SECONDS);
-
         // Send game seconds
         this.send(new GAMESTART(Game.GAME_LENGTH_SECONDS));
     }
@@ -237,6 +235,10 @@ public class Game {
             this.room.getTaskManager().cancelTask("GameTask");
         }
 
+        // Restart countdown
+        this.restartCountdown = new AtomicLong(DateUtil.getCurrentTimeSeconds() + Game.RESTART_GAME_SECONDS);
+
+        // Send scores to everybody
         this.send(new GAMEEND(this, this.teams));
     }
 

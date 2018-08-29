@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
 import org.alexdev.kepler.messages.outgoing.games.GAMERESET;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
+import org.alexdev.kepler.util.DateUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,22 @@ public class GAMERESTART implements MessageEvent {
             return;
         }
 
+        // We don't allow users to instantly restart until they've had a look at their scores
+        if (game.getRestartCountdown().get() > DateUtil.getCurrentTimeSeconds()) {
+            return;
+        }
+
+        // Only allow restart once everyone has clicked they'd like to restart
+        gamePlayer.setClickedRestart(true);
+
+        for (GameTeam gameTeam : game.getTeams().values()) {
+            for (GamePlayer p : gameTeam.getActivePlayers()) {
+                if (!p.isClickedRestart()) {
+                    return;
+                }
+            }
+
+        }
         /*Game restartGame = new Game(game.getId(), game.getMapId(), game.getGameType(), game.getName(), game.getTeamAmount(), game.getGameCreator().getDetails().getId());
 
         List<GamePlayer> restartedPlayers = new ArrayList<>();
