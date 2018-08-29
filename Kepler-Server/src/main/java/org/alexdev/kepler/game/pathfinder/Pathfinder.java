@@ -228,11 +228,11 @@ public class Pathfinder {
                         diff = 0;
 
                         if (current.getPosition().getX() != node.getPosition().getX()) {
-                            diff += 1;
+                            diff += 2; // Reminder: It was 1 up until 29/08/2018
                         }
 
                         if (current.getPosition().getY() != node.getPosition().getY()) {
-                            diff += 1;
+                            diff += 2; // Reminder: It was 1 up until 29/08/2018
                         }
 
                         cost = current.getCost() + diff + node.getPosition().getDistanceSquared(end);
