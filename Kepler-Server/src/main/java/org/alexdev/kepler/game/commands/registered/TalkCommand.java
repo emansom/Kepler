@@ -3,8 +3,12 @@ package org.alexdev.kepler.game.commands.registered;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
+import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.moderation.Fuseright;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.util.StringUtil;
 
 public class TalkCommand extends Command {
@@ -29,7 +33,19 @@ public class TalkCommand extends Command {
             talkMessage = "";
         }
 
-        UfosCommand.createVoiceSpeakMessage(player.getRoomUser().getRoom(), talkMessage);
+        TalkCommand.createVoiceSpeakMessage(player.getRoomUser().getRoom(), talkMessage);
+    }
+
+    public static void createVoiceSpeakMessage(Room room, String text) {
+        // 'Speaker'
+        Item pItem = new Item();
+        pItem.setId(Integer.MAX_VALUE);
+        pItem.setPosition(new Position(255, 255, -1f));
+        pItem.setCustomData("voiceSpeak(\"" + text + "\")");
+        pItem.getDefinition().setSprite("spotlight");
+        pItem.getDefinition().setLength(1);
+        pItem.getDefinition().setWidth(1);
+        room.send(new PLACE_FLOORITEM(pItem));
     }
 
     @Override
