@@ -265,12 +265,8 @@ public class Game {
             boolean flip = false;
 
             for (GamePlayer p : team.getPlayers()) {
-                try {
-                    findSpawn(flip, spawnX, spawnY, spawnRotation);
-                    //flip = (!flip);
-                } catch (Exception ex) {
-                    flip = (!flip);
-                }
+
+                findSpawn(flip, spawnX, spawnY, spawnRotation);
 
                 p.getSpawnPosition().setX(spawnX.get());
                 p.getSpawnPosition().setY(spawnY.get());
@@ -290,7 +286,7 @@ public class Game {
                 // Set first interaction on spawn tile, like official Habbo
                 tile.setState(BattleballTileState.TOUCHED);
                 tile.setColour(BattleballTileColour.getColourById(team.getId()));
-             }
+            }
         }
     }
 
@@ -303,18 +299,51 @@ public class Game {
      * @param spawnRotation the spawn rotation
      */
     private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
-        while (this.getTile(spawnX.get(), spawnY.get()) == null || this.getTile(spawnX.get(), spawnY.get()).isSpawnOccupied()) {
-            if (spawnRotation.get() == 0 || spawnRotation.get() == 2) {
-                if (flip)
-                    spawnX.decrementAndGet();// -= 1;
-                else
-                    spawnY.incrementAndGet();// += 1;
-            } else if (spawnRotation.get() == 4 || spawnRotation.get() == 6) {
-                if (flip)
-                    spawnX.incrementAndGet();// -= 1;
-                else
-                    spawnY.decrementAndGet();// += 1;
+        try {
+            while (this.battleballTiles[spawnX.get()][spawnY.get()].isSpawnOccupied()) {
+                /*if (spawnRotation.get() == 0 || spawnRotation.get() == 4) {
+                    if (flip)
+                        spawnX.incrementAndGet();// -= 1;
+                    else
+                        spawnY.decrementAndGet();// += 1;
+                } else if (spawnRotation.get() == 2 || spawnRotation.get() == 6) {
+                    if (flip)
+                        spawnX.incrementAndGet();// -= 1;
+                    else
+                        spawnY.decrementAndGet();// += 1;
+                }*/
+                if (spawnRotation.get() == 0) {
+                    if (!flip)
+                        spawnX.decrementAndGet();// -= 1;
+                    else
+                        spawnX.incrementAndGet();// += 1;
+                }
+
+                if (spawnRotation.get() == 2) {
+                    if (!flip)
+                        spawnY.incrementAndGet();// -= 1;
+                    else
+                        spawnY.decrementAndGet();// += 1;
+                }
+
+                if (spawnRotation.get() == 4) {
+                    if (!flip)
+                        spawnX.incrementAndGet();// -= 1;
+                    else
+                        spawnX.decrementAndGet();// += 1;
+                }
+
+                if (spawnRotation.get() == 6) {
+                    if (!flip)
+                        spawnY.decrementAndGet();// -= 1;
+                    else
+                        spawnY.incrementAndGet();// += 1;
+                }
             }
+            flip = (!flip);
+        } catch (Exception ex) {
+            flip = (!flip);
+            findSpawn(flip, spawnX, spawnY, spawnRotation);
         }
     }
 
