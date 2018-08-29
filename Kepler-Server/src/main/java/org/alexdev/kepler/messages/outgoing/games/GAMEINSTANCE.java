@@ -41,6 +41,16 @@ public class GAMEINSTANCE extends MessageComposer {
                     response.writeString(player.getPlayer().getDetails().getName());
                 }
             }
+
+            // TODO: Special SnowStorm parameters
+
+            String[] powerUps = new String[this.game.getPowerUps().size()];
+
+            for (int i = 0; i < this.game.getPowerUps().size(); i++) {
+                powerUps[i] = String.valueOf(this.game.getPowerUps().get(i));
+            }
+
+            response.writeString(String.join(",", powerUps));
         }
 
         if (this.game.getGameState() == GameState.STARTED) {
