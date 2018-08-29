@@ -14,11 +14,9 @@ import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.game.room.models.RoomModel;
-import org.alexdev.kepler.messages.outgoing.games.GAMEDELETED;
-import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
-import org.alexdev.kepler.messages.outgoing.games.GAMELOCATION;
-import org.alexdev.kepler.messages.outgoing.games.GAMESTART;
+import org.alexdev.kepler.messages.outgoing.games.*;
 import org.alexdev.kepler.messages.types.MessageComposer;
+import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
 
 import java.util.ArrayList;
@@ -28,6 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class Game {
     private int id;
@@ -44,17 +43,21 @@ public class Game {
     private String name;
 
     private List<Integer> powerUps;
-    private Map<Integer, GameTeam> teamPlayers;
+    private Map<Integer, GameTeam> teams;
     private List<Player> spectators;
 
     private BattleballTile[][] battleballTiles;
 
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
+    private AtomicLong restartCountdown;
 
-    public static final int PREPARING_GAME_SECONDS_LEFT = 1;
-    public static final int RESTART_GAME_SECONDS = 1200;
+    public static final int PREPARING_GAME_SECONDS_LEFT = 10;
+    public static final int RESTART_GAME_SECONDS = 10;
     public static final int GAME_LENGTH_SECONDS = 180;
+
+    private FutureRunnable preparingTimerRunnable;
+    private FutureRunnable gameTimerRunnable;
 
     public Game(int id, int mapId, GameType gameType, String name, int teamAmount, int gameCreator) {
         this.id = id;
@@ -65,28 +68,27 @@ public class Game {
         this.gameCreator = gameCreator;
 
         this.powerUps = new ArrayList<>();
-        this.teamPlayers = new ConcurrentHashMap<>();
+        this.teams = new ConcurrentHashMap<>();
         this.spectators = new CopyOnWriteArrayList<>();
 
         for (int i = 0; i < teamAmount; i++) {
-            this.teamPlayers.put(i, new GameTeam(i));
+            this.teams.put(i, new GameTeam(i));
         }
-
-        this.preparingGameSecondsLeft = new AtomicInteger(Game.PREPARING_GAME_SECONDS_LEFT);
-        this.totalSecondsLeft = new AtomicInteger(Game.GAME_LENGTH_SECONDS);
 
         this.gameState = GameState.WAITING;
     }
 
     /**
-     * Method to start the game
+     * Method to initialise the game
      */
-    public void startGame() {
+    public void initialiseGame() {
+        this.preparingGameSecondsLeft = new AtomicInteger(Game.PREPARING_GAME_SECONDS_LEFT);
+        this.totalSecondsLeft = new AtomicInteger(Game.GAME_LENGTH_SECONDS);
+
         this.gameState = GameState.STARTED;
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
 
         BattleballTileMap tileMap = GameManager.getInstance().getBattleballTileMap(this.mapId);
-
         this.battleballTiles = new BattleballTile[this.roomModel.getMapSizeX()][this.roomModel.getMapSizeY()];
 
         for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
@@ -111,14 +113,66 @@ public class Game {
             }
         }
 
+        if (this.room == null) {
+            this.room = new Room();
+            this.room.getData().fill(this.id, "Battleball Arena", "");
+            this.room.setRoomModel(roomModel);
+        }
+
         this.assignSpawnPoints();
+    }
 
-        this.room = new Room();
-        this.room.getData().fill(this.id, "Battleball Arena", "");
-        this.room.setRoomModel(roomModel);
+    /**
+     * Method to restart game.
+     *
+     * @return the list of players who are playing in the restarted game
+     */
+    public List<GamePlayer> resetGame() {
+        List<GamePlayer> newPlayers = new ArrayList<>();
 
-        for (GameTeam team : this.teamPlayers.values()) {
-            for (GamePlayer p : team.getPlayers()) {
+        if (this.preparingTimerRunnable != null) {
+            this.preparingTimerRunnable.cancelFuture();
+        }
+
+        if (this.gameTimerRunnable != null) {
+            this.gameTimerRunnable.cancelFuture();
+        }
+
+        for (GameTeam gameTeam : this.teams.values()) {
+            for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
+                gamePlayer.setScore(0);
+                gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
+                gamePlayer.setClickedRestart(false);
+
+                newPlayers.add(gamePlayer);
+            }
+        }
+
+        this.initialiseGame();
+        this.send(new FULLGAMESTATUS(this, false));  // Show users back at teleporting positions
+
+        // Show coloured tiles at the start of the time, needs to be on delay or won't be seen
+        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+            this.send(new FULLGAMESTATUS(this, false));
+        }, 200, TimeUnit.MILLISECONDS);
+
+        // Start game after "game is about to begin"
+        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+            this.beginGame();
+            this.room.getTaskManager().startTasks();
+        }, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
+
+        return newPlayers;
+    }
+
+    /**
+     * Method to start the game
+     */
+    public void startGame() {
+        this.initialiseGame();
+
+        for (GameTeam team : this.teams.values()) {
+            for (GamePlayer p : team.getActivePlayers()) {
                 p.setEnteringGame(true);
             }
         }
@@ -126,22 +180,22 @@ public class Game {
         this.send(new GAMELOCATION());
 
         // Preparing game seconds countdown
-        FutureRunnable runnable = new FutureRunnable() {
+        this.preparingTimerRunnable = new FutureRunnable() {
             public void run() {
                 if (!canGameContinue()) {
-                    this.getFuture().cancel(true);
+                    this.cancelFuture();
                     return;
                 }
 
                 if (preparingGameSecondsLeft.getAndDecrement() == 0) {
-                    this.getFuture().cancel(true);
+                    this.cancelFuture();
                     beginGame();
                 }
             }
         };
 
-        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
-        runnable.setFuture(future);
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 0, 1, TimeUnit.SECONDS);
+        this.preparingTimerRunnable.setFuture(future);
     }
 
     /**
@@ -149,38 +203,55 @@ public class Game {
      */
     private void beginGame() {
         // Stop all players from walking when game starts if they selected a tile
-        for (GameTeam team : teamPlayers.values()) {
+        for (GameTeam team : teams.values()) {
             for (GamePlayer p : team.getActivePlayers()) {
                 p.getPlayer().getRoomUser().setWalkingAllowed(true);
             }
         }
 
         // Game seconds counter
-        FutureRunnable runnable = new FutureRunnable() {
+        this.gameTimerRunnable = new FutureRunnable() {
             public void run() {
                 if (!canGameContinue()) {
-                    this.getFuture().cancel(true);
+                    this.cancelFuture();
                     return;
                 }
 
-                if (totalSecondsLeft.decrementAndGet() == 0) {
-                    this.getFuture().cancel(true);
+                if (totalSecondsLeft.decrementAndGet() == 0 || !hasFreeTiles()) {
+                    this.cancelFuture();
+                    finishGame();
                 }
             }
         };
 
-        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(runnable, 0, 1, TimeUnit.SECONDS);
-        runnable.setFuture(future);
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.gameTimerRunnable, 0, 1, TimeUnit.SECONDS);
+        this.gameTimerRunnable.setFuture(future);
 
         // Send game seconds
         this.send(new GAMESTART(Game.GAME_LENGTH_SECONDS));
     }
 
     /**
+     * Finish game
+     */
+    private void finishGame() {
+        // Kill GameTask, stops people interacting, walking, etc
+        if (this.room.getTaskManager().hasTask("GameTask")) {
+            this.room.getTaskManager().cancelTask("GameTask");
+        }
+
+        // Restart countdown
+        this.restartCountdown = new AtomicLong(DateUtil.getCurrentTimeSeconds() + Game.RESTART_GAME_SECONDS);
+
+        // Send scores to everybody
+        this.send(new GAMEEND(this, this.teams));
+    }
+
+    /**
      * Assign spawn points to all team members
      */
-    private void assignSpawnPoints() {
-        for (GameTeam team : this.teamPlayers.values()) {
+    public void assignSpawnPoints() {
+        for (GameTeam team : this.teams.values()) {
             GameSpawn gameSpawn = GameManager.getInstance().getGameSpawn(this.gameType, this.mapId, team.getId());
 
             if (gameSpawn == null) {
@@ -208,8 +279,17 @@ public class Game {
 
                 p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
                 p.getPlayer().getRoomUser().setInstanceId(p.getPlayer().getDetails().getId());
+                p.getPlayer().getRoomUser().setWalking(false);
+                p.getPlayer().getRoomUser().setNextPosition(null);
 
-                this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY()).setSpawnOccupied(true);
+                BattleballTile tile = this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY());
+
+                // Don't allow anyone to spawn on this tile
+                tile.setSpawnOccupied(true);
+
+                // Set first interaction on spawn tile, like official Habbo
+                tile.setState(BattleballTileState.TOUCHED);
+                tile.setColour(BattleballTileColour.getColourById(team.getId()));
              }
         }
     }
@@ -273,7 +353,7 @@ public class Game {
             maxPerTeam = 2;
         }
 
-        return this.teamPlayers.get(teamId).getActivePlayers().size() < maxPerTeam;
+        return this.teams.get(teamId).getActivePlayers().size() < maxPerTeam;
     }
 
     /**
@@ -285,19 +365,19 @@ public class Game {
      */
     public void movePlayer(GamePlayer gamePlayer, int fromTeamId, int toTeamId) {
         if (fromTeamId != -1) {
-            this.teamPlayers.get(fromTeamId).getPlayers().remove(gamePlayer);
+            this.teams.get(fromTeamId).getPlayers().remove(gamePlayer);
         }
 
         if (toTeamId != -1) {
-            if (!this.teamPlayers.get(toTeamId).getPlayers().contains(gamePlayer)) {
-                this.teamPlayers.get(toTeamId).getPlayers().add(gamePlayer);
+            if (!this.teams.get(toTeamId).getPlayers().contains(gamePlayer)) {
+                this.teams.get(toTeamId).getPlayers().add(gamePlayer);
             }
 
             gamePlayer.setTeamId(toTeamId);
             gamePlayer.setInGame(true);
         } else {
             if (this.gameState == GameState.WAITING) {
-                this.teamPlayers.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
+                this.teams.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
             } else {
                 gamePlayer.setInGame(false); // Don't remove from team, just show they're no longer in game, for "0" score at the end.
             }
@@ -314,7 +394,7 @@ public class Game {
      * @param composer the composer to send
      */
     public void send(MessageComposer composer) {
-        for (GameTeam team : this.teamPlayers.values()) {
+        for (GameTeam team : this.teams.values()) {
             for (GamePlayer gamePlayer : team.getActivePlayers()) {
                 gamePlayer.getPlayer().send(composer);
             }
@@ -335,12 +415,12 @@ public class Game {
         int activeTeamCount = 0;
 
         for (int i = 0; i < this.teamAmount; i++) {
-            if (this.teamPlayers.get(i).getActivePlayers().size() > 0) {
+            if (this.teams.get(i).getActivePlayers().size() > 0) {
                 activeTeamCount++;
             }
         }
 
-        return activeTeamCount > 0;
+        return activeTeamCount > 1;
     }
 
     /**
@@ -353,12 +433,30 @@ public class Game {
         int activeTeamCount = 0;
 
         for (int i = 0; i < this.teamAmount; i++) {
-            if (this.teamPlayers.get(i).getActivePlayers().size() > 0) {
+            if (this.teams.get(i).getActivePlayers().size() > 0) {
                 activeTeamCount++;
             }
         }
 
         return activeTeamCount > 0;
+    }
+
+    public boolean hasFreeTiles() {
+        for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
+            for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
+                BattleballTile tile = this.getTile(x, y);
+
+                if (tile == null || tile.getColour() == BattleballTileColour.DISABLED) {
+                    continue;
+                }
+
+                if (tile.getState() != BattleballTileState.SEALED) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -367,7 +465,7 @@ public class Game {
      * @return the game player instance, else if null
      */
     public GamePlayer getGamePlayer(int userId) {
-        for (GameTeam team : this.teamPlayers.values()) {
+        for (GameTeam team : this.teams.values()) {
             for (GamePlayer gamePlayer : team.getPlayers()) {
                 if (gamePlayer.getUserId() == userId) {
                     return gamePlayer;
@@ -429,7 +527,7 @@ public class Game {
     }
 
     public Map<Integer, GameTeam> getTeams() {
-        return teamPlayers;
+        return teams;
     }
 
     public Player getGameCreator() {
@@ -454,5 +552,9 @@ public class Game {
 
     public Room getRoom() {
         return room;
+    }
+
+    public AtomicLong getRestartCountdown() {
+        return restartCountdown;
     }
 }

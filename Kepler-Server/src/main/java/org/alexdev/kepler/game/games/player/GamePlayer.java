@@ -15,6 +15,7 @@ public class GamePlayer {
     private int score;
     private boolean enteringGame;
     private boolean inGame;
+    private boolean clickedRestart;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -22,8 +23,8 @@ public class GamePlayer {
         this.teamId = -1;
         this.gameId = -1;
         this.score = 0;
-        this.inGame = false;
         this.enteringGame = false;
+        this.clickedRestart = false;
         this.position = new Position();
     }
 
@@ -81,5 +82,13 @@ public class GamePlayer {
 
     public void setInGame(boolean inGame) {
         this.inGame = inGame;
+    }
+
+    public boolean isClickedRestart() {
+        return clickedRestart;
+    }
+
+    public void setClickedRestart(boolean clickedRestart) {
+        this.clickedRestart = clickedRestart;
     }
 }

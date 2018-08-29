@@ -314,14 +314,15 @@ public class MessageHandler {
      */
     private void registerGamePackets() {
         registerEvent(159, new GETINSTANCELIST());
+        registerEvent(160, new OBSERVEINSTANCE());
         registerEvent(162, new INITIATECREATEGAME());
         registerEvent(163, new GAMEPARAMETERVALUES());
-        registerEvent(160, new OBSERVEINSTANCE());
         registerEvent(165, new INITIATEJOINGAME());
-        registerEvent(170, new STARTGAME());
         registerEvent(167, new LEAVEGAME());
         registerEvent(168, new KICKPLAYER());
+        registerEvent(170, new STARTGAME());
         registerEvent(171, new GAMEEVENT());
+        registerEvent(172, new GAMERESTART());
     }
 
     /**
