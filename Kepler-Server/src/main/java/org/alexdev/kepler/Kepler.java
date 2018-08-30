@@ -95,8 +95,8 @@ public class Kepler {
             PlayerManager.getInstance();
             FuserightsManager.getInstance();
             NavigatorManager.getInstance();
-            GameManager.getInstance();
             GameScheduler.getInstance();
+            GameManager.getInstance();
             CommandManager.getInstance();
             MessageHandler.getInstance();
             TextsManager.getInstance();

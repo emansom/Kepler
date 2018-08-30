@@ -46,6 +46,9 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
 
         Player player = (Player) entity;
 
+        if (player.getRoomUser().getObservingGameId() != -1) {
+            player.getRoomUser().stopObservingGame();
+        }
     }
 
     @Override

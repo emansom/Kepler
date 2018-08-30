@@ -2,18 +2,14 @@ package org.alexdev.kepler.game.room.entities;
 
 import org.alexdev.kepler.dao.mysql.ItemDao;
 import org.alexdev.kepler.dao.mysql.PlayerDao;
+import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
-import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
-import org.alexdev.kepler.game.room.managers.RoomTimerManager;
 import org.alexdev.kepler.game.room.managers.RoomTradeManager;
-import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
-import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
-import org.alexdev.kepler.game.room.tasks.StatusTask;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 
@@ -25,6 +21,7 @@ public class RoomPlayer extends RoomEntity {
 
     private int authenticateId;
     private int authenticateTelporterId;
+    private int observingGameId;
 
     private boolean isTyping;
     private boolean isDiving;
@@ -49,6 +46,7 @@ public class RoomPlayer extends RoomEntity {
         super.reset();
         this.isTyping = false;
         this.isDiving = false;
+        this.observingGameId = -1;
         RoomTradeManager.close(this);
     }
 
@@ -93,6 +91,17 @@ public class RoomPlayer extends RoomEntity {
         // Remove authentications
         this.authenticateId = -1;
         this.authenticateTelporterId = -1;
+    }
+
+    public void stopObservingGame() {
+        if (this.observingGameId != -1) {
+            Game game = GameManager.getInstance().getGameById(this.observingGameId);
+
+            if (game != null) {
+                game.removeObserver(this.player);
+                System.out.println("Stopped observing");
+            }
+        }
     }
 
     /**
@@ -181,5 +190,17 @@ public class RoomPlayer extends RoomEntity {
 
     public void setGamePlayer(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
+    }
+
+    public int getObservingGameId() {
+        return observingGameId;
+    }
+
+    public int resetObservingGameId() {
+        return observingGameId;
+    }
+
+    public void setObservingGameId(int observingGameId) {
+        this.observingGameId = observingGameId;
     }
 }

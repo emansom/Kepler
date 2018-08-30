@@ -50,9 +50,15 @@ public class GameConfiguration {
         config.put("chat.garbled.text", "true");
         config.put("chat.bubble.timeout.seconds", "15");
 
-        config.put("battleball.create.game.enabled", "false");
-        config.put("snowstorm.create.game.enabled", "false");
+        config.put("battleball.create.game.enabled", "true");
+        config.put("battleball.start.minimum.active.teams", "2");
+        config.put("battleball.preparing.game.seconds", "10");
+        config.put("battleball.game.lifetime.seconds", "180");
+        config.put("battleball.restart.game.seconds", "30");
 
+        config.put("game.finished.listing.expiry.seconds", "300");
+
+        config.put("snowstorm.create.game.enabled", "false");
         config.put("tutorial.enabled", "true");
         config.put("profile.editing", "true");
         config.put("vouchers.enabled", "true");

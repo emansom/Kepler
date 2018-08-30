@@ -2,18 +2,25 @@ package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.models.RoomModel;
+import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
+import org.bouncycastle.asn1.cms.PasswordRecipientInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class GameManager {
     private static GameManager instance = null;
+    private ScheduledFuture<?> expiryLoop;
 
     private AtomicInteger idTracker;
 
@@ -22,6 +29,8 @@ public class GameManager {
     private List<RoomModel> modelList;
 
     private List<Game> games;
+    private List<FinishedGame> finishedGames;
+
     private List<BattleballTileMap> battleballTileMaps;
 
     public GameManager() {
@@ -31,7 +40,19 @@ public class GameManager {
         this.battleballTileMaps = GameDao.getBattleballTileMaps();
 
         this.games = new ArrayList<>();
+        this.finishedGames = new ArrayList<>();
         this.idTracker = new AtomicInteger(0);
+
+        this.createExpiryCheckLoop();
+    }
+
+    /**
+     * Recurring task used to clear old games after their listing time has expired.
+     */
+    private void createExpiryCheckLoop() {
+        this.expiryLoop = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(() -> {
+            finishedGames.removeIf(game -> DateUtil.getCurrentTimeSeconds() > game.getExpireTime());
+        }, 0, getListingExpiryTime() / 10, TimeUnit.SECONDS);
     }
 
     /**
@@ -161,6 +182,36 @@ public class GameManager {
     }
 
     /**
+     * Gets the restart time for the specified game type.
+     */
+    public int getRestartSeconds(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".restart.game.seconds");
+    }
+
+    /**
+     * Gets the game time for the specified game type.
+     */
+    public int getLifetimeSeconds(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".game.lifetime.seconds");
+    }
+
+    /**
+     * Gets the game time for the specified game type.
+     */
+    public int getPreparingSeconds(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".preparing.game.seconds");
+    }
+
+    /**
+     * Get the amount of seconds allowed for a finished game to persist on the instance list before it's removed
+     *
+     * @return the amount of seconds
+     */
+    public int getListingExpiryTime() {
+        return GameConfiguration.getInstance().getInteger("game.finished.listing.expiry.seconds");
+    }
+
+    /**
      * Get model by type and map id
      *
      * @return the room model instance
@@ -171,6 +222,25 @@ public class GameManager {
         for (RoomModel roomModel : this.modelList) {
             if (roomModel.getName().equals(prefix + "_arena_" + mapId)) {
                 return roomModel;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the list of all finished games
+     *
+     * @return the list of finished games
+     */
+    public List<FinishedGame> getFinishedGames() {
+        return finishedGames;
+    }
+
+    public FinishedGame getFinishedGameById(int id) {
+        for (FinishedGame game : this.finishedGames) {
+            if (game.getId() == id) {
+                return game;
             }
         }
 

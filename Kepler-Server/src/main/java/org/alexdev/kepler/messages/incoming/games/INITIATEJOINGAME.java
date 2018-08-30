@@ -19,29 +19,38 @@ public class INITIATEJOINGAME implements MessageEvent {
 
         Room room = player.getRoomUser().getRoom();
 
+        int instanceId = reader.readInt();
+        int teamId = reader.readInt();
+
         if (!(room.getModel().getModelTrigger() instanceof GameLobbyTrigger)) {
             return;
         }
 
-        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+        /*GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
         if (gamePlayer == null) {
             return;
-        }
+        }*/
 
-        Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
+        Game game = GameManager.getInstance().getGameById(instanceId);
 
         if (game == null || game.getGameState() != GameState.WAITING) {
             return;
         }
 
-        int instanceId = reader.readInt();
-        int teamId = reader.readInt();
-
         if (!game.canSwitchTeam(teamId)) {
             return;
         }
 
+        if (player.getRoomUser().getGamePlayer() == null) {
+            player.getRoomUser().setGamePlayer(new GamePlayer(player));
+            player.getRoomUser().getGamePlayer().setGameId(game.getId());
+            player.getRoomUser().getGamePlayer().setTeamId(teamId);
+        }
+
+        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        game.removeObserver(player); // Player was a viewer
         game.movePlayer(gamePlayer, gamePlayer.getTeamId(), teamId);
     }
 }

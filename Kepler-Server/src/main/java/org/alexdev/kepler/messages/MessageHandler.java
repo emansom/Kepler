@@ -315,6 +315,7 @@ public class MessageHandler {
     private void registerGamePackets() {
         registerEvent(159, new GETINSTANCELIST());
         registerEvent(160, new OBSERVEINSTANCE());
+        registerEvent(161, new UNOBSERVEINSTANCE());
         registerEvent(162, new INITIATECREATEGAME());
         registerEvent(163, new GAMEPARAMETERVALUES());
         registerEvent(165, new INITIATEJOINGAME());
