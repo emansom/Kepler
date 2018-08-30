@@ -44,6 +44,8 @@ public class Game {
 
     private List<Integer> powerUps;
     private Map<Integer, GameTeam> teams;
+
+    private List<Player> viewers;
     private List<Player> spectators;
 
     private BattleballTile[][] battleballTiles;
@@ -68,7 +70,9 @@ public class Game {
 
         this.powerUps = new ArrayList<>();
         this.teams = new ConcurrentHashMap<>();
+
         this.spectators = new CopyOnWriteArrayList<>();
+        this.viewers = new ArrayList<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -81,13 +85,15 @@ public class Game {
      * Method to initialise the game
      */
     private void restartUsers() {
+        this.gameState = GameState.STARTED;
+        this.viewers.clear();
+
         this.gameStarted = false;
         this.gameFinished = false;
 
         this.preparingGameSecondsLeft = new AtomicInteger(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL));
         this.totalSecondsLeft = new AtomicInteger(GameManager.getInstance().getLifetimeSeconds(GameType.BATTLEBALL));
 
-        this.gameState = GameState.STARTED;
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
 
         BattleballTileMap tileMap = GameManager.getInstance().getBattleballTileMap(this.mapId);
@@ -303,7 +309,7 @@ public class Game {
         }
 
         // Send scores to everybody
-        this.send(new GAMEEND(this, this.teams));
+        this.send(new GAMEEND(this.teams));
 
         // Restart countdown
         this.restartCountdown = new AtomicLong(GameManager.getInstance().getRestartSeconds(GameType.BATTLEBALL));
@@ -478,6 +484,12 @@ public class Game {
         for (Player player : this.spectators) {
             player.send(composer);
         }
+
+        if (this.gameState == GameState.WAITING) {
+            for (Player player : this.viewers) {
+                player.send(composer);
+            }
+        }
     }
 
     /**
@@ -556,6 +568,25 @@ public class Game {
     }
 
     /**
+     * Add the player to view the team list and allow them to see
+     * others change teams before they actually join a team.
+     *
+     * @param player the player to add
+     */
+    public void addViewer(Player player) {
+        this.viewers.add(player);
+    }
+
+    /**
+     * Remove the player from the viewer list
+     *
+     * @param player the player to remove
+     */
+    public void removeViewer(Player player) {
+        this.viewers.remove(player);
+    }
+
+    /**
      * Get a tile by specified coordinates
      *
      * @param x the x coordinate
@@ -628,10 +659,6 @@ public class Game {
         return preparingGameSecondsLeft;
     }
 
-    public AtomicInteger getTotalSecondsLeft() {
-        return totalSecondsLeft;
-    }
-
     public RoomModel getRoomModel() {
         return roomModel;
     }
@@ -639,11 +666,6 @@ public class Game {
     public Room getRoom() {
         return room;
     }
-
-    public AtomicLong getRestartCountdown() {
-        return restartCountdown;
-    }
-
     public boolean isGameStarted() {
         return gameStarted;
     }

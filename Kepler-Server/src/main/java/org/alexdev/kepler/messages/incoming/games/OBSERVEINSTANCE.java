@@ -42,7 +42,13 @@ public class OBSERVEINSTANCE implements MessageEvent {
             return;
         }
 
+        player.send(new GAMEINSTANCE(game));
+
         if (game.getGameState() == GameState.WAITING) {
+            game.addViewer(player);
+        }
+
+        /*if (game.getGameState() == GameState.WAITING) {
             if (player.getDetails().getTickets() <= 1) {
                 player.send(new JOINFAILED(JOINFAILED.FailedReason.TICKETS_NEEDED));
                 return;
@@ -69,6 +75,8 @@ public class OBSERVEINSTANCE implements MessageEvent {
 
             game.movePlayer(player.getRoomUser().getGamePlayer(), -1, gameTeam.getId());
             game.send(new GAMEINSTANCE(game));
-        }
+        }*/
+
+
     }
 }

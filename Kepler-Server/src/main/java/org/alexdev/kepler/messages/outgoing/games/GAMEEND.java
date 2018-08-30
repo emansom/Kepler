@@ -11,11 +11,9 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import java.util.Map;
 
 public class GAMEEND extends MessageComposer {
-    private final Game game;
     private final Map<Integer, GameTeam> teams;
 
-    public GAMEEND(Game game, Map<Integer, GameTeam> teams) {
-        this.game = game;
+    public GAMEEND(Map<Integer, GameTeam> teams) {
         this.teams = teams;
     }
 
