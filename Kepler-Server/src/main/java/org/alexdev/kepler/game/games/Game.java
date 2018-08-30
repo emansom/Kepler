@@ -425,7 +425,7 @@ public class Game {
             maxPerTeam = 2;
         }
 
-        return this.teams.get(teamId).getActivePlayers().size() < maxPerTeam;
+        return this.teams.get(teamId).getActivePlayers().size() <= maxPerTeam;
     }
 
     /**
