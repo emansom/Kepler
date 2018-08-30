@@ -52,8 +52,8 @@ public class Game {
     private AtomicLong restartCountdown;
 
     public static final int PREPARING_GAME_SECONDS_LEFT = 10;
-    public static final int RESTART_GAME_SECONDS = 30;
-    public static final int GAME_LENGTH_SECONDS =  180;
+    public static final int RESTART_GAME_SECONDS = 10;
+    public static final int GAME_LENGTH_SECONDS =  10;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
