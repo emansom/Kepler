@@ -1,11 +1,10 @@
 package org.alexdev.kepler.game.games;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
@@ -17,7 +16,6 @@ import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.messages.outgoing.games.*;
 import org.alexdev.kepler.messages.types.MessageComposer;
-import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
 
 import java.util.ArrayList;
