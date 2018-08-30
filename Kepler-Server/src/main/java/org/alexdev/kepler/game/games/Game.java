@@ -334,14 +334,23 @@ public class Game {
      */
     private void triggerRestart() {
         List<GamePlayer> players = new ArrayList<>();
+        List<GamePlayer> afkPlayers = new ArrayList<>();
 
         for (GameTeam gameTeam : this.teams.values()) {
             for (GamePlayer p : gameTeam.getActivePlayers()) {
                 if (!p.isClickedRestart()) {
-                    continue;
+                    afkPlayers.add(p);
+                } else {
+                    players.add(p);
                 }
+            }
+        }
 
-                players.add(p);
+        for (var afkPlayer : afkPlayers) {
+            this.leaveGame(afkPlayer);
+
+            if (afkPlayer.getPlayer().getRoomUser().getRoom() != null) {
+                afkPlayer.getPlayer().getRoomUser().getRoom().getEntityManager().leaveRoom(afkPlayer.getPlayer(), true);
             }
         }
 
