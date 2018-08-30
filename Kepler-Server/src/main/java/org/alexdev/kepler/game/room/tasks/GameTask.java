@@ -54,10 +54,13 @@ public class GameTask implements Runnable {
                         if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
                             BattleballTile tile = this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
 
-                            // Set first interaction on spawn tile, like official Habbo
-                            tile.setState(BattleballTileState.TOUCHED);
-                            tile.setColour(BattleballTileColour.getColourById(gamePlayer.getTeamId()));
-                            updateTiles.add(tile);
+                            if (tile.isSpawnOccupied()) {
+                                // Set first interaction on spawn tile, like official Habbo
+                                tile.setState(BattleballTileState.TOUCHED);
+                                tile.setColour(BattleballTileColour.getColourById(gamePlayer.getTeamId()));
+
+                                updateTiles.add(tile);
+                            }
                         }
 
                         this.processEntity(gamePlayer, movingPlayers, updateTiles, fillTiles);
