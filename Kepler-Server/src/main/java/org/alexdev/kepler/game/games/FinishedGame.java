@@ -1,6 +1,8 @@
 package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.util.DateUtil;
+import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -17,6 +19,8 @@ public class FinishedGame {
     private List<Integer> powerUps;
     private Map<Integer, FinishedGameTeam> teamScores;
 
+    private long expireTime;
+
     public FinishedGame(Game game) {
         this.id = game.getId();
         this.mapId = game.getMapId();
@@ -25,6 +29,7 @@ public class FinishedGame {
         this.gameType = game.getGameType();
         this.powerUps = game.getPowerUps();
         this.teamScores = new HashMap<>();
+        this.expireTime = DateUtil.getCurrentTimeSeconds() + GameManager.getInstance().getListingExpiryTime();
 
         for (int i = 0; i < game.getTeamAmount(); i++) {
             this.teamScores.put(i, new FinishedGameTeam(game.getTeams().get(i)));
@@ -57,6 +62,10 @@ public class FinishedGame {
 
     public List<Integer> getPowerUps() {
         return powerUps;
+    }
+
+    public long getExpireTime() {
+        return expireTime;
     }
 
     public class FinishedGameTeam {

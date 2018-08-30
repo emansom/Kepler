@@ -31,12 +31,6 @@ public class OBSERVEINSTANCE implements MessageEvent {
 
         int gameId = reader.readInt();
 
-        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
-
-        if (gamePlayer != null) {
-            return;
-        }
-
         Game game = GameManager.getInstance().getGameById(gameId);
 
         if (game != null) {
@@ -46,6 +40,11 @@ public class OBSERVEINSTANCE implements MessageEvent {
         }
 
         FinishedGame finishedGame = GameManager.getInstance().getFinishedGameById(gameId);
+
+        if (finishedGame == null) {
+            return;
+        }
+
         player.send(new GAMEINSTANCE(finishedGame));
 
         /*if (game.getGameState() == GameState.WAITING) {

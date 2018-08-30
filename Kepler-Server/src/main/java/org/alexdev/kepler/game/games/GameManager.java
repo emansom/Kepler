@@ -2,19 +2,25 @@ package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.models.RoomModel;
+import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
+import org.bouncycastle.asn1.cms.PasswordRecipientInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class GameManager {
     private static GameManager instance = null;
+    private ScheduledFuture<?> expiryLoop;
 
     private AtomicInteger idTracker;
 
@@ -36,6 +42,17 @@ public class GameManager {
         this.games = new ArrayList<>();
         this.finishedGames = new ArrayList<>();
         this.idTracker = new AtomicInteger(0);
+
+        this.createExpiryCheckLoop();
+    }
+
+    /**
+     * Recurring task used to clear old games after their listing time has expired.
+     */
+    private void createExpiryCheckLoop() {
+        this.expiryLoop = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(() -> {
+            finishedGames.removeIf(game -> DateUtil.getCurrentTimeSeconds() > game.getExpireTime());
+        }, 0, getListingExpiryTime() / 10, TimeUnit.SECONDS);
     }
 
     /**
@@ -183,6 +200,15 @@ public class GameManager {
      */
     public int getPreparingSeconds(GameType gameType) {
         return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".preparing.game.seconds");
+    }
+
+    /**
+     * Get the amount of seconds allowed for a finished game to persist on the instance list before it's removed
+     *
+     * @return the amount of seconds
+     */
+    public int getListingExpiryTime() {
+        return GameConfiguration.getInstance().getInteger("game.finished.listing.expiry.seconds");
     }
 
     /**
