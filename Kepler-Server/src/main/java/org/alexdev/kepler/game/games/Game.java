@@ -83,7 +83,7 @@ public class Game {
     /**
      * Method to initialise the game
      */
-    private void initialiseGame() {
+    private void restartUsers() {
         this.gameStarted = false;
         this.gameFinished = false;
 
@@ -226,11 +226,11 @@ public class Game {
      * Method to start the game
      */
     public void startGame() {
-        this.initialiseGame();
+        this.restartUsers();
 
         for (GameTeam team : this.teams.values()) {
             for (GamePlayer p : team.getActivePlayers()) {
-                p.setEnteringGame(true);
+                p.setEnteringGame(true); // Set to true so when they leave the lobby, the server knows to initialise the user when they join the arena
             }
         }
 
@@ -355,13 +355,13 @@ public class Game {
             }
         }
 
-        this.resetGame(players);
+        this.restartUsers(players);
     }
 
     /**
      * Method to restart game.
      */
-    private void resetGame(List<GamePlayer> players) {
+    private void restartUsers(List<GamePlayer> players) {
         this.send(new GAMERESET(Game.PREPARING_GAME_SECONDS_LEFT, players));
 
         if (this.preparingTimerRunnable != null) {
@@ -383,7 +383,7 @@ public class Game {
             gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false); // Don't allow them to walk, for next game
         }
 
-        this.initialiseGame();
+        this.restartUsers();
         this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
 
         // Start game after "game is about to begin"
