@@ -282,14 +282,9 @@ public class Game {
                 p.getPlayer().getRoomUser().setWalking(false);
                 p.getPlayer().getRoomUser().setNextPosition(null);
 
-                BattleballTile tile = this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY());
-
                 // Don't allow anyone to spawn on this tile
+                BattleballTile tile = this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY());
                 tile.setSpawnOccupied(true);
-
-                // Set first interaction on spawn tile, like official Habbo
-                tile.setState(BattleballTileState.TOUCHED);
-                tile.setColour(BattleballTileColour.getColourById(team.getId()));
             }
         }
     }

@@ -47,7 +47,7 @@ public class FULLGAMESTATUS extends MessageComposer {
                     response.writeString(gamePlayer.getPlayer().getDetails().getFigure());
                     response.writeString(gamePlayer.getPlayer().getDetails().getSex());
                     response.writeInt(gamePlayer.getTeamId());
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId());//gamePlayer.getPlayer().getRoomUser().getInstanceId());
+                    response.writeInt(gamePlayer.getPlayer().getDetails().getId()); // Actually room user id/instance id
                 /*} else {
                     response.writeInt(0); // type, 0 = player
                     response.writeInt(gamePlayer.getPlayer().getDetails().getId());
