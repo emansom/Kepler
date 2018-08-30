@@ -53,7 +53,7 @@ public class Game {
     private AtomicLong restartCountdown;
 
     public static final int PREPARING_GAME_SECONDS_LEFT = 10;
-    public static final int RESTART_GAME_SECONDS = 10;
+    public static final int RESTART_GAME_SECONDS = 30;
     public static final int GAME_LENGTH_SECONDS = 180;
 
     private FutureRunnable preparingTimerRunnable;
@@ -129,39 +129,96 @@ public class Game {
     }
 
     /**
-     * Method to restart game.
-     *
-     * @return the list of players who are playing in the restarted game
+     * Assign spawn points to all team members
      */
-    public List<GamePlayer> resetGame() {
-        List<GamePlayer> newPlayers = new ArrayList<>();
+    public void assignSpawnPoints() {
+        for (GameTeam team : this.teams.values()) {
+            GameSpawn gameSpawn = GameManager.getInstance().getGameSpawn(this.gameType, this.mapId, team.getId());
 
-        if (this.preparingTimerRunnable != null) {
-            this.preparingTimerRunnable.cancelFuture();
-        }
+            if (gameSpawn == null) {
+                continue;
+            }
 
-        if (this.gameTimerRunnable != null) {
-            this.gameTimerRunnable.cancelFuture();
-        }
+            AtomicInteger spawnX = new AtomicInteger(gameSpawn.getX());
+            AtomicInteger spawnY = new AtomicInteger(gameSpawn.getY());
+            AtomicInteger spawnRotation = new AtomicInteger(gameSpawn.getZ());
 
-        for (GameTeam gameTeam : this.teams.values()) {
-            for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
-                gamePlayer.setScore(0);
-                gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
-                gamePlayer.setClickedRestart(false);
+            boolean flip = false;
 
-                newPlayers.add(gamePlayer);
+            for (GamePlayer p : team.getPlayers()) {
+                findSpawn(flip, spawnX, spawnY, spawnRotation);
+
+                p.getSpawnPosition().setX(spawnX.get());
+                p.getSpawnPosition().setY(spawnY.get());
+                p.getSpawnPosition().setRotation(spawnRotation.get());
+                p.getSpawnPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+
+                p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
+                p.getPlayer().getRoomUser().setWalking(false);
+                p.getPlayer().getRoomUser().setNextPosition(null);
+
+                // Don't allow anyone to spawn on this tile
+                BattleballTile tile = this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY());
+                tile.setSpawnOccupied(true);
             }
         }
+    }
 
-        this.initialiseGame();
-        this.send(new FULLGAMESTATUS(this, false));  // Show users back at teleporting positions
-        this.room.getTaskManager().startTasks();
+    /**
+     * Find a spawn with given coordinates.
+     *
+     * @param flip whether the integers should get incremented or decremented
+     * @param spawnX the x coord
+     * @param spawnY the y coord
+     * @param spawnRotation the spawn rotation
+     */
+    private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
+        try {
+            while (this.battleballTiles[spawnX.get()][spawnY.get()].isSpawnOccupied()) {
+                /*if (spawnRotation.get() == 0 || spawnRotation.get() == 4) {
+                    if (flip)
+                        spawnX.incrementAndGet();// -= 1;
+                    else
+                        spawnY.decrementAndGet();// += 1;
+                } else if (spawnRotation.get() == 2 || spawnRotation.get() == 6) {
+                    if (flip)
+                        spawnX.incrementAndGet();// -= 1;
+                    else
+                        spawnY.decrementAndGet();// += 1;
+                }*/
+                if (spawnRotation.get() == 0) {
+                    if (!flip)
+                        spawnX.decrementAndGet();// -= 1;
+                    else
+                        spawnX.incrementAndGet();// += 1;
+                }
 
-        // Start game after "game is about to begin"
-        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
+                if (spawnRotation.get() == 2) {
+                    if (!flip)
+                        spawnY.incrementAndGet();// -= 1;
+                    else
+                        spawnY.decrementAndGet();// += 1;
+                }
 
-        return newPlayers;
+                if (spawnRotation.get() == 4) {
+                    if (!flip)
+                        spawnX.incrementAndGet();// -= 1;
+                    else
+                        spawnX.decrementAndGet();// += 1;
+                }
+
+                if (spawnRotation.get() == 6) {
+                    if (!flip)
+                        spawnY.decrementAndGet();// -= 1;
+                    else
+                        spawnY.incrementAndGet();// += 1;
+                }
+            }
+            flip = (!flip);
+        } catch (Exception ex) {
+            flip = (!flip);
+            findSpawn(flip, spawnX, spawnY, spawnRotation);
+        }
     }
 
     /**
@@ -245,105 +302,77 @@ public class Game {
         }
 
         // Restart countdown
-        this.restartCountdown = new AtomicLong(DateUtil.getCurrentTimeSeconds() + Game.RESTART_GAME_SECONDS);
+        this.restartCountdown = new AtomicLong(Game.RESTART_GAME_SECONDS);
+
+        var restartRunnable = new FutureRunnable() {
+            public void run() {
+                if (!canGameContinue()) {
+                    this.cancelFuture();
+                    return;
+                }
+
+                if (restartCountdown.decrementAndGet() == 0) {
+                    this.cancelFuture();
+                    triggerRestart();
+                }
+            }
+        };
+
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(restartRunnable, 0, 1, TimeUnit.SECONDS);
+        restartRunnable.setFuture(future);
 
         // Send scores to everybody
         this.send(new GAMEEND(this, this.teams));
     }
 
     /**
-     * Assign spawn points to all team members
+     * Method to restart game.
+     *
+     * @return the list of players who are playing in the restarted game
      */
-    public void assignSpawnPoints() {
-        for (GameTeam team : this.teams.values()) {
-            GameSpawn gameSpawn = GameManager.getInstance().getGameSpawn(this.gameType, this.mapId, team.getId());
-
-            if (gameSpawn == null) {
-                continue;
-            }
-
-            AtomicInteger spawnX = new AtomicInteger(gameSpawn.getX());
-            AtomicInteger spawnY = new AtomicInteger(gameSpawn.getY());
-            AtomicInteger spawnRotation = new AtomicInteger(gameSpawn.getZ());
-
-            boolean flip = false;
-
-            for (GamePlayer p : team.getPlayers()) {
-
-                findSpawn(flip, spawnX, spawnY, spawnRotation);
-
-                p.getSpawnPosition().setX(spawnX.get());
-                p.getSpawnPosition().setY(spawnY.get());
-                p.getSpawnPosition().setRotation(spawnRotation.get());
-                p.getSpawnPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
-
-                p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
-                //p.getPlayer().getRoomUser().setInstanceId(p.getPlayer().getDetails().getId());
-                p.getPlayer().getRoomUser().setWalking(false);
-                p.getPlayer().getRoomUser().setNextPosition(null);
-
-                // Don't allow anyone to spawn on this tile
-                BattleballTile tile = this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY());
-                tile.setSpawnOccupied(true);
-            }
+    private void resetGame(List<GamePlayer> players) {
+        if (this.preparingTimerRunnable != null) {
+            this.preparingTimerRunnable.cancelFuture();
         }
+
+        if (this.gameTimerRunnable != null) {
+            this.gameTimerRunnable.cancelFuture();
+        }
+
+        for (GameTeam gameTeam : this.teams.values()) {
+            gameTeam.getPlayers().clear();
+        }
+
+        for (var gamePlayer : players) {
+            this.movePlayer(gamePlayer, -1, gamePlayer.getTeamId());
+        }
+
+        this.initialiseGame();
+        this.send(new FULLGAMESTATUS(this, false));  // Show users back at teleporting positions
+        this.room.getTaskManager().startTasks();
+
+        // Start game after "game is about to begin"
+        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
     }
 
     /**
-     * Find a spawn with given coordinates.
-     *
-     * @param flip whether the integers should get incremented or decremented
-     * @param spawnX the x coord
-     * @param spawnY the y coord
-     * @param spawnRotation the spawn rotation
+     * Restarts all the new players who clicked to play the next game.
      */
-    private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
-        try {
-            while (this.battleballTiles[spawnX.get()][spawnY.get()].isSpawnOccupied()) {
-                /*if (spawnRotation.get() == 0 || spawnRotation.get() == 4) {
-                    if (flip)
-                        spawnX.incrementAndGet();// -= 1;
-                    else
-                        spawnY.decrementAndGet();// += 1;
-                } else if (spawnRotation.get() == 2 || spawnRotation.get() == 6) {
-                    if (flip)
-                        spawnX.incrementAndGet();// -= 1;
-                    else
-                        spawnY.decrementAndGet();// += 1;
-                }*/
-                if (spawnRotation.get() == 0) {
-                    if (!flip)
-                        spawnX.decrementAndGet();// -= 1;
-                    else
-                        spawnX.incrementAndGet();// += 1;
+    private void triggerRestart() {
+        List<GamePlayer> players = new ArrayList<>();
+
+        for (GameTeam gameTeam : this.teams.values()) {
+            for (GamePlayer p : gameTeam.getActivePlayers()) {
+                if (!p.isClickedRestart()) {
+                    continue;
                 }
 
-                if (spawnRotation.get() == 2) {
-                    if (!flip)
-                        spawnY.incrementAndGet();// -= 1;
-                    else
-                        spawnY.decrementAndGet();// += 1;
-                }
-
-                if (spawnRotation.get() == 4) {
-                    if (!flip)
-                        spawnX.incrementAndGet();// -= 1;
-                    else
-                        spawnX.decrementAndGet();// += 1;
-                }
-
-                if (spawnRotation.get() == 6) {
-                    if (!flip)
-                        spawnY.decrementAndGet();// -= 1;
-                    else
-                        spawnY.incrementAndGet();// += 1;
-                }
+                players.add(p);
             }
-            flip = (!flip);
-        } catch (Exception ex) {
-            flip = (!flip);
-            findSpawn(flip, spawnX, spawnY, spawnRotation);
         }
+
+        this.resetGame(players);
+        this.send(new GAMERESET(Game.PREPARING_GAME_SECONDS_LEFT, players));
     }
 
     /**
