@@ -52,8 +52,8 @@ public class Game {
     private AtomicLong restartCountdown;
 
     public static final int PREPARING_GAME_SECONDS_LEFT = 10;
-    public static final int RESTART_GAME_SECONDS = 10;
-    public static final int GAME_LENGTH_SECONDS =  10;
+    public static final int RESTART_GAME_SECONDS = 30;
+    public static final int GAME_LENGTH_SECONDS =  180;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
@@ -333,8 +333,8 @@ public class Game {
      * Restarts all the new players who clicked to play the next game.
      */
     private void triggerRestart() {
-        List<GamePlayer> players = new ArrayList<>();
-        List<GamePlayer> afkPlayers = new ArrayList<>();
+        List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
+        List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
 
         for (GameTeam gameTeam : this.teams.values()) {
             for (GamePlayer p : gameTeam.getActivePlayers()) {
