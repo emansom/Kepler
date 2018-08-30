@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSED;
 import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSING;
 import org.alexdev.kepler.messages.outgoing.user.ALERT;
+import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.util.DateUtil;
 
 import java.time.Duration;
@@ -175,6 +176,12 @@ public class PlayerManager {
         // Notify all users maintenance has been cancelled
         for (Player p : this.players) {
             p.send(new ALERT(TextsManager.getInstance().getValue("maintenance_cancelled")));
+        }
+    }
+
+    public void sendAll(MessageComposer composer) {
+        for (Player p : this.players) {
+            p.send(composer);
         }
     }
 

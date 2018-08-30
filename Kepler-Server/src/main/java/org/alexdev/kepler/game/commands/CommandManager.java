@@ -37,8 +37,6 @@ public class CommandManager {
         this.commands.put(new String[] { "rgb", "rainbow" }, new RainbowDimmerCommand());
         this.commands.put(new String[] { "afk", "idle" }, new AfkCommand());
         this.commands.put(new String[] { "motto" }, new ChangeMottoCommand());
-        this.commands.put(new String[] { "ufos" }, new UfosCommand());
-        this.commands.put(new String[] { "talk" }, new TalkCommand());
 
         // Staff commands
         this.commands.put(new String[] { "givebadge" }, new GiveBadgeCommand());
@@ -47,6 +45,9 @@ public class CommandManager {
         this.commands.put(new String[] { "shutdown" }, new ShutdownCommand());
         this.commands.put(new String[] { "setprice" }, new SetItemPriceCommand());
         this.commands.put(new String[] { "setconfig" }, new SetConfigCommand());
+        this.commands.put(new String[] { "hotelalert" }, new HotelAlertCommand());
+        this.commands.put(new String[] { "ufos" }, new UfosCommand());
+        this.commands.put(new String[] { "talk" }, new TalkCommand());
 
         // Add client-side commands to list
         this.commands.put(new String[] { "chooser" }, new ChooserCommand());

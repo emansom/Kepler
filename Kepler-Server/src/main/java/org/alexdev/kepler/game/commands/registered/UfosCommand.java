@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.commands.registered;
 
-import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.commands.Command;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
@@ -13,12 +12,11 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SLIDEOBJECTBUNDLE;
 
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 public class UfosCommand extends Command {
     @Override
     public void addPermissions() {
-        this.permissions.add(Fuseright.DEFAULT);
+        this.permissions.add(Fuseright.ADMINISTRATOR_ACCESS);
     }
 
     @Override
@@ -42,7 +40,7 @@ public class UfosCommand extends Command {
         int ufoAmount = ThreadLocalRandom.current().nextInt(0, 45) + 50;
         String textToSpeech = "Help, unknown flying objects! The aliens! There's a swarm of " + ufoAmount + " ufos coming this way! UFOS! Help! The hotel is attacked! Zap zap zap... Houston, we have a problem! Aliens! soi soi soi soi soi. The aliens are coming! We didn't listen! The end of the world! Aargh! Help, Aliens everywhere! I see ufos! I dream about cheese! I mean, beep beep beep! Meep meep meep! Code Red! Code Red! Area 51! Marihuana! Cape Canaveral! Aaron is a fag! Ufos! " + ufoAmount + " of them! I see them everywhere! Oh and I see dead people! UFOS! UFOs from Mars! Or from the Moon! Fuck knows! Whatever! Oh my god! They look like fucking weirdos! Space monsters! They look even worse than Rick Astley! UFOs! It's the end of the world! Ufos! Ufos! Ufos!";
 
-        createVoiceSpeakMessage(room, textToSpeech);
+        TalkCommand.createVoiceSpeakMessage(room, textToSpeech);
 
         int incremental = 0;
 
@@ -72,18 +70,6 @@ public class UfosCommand extends Command {
                 room.send(new SLIDEOBJECTBUNDLE(pItem.getPosition(), destX, destY, destZ, pItem.getId()));
             //}, 0, incremental += 10, TimeUnit.MILLISECONDS);
         }
-    }
-
-    public static void createVoiceSpeakMessage(Room room, String text) {
-        // 'Speaker'
-        Item pItem = new Item();
-        pItem.setId(Integer.MAX_VALUE);
-        pItem.setPosition(new Position(255, 255, -1f));
-        pItem.setCustomData("voiceSpeak(\"" + text + "\")");
-        pItem.getDefinition().setSprite("spotlight");
-        pItem.getDefinition().setLength(1);
-        pItem.getDefinition().setWidth(1);
-        room.send(new PLACE_FLOORITEM(pItem));
     }
 
     @Override
