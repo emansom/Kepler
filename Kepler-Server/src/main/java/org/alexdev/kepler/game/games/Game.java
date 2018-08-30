@@ -495,7 +495,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > GameConfiguration.getInstance().getInteger("battleball.start.minimum.active.teams");
+        return activeTeamCount >= GameConfiguration.getInstance().getInteger("battleball.start.minimum.active.teams");
     }
 
     /**
