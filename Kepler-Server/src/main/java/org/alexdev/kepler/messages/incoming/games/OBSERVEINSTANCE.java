@@ -33,7 +33,7 @@ public class OBSERVEINSTANCE implements MessageEvent {
 
         Game game = GameManager.getInstance().getGameById(gameId);
 
-        if (game != null) {
+        if (game != null && game.getGameState() != GameState.ENDED) {
             player.send(new GAMEINSTANCE(game));
             game.addViewer(player);
             return;
