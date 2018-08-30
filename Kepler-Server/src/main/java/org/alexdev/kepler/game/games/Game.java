@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
@@ -148,17 +149,19 @@ public class Game {
             for (GamePlayer p : team.getPlayers()) {
                 findSpawn(flip, spawnX, spawnY, spawnRotation);
 
-                p.getSpawnPosition().setX(spawnX.get());
-                p.getSpawnPosition().setY(spawnY.get());
-                p.getSpawnPosition().setRotation(spawnRotation.get());
-                p.getSpawnPosition().setZ(this.roomModel.getTileHeight(spawnX.get(), spawnY.get()));
+                Position spawnPosition = new Position(spawnX.get(), spawnY.get(), this.roomModel.getTileHeight(spawnX.get(), spawnY.get()), spawnRotation.get(), spawnRotation.get());
 
-                p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
+                p.getSpawnPosition().setX(spawnPosition.getX());
+                p.getSpawnPosition().setY(spawnPosition.getY());
+                p.getSpawnPosition().setRotation(spawnPosition.getRotation());
+                p.getSpawnPosition().setZ(spawnPosition.getZ());
+
+                p.getPlayer().getRoomUser().setPosition(spawnPosition.copy());
                 p.getPlayer().getRoomUser().setWalking(false);
                 p.getPlayer().getRoomUser().setNextPosition(null);
 
                 // Don't allow anyone to spawn on this tile
-                BattleballTile tile = this.getTile(p.getSpawnPosition().getX(), p.getSpawnPosition().getY());
+                BattleballTile tile = this.getTile(spawnPosition.getX(), spawnPosition.getY());
                 tile.setSpawnOccupied(true);
             }
         }
