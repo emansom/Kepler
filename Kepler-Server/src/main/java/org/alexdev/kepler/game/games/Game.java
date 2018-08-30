@@ -435,7 +435,11 @@ public class Game {
      */
     public void movePlayer(GamePlayer gamePlayer, int fromTeamId, int toTeamId) {
         if (fromTeamId != -1) {
-            this.teams.get(fromTeamId).getPlayers().remove(gamePlayer);
+            if (this.gameState == GameState.WAITING) {
+                this.teams.get(fromTeamId).getPlayers().remove(gamePlayer);
+            }
+
+            gamePlayer.setInGame(false); // Leaving team so they're not in game
         }
 
         if (toTeamId != -1) {
@@ -444,7 +448,7 @@ public class Game {
             }
 
             gamePlayer.setTeamId(toTeamId);
-            gamePlayer.setInGame(true);
+            gamePlayer.setInGame(true); // Entering team so they're in game
         } else {
             if (this.gameState == GameState.WAITING) {
                 this.teams.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
