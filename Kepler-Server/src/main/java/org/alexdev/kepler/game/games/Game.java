@@ -439,6 +439,7 @@ public class Game {
             }
 
             gamePlayer.setInGame(false); // Leaving team so they're not in game
+            gamePlayer.setScore(0);
         }
 
         if (toTeamId != -1) {
@@ -453,6 +454,7 @@ public class Game {
                 this.teams.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
             } else {
                 gamePlayer.setInGame(false); // Don't remove from team, just show they're no longer in game, for "0" score at the end.
+                gamePlayer.setScore(0);
             }
 
             gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
