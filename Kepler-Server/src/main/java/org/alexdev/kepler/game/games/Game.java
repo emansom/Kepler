@@ -298,9 +298,11 @@ public class Game {
         this.gameStarted = false;
         this.gameFinished = true;
 
-        // Kill GameTask, stops people interacting, walking, etc
-        if (this.room.getTaskManager().hasTask("GameTask")) {
-            this.room.getTaskManager().cancelTask("GameTask");
+        // Stop all players from walking when game starts if they selected a tile
+        for (GameTeam team : teams.values()) {
+            for (GamePlayer p : team.getActivePlayers()) {
+                p.getPlayer().getRoomUser().setWalkingAllowed(false);
+            }
         }
 
         // Send scores to everybody
@@ -380,9 +382,7 @@ public class Game {
         }
 
         this.initialiseGame();
-
         this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
-        this.room.getTaskManager().startTasks();
 
         // Start game after "game is about to begin"
         GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
