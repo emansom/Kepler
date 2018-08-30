@@ -4,17 +4,12 @@ import org.alexdev.kepler.game.games.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameState;
-import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
 import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
-import org.alexdev.kepler.messages.outgoing.games.JOINFAILED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
-
-import java.util.*;
 
 public class OBSERVEINSTANCE implements MessageEvent {
     @Override
@@ -35,17 +30,17 @@ public class OBSERVEINSTANCE implements MessageEvent {
 
         if (game != null && game.getGameState() != GameState.ENDED) {
             player.send(new GAMEINSTANCE(game));
-            game.addViewer(player);
+            player.getRoomUser().setObservingGameId(gameId);
+
+            game.addObserver(player);
             return;
         }
 
         FinishedGame finishedGame = GameManager.getInstance().getFinishedGameById(gameId);
 
-        if (finishedGame == null) {
-            return;
+        if (finishedGame != null) {
+            player.send(new GAMEINSTANCE(finishedGame));
         }
-
-        player.send(new GAMEINSTANCE(finishedGame));
 
         /*if (game.getGameState() == GameState.WAITING) {
             if (player.getDetails().getTickets() <= 1) {

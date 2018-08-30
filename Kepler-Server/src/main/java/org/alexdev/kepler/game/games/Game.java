@@ -43,7 +43,7 @@ public class Game {
     private List<Integer> powerUps;
     private Map<Integer, GameTeam> teams;
 
-    private Set<Player> viewers;
+    private Set<Player> observers;
     private List<Player> spectators;
 
     private BattleballTile[][] battleballTiles;
@@ -70,7 +70,7 @@ public class Game {
         this.teams = new ConcurrentHashMap<>();
 
         this.spectators = new CopyOnWriteArrayList<>();
-        this.viewers = new HashSet<>();
+        this.observers = new HashSet<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -84,7 +84,7 @@ public class Game {
      */
     private void initialise() {
         this.gameState = GameState.STARTED;
-        //this.viewers.clear();
+        //this.observers.clear();
 
         this.gameStarted = false;
         this.gameFinished = false;
@@ -255,7 +255,7 @@ public class Game {
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 0, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
 
-        for (Player player : this.viewers) {
+        for (Player player : this.observers) {
             player.send(new GAMEINSTANCE(this));
         }
     }
@@ -337,8 +337,8 @@ public class Game {
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(restartRunnable, 0, 1, TimeUnit.SECONDS);
         restartRunnable.setFuture(future);
 
-        this.sendViewers(new GAMEINSTANCE(finishedGame));
-        this.viewers.clear();
+        this.sendObservers(new GAMEINSTANCE(finishedGame));
+        this.observers.clear();
     }
 
     /**
@@ -397,7 +397,7 @@ public class Game {
 
         this.initialise();
         this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
-        this.sendViewers(new GAMEDELETED());
+        this.sendObservers(new GAMEDELETED());
 
         // Start game after "game is about to begin"
         GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL), TimeUnit.SECONDS);
@@ -416,7 +416,7 @@ public class Game {
 
         if (!this.canGameContinue()) {
             GameManager.getInstance().getGames().remove(this);
-            this.sendViewers(new GAMEDELETED());
+            this.sendObservers(new GAMEDELETED());
         }
     }
 
@@ -478,7 +478,7 @@ public class Game {
         }
 
         this.send(new GAMEINSTANCE(this));
-        this.sendViewers(new GAMEINSTANCE(this));
+        this.sendObservers(new GAMEINSTANCE(this));
     }
 
     /**
@@ -499,12 +499,12 @@ public class Game {
     }
 
     /**
-     * Send a packet to all viewers
+     * Send a packet (game status) to all observers
      *
      * @param composer the composer to send
      */
-    public void sendViewers(MessageComposer composer) {
-        for (Player player : this.viewers) {
+    public void sendObservers(MessageComposer composer) {
+        for (Player player : this.observers) {
             player.send(composer);
         }
     }
@@ -590,8 +590,8 @@ public class Game {
      *
      * @param player the player to add
      */
-    public void addViewer(Player player) {
-        this.viewers.add(player);
+    public void addObserver(Player player) {
+        this.observers.add(player);
     }
 
     /**
@@ -599,8 +599,8 @@ public class Game {
      *
      * @param player the player to remove
      */
-    public void removeViewer(Player player) {
-        this.viewers.remove(player);
+    public void removeObserver(Player player) {
+        this.observers.remove(player);
     }
 
     /**
