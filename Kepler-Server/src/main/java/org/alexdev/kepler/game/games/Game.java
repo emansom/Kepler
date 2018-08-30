@@ -378,7 +378,9 @@ public class Game {
 
         for (var gamePlayer : players) {
             this.movePlayer(gamePlayer, -1, gamePlayer.getTeamId());
-            gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
+
+            gamePlayer.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
+            gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false); // Don't allow them to walk, for next game
         }
 
         this.initialiseGame();
