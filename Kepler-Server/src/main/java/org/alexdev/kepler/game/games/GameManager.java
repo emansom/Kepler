@@ -179,7 +179,7 @@ public class GameManager {
      * Gets the game time for the specified game type.
      */
     public int getPreparingSeconds(GameType gameType) {
-        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + "..preparing.game.seconds");
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".preparing.game.seconds");
     }
 
     /**
