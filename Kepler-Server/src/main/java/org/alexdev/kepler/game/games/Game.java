@@ -84,7 +84,7 @@ public class Game {
     /**
      * Method to initialise the game
      */
-    public void initialiseGame() {
+    private void initialiseGame() {
         this.gameStarted = false;
         this.gameFinished = false;
 
@@ -131,7 +131,7 @@ public class Game {
     /**
      * Assign spawn points to all team members
      */
-    public void assignSpawnPoints() {
+    private void assignSpawnPoints() {
         for (GameTeam team : this.teams.values()) {
             GameSpawn gameSpawn = GameManager.getInstance().getGameSpawn(this.gameType, this.mapId, team.getId());
 
@@ -275,6 +275,7 @@ public class Game {
                     return;
                 }
 
+                // Game ends either when time runs out or there's no free tiles left to seal
                 if (totalSecondsLeft.decrementAndGet() == 0 || !hasFreeTiles()) {
                     this.cancelFuture();
                     finishGame();
@@ -301,6 +302,9 @@ public class Game {
             this.room.getTaskManager().cancelTask("GameTask");
         }
 
+        // Send scores to everybody
+        this.send(new GAMEEND(this, this.teams));
+
         // Restart countdown
         this.restartCountdown = new AtomicLong(Game.RESTART_GAME_SECONDS);
 
@@ -320,39 +324,6 @@ public class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(restartRunnable, 0, 1, TimeUnit.SECONDS);
         restartRunnable.setFuture(future);
-
-        // Send scores to everybody
-        this.send(new GAMEEND(this, this.teams));
-    }
-
-    /**
-     * Method to restart game.
-     *
-     * @return the list of players who are playing in the restarted game
-     */
-    private void resetGame(List<GamePlayer> players) {
-        if (this.preparingTimerRunnable != null) {
-            this.preparingTimerRunnable.cancelFuture();
-        }
-
-        if (this.gameTimerRunnable != null) {
-            this.gameTimerRunnable.cancelFuture();
-        }
-
-        for (GameTeam gameTeam : this.teams.values()) {
-            gameTeam.getPlayers().clear();
-        }
-
-        for (var gamePlayer : players) {
-            this.movePlayer(gamePlayer, -1, gamePlayer.getTeamId());
-        }
-
-        this.initialiseGame();
-        this.send(new FULLGAMESTATUS(this, false));  // Show users back at teleporting positions
-        this.room.getTaskManager().startTasks();
-
-        // Start game after "game is about to begin"
-        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
     }
 
     /**
@@ -373,6 +344,35 @@ public class Game {
 
         this.resetGame(players);
         this.send(new GAMERESET(Game.PREPARING_GAME_SECONDS_LEFT, players));
+    }
+
+    /**
+     * Method to restart game.
+     */
+    private void resetGame(List<GamePlayer> players) {
+        if (this.preparingTimerRunnable != null) {
+            this.preparingTimerRunnable.cancelFuture();
+        }
+
+        if (this.gameTimerRunnable != null) {
+            this.gameTimerRunnable.cancelFuture();
+        }
+
+        for (GameTeam gameTeam : this.teams.values()) {
+            gameTeam.getPlayers().clear();
+        }
+
+        for (var gamePlayer : players) {
+            this.movePlayer(gamePlayer, -1, gamePlayer.getTeamId());
+        }
+
+        this.initialiseGame();
+
+        this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
+        this.room.getTaskManager().startTasks();
+
+        // Start game after "game is about to begin"
+        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
     }
 
     /**
@@ -498,7 +498,11 @@ public class Game {
         return activeTeamCount > 0;
     }
 
-    public boolean hasFreeTiles() {
+    /**
+     * Get if the game still has free tiles to use
+     * @return true, if successful
+     */
+    private boolean hasFreeTiles() {
         for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
             for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
                 BattleballTile tile = this.getTile(x, y);
@@ -533,6 +537,13 @@ public class Game {
         return null;
     }
 
+    /**
+     * Get a tile by specified coordinates
+     *
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @return the battleball tile, if successful
+     */
     public BattleballTile getTile(int x, int y) {
         if (x < 0 || y < 0) {
             return null;
