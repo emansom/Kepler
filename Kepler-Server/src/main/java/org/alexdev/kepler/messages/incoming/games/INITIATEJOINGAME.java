@@ -49,6 +49,8 @@ public class INITIATEJOINGAME implements MessageEvent {
         }
 
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+
+        game.removeViewer(player); // Player was a viewer
         game.movePlayer(gamePlayer, gamePlayer.getTeamId(), teamId);
     }
 }

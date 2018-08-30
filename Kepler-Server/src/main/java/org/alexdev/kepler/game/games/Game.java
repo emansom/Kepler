@@ -19,9 +19,7 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +43,7 @@ public class Game {
     private List<Integer> powerUps;
     private Map<Integer, GameTeam> teams;
 
-    private List<Player> viewers;
+    private Set<Player> viewers;
     private List<Player> spectators;
 
     private BattleballTile[][] battleballTiles;
@@ -72,7 +70,7 @@ public class Game {
         this.teams = new ConcurrentHashMap<>();
 
         this.spectators = new CopyOnWriteArrayList<>();
-        this.viewers = new ArrayList<>();
+        this.viewers = new HashSet<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -84,9 +82,9 @@ public class Game {
     /**
      * Method to initialise the game
      */
-    private void restartUsers() {
+    private void initialise() {
         this.gameState = GameState.STARTED;
-        this.viewers.clear();
+        //this.viewers.clear();
 
         this.gameStarted = false;
         this.gameFinished = false;
@@ -229,7 +227,7 @@ public class Game {
      * Method to start the game
      */
     public void startGame() {
-        this.restartUsers();
+        this.initialise();
 
         for (GameTeam team : this.teams.values()) {
             for (GamePlayer p : team.getActivePlayers()) {
@@ -256,6 +254,10 @@ public class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 0, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
+
+        for (Player player : this.viewers) {
+            player.send(new GAMEINSTANCE(this));
+        }
     }
 
     /**
@@ -358,13 +360,13 @@ public class Game {
             }
         }
 
-        this.restartUsers(players);
+        this.initialise(players);
     }
 
     /**
      * Method to restart game.
      */
-    private void restartUsers(List<GamePlayer> players) {
+    private void initialise(List<GamePlayer> players) {
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL), players));
 
         if (this.preparingTimerRunnable != null) {
@@ -386,8 +388,9 @@ public class Game {
             gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false); // Don't allow them to walk, for next game
         }
 
-        this.restartUsers();
+        this.initialise();
         this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
+        this.sendViewers(new GAMEDELETED());
 
         // Start game after "game is about to begin"
         GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL), TimeUnit.SECONDS);
@@ -406,6 +409,7 @@ public class Game {
 
         if (!this.canGameContinue()) {
             GameManager.getInstance().getGames().remove(this);
+            this.sendViewers(new GAMEDELETED());
         }
     }
 
@@ -467,6 +471,7 @@ public class Game {
         }
 
         this.send(new GAMEINSTANCE(this));
+        this.sendViewers(new GAMEINSTANCE(this));
     }
 
     /**
@@ -484,11 +489,16 @@ public class Game {
         for (Player player : this.spectators) {
             player.send(composer);
         }
+    }
 
-        if (this.gameState == GameState.WAITING) {
-            for (Player player : this.viewers) {
-                player.send(composer);
-            }
+    /**
+     * Send a packet to all viewers
+     *
+     * @param composer the composer to send
+     */
+    public void sendViewers(MessageComposer composer) {
+        for (Player player : this.viewers) {
+            player.send(composer);
         }
     }
 
