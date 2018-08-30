@@ -302,9 +302,13 @@ public class Game {
     private void finishGame() {
         this.gameStarted = false;
         this.gameFinished = true;
+        this.gameState = GameState.ENDED;
+
+        FinishedGame finishedGame = new FinishedGame(this);
+        GameManager.getInstance().getFinishedGames().add(finishedGame);
 
         // Stop all players from walking when game starts if they selected a tile
-        for (GameTeam team : teams.values()) {
+        for (GameTeam team : this.teams.values()) {
             for (GamePlayer p : team.getActivePlayers()) {
                 p.getPlayer().getRoomUser().setWalkingAllowed(false);
             }
@@ -332,6 +336,9 @@ public class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(restartRunnable, 0, 1, TimeUnit.SECONDS);
         restartRunnable.setFuture(future);
+
+        this.sendViewers(new GAMEINSTANCE(finishedGame));
+        this.viewers.clear();
     }
 
     /**

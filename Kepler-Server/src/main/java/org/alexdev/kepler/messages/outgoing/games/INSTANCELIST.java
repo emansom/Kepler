@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
+import org.alexdev.kepler.game.games.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -12,12 +13,12 @@ import java.util.stream.Collectors;
 public class INSTANCELIST extends MessageComposer {
     private final List<Game> createdGames;
     private final List<Game> startedGames;
-    private final List<Game> finishedGames;
+    private final List<FinishedGame> finishedGames;
 
-    public INSTANCELIST(List<Game> gamesByType) {
+    public INSTANCELIST(List<Game> gamesByType, List<FinishedGame> finishedGames) {
         this.createdGames = gamesByType.stream().filter(game -> game.getGameState() == GameState.WAITING).collect(Collectors.toList());
         this.startedGames = gamesByType.stream().filter(game -> game.getGameState() == GameState.STARTED).collect(Collectors.toList());
-        this.finishedGames = gamesByType.stream().filter(game -> game.getGameState() == GameState.ENDED).collect(Collectors.toList());
+        this.finishedGames = finishedGames;
     }
 
     @Override
@@ -45,10 +46,10 @@ public class INSTANCELIST extends MessageComposer {
 
         response.writeInt(this.finishedGames.size());
 
-        for (Game game : this.finishedGames) {
+        for (FinishedGame game : this.finishedGames) {
             response.writeInt(game.getId());
             response.writeString(game.getName());
-            response.writeString(game.getGameCreator().getDetails().getName());
+            response.writeString(game.getMapCreator());
             response.writeInt(game.getMapId());
         }
         /*response.writeInt(this.createdGames.size());

@@ -23,6 +23,8 @@ public class GameManager {
     private List<RoomModel> modelList;
 
     private List<Game> games;
+    private List<FinishedGame> finishedGames;
+
     private List<BattleballTileMap> battleballTileMaps;
 
     public GameManager() {
@@ -32,6 +34,7 @@ public class GameManager {
         this.battleballTileMaps = GameDao.getBattleballTileMaps();
 
         this.games = new ArrayList<>();
+        this.finishedGames = new ArrayList<>();
         this.idTracker = new AtomicInteger(0);
     }
 
@@ -197,5 +200,9 @@ public class GameManager {
         }
 
         return null;
+    }
+
+    public List<FinishedGame> getFinishedGames() {
+        return finishedGames;
     }
 }
