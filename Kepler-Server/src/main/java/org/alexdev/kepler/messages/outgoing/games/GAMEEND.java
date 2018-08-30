@@ -1,6 +1,8 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -19,7 +21,7 @@ public class GAMEEND extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(Game.RESTART_GAME_SECONDS);
+        response.writeInt(GameManager.getInstance().getRestartSeconds(GameType.BATTLEBALL));
         response.writeInt(this.teams.size());
 
         for (GameTeam team : this.teams.values()) {

@@ -16,6 +16,7 @@ import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.messages.outgoing.games.*;
 import org.alexdev.kepler.messages.types.MessageComposer;
+import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
 
 import java.util.ArrayList;
@@ -51,10 +52,6 @@ public class Game {
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
 
-    public static final int PREPARING_GAME_SECONDS_LEFT = 10;
-    public static final int RESTART_GAME_SECONDS = 30;
-    public static final int GAME_LENGTH_SECONDS =  180;
-
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
 
@@ -87,8 +84,8 @@ public class Game {
         this.gameStarted = false;
         this.gameFinished = false;
 
-        this.preparingGameSecondsLeft = new AtomicInteger(Game.PREPARING_GAME_SECONDS_LEFT);
-        this.totalSecondsLeft = new AtomicInteger(Game.GAME_LENGTH_SECONDS);
+        this.preparingGameSecondsLeft = new AtomicInteger(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL));
+        this.totalSecondsLeft = new AtomicInteger(GameManager.getInstance().getLifetimeSeconds(GameType.BATTLEBALL));
 
         this.gameState = GameState.STARTED;
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
@@ -288,7 +285,7 @@ public class Game {
         this.gameTimerRunnable.setFuture(future);
 
         // Send game seconds
-        this.send(new GAMESTART(Game.GAME_LENGTH_SECONDS));
+        this.send(new GAMESTART(GameManager.getInstance().getLifetimeSeconds(GameType.BATTLEBALL)));
     }
 
     /**
@@ -309,7 +306,7 @@ public class Game {
         this.send(new GAMEEND(this, this.teams));
 
         // Restart countdown
-        this.restartCountdown = new AtomicLong(Game.RESTART_GAME_SECONDS);
+        this.restartCountdown = new AtomicLong(GameManager.getInstance().getRestartSeconds(GameType.BATTLEBALL));
 
         var restartRunnable = new FutureRunnable() {
             public void run() {
@@ -362,7 +359,7 @@ public class Game {
      * Method to restart game.
      */
     private void restartUsers(List<GamePlayer> players) {
-        this.send(new GAMERESET(Game.PREPARING_GAME_SECONDS_LEFT, players));
+        this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL), players));
 
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
@@ -387,7 +384,7 @@ public class Game {
         this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
 
         // Start game after "game is about to begin"
-        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, Game.PREPARING_GAME_SECONDS_LEFT, TimeUnit.SECONDS);
+        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL), TimeUnit.SECONDS);
     }
 
     /**
@@ -496,7 +493,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > 0;
+        return activeTeamCount > GameConfiguration.getInstance().getInteger("battleball.start.minimum.active.teams");
     }
 
     /**

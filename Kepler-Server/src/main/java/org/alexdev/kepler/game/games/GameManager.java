@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.models.RoomModel;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -158,6 +159,27 @@ public class GameManager {
      */
     public List<Game> getGames() {
         return games;
+    }
+
+    /**
+     * Gets the restart time for the specified game type.
+     */
+    public int getRestartSeconds(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".restart.game.seconds");
+    }
+
+    /**
+     * Gets the game time for the specified game type.
+     */
+    public int getLifetimeSeconds(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".game.lifetime.seconds");
+    }
+
+    /**
+     * Gets the game time for the specified game type.
+     */
+    public int getPreparingSeconds(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + "..preparing.game.seconds");
     }
 
     /**

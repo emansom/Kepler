@@ -1,6 +1,8 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -28,7 +30,7 @@ public class FULLGAMESTATUS extends MessageComposer {
     public void compose(NettyResponse response) {
         response.writeInt(1);
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
-        response.writeInt(Game.PREPARING_GAME_SECONDS_LEFT);
+        response.writeInt(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL));
         response.writeInt(this.gamePlayerList.size());
 
         for (var team : this.game.getTeams().values()) {
