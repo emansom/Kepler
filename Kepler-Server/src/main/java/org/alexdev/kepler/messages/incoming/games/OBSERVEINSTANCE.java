@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.incoming.games;
 
+import org.alexdev.kepler.game.games.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameState;
@@ -30,23 +31,22 @@ public class OBSERVEINSTANCE implements MessageEvent {
 
         int gameId = reader.readInt();
 
-        Game game = GameManager.getInstance().getGameById(gameId);
-
-        if (game == null) {
-            return;
-        }
-
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
         if (gamePlayer != null) {
             return;
         }
 
-        player.send(new GAMEINSTANCE(game));
+        Game game = GameManager.getInstance().getGameById(gameId);
 
-        if (game.getGameState() == GameState.WAITING) {
+        if (game != null) {
+            player.send(new GAMEINSTANCE(game));
             game.addViewer(player);
+            return;
         }
+
+        FinishedGame finishedGame = GameManager.getInstance().getFinishedGameById(gameId);
+        player.send(new GAMEINSTANCE(finishedGame));
 
         /*if (game.getGameState() == GameState.WAITING) {
             if (player.getDetails().getTickets() <= 1) {

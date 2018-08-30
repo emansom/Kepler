@@ -202,7 +202,22 @@ public class GameManager {
         return null;
     }
 
+    /**
+     * Get the list of all finished games
+     *
+     * @return the list of finished games
+     */
     public List<FinishedGame> getFinishedGames() {
         return finishedGames;
+    }
+
+    public FinishedGame getFinishedGameById(int id) {
+        for (FinishedGame game : this.finishedGames) {
+            if (game.getId() == id) {
+                return game;
+            }
+        }
+
+        return null;
     }
 }
