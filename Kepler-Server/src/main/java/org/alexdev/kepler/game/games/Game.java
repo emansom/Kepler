@@ -354,13 +354,14 @@ public class Game {
         }
 
         this.resetGame(players);
-        this.send(new GAMERESET(Game.PREPARING_GAME_SECONDS_LEFT, players));
     }
 
     /**
      * Method to restart game.
      */
     private void resetGame(List<GamePlayer> players) {
+        this.send(new GAMERESET(Game.PREPARING_GAME_SECONDS_LEFT, players));
+
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
         }
