@@ -490,7 +490,7 @@ public class Game {
             }
         }
 
-        return activeTeamCount > 1;
+        return activeTeamCount > 0;
     }
 
     /**
