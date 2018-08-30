@@ -364,6 +364,7 @@ public class Game {
 
         for (var gamePlayer : players) {
             this.movePlayer(gamePlayer, -1, gamePlayer.getTeamId());
+            gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
         }
 
         this.initialiseGame();
