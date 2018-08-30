@@ -31,7 +31,7 @@ public class GAMERESTART implements MessageEvent {
 
         Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
 
-        if (game == null) {
+        if (game == null || !game.isGameFinished()) {
             return;
         }
 
