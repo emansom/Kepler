@@ -35,6 +35,10 @@ public class GameTask implements Runnable {
     @Override
     public void run() {
         try {
+            if (this.game.isGameFinished()) {
+                return; // Don't send any packets or do any logic checks during when the game is finished
+            }
+
             List<GamePlayer> players = new ArrayList<>();
 
             List<BattleballTile> updateTiles = new ArrayList<>();
