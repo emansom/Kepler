@@ -53,7 +53,7 @@ public class Game {
 
     public static final int PREPARING_GAME_SECONDS_LEFT = 10;
     public static final int RESTART_GAME_SECONDS = 30;
-    public static final int GAME_LENGTH_SECONDS =  10;
+    public static final int GAME_LENGTH_SECONDS =  180;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
@@ -347,6 +347,7 @@ public class Game {
         for (var afkPlayer : afkPlayers) {
             this.leaveGame(afkPlayer);
 
+            // TODO: Redirect to lobby instead
             if (afkPlayer.getPlayer().getRoomUser().getRoom() != null) {
                 afkPlayer.getPlayer().getRoomUser().getRoom().getEntityManager().leaveRoom(afkPlayer.getPlayer(), true);
             }
