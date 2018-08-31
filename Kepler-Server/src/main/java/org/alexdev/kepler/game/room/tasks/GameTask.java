@@ -58,7 +58,7 @@ public class GameTask implements Runnable {
                         if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
                             BattleballTile tile = (BattleballTile) this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
 
-                            if (tile.isSpawnOccupied()) {
+                            if (tile.isSpawnOccupied() && tile.getColour() != BattleballTileColour.DISABLED) {
                                 // Set first interaction on spawn tile, like official Habbo
                                 tile.setState(BattleballTileState.TOUCHED);
                                 tile.setColour(BattleballTileColour.getColourById(gamePlayer.getTeamId()));
@@ -108,7 +108,7 @@ public class GameTask implements Runnable {
                 BattleballTile tile = (BattleballTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
 
                 if (tile != null) {
-                    tile.incrementTile(gamePlayer, updateTiles, fillTiles);
+                    tile.interact(gamePlayer, updateTiles, fillTiles);
                 }
             }
 
