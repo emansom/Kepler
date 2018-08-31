@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games.battleball;
 
+import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -8,14 +9,12 @@ import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.List;
 
-public class BattleballTile {
-    private Position position;
+public class BattleballTile extends GameTile  {
     private BattleballTileColour colour;
     private BattleballTileState state;
-    private boolean isSpawnOccupied;
 
     public BattleballTile(Position position) {
-        this.position = position;
+        super(position);
     }
 
     public void incrementTile(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
@@ -84,7 +83,7 @@ public class BattleballTile {
                 }
             }
 
-            for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), this.position)) {
+            for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), this.getPosition())) {
                 if (neighbour == null || neighbour.getState() == BattleballTileState.SEALED || neighbour.getColour() == BattleballTileColour.DISABLED) {
                     continue;
                 }
@@ -111,14 +110,6 @@ public class BattleballTile {
         }
     }
 
-    /**
-     * Get the position of this tile
-     *
-     * @return the position
-     */
-    public Position getPosition() {
-        return position;
-    }
 
     /**
      * Get the current colour of this tile
@@ -154,23 +145,5 @@ public class BattleballTile {
      */
     public void setState(BattleballTileState state) {
         this.state = state;
-    }
-
-    /**
-     * Set whether this tile has been used as a spawn point
-     *
-     * @return true, if successful
-     */
-    public boolean isSpawnOccupied() {
-        return isSpawnOccupied;
-    }
-
-    /**
-     * Get whether this tile has been used as a spawn point
-     *
-     * @param spawnOccupied whether the spawn is occupied for spawning a player
-     */
-    public void setSpawnOccupied(boolean spawnOccupied) {
-        isSpawnOccupied = spawnOccupied;
     }
 }

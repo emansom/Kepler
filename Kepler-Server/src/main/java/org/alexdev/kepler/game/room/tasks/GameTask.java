@@ -56,7 +56,7 @@ public class GameTask implements Runnable {
 
                         // Keep setting spawn colour underneath player, only during "this game is starting soon"
                         if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
-                            BattleballTile tile = this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
+                            BattleballTile tile = (BattleballTile) this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
 
                             if (tile.isSpawnOccupied()) {
                                 // Set first interaction on spawn tile, like official Habbo
@@ -105,7 +105,7 @@ public class GameTask implements Runnable {
                 roomEntity.updateNewHeight(roomEntity.getPosition());
 
                 // Increment tiles...
-                BattleballTile tile = game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
+                BattleballTile tile = (BattleballTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
 
                 if (tile != null) {
                     tile.incrementTile(gamePlayer, updateTiles, fillTiles);

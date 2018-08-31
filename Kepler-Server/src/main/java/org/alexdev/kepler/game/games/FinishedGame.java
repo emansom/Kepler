@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games;
 
+import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -27,7 +28,12 @@ public class FinishedGame {
         this.name = game.getName();
         this.mapCreator = game.getGameCreator();
         this.gameType = game.getGameType();
-        this.powerUps = game.getPowerUps();
+
+        if (this.gameType == GameType.BATTLEBALL) {
+            BattleballGame battleballGame = (BattleballGame) game;
+            this.powerUps = battleballGame.getPowerUps();
+        }
+
         this.teamScores = new HashMap<>();
         this.expireTime = DateUtil.getCurrentTimeSeconds() + GameManager.getInstance().getListingExpiryTime();
 

@@ -48,7 +48,7 @@ public class FloodFill {
 
         for (Position point : Pathfinder.MOVE_POINTS) {
             Position tmp = position.copy().add(point);
-            battleballTiles.add(game.getTile(tmp.getX(), tmp.getY()));
+            battleballTiles.add((BattleballTile) game.getTile(tmp.getX(), tmp.getY()));
         }
 
         return battleballTiles;
