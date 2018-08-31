@@ -1,6 +1,7 @@
-package org.alexdev.kepler.game.games.battleball;
+package org.alexdev.kepler.game.games.utils;
 
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;

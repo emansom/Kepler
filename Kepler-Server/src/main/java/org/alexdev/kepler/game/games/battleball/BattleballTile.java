@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.utils.FloodFill;
 import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.List;
@@ -107,7 +108,7 @@ public class BattleballTile extends GameTile  {
 
                         filledTile.setColour(this.getColour());
                         filledTile.setState(BattleballTileState.SEALED);
-                        
+
                         updateFillTiles.add(filledTile);
                     }
                 }

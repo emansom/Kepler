@@ -1,6 +1,6 @@
 package org.alexdev.kepler.messages.incoming.games;
 
-import org.alexdev.kepler.game.games.FinishedGame;
+import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameState;
