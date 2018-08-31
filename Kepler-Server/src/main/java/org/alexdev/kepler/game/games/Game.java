@@ -31,7 +31,7 @@ public class Game {
     private int id;
     private int mapId;
     private int teamAmount;
-    private int gameCreator;
+    private Player gameCreator;
 
     private GameType gameType;
     private GameState gameState;
@@ -59,7 +59,7 @@ public class Game {
     private boolean gameStarted;
     private boolean gameFinished;
 
-    public Game(int id, int mapId, GameType gameType, String name, int teamAmount, int gameCreator) {
+    public Game(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator) {
         this.id = id;
         this.mapId = mapId;
         this.gameType = gameType;
@@ -670,7 +670,7 @@ public class Game {
     }
 
     public Player getGameCreator() {
-        return PlayerManager.getInstance().getPlayerById(this.gameCreator);
+        return this.gameCreator;
     }
 
     public int getMapId() {

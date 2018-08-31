@@ -71,7 +71,7 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
             return;
         }
 
-        Game game = new Game(GameManager.getInstance().createId(), mapId, this.getGameType(), name, teams, gameCreator.getDetails().getId());
+        Game game = new Game(GameManager.getInstance().createId(), mapId, this.getGameType(), name, teams, gameCreator);
 
         GamePlayer gamePlayer = new GamePlayer(gameCreator);
         gamePlayer.setGameId(game.getId());
