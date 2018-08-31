@@ -17,7 +17,14 @@ public class BattleballTile extends GameTile  {
         super(position);
     }
 
-    public void incrementTile(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+    /**
+     * Handle when a player jumps on a Battleball tile.
+     *
+     * @param gamePlayer the GamePlayer instance of the user jumping on the tile
+     * @param updateTiles the tile list to add to if the tile requires an update
+     * @param updateFillTiles the list to add to if these tiles require the filling in animation
+     */
+    public void interact(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         if (this.getColour() == BattleballTileColour.DISABLED) {
             return;
         }
@@ -96,11 +103,11 @@ public class BattleballTile extends GameTile  {
                             continue;
                         }
 
-                        // Tile got sealed, so increase every team members' points
                         team.setSealedTileScore();
 
                         filledTile.setColour(this.getColour());
                         filledTile.setState(BattleballTileState.SEALED);
+                        
                         updateFillTiles.add(filledTile);
                     }
                 }
