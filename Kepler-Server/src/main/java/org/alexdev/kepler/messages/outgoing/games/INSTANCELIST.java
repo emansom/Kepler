@@ -29,8 +29,8 @@ public class INSTANCELIST extends MessageComposer {
             response.writeInt(game.getId());
             response.writeString(game.getName());
 
-            response.writeInt(game.getGameCreator().getRoomUser().getInstanceId());
-            response.writeString(game.getGameCreator().getDetails().getName());
+            response.writeInt(game.getGameCreatorId());
+            response.writeString(game.getGameCreator());
 
             response.writeInt(game.getMapId());
         }
@@ -40,7 +40,7 @@ public class INSTANCELIST extends MessageComposer {
         for (Game game : this.startedGames) {
             response.writeInt(game.getId());
             response.writeString(game.getName());
-            response.writeString(game.getGameCreator().getDetails().getName());
+            response.writeString(game.getGameCreator());
             response.writeInt(game.getMapId());
         }
 

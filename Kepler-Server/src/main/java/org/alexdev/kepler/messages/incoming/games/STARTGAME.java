@@ -36,7 +36,7 @@ public class STARTGAME implements MessageEvent {
             return;
         }
 
-        if (game.getGameCreator() != player) {
+        if (game.getGameCreatorId() != player.getDetails().getId()) {
             return;
         }
 

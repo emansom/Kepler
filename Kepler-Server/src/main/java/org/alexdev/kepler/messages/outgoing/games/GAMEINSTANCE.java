@@ -30,8 +30,8 @@ public class GAMEINSTANCE extends MessageComposer {
                 response.writeInt(this.game.getId());
                 response.writeString(this.game.getName());
 
-                response.writeInt(this.game.getGameCreator().getRoomUser().getInstanceId());
-                response.writeString(this.game.getGameCreator().getDetails().getName());
+                response.writeInt(this.game.getGameCreatorId());
+                response.writeString(this.game.getGameCreator());
 
                 response.writeInt(this.game.getMapId());
 
@@ -63,7 +63,7 @@ public class GAMEINSTANCE extends MessageComposer {
             if (this.game.getGameState() == GameState.STARTED) {
                 response.writeInt(this.game.getId());
                 response.writeString(this.game.getName());
-                response.writeString(this.game.getGameCreator().getDetails().getName());
+                response.writeString(this.game.getGameCreator());
                 response.writeInt(this.game.getMapId());
                 response.writeInt(this.game.getTeamAmount());
 

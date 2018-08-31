@@ -25,7 +25,7 @@ public class FinishedGame {
         this.id = game.getId();
         this.mapId = game.getMapId();
         this.name = game.getName();
-        this.mapCreator = game.getGameCreator().getDetails().getName();
+        this.mapCreator = game.getGameCreator();
         this.gameType = game.getGameType();
         this.powerUps = game.getPowerUps();
         this.teamScores = new HashMap<>();

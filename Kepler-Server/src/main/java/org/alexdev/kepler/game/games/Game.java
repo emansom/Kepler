@@ -10,7 +10,6 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.game.room.models.RoomModel;
@@ -31,7 +30,9 @@ public class Game {
     private int id;
     private int mapId;
     private int teamAmount;
-    private Player gameCreator;
+
+    private String gameCreatorName;
+    private int gameCreatorId;
 
     private GameType gameType;
     private GameState gameState;
@@ -65,7 +66,8 @@ public class Game {
         this.gameType = gameType;
         this.name = name;
         this.teamAmount = teamAmount;
-        this.gameCreator = gameCreator;
+        this.gameCreatorName = gameCreator.getDetails().getName();
+        this.gameCreatorId = gameCreator.getDetails().getId();
 
         this.powerUps = new ArrayList<>();
         this.teams = new ConcurrentHashMap<>();
@@ -669,8 +671,8 @@ public class Game {
         return teams;
     }
 
-    public Player getGameCreator() {
-        return this.gameCreator;
+    public String getGameCreator() {
+        return this.gameCreatorName;
     }
 
     public int getMapId() {
@@ -696,4 +698,7 @@ public class Game {
         return gameFinished;
     }
 
+    public int getGameCreatorId() {
+        return gameCreatorId;
+    }
 }

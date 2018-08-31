@@ -32,7 +32,7 @@ public class KICKPLAYER implements MessageEvent {
 
         Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
 
-        if (game == null || game.getGameCreator() != player) {
+        if (game == null || game.getGameCreatorId() != player.getDetails().getId()) {
             return;
         }
 
