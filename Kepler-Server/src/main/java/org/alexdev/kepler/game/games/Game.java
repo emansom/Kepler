@@ -14,6 +14,7 @@ import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.alexdev.kepler.game.room.models.RoomModel;
+import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.games.*;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -276,15 +277,19 @@ public class Game {
         // Game seconds counter
         this.gameTimerRunnable = new FutureRunnable() {
             public void run() {
-                if (!canGameContinue()) {
-                    this.cancelFuture();
-                    return;
-                }
+                try {
+                    if (!canGameContinue()) {
+                        this.cancelFuture();
+                        return;
+                    }
 
-                // Game ends either when time runs out or there's no free tiles left to seal
-                if (totalSecondsLeft.decrementAndGet() == 0 || !hasFreeTiles()) {
-                    this.cancelFuture();
-                    finishGame();
+                    // Game ends either when time runs out or there's no free tiles left to seal
+                    if (totalSecondsLeft.decrementAndGet() == 0 || !hasFreeTiles()) {
+                        this.cancelFuture();
+                        finishGame();
+                    }
+                } catch (Exception ex) {
+                    Log.getErrorLogger().error("Error occurred in game timer runnable: ", ex);
                 }
             }
         };

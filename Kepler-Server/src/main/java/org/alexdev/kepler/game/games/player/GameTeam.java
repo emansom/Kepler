@@ -22,7 +22,6 @@ public class GameTeam {
         return playerList.stream().filter(GamePlayer::isInGame).collect(Collectors.toList());
     }
 
-
     public List<GamePlayer> getPlayers() {
         return playerList;
     }
