@@ -79,8 +79,8 @@ public abstract class Game {
         this.gameStarted = false;
         this.gameFinished = false;
 
-        this.preparingGameSecondsLeft = new AtomicInteger(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL));
-        this.totalSecondsLeft = new AtomicInteger(GameManager.getInstance().getLifetimeSeconds(GameType.BATTLEBALL));
+        this.preparingGameSecondsLeft = new AtomicInteger(GameManager.getInstance().getPreparingSeconds(this.gameType));
+        this.totalSecondsLeft = new AtomicInteger(GameManager.getInstance().getLifetimeSeconds(this.gameType));
 
         this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
 
@@ -168,7 +168,7 @@ public abstract class Game {
         this.gameTimerRunnable.setFuture(future);
 
         // Send game seconds
-        this.send(new GAMESTART(GameManager.getInstance().getLifetimeSeconds(GameType.BATTLEBALL)));
+        this.send(new GAMESTART(GameManager.getInstance().getLifetimeSeconds(this.gameType)));
     }
 
     /**
@@ -190,10 +190,10 @@ public abstract class Game {
         }
 
         // Send scores to everybody
-        this.send(new GAMEEND(this.teams));
+        this.send(new GAMEEND(this.gameType, this.teams));
 
         // Restart countdown
-        this.restartCountdown = new AtomicLong(GameManager.getInstance().getRestartSeconds(GameType.BATTLEBALL));
+        this.restartCountdown = new AtomicLong(GameManager.getInstance().getRestartSeconds(this.gameType));
 
         var restartRunnable = new FutureRunnable() {
             public void run() {
@@ -249,7 +249,7 @@ public abstract class Game {
      * Method to restart game.
      */
     private void initialise(List<GamePlayer> players) {
-        this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL), players));
+        this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
 
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
@@ -275,7 +275,7 @@ public abstract class Game {
         this.sendObservers(new GAMEDELETED());
 
         // Start game after "game is about to begin"
-        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL), TimeUnit.SECONDS);
+        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, GameManager.getInstance().getPreparingSeconds(this.gameType), TimeUnit.SECONDS);
     }
 
     /**

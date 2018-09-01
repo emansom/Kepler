@@ -31,7 +31,7 @@ public class FULLGAMESTATUS extends MessageComposer {
     public void compose(NettyResponse response) {
         response.writeInt(1);
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
-        response.writeInt(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL));
+        response.writeInt(GameManager.getInstance().getPreparingSeconds(game.getGameType()));
         response.writeInt(this.gamePlayerList.size());
 
         for (var team : this.game.getTeams().values()) {
