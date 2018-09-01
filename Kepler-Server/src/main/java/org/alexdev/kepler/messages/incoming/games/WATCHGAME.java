@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.games;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.GameState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -42,7 +43,12 @@ public class WATCHGAME implements MessageEvent {
         player.getRoomUser().setGamePlayer(gamePlayer);
 
         game.getSpectators().add(gamePlayer);
-        game.send(new GAMEINSTANCE(game));
-        game.sendObservers(new GAMEINSTANCE(game));
+
+        if (game.getGameState() == GameState.STARTED) {
+            game.sendSpectatorToArena(gamePlayer);
+        } else {
+            game.send(new GAMEINSTANCE(game));
+            game.sendObservers(new GAMEINSTANCE(game));
+        }
     }
 }

@@ -8,6 +8,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.items.DICE_VALUE;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.user.USER_STATUSES;
+import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARESPECTATOR;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -15,6 +16,11 @@ public class G_STAT implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         if (player.getRoomUser().getRoom() == null) {
+            return;
+        }
+
+        if (player.getRoomUser().getGamePlayer() != null && player.getRoomUser().getGamePlayer().isSpectator()) {
+            player.send(new YOUARESPECTATOR());
             return;
         }
 

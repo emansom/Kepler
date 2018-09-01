@@ -6,9 +6,11 @@ import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.games.*;
+import org.alexdev.kepler.messages.outgoing.messenger.ROOMFORWARD;
 import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARESPECTATOR;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -128,18 +130,54 @@ public abstract class Game {
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 0, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
 
-        for (Player player : this.observers) {
-            player.send(new GAMEINSTANCE(this));
+        this.sendObservers(new GAMEINSTANCE(this));
+    }
+
+    /**
+     * Send all spectators to arena, happens when game starts after waiting for players.
+     */
+    private void sendSpectatorsToArena() {
+        for (GamePlayer spectator : this.spectators) {
+            this.sendSpectatorToArena(spectator);
         }
     }
 
-    private void sendSpectatorsToArena() {
-        for (GamePlayer spectator : this.spectators) {
-            if (spectator.getPlayer().getRoomUser().getRoom() != this.room) {
-                spectator.getPlayer().send(new GAMELOCATION());
-                spectator.setEnteringGame(true);
-            }
+    /**
+     * Send spectaot to arena
+     *
+     * @param spectator the spectator to send
+     */
+    public void sendSpectatorToArena(GamePlayer spectator) {
+        if (!spectator.isSpectator()) {
+            return;
         }
+
+        if (spectator.getPlayer().getRoomUser().getRoom() != this.room) {
+            spectator.getPlayer().send(new GAMELOCATION());
+            spectator.setEnteringGame(true);
+
+            // No longer an observer
+            this.observers.remove(spectator.getPlayer());
+        }
+    }
+
+    /**
+     * Terminate all spectators, and send them to the lobby.
+     */
+    private void killSpectators() {
+        for (GamePlayer spectator : this.spectators) {
+            this.leaveGame(spectator);
+            this.sendToLobby(spectator.getPlayer());
+        }
+    }
+
+    /**
+     * Send players to the game lobby
+     *
+     * @param player the player to send
+     */
+    private void sendToLobby(Player player) {
+        player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId() + RoomManager.PUBLIC_ROOM_OFFSET));
     }
 
     /**
@@ -149,7 +187,7 @@ public abstract class Game {
         this.gameStarted = true;
 
         // Stop all players from walking when game starts if they selected a tile
-        for (GameTeam team : teams.values()) {
+        for (GameTeam team : this.teams.values()) {
             for (GamePlayer p : team.getActivePlayers()) {
                 p.getPlayer().getRoomUser().setWalkingAllowed(true);
             }
@@ -310,7 +348,9 @@ public abstract class Game {
 
         if (!this.hasEnoughPlayers()) {
             GameManager.getInstance().getGames().remove(this);
+
             this.sendObservers(new GAMEDELETED());
+            this.killSpectators();
         }
     }
 

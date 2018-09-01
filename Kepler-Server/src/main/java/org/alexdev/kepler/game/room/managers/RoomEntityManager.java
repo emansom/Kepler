@@ -273,7 +273,9 @@ public class RoomEntityManager {
         // If we left room while in a game, leave the game
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
-        if (gamePlayer != null && !gamePlayer.isEnteringGame()) {
+        if (gamePlayer != null
+                && !gamePlayer.isEnteringGame()
+                && gamePlayer.getGame() != null) {
             gamePlayer.getGame().leaveGame(gamePlayer);
         }
     }
