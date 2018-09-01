@@ -308,6 +308,8 @@ public abstract class Game {
             this.sendObservers(new GAMEDELETED());
             this.killSpectators();
         }
+
+        gamePlayer.setGameId(-1);
     }
 
     /**
@@ -345,6 +347,8 @@ public abstract class Game {
         for (GamePlayer spectator : this.spectators) {
             this.sendToLobby(spectator);
         }
+
+        this.spectators.clear();
     }
 
     /**
