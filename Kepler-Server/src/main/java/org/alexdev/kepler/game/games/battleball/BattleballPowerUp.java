@@ -11,11 +11,13 @@ public class BattleballPowerUp {
     private final BattleballTile tile;
     private final Position position;
 
-    public BattleballPowerUp(BattleballGame battleballGame, int id, BattleballTile tile) {
+    public BattleballPowerUp(BattleballGame game, int id, BattleballTile tile) {
         this.id = id;
         this.tile = tile;
         this.position = this.tile.getPosition().copy();
-        this.powerType = BattleballPowerType.random();
+
+        var allowedPowerUps = game.getAllowedPowerUps();
+        this.powerType = BattleballPowerType.getById(allowedPowerUps[ThreadLocalRandom.current().nextInt(0, allowedPowerUps.length)]);
     }
 
     public int getId() {

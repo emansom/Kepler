@@ -38,20 +38,20 @@ public class FULLGAMESTATUS extends MessageComposer {
         for (var team : this.game.getTeams().values()) {
             for (var gamePlayer : team.getActivePlayers()) {
                 //if (!this.startedGame) {
-                    response.writeInt(0); // type, 0 = player
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY());
-                    response.writeInt((int) gamePlayer.getPlayer().getRoomUser().getPosition().getZ());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
-                    response.writeInt(0);
-                    response.writeInt(-1);
-                    response.writeString(gamePlayer.getPlayer().getDetails().getName());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getMotto());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getFigure());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getSex());
-                    response.writeInt(gamePlayer.getTeamId());
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId()); // Actually room user id/instance id
+                response.writeInt(0); // type, 0 = player
+                response.writeInt(gamePlayer.getPlayer().getDetails().getId());
+                response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
+                response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY());
+                response.writeInt((int) gamePlayer.getPlayer().getRoomUser().getPosition().getZ());
+                response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
+                response.writeInt(0);
+                response.writeInt(-1);
+                response.writeString(gamePlayer.getPlayer().getDetails().getName());
+                response.writeString(gamePlayer.getPlayer().getDetails().getMotto());
+                response.writeString(gamePlayer.getPlayer().getDetails().getFigure());
+                response.writeString(gamePlayer.getPlayer().getDetails().getSex());
+                response.writeInt(gamePlayer.getTeamId());
+                response.writeInt(gamePlayer.getPlayer().getDetails().getId()); // Actually room user id/instance id
                 /*} else {
                     response.writeInt(0); // type, 0 = player
                     response.writeInt(gamePlayer.getPlayer().getDetails().getId());

@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,10 +28,10 @@ public class BattleballGame extends Game {
     private AtomicInteger timeUntilNextPower;
     private AtomicInteger powerId;
 
-    public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator) {
+    public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
 
-        this.allowedPowerUps = new ArrayList<>();
+        this.allowedPowerUps = allowedPowerUps;
 
         this.activePowers = new CopyOnWriteArrayList<>();
         this.powerId = new AtomicInteger(0);
@@ -241,7 +242,7 @@ public class BattleballGame extends Game {
      *
      * @return the power ups allowed
      */
-    public List<Integer> getAllowedPowerUps() {
-        return allowedPowerUps;
+    public int[] getAllowedPowerUps() {
+        return ArrayUtils.toPrimitive(this.allowedPowerUps.toArray(new Integer[0]));
     }
 }

@@ -22,6 +22,16 @@ public enum BattleballPowerType {
         return BattleballPowerType.values()[ThreadLocalRandom.current().nextInt(0, BattleballPowerType.values().length)];
     }
 
+    public static BattleballPowerType getById(int powerUpId) {
+        for (var powerUp : values()) {
+            if (powerUp.getPowerUpId() == powerUpId) {
+                return powerUp;
+            }
+        }
+
+        return null;
+    }
+
     public int getPowerUpId() {
         return powerUpId;
     }

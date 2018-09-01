@@ -55,11 +55,12 @@ public class GAMEINSTANCE extends MessageComposer {
 
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
                     BattleballGame battleballGame = (BattleballGame) this.game;
+                    int[] allowedPowerUps = battleballGame.getAllowedPowerUps();
 
-                    String[] powerUps = new String[battleballGame.getAllowedPowerUps().size()];
+                    String[] powerUps = new String[allowedPowerUps.length];
 
-                    for (int i = 0; i < battleballGame.getAllowedPowerUps().size(); i++) {
-                        powerUps[i] = String.valueOf(battleballGame.getAllowedPowerUps().get(i));
+                    for (int i = 0; i < allowedPowerUps.length; i++) {
+                        powerUps[i] = String.valueOf(allowedPowerUps[i]);
                     }
 
                     response.writeString(String.join(",", powerUps));
@@ -88,11 +89,12 @@ public class GAMEINSTANCE extends MessageComposer {
 
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
                     BattleballGame battleballGame = (BattleballGame) this.game;
+                    int[] allowedPowerUps = battleballGame.getAllowedPowerUps();
 
-                    String[] powerUps = new String[battleballGame.getAllowedPowerUps().size()];
+                    String[] powerUps = new String[allowedPowerUps.length];
 
-                    for (int i = 0; i < battleballGame.getAllowedPowerUps().size(); i++) {
-                        powerUps[i] = String.valueOf(battleballGame.getAllowedPowerUps().get(i));
+                    for (int i = 0; i < allowedPowerUps.length; i++) {
+                        powerUps[i] = String.valueOf(allowedPowerUps[i]);
                     }
 
                     response.writeString(String.join(",", powerUps));
@@ -121,10 +123,12 @@ public class GAMEINSTANCE extends MessageComposer {
 
             // TODO: Special SnowStorm parameters
 
-            String[] powerUps = new String[this.finishedGame.getPowerUps().size()];
+            int[] allowedPowerUps = this.finishedGame.getPowerUps();
 
-            for (int i = 0; i < this.finishedGame.getPowerUps().size(); i++) {
-                powerUps[i] = String.valueOf(this.finishedGame.getPowerUps().get(i));
+            String[] powerUps = new String[allowedPowerUps.length];
+
+            for (int i = 0; i < allowedPowerUps.length; i++) {
+                powerUps[i] = String.valueOf(allowedPowerUps[i]);
             }
 
             response.writeString(String.join(",", powerUps));
