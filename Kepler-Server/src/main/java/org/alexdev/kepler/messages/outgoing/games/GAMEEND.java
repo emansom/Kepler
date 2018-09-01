@@ -36,8 +36,6 @@ public class GAMEEND extends MessageComposer {
                 }
 
                 response.writeInt(team.getScore());
-            } else {
-                response.writeInt(-1);
             }
         }
     }
