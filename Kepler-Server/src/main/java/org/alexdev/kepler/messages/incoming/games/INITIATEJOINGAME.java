@@ -41,6 +41,12 @@ public class INITIATEJOINGAME implements MessageEvent {
         if (!game.canSwitchTeam(teamId)) {
             return;
         }
+        if (player.getRoomUser().getGamePlayer() != null && player.getRoomUser().getGamePlayer().isSpectator()) {
+            game.leaveGame(player.getRoomUser().getGamePlayer());
+            //player.getRoomUser().getGamePlayer().setSpectator(false);
+            //player.getRoomUser().getGamePlayer().setGameId(game.getId());
+            //player.getRoomUser().getGamePlayer().setTeamId(teamId);
+        }
 
         if (player.getRoomUser().getGamePlayer() == null) {
             player.getRoomUser().setGamePlayer(new GamePlayer(player));

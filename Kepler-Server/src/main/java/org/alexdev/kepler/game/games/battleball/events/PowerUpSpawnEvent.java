@@ -3,11 +3,8 @@ package org.alexdev.kepler.game.games.battleball.events;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.enums.GameEventType;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 public class PowerUpSpawnEvent extends GameEvent {
     private final BattleballGame game;
