@@ -13,7 +13,6 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -56,11 +55,11 @@ public class BattleballGame extends Game {
             return;
         }
 
-        BattleballPowerUp powerUp = new BattleballPowerUp(this, this.powerId.getAndIncrement(), this.getRandomTile());
+        /*BattleballPowerUp powerUp = new BattleballPowerUp(this, this.powerId.getAndIncrement(), this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
-        this.getGameEvents().add(new PowerUpSpawnEvent(this, powerUp));
+        this.getEventsQueue().add(new PowerUpSpawnEvent(this, powerUp));*/
     }
 
     public void updateTimeUntilNextPower() {

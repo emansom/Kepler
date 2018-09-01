@@ -124,7 +124,6 @@ public class GAMEINSTANCE extends MessageComposer {
             // TODO: Special SnowStorm parameters
 
             int[] allowedPowerUps = this.finishedGame.getPowerUps();
-
             String[] powerUps = new String[allowedPowerUps.length];
 
             for (int i = 0; i < allowedPowerUps.length; i++) {
