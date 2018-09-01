@@ -230,13 +230,14 @@ public abstract class Game {
                 if (!p.isClickedRestart()) {
                     afkPlayers.add(p);
                 } else {
+                    p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
                     players.add(p);
                 }
             }
         }
 
         // Only create a new game if there's two players who joined
-        if (players.size() > 1) {
+        if (players.size() >= 2) {
             this.initialise(players);
         } else {
             afkPlayers.addAll(players);
@@ -270,8 +271,6 @@ public abstract class Game {
 
         for (var gamePlayer : players) {
             this.movePlayer(gamePlayer, -1, gamePlayer.getTeamId());
-
-            gamePlayer.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
             gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false); // Don't allow them to walk, for next game
         }
 
