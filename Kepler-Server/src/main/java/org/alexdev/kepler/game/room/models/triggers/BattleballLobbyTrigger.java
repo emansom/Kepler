@@ -14,6 +14,7 @@ import org.alexdev.kepler.messages.outgoing.games.GAMEPLAYERINFO;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -69,7 +70,17 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
             return;
         }
 
-        BattleballGame game = new BattleballGame(GameManager.getInstance().createId(), mapId, this.getGameType(), name, teams, gameCreator);
+        List<Integer> allowedPowerUps = new ArrayList<>();
+
+        String powerUps = (String) gameParameters.get("allowedPowerups");
+
+        for (String powerUp : powerUps.split(",")) {
+            if (StringUtils.isNumeric(powerUp)) {
+                allowedPowerUps.add(Integer.parseInt(powerUp));
+            }
+        }
+
+        BattleballGame game = new BattleballGame(GameManager.getInstance().createId(), mapId, this.getGameType(), name, teams, gameCreator, allowedPowerUps);
 
         GamePlayer gamePlayer = new GamePlayer(gameCreator);
         gamePlayer.setGameId(game.getId());
@@ -77,14 +88,6 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
 
         gameCreator.getRoomUser().setGamePlayer(gamePlayer);
         game.movePlayer(gamePlayer, -1, 0);
-
-        String powerUps = (String) gameParameters.get("allowedPowerups");
-
-        for (String powerUp : powerUps.split(",")) {
-            if (StringUtils.isNumeric(powerUp)) {
-                game.getPowerUps().add(Integer.parseInt(powerUp));
-            }
-        }
 
         GameManager.getInstance().getGames().add(game);
     }

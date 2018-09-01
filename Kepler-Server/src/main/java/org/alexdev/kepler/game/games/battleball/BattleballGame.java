@@ -2,7 +2,6 @@ package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
@@ -12,8 +11,8 @@ import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.apache.commons.lang3.ArrayUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -22,16 +21,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BattleballGame extends Game {
     private BattleballTile[][] battleballTiles;
 
-    private List<Integer> powerUps;
+    private List<Integer> allowedPowerUps;
     private List<BattleballPowerUp> activePowers;
 
     private AtomicInteger timeUntilNextPower;
     private AtomicInteger powerId;
 
-    public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator) {
+    public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
 
-        this.powerUps = new ArrayList<>();
+        this.allowedPowerUps = allowedPowerUps;
 
         this.activePowers = new CopyOnWriteArrayList<>();
         this.powerId = new AtomicInteger(0);
@@ -44,16 +43,27 @@ public class BattleballGame extends Game {
 
     @Override
     public void gameTick() {
+        if (this.allowedPowerUps.isEmpty()) {
+            return;
+        }
+
         if (this.timeUntilNextPower.decrementAndGet() != 0) {
             return;
         }
 
+        if (this.activePowers.size() > 0) { // There's already an active power so don't spawn another one
+            return;
+        }
+
+        /*BattleballPowerUp powerUp = new BattleballPowerUp(this, this.powerId.getAndIncrement(), this.getRandomTile());
+        this.activePowers.add(powerUp);
+
         this.updateTimeUntilNextPower();
-        //this.getGameEvents().add(new PowerUpSpawnEvent(this.powerId.getAndIncrement(), this, BattleballPowerType.BOMB));
+        this.getEventsQueue().add(new PowerUpSpawnEvent(this, powerUp));*/
     }
 
     public void updateTimeUntilNextPower() {
-        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(4, 15) + 1);
+        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(4, 15));
     }
 
     @Override
@@ -64,7 +74,7 @@ public class BattleballGame extends Game {
         for (int y = 0; y < this.getRoomModel().getMapSizeY(); y++) {
             for (int x = 0; x < this.getRoomModel().getMapSizeX(); x++) {
                 RoomTileState tileState = this.getRoomModel().getTileState(x, y);
-                BattleballTile tile = new BattleballTile(new Position(x, y));
+                BattleballTile tile = new BattleballTile(new Position(x, y, this.getRoomModel().getTileHeight(x, y)));
 
                 this.battleballTiles[x][y] = tile;
                 tile.setState(BattleballTileType.DEFAULT);
@@ -205,6 +215,22 @@ public class BattleballGame extends Game {
         return false;
     }
 
+    public BattleballTile getRandomTile() {
+        int mapSizeX = this.getRoomModel().getMapSizeX();
+        int mapSizeY = this.getRoomModel().getMapSizeY();
+
+        int x = ThreadLocalRandom.current().nextInt(0, mapSizeX);
+        int y = ThreadLocalRandom.current().nextInt(0, mapSizeY);
+
+        BattleballTile battleballTile = (BattleballTile) this.getTile(x, y);
+
+        if (battleballTile == null || battleballTile.getColour() == BattleballColourType.DISABLED) {
+            return getRandomTile();
+        }
+
+        return battleballTile;
+    }
+
     @Override
     public GameTile[][] getTileMap() {
         return battleballTiles;
@@ -215,7 +241,7 @@ public class BattleballGame extends Game {
      *
      * @return the power ups allowed
      */
-    public List<Integer> getPowerUps() {
-        return powerUps;
+    public int[] getAllowedPowerUps() {
+        return ArrayUtils.toPrimitive(this.allowedPowerUps.toArray(new Integer[0]));
     }
 }

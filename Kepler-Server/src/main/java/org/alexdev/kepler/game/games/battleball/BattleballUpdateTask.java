@@ -43,7 +43,7 @@ public class BattleballUpdateTask implements Runnable {
             List<GameObject> objects = new ArrayList<>();
             List<GameEvent> events = new ArrayList<>();
 
-            this.game.getGameEvents().drainTo(events);
+            this.game.getEventsQueue().drainTo(events);
 
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();

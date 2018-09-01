@@ -1,9 +1,12 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
+import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.messages.outgoing.games.GAMESTART;
 import org.alexdev.kepler.messages.outgoing.rooms.items.DICE_VALUE;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
@@ -21,6 +24,12 @@ public class G_STAT implements MessageEvent {
 
         if (player.getRoomUser().getGamePlayer() != null && player.getRoomUser().getGamePlayer().isSpectator()) {
             player.send(new YOUARESPECTATOR());
+
+            Game game = player.getRoomUser().getGamePlayer().getGame();
+
+            if (game.getGameState() == GameState.STARTED) {
+                player.send(new GAMESTART(game.getTotalSecondsLeft().get()));
+            }
             return;
         }
 
