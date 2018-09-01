@@ -2,8 +2,8 @@ package org.alexdev.kepler.game.games.utils;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -27,12 +27,12 @@ public class FloodFill {
                         return closed;
                     }
 
-                    if (loopTile.getColour() == BattleballTileColour.DISABLED) {
+                    if (loopTile.getColour() == BattleballColourType.DISABLED) {
                         closed.clear();
                         return closed;
                     }
 
-                    if ((loopTile.getColour().getColourId() != gamePlayer.getTeamId() || loopTile.getState() != BattleballTileState.SEALED) && !closed.contains(loopTile) && !stack.contains(loopTile)) {
+                    if ((loopTile.getColour().getColourId() != gamePlayer.getTeamId() || loopTile.getState() != BattleballTileType.SEALED) && !closed.contains(loopTile) && !stack.contains(loopTile)) {
                         stack.addFirst(loopTile);
                     }
                 }

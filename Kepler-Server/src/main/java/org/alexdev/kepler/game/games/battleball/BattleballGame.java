@@ -5,8 +5,8 @@ import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.enums.GameType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -28,7 +28,7 @@ public class BattleballGame extends Game {
 
     @Override
     public void gameTick() {
-        
+
     }
 
     @Override
@@ -42,19 +42,19 @@ public class BattleballGame extends Game {
                 BattleballTile tile = new BattleballTile(new Position(x, y));
 
                 this.battleballTiles[x][y] = tile;
-                tile.setState(BattleballTileState.DEFAULT);
+                tile.setState(BattleballTileType.DEFAULT);
 
                 if (tileState == RoomTileState.CLOSED) {
-                    tile.setColour(BattleballTileColour.DISABLED);
+                    tile.setColour(BattleballColourType.DISABLED);
                     continue;
                 }
 
                 if (!tileMap.isGameTile(x, y)) {
-                    tile.setColour(BattleballTileColour.DISABLED);
+                    tile.setColour(BattleballColourType.DISABLED);
                     continue;
                 }
 
-                tile.setColour(BattleballTileColour.DEFAULT);
+                tile.setColour(BattleballColourType.DEFAULT);
             }
         }
     }
@@ -167,11 +167,11 @@ public class BattleballGame extends Game {
             for (int x = 0; x < this.getRoomModel().getMapSizeX(); x++) {
                 BattleballTile tile = (BattleballTile) this.getTile(x, y);
 
-                if (tile == null || tile.getColour() == BattleballTileColour.DISABLED) {
+                if (tile == null || tile.getColour() == BattleballColourType.DISABLED) {
                     continue;
                 }
 
-                if (tile.getState() != BattleballTileState.SEALED) {
+                if (tile.getState() != BattleballTileType.SEALED) {
                     return true;
                 }
             }

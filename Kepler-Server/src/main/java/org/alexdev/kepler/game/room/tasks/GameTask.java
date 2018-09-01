@@ -5,8 +5,8 @@ import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.BattleballMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.BattleballPlayerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -23,9 +23,7 @@ import org.alexdev.kepler.messages.outgoing.games.GAMESTATUS;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class GameTask implements Runnable {
     private final Room room;
@@ -64,10 +62,10 @@ public class GameTask implements Runnable {
                         if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
                             BattleballTile tile = (BattleballTile) this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
 
-                            if (tile.isSpawnOccupied() && tile.getColour() != BattleballTileColour.DISABLED) {
+                            if (tile.isSpawnOccupied() && tile.getColour() != BattleballColourType.DISABLED) {
                                 // Set first interaction on spawn tile, like official Habbo
-                                tile.setState(BattleballTileState.TOUCHED);
-                                tile.setColour(BattleballTileColour.getColourById(gamePlayer.getTeamId()));
+                                tile.setState(BattleballTileType.TOUCHED);
+                                tile.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
 
                                 updateTiles.add(tile);
                             }

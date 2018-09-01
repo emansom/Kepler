@@ -1,7 +1,5 @@
 package org.alexdev.kepler.game.games;
 
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
 import org.alexdev.kepler.game.pathfinder.Position;
 
 public abstract class GameTile {
