@@ -289,6 +289,7 @@ public abstract class Game {
      * @param gamePlayer the game player to leave
      */
     public void leaveGame(GamePlayer gamePlayer) {
+        //System.out.println("called: " + gamePlayer.getUserId());
         boolean isSpectator = this.spectators.contains(gamePlayer);
         this.spectators.remove(gamePlayer);
 
