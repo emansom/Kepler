@@ -27,6 +27,11 @@ public class BattleballGame extends Game {
     }
 
     @Override
+    public void gameTick() {
+        
+    }
+
+    @Override
     public void buildMap() {
         BattleballTileMap tileMap = GameManager.getInstance().getBattleballTileMap(this.getMapId());
         this.battleballTiles = new BattleballTile[this.getRoomModel().getMapSizeX()][this.getRoomModel().getMapSizeY()];

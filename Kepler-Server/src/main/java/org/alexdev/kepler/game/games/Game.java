@@ -18,9 +18,7 @@ import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -44,6 +42,9 @@ public abstract class Game {
     private List<Player> observers;
     private List<GamePlayer> spectators;
 
+    private BlockingQueue<GameObject> gameObjects;
+    private BlockingQueue<GameEvent> gameEvents;
+
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
@@ -66,6 +67,9 @@ public abstract class Game {
 
         this.spectators = new CopyOnWriteArrayList<>();
         this.observers = new CopyOnWriteArrayList<>();
+
+        this.gameObjects = new LinkedBlockingQueue<>();
+        this.gameEvents = new LinkedBlockingQueue<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -155,6 +159,8 @@ public abstract class Game {
                         this.cancelFuture();
                         return;
                     }
+
+                    gameTick();
 
                     // Game ends either when time runs out or there's no free tiles left to seal
                     if (totalSecondsLeft.decrementAndGet() == 0 || !canTimerContinue()) {
@@ -549,6 +555,10 @@ public abstract class Game {
      */
     public abstract void buildMap();
 
+    /**
+     * Method called when game is ticked
+     */
+    public abstract void gameTick();
 
     /**
      * Get the list of specators, the people currently watching the game
@@ -622,5 +632,13 @@ public abstract class Game {
 
     public int getGameCreatorId() {
         return gameCreatorId;
+    }
+
+    public BlockingQueue<GameObject> getGameObjects() {
+        return gameObjects;
+    }
+
+    public BlockingQueue<GameEvent> getGameEvents() {
+        return gameEvents;
     }
 }

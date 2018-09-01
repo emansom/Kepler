@@ -46,6 +46,9 @@ public class GameTask implements Runnable {
             List<GameObject> objects = new ArrayList<>();
             List<GameEvent> events = new ArrayList<>();
 
+            this.game.getGameObjects().drainTo(objects);
+            this.game.getGameEvents().drainTo(events);
+
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();
 
