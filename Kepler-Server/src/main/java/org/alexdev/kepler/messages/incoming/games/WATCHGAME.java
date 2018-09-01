@@ -37,6 +37,7 @@ public class WATCHGAME implements MessageEvent {
 
         GamePlayer gamePlayer = new GamePlayer(player);
         gamePlayer.setGameId(gameId);
+        gamePlayer.setSpectator(true);
 
         player.getRoomUser().setGamePlayer(gamePlayer);
 

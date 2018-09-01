@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.games.*;
+import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARESPECTATOR;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
@@ -107,6 +108,7 @@ public abstract class Game {
         }
 
         this.send(new GAMELOCATION());
+        this.sendSpectatorsToArena();
 
         // Preparing game seconds countdown
         this.preparingTimerRunnable = new FutureRunnable() {
@@ -128,6 +130,15 @@ public abstract class Game {
 
         for (Player player : this.observers) {
             player.send(new GAMEINSTANCE(this));
+        }
+    }
+
+    private void sendSpectatorsToArena() {
+        for (GamePlayer spectator : this.spectators) {
+            if (spectator.getPlayer().getRoomUser().getRoom() != this.room) {
+                spectator.getPlayer().send(new GAMELOCATION());
+                spectator.setEnteringGame(true);
+            }
         }
     }
 
