@@ -42,6 +42,9 @@ public abstract class Game {
     private List<Player> observers;
     private List<GamePlayer> spectators;
 
+    private BlockingQueue<GameEvent> gameEvents;
+    private BlockingQueue<GameObject> gameObjects;
+
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
@@ -64,6 +67,9 @@ public abstract class Game {
 
         this.spectators = new CopyOnWriteArrayList<>();
         this.observers = new CopyOnWriteArrayList<>();
+
+        this.gameEvents = new LinkedBlockingQueue<>();
+        this.gameObjects = new LinkedBlockingQueue<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -638,5 +644,13 @@ public abstract class Game {
 
     public int getGameCreatorId() {
         return gameCreatorId;
+    }
+
+    public BlockingQueue<GameEvent> getGameEvents() {
+        return gameEvents;
+    }
+
+    public BlockingQueue<GameObject> getGameObjects() {
+        return gameObjects;
     }
 }

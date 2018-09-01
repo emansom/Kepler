@@ -26,9 +26,9 @@ public class BattleballPowerObject extends GameObject {
         response.writeInt(this.powerId);
         response.writeInt(10);
         response.writeInt(-1);
-        response.writeInt(this.powerType.getPowerUpId());
-        response.writeInt(10);//ThreadLocalRandom.current().nextInt(0, 20));
-        response.writeInt(11);//ThreadLocalRandom.current().nextInt(0, 20));
-        response.writeInt(1);//ThreadLocalRandom.current().nextInt(0, 1));
+        //response.writeInt(this.powerType.getPowerUpId());
+        //response.writeInt(10);//ThreadLocalRandom.current().nextInt(0, 20));
+        //response.writeInt(11);//ThreadLocalRandom.current().nextInt(0, 20));
+        //response.writeInt(1);//ThreadLocalRandom.current().nextInt(0, 1));
     }
 }
