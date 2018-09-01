@@ -2,9 +2,13 @@ package org.alexdev.kepler.game.room.tasks;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameEvent;
+import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileColour;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileState;
+import org.alexdev.kepler.game.games.battleball.events.BattleballMoveEvent;
+import org.alexdev.kepler.game.games.battleball.objects.BattleballPlayerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -39,12 +43,11 @@ public class GameTask implements Runnable {
                 return; // Don't send any packets or do any logic checks during when the game is finished
             }
 
-            List<GamePlayer> players = new ArrayList<>();
+            List<GameObject> objects = new ArrayList<>();
+            List<GameEvent> events = new ArrayList<>();
 
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();
-
-            Map<GamePlayer, Position> movingPlayers = new HashMap<>();
 
             for (GameTeam gameTeam : this.game.getTeams().values()) {
                 for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
@@ -67,10 +70,10 @@ public class GameTask implements Runnable {
                             }
                         }
 
-                        this.processEntity(gamePlayer, movingPlayers, updateTiles, fillTiles);
+                        this.processEntity(gamePlayer, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
 
-                        players.add(gamePlayer);
+                        objects.add(new BattleballPlayerObject(gamePlayer));
 
                         if (roomEntity.isNeedsUpdate()) {
                             roomEntity.setNeedsUpdate(false);
@@ -79,7 +82,7 @@ public class GameTask implements Runnable {
                 }
             }
 
-            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), players, movingPlayers, updateTiles, fillTiles));
+            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }
@@ -88,7 +91,7 @@ public class GameTask implements Runnable {
     /**
      * Process entity.
      */
-    private void processEntity(GamePlayer gamePlayer, Map<GamePlayer, Position> movingPlayers, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
+    private void processEntity(GamePlayer gamePlayer, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
         Entity entity = (Entity) gamePlayer.getPlayer();
         Game game = gamePlayer.getGame();
 
@@ -120,7 +123,7 @@ public class GameTask implements Runnable {
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
                     entity.getRoomUser().getPath().clear();
                     roomEntity.walkTo(goal.getX(), goal.getY());
-                    this.processEntity(gamePlayer, movingPlayers, updateTiles, fillTiles);
+                    this.processEntity(gamePlayer, events, updateTiles, fillTiles);
                     return;
                 }
 
@@ -141,7 +144,7 @@ public class GameTask implements Runnable {
                 roomEntity.setNextPosition(next);
 
                 // Add next position if moving
-                movingPlayers.put(gamePlayer, roomEntity.getNextPosition().copy());
+                events.add(new BattleballMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
             } else {
                 roomEntity.stopWalking();
             }

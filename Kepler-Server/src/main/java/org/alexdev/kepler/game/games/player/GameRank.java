@@ -1,6 +1,6 @@
 package org.alexdev.kepler.game.games.player;
 
-import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.enums.GameType;
 
 public class GameRank {
     private final int id;

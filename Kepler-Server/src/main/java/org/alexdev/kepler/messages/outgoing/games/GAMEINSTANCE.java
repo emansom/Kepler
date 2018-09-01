@@ -2,8 +2,8 @@ package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameState;
-import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.enums.GameState;
+import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.messages.types.MessageComposer;

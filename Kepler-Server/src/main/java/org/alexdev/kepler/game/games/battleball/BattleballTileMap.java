@@ -1,7 +1,6 @@
 package org.alexdev.kepler.game.games.battleball;
 
-import org.alexdev.kepler.game.games.GameType;
-import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.alexdev.kepler.game.games.enums.GameType;
 import org.apache.commons.lang3.StringUtils;
 
 public class BattleballTileMap {

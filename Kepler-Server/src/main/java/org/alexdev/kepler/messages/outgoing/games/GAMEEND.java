@@ -1,7 +1,7 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.messages.types.MessageComposer;

@@ -1,6 +1,6 @@
 package org.alexdev.kepler.dao.mysql;
 
-import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.enums.GameType;
 
 public class GameSpawn {
     private int teamId;

@@ -1,6 +1,8 @@
 package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.enums.GameState;
+import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FinishedGame;
@@ -11,7 +13,6 @@ import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.games.*;
 import org.alexdev.kepler.messages.outgoing.messenger.ROOMFORWARD;
-import org.alexdev.kepler.messages.outgoing.rooms.user.YOUARESPECTATOR;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.util.config.GameConfiguration;
 import org.alexdev.kepler.util.schedule.FutureRunnable;
