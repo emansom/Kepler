@@ -55,11 +55,11 @@ public class BattleballGame extends Game {
             return;
         }
 
-        /*BattleballPowerUp powerUp = new BattleballPowerUp(this, this.powerId.getAndIncrement(), this.getRandomTile());
+        BattleballPowerUp powerUp = new BattleballPowerUp(this, this.powerId.getAndIncrement(), this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
-        this.getEventsQueue().add(new PowerUpSpawnEvent(this, powerUp));*/
+        this.getEventsQueue().add(new PowerUpSpawnEvent(this, powerUp));
     }
 
     public void updateTimeUntilNextPower() {
