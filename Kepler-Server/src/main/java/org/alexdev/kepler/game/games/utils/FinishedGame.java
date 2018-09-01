@@ -33,7 +33,7 @@ public class FinishedGame {
 
         if (this.gameType == GameType.BATTLEBALL) {
             BattleballGame battleballGame = (BattleballGame) game;
-            this.powerUps = battleballGame.getPowerUps();
+            this.powerUps = battleballGame.getAllowedPowerUps();
         }
 
         this.teamScores = new HashMap<>();

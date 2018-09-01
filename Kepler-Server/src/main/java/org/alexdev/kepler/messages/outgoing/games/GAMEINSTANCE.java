@@ -56,10 +56,10 @@ public class GAMEINSTANCE extends MessageComposer {
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
                     BattleballGame battleballGame = (BattleballGame) this.game;
 
-                    String[] powerUps = new String[battleballGame.getPowerUps().size()];
+                    String[] powerUps = new String[battleballGame.getAllowedPowerUps().size()];
 
-                    for (int i = 0; i < battleballGame.getPowerUps().size(); i++) {
-                        powerUps[i] = String.valueOf(battleballGame.getPowerUps().get(i));
+                    for (int i = 0; i < battleballGame.getAllowedPowerUps().size(); i++) {
+                        powerUps[i] = String.valueOf(battleballGame.getAllowedPowerUps().get(i));
                     }
 
                     response.writeString(String.join(",", powerUps));
@@ -89,10 +89,10 @@ public class GAMEINSTANCE extends MessageComposer {
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
                     BattleballGame battleballGame = (BattleballGame) this.game;
 
-                    String[] powerUps = new String[battleballGame.getPowerUps().size()];
+                    String[] powerUps = new String[battleballGame.getAllowedPowerUps().size()];
 
-                    for (int i = 0; i < battleballGame.getPowerUps().size(); i++) {
-                        powerUps[i] = String.valueOf(battleballGame.getPowerUps().get(i));
+                    for (int i = 0; i < battleballGame.getAllowedPowerUps().size(); i++) {
+                        powerUps[i] = String.valueOf(battleballGame.getAllowedPowerUps().get(i));
                     }
 
                     response.writeString(String.join(",", powerUps));

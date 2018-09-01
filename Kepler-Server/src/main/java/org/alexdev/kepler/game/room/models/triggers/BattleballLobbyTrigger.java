@@ -82,7 +82,7 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
 
         for (String powerUp : powerUps.split(",")) {
             if (StringUtils.isNumeric(powerUp)) {
-                game.getPowerUps().add(Integer.parseInt(powerUp));
+                game.getAllowedPowerUps().add(Integer.parseInt(powerUp));
             }
         }
 
