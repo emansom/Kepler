@@ -7,13 +7,13 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
+import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class STARTGAME implements MessageEvent {
+public class WATCHGAME implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
-
         if (player.getRoomUser().getRoom() == null) {
             return;
         }
@@ -24,26 +24,31 @@ public class STARTGAME implements MessageEvent {
             return;
         }
 
-        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
-
-        if (gamePlayer == null) {
+        if (player.getRoomUser().getGamePlayer() != null) {
             return;
         }
 
-        Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
+        int gameId = reader.readInt();
 
-        if (game.getGameState() != GameState.WAITING) {
+        Game game = GameManager.getInstance().getGameById(gameId);
+
+        if (game == null) {
             return;
         }
 
-        if (game.getGameCreatorId() != player.getDetails().getId()) {
-            return;
-        }
+        GamePlayer gamePlayer = new GamePlayer(player);
+        gamePlayer.setGameId(gameId);
+        gamePlayer.setSpectator(true);
 
-        if (!game.canGameStart()) {
-            return;
-        }
+        player.getRoomUser().setGamePlayer(gamePlayer);
 
-        game.startGame();
+        game.getSpectators().add(gamePlayer);
+
+        if (game.getGameState() == GameState.STARTED) {
+            game.sendSpectatorToArena(gamePlayer);
+        } else {
+            game.send(new GAMEINSTANCE(game));
+            game.sendObservers(new GAMEINSTANCE(game));
+        }
     }
 }

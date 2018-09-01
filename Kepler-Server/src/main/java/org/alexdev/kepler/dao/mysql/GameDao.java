@@ -1,7 +1,7 @@
 package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
-import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.PlayerDetails;

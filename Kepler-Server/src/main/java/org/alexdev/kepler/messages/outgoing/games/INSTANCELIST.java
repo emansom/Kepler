@@ -1,9 +1,8 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
-import org.alexdev.kepler.game.games.FinishedGame;
+import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameState;
-import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 

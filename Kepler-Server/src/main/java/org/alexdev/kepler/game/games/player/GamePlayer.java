@@ -14,6 +14,7 @@ public class GamePlayer {
     private Position position;
     private int score;
     private boolean enteringGame;
+    private boolean isSpectator;
     private boolean inGame;
     private boolean clickedRestart;
 
@@ -90,5 +91,13 @@ public class GamePlayer {
 
     public void setClickedRestart(boolean clickedRestart) {
         this.clickedRestart = clickedRestart;
+    }
+
+    public boolean isSpectator() {
+        return isSpectator;
+    }
+
+    public void setSpectator(boolean spectator) {
+        isSpectator = spectator;
     }
 }

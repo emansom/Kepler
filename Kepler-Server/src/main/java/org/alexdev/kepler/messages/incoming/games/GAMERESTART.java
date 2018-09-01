@@ -3,18 +3,10 @@ package org.alexdev.kepler.messages.incoming.games;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.player.PlayerManager;
-import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
-import org.alexdev.kepler.messages.outgoing.games.GAMERESET;
+import org.alexdev.kepler.messages.outgoing.games.PLAYERREJOINED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
-import org.alexdev.kepler.util.DateUtil;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class GAMERESTART implements MessageEvent {
     @Override
@@ -37,6 +29,7 @@ public class GAMERESTART implements MessageEvent {
 
         // Only allow restart once everyone has clicked they'd like to restart
         gamePlayer.setClickedRestart(true);
+        game.send(new PLAYERREJOINED(player.getRoomUser().getInstanceId()));
 
 /*        for (GameTeam gameTeam : game.getTeams().values()) {
             for (GamePlayer p : gameTeam.getActivePlayers()) {

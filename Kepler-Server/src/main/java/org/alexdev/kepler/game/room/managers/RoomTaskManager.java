@@ -3,9 +3,10 @@ package org.alexdev.kepler.game.room.managers;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.EntityTask;
-import org.alexdev.kepler.game.room.tasks.GameTask;
+import org.alexdev.kepler.game.games.battleball.BattleballUpdateTask;
 import org.alexdev.kepler.game.room.tasks.RollerTask;
 import org.alexdev.kepler.game.room.tasks.StatusTask;
 import org.alexdev.kepler.util.config.GameConfiguration;
@@ -51,7 +52,7 @@ public class RoomTaskManager {
         Game game = GameManager.getInstance().getGameById(this.room.getId());
 
         //this.scheduleTask("StatusTask", new StatusTask(this.room), 0, 1, TimeUnit.SECONDS);
-        this.scheduleTask("GameTask", new GameTask(this.room, game), 0, 500, TimeUnit.MILLISECONDS);
+        this.scheduleTask("GameTask", new BattleballUpdateTask(this.room, (BattleballGame) game), 0, 500, TimeUnit.MILLISECONDS);
     }
 
     /**

@@ -98,8 +98,7 @@ public class RoomPlayer extends RoomEntity {
             Game game = GameManager.getInstance().getGameById(this.observingGameId);
 
             if (game != null) {
-                game.removeObserver(this.player);
-                System.out.println("Stopped observing");
+                game.getObservers().remove(this.player);
             }
         }
     }

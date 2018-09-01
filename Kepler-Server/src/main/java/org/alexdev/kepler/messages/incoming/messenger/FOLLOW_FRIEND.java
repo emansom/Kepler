@@ -63,7 +63,7 @@ public class FOLLOW_FRIEND implements MessageEvent {
                 roomId = room.getFollowRedirect();
             }
 
-            roomId = roomId + RoomManager.PUBLIC_ROOM_OFFSET;
+           // roomId = roomId + RoomManager.PUBLIC_ROOM_OFFSET;
         }
 
         player.send(new ROOMFORWARD(isPublic, roomId));

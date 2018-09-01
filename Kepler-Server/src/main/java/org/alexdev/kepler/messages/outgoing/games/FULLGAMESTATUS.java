@@ -2,7 +2,7 @@ package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -30,7 +30,7 @@ public class FULLGAMESTATUS extends MessageComposer {
     public void compose(NettyResponse response) {
         response.writeInt(1);
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
-        response.writeInt(GameManager.getInstance().getPreparingSeconds(GameType.BATTLEBALL));
+        response.writeInt(GameManager.getInstance().getPreparingSeconds(game.getGameType()));
         response.writeInt(this.gamePlayerList.size());
 
         for (var team : this.game.getTeams().values()) {
@@ -74,8 +74,10 @@ public class FULLGAMESTATUS extends MessageComposer {
 
         for (int y = 0; y < this.game.getRoomModel().getMapSizeY(); y++) {
             for (int x = 0; x < this.game.getRoomModel().getMapSizeX(); x++) {
-                response.writeInt(this.game.getTile(x, y).getColour().getColourId());
-                response.writeInt(this.game.getTile(x, y).getState().getTileStateId());
+                BattleballTile tile = (BattleballTile) this.game.getTile(x, y);
+
+                response.writeInt(tile.getColour().getColourId());
+                response.writeInt(tile.getState().getTileStateId());
             }
         }
 

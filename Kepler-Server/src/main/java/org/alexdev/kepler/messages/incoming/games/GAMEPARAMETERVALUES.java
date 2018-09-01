@@ -1,7 +1,5 @@
 package org.alexdev.kepler.messages.incoming.games;
 
-import gherkin.lexer.Pa;
-import org.alexdev.kepler.game.games.GameType;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;

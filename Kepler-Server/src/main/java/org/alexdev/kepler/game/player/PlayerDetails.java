@@ -1,7 +1,7 @@
 package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
-import org.alexdev.kepler.game.games.GameType;
+import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.util.DateUtil;
 import org.alexdev.kepler.util.StringUtil;
 import org.alexdev.kepler.util.config.GameConfiguration;

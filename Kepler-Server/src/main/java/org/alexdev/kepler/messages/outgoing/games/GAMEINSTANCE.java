@@ -1,8 +1,10 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
-import org.alexdev.kepler.game.games.FinishedGame;
+import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameState;
+import org.alexdev.kepler.game.games.enums.GameState;
+import org.alexdev.kepler.game.games.enums.GameType;
+import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -51,13 +53,17 @@ public class GAMEINSTANCE extends MessageComposer {
 
                 // TODO: Special SnowStorm parameters
 
-                String[] powerUps = new String[this.game.getPowerUps().size()];
+                if (this.game.getGameType() == GameType.BATTLEBALL) {
+                    BattleballGame battleballGame = (BattleballGame) this.game;
 
-                for (int i = 0; i < this.game.getPowerUps().size(); i++) {
-                    powerUps[i] = String.valueOf(this.game.getPowerUps().get(i));
+                    String[] powerUps = new String[battleballGame.getPowerUps().size()];
+
+                    for (int i = 0; i < battleballGame.getPowerUps().size(); i++) {
+                        powerUps[i] = String.valueOf(battleballGame.getPowerUps().get(i));
+                    }
+
+                    response.writeString(String.join(",", powerUps));
                 }
-
-                response.writeString(String.join(",", powerUps));
             }
 
             if (this.game.getGameState() == GameState.STARTED) {
@@ -68,7 +74,7 @@ public class GAMEINSTANCE extends MessageComposer {
                 response.writeInt(this.game.getTeamAmount());
 
                 for (int i = 0; i < this.game.getTeamAmount(); i++) {
-                    List<GamePlayer> playerList = this.game.getTeams().get(i).getPlayers();
+                    List<GamePlayer> playerList = this.game.getTeams().get(i).getActivePlayers();
 
                     response.writeInt(playerList.size());
 
@@ -80,13 +86,18 @@ public class GAMEINSTANCE extends MessageComposer {
 
                 // TODO: Special SnowStorm parameters
 
-                String[] powerUps = new String[this.game.getPowerUps().size()];
+                if (this.game.getGameType() == GameType.BATTLEBALL) {
+                    BattleballGame battleballGame = (BattleballGame) this.game;
 
-                for (int i = 0; i < this.game.getPowerUps().size(); i++) {
-                    powerUps[i] = String.valueOf(this.game.getPowerUps().get(i));
+                    String[] powerUps = new String[battleballGame.getPowerUps().size()];
+
+                    for (int i = 0; i < battleballGame.getPowerUps().size(); i++) {
+                        powerUps[i] = String.valueOf(battleballGame.getPowerUps().get(i));
+                    }
+
+                    response.writeString(String.join(",", powerUps));
                 }
 
-                response.writeString(String.join(",", powerUps));
             }
         } else {
             response.writeInt(GameState.ENDED.getStateId());

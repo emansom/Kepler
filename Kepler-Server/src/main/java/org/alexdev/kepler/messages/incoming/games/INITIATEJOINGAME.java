@@ -2,7 +2,7 @@ package org.alexdev.kepler.messages.incoming.games;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.GameState;
+import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -50,7 +50,7 @@ public class INITIATEJOINGAME implements MessageEvent {
 
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
-        game.removeObserver(player); // Player was a viewer
+        game.getObservers().remove(player); // Player was a viewer
         game.movePlayer(gamePlayer, gamePlayer.getTeamId(), teamId);
     }
 }

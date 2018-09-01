@@ -1,9 +1,9 @@
 package org.alexdev.kepler.messages.incoming.games;
 
-import org.alexdev.kepler.game.games.FinishedGame;
+import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.GameState;
+import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
@@ -32,7 +32,7 @@ public class OBSERVEINSTANCE implements MessageEvent {
             player.send(new GAMEINSTANCE(game));
             player.getRoomUser().setObservingGameId(gameId);
 
-            game.addObserver(player);
+            game.getObservers().add(player);
             return;
         }
 

@@ -1,8 +1,6 @@
 package org.alexdev.kepler.messages.incoming.games;
 
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.GameState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -29,7 +27,7 @@ public class LEAVEGAME implements MessageEvent {
             return;
         }
 
-        Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
+        Game game = gamePlayer.getGame();
 
         if (game == null) {
             return;

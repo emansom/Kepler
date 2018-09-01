@@ -1,7 +1,6 @@
 package org.alexdev.kepler.messages.incoming.games;
 
 import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.GameState;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
