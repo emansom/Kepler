@@ -1,26 +1,34 @@
 package org.alexdev.kepler.game.games.battleball.objects;
 
 import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.battleball.BattleballGame;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class BattleballPowerObject extends GameObject {
-    private final GamePlayer gamePlayer;
+import java.util.concurrent.ThreadLocalRandom;
 
-    public BattleballPowerObject(GamePlayer gamePlayer) {
-        super(GameObjectType.BATTLEBALL_PLAYER_OBJECT);
-        this.gamePlayer = gamePlayer;
+public class BattleballPowerObject extends GameObject {
+    private final int powerId;
+    private final BattleballGame battleballGame;
+    private final BattleballPowerType powerType;
+
+    public BattleballPowerObject(int powerId, BattleballGame battleballGame, BattleballPowerType powerType) {
+        super(GameObjectType.BATTLEBALL_POWER_OBJECT);
+        this.powerId = powerId;
+        this.battleballGame = battleballGame;
+        this.powerType = powerType;
     }
 
     @Override
     public void serialiseObject(NettyResponse response) {
-        response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getInstanceId());
-        response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getX());
-        response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getY());
-        response.writeInt((int) this.gamePlayer.getPlayer().getRoomUser().getPosition().getZ());
-        response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
-        response.writeInt(0);
+        response.writeInt(this.powerId);
+        response.writeInt(10);
         response.writeInt(-1);
+        response.writeInt(this.powerType.getPowerUpId());
+        response.writeInt(10);//ThreadLocalRandom.current().nextInt(0, 20));
+        response.writeInt(11);//ThreadLocalRandom.current().nextInt(0, 20));
+        response.writeInt(1);//ThreadLocalRandom.current().nextInt(0, 1));
     }
 }

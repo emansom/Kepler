@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.room.tasks;
+package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
@@ -25,11 +25,11 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GameTask implements Runnable {
+public class BattleballUpdateTask implements Runnable {
     private final Room room;
-    private final Game game;
+    private final BattleballGame game;
 
-    public GameTask(Room room, Game game) {
+    public BattleballUpdateTask(Room room, BattleballGame game) {
         this.room = room;
         this.game = game;
     }
@@ -44,8 +44,7 @@ public class GameTask implements Runnable {
             List<GameObject> objects = new ArrayList<>();
             List<GameEvent> events = new ArrayList<>();
 
-            this.game.getGameObjects().drainTo(objects);
-            this.game.getGameEvents().drainTo(events);
+            objects.addAll(this.game.getActivePowers());
 
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();

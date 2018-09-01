@@ -42,9 +42,6 @@ public abstract class Game {
     private List<Player> observers;
     private List<GamePlayer> spectators;
 
-    private BlockingQueue<GameObject> gameObjects;
-    private BlockingQueue<GameEvent> gameEvents;
-
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
@@ -67,9 +64,6 @@ public abstract class Game {
 
         this.spectators = new CopyOnWriteArrayList<>();
         this.observers = new CopyOnWriteArrayList<>();
-
-        this.gameObjects = new LinkedBlockingQueue<>();
-        this.gameEvents = new LinkedBlockingQueue<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -136,6 +130,7 @@ public abstract class Game {
         this.preparingTimerRunnable.setFuture(future);
 
         this.sendObservers(new GAMEINSTANCE(this));
+        this.gameBegin();
     }
 
     /**
@@ -178,6 +173,7 @@ public abstract class Game {
 
         // Send game seconds
         this.send(new GAMESTART(GameManager.getInstance().getLifetimeSeconds(this.gameType)));
+        gameStarted();
     }
 
     /**
@@ -561,6 +557,16 @@ public abstract class Game {
     public abstract void gameTick();
 
     /**
+     * Method called when the game initially began
+     */
+    public void gameBegin() { }
+
+    /**
+     * Method called when the game initially started
+     */
+    public void gameStarted() { }
+
+    /**
      * Get the list of specators, the people currently watching the game
      *
      * @return the list of spectators
@@ -632,13 +638,5 @@ public abstract class Game {
 
     public int getGameCreatorId() {
         return gameCreatorId;
-    }
-
-    public BlockingQueue<GameObject> getGameObjects() {
-        return gameObjects;
-    }
-
-    public BlockingQueue<GameEvent> getGameEvents() {
-        return gameEvents;
     }
 }
