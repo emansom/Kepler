@@ -134,53 +134,6 @@ public abstract class Game {
     }
 
     /**
-     * Send all spectators to arena, happens when game starts after waiting for players.
-     */
-    private void sendSpectatorsToArena() {
-        for (GamePlayer spectator : this.spectators) {
-            this.sendSpectatorToArena(spectator);
-        }
-    }
-
-    /**
-     * Send spectaot to arena
-     *
-     * @param spectator the spectator to send
-     */
-    public void sendSpectatorToArena(GamePlayer spectator) {
-        if (!spectator.isSpectator()) {
-            return;
-        }
-
-        if (spectator.getPlayer().getRoomUser().getRoom() != this.room) {
-            spectator.getPlayer().send(new GAMELOCATION());
-            spectator.setEnteringGame(true);
-
-            // No longer an observer
-            this.observers.remove(spectator.getPlayer());
-        }
-    }
-
-    /**
-     * Terminate all spectators, and send them to the lobby.
-     */
-    private void killSpectators() {
-        for (GamePlayer spectator : this.spectators) {
-            this.leaveGame(spectator);
-            this.sendToLobby(spectator.getPlayer());
-        }
-    }
-
-    /**
-     * Send players to the game lobby
-     *
-     * @param player the player to send
-     */
-    private void sendToLobby(Player player) {
-        player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId() + RoomManager.PUBLIC_ROOM_OFFSET));
-    }
-
-    /**
      * Method for when the game begins after the initial preparing game seconds timer
      */
     private void beginGame() {
@@ -282,16 +235,19 @@ public abstract class Game {
             }
         }
 
-        for (var afkPlayer : afkPlayers) {
-            this.leaveGame(afkPlayer);
-
-            // TODO: Redirect to lobby instead
-            if (afkPlayer.getPlayer().getRoomUser().getRoom() != null) {
-                afkPlayer.getPlayer().getRoomUser().getRoom().getEntityManager().leaveRoom(afkPlayer.getPlayer(), true);
-            }
+        // Only create a new game if there's two players who joined
+        if (players.size() > 1) {
+            this.initialise(players);
+        } else {
+            afkPlayers.addAll(players);
         }
 
-        this.initialise(players);
+        // Send spectators to lobby too
+        afkPlayers.addAll(this.spectators);
+
+        for (var afkPlayer : afkPlayers) {
+            this.sendToLobby(afkPlayer);
+        }
     }
 
     /**
@@ -352,6 +308,57 @@ public abstract class Game {
             this.sendObservers(new GAMEDELETED());
             this.killSpectators();
         }
+    }
+
+    /**
+     * Send all spectators to arena, happens when game starts after waiting for players.
+     */
+    private void sendSpectatorsToArena() {
+        for (GamePlayer spectator : this.spectators) {
+            this.sendSpectatorToArena(spectator);
+        }
+    }
+
+    /**
+     * Send spectaot to arena
+     *
+     * @param spectator the spectator to send
+     */
+    public void sendSpectatorToArena(GamePlayer spectator) {
+        if (!spectator.isSpectator()) {
+            return;
+        }
+
+        if (spectator.getPlayer().getRoomUser().getRoom() != this.room) {
+            spectator.getPlayer().send(new GAMELOCATION());
+            spectator.setEnteringGame(true);
+
+            // No longer an observer
+            this.observers.remove(spectator.getPlayer());
+        }
+    }
+
+    /**
+     * Terminate all spectators, and send them to the lobby.
+     */
+    private void killSpectators() {
+        for (GamePlayer spectator : this.spectators) {
+            this.leaveGame(spectator);
+            this.sendToLobby(spectator);
+        }
+    }
+
+    /**
+     * Send players to the game lobby, will make them leave the game.
+     *
+     * @param gamePlayer the player to send
+     */
+    private void sendToLobby(GamePlayer gamePlayer) {
+        this.leaveGame(gamePlayer);
+
+        gamePlayer.getPlayer().send(new ROOMFORWARD(
+                true,
+                RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId() + RoomManager.PUBLIC_ROOM_OFFSET));
     }
 
     /**
