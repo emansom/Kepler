@@ -626,6 +626,10 @@ public abstract class Game {
         return preparingGameSecondsLeft;
     }
 
+    public AtomicInteger getTotalSecondsLeft() {
+        return totalSecondsLeft;
+    }
+
     public RoomModel getRoomModel() {
         return roomModel;
     }
