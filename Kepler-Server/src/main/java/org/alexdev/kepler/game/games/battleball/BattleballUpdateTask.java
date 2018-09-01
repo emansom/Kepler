@@ -4,11 +4,10 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
-import org.alexdev.kepler.game.games.battleball.events.BattleballMoveEvent;
-import org.alexdev.kepler.game.games.battleball.objects.BattleballPlayerObject;
+import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -73,7 +72,7 @@ public class BattleballUpdateTask implements Runnable {
                         this.processEntity(gamePlayer, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
 
-                        objects.add(new BattleballPlayerObject(gamePlayer));
+                        objects.add(new PlayerObject(gamePlayer));
 
                         if (roomEntity.isNeedsUpdate()) {
                             roomEntity.setNeedsUpdate(false);
@@ -144,7 +143,7 @@ public class BattleballUpdateTask implements Runnable {
                 roomEntity.setNextPosition(next);
 
                 // Add next position if moving
-                events.add(new BattleballMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
+                events.add(new PlayerMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
             } else {
                 roomEntity.stopWalking();
             }

@@ -6,12 +6,14 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.enums.GameEventType;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class BattleballPowerEvent extends GameEvent {
+import java.util.concurrent.ThreadLocalRandom;
+
+public class PowerUpSpawnEvent extends GameEvent {
     private final int powerId;
     private final BattleballGame game;
     private final BattleballPowerType powerType;
 
-    public BattleballPowerEvent(int powerId, BattleballGame game, BattleballPowerType powerType) {
+    public PowerUpSpawnEvent(int powerId, BattleballGame game, BattleballPowerType powerType) {
         super(GameEventType.BATTLEBALL_POWERUP_SPAWN);
         this.powerId = powerId;
         this.game = game;
@@ -25,8 +27,8 @@ public class BattleballPowerEvent extends GameEvent {
         response.writeInt(10);
         response.writeInt(-1);
         response.writeInt(this.powerType.getPowerUpId());
-        response.writeInt(10);//ThreadLocalRandom.current().nextInt(0, 20));
-        response.writeInt(11);//ThreadLocalRandom.current().nextInt(0, 20));
-        response.writeInt(1);//ThreadLocalRandom.current().nextInt(0, 1));
+        response.writeInt(ThreadLocalRandom.current().nextInt(0, 20));
+        response.writeInt(ThreadLocalRandom.current().nextInt(0, 20));
+        response.writeInt(ThreadLocalRandom.current().nextInt(0, 1));
     }
 }

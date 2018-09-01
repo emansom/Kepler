@@ -9,12 +9,12 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class BattleballPowerObject extends GameObject {
+public class PlayerPowerObject extends GameObject {
     private final int powerId;
     private final BattleballGame battleballGame;
     private final BattleballPowerType powerType;
 
-    public BattleballPowerObject(int powerId, BattleballGame battleballGame, BattleballPowerType powerType) {
+    public PlayerPowerObject(int powerId, BattleballGame battleballGame, BattleballPowerType powerType) {
         super(GameObjectType.BATTLEBALL_POWER_OBJECT);
         this.powerId = powerId;
         this.battleballGame = battleballGame;

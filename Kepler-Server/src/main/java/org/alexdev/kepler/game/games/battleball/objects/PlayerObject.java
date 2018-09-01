@@ -5,10 +5,10 @@ import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class BattleballPlayerObject extends GameObject {
+public class PlayerObject extends GameObject {
     private final GamePlayer gamePlayer;
 
-    public BattleballPlayerObject(GamePlayer gamePlayer) {
+    public PlayerObject(GamePlayer gamePlayer) {
         super(GameObjectType.BATTLEBALL_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
     }

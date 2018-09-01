@@ -8,11 +8,11 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class BattleballMoveEvent extends GameEvent {
+public class PlayerMoveEvent extends GameEvent {
     private final GamePlayer gamePlayer;
     private final Position nextPosition;
 
-    public BattleballMoveEvent(GamePlayer gamePlayer, Position nextPosition) {
+    public PlayerMoveEvent(GamePlayer gamePlayer, Position nextPosition) {
         super(GameEventType.BATTLEBALL_PLAYER_EVENT);
         this.gamePlayer = gamePlayer;
         this.nextPosition = nextPosition;

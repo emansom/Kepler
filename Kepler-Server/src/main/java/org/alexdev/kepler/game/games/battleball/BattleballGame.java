@@ -3,8 +3,7 @@ package org.alexdev.kepler.game.games.battleball;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
-import org.alexdev.kepler.game.games.battleball.events.BattleballPowerEvent;
-import org.alexdev.kepler.game.games.battleball.objects.BattleballPowerObject;
+import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
@@ -16,7 +15,6 @@ import org.alexdev.kepler.game.room.mapping.RoomTileState;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -42,7 +40,6 @@ public class BattleballGame extends Game {
     @Override
     public void gameBegin() {
         this.updateTimeUntilNextPower();
-        this.gameTick();
     }
 
     @Override
@@ -52,7 +49,7 @@ public class BattleballGame extends Game {
         }
 
         this.updateTimeUntilNextPower();
-        this.getGameEvents().add(new BattleballPowerEvent(this.powerId.getAndIncrement(), this, BattleballPowerType.BOMB));
+        //this.getGameEvents().add(new PowerUpSpawnEvent(this.powerId.getAndIncrement(), this, BattleballPowerType.BOMB));
     }
 
     public void updateTimeUntilNextPower() {
