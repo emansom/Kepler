@@ -37,8 +37,8 @@ public abstract class Game {
     private String name;
     private Map<Integer, GameTeam> teams;
 
-    private Set<Player> observers;
-    private List<Player> spectators;
+    private List<Player> observers;
+    private List<GamePlayer> spectators;
 
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
@@ -61,7 +61,7 @@ public abstract class Game {
         this.teams = new ConcurrentHashMap<>();
 
         this.spectators = new CopyOnWriteArrayList<>();
-        this.observers = new HashSet<>();
+        this.observers = new CopyOnWriteArrayList<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -284,10 +284,18 @@ public abstract class Game {
      * @param gamePlayer the game player to leave
      */
     public void leaveGame(GamePlayer gamePlayer) {
+        boolean isSpectator = this.spectators.contains(gamePlayer);
+        this.spectators.remove(gamePlayer);
+
         gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
         gamePlayer.getPlayer().send(new GAMEDELETED());
 
-        this.movePlayer(gamePlayer, gamePlayer.getTeamId(), -1);
+        if (!isSpectator) {
+            this.movePlayer(gamePlayer, gamePlayer.getTeamId(), -1);
+        } else {
+            this.send(new GAMEINSTANCE(this));
+            this.sendObservers(new GAMEINSTANCE(this));
+        }
 
         if (!this.hasEnoughPlayers()) {
             GameManager.getInstance().getGames().remove(this);
@@ -368,8 +376,8 @@ public abstract class Game {
             }
         }
 
-        for (Player player : this.spectators) {
-            player.send(composer);
+        for (GamePlayer player : this.spectators) {
+            player.getPlayer().send(composer);
         }
     }
 
@@ -438,25 +446,6 @@ public abstract class Game {
     }
 
     /**
-     * Add the player to view the team list and allow them to see
-     * others change teams before they actually join a team.
-     *
-     * @param player the player to add
-     */
-    public void addObserver(Player player) {
-        this.observers.add(player);
-    }
-
-    /**
-     * Remove the player from the viewer list
-     *
-     * @param player the player to remove
-     */
-    public void removeObserver(Player player) {
-        this.observers.remove(player);
-    }
-
-    /**
      * Get a tile by specified coordinates
      *
      * @param x the x coordinate
@@ -504,8 +493,12 @@ public abstract class Game {
      *
      * @return the list of spectators
      */
-    public List<Player> getSpectators() {
+    public List<GamePlayer> getSpectators() {
         return spectators;
+    }
+
+    public List<Player> getObservers() {
+        return observers;
     }
 
     /**
@@ -556,6 +549,7 @@ public abstract class Game {
     public Room getRoom() {
         return room;
     }
+
     public boolean isGameStarted() {
         return gameStarted;
     }

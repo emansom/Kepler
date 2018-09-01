@@ -50,7 +50,7 @@ public class INITIATEJOINGAME implements MessageEvent {
 
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
-        game.removeObserver(player); // Player was a viewer
+        game.getObservers().remove(player); // Player was a viewer
         game.movePlayer(gamePlayer, gamePlayer.getTeamId(), teamId);
     }
 }

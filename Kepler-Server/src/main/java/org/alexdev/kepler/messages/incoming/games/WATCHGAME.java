@@ -2,15 +2,15 @@ package org.alexdev.kepler.messages.incoming.games;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.GameState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
+import org.alexdev.kepler.messages.outgoing.games.GAMEINSTANCE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
-public class LEAVEGAME implements MessageEvent {
+public class WATCHGAME implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
         if (player.getRoomUser().getRoom() == null) {
@@ -23,18 +23,25 @@ public class LEAVEGAME implements MessageEvent {
             return;
         }
 
-        GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
-
-        if (gamePlayer == null) {
+        if (player.getRoomUser().getGamePlayer() != null) {
             return;
         }
 
-        Game game = gamePlayer.getGame();
+        int gameId = reader.readInt();
+
+        Game game = GameManager.getInstance().getGameById(gameId);
 
         if (game == null) {
             return;
         }
 
-        game.leaveGame(gamePlayer);
+        GamePlayer gamePlayer = new GamePlayer(player);
+        gamePlayer.setGameId(gameId);
+
+        player.getRoomUser().setGamePlayer(gamePlayer);
+
+        game.getSpectators().add(gamePlayer);
+        game.send(new GAMEINSTANCE(game));
+        game.sendObservers(new GAMEINSTANCE(game));
     }
 }

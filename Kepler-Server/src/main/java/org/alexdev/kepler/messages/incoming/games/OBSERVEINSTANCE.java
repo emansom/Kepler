@@ -32,7 +32,7 @@ public class OBSERVEINSTANCE implements MessageEvent {
             player.send(new GAMEINSTANCE(game));
             player.getRoomUser().setObservingGameId(gameId);
 
-            game.addObserver(player);
+            game.getObservers().add(player);
             return;
         }
 
