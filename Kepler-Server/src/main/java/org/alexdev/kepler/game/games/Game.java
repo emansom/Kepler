@@ -343,7 +343,6 @@ public abstract class Game {
      */
     private void killSpectators() {
         for (GamePlayer spectator : this.spectators) {
-            this.leaveGame(spectator);
             this.sendToLobby(spectator);
         }
     }
@@ -358,7 +357,7 @@ public abstract class Game {
 
         gamePlayer.getPlayer().send(new ROOMFORWARD(
                 true,
-                RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId() + RoomManager.PUBLIC_ROOM_OFFSET));
+                RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
     }
 
     /**
