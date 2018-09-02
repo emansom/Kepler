@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
+import org.alexdev.kepler.game.games.battleball.events.DespawnGameObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
@@ -25,7 +26,7 @@ public class BattleballGame extends Game {
     private List<BattleballPowerUp> activePowers;
 
     private AtomicInteger timeUntilNextPower;
-    private AtomicInteger powerId;
+    private AtomicInteger objectId;
 
     public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
@@ -33,7 +34,7 @@ public class BattleballGame extends Game {
         this.allowedPowerUps = allowedPowerUps;
 
         this.activePowers = new CopyOnWriteArrayList<>();
-        this.powerId = new AtomicInteger(0);
+        this.objectId = new AtomicInteger(0);
     }
 
     @Override
@@ -43,27 +44,85 @@ public class BattleballGame extends Game {
 
     @Override
     public void gameTick() {
-        if (this.allowedPowerUps.isEmpty()) {
+        this.checkExpirePower();
+        this.checkSpawnPower();
+    }
+
+    private void checkExpirePower() {
+        if (this.allowedPowerUps.isEmpty() || this.activePowers.isEmpty() || (this.getMapId() == 5)) {
             return;
         }
 
-        if (this.timeUntilNextPower.decrementAndGet() != 0) {
+        BattleballPowerUp powerUp = this.activePowers.get(0);
+
+        if (powerUp.getTimeToDespawn().get() > 0) {
+            if (powerUp.getTimeToDespawn().decrementAndGet() != 0) {
+                return;
+            }
+        }
+
+        this.getEventsQueue().add(new DespawnGameObjectEvent(powerUp.getId()));
+        this.activePowers.clear();
+    }
+
+    private void checkSpawnPower() {
+        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
             return;
+        }
+
+        if (this.timeUntilNextPower.get() > 0) {
+            if (this.timeUntilNextPower.decrementAndGet() != 0) {
+                return;
+            }
         }
 
         if (this.activePowers.size() > 0) { // There's already an active power so don't spawn another one
             return;
         }
 
-        BattleballPowerUp powerUp = new BattleballPowerUp(this, this.powerId.getAndIncrement(), this.getRandomTile());
+        BattleballPowerUp powerUp = new BattleballPowerUp(this, this.generateObjectId(), this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
         this.getEventsQueue().add(new PowerUpSpawnEvent(this, powerUp));
     }
 
-    public void updateTimeUntilNextPower() {
-        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(4, 15));
+    private void updateTimeUntilNextPower() {
+        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 30));
+    }
+
+    /**
+     * Generates a unique ID for the entities in a room. Will be used for pets
+     * and bots in future.
+     *
+     * @return the unique ID
+     */
+    public int generateObjectId() {
+        int uniqueId = 0;
+
+        while (getByInstanceId(uniqueId)) {
+            uniqueId =this.objectId.incrementAndGet();
+        }
+
+        return uniqueId;
+    }
+
+    /**
+     * Get a game player by their instance id
+     *
+     * @param uniqueId the unique id
+     * @return the instance, if successful
+     */
+    private boolean getByInstanceId(int uniqueId) {
+        for (var team : this.getTeams().values()) {
+            for (var player : team.getActivePlayers()) {
+                if (player.getPlayer().getRoomUser().getInstanceId() == uniqueId) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     @Override
