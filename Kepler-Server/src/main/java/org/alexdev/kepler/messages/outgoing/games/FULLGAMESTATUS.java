@@ -9,7 +9,9 @@ import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormSpawnPlayerEvent;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -19,12 +21,12 @@ import java.util.List;
 public class FULLGAMESTATUS extends MessageComposer {
     private final Game game;
     private final List<GamePlayer> gamePlayerList;
-    private final boolean startedGame;
+    private final GamePlayer gamePlayer;
 
-    public FULLGAMESTATUS(Game game, boolean startedGame) {
+    public FULLGAMESTATUS(Game game, GamePlayer gamePlayer) {
         this.game = game;
         this.gamePlayerList = new ArrayList<>();
-        this.startedGame = startedGame;
+        this.gamePlayer = gamePlayer;
 
         for (GameTeam team : this.game.getTeams().values()) {
             this.gamePlayerList.addAll(team.getActivePlayers());
@@ -39,17 +41,27 @@ public class FULLGAMESTATUS extends MessageComposer {
         response.writeInt(this.gamePlayerList.size()); // TODO: Objects here
 
         if (this.game.getGameType() == GameType.SNOWSTORM) {
+            List<GameObject> objects = new ArrayList<>();
+
             for (var team : this.game.getTeams().values()) {
                 for (var gamePlayer : team.getActivePlayers()) {
                     response.writeInt(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId());
-                    new SnowStormPlayerObject(gamePlayer).serialiseObject(response);
+
+                    GameObject obj = new SnowStormPlayerObject(gamePlayer);
+                    obj.serialiseObject(response);
+
+                    objects.add(new SnowStormPlayerObject(gamePlayer));
+                    //objects.add(new SnowStormSpawnPlayerEvent(gamePlayer));
                 }
             }
 
             response.writeBool(false);
             response.writeInt(this.game.getTeamAmount());
 
+            this.gamePlayer.getTurnContainer().getCurrentTurn().incrementAndGet();
+            this.gamePlayer.getTurnContainer().calculateChecksum(objects);
 
+            new SNOWSTORM_GAMESTATUS((SnowStormGame) this.game, objects, this.gamePlayer).compose(response);
         }
 
         if (this.game.getGameType() == GameType.BATTLEBALL) {

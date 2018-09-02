@@ -286,7 +286,7 @@ public abstract class Game {
         }
 
         this.initialise();
-        this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
+        this.send(new FULLGAMESTATUS(this, null));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
 
         // Start game after "game is about to begin"

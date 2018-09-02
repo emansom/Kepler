@@ -16,14 +16,49 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
     public SnowStormPlayerObject(GamePlayer gamePlayer) {
         super(GameObjectType.SNOWSTORM_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
-        this.getGameObjectsSyncValues().add(4);
-        this.getGameObjectsSyncValues().add(4);
-        this.getGameObjectsSyncValues().add(0);
+        this.getGameObjectsSyncValues().add(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId()); // type id
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // int id
+        this.getGameObjectsSyncValues().add(4); // x
+        this.getGameObjectsSyncValues().add(4); // y
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation()); // body direction
+        this.getGameObjectsSyncValues().add(0); // hit points
+        this.getGameObjectsSyncValues().add(5); // snowball count
+        this.getGameObjectsSyncValues().add(0); // is bot 
+        this.getGameObjectsSyncValues().add(0); // activity timer
+        this.getGameObjectsSyncValues().add(0); // activity state
+        this.getGameObjectsSyncValues().add(4); // next tile x
+        this.getGameObjectsSyncValues().add(4); // next tile y
+        this.getGameObjectsSyncValues().add(4); // move target x
+        this.getGameObjectsSyncValues().add(4); // move target y
+        this.getGameObjectsSyncValues().add(0); // score
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getDetails().getId()); // player id
+        this.getGameObjectsSyncValues().add(gamePlayer.getTeamId()); // team id
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getRoom().getId()); // room index
+
+        // ["type: 5",
+        // "int_id: 4",
+        // "x: 4",
+        // "y: 0",
+        // "body_direction: 5",
+        // "hit_points: 0",
+        // "snowball_count: 0",
+        // "is_bot: 0",
+        // "activity_timer: 0",
+        // "activity_state: 4",
+        // "next_tile_x: 4",
+        // "next_tile_y: 4",
+        // "move_target_x: 4",
+        // "move_target_y: 0",
+        // "score: 1",
+        // "player_id: 0",
+        // "team_id: 1",
+        // "room_index: 1"]
+        //"
     }
 
     @Override
     public void serialiseObject(NettyResponse response) {
-        //response.writeInt(gamePlayer.getPlayer().getDetails().getId());
+        response.writeInt(gamePlayer.getPlayer().getDetails().getId());
         response.writeInt(4);//gamePlayer.getPlayer().getRoomUser().getPosition().getX());
         response.writeInt(4);//gamePlayer.getPlayer().getRoomUser().getPosition().getY());
         response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
@@ -35,14 +70,10 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
         response.writeInt(4); // next tile x
         response.writeInt(4); // next tile y
         response.writeInt(4); // move target x
-        response.writeInt(4); // move targett y
+        response.writeInt(4); // move target y
         response.writeInt(0); // score
         response.writeInt(gamePlayer.getPlayer().getDetails().getId());
         response.writeInt(gamePlayer.getTeamId());
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getRoom().getId());
-
-        //response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-        //response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
         response.writeInt(gamePlayer.getPlayer().getRoomUser().getRoom().getId());
         response.writeString(gamePlayer.getPlayer().getDetails().getName());
         response.writeString(gamePlayer.getPlayer().getDetails().getMotto());

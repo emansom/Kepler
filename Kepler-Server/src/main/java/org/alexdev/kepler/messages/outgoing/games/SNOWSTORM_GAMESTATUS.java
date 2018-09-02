@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.enums.GameType;
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -15,28 +16,25 @@ import java.util.List;
 
 public class SNOWSTORM_GAMESTATUS extends MessageComposer {
     private final SnowStormGame game;
-
-    private final Collection<GameTeam> gameTeams;
-
     private final List<GameObject> objects;
-    private final List<GameEvent> events;
+    private final GamePlayer gamePlayer;
 
-    public SNOWSTORM_GAMESTATUS(SnowStormGame game, Collection<GameTeam> gameTeams, List<GameObject> objects, List<GameEvent> events) {
+    public SNOWSTORM_GAMESTATUS(SnowStormGame game, List<GameObject> objects, GamePlayer gamePlayer) {
         this.game = game;
-        this.gameTeams = gameTeams;
         this.objects = objects;
-        this.events = events;
+        this.gamePlayer = gamePlayer;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(this.game.getTurnContainer().getCurrentTurn().get());
-        response.writeInt(this.game.getTurnContainer().getCheckSum());
-        response.writeInt(1);
+        response.writeInt(this.gamePlayer.getTurnContainer().getCurrentTurn().get());
+        response.writeInt(this.gamePlayer.getTurnContainer().getCheckSum());
+        response.writeInt(this.objects.size());
 
-        response.writeInt(this.objects.size()); // TODO: Handle more than just objects events (power ups, etc)
+       // response.writeInt(this.objects.size()); // TODO: Handle more than just objects events (power ups, etc)
 
         for (GameObject gameObject : this.objects) {
+            response.writeInt(1);
             response.writeInt(gameObject.getGameObjectType().getObjectId());
             gameObject.serialiseObject(response);
         }
