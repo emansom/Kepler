@@ -41,4 +41,8 @@ public class BattleballPowerUp {
     public AtomicInteger getTimeToDespawn() {
         return timeToDespawn;
     }
+
+    public int getPlayerHolding() {
+        return -1;
+    }
 }

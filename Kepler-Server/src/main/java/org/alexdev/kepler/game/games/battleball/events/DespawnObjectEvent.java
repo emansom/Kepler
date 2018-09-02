@@ -6,10 +6,10 @@ import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.enums.GameEventType;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class DespawnGameObjectEvent extends GameEvent {
+public class DespawnObjectEvent extends GameEvent {
     private final int gameObjectId;
 
-    public DespawnGameObjectEvent(int gameObjectId) {
+    public DespawnObjectEvent(int gameObjectId) {
         super(GameEventType.BATTLEBALL_DESPAWN_OBJECT);
         this.gameObjectId = gameObjectId;
     }

@@ -57,7 +57,7 @@ public class BattleballUpdateTask implements Runnable {
                             && player.getRoomUser().getRoom() == this.room) {
 
                         // Keep setting spawn colour underneath player, only during "this game is starting soon"
-                        if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
+                        /*if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
                             BattleballTile tile = (BattleballTile) this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
 
                             if (tile.isSpawnOccupied() && tile.getColour() != BattleballColourType.DISABLED) {
@@ -67,7 +67,7 @@ public class BattleballUpdateTask implements Runnable {
 
                                 updateTiles.add(tile);
                             }
-                        }
+                        }*/
 
                         this.processEntity(gamePlayer, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
@@ -110,7 +110,7 @@ public class BattleballUpdateTask implements Runnable {
                 BattleballTile tile = (BattleballTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
 
                 if (tile != null) {
-                    tile.interact(gamePlayer, updateTiles, fillTiles);
+                    tile.interact(gamePlayer, events, updateTiles, fillTiles);
                 }
             }
 

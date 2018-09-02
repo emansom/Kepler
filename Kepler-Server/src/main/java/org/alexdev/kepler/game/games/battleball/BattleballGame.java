@@ -2,7 +2,7 @@ package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
-import org.alexdev.kepler.game.games.battleball.events.DespawnGameObjectEvent;
+import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
@@ -15,6 +15,8 @@ import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -25,6 +27,8 @@ public class BattleballGame extends Game {
     private List<Integer> allowedPowerUps;
     private List<BattleballPowerUp> activePowers;
 
+    private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
+
     private AtomicInteger timeUntilNextPower;
     private AtomicInteger objectId;
 
@@ -34,6 +38,8 @@ public class BattleballGame extends Game {
         this.allowedPowerUps = allowedPowerUps;
 
         this.activePowers = new CopyOnWriteArrayList<>();
+        this.storedPowers = new ConcurrentHashMap<>();
+
         this.objectId = new AtomicInteger(0);
     }
 
@@ -46,6 +52,12 @@ public class BattleballGame extends Game {
     public void gameTick() {
         this.checkExpirePower();
         this.checkSpawnPower();
+    }
+
+    @Override
+    public void gameEnded() {
+        this.activePowers.clear();
+        this.storedPowers.clear();
     }
 
     private void checkExpirePower() {
@@ -61,7 +73,7 @@ public class BattleballGame extends Game {
             }
         }
 
-        this.getEventsQueue().add(new DespawnGameObjectEvent(powerUp.getId()));
+        this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
         this.activePowers.clear();
     }
 
@@ -302,5 +314,13 @@ public class BattleballGame extends Game {
      */
     public int[] getAllowedPowerUps() {
         return ArrayUtils.toPrimitive(this.allowedPowerUps.toArray(new Integer[0]));
+    }
+
+    public List<BattleballPowerUp> getActivePowers() {
+        return activePowers;
+    }
+
+    public Map<GamePlayer, List<BattleballPowerUp>> getStoredPowers() {
+        return storedPowers;
     }
 }

@@ -202,6 +202,7 @@ public abstract class Game {
 
         // Send scores to everybody
         this.send(new GAMEEND(this.gameType, this.teams));
+        this.gameEnded();
 
         // Restart countdown
         this.restartCountdown = new AtomicLong(GameManager.getInstance().getRestartSeconds(this.gameType));
@@ -571,6 +572,11 @@ public abstract class Game {
      * Method called when the game initially started
      */
     public void gameStarted() { }
+
+    /**
+     * Method called when the game ends, when the scoreboard shows
+     */
+    public void gameEnded() { }
 
     /**
      * Get the list of specators, the people currently watching the game

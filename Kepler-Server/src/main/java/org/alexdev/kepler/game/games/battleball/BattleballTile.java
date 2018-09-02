@@ -1,14 +1,17 @@
 package org.alexdev.kepler.game.games.battleball;
 
+import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
+import org.alexdev.kepler.game.games.battleball.events.GetPowerUpEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
 import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class BattleballTile extends GameTile  {
     private BattleballColourType colour;
@@ -25,7 +28,37 @@ public class BattleballTile extends GameTile  {
      * @param updateTiles the tile list to add to if the tile requires an update
      * @param updateFillTiles the list to add to if these tiles require the filling in animation
      */
-    public void interact(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+    public void interact(GamePlayer gamePlayer, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+        this.changeState(gamePlayer, updateTiles, updateFillTiles);
+        this.checkPowerUp(gamePlayer, events, updateTiles, updateFillTiles);
+    }
+
+    private void checkPowerUp(GamePlayer gamePlayer, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+        BattleballGame game = (BattleballGame) gamePlayer.getGame();
+        BattleballPowerUp powerUp = null;
+
+        for (BattleballPowerUp power : game.getActivePowers()) {
+            if (power.getTile().getPosition().equals(this.getPosition())) {
+                powerUp = power;
+                break;
+            }
+        }
+
+        if (powerUp == null) {
+            return;
+        }
+
+        if (!game.getStoredPowers().containsKey(gamePlayer)) {
+            game.getStoredPowers().put(gamePlayer, new CopyOnWriteArrayList<>());
+        }
+
+        game.getStoredPowers().get(gamePlayer).add(powerUp);
+        game.getActivePowers().clear();
+
+        events.add(new GetPowerUpEvent(gamePlayer, powerUp));
+    }
+
+    private void changeState(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         if (this.getColour() == BattleballColourType.DISABLED) {
             return;
         }
