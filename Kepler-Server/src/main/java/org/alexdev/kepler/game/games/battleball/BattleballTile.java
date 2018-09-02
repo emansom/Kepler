@@ -64,7 +64,6 @@ public class BattleballTile extends GameTile  {
         powerUp.setPlayerHolding(gamePlayer);
 
         events.add(new AcquirePowerUpEvent(gamePlayer, powerUp));
-        events.add(new PowerUpSpawnEvent(powerUp));
     }
 
     private void changeState(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
