@@ -33,7 +33,7 @@ public class RoomTaskManager {
      * Start all needed room tasks, called when there's at least 1 player in the room.
      */
     public void startTasks() {
-        if (this.room.getModel().getName().contains("_arena_")) {
+        if (this.room.getModel().getName().contains("_arena_") || this.room.getModel().getName().contains("snowwar_arena")) {
             this.loadGameTasks();
             return;
         }
@@ -51,8 +51,10 @@ public class RoomTaskManager {
     private void loadGameTasks() {
         Game game = GameManager.getInstance().getGameById(this.room.getId());
 
-        //this.scheduleTask("StatusTask", new StatusTask(this.room), 0, 1, TimeUnit.SECONDS);
-        //this.scheduleTask("GameTask", new BattleballUpdateTask(this.room, (BattleballGame) game), 0, 500, TimeUnit.MILLISECONDS);
+        if (game instanceof BattleballGame) {
+            BattleballGame battleballGame = (BattleballGame) game;
+            this.scheduleTask("GameTask", new BattleballUpdateTask(this.room, battleballGame), 0, 500, TimeUnit.MILLISECONDS);
+        }
     }
 
     /**
