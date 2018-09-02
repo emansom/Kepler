@@ -4,7 +4,9 @@ import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
+import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -19,8 +21,8 @@ public class GAMESTATUS extends MessageComposer {
     private final List<GameObject> objects;
     private final List<GameEvent> events;
 
-    private final List<BattleballTile> updateTiles;
-    private final List<BattleballTile> fillTiles;
+    private List<BattleballTile> updateTiles;
+    private List<BattleballTile> fillTiles;
 
     public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
         this.game = game;
@@ -29,6 +31,13 @@ public class GAMESTATUS extends MessageComposer {
         this.events = events;
         this.updateTiles = updateTiles;
         this.fillTiles = fillTiles;
+    }
+
+    public GAMESTATUS(SnowStormGame game, Collection<GameTeam> gameTeams, List<GameObject> objects, List<GameEvent> events) {
+        this.game = game;
+        this.gameTeams = gameTeams;
+        this.objects = objects;
+        this.events = events;
     }
 
     @Override
@@ -51,22 +60,24 @@ public class GAMESTATUS extends MessageComposer {
             response.writeInt(-1);
         }*/
 
-        response.writeInt(this.updateTiles.size());
+        if (this.game.getGameType() == GameType.BATTLEBALL) {
+            response.writeInt(this.updateTiles.size());
 
-        for (BattleballTile tile : this.updateTiles) {
-            response.writeInt(tile.getPosition().getX());
-            response.writeInt(tile.getPosition().getY());
-            response.writeInt(tile.getColour().getColourId());
-            response.writeInt(tile.getState().getTileStateId());
-        }
+            for (BattleballTile tile : this.updateTiles) {
+                response.writeInt(tile.getPosition().getX());
+                response.writeInt(tile.getPosition().getY());
+                response.writeInt(tile.getColour().getColourId());
+                response.writeInt(tile.getState().getTileStateId());
+            }
 
-        response.writeInt(this.fillTiles.size());
+            response.writeInt(this.fillTiles.size());
 
-        for (BattleballTile tile : this.fillTiles) {
-            response.writeInt(tile.getPosition().getX());
-            response.writeInt(tile.getPosition().getY());
-            response.writeInt(tile.getColour().getColourId());
-            response.writeInt(tile.getState().getTileStateId());
+            for (BattleballTile tile : this.fillTiles) {
+                response.writeInt(tile.getPosition().getX());
+                response.writeInt(tile.getPosition().getY());
+                response.writeInt(tile.getColour().getColourId());
+                response.writeInt(tile.getState().getTileStateId());
+            }
         }
 
         response.writeInt(this.gameTeams.size());
