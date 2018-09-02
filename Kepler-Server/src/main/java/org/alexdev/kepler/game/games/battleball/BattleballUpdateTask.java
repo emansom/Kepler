@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -44,6 +45,11 @@ public class BattleballUpdateTask implements Runnable {
             List<GameEvent> events = new ArrayList<>();
 
             this.game.getEventsQueue().drainTo(events);
+            this.game.getObjectsQueue().drainTo(objects);
+
+            // for (BattleballPowerUp battleballPowerUp : this.game.getActivePowers()) {
+            //     objects.add(new PowerObject(battleballPowerUp));
+            // }
 
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();

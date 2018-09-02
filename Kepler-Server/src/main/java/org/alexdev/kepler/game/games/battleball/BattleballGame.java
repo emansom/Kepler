@@ -14,6 +14,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -300,6 +301,16 @@ public class BattleballGame extends Game {
         }
 
         return battleballTile;
+    }
+
+    public List<GameEvent> getPersistentEvents() {
+        List<GameEvent> gameEvents = new ArrayList<>();
+
+        if (!this.activePowers.isEmpty()) {
+            gameEvents.add(new PowerUpSpawnEvent(this, this.activePowers.get(0)));
+        }
+
+        return gameEvents;
     }
 
     @Override

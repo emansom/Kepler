@@ -1,10 +1,9 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -89,7 +88,12 @@ public class FULLGAMESTATUS extends MessageComposer {
         }
 
         response.writeInt(1);
-        response.writeInt(0);
+        response.writeInt(this.game.getPersistentEvents().size());
+
+        for (GameEvent event : this.game.getPersistentEvents()) {
+            response.writeInt(event.getGameEventType().getEventId());
+            event.serialiseEvent(response);
+        }
     }
 
     @Override

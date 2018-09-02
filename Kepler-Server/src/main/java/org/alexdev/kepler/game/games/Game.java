@@ -587,9 +587,21 @@ public abstract class Game {
         return spectators;
     }
 
+    /**
+     * 
+     * @return
+     */
     public List<Player> getObservers() {
         return observers;
     }
+
+    /**
+     * Get persistent events, used for when spectators join mid-game and there's tacks
+     * or power ups on the map.
+     *
+     * @return the list of persistent events
+     */
+    public abstract List<GameEvent> getPersistentEvents();
 
     /**
      * Get the game id
