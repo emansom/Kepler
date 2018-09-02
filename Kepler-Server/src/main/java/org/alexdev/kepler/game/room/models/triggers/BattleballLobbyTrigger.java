@@ -60,7 +60,7 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
 
         int teams = (int) gameParameters.get("numTeams");
 
-        if (teams < 1 || teams > 4) {
+        if (teams < 2 || teams > 4) {
             return;
         }
 

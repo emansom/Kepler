@@ -376,28 +376,6 @@ public abstract class Game {
     }
 
     /**
-     * Get if there is enough space for this user to switch to the team
-     *
-     * @param teamId the team id to check for
-     * @return true, if successful
-     */
-    public boolean canSwitchTeam(int teamId) {
-        int maxPerTeam = 0;
-
-        if (this.teamAmount == 2) {
-            maxPerTeam = 5;
-        }
-        else if (this.teamAmount == 3) {
-            maxPerTeam = 3;
-        }
-        else if (this.teamAmount == 4) {
-            maxPerTeam = 2;
-        }
-
-        return this.teams.get(teamId).getActivePlayers().size() <= maxPerTeam;
-    }
-
-    /**
      * Moves a player from one team to another team.
      *
      * @param gamePlayer the player to move
@@ -462,6 +440,32 @@ public abstract class Game {
         for (Player player : this.observers) {
             player.send(composer);
         }
+    }
+
+    /**
+     * Get if there is enough space for this user to switch to the team
+     *
+     * @param teamId the team id to check for
+     * @return true, if successful
+     */
+    public boolean canSwitchTeam(int teamId) {
+        int maxPerTeam = 0;
+
+        if (this.teamAmount == 1) {
+            maxPerTeam = 10;
+        }
+
+        if (this.teamAmount == 2) {
+            maxPerTeam = 5;
+        }
+        else if (this.teamAmount == 3) {
+            maxPerTeam = 3;
+        }
+        else if (this.teamAmount == 4) {
+            maxPerTeam = 2;
+        }
+
+        return this.teams.get(teamId).getActivePlayers().size() <= maxPerTeam;
     }
 
     /**

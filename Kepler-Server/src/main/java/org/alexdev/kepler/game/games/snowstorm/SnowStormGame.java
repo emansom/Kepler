@@ -41,13 +41,20 @@ public class SnowStormGame extends Game {
 
         this.getTotalSecondsLeft().set(seconds); // Override with game length choice
 
+
         this.getRoom().setRoomModel(new RoomModel("snowwar_arena_0", "snowwar_arena_0", 0, 0, 0, 0,
                 "", "none"));
     }
 
+
+    @Override
+    public void gameTick() {
+
+    }
+
     @Override
     public boolean canTimerContinue() {
-        return false;
+        return true;
     }
 
     @Override
@@ -62,11 +69,6 @@ public class SnowStormGame extends Game {
 
     @Override
     public void buildMap() {
-
-    }
-
-    @Override
-    public void gameTick() {
 
     }
 
