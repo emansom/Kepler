@@ -4,14 +4,24 @@ import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGameObject;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class SnowStormPlayerObject extends GameObject {
+import java.util.ArrayList;
+import java.util.List;
+
+public class SnowStormPlayerObject extends SnowStormGameObject {
     private final GamePlayer gamePlayer;
 
     public SnowStormPlayerObject(GamePlayer gamePlayer) {
         super(GameObjectType.SNOWSTORM_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
+        this.getGameObjectsSyncValues().add(0); // Hit points
+        this.getGameObjectsSyncValues().add(0); // Snowball count
+        this.getGameObjectsSyncValues().add(0); // activity timer
+        this.getGameObjectsSyncValues().add(0); // activity state
+        this.getGameObjectsSyncValues().add(0); // body direction
+        this.getGameObjectsSyncValues().add(0); // score
     }
 
     @Override

@@ -77,6 +77,9 @@ public class SnowstormUpdateTask implements Runnable {
                 }
             }
 
+            this.game.getTurnContainer().calculateChecksum(objects);
+            this.game.getTurnContainer().getCurrentTurn().incrementAndGet();
+
             this.game.send(new SNOWSTORM_GAMESTATUS(this.game, this.game.getTeams().values(), objects, events));
         } catch (Exception ex) {
             Log.getErrorLogger().error("SnowstormUpdateTask crashed: ", ex);

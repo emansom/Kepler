@@ -15,10 +15,12 @@ import java.util.concurrent.TimeUnit;
 
 public class SnowStormGame extends Game {
     private int gameLengthChoice;
+    private TurnContainer turnContainer;
 
     public SnowStormGame(int id, int mapId, String name, int teamAmount, Player gameCreator, int gameLengthChoice) {
         super(id, mapId, GameType.SNOWSTORM, name, teamAmount, gameCreator);
         this.gameLengthChoice = gameLengthChoice;
+        this.turnContainer = new TurnContainer();
     }
 
     @Override
@@ -79,5 +81,9 @@ public class SnowStormGame extends Game {
 
     public int getGameLengthChoice() {
         return gameLengthChoice;
+    }
+
+    public TurnContainer getTurnContainer() {
+        return turnContainer;
     }
 }

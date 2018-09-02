@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class SNOWSTORM_GAMESTATUS extends MessageComposer {
-    private final Game game;
+    private final SnowStormGame game;
 
     private final Collection<GameTeam> gameTeams;
 
@@ -30,6 +30,12 @@ public class SNOWSTORM_GAMESTATUS extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
+        response.writeInt(this.game.getTurnContainer().getCurrentTurn().get());
+        response.writeInt(this.game.getTurnContainer().getCheckSum());
+        response.writeInt(1);
+
+        System.out.println("Checksum: " + this.game.getTurnContainer().getCheckSum());
+
         response.writeInt(this.objects.size()); // TODO: Handle more than just objects events (power ups, etc)
 
         for (GameObject gameObject : this.objects) {
