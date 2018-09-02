@@ -4,7 +4,7 @@ import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
-import org.alexdev.kepler.game.games.battleball.events.GetPowerUpEvent;
+import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
@@ -62,7 +62,7 @@ public class BattleballTile extends GameTile  {
 
         powerUp.setPlayerHolding(gamePlayer);
 
-        events.add(new GetPowerUpEvent(gamePlayer, powerUp));
+        events.add(new AcquirePowerUpEvent(gamePlayer, powerUp));
         events.add(new PowerUpSpawnEvent(powerUp));
     }
 
