@@ -152,6 +152,9 @@ public abstract class Game {
             }
         }
 
+        // Send game seconds
+        this.send(new GAMESTART(this.totalSecondsLeft.get()));
+
         // Game seconds counter
         this.gameTimerRunnable = new FutureRunnable() {
             public void run() {
@@ -177,8 +180,6 @@ public abstract class Game {
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.gameTimerRunnable, 0, 1, TimeUnit.SECONDS);
         this.gameTimerRunnable.setFuture(future);
 
-        // Send game seconds
-        this.send(new GAMESTART(GameManager.getInstance().getLifetimeSeconds(this.gameType)));
         gameStarted();
     }
 

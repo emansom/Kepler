@@ -24,6 +24,7 @@ public class SnowStormGame extends Game {
     public void initialise() {
         super.initialise();
 
+        this.getTotalSecondsLeft().set(this.gameLengthChoice); // Override with game length choice
         this.getRoom().setRoomModel(new RoomModel("snowwar_arena_0", "snowwar_arena_0", 0, 0, 0, 0,
                 "", "none"));
     }
