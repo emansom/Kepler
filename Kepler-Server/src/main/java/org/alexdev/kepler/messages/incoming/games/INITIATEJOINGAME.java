@@ -41,13 +41,14 @@ public class INITIATEJOINGAME implements MessageEvent {
         if (!game.canSwitchTeam(teamId)) {
             return;
         }
-        if (player.getRoomUser().getGamePlayer() != null && player.getRoomUser().getGamePlayer().isSpectator()) {
+
+        // If player was initially a spectator, they need to leave
+        if (player.getRoomUser().getGamePlayer() != null &&
+            player.getRoomUser().getGamePlayer().isSpectator()) {
             game.leaveGame(player.getRoomUser().getGamePlayer());
-            //player.getRoomUser().getGamePlayer().setSpectator(false);
-            //player.getRoomUser().getGamePlayer().setGameId(game.getId());
-            //player.getRoomUser().getGamePlayer().setTeamId(teamId);
         }
 
+        // Their game player instance will always be null after leaveGame()
         if (player.getRoomUser().getGamePlayer() == null) {
             player.getRoomUser().setGamePlayer(new GamePlayer(player));
             player.getRoomUser().getGamePlayer().setGameId(game.getId());
@@ -55,7 +56,6 @@ public class INITIATEJOINGAME implements MessageEvent {
         }
 
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
-
         game.getObservers().remove(player); // Player was a viewer
         game.movePlayer(gamePlayer, gamePlayer.getTeamId(), teamId);
     }
