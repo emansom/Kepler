@@ -31,7 +31,6 @@ public class BattleballGame extends Game {
     private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
 
     private AtomicInteger timeUntilNextPower;
-    private AtomicInteger objectId;
 
     public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
@@ -45,19 +44,6 @@ public class BattleballGame extends Game {
     @Override
     public void gameBegin() {
         this.updateTimeUntilNextPower();
-
-        // Make the starting object ID's higher than the player instance ids to avoid collision
-        int startingObjectId = 0;
-
-        for (GameTeam team : this.getTeams().values()) {
-            for (GamePlayer gamePlayer : team.getActivePlayers()) {
-                if (gamePlayer.getPlayer().getRoomUser().getInstanceId() > startingObjectId) {
-                    startingObjectId = gamePlayer.getPlayer().getRoomUser().getInstanceId();
-                }
-            }
-        }
-
-        this.objectId = new AtomicInteger(startingObjectId);
     }
 
     @Override
@@ -123,11 +109,32 @@ public class BattleballGame extends Game {
             return;
         }
 
-        BattleballPowerUp powerUp = new BattleballPowerUp(this, this.objectId.incrementAndGet(), this.getRandomTile());
+        int powerId = createObjectId();
+
+        BattleballPowerUp powerUp = new BattleballPowerUp(this, powerId, this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
         this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
+    }
+
+    /**
+     * Method to create object ids.
+     *
+     * @return the new object ids
+     */
+    private int createObjectId() {
+        int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
+
+        for (GameTeam team : this.getTeams().values()) {
+            for (GamePlayer gamePlayer : team.getActivePlayers()) {
+                if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
+                    return createObjectId();
+                }
+            }
+        }
+
+        return powerId;
     }
 
     private void updateTimeUntilNextPower() {
