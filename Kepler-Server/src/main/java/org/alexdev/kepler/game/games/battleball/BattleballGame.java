@@ -74,8 +74,6 @@ public class BattleballGame extends Game {
             }
         }
 
-        System.out.println("lol ?!!");
-
         this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
         this.activePowers.clear();
     }
@@ -123,15 +121,23 @@ public class BattleballGame extends Game {
     }
 
     /**
-     * Get a game player by their instance id
+     * Checks if the instance id is already being used
      *
      * @param uniqueId the unique id
-     * @return the instance, if successful
+     * @return true, if successful
      */
     private boolean getByInstanceId(int uniqueId) {
         for (var team : this.getTeams().values()) {
             for (var player : team.getActivePlayers()) {
                 if (player.getPlayer().getRoomUser().getInstanceId() == uniqueId) {
+                    return true;
+                }
+            }
+        }
+
+        for (var powers : this.getStoredPowers().values()) {
+            for (var power : powers) {
+                if (power.getId() == uniqueId) {
                     return true;
                 }
             }

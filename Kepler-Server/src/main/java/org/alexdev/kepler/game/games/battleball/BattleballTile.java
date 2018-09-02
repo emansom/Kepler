@@ -30,8 +30,12 @@ public class BattleballTile extends GameTile  {
      * @param updateFillTiles the list to add to if these tiles require the filling in animation
      */
     public void interact(GamePlayer gamePlayer, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
-        this.changeState(gamePlayer, updateTiles, updateFillTiles);
-        this.checkPowerUp(gamePlayer, events, updateTiles, updateFillTiles);
+        try {
+            this.changeState(gamePlayer, updateTiles, updateFillTiles);
+            this.checkPowerUp(gamePlayer, events, updateTiles, updateFillTiles);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void checkPowerUp(GamePlayer gamePlayer, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
@@ -53,10 +57,10 @@ public class BattleballTile extends GameTile  {
             game.getStoredPowers().put(gamePlayer, new CopyOnWriteArrayList<>());
         }
 
-        powerUp.setPlayerHolding(gamePlayer);
-
-        game.getStoredPowers().get(gamePlayer).add(powerUp);
         game.getActivePowers().clear();
+        game.getStoredPowers().get(gamePlayer).add(powerUp);
+
+        powerUp.setPlayerHolding(gamePlayer);
 
         events.add(new GetPowerUpEvent(gamePlayer, powerUp));
         events.add(new PowerUpSpawnEvent(powerUp));
