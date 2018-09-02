@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -71,6 +72,12 @@ public class BattleballUpdateTask implements Runnable {
                                 updateTiles.add(tile);
                             }
                         }*/
+
+                        if (this.game.getStoredPowers().containsKey(gamePlayer)) {
+                            for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
+                                objects.add(new PowerObject(gamePlayer, powerUp));
+                            }
+                        }
 
                         this.processEntity(gamePlayer, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();

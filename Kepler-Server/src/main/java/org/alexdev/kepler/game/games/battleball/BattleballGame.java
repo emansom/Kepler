@@ -64,6 +64,7 @@ public class BattleballGame extends Game {
     public void gameTick() {
         this.checkExpirePower();
         this.checkSpawnPower();
+        this.checkStoredExpirePower();
     }
 
     @Override
@@ -77,16 +78,34 @@ public class BattleballGame extends Game {
             return;
         }
 
-        BattleballPowerUp powerUp = this.activePowers.get(0);
+        if (expirePower(this.activePowers.get(0))) {
+            this.activePowers.clear();
+        }
+    }
 
+    private void checkStoredExpirePower() {
+        for (var powers : this.storedPowers.values()) {
+            List<BattleballPowerUp> expiredPowers = new ArrayList<>();
+
+            for (BattleballPowerUp power : powers) {
+                if (expirePower(power)) {
+                    expiredPowers.add(power);
+                }
+            }
+
+            powers.removeAll(expiredPowers);
+        }
+    }
+
+    private boolean expirePower(BattleballPowerUp powerUp) {
         if (powerUp.getTimeToDespawn().get() > 0) {
             if (powerUp.getTimeToDespawn().decrementAndGet() != 0) {
-                return;
+                return false;
             }
         }
 
         this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
-        this.activePowers.clear();
+        return true;
     }
 
     private void checkSpawnPower() {
