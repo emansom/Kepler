@@ -48,6 +48,8 @@ public class FULLGAMESTATUS extends MessageComposer {
 
             response.writeBool(false);
             response.writeInt(this.game.getTeamAmount());
+
+
         }
 
         if (this.game.getGameType() == GameType.BATTLEBALL) {

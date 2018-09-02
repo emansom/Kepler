@@ -34,8 +34,6 @@ public class SNOWSTORM_GAMESTATUS extends MessageComposer {
         response.writeInt(this.game.getTurnContainer().getCheckSum());
         response.writeInt(1);
 
-        System.out.println("Checksum: " + this.game.getTurnContainer().getCheckSum());
-
         response.writeInt(this.objects.size()); // TODO: Handle more than just objects events (power ups, etc)
 
         for (GameObject gameObject : this.objects) {

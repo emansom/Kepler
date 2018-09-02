@@ -11,7 +11,7 @@ public class TurnContainer {
     private int checkSum;
 
     public TurnContainer() {
-        this.currentTurn = new AtomicInteger(0);
+        this.currentTurn = new AtomicInteger(-1);
     }
 
     public void calculateChecksum(List<GameObject> objectList) {
