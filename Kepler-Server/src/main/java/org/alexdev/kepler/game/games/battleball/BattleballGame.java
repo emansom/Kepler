@@ -40,13 +40,24 @@ public class BattleballGame extends Game {
 
         this.activePowers = new CopyOnWriteArrayList<>();
         this.storedPowers = new ConcurrentHashMap<>();
-
-        this.objectId = new AtomicInteger(0);
     }
 
     @Override
     public void gameBegin() {
         this.updateTimeUntilNextPower();
+
+        // Make the starting object ID's higher than the player instance ids to avoid collision
+        int startingObjectId = 0;
+
+        for (GameTeam team : this.getTeams().values()) {
+            for (GamePlayer gamePlayer : team.getActivePlayers()) {
+                if (gamePlayer.getPlayer().getRoomUser().getInstanceId() > startingObjectId) {
+                    startingObjectId = gamePlayer.getPlayer().getRoomUser().getInstanceId();
+                }
+            }
+        }
+
+        this.objectId = new AtomicInteger(startingObjectId);
     }
 
     @Override
@@ -93,7 +104,7 @@ public class BattleballGame extends Game {
             return;
         }
 
-        BattleballPowerUp powerUp = new BattleballPowerUp(this, this.generateObjectId(), this.getRandomTile());
+        BattleballPowerUp powerUp = new BattleballPowerUp(this, this.objectId.incrementAndGet(), this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
@@ -102,48 +113,6 @@ public class BattleballGame extends Game {
 
     private void updateTimeUntilNextPower() {
         this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 30));
-    }
-
-    /**
-     * Generates a unique ID for the entities in a room. Will be used for pets
-     * and bots in future.
-     *
-     * @return the unique ID
-     */
-    public int generateObjectId() {
-        int uniqueId = 0;
-
-        while (getByInstanceId(uniqueId)) {
-            uniqueId =this.objectId.incrementAndGet();
-        }
-
-        return uniqueId;
-    }
-
-    /**
-     * Checks if the instance id is already being used
-     *
-     * @param uniqueId the unique id
-     * @return true, if successful
-     */
-    private boolean getByInstanceId(int uniqueId) {
-        for (var team : this.getTeams().values()) {
-            for (var player : team.getActivePlayers()) {
-                if (player.getPlayer().getRoomUser().getInstanceId() == uniqueId) {
-                    return true;
-                }
-            }
-        }
-
-        for (var powers : this.getStoredPowers().values()) {
-            for (var power : powers) {
-                if (power.getId() == uniqueId) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     @Override
