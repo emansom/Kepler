@@ -79,7 +79,7 @@ public class BattleballUpdateTask implements Runnable {
                             }
                         }
 
-                        this.processEntity(gamePlayer, events, updateTiles, fillTiles);
+                        this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
 
                         objects.add(new PlayerObject(gamePlayer));
@@ -100,7 +100,7 @@ public class BattleballUpdateTask implements Runnable {
     /**
      * Process entity.
      */
-    private void processEntity(GamePlayer gamePlayer, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
+    private void processEntity(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
         Entity entity = (Entity) gamePlayer.getPlayer();
         Game game = gamePlayer.getGame();
 
@@ -120,7 +120,7 @@ public class BattleballUpdateTask implements Runnable {
                 BattleballTile tile = (BattleballTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
 
                 if (tile != null) {
-                    tile.interact(gamePlayer, events, updateTiles, fillTiles);
+                    tile.interact(gamePlayer, objects, events, updateTiles, fillTiles);
                 }
             }
 
@@ -132,7 +132,7 @@ public class BattleballUpdateTask implements Runnable {
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
                     entity.getRoomUser().getPath().clear();
                     roomEntity.walkTo(goal.getX(), goal.getY());
-                    this.processEntity(gamePlayer, events, updateTiles, fillTiles);
+                    this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
                     return;
                 }
 
