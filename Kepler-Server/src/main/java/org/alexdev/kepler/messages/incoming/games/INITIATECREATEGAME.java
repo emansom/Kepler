@@ -36,7 +36,7 @@ public class INITIATECREATEGAME implements MessageEvent {
 
         if (gameLobbyTrigger.getGameType() == GameType.SNOWSTORM) {
             parameters = new GameParameter[]{
-                    new GameParameter("fieldType", true, "1", 1, 5),
+                    new GameParameter("fieldType", true, "1", 1, 7),
                     new GameParameter("numTeams", true, "2", 2, 4),
                     new GameParameter("gameLengthChoice", true, "1", 1, 3),
                     new GameParameter("name", true, "")

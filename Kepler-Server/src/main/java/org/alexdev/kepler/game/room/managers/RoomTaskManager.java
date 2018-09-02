@@ -52,7 +52,7 @@ public class RoomTaskManager {
         Game game = GameManager.getInstance().getGameById(this.room.getId());
 
         //this.scheduleTask("StatusTask", new StatusTask(this.room), 0, 1, TimeUnit.SECONDS);
-        this.scheduleTask("GameTask", new BattleballUpdateTask(this.room, (BattleballGame) game), 0, 500, TimeUnit.MILLISECONDS);
+        //this.scheduleTask("GameTask", new BattleballUpdateTask(this.room, (BattleballGame) game), 0, 500, TimeUnit.MILLISECONDS);
     }
 
     /**

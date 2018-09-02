@@ -58,8 +58,6 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
             return;
         }
 
-        System.out.println("Field type: "+ mapId);
-
         int teams = (int) gameParameters.get("numTeams");
 
         if (teams < 1 || teams > 4) {

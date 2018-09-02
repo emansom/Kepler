@@ -81,7 +81,7 @@ public abstract class Game {
     /**
      * Method to initialise the game
      */
-    private void initialise() {
+    public void initialise() {
         this.gameState = GameState.STARTED;
 
         this.gameStarted = false;
@@ -478,7 +478,7 @@ public abstract class Game {
             }
         }
 
-        return activeTeamCount >= GameConfiguration.getInstance().getInteger("battleball.start.minimum.active.teams");
+        return activeTeamCount >= GameConfiguration.getInstance().getInteger(this.gameType.name().toLowerCase() + ".start.minimum.active.teams");
     }
 
     /**
