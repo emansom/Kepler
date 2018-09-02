@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.GetPowerUpEvent;
+import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
@@ -52,10 +53,13 @@ public class BattleballTile extends GameTile  {
             game.getStoredPowers().put(gamePlayer, new CopyOnWriteArrayList<>());
         }
 
+        powerUp.setPlayerHolding(gamePlayer);
+
         game.getStoredPowers().get(gamePlayer).add(powerUp);
         game.getActivePowers().clear();
 
         events.add(new GetPowerUpEvent(gamePlayer, powerUp));
+        events.add(new PowerUpSpawnEvent(powerUp));
     }
 
     private void changeState(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {

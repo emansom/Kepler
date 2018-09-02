@@ -74,6 +74,8 @@ public class BattleballGame extends Game {
             }
         }
 
+        System.out.println("lol ?!!");
+
         this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
         this.activePowers.clear();
     }
@@ -97,7 +99,7 @@ public class BattleballGame extends Game {
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
-        this.getEventsQueue().add(new PowerUpSpawnEvent(this, powerUp));
+        this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
     }
 
     private void updateTimeUntilNextPower() {
@@ -307,7 +309,7 @@ public class BattleballGame extends Game {
         List<GameEvent> gameEvents = new ArrayList<>();
 
         if (!this.activePowers.isEmpty()) {
-            gameEvents.add(new PowerUpSpawnEvent(this, this.activePowers.get(0)));
+            gameEvents.add(new PowerUpSpawnEvent(this.activePowers.get(0)));
         }
 
         return gameEvents;

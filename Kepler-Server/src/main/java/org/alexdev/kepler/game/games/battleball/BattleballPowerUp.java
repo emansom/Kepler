@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
+import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.concurrent.ThreadLocalRandom;
@@ -12,10 +13,12 @@ public class BattleballPowerUp {
     private final BattleballPowerType powerType;
     private final BattleballTile tile;
     private final Position position;
+    private GamePlayer playerHolding;
 
     public BattleballPowerUp(BattleballGame game, int id, BattleballTile tile) {
         this.id = id;
         this.tile = tile;
+        this.playerHolding = null;
         this.position = this.tile.getPosition().copy();
         this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 20));
         var allowedPowerUps = game.getAllowedPowerUps();
@@ -42,7 +45,19 @@ public class BattleballPowerUp {
         return timeToDespawn;
     }
 
-    public int getPlayerHolding() {
+    public GamePlayer getPlayerHolding() {
+        return playerHolding;
+    }
+
+    public void setPlayerHolding(GamePlayer playerHolding) {
+        this.playerHolding = playerHolding;
+    }
+
+    public Integer getPlayerHoldingId() {
+        if (this.playerHolding != null) {
+            return this.playerHolding.getPlayer().getRoomUser().getInstanceId();
+        }
+
         return -1;
     }
 }

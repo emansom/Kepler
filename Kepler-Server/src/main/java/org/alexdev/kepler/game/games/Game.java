@@ -588,7 +588,7 @@ public abstract class Game {
     }
 
     /**
-     * 
+     *
      * @return
      */
     public List<Player> getObservers() {
