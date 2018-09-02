@@ -12,6 +12,7 @@ import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
@@ -21,6 +22,7 @@ import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.games.GAMESTATUS;
+import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_GAMESTATUS;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
@@ -66,7 +68,7 @@ public class SnowstormUpdateTask implements Runnable {
                         this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
 
-                        objects.add(new PlayerObject(gamePlayer));
+                        objects.add(new SnowStormPlayerObject(gamePlayer));
 
                         if (roomEntity.isNeedsUpdate()) {
                             roomEntity.setNeedsUpdate(false);
@@ -75,9 +77,9 @@ public class SnowstormUpdateTask implements Runnable {
                 }
             }
 
-            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events));
+            this.game.send(new SNOWSTORM_GAMESTATUS(this.game, this.game.getTeams().values(), objects, events));
         } catch (Exception ex) {
-            Log.getErrorLogger().error("GameTask crashed: ", ex);
+            Log.getErrorLogger().error("SnowstormUpdateTask crashed: ", ex);
         }
     }
 

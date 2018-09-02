@@ -2,7 +2,8 @@ package org.alexdev.kepler.game.games.enums;
 
 public enum GameObjectType {
     BATTLEBALL_PLAYER_OBJECT(0),
-    BATTLEBALL_POWER_OBJECT(1);
+    BATTLEBALL_POWER_OBJECT(1),
+    SNOWSTORM_PLAYER_OBJECT(5);
 
     private final int objectId;
 
