@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.enums.GameState;
@@ -32,11 +33,16 @@ public class GAMEINSTANCE extends MessageComposer {
                 response.writeInt(this.game.getId());
                 response.writeString(this.game.getName());
 
+                // Host
                 response.writeInt(this.game.getGameCreatorId());
                 response.writeString(this.game.getGameCreator());
 
-                response.writeInt(this.game.getMapId());
+                if (this.game.getGameType() == GameType.SNOWSTORM) {
+                    SnowStormGame snowStormGame = (SnowStormGame) this.game;
+                    response.writeInt(snowStormGame.getGameLengthChoice());
+                }
 
+                response.writeInt(this.game.getMapId());
                 response.writeInt(this.game.getSpectators().size());
                 response.writeInt(this.game.getTeamAmount());
 
@@ -50,8 +56,6 @@ public class GAMEINSTANCE extends MessageComposer {
                         response.writeString(player.getPlayer().getDetails().getName());
                     }
                 }
-
-                // TODO: Special SnowStorm parameters
 
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
                     BattleballGame battleballGame = (BattleballGame) this.game;
@@ -71,6 +75,14 @@ public class GAMEINSTANCE extends MessageComposer {
                 response.writeInt(this.game.getId());
                 response.writeString(this.game.getName());
                 response.writeString(this.game.getGameCreator());
+
+                if (this.game.getGameType() == GameType.SNOWSTORM) {
+                    SnowStormGame snowStormGame = (SnowStormGame) this.game;
+                    response.writeInt(snowStormGame.getGameLengthChoice());
+
+                    System.out.println("Map id: " + this.game.getMapId());
+                }
+
                 response.writeInt(this.game.getMapId());
                 response.writeInt(this.game.getTeamAmount());
 
@@ -106,6 +118,11 @@ public class GAMEINSTANCE extends MessageComposer {
             response.writeInt(this.finishedGame.getId());
             response.writeString(this.finishedGame.getName());
             response.writeString(this.finishedGame.getMapCreator());
+
+            if (this.finishedGame.getGameType() == GameType.SNOWSTORM) {
+                response.writeInt(0);//snowStormGame.getGameLengthChoice());
+            }
+
             response.writeInt(this.finishedGame.getMapId());
             response.writeInt(this.finishedGame.getTeamScores().size());
 
@@ -121,16 +138,16 @@ public class GAMEINSTANCE extends MessageComposer {
                 response.writeInt(gameTeam.getScore());
             }
 
-            // TODO: Special SnowStorm parameters
+            if (this.finishedGame.getGameType() == GameType.BATTLEBALL) {
+                int[] allowedPowerUps = this.finishedGame.getPowerUps();
+                String[] powerUps = new String[allowedPowerUps.length];
 
-            int[] allowedPowerUps = this.finishedGame.getPowerUps();
-            String[] powerUps = new String[allowedPowerUps.length];
+                for (int i = 0; i < allowedPowerUps.length; i++) {
+                    powerUps[i] = String.valueOf(allowedPowerUps[i]);
+                }
 
-            for (int i = 0; i < allowedPowerUps.length; i++) {
-                powerUps[i] = String.valueOf(allowedPowerUps[i]);
+                response.writeString(String.join(",", powerUps));
             }
-
-            response.writeString(String.join(",", powerUps));
         }
     }
 

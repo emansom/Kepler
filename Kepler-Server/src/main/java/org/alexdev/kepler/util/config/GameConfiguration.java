@@ -59,6 +59,11 @@ public class GameConfiguration {
         config.put("game.finished.listing.expiry.seconds", "300");
 
         config.put("snowstorm.create.game.enabled", "false");
+        config.put("snowstorm.start.minimum.active.teams", "2");
+        config.put("snowstorm.preparing.game.seconds", "10");
+        //config.put("snowstorm.game.lifetime.seconds", "180");
+        config.put("snowstorm.restart.game.seconds", "30");
+
         config.put("tutorial.enabled", "true");
         config.put("profile.editing", "true");
         config.put("vouchers.enabled", "true");

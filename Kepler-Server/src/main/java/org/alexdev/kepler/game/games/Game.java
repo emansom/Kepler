@@ -81,7 +81,7 @@ public abstract class Game {
     /**
      * Method to initialise the game
      */
-    private void initialise() {
+    public void initialise() {
         this.gameState = GameState.STARTED;
 
         this.gameStarted = false;
@@ -152,6 +152,9 @@ public abstract class Game {
             }
         }
 
+        // Send game seconds
+        this.send(new GAMESTART(this.totalSecondsLeft.get()));
+
         // Game seconds counter
         this.gameTimerRunnable = new FutureRunnable() {
             public void run() {
@@ -177,8 +180,6 @@ public abstract class Game {
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.gameTimerRunnable, 0, 1, TimeUnit.SECONDS);
         this.gameTimerRunnable.setFuture(future);
 
-        // Send game seconds
-        this.send(new GAMESTART(GameManager.getInstance().getLifetimeSeconds(this.gameType)));
         gameStarted();
     }
 
@@ -202,6 +203,7 @@ public abstract class Game {
 
         // Send scores to everybody
         this.send(new GAMEEND(this.gameType, this.teams));
+        this.gameEnded();
 
         // Restart countdown
         this.restartCountdown = new AtomicLong(GameManager.getInstance().getRestartSeconds(this.gameType));
@@ -374,28 +376,6 @@ public abstract class Game {
     }
 
     /**
-     * Get if there is enough space for this user to switch to the team
-     *
-     * @param teamId the team id to check for
-     * @return true, if successful
-     */
-    public boolean canSwitchTeam(int teamId) {
-        int maxPerTeam = 0;
-
-        if (this.teamAmount == 2) {
-            maxPerTeam = 5;
-        }
-        else if (this.teamAmount == 3) {
-            maxPerTeam = 3;
-        }
-        else if (this.teamAmount == 4) {
-            maxPerTeam = 2;
-        }
-
-        return this.teams.get(teamId).getActivePlayers().size() <= maxPerTeam;
-    }
-
-    /**
      * Moves a player from one team to another team.
      *
      * @param gamePlayer the player to move
@@ -463,6 +443,32 @@ public abstract class Game {
     }
 
     /**
+     * Get if there is enough space for this user to switch to the team
+     *
+     * @param teamId the team id to check for
+     * @return true, if successful
+     */
+    public boolean canSwitchTeam(int teamId) {
+        int maxPerTeam = 0;
+
+        if (this.teamAmount == 1) {
+            maxPerTeam = 10;
+        }
+
+        if (this.teamAmount == 2) {
+            maxPerTeam = 5;
+        }
+        else if (this.teamAmount == 3) {
+            maxPerTeam = 3;
+        }
+        else if (this.teamAmount == 4) {
+            maxPerTeam = 2;
+        }
+
+        return this.teams.get(teamId).getActivePlayers().size() <= maxPerTeam;
+    }
+
+    /**
      * Gets if there's enough players in different teams for the game to start
      * (minimum of 2 players)
      *
@@ -477,7 +483,7 @@ public abstract class Game {
             }
         }
 
-        return activeTeamCount >= GameConfiguration.getInstance().getInteger("battleball.start.minimum.active.teams");
+        return activeTeamCount >= GameConfiguration.getInstance().getInteger(this.gameType.name().toLowerCase() + ".start.minimum.active.teams");
     }
 
     /**
@@ -573,6 +579,11 @@ public abstract class Game {
     public void gameStarted() { }
 
     /**
+     * Method called when the game ends, when the scoreboard shows
+     */
+    public void gameEnded() { }
+
+    /**
      * Get the list of specators, the people currently watching the game
      *
      * @return the list of spectators
@@ -581,9 +592,21 @@ public abstract class Game {
         return spectators;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<Player> getObservers() {
         return observers;
     }
+
+    /**
+     * Get persistent events, used for when spectators join mid-game and there's tacks
+     * or power ups on the map.
+     *
+     * @return the list of persistent events
+     */
+    public abstract List<GameEvent> getPersistentEvents();
 
     /**
      * Get the game id

@@ -1,5 +1,7 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
+import org.alexdev.kepler.game.games.enums.GameType;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.enums.GameState;
@@ -31,6 +33,11 @@ public class INSTANCELIST extends MessageComposer {
             response.writeInt(game.getGameCreatorId());
             response.writeString(game.getGameCreator());
 
+            if (game.getGameType() == GameType.SNOWSTORM) {
+                SnowStormGame snowStormGame = (SnowStormGame) game;
+                response.writeInt(snowStormGame.getGameLengthChoice());
+            }
+
             response.writeInt(game.getMapId());
         }
 
@@ -40,6 +47,12 @@ public class INSTANCELIST extends MessageComposer {
             response.writeInt(game.getId());
             response.writeString(game.getName());
             response.writeString(game.getGameCreator());
+
+            if (game.getGameType() == GameType.SNOWSTORM) {
+                SnowStormGame snowStormGame = (SnowStormGame) game;
+                response.writeInt(snowStormGame.getGameLengthChoice());
+            }
+
             response.writeInt(game.getMapId());
         }
 
@@ -49,70 +62,14 @@ public class INSTANCELIST extends MessageComposer {
             response.writeInt(game.getId());
             response.writeString(game.getName());
             response.writeString(game.getMapCreator());
+
+            if (game.getGameType() == GameType.SNOWSTORM) {
+                //SnowStormGame snowStormGame = (SnowStormGame) this.game;
+                response.writeInt(0);//snowStormGame.getGameLengthChoice());
+            }
+
             response.writeInt(game.getMapId());
         }
-        /*response.writeInt(this.createdGames.size());
-
-        for (Game game : this.createdGames) {
-            response.writeInt(game.getId());
-            response.writeString(game.getName());
-            response.writeInt(game.getGameCreator().getRoomUser().getInstanceId());
-            response.writeString(game.getGameCreator().getDetails().getName());
-            response.writeInt(0); // Number of spectators
-
-            response.writeInt(game.getTeamAmount());
-
-            for (int i = 0; i < game.getTeamAmount(); i++) {
-                response.writeInt(game.getTeams().get(i).size());
-
-                for (GamePlayer gamePlayer : game.getTeams().get(i)) {
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getInstanceId());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getName());
-                }
-            }
-        }
-
-        response.writeInt(this.startedGames.size());
-
-        for (Game game : this.startedGames) {
-            response.writeInt(game.getId());
-            response.writeString(game.getName());
-            response.writeString(game.getGameCreator().getDetails().getName());
-
-            response.writeInt(game.getTeamAmount());
-
-            for (int i = 0; i < game.getTeamAmount(); i++) {
-                response.writeInt(game.getTeams().get(i).size());
-
-                for (GamePlayer gamePlayer : game.getTeams().get(i)) {
-                    response.writeString(gamePlayer.getPlayer().getDetails().getName());
-                }
-            }
-        }
-
-        response.writeInt(this.finishedGames.size());
-
-        for (Game game : this.finishedGames) {
-            response.writeInt(game.getId());
-            response.writeString(game.getName());
-            response.writeString(game.getGameCreator().getDetails().getName());
-
-            response.writeInt(game.getTeamAmount());
-
-            for (int i = 0; i < game.getTeamAmount(); i++) {
-                response.writeInt(game.getTeams().get(i).size());
-                int teamScore = 0;
-
-                for (GamePlayer gamePlayer : game.getTeams().get(i)) {
-                    response.writeString(gamePlayer.getPlayer().getDetails().getName());
-                    response.writeInt(gamePlayer.getScore());
-
-                    teamScore += gamePlayer.getScore();
-                }
-
-                response.writeInt(teamScore);
-            }
-        }*/
     }
 
     @Override

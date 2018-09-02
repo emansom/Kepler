@@ -15,6 +15,12 @@ public class USER_CANCEL_TYPING implements MessageEvent {
             return;
         }
 
+        if (player.getRoomUser().getGamePlayer() != null &&
+            player.getRoomUser().getGamePlayer().getGame() != null &&
+            player.getRoomUser().getGamePlayer().isInGame()) {
+            return;
+        }
+
         player.getRoomUser().getTimerManager().stopChatBubbleTimer();
         player.getRoomUser().setTyping(false);
 

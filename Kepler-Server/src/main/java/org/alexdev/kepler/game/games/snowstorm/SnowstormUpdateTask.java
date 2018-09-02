@@ -1,9 +1,12 @@
-package org.alexdev.kepler.game.games.battleball;
+package org.alexdev.kepler.game.games.snowstorm;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.battleball.BattleballGame;
+import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
+import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
@@ -23,11 +26,11 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BattleballUpdateTask implements Runnable {
+public class SnowstormUpdateTask implements Runnable {
     private final Room room;
-    private final BattleballGame game;
+    private final SnowStormGame game;
 
-    public BattleballUpdateTask(Room room, BattleballGame game) {
+    public SnowstormUpdateTask(Room room, SnowStormGame game) {
         this.room = room;
         this.game = game;
     }
@@ -60,25 +63,6 @@ public class BattleballUpdateTask implements Runnable {
                             && player.getRoomUser().getRoom() != null
                             && player.getRoomUser().getRoom() == this.room) {
 
-                        // Keep setting spawn colour underneath player, only during "this game is starting soon"
-                        /*if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
-                            BattleballTile tile = (BattleballTile) this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
-
-                            if (tile.isSpawnOccupied() && tile.getColour() != BattleballColourType.DISABLED) {
-                                // Set first interaction on spawn tile, like official Habbo
-                                tile.setState(BattleballTileType.TOUCHED);
-                                tile.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
-
-                                updateTiles.add(tile);
-                            }
-                        }*/
-
-                        if (this.game.getStoredPowers().containsKey(gamePlayer)) {
-                            for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
-                                objects.add(new PowerObject(gamePlayer, powerUp));
-                            }
-                        }
-
                         this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
 
@@ -91,7 +75,7 @@ public class BattleballUpdateTask implements Runnable {
                 }
             }
 
-            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
+            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }
@@ -115,13 +99,6 @@ public class BattleballUpdateTask implements Runnable {
                 roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
                 roomEntity.getPosition().setY(roomEntity.getNextPosition().getY());
                 roomEntity.updateNewHeight(roomEntity.getPosition());
-
-                // Increment tiles...
-                BattleballTile tile = (BattleballTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
-
-                if (tile != null) {
-                    tile.interact(gamePlayer, objects, events, updateTiles, fillTiles);
-                }
             }
 
             // We still have more tiles left, so lets continue moving

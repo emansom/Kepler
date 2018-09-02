@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
+import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
@@ -13,7 +14,10 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
 import org.apache.commons.lang3.ArrayUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -24,8 +28,9 @@ public class BattleballGame extends Game {
     private List<Integer> allowedPowerUps;
     private List<BattleballPowerUp> activePowers;
 
+    private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
+
     private AtomicInteger timeUntilNextPower;
-    private AtomicInteger powerId;
 
     public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
@@ -33,7 +38,7 @@ public class BattleballGame extends Game {
         this.allowedPowerUps = allowedPowerUps;
 
         this.activePowers = new CopyOnWriteArrayList<>();
-        this.powerId = new AtomicInteger(0);
+        this.storedPowers = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -43,27 +48,97 @@ public class BattleballGame extends Game {
 
     @Override
     public void gameTick() {
-        if (this.allowedPowerUps.isEmpty()) {
+        this.checkExpirePower();
+        this.checkSpawnPower();
+        this.checkStoredExpirePower();
+    }
+
+    @Override
+    public void gameEnded() {
+        this.activePowers.clear();
+        this.storedPowers.clear();
+    }
+
+    private void checkExpirePower() {
+        if (this.allowedPowerUps.isEmpty() || this.activePowers.isEmpty() || (this.getMapId() == 5)) {
             return;
         }
 
-        if (this.timeUntilNextPower.decrementAndGet() != 0) {
+        if (expirePower(this.activePowers.get(0))) {
+            this.activePowers.clear();
+        }
+    }
+
+    private void checkStoredExpirePower() {
+        for (var powers : this.storedPowers.values()) {
+            List<BattleballPowerUp> expiredPowers = new ArrayList<>();
+
+            for (BattleballPowerUp power : powers) {
+                if (expirePower(power)) {
+                    expiredPowers.add(power);
+                }
+            }
+
+            powers.removeAll(expiredPowers);
+        }
+    }
+
+    private boolean expirePower(BattleballPowerUp powerUp) {
+        if (powerUp.getTimeToDespawn().get() > 0) {
+            if (powerUp.getTimeToDespawn().decrementAndGet() != 0) {
+                return false;
+            }
+        }
+
+        this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
+        return true;
+    }
+
+    private void checkSpawnPower() {
+        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
             return;
+        }
+
+        if (this.timeUntilNextPower.get() > 0) {
+            if (this.timeUntilNextPower.decrementAndGet() != 0) {
+                return;
+            }
         }
 
         if (this.activePowers.size() > 0) { // There's already an active power so don't spawn another one
             return;
         }
 
-        /*BattleballPowerUp powerUp = new BattleballPowerUp(this, this.powerId.getAndIncrement(), this.getRandomTile());
+        int powerId = createObjectId();
+
+        BattleballPowerUp powerUp = new BattleballPowerUp(this, powerId, this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
-        this.getEventsQueue().add(new PowerUpSpawnEvent(this, powerUp));*/
+        this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
     }
 
-    public void updateTimeUntilNextPower() {
-        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(4, 15));
+    /**
+     * Method to create object ids.
+     *
+     * @return the new object ids
+     */
+    private int createObjectId() {
+        int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
+
+        for (GameTeam team : this.getTeams().values()) {
+            for (GamePlayer gamePlayer : team.getActivePlayers()) {
+                if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
+                    return createObjectId();
+                }
+            }
+        }
+
+        return powerId;
+    }
+
+    private void updateTimeUntilNextPower() {
+        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 30));
     }
 
     @Override
@@ -231,6 +306,16 @@ public class BattleballGame extends Game {
         return battleballTile;
     }
 
+    public List<GameEvent> getPersistentEvents() {
+        List<GameEvent> gameEvents = new ArrayList<>();
+
+        if (!this.activePowers.isEmpty()) {
+            gameEvents.add(new PowerUpSpawnEvent(this.activePowers.get(0)));
+        }
+
+        return gameEvents;
+    }
+
     @Override
     public GameTile[][] getTileMap() {
         return battleballTiles;
@@ -243,5 +328,13 @@ public class BattleballGame extends Game {
      */
     public int[] getAllowedPowerUps() {
         return ArrayUtils.toPrimitive(this.allowedPowerUps.toArray(new Integer[0]));
+    }
+
+    public List<BattleballPowerUp> getActivePowers() {
+        return activePowers;
+    }
+
+    public Map<GamePlayer, List<BattleballPowerUp>> getStoredPowers() {
+        return storedPowers;
     }
 }
