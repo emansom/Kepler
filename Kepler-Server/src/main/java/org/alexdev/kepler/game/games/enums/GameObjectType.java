@@ -6,7 +6,7 @@ public enum GameObjectType {
     SNOWSTORM_PLAYER_OBJECT(5),
 
     SNOWSTORM_SPAWN_PLAYER_EVENT(0),
-    SNOWSTORM_SPAWN_PLAYER_ONE(1);
+    SNOWSTORM_SPAWN_PLAYER_ONE(0);
 
     private final int objectId;
 
