@@ -35,7 +35,7 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
         this.getGameObjectsSyncValues().add(0); // score
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getDetails().getId()); // player id
         this.getGameObjectsSyncValues().add(gamePlayer.getTeamId()); // team id
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getRoom().getId()); // room index
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // room index
 
         // ["type: 5",
         // "int_id: 4",
