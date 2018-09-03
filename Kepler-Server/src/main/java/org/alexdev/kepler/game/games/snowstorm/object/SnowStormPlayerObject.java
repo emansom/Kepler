@@ -18,18 +18,18 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
         this.gamePlayer = gamePlayer;
         this.getGameObjectsSyncValues().add(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId()); // type id
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // int id
-        this.getGameObjectsSyncValues().add(86400); // x
-        this.getGameObjectsSyncValues().add(92800); // y
-        this.getGameObjectsSyncValues().add(3);//gamePlayer.getPlayer().getRoomUser().getPosition().getRotation()); // body direction
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // x
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // y
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation()); // body direction
         this.getGameObjectsSyncValues().add(0); // hit points
         this.getGameObjectsSyncValues().add(5); // snowball count
         this.getGameObjectsSyncValues().add(0); // is bot 
         this.getGameObjectsSyncValues().add(0); // activity timer
         this.getGameObjectsSyncValues().add(0); // activity state
-        this.getGameObjectsSyncValues().add(86400); // next tile x
-        this.getGameObjectsSyncValues().add(92800); // next tile y
-        this.getGameObjectsSyncValues().add(86400); // move target x
-        this.getGameObjectsSyncValues().add(92800); // move target y
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // next tile x
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // next tile y
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // move target x
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // move target y
         this.getGameObjectsSyncValues().add(0); // score
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getDetails().getId()); // player id
         this.getGameObjectsSyncValues().add(gamePlayer.getTeamId()); // team id
@@ -59,18 +59,18 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
     @Override
     public void serialiseObject(NettyResponse response) {
         response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-        response.writeInt(86400);//gamePlayer.getPlayer().getRoomUser().getPosition().getX());
-        response.writeInt(92800);//gamePlayer.getPlayer().getRoomUser().getPosition().getY());
-        response.writeInt(3);//gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY());
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
         response.writeInt(0); // hit points
         response.writeInt(5); // snowball count
         response.writeInt(0); // is bot
         response.writeInt(0); // activity timer
         response.writeInt(0); // activity state
-        response.writeInt(86400); // next tile x
-        response.writeInt(92800); // next tile y
-        response.writeInt(86400); // move target x
-        response.writeInt(92800); // move target y
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // next tile x
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // next tile y
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // move target x
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // move target y
         response.writeInt(0); // score
         response.writeInt(gamePlayer.getPlayer().getDetails().getId());
         response.writeInt(gamePlayer.getTeamId());

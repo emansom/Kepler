@@ -26,10 +26,24 @@ public class GAMEEVENT implements MessageEvent {
 
         int eventType = reader.readInt(); // Instance ID? Useless?
 
+        // Walk request
+        if (eventType == 0) {
+            int X = reader.readInt();
+            int Y = reader.readInt();
+
+            System.out.println("X: " + X);
+            System.out.println("Y: " + Y);
+
+            //player.getRoomUser().walkTo(X, Y);
+        }
+
         // Jump request
         if (eventType == 2) {
             int X = reader.readInt();
             int Y = reader.readInt();
+
+            System.out.println("X: " + X);
+            System.out.println("Y: " + Y);
 
             player.getRoomUser().walkTo(X, Y);
         }

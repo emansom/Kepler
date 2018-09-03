@@ -12,6 +12,7 @@ public class SnowStormSpawnPlayerEvent extends SnowStormGameObject {
     public SnowStormSpawnPlayerEvent(GamePlayer gamePlayer) {
         super(GameObjectType.SNOWSTORM_SPAWN_PLAYER_ONE);
         this.gamePlayer = gamePlayer;
+
         this.obj = new SnowStormPlayerObject(gamePlayer);
         this.getGameObjectsSyncValues().addAll(this.obj.getGameObjectsSyncValues());
     }
