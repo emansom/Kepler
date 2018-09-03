@@ -14,6 +14,12 @@ public class TurnContainer {
         this.currentTurn = new AtomicInteger(-1);
     }
 
+    /**
+     * Set the object list used to create a checksum for, and create a seed based on the current
+     * turn of the checksum.
+     *
+     * @param objectList the object list that's sent to the client
+     */
     public void calculateChecksum(List<GameObject> objectList) {
         this.objectList = objectList;
 
@@ -25,6 +31,11 @@ public class TurnContainer {
         this.checkSum = tCheckSum;
     }
 
+    /**
+     * Calculate object checksum based on the seed given
+     * @param tSeed the checksum created by above
+     * @return the integer to add on to the seed
+     */
     private int calculateChecksum(int tSeed) {
         int tCheckSum = tSeed;
 
@@ -36,6 +47,12 @@ public class TurnContainer {
         return tCheckSum;
     }
 
+    /**
+     * Combine the sync values used from the objects into a single integer
+     *
+     * @param pGameObjectSyncValues the sync values from the object
+     * @return the new integer
+     */
     private int addChecksum(List<Integer> pGameObjectSyncValues) {
         int tCheckSum = 0;
         int tCounter = 1;
@@ -49,6 +66,12 @@ public class TurnContainer {
         return tCheckSum;
     }
 
+    /**
+     * Seed generation, taken from client source.
+     *
+     * @param a_iSeed the current turn
+     * @return the seed created
+     */
     private int iterateSeed(int a_iSeed) {
         var t_iSeed2 = 0;
 
@@ -66,10 +89,26 @@ public class TurnContainer {
         return a_iSeed;
     }
 
-    public AtomicInteger getCurrentTurn() {
-        return currentTurn;
+    /**
+     * Increments the current turn
+     */
+    public void iterateTurn() {
+        this.currentTurn.incrementAndGet();
     }
 
+    /**
+     * Get the current turn in the turn container
+     *
+     * @return the turn
+     */
+    public int getCurrentTurn() {
+        return currentTurn.get();
+    }
+
+    /**
+     * Get the checksum created
+     * @return the checksum
+     */
     public int getCheckSum() {
         return checkSum;
     }
