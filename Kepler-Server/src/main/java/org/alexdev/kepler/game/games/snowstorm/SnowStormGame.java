@@ -1,14 +1,15 @@
 package org.alexdev.kepler.game.games.snowstorm;
 
-import org.alexdev.kepler.dao.mysql.GameSpawn;
-import org.alexdev.kepler.game.games.*;
+import org.alexdev.kepler.game.games.Game;
+import org.alexdev.kepler.game.games.GameEvent;
+import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.models.RoomModel;
-import org.alexdev.kepler.game.room.models.RoomModelManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,14 @@ public class SnowStormGame extends Game {
     private int gameLengthChoice;
     private TurnContainer turnContainer;
     private List<GameObject> gameObjects;
+    private AtomicInteger objectId;
 
     public SnowStormGame(int id, int mapId, String name, int teamAmount, Player gameCreator, int gameLengthChoice) {
         super(id, mapId, GameType.SNOWSTORM, name, teamAmount, gameCreator);
         this.gameLengthChoice = gameLengthChoice;
         this.turnContainer = new TurnContainer();
         this.gameObjects = new CopyOnWriteArrayList<>();
+        this.objectId = new AtomicInteger(0);
     }
 
     @Override
@@ -56,7 +59,7 @@ public class SnowStormGame extends Game {
     public void assignSpawnPoints() {
         for (GameTeam team : this.getTeams().values()) {
             for (GamePlayer p : team.getPlayers()) {
-                /*if (p.getPlayer().getDetails().getId() == 4) {
+                if (p.getPlayer().getDetails().getId() == 4) {
                     p.getSpawnPosition().setX(73600);
                     p.getSpawnPosition().setY(80000);
                 }
@@ -76,13 +79,15 @@ public class SnowStormGame extends Game {
                 if (p.getPlayer().getDetails().getId() == 1) {
                     p.getSpawnPosition().setX(51200);
                     p.getSpawnPosition().setY(41600);
-                }*/
+                }
 
-                p.getSpawnPosition().setX(51200);
-                p.getSpawnPosition().setY(41600);
+                //p.getSpawnPosition().setX(51200);
+                //p.getSpawnPosition().setY(41600);
 
                 p.getSpawnPosition().setRotation(4);
                 p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
+
+                this.gameObjects.add(new SnowStormPlayerObject(p, this.objectId.incrementAndGet()));
             }
         }
     }

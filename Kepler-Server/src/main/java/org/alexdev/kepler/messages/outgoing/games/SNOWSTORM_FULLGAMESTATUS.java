@@ -14,18 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
-    private final Game game;
-    private final List<GamePlayer> gamePlayerList;
+    private final SnowStormGame game;
     private final GamePlayer gamePlayer;
 
-    public SNOWSTORM_FULLGAMESTATUS(Game game, GamePlayer gamePlayer) {
+    public SNOWSTORM_FULLGAMESTATUS(SnowStormGame game, GamePlayer gamePlayer) {
         this.game = game;
-        this.gamePlayerList = new ArrayList<>();
         this.gamePlayer = gamePlayer;
-
-        for (GameTeam team : this.game.getTeams().values()) {
-            this.gamePlayerList.addAll(team.getActivePlayers());
-        }
     }
 
     @Override
@@ -37,8 +31,8 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
         List<GameObject> objects = new ArrayList<>();
         List<GameObject> events = new ArrayList<>();
 
-        for (var gamePlayer : this.gamePlayerList) {
-            objects.add(new SnowStormPlayerObject(gamePlayer));
+        for (var gamePlayer : this.game.getGameObjects()) {
+            objects.add(gamePlayer);
             //objects.add(new SnowStormSpawnPlayerObject(gamePlayer));
         }
 
@@ -49,7 +43,7 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
         }
 
         response.writeBool(false);
-        response.writeInt(this.game.getTeamAmount());
+        response.writeInt(4);//this.game.getTeamAmount());
 
         this.gamePlayer.getTurnContainer().getCurrentTurn().incrementAndGet();
         this.gamePlayer.getTurnContainer().calculateChecksum(objects);

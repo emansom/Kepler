@@ -2,6 +2,7 @@ package org.alexdev.kepler.messages.incoming.rooms;
 
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.messages.outgoing.games.FULLGAMESTATUS;
@@ -26,7 +27,7 @@ public class G_HMAP implements MessageEvent {
             if (gamePlayer.getGame() instanceof BattleballGame) {
                 player.send(new FULLGAMESTATUS(gamePlayer.getGame(), gamePlayer));
             } else {
-                player.send(new SNOWSTORM_FULLGAMESTATUS(gamePlayer.getGame(), gamePlayer));
+                player.send(new SNOWSTORM_FULLGAMESTATUS((SnowStormGame) gamePlayer.getGame(), gamePlayer));
             }
         }
     }

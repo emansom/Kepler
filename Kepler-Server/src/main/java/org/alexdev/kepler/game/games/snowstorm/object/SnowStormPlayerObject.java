@@ -12,12 +12,14 @@ import java.util.List;
 
 public class SnowStormPlayerObject extends SnowStormGameObject {
     private final GamePlayer gamePlayer;
+    private final int objectId;
 
-    public SnowStormPlayerObject(GamePlayer gamePlayer) {
+    public SnowStormPlayerObject(GamePlayer gamePlayer, int objectId) {
         super(GameObjectType.SNOWSTORM_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
+        this.objectId = objectId;
         this.getGameObjectsSyncValues().add(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId()); // type id
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // int id
+        this.getGameObjectsSyncValues().add(this.objectId); // int id
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // x
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // y
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation()); // body direction
@@ -25,7 +27,7 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
         this.getGameObjectsSyncValues().add(5); // snowball count
         this.getGameObjectsSyncValues().add(0); // is bot 
         this.getGameObjectsSyncValues().add(0); // activity timer
-        this.getGameObjectsSyncValues().add(1); // activity state
+        this.getGameObjectsSyncValues().add(0); // activity state
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // next tile x
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // next tile y
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // move target x

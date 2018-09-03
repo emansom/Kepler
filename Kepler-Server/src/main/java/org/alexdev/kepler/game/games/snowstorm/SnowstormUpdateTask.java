@@ -68,8 +68,6 @@ public class SnowstormUpdateTask implements Runnable {
                         this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
                         RoomEntity roomEntity = player.getRoomUser();
 
-                        objects.add(new SnowStormPlayerObject(gamePlayer));
-
                         if (roomEntity.isNeedsUpdate()) {
                             roomEntity.setNeedsUpdate(false);
                         }
