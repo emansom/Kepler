@@ -42,9 +42,6 @@ public class GAMEEVENT implements MessageEvent {
             int X = reader.readInt();
             int Y = reader.readInt();
 
-            System.out.println("X: " + X);
-            System.out.println("Y: " + Y);
-
             player.getRoomUser().walkTo(X, Y);
         }
 
