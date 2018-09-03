@@ -43,7 +43,7 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
         }
 
         response.writeBool(false);
-        response.writeInt(4);//this.game.getTeamAmount());
+        response.writeInt(this.game.getTeamAmount());
 
         this.gamePlayer.getTurnContainer().iterateTurn();
         this.gamePlayer.getTurnContainer().calculateChecksum(objects);
