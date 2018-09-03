@@ -25,7 +25,7 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
         this.getGameObjectsSyncValues().add(5); // snowball count
         this.getGameObjectsSyncValues().add(0); // is bot 
         this.getGameObjectsSyncValues().add(0); // activity timer
-        this.getGameObjectsSyncValues().add(0); // activity state
+        this.getGameObjectsSyncValues().add(1); // activity state
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // next tile x
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // next tile y
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // move target x
@@ -66,7 +66,7 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
         response.writeInt(5); // snowball count
         response.writeInt(0); // is bot
         response.writeInt(0); // activity timer
-        response.writeInt(0); // activity state
+        response.writeInt(1); // activity state
         response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // next tile x
         response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // next tile y
         response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // move target x

@@ -43,15 +43,11 @@ public class FULLGAMESTATUS extends MessageComposer {
         if (this.game.getGameType() == GameType.SNOWSTORM) {
             List<GameObject> objects = new ArrayList<>();
 
-            for (var team : this.game.getTeams().values()) {
-                for (var gamePlayer : team.getActivePlayers()) {
-                    response.writeInt(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId());
+            for (var gamePlayer : this.gamePlayerList) {
+                response.writeInt(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId());
+                new SnowStormPlayerObject(gamePlayer).serialiseObject(response);
 
-                    GameObject obj = new SnowStormPlayerObject(gamePlayer);
-                    obj.serialiseObject(response);
-
-                    objects.add(new SnowStormSpawnPlayerEvent(gamePlayer));
-                }
+                objects.add(new SnowStormSpawnPlayerEvent(gamePlayer));
             }
 
             response.writeBool(false);

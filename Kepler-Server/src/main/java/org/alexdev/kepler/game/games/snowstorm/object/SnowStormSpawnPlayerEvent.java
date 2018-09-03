@@ -24,6 +24,6 @@ public class SnowStormSpawnPlayerEvent extends SnowStormGameObject {
         response.writeInt(GameObjectType.SNOWSTORM_SPAWN_PLAYER_ONE.getObjectId());
         obj.serialiseObject(response);
 
-        //response.writeInt(0);
+        response.writeInt(0);
     }
 }

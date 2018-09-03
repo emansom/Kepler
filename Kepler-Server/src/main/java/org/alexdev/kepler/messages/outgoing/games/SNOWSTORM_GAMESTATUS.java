@@ -29,12 +29,11 @@ public class SNOWSTORM_GAMESTATUS extends MessageComposer {
     public void compose(NettyResponse response) {
         response.writeInt(this.gamePlayer.getTurnContainer().getCurrentTurn().get());
         response.writeInt(this.gamePlayer.getTurnContainer().getCheckSum());
+        response.writeInt(1);
+
         response.writeInt(this.objects.size());
 
-       // response.writeInt(this.objects.size()); // TODO: Handle more than just objects events (power ups, etc)
-
         for (GameObject gameObject : this.objects) {
-            response.writeInt(1);
             response.writeInt(gameObject.getGameObjectType().getObjectId());
             gameObject.serialiseObject(response);
         }
