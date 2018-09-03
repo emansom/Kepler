@@ -1,14 +1,8 @@
 package org.alexdev.kepler.game.games.snowstorm.object;
 
-import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.snowstorm.SnowStormGameObject;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SnowStormPlayerObject extends SnowStormGameObject {
     private final GamePlayer gamePlayer;

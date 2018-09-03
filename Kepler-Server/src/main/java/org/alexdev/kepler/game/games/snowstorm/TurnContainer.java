@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.games.snowstorm;
 
 import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormGameObject;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;

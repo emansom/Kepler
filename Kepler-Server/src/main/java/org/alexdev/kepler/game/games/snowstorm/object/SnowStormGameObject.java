@@ -1,4 +1,4 @@
-package org.alexdev.kepler.game.games.snowstorm;
+package org.alexdev.kepler.game.games.snowstorm.object;
 
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.enums.GameObjectType;
