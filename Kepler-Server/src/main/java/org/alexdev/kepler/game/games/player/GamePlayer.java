@@ -2,8 +2,10 @@ package org.alexdev.kepler.game.games.player;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.snowstorm.TurnContainer;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.Room;
 
 public class GamePlayer {
     private Player player;
@@ -16,6 +18,7 @@ public class GamePlayer {
     private boolean isSpectator;
     private boolean inGame;
     private boolean clickedRestart;
+    private TurnContainer turnContainer;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -26,6 +29,7 @@ public class GamePlayer {
         this.enteringGame = false;
         this.clickedRestart = false;
         this.position = new Position();
+        this.turnContainer = new TurnContainer();
     }
 
     public Game getGame() {
@@ -100,4 +104,7 @@ public class GamePlayer {
         isSpectator = spectator;
     }
 
+    public TurnContainer getTurnContainer() {
+        return turnContainer;
+    }
 }

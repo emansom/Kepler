@@ -17,11 +17,13 @@ import java.util.concurrent.TimeUnit;
 
 public class SnowStormGame extends Game {
     private int gameLengthChoice;
+    private TurnContainer turnContainer;
     private List<GameObject> gameObjects;
 
     public SnowStormGame(int id, int mapId, String name, int teamAmount, Player gameCreator, int gameLengthChoice) {
         super(id, mapId, GameType.SNOWSTORM, name, teamAmount, gameCreator);
         this.gameLengthChoice = gameLengthChoice;
+        this.turnContainer = new TurnContainer();
         this.gameObjects = new CopyOnWriteArrayList<>();
     }
 
@@ -83,6 +85,10 @@ public class SnowStormGame extends Game {
 
     public int getGameLengthChoice() {
         return gameLengthChoice;
+    }
+
+    public TurnContainer getTurnContainer() {
+        return turnContainer;
     }
 
     public List<GameObject> getGameObjects() {

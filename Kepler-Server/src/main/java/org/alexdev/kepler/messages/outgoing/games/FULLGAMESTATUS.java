@@ -57,6 +57,9 @@ public class FULLGAMESTATUS extends MessageComposer {
             response.writeBool(false);
             response.writeInt(this.game.getTeamAmount());
 
+            this.gamePlayer.getTurnContainer().getCurrentTurn().incrementAndGet();
+            this.gamePlayer.getTurnContainer().calculateChecksum(objects);
+
             new SNOWSTORM_GAMESTATUS((SnowStormGame) this.game, objects, this.gamePlayer).compose(response);
         }
 
