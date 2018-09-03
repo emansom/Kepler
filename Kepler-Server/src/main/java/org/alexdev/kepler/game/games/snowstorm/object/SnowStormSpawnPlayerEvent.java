@@ -7,23 +7,20 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class SnowStormSpawnPlayerEvent extends SnowStormGameObject {
     private final GamePlayer gamePlayer;
-    private final SnowStormPlayerObject obj;// = new SnowStormPlayerObject(gamePlayer);
 
     public SnowStormSpawnPlayerEvent(GamePlayer gamePlayer) {
-        super(GameObjectType.SNOWSTORM_SPAWN_PLAYER_ONE);
+        super(GameObjectType.SNOWWAR_OBJECT);
         this.gamePlayer = gamePlayer;
-
-        this.obj = new SnowStormPlayerObject(gamePlayer);
-        this.getGameObjectsSyncValues().addAll(this.obj.getGameObjectsSyncValues());
+        this.getGameObjectsSyncValues().addAll(new SnowStormPlayerObject(gamePlayer).getGameObjectsSyncValues());
     }
 
     @Override
     public void serialiseObject(NettyResponse response) {
-        response.writeInt(0);//GameObjectType.SNOWSTORM_SPAWN_PLAYER_ONE.getObjectId());
+        //response.writeInt(GameObjectType.SNOWWAR_OBJECT.getObjectId());
 
-        response.writeInt(GameObjectType.SNOWSTORM_SPAWN_PLAYER_ONE.getObjectId());
-        obj.serialiseObject(response);
-
-        response.writeInt(0);
+        //response.writeInt(GameObjectType.SNOWSTORM_SPAWN_PLAYER_EVENT.getObjectId());
+        //response.writeInt(this.gamePlayer.getPlayer().getDetails().getId());
+        //response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getRoom().getId());
+        //response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getInstanceId());
     }
 }

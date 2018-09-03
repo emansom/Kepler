@@ -34,7 +34,6 @@ public class SNOWSTORM_GAMESTATUS extends MessageComposer {
         response.writeInt(this.objects.size());
 
         for (GameObject gameObject : this.objects) {
-            response.writeInt(gameObject.getGameObjectType().getObjectId());
             gameObject.serialiseObject(response);
         }
     }

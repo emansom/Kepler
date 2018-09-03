@@ -58,6 +58,7 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
 
     @Override
     public void serialiseObject(NettyResponse response) {
+        response.writeInt(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId());
         response.writeInt(gamePlayer.getPlayer().getDetails().getId());
         response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
         response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY());

@@ -56,7 +56,7 @@ public class SnowStormGame extends Game {
     public void assignSpawnPoints() {
         for (GameTeam team : this.getTeams().values()) {
             for (GamePlayer p : team.getPlayers()) {
-                if (p.getPlayer().getDetails().getId() == 1) {
+                if (p.getPlayer().getDetails().getId() == 4) {
                     p.getSpawnPosition().setX(73600);
                     p.getSpawnPosition().setY(80000);
                 } else {
