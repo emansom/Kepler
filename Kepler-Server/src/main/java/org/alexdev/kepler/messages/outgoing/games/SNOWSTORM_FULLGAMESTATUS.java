@@ -3,23 +3,21 @@ package org.alexdev.kepler.messages.outgoing.games;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
     private final SnowStormGame game;
-    private final GamePlayer gamePlayer;
+    private final List<GameObject> objects;
+    private final List<GameObject> events;
 
-    public SNOWSTORM_FULLGAMESTATUS(SnowStormGame game, GamePlayer gamePlayer) {
+    public SNOWSTORM_FULLGAMESTATUS(SnowStormGame game, List<GameObject> objects, List<GameObject> events) {
         this.game = game;
-        this.gamePlayer = gamePlayer;
+        this.objects = objects;
+        this.events = events;
     }
 
     @Override
@@ -27,16 +25,7 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
         response.writeInt(this.game.getGameState().getStateId());
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
         response.writeInt(GameManager.getInstance().getPreparingSeconds(game.getGameType()));
-
-        List<GameObject> objects = new ArrayList<>();
-        List<GameObject> events = new ArrayList<>();
-
-        for (var gamePlayer : this.game.getGameObjects()) {
-            objects.add(gamePlayer);
-            //objects.add(new SnowStormSpawnPlayerObject(gamePlayer));
-        }
-
-        response.writeInt(objects.size());
+        response.writeInt(this.objects.size());
 
         for (var obj : objects) {
             obj.serialiseObject(response);
@@ -44,11 +33,15 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
 
         response.writeBool(false);
         response.writeInt(this.game.getTeamAmount());
+        response.writeInt(this.game.getTurnContainer().getCurrentTurn());
+        response.writeInt(this.game.getTurnContainer().getCheckSum());
+        response.writeInt(1);
 
-        this.gamePlayer.getTurnContainer().iterateTurn();
-        this.gamePlayer.getTurnContainer().calculateChecksum(objects);
+        response.writeInt(this.events.size());
 
-        new SNOWSTORM_GAMESTATUS((SnowStormGame) this.game, events, this.gamePlayer).compose(response);
+        for (GameObject gameObject : this.events) {
+            gameObject.serialiseObject(response);
+        }
     }
 
     @Override
