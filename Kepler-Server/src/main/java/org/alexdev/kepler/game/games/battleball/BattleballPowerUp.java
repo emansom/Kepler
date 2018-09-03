@@ -45,15 +45,11 @@ public class BattleballPowerUp {
         return timeToDespawn;
     }
 
-    public GamePlayer getPlayerHolding() {
-        return playerHolding;
-    }
-
     public void setPlayerHolding(GamePlayer playerHolding) {
         this.playerHolding = playerHolding;
     }
 
-    public Integer getPlayerHoldingId() {
+    public Integer getPlayerHolding() {
         if (this.playerHolding != null) {
             return this.playerHolding.getPlayer().getRoomUser().getInstanceId();
         }
