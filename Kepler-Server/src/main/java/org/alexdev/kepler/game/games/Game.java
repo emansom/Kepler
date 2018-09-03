@@ -248,7 +248,7 @@ public abstract class Game {
         }
 
         // Only create a new game if there's two players who joined
-        if (players.size() >= 2) {
+        if (players.size() >= GameConfiguration.getInstance().getInteger(this.gameType.name().toLowerCase() + ".start.minimum.active.teams")) {
             this.initialise(players);
         } else {
             afkPlayers.addAll(players);
