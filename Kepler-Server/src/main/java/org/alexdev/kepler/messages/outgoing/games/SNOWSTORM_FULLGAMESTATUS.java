@@ -1,17 +1,12 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.enums.GameObjectType;
-import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormSpawnPlayerEvent;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -41,9 +36,11 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
         response.writeInt(this.gamePlayerList.size());
 
         List<GameObject> objects = new ArrayList<>();
+        List<GameObject> events = new ArrayList<>();
 
         for (var gamePlayer : this.gamePlayerList) {
             objects.add(new SnowStormPlayerObject(gamePlayer));
+            //events.add(new SnowStormSpawnPlayerEvent(gamePlayer));
         }
 
         for (var obj : objects) {
@@ -56,7 +53,7 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
         this.gamePlayer.getTurnContainer().getCurrentTurn().incrementAndGet();
         this.gamePlayer.getTurnContainer().calculateChecksum(objects);
 
-        new SNOWSTORM_GAMESTATUS((SnowStormGame) this.game, List.of(), this.gamePlayer).compose(response);
+        new SNOWSTORM_GAMESTATUS((SnowStormGame) this.game, events, this.gamePlayer).compose(response);
     }
 
     @Override

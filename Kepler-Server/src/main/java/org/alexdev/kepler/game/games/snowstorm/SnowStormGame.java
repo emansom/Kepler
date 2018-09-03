@@ -56,15 +56,33 @@ public class SnowStormGame extends Game {
     public void assignSpawnPoints() {
         for (GameTeam team : this.getTeams().values()) {
             for (GamePlayer p : team.getPlayers()) {
-                if (p.getPlayer().getDetails().getId() == 4) {
+                /*if (p.getPlayer().getDetails().getId() == 4) {
                     p.getSpawnPosition().setX(73600);
                     p.getSpawnPosition().setY(80000);
-                } else {
-                    p.getSpawnPosition().setX(92800);
-                    p.getSpawnPosition().setY(105600);
                 }
 
+                if (p.getPlayer().getDetails().getId() == 2) {
+                    p.getSpawnPosition().setX(102400);
+                    p.getSpawnPosition().setY(9600);
+                }
+
+
+                if (p.getPlayer().getDetails().getId() == 3) {
+                    p.getSpawnPosition().setX(83200);
+                    p.getSpawnPosition().setY(57600);
+                }
+
+
+                if (p.getPlayer().getDetails().getId() == 1) {
+                    p.getSpawnPosition().setX(51200);
+                    p.getSpawnPosition().setY(41600);
+                }*/
+
+                p.getSpawnPosition().setX(51200);
+                p.getSpawnPosition().setY(41600);
+
                 p.getSpawnPosition().setRotation(4);
+                p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
             }
         }
     }

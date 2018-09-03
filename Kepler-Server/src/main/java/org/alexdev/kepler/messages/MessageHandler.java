@@ -1,11 +1,5 @@
 package org.alexdev.kepler.messages;
 
-import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.enums.GameObjectType;
-import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormSpawnPlayerEvent;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.log.Log;
@@ -31,15 +25,12 @@ import org.alexdev.kepler.messages.incoming.songs.*;
 import org.alexdev.kepler.messages.incoming.trade.*;
 import org.alexdev.kepler.messages.incoming.tutorial.*;
 import org.alexdev.kepler.messages.incoming.user.*;
-import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_GAMESTATUS;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.ServerConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class MessageHandler {
