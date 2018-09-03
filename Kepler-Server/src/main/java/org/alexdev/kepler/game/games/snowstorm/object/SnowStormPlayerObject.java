@@ -58,24 +58,13 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
 
     @Override
     public void serialiseObject(NettyResponse response) {
-        response.writeInt(GameObjectType.SNOWSTORM_PLAYER_OBJECT.getObjectId());
-        response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY());
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
-        response.writeInt(0); // hit points
-        response.writeInt(5); // snowball count
-        response.writeInt(0); // is bot
-        response.writeInt(0); // activity timer
-        response.writeInt(1); // activity state
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // next tile x
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // next tile y
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // move target x
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // move target y
-        response.writeInt(0); // score
-        response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-        response.writeInt(gamePlayer.getTeamId());
-        response.writeInt(gamePlayer.getPlayer().getRoomUser().getRoom().getId());
+        for (int syncValue : this.getGameObjectsSyncValues()) {
+            System.out.println("Sync value: " + syncValue);
+            response.writeInt(syncValue);
+        }
+
+        System.out.println("End of sync values");
+
         response.writeString(gamePlayer.getPlayer().getDetails().getName());
         response.writeString(gamePlayer.getPlayer().getDetails().getMotto());
         response.writeString(gamePlayer.getPlayer().getDetails().getFigure());
