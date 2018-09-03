@@ -7,7 +7,6 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormSpawnPlayerObject;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
