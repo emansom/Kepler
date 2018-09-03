@@ -61,11 +61,8 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
     @Override
     public void serialiseObject(NettyResponse response) {
         for (int syncValue : this.getGameObjectsSyncValues()) {
-            System.out.println("Sync value: " + syncValue);
             response.writeInt(syncValue);
         }
-
-        System.out.println("End of sync values");
 
         response.writeString(gamePlayer.getPlayer().getDetails().getName());
         response.writeString(gamePlayer.getPlayer().getDetails().getMotto());
