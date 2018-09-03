@@ -87,7 +87,6 @@ public class SnowStormGame extends Game {
                 p.getSpawnPosition().setRotation(ThreadLocalRandom.current().nextInt(0, 7));
 
                 p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
-                this.gameObjects.add(new SnowStormPlayerObject(p, this.objectId.incrementAndGet()));
             }
         }
     }

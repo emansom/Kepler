@@ -6,14 +6,12 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class SnowStormPlayerObject extends SnowStormGameObject {
     private final GamePlayer gamePlayer;
-    private final int objectId;
 
-    public SnowStormPlayerObject(GamePlayer gamePlayer, int objectId) {
+    public SnowStormPlayerObject(GamePlayer gamePlayer) {
         super(GameObjectType.SNOWWAR_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
-        this.objectId = objectId;
         this.getGameObjectsSyncValues().add(GameObjectType.SNOWWAR_PLAYER_OBJECT.getObjectId()); // type id
-        this.getGameObjectsSyncValues().add(this.objectId); // int id
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // int id
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // x
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // y
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation()); // body direction

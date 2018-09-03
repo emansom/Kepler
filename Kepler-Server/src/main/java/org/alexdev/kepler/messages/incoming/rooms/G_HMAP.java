@@ -1,8 +1,11 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
+import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.games.FULLGAMESTATUS;
 import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_FULLGAMESTATUS;
@@ -10,6 +13,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.HEIGHTMAP;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class G_HMAP implements MessageEvent {
@@ -29,10 +33,19 @@ public class G_HMAP implements MessageEvent {
             } else {
                 SnowStormGame game = (SnowStormGame) gamePlayer.getGame();
 
-                game.getTurnContainer().iterateTurn();
-                game.getTurnContainer().calculateChecksum(game.getGameObjects());
+                List<GameObject> objects = new ArrayList<>();
+                List<GameObject> events = new ArrayList<>();
 
-                player.send(new SNOWSTORM_FULLGAMESTATUS((SnowStormGame) gamePlayer.getGame(), game.getGameObjects(), List.of()));
+                for (GameTeam gameTeam : game.getTeams().values()) {
+                    for (GamePlayer p : gameTeam.getActivePlayers()) {
+                        objects.add(new SnowStormPlayerObject(p));
+                    }
+                }
+
+                gamePlayer.getTurnContainer().iterateTurn();
+                gamePlayer.getTurnContainer().calculateChecksum(objects);
+
+                player.send(new SNOWSTORM_FULLGAMESTATUS(game, gamePlayer, objects, events));
             }
         }
     }

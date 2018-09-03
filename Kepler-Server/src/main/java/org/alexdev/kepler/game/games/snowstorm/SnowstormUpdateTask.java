@@ -16,6 +16,7 @@ import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_FULLGAMESTATUS;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class SnowstormUpdateTask implements Runnable {
             }
 
             List<GameObject> objects = new ArrayList<>();
-            List<GameEvent> events = new ArrayList<>();
+            List<GameObject> events = new ArrayList<>();
 
             //this.game.getEventsQueue().drainTo(events);
             //this.game.getObjectsQueue().drainTo(objects);
@@ -58,12 +59,17 @@ public class SnowstormUpdateTask implements Runnable {
                             && player.getRoomUser().getRoom() != null
                             && player.getRoomUser().getRoom() == this.room) {
 
-                        this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
+                        this.processEntity(gamePlayer, objects, events);
                         RoomEntity roomEntity = player.getRoomUser();
 
                         if (roomEntity.isNeedsUpdate()) {
                             roomEntity.setNeedsUpdate(false);
                         }
+
+                        //gamePlayer.getTurnContainer().iterateTurn();
+                        //gamePlayer.getTurnContainer().calculateChecksum(game.getGameObjects());
+
+                        //player.send(new SNOWSTORM_FULLGAMESTATUS(game, gamePlayer, game.getGameObjects(), events));
 
                         //this.game.send(new SNOWSTORM_FULLGAMESTATUS(this.game, gamePlayer));
                     }
@@ -81,7 +87,7 @@ public class SnowstormUpdateTask implements Runnable {
     /**
      * Process entity.
      */
-    private void processEntity(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
+    private void processEntity(GamePlayer gamePlayer, List<GameObject> objects, List<GameObject> events) {
         Entity entity = (Entity) gamePlayer.getPlayer();
         Game game = gamePlayer.getGame();
 
@@ -106,7 +112,7 @@ public class SnowstormUpdateTask implements Runnable {
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
                     entity.getRoomUser().getPath().clear();
                     roomEntity.walkTo(goal.getX(), goal.getY());
-                    this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
+                    this.processEntity(gamePlayer, objects, events);
                     return;
                 }
 
@@ -127,7 +133,7 @@ public class SnowstormUpdateTask implements Runnable {
                 roomEntity.setNextPosition(next);
 
                 // Add next position if moving
-                events.add(new PlayerMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
+                //events.add(new SnowStormMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
             } else {
                 roomEntity.stopWalking();
             }
