@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormSpawnPlayerObject;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
@@ -33,15 +34,16 @@ public class SNOWSTORM_FULLGAMESTATUS extends MessageComposer {
         response.writeInt(this.game.getGameState().getStateId());
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
         response.writeInt(GameManager.getInstance().getPreparingSeconds(game.getGameType()));
-        response.writeInt(this.gamePlayerList.size());
 
         List<GameObject> objects = new ArrayList<>();
         List<GameObject> events = new ArrayList<>();
 
         for (var gamePlayer : this.gamePlayerList) {
             objects.add(new SnowStormPlayerObject(gamePlayer));
-            //events.add(new SnowStormSpawnPlayerEvent(gamePlayer));
+            //objects.add(new SnowStormSpawnPlayerObject(gamePlayer));
         }
+
+        response.writeInt(objects.size());
 
         for (var obj : objects) {
             obj.serialiseObject(response);
