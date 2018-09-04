@@ -17,6 +17,7 @@ import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_FULLGAMESTATUS;
+import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_GAMESTATUS;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class SnowstormUpdateTask implements Runnable {
                             roomEntity.setNeedsUpdate(false);
                         }
 
-                        events.add(new SnowStormAvatarObject(gamePlayer));
+                        //objects.add(new SnowStormAvatarObject(gamePlayer));
 
                         playersToUpdate.add(gamePlayer);
                     }
@@ -66,9 +67,9 @@ public class SnowstormUpdateTask implements Runnable {
             }
 
             for (GamePlayer gamePlayer : playersToUpdate) {
-                //gamePlayer.getTurnContainer().iterateTurn();
-                //gamePlayer.getTurnContainer().calculateChecksum(objects);
-                //gamePlayer.getPlayer().send(new SNOWSTORM_FULLGAMESTATUS(this.game, gamePlayer, objects, events));
+                gamePlayer.getTurnContainer().iterateTurn();
+                gamePlayer.getTurnContainer().calculateChecksum(objects);
+                gamePlayer.getPlayer().send(new SNOWSTORM_GAMESTATUS(gamePlayer, events));
             }
 
         } catch (Exception ex) {
