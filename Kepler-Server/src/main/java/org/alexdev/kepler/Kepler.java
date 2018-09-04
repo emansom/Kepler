@@ -111,6 +111,10 @@ public class Kepler {
         }
     }
 
+    private static int bitLeft(int n, int s) {
+        return (int) (n * Math.pow(2, Math.floorMod(s, 32)));
+    }
+
     private static void setupServer() throws UnknownHostException {
         String serverIP = ServerConfiguration.getString("bind");
 

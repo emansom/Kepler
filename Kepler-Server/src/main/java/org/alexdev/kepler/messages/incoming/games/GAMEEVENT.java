@@ -5,6 +5,7 @@ import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.battleball.events.ActivatePowerUpEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -25,6 +26,19 @@ public class GAMEEVENT implements MessageEvent {
         Game game = gamePlayer.getGame();
 
         int eventType = reader.readInt(); // Instance ID? Useless?
+
+        // Walk request
+        if (eventType == 0) {
+            int X = reader.readInt();
+            int Y = reader.readInt();
+
+            System.out.println("X: " + X);
+            System.out.println("Y: " + Y);
+
+            player.getRoomUser().getPosition().setX(SnowStormGame.convertToGameCoordinate(X, game));
+            player.getRoomUser().getPosition().setY(SnowStormGame.convertToGameCoordinate(Y, game));
+            //player.getRoomUser().walkTo(X, Y);
+        }
 
         // Jump request
         if (eventType == 2) {

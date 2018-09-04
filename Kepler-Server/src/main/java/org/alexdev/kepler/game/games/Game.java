@@ -90,12 +90,14 @@ public abstract class Game {
         this.preparingGameSecondsLeft = new AtomicInteger(GameManager.getInstance().getPreparingSeconds(this.gameType));
         this.totalSecondsLeft = new AtomicInteger(GameManager.getInstance().getLifetimeSeconds(this.gameType));
 
-        this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
+        if (this.roomModel == null) {
+            this.roomModel = GameManager.getInstance().getModel(this.gameType, this.mapId);
+        }
 
         if (this.room == null) {
             this.room = new Room();
             this.room.getData().fill(this.id, "Battleball Arena", "");
-            this.room.setRoomModel(this.roomModel);
+            this.room.setRoomModel(this.getRoomModel());
         }
 
         this.buildMap();
@@ -248,7 +250,7 @@ public abstract class Game {
         }
 
         // Only create a new game if there's two players who joined
-        if (players.size() >= 2) {
+        if (players.size() >= GameConfiguration.getInstance().getInteger(this.gameType.name().toLowerCase() + ".start.minimum.active.teams")) {
             this.initialise(players);
         } else {
             afkPlayers.addAll(players);
@@ -286,7 +288,7 @@ public abstract class Game {
         }
 
         this.initialise();
-        this.send(new FULLGAMESTATUS(this, false));  // Show users back at spawn positions
+        this.send(new FULLGAMESTATUS(this, null));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
 
         // Start game after "game is about to begin"
@@ -679,5 +681,9 @@ public abstract class Game {
 
     public BlockingQueue<GameObject> getObjectsQueue() {
         return objectsQueue;
+    }
+
+    public void setRoomModel(RoomModel roomModel) {
+        this.roomModel = roomModel;
     }
 }

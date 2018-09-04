@@ -2,16 +2,12 @@ package org.alexdev.kepler.game.games.snowstorm;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
-import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
-import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
-import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.snowstorm.events.SnowStormObjectEvent;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormAvatarObject;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
@@ -20,7 +16,7 @@ import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
-import org.alexdev.kepler.messages.outgoing.games.GAMESTATUS;
+import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_FULLGAMESTATUS;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
@@ -43,17 +39,9 @@ public class SnowstormUpdateTask implements Runnable {
             }
 
             List<GameObject> objects = new ArrayList<>();
-            List<GameEvent> events = new ArrayList<>();
+            List<GameObject> events = new ArrayList<>();
 
-            this.game.getEventsQueue().drainTo(events);
-            this.game.getObjectsQueue().drainTo(objects);
-
-            // for (BattleballPowerUp battleballPowerUp : this.game.getActivePowers()) {
-            //     objects.add(new PowerObject(battleballPowerUp));
-            // }
-
-            List<BattleballTile> updateTiles = new ArrayList<>();
-            List<BattleballTile> fillTiles = new ArrayList<>();
+            List<GamePlayer> playersToUpdate = new ArrayList<>();
 
             for (GameTeam gameTeam : this.game.getTeams().values()) {
                 for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
@@ -63,28 +51,35 @@ public class SnowstormUpdateTask implements Runnable {
                             && player.getRoomUser().getRoom() != null
                             && player.getRoomUser().getRoom() == this.room) {
 
-                        this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
+                        this.processEntity(gamePlayer, objects, events);
                         RoomEntity roomEntity = player.getRoomUser();
-
-                        objects.add(new PlayerObject(gamePlayer));
 
                         if (roomEntity.isNeedsUpdate()) {
                             roomEntity.setNeedsUpdate(false);
                         }
+
+                        events.add(new SnowStormAvatarObject(gamePlayer));
+
+                        playersToUpdate.add(gamePlayer);
                     }
                 }
             }
 
-            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events));
+            for (GamePlayer gamePlayer : playersToUpdate) {
+                //gamePlayer.getTurnContainer().iterateTurn();
+                //gamePlayer.getTurnContainer().calculateChecksum(objects);
+                //gamePlayer.getPlayer().send(new SNOWSTORM_FULLGAMESTATUS(this.game, gamePlayer, objects, events));
+            }
+
         } catch (Exception ex) {
-            Log.getErrorLogger().error("GameTask crashed: ", ex);
+            Log.getErrorLogger().error("SnowstormUpdateTask crashed: ", ex);
         }
     }
 
     /**
      * Process entity.
      */
-    private void processEntity(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
+    private void processEntity(GamePlayer gamePlayer, List<GameObject> objects, List<GameObject> events) {
         Entity entity = (Entity) gamePlayer.getPlayer();
         Game game = gamePlayer.getGame();
 
@@ -109,7 +104,7 @@ public class SnowstormUpdateTask implements Runnable {
                 if (!RoomTile.isValidTile(this.room, entity, next)) {
                     entity.getRoomUser().getPath().clear();
                     roomEntity.walkTo(goal.getX(), goal.getY());
-                    this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
+                    this.processEntity(gamePlayer, objects, events);
                     return;
                 }
 
@@ -130,7 +125,7 @@ public class SnowstormUpdateTask implements Runnable {
                 roomEntity.setNextPosition(next);
 
                 // Add next position if moving
-                events.add(new PlayerMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
+                //events.add(new SnowStormMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
             } else {
                 roomEntity.stopWalking();
             }

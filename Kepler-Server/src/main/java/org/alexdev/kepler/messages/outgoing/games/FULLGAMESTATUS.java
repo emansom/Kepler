@@ -16,12 +16,12 @@ import java.util.List;
 public class FULLGAMESTATUS extends MessageComposer {
     private final Game game;
     private final List<GamePlayer> gamePlayerList;
-    private final boolean startedGame;
+    private final GamePlayer gamePlayer;
 
-    public FULLGAMESTATUS(Game game, boolean startedGame) {
+    public FULLGAMESTATUS(Game game, GamePlayer gamePlayer) {
         this.game = game;
         this.gamePlayerList = new ArrayList<>();
-        this.startedGame = startedGame;
+        this.gamePlayer = gamePlayer;
 
         for (GameTeam team : this.game.getTeams().values()) {
             this.gamePlayerList.addAll(team.getActivePlayers());
@@ -34,39 +34,6 @@ public class FULLGAMESTATUS extends MessageComposer {
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
         response.writeInt(GameManager.getInstance().getPreparingSeconds(game.getGameType()));
         response.writeInt(this.gamePlayerList.size()); // TODO: Objects here
-
-        if (this.game.getGameType() == GameType.SNOWSTORM) {
-            for (var team : this.game.getTeams().values()) {
-                for (var gamePlayer : team.getActivePlayers()) {
-                    response.writeInt(5); // type, 0 = player
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-                    response.writeInt(4);//gamePlayer.getPlayer().getRoomUser().getPosition().getX());
-                    response.writeInt(4);//gamePlayer.getPlayer().getRoomUser().getPosition().getY());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
-                    response.writeInt(0); // hit points
-                    response.writeInt(0); // snowball count
-                    response.writeInt(0); // is bot
-                    response.writeInt(0); // activity timer
-                    response.writeInt(0); // activity state
-                    response.writeInt(0); // next tile x
-                    response.writeInt(0); // next tile y
-                    response.writeInt(0); // move target x
-                    response.writeInt(0); // move targett y
-                    response.writeInt(0); // score
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-                    response.writeInt(gamePlayer.getTeamId());
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getRoom().getId());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getName());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getMotto());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getFigure());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getSex());// Actually room user id/instance id
-                }
-            }
-
-            response.writeBool(false);
-            response.writeInt(this.game.getTeamAmount());
-        }
 
         if (this.game.getGameType() == GameType.BATTLEBALL) {
             for (var team : this.game.getTeams().values()) {

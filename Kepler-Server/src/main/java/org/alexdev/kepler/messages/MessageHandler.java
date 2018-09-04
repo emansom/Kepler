@@ -325,6 +325,18 @@ public class MessageHandler {
         registerEvent(170, new STARTGAME());
         registerEvent(171, new GAMEEVENT());
         registerEvent(172, new GAMERESTART());
+        /*registerEvent(173, (player, reader) -> {
+            List<GameObject> objects = new ArrayList<>();
+            objects.add(new SnowStormSpawnPlayerEvent(player.getRoomUser().getGamePlayer()));
+
+            GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
+            SnowStormGame game = (SnowStormGame) gamePlayer.getGame();
+
+            gamePlayer.getTurnContainer().calculateChecksum(objects);
+            gamePlayer.getTurnContainer().getCurrentTurn().incrementAndGet();
+
+            player.send(new SNOWSTORM_GAMESTATUS((SnowStormGame) game, List.of(), gamePlayer));//.compose(response);
+        });*/
     }
 
     /**
