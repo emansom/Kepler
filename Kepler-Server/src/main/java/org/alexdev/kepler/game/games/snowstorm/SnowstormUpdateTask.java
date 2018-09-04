@@ -59,9 +59,11 @@ public class SnowstormUpdateTask implements Runnable {
                             roomEntity.setNeedsUpdate(false);
                         }
 
-                        //objects.add(new SnowStormAvatarObject(gamePlayer));
+                       // objects.add(new SnowStormAvatarObject(gamePlayer));
+                        //objects.add(new SnowStormPlayerObject(gamePlayer));
+                        //.add(new SnowStormObjectEvent(new SnowStormAvatarObject(gamePlayer)));
 
-                        playersToUpdate.add(gamePlayer);
+                    // playersToUpdate.add(gamePlayer);
                     }
                 }
             }

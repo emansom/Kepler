@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class TurnContainer {
     private AtomicInteger currentTurn;
-    private List<GameObject> objectList;
     private int checkSum;
 
     public TurnContainer() {
@@ -21,12 +20,10 @@ public class TurnContainer {
      * @param objectList the object list that's sent to the client
      */
     public void calculateChecksum(List<GameObject> objectList) {
-        this.objectList = objectList;
-
         int tCheckSum;
 
         tCheckSum = iterateSeed(this.currentTurn.get());
-        tCheckSum = calculateChecksum(tCheckSum);
+        tCheckSum = calculateChecksum(tCheckSum, objectList);
 
         this.checkSum = tCheckSum;
     }
@@ -34,12 +31,13 @@ public class TurnContainer {
     /**
      * Calculate object checksum based on the seed given
      * @param tSeed the checksum created by above
+     * @param objectList
      * @return the integer to add on to the seed
      */
-    private int calculateChecksum(int tSeed) {
+    private int calculateChecksum(int tSeed, List<GameObject> objectList) {
         int tCheckSum = tSeed;
 
-        for (var object : this.objectList) {
+        for (var object : objectList) {
             SnowStormObject gameObject = (SnowStormObject) object;
             tCheckSum = tCheckSum + addChecksum(gameObject.getGameObjectsSyncValues());
         }
