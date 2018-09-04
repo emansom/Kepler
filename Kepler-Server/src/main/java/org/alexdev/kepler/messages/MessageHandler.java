@@ -384,7 +384,14 @@ public class MessageHandler {
             try {
                 event.handle(player, message);
             } catch (Exception ex) {
-                Log.getErrorLogger().error("Error occurred when handling (" + message.getHeaderId() + "):", ex);
+                String name = "";
+
+                if (player != null && player.isLoggedIn()) {
+                    name = player.getDetails().getName();
+                }
+
+
+                Log.getErrorLogger().error("Error occurred when handling (" + message.getHeaderId() + ") for user (" + name + "):", ex);
             }
         }
 
