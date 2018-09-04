@@ -2,14 +2,11 @@ package org.alexdev.kepler.game.games.snowstorm;
 
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.events.SnowStormObjectEvent;
-import org.alexdev.kepler.game.games.snowstorm.events.SnowStormSpawnPlayer;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormAvatarObject;
 import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
@@ -61,7 +58,7 @@ public class SnowstormUpdateTask implements Runnable {
                             roomEntity.setNeedsUpdate(false);
                         }
 
-                        objects.add(new SnowStormPlayerObject(gamePlayer));
+                        events.add(new SnowStormAvatarObject(gamePlayer));
 
                         playersToUpdate.add(gamePlayer);
                     }
@@ -69,9 +66,9 @@ public class SnowstormUpdateTask implements Runnable {
             }
 
             for (GamePlayer gamePlayer : playersToUpdate) {
-                gamePlayer.getTurnContainer().iterateTurn();
-                gamePlayer.getTurnContainer().calculateChecksum(objects);
-                gamePlayer.getPlayer().send(new SNOWSTORM_FULLGAMESTATUS(this.game, gamePlayer, objects, events));
+                //gamePlayer.getTurnContainer().iterateTurn();
+                //gamePlayer.getTurnContainer().calculateChecksum(objects);
+                //gamePlayer.getPlayer().send(new SNOWSTORM_FULLGAMESTATUS(this.game, gamePlayer, objects, events));
             }
 
         } catch (Exception ex) {

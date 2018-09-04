@@ -2,32 +2,17 @@ package org.alexdev.kepler.game.games.snowstorm.object;
 
 import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormObject;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class SnowStormPlayerObject extends SnowStormGameObject {
+public class SnowStormPlayerObject extends SnowStormObject {
     private final GamePlayer gamePlayer;
 
     public SnowStormPlayerObject(GamePlayer gamePlayer) {
         super(GameObjectType.SNOWWAR_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
-        this.getGameObjectsSyncValues().add(GameObjectType.SNOWWAR_PLAYER_OBJECT.getObjectId()); // type id
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // int id
-        this.getGameObjectsSyncValues().add(SnowStormGame.convertToWorldCoordinate(gamePlayer.getPlayer().getRoomUser().getPosition().getX(), gamePlayer.getGame())); // x
-        this.getGameObjectsSyncValues().add(SnowStormGame.convertToWorldCoordinate(gamePlayer.getPlayer().getRoomUser().getPosition().getY(), gamePlayer.getGame())); // y
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation()); // body direction
-        this.getGameObjectsSyncValues().add(0); // hit points
-        this.getGameObjectsSyncValues().add(5); // snowball count
-        this.getGameObjectsSyncValues().add(0); // is bot 
-        this.getGameObjectsSyncValues().add(0); // activity timer
-        this.getGameObjectsSyncValues().add(0); // activity state
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // next tile x
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // next tile y
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // move target x
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // move target y
-        this.getGameObjectsSyncValues().add(0); // score
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getDetails().getId()); // player id
-        this.getGameObjectsSyncValues().add(gamePlayer.getTeamId()); // team id
+        this.getGameObjectsSyncValues().add(this.getGameObjectType().getObjectId()); // type id
+        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getDetails().getId()); // int id
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // room index
 
         // ["type: 5",
@@ -53,13 +38,11 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
 
     @Override
     public void serialiseObject(NettyResponse response) {
+        response.writeInt(this.getGameObjectType().getObjectId());
+        response.writeInt(gamePlayer.getPlayer().getRoomUser().getInstanceId());
+
         for (int syncValue : this.getGameObjectsSyncValues()) {
             response.writeInt(syncValue);
         }
-
-        response.writeString(gamePlayer.getPlayer().getDetails().getName());
-        response.writeString(gamePlayer.getPlayer().getDetails().getMotto());
-        response.writeString(gamePlayer.getPlayer().getDetails().getFigure());
-        response.writeString(gamePlayer.getPlayer().getDetails().getSex());// Actually room user id/instance id
     }
 }

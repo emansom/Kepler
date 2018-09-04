@@ -1,7 +1,6 @@
 package org.alexdev.kepler.game.games.snowstorm;
 
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormGameObject;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -41,7 +40,7 @@ public class TurnContainer {
         int tCheckSum = tSeed;
 
         for (var object : this.objectList) {
-            SnowStormGameObject gameObject = (SnowStormGameObject) object;
+            SnowStormObject gameObject = (SnowStormObject) object;
             tCheckSum = tCheckSum + addChecksum(gameObject.getGameObjectsSyncValues());
         }
 

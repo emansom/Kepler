@@ -5,7 +5,7 @@ import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormAvatarObject;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.games.FULLGAMESTATUS;
 import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_FULLGAMESTATUS;
@@ -38,7 +38,7 @@ public class G_HMAP implements MessageEvent {
 
                 for (GameTeam gameTeam : game.getTeams().values()) {
                     for (GamePlayer p : gameTeam.getActivePlayers()) {
-                        objects.add(new SnowStormPlayerObject(p));
+                        objects.add(new SnowStormAvatarObject(p));
                     }
                 }
 

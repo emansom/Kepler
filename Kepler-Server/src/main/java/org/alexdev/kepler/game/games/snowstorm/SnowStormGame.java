@@ -7,7 +7,6 @@ import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
-import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.models.RoomModel;
 
