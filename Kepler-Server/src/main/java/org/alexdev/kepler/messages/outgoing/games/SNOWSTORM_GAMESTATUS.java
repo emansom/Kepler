@@ -32,6 +32,6 @@ public class SNOWSTORM_GAMESTATUS extends MessageComposer {
 
     @Override
     public short getHeader() {
-        return 243; // "Cs"
+        return 244; // "Cs"
     }
 }
