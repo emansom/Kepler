@@ -3,6 +3,8 @@ package org.alexdev.kepler.server.netty.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToMessageEncoder;
+import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -26,7 +28,15 @@ public class NetworkEncoder extends MessageToMessageEncoder<Object> {
             try {
                 msg.compose(response);
             } catch (Exception ex) {
-                Log.getErrorLogger().error("Error occurred when composing " + response.getHeader() + ": ", ex);
+                Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
+
+                String name = "";
+
+                if (player != null && player.isLoggedIn()) {
+                    name = player.getDetails().getName();
+                }
+
+                Log.getErrorLogger().error("Error occurred when composing (" + response.getHeader() + ") for user (" + name + "):", ex);
                 return;
             }
 
