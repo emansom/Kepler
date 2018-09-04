@@ -8,6 +8,9 @@ import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.snowstorm.events.SnowStormObjectEvent;
+import org.alexdev.kepler.game.games.snowstorm.events.SnowStormSpawnPlayer;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormPlayerObject;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
@@ -41,15 +44,7 @@ public class SnowstormUpdateTask implements Runnable {
             List<GameObject> objects = new ArrayList<>();
             List<GameObject> events = new ArrayList<>();
 
-            //this.game.getEventsQueue().drainTo(events);
-            //this.game.getObjectsQueue().drainTo(objects);
-
-            // for (BattleballPowerUp battleballPowerUp : this.game.getActivePowers()) {
-            //     objects.add(new PowerObject(battleballPowerUp));
-            // }
-
-            List<BattleballTile> updateTiles = new ArrayList<>();
-            List<BattleballTile> fillTiles = new ArrayList<>();
+            List<GamePlayer> playersToUpdate = new ArrayList<>();
 
             for (GameTeam gameTeam : this.game.getTeams().values()) {
                 for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
@@ -66,18 +61,18 @@ public class SnowstormUpdateTask implements Runnable {
                             roomEntity.setNeedsUpdate(false);
                         }
 
-                        //gamePlayer.getTurnContainer().iterateTurn();
-                        //gamePlayer.getTurnContainer().calculateChecksum(game.getGameObjects());
+                        objects.add(new SnowStormPlayerObject(gamePlayer));
 
-                        //player.send(new SNOWSTORM_FULLGAMESTATUS(game, gamePlayer, game.getGameObjects(), events));
-
-                        //this.game.send(new SNOWSTORM_FULLGAMESTATUS(this.game, gamePlayer));
+                        playersToUpdate.add(gamePlayer);
                     }
                 }
             }
 
-            //this.game.getTurnContainer().calculateChecksum(objects);
-            //this.game.getTurnContainer().getCurrentTurn().incrementAndGet();
+            for (GamePlayer gamePlayer : playersToUpdate) {
+                gamePlayer.getTurnContainer().iterateTurn();
+                gamePlayer.getTurnContainer().calculateChecksum(objects);
+                gamePlayer.getPlayer().send(new SNOWSTORM_FULLGAMESTATUS(this.game, gamePlayer, objects, events));
+            }
 
         } catch (Exception ex) {
             Log.getErrorLogger().error("SnowstormUpdateTask crashed: ", ex);

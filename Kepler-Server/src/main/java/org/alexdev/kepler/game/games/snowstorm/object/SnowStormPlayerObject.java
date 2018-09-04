@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.games.snowstorm.object;
 
 import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class SnowStormPlayerObject extends SnowStormGameObject {
@@ -12,8 +13,8 @@ public class SnowStormPlayerObject extends SnowStormGameObject {
         this.gamePlayer = gamePlayer;
         this.getGameObjectsSyncValues().add(GameObjectType.SNOWWAR_PLAYER_OBJECT.getObjectId()); // type id
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getInstanceId()); // int id
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getX()); // x
-        this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getY()); // y
+        this.getGameObjectsSyncValues().add(SnowStormGame.convertToWorldCoordinate(gamePlayer.getPlayer().getRoomUser().getPosition().getX(), gamePlayer.getGame())); // x
+        this.getGameObjectsSyncValues().add(SnowStormGame.convertToWorldCoordinate(gamePlayer.getPlayer().getRoomUser().getPosition().getY(), gamePlayer.getGame())); // y
         this.getGameObjectsSyncValues().add(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation()); // body direction
         this.getGameObjectsSyncValues().add(0); // hit points
         this.getGameObjectsSyncValues().add(5); // snowball count

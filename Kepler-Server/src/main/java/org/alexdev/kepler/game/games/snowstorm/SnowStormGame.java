@@ -82,8 +82,8 @@ public class SnowStormGame extends Game {
                     p.getSpawnPosition().setY(41600);
                 }*/
 
-                p.getSpawnPosition().setX(convertToWorldCoordinate(ThreadLocalRandom.current().nextInt(5, 21), this));
-                p.getSpawnPosition().setY(convertToWorldCoordinate(ThreadLocalRandom.current().nextInt(5, 21), this));
+                p.getSpawnPosition().setX(ThreadLocalRandom.current().nextInt(5, 21));
+                p.getSpawnPosition().setY(ThreadLocalRandom.current().nextInt(5, 21));
                 p.getSpawnPosition().setRotation(ThreadLocalRandom.current().nextInt(0, 7));
 
                 p.getPlayer().getRoomUser().setPosition(p.getSpawnPosition().copy());
