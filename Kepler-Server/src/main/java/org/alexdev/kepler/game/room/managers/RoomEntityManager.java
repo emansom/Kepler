@@ -180,8 +180,12 @@ public class RoomEntityManager {
         }
 
         // Don't let the room owner vote on it's own room
-        boolean voted = this.room.isOwner(player.getDetails().getId()) || RoomDao.hasVoted(player.getDetails(), this.room.getData());
-        player.send(new UPDATE_VOTES(voted, this.room.getData().getRating()));
+        boolean voted = this.room.isOwner(player.getDetails().getId()) || this.room.hasVoted(player.getDetails().getId());
+
+        // Only send new vote count to users that haven't voted yet
+        if (voted) {
+            player.send(new UPDATE_VOTES(this.room.getData().getRating()));
+        }
 
         // Let friends know I entered this room by updating their console :)
         player.getMessenger().sendStatusUpdate();
@@ -211,10 +215,11 @@ public class RoomEntityManager {
             this.room.getItems().addAll(PublicItemParser.getPublicItems(this.room.getId(), this.room.getModel().getId()));
         } else {
             this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getData()));
+            this.room.getVotes().putAll(RoomDao.getRatings(this.room.getData()));
         }
 
         this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getData()));
-        this.room.getData().setRating(RoomDao.getRating(this.room.getData()));
+        this.room.getData().setRating(RoomDao.getRatingCount(this.room.getData()));
 
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();

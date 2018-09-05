@@ -1,9 +1,11 @@
 package org.alexdev.kepler.game.room;
 
+import org.alexdev.kepler.dao.mysql.RoomDao;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.navigator.NavigatorCategory;
 import org.alexdev.kepler.game.navigator.NavigatorManager;
+import org.alexdev.kepler.game.room.entities.RoomPlayer;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.player.Player;
@@ -14,6 +16,7 @@ import org.alexdev.kepler.game.room.managers.RoomTaskManager;
 import org.alexdev.kepler.game.room.mapping.RoomMapping;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.models.RoomModelManager;
+import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
 import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUAROWNER;
 import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUARECONTROLLER;
 import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUNOTCONTROLLER;
@@ -21,7 +24,10 @@ import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.IntStream;
 
 public class Room {
     private RoomModel roomModel;
@@ -37,6 +43,7 @@ public class Room {
     private List<Entity> entities;
     private List<Item> items;
     private List<Integer> rights;
+    private Map<Integer, Integer> votes;
 
     public Room() {
         this.roomData = new RoomData(this);
@@ -46,7 +53,8 @@ public class Room {
         this.roomMapping = new RoomMapping(this);
         this.entities = new CopyOnWriteArrayList<>();
         this.items = new CopyOnWriteArrayList<>();
-        this.rights = new ArrayList<>();
+        this.rights = new CopyOnWriteArrayList<>();
+        this.votes = new ConcurrentHashMap<>();
     }
 
     /**
@@ -77,7 +85,7 @@ public class Room {
      * @return true, if successful
      */
     public boolean hasRights(int userId) {
-        return hasRights(userId, true);
+        return this.hasRights(userId, true);
     }
 
     /**
@@ -103,6 +111,48 @@ public class Room {
         }
 
         return false;
+    }
+
+    /**
+     * Check if this certain user has voted
+     *
+     * @param userId
+     * @return boolean indicating if the user has voted
+     */
+    public boolean hasVoted(int userId) {
+        return this.votes.containsKey(userId);
+    }
+
+    /**
+     * Add vote to this room
+     *
+     * @param answer chosen vote
+     * @param userId user that is voting
+     */
+    public void addVote(int answer, int userId) {
+        // Add vote to in-memory structure
+        this.votes.put(userId, answer);
+
+        // Re-calculate total rating count
+        int sum = 0;
+        for (Integer vote : this.votes.values()) {
+            sum += vote;
+        }
+        this.roomData.setRating(sum);
+
+        // Send new vote count to all player entities
+        for (Player p : this.roomEntityManager.getPlayers()) {
+            boolean voted = this.hasVoted(p.getDetails().getId());
+
+            // Only send new vote count to users who didn't vote
+            if (voted) {
+                p.send(new UPDATE_VOTES(this.roomData.getRating()));
+            }
+        }
+
+        // Persist vote
+        // We do this as last step for less observed latency
+        RoomDao.vote(userId, this.roomData, answer);
     }
 
     /**
@@ -170,7 +220,7 @@ public class Room {
      * @return the item manager
      */
     public RoomItemManager getItemManager() {
-        return roomItemManager;
+        return this.roomItemManager;
     }
 
     /**
@@ -179,7 +229,7 @@ public class Room {
      * @return the task manager
      */
     public RoomTaskManager getTaskManager() {
-        return roomTaskManager;
+        return this.roomTaskManager;
     }
 
     /**
@@ -188,7 +238,7 @@ public class Room {
      * @return the room mapping manager
      */
     public RoomMapping getMapping() {
-        return roomMapping;
+        return this.roomMapping;
     }
 
     /**
@@ -197,7 +247,7 @@ public class Room {
      * @return the room data
      */
     public RoomData getData() {
-        return roomData;
+        return this.roomData;
     }
 
     /**
@@ -235,7 +285,7 @@ public class Room {
      * @return the list of entities
      */
     public List<Entity> getEntities() {
-        return entities;
+        return this.entities;
     }
 
     /**
@@ -244,7 +294,7 @@ public class Room {
      * @return the list of items
      */
     public List<Item> getItems() {
-        return items;
+        return this.items;
     }
 
     /**
@@ -253,7 +303,16 @@ public class Room {
      * @return the room rights list
      */
     public List<Integer> getRights() {
-        return rights;
+        return this.rights;
+    }
+
+    /**
+     * Get a map of votes
+     *
+     * @return map of votes
+     */
+    public Map<Integer, Integer> getVotes() {
+        return this.votes;
     }
 
     /**
@@ -278,7 +337,7 @@ public class Room {
      * @return true, if successful
      */
     public boolean isActive() {
-        return isActive;
+        return this.isActive;
     }
 
     /**
@@ -287,7 +346,7 @@ public class Room {
      * @param active the active flag
      */
     public void setActive(boolean active) {
-        isActive = active;
+        this.isActive = active;
     }
 
     /**
@@ -297,7 +356,7 @@ public class Room {
      * @return the follow redirect room id
      */
     public int getFollowRedirect() {
-        return followRedirect;
+        return this.followRedirect;
     }
 
     /**

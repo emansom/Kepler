@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomDao {
 
@@ -301,20 +303,20 @@ public class RoomDao {
     /**
      * Vote for a room
      *
-     * @param details   the User who is voting
+     * @param userId   the User who is voting
      * @param roomData  the Room that the user is voting for
-     * @param voteValue the Value of the vote (1 or -1)
+     * @param answer the value of the vote (1 or -1)
      */
-    public static void vote(PlayerDetails details, RoomData roomData, int voteValue) {
+    public static void vote(int userId, RoomData roomData, int answer) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("INSERT INTO users_room_votes (user_id, room_id, vote) VALUES (?, ?, ?)", sqlConnection);
-            preparedStatement.setInt(1, details.getId());
+            preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, roomData.getId());
-            preparedStatement.setInt(3, voteValue);
+            preparedStatement.setInt(3, answer);
             preparedStatement.execute();
 
         } catch (Exception e) {
@@ -328,17 +330,17 @@ public class RoomDao {
     /**
      * Vote for a room
      *
-     * @param user the User who is voting
+     * @param userId the User who is voting
      * @param room the Room that the user is voting for
      */
-    public static void removeVote(PlayerDetails user, RoomData room) {
+    public static void removeVote(int userId, RoomData room) {
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("DELETE FROM users_room_votes WHERE user_id = ? AND room_id = ?", sqlConnection);
-            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setInt(1, userId);
             preparedStatement.setInt(2, room.getId());
             preparedStatement.execute();
 
@@ -355,7 +357,7 @@ public class RoomDao {
      *
      * @param roomData the room to get the rating for
      */
-    public static int getRating(RoomData roomData) {
+    public static int getRatingCount(RoomData roomData) {
         int rating = 0;
 
         Connection sqlConnection = null;
@@ -388,38 +390,37 @@ public class RoomDao {
     }
 
     /**
-     * Check if a user has voted for a room
+     * Return a map of the room ratings
      *
-     * @param details  the User who is voting
-     * @param roomData the Room that the user is voting for
-     * @return true if the user has voted, false if not
+     * @param room the Room
+     * @return Map containing key userId and value voteAnswer
      */
-    public static boolean hasVoted(PlayerDetails details, RoomData roomData) {
+    public static Map<Integer, Integer> getRatings(RoomData room) {
+        Map<Integer, Integer> ratings = new ConcurrentHashMap<>();
+
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet;
-
-        boolean hasVoted = false;
+        ResultSet resultSet = null;
 
         try {
             sqlConnection = Storage.getStorage().getConnection();
-
-            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users_room_votes WHERE room_id = ? AND user_id = ? LIMIT 1", sqlConnection);
-            preparedStatement.setInt(1, roomData.getId());
-            preparedStatement.setInt(2, details.getId());
+            preparedStatement = Storage.getStorage().prepare("SELECT user_id,vote FROM users_room_votes WHERE room_id = ?", sqlConnection);
+            preparedStatement.setInt(1, room.getId());
             resultSet = preparedStatement.executeQuery();
 
-            if (resultSet.next()) {
-                hasVoted = true;
+            while (resultSet.next()) {
+                ratings.put(resultSet.getInt("user_id"), resultSet.getInt("vote"));
             }
+
         } catch (Exception e) {
             Storage.logError(e);
         } finally {
+            Storage.closeSilently(resultSet);
             Storage.closeSilently(preparedStatement);
             Storage.closeSilently(sqlConnection);
         }
 
-        return hasVoted;
+        return ratings;
     }
 
     /**
