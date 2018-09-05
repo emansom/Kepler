@@ -181,9 +181,12 @@ public class RoomEntityManager {
         // Don't let the room owner vote on it's own room
         boolean voted = this.room.isOwner(player.getDetails().getId()) || this.room.hasVoted(player.getDetails().getId());
 
-        // Only send new vote count to users that haven't voted yet
+        // Send -1 to users who haven't voted yet, and vote count to others
+        // We do this to make the vote UI pop up
         if (voted) {
             player.send(new UPDATE_VOTES(this.room.getData().getRating()));
+        } else {
+            player.send(new UPDATE_VOTES(-1));
         }
 
         // Let friends know I entered this room by updating their console :)
