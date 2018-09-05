@@ -19,12 +19,11 @@ import org.alexdev.kepler.messages.outgoing.rooms.ROOM_URL;
 import org.alexdev.kepler.messages.outgoing.rooms.ROOM_READY;
 import org.alexdev.kepler.messages.outgoing.rooms.UPDATE_VOTES;
 import org.alexdev.kepler.messages.outgoing.rooms.user.LOGOUT;
-import org.alexdev.kepler.messages.incoming.rooms.user.HOTEL_VIEW;
+import org.alexdev.kepler.messages.outgoing.rooms.user.HOTEL_VIEW;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class RoomEntityManager {
     private Room room;
