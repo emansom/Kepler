@@ -27,19 +27,10 @@ public class UsersOnlineCommand extends Command {
             return;
         }
 
-        int pageNumber = 1;
-        int maxPlayersPerPage = 10;
-
-        if (args.length > 0 && StringUtils.isNumeric(args[0])) {
-            pageNumber = Integer.parseInt(args[0]);
-        }
+        int maxPlayersPerLine = 5;
 
         List<Player> players = PlayerManager.getInstance().getPlayers();
-        Map<Integer, List<Player>> paginatedPlayers = StringUtil.paginate(players, maxPlayersPerPage);
-
-        if (!paginatedPlayers.containsKey(pageNumber - 1)) {
-            pageNumber = 1;
-        }
+        Map<Integer, List<Player>> paginatedPlayers = StringUtil.paginate(players, maxPlayersPerLine);
 
         Player session = (Player) entity;
 
@@ -47,21 +38,27 @@ public class UsersOnlineCommand extends Command {
                 .append("Users online: ").append(players.size()).append("<br>")
                 .append("Daily player peak count: ").append(PlayerManager.getInstance().getDailyPlayerPeak()).append("<br>");
 
-        if (paginatedPlayers.containsKey(pageNumber - 1)) {
-            List<Player> playerList = paginatedPlayers.get(pageNumber - 1);
+        for (List<Player> playerList : paginatedPlayers.values()) {
+            sb.append("\n");
 
+            int i = 0;
+            int length = playerList.size();
             for (Player player : playerList) {
-                sb.append("\n - ");
                 sb.append(player.getDetails().getName());
+
+                i++;
+
+                if (i < length) {
+                    sb.append(", ");
+                }
             }
         }
 
-            sb.append("<br>").append("<br>Page ").append(pageNumber).append(" out of ").append(paginatedPlayers.size());
         session.send(new ALERT(sb.toString()));
     }
 
     @Override
     public String getDescription() {
-        return "<page> - Get the list of players currently online";
+        return "Get the list of players currently online";
     }
 }

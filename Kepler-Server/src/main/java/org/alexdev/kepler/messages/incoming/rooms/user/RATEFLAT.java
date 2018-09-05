@@ -28,16 +28,12 @@ public class RATEFLAT implements MessageEvent {
             return;
         }
 
-        if (RoomDao.hasVoted(player.getDetails(), room.getData())) {
+        int userId = player.getDetails().getId();
+
+        if (room.hasVoted(userId)) {
             return;
         }
 
-        RoomDao.vote(player.getDetails(), player.getRoomUser().getRoom().getData(), answer);
-        room.getData().setRating(RoomDao.getRating(room.getData()));
-
-        for (Player p : room.getEntityManager().getPlayers()) {
-            boolean voted = RoomDao.hasVoted(player.getDetails(), room.getData());
-            p.send(new UPDATE_VOTES(voted, room.getData().getRating()));
-        }
+        room.addVote(answer, userId);
     }
 }
