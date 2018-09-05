@@ -59,6 +59,6 @@ public class UsersOnlineCommand extends Command {
 
     @Override
     public String getDescription() {
-        return "<page> - Get the list of players currently online";
+        return "Get the list of players currently online";
     }
 }
