@@ -2,6 +2,8 @@ package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.enums.GameType;
@@ -189,9 +191,9 @@ public class BattleballGame extends Game {
 
             for (GamePlayer p : team.getPlayers()) {
                 findSpawn(flip, spawnX, spawnY, spawnRotation);
+                p.setPlayerState(BattleballPlayerState.NORMAL);
 
                 Position spawnPosition = new Position(spawnX.get(), spawnY.get(), this.getRoomModel().getTileHeight(spawnX.get(), spawnY.get()), spawnRotation.get(), spawnRotation.get());
-
                 p.getSpawnPosition().setX(spawnPosition.getX());
                 p.getSpawnPosition().setY(spawnPosition.getY());
                 p.getSpawnPosition().setRotation(spawnPosition.getRotation());

@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.battleball.events.ActivatePowerUpEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -73,6 +74,8 @@ public class GAMEEVENT implements MessageEvent {
                 if (powerUp != null) {
                     battleballGame.getEventsQueue().add(new ActivatePowerUpEvent(gamePlayer, powerUp));
                     powerList.remove(powerUp);
+
+                    powerUp.usePower(gamePlayer, player.getRoomUser().getPosition());
                 }
             }
         }

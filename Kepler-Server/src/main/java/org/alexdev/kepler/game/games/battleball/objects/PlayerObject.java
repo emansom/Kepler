@@ -20,7 +20,7 @@ public class PlayerObject extends GameObject {
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getY());
         response.writeInt((int) this.gamePlayer.getPlayer().getRoomUser().getPosition().getZ());
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
-        response.writeInt(0);
+        response.writeInt(this.gamePlayer.getPlayerState().getStateId());
         response.writeInt(-1);
     }
 }
