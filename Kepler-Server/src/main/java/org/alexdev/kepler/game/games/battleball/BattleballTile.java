@@ -117,8 +117,13 @@ public class BattleballTile extends GameTile  {
             if (colour.getColourId() == gamePlayer.getTeamId()) {
                 this.setState(BattleballTileType.getStateById(state.getTileStateId() + 1));
             } else {
-                this.setState(BattleballTileType.TOUCHED);
-                this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                if (gamePlayer.getGame().getMapId() == 5) { // Barebones classic takes 4 hits
+                    this.setState(BattleballTileType.TOUCHED);
+                    this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                } else {
+                    this.setState(BattleballTileType.CLICKED);
+                    this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                }
             }
 
             BattleballTileType newState = this.getState();
