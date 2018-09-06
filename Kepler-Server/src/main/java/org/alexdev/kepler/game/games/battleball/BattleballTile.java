@@ -46,6 +46,12 @@ public class BattleballTile extends GameTile  {
     }
 
     private boolean bounceWithPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+        BattleballColourType colour = this.getColour();
+
+        if (colour == BattleballColourType.DISABLED) {
+            return false;
+        }
+        
         GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.HIGH_JUMPS) {
