@@ -9,7 +9,7 @@ public class PowerUpSpawnEvent extends GameEvent {
     private final BattleballPowerUp powerUp;
 
     public PowerUpSpawnEvent(BattleballPowerUp powerUp) {
-        super(GameEventType.BATTLEBALL_POWERUP_SPAWN);
+        super(GameEventType.BATTLEBALL_OBJECT_SPAWN);
         this.powerUp = powerUp;
     }
 

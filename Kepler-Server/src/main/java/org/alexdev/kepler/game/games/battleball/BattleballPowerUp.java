@@ -1,10 +1,15 @@
 package org.alexdev.kepler.game.games.battleball;
 
+import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
+import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BattleballPowerUp {
@@ -13,14 +18,52 @@ public class BattleballPowerUp {
     private final BattleballPowerType powerType;
     private final BattleballTile tile;
     private final Position position;
+    private final BattleballGame game;
     private GamePlayer playerHolding;
 
     public BattleballPowerUp(BattleballGame game, int id, BattleballTile tile) {
         this.id = id;
         this.tile = tile;
+        this.game = game;
         this.position = this.tile.getPosition().copy();
         this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 20));
         this.powerType = BattleballPowerType.getById(game.getAllowedPowerUps()[ThreadLocalRandom.current().nextInt(0, game.getAllowedPowerUps().length)]);
+    }
+
+    /**
+     * Called when a player decides to use the power they have collected
+     *
+     * @param gamePlayer the game player that uses it
+     * @param position the position that the power up should be used at
+     */
+    public void usePower(GamePlayer gamePlayer, Position position) {
+        if (this.powerType == BattleballPowerType.DRILL) {
+            gamePlayer.setPlayerState(BattleballPlayerState.CLEANING_TILES);
+            this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+
+            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
+                if (this.game.isGameFinished()) {
+                    return;
+                }
+
+                gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
+                this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+            }, 10, TimeUnit.SECONDS);
+        }
+
+        if (this.powerType == BattleballPowerType.SPRING) {
+            gamePlayer.setPlayerState(BattleballPlayerState.HIGH_JUMPS);
+            this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+
+            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
+                if (this.game.isGameFinished()) {
+                    return;
+                }
+
+                gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
+                this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+            }, 10, TimeUnit.SECONDS);
+        }
     }
 
     /**

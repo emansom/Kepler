@@ -2,10 +2,10 @@ package org.alexdev.kepler.game.games.player;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.snowstorm.TurnContainer;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
-import org.alexdev.kepler.game.room.Room;
 
 public class GamePlayer {
     private Player player;
@@ -19,6 +19,7 @@ public class GamePlayer {
     private boolean inGame;
     private boolean clickedRestart;
     private TurnContainer turnContainer;
+    private BattleballPlayerState playerState;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -106,5 +107,13 @@ public class GamePlayer {
 
     public TurnContainer getTurnContainer() {
         return turnContainer;
+    }
+
+    public BattleballPlayerState getPlayerState() {
+        return playerState;
+    }
+
+    public void setPlayerState(BattleballPlayerState playerState) {
+        this.playerState = playerState;
     }
 }

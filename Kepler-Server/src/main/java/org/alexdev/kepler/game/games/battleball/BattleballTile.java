@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
@@ -33,11 +34,40 @@ public class BattleballTile extends GameTile  {
      */
     public void interact(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         try {
+            if (this.bounceWithPower(gamePlayer, updateTiles, updateFillTiles)) {
+                return;
+            }
+
             this.changeState(gamePlayer, updateTiles, updateFillTiles);
             this.checkPowerUp(gamePlayer, objects, events, updateTiles, updateFillTiles);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private boolean bounceWithPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+        GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
+
+        if (gamePlayer.getPlayerState() == BattleballPlayerState.HIGH_JUMPS) {
+            this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+            this.setState(BattleballTileType.SEALED);
+
+            this.checkFill(gamePlayer, updateTiles, updateFillTiles);
+            updateTiles.add(this);
+
+            team.setSealedTileScore();
+            return true;
+        }
+
+        if (gamePlayer.getPlayerState() == BattleballPlayerState.CLEANING_TILES) {
+            this.setColour(BattleballColourType.DEFAULT);
+            this.setState(BattleballTileType.DEFAULT);
+            updateTiles.add(this);
+
+            return true;
+        }
+
+        return false;
     }
 
     private void checkPowerUp(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
@@ -87,8 +117,13 @@ public class BattleballTile extends GameTile  {
             if (colour.getColourId() == gamePlayer.getTeamId()) {
                 this.setState(BattleballTileType.getStateById(state.getTileStateId() + 1));
             } else {
-                this.setState(BattleballTileType.TOUCHED);
-                this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                if (gamePlayer.getGame().getMapId() == 5) { // Barebones classic takes 4 hits
+                    this.setState(BattleballTileType.TOUCHED);
+                    this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                } else {
+                    this.setState(BattleballTileType.CLICKED);
+                    this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                }
             }
 
             BattleballTileType newState = this.getState();
@@ -135,30 +170,35 @@ public class BattleballTile extends GameTile  {
                 }
             }
 
-            for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), this.getPosition())) {
-                if (neighbour == null || neighbour.getState() == BattleballTileType.SEALED || neighbour.getColour() == BattleballColourType.DISABLED) {
-                    continue;
-                }
+            this.checkFill(gamePlayer, updateTiles, updateFillTiles);
+            updateTiles.add(this);
+        }
+    }
 
-                var fillTiles = FloodFill.getFill(gamePlayer, neighbour);
+    private void checkFill(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+        GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
 
-                if (fillTiles.size() > 1) {
-                    for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
-                        if (filledTile.getState() == BattleballTileType.SEALED) {
-                            continue;
-                        }
-
-                        team.setSealedTileScore();
-
-                        filledTile.setColour(this.getColour());
-                        filledTile.setState(BattleballTileType.SEALED);
-
-                        updateFillTiles.add(filledTile);
-                    }
-                }
+        for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), this.getPosition())) {
+            if (neighbour == null || neighbour.getState() == BattleballTileType.SEALED || neighbour.getColour() == BattleballColourType.DISABLED) {
+                continue;
             }
 
-            updateTiles.add(this);
+            var fillTiles = FloodFill.getFill(gamePlayer, neighbour);
+
+            if (fillTiles.size() > 1) {
+                for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
+                    if (filledTile.getState() == BattleballTileType.SEALED) {
+                        continue;
+                    }
+
+                    team.setSealedTileScore();
+
+                    filledTile.setColour(this.getColour());
+                    filledTile.setState(BattleballTileType.SEALED);
+
+                    updateFillTiles.add(filledTile);
+                }
+            }
         }
     }
 
