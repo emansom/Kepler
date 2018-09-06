@@ -199,6 +199,7 @@ public class Room {
 
         this.items.clear();
         this.rights.clear();
+        this.votes.clear();
         this.entities.clear();
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
