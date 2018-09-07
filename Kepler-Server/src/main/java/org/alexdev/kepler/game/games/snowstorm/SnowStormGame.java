@@ -4,9 +4,11 @@ import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.GameTile;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.snowstorm.object.SnowStormAvatarObject;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.models.RoomModel;
 
@@ -59,6 +61,8 @@ public class SnowStormGame extends Game {
     public void assignSpawnPoints() {
         for (GameTeam team : this.getTeams().values()) {
             for (GamePlayer p : team.getPlayers()) {
+                p.setGameObject(new SnowStormAvatarObject(p));
+
                 /*if (p.getPlayer().getDetails().getId() == 4) {
                     p.getSpawnPosition().setX(73600);
                     p.getSpawnPosition().setY(80000);
@@ -108,11 +112,6 @@ public class SnowStormGame extends Game {
     @Override
     public void buildMap() {
 
-    }
-
-    @Override
-    public List<GameEvent> getPersistentEvents() {
-        return new ArrayList<>();
     }
 
     public int getGameLengthChoice() {

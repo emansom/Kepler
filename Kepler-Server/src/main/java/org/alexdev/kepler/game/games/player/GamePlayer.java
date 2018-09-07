@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.games.player;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.snowstorm.TurnContainer;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -9,6 +10,7 @@ import org.alexdev.kepler.game.player.Player;
 
 public class GamePlayer {
     private Player player;
+    private GameObject gameObject;
     private int userId;
     private int gameId;
     private int teamId;
@@ -128,5 +130,13 @@ public class GamePlayer {
 
     public void setHarlequinTeamId(int harlequinTeamId) {
         this.harlequinTeamId = harlequinTeamId;
+    }
+
+    public GameObject getGameObject() {
+        return gameObject;
+    }
+
+    public void setGameObject(GameObject gameObject) {
+        this.gameObject = gameObject;
     }
 }

@@ -45,6 +45,9 @@ public abstract class Game {
     private BlockingQueue<GameEvent> eventsQueue;
     private BlockingQueue<GameObject> objectsQueue;
 
+    private List<GameObject> objects;
+    private List<GameEvent> events;
+
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
@@ -70,6 +73,9 @@ public abstract class Game {
 
         this.eventsQueue = new LinkedBlockingQueue<>();
         this.objectsQueue = new LinkedBlockingQueue<>();
+
+        this.objects = new ArrayList<>();
+        this.events = new ArrayList<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
@@ -99,6 +105,9 @@ public abstract class Game {
             this.room.getData().fill(this.id, "Battleball Arena", "");
             this.room.setRoomModel(this.getRoomModel());
         }
+
+        this.objects.clear();
+        this.events.clear();
 
         this.buildMap();
         this.assignSpawnPoints();
@@ -298,6 +307,8 @@ public abstract class Game {
         //System.out.println("called: " + gamePlayer.getUserId());
         boolean isSpectator = this.spectators.contains(gamePlayer);
         this.spectators.remove(gamePlayer);
+
+        this.objects.remove(gamePlayer.getGameObject());
 
         gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
         gamePlayer.getPlayer().send(new GAMEDELETED());
@@ -610,14 +621,6 @@ public abstract class Game {
     }
 
     /**
-     * Get persistent events, used for when spectators join mid-game and there's tacks
-     * or power ups on the map.
-     *
-     * @return the list of persistent events
-     */
-    public abstract List<GameEvent> getPersistentEvents();
-
-    /**
      * Get the game id
      *
      * @return the game id
@@ -688,6 +691,10 @@ public abstract class Game {
 
     public BlockingQueue<GameObject> getObjectsQueue() {
         return objectsQueue;
+    }
+
+    public List<GameObject> getObjects() {
+        return objects;
     }
 
     public void setRoomModel(RoomModel roomModel) {

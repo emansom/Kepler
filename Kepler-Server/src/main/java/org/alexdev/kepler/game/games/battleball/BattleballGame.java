@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
@@ -67,7 +68,10 @@ public class BattleballGame extends Game {
             return;
         }
 
-        if (expirePower(this.activePowers.get(0))) {
+        BattleballPowerUp powerUp = this.activePowers.get(0);
+
+        if (expirePower(powerUp)) {
+            this.getObjects().remove(powerUp.getObject());
             this.activePowers.clear();
         }
     }
@@ -119,6 +123,8 @@ public class BattleballGame extends Game {
 
         this.updateTimeUntilNextPower();
         this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
+
+        this.getObjects().add(powerUp.getObject());
     }
 
     /**
@@ -190,8 +196,12 @@ public class BattleballGame extends Game {
 
             for (GamePlayer p : team.getPlayers()) {
                 findSpawn(flip, spawnX, spawnY, spawnRotation);
+
                 p.setPlayerState(BattleballPlayerState.NORMAL);
                 p.setHarlequinTeamId(-1);
+                p.setGameObject(new PlayerObject(p));
+
+                this.getObjects().add(p.getGameObject());
 
                 Position spawnPosition = new Position(spawnX.get(), spawnY.get(), this.getRoomModel().getTileHeight(spawnX.get(), spawnY.get()), spawnRotation.get(), spawnRotation.get());
                 p.getSpawnPosition().setX(spawnPosition.getX());
@@ -306,16 +316,6 @@ public class BattleballGame extends Game {
         }
 
         return battleballTile;
-    }
-
-    public List<GameEvent> getPersistentEvents() {
-        List<GameEvent> gameEvents = new ArrayList<>();
-
-        if (!this.activePowers.isEmpty()) {
-            gameEvents.add(new PowerUpSpawnEvent(this.activePowers.get(0)));
-        }
-
-        return gameEvents;
     }
 
     @Override

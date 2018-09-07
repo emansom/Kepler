@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
@@ -137,7 +138,7 @@ public class BattleballTile extends GameTile  {
         powerUp.setPlayerHolding(gamePlayer);
 
         events.add(new AcquirePowerUpEvent(gamePlayer, powerUp));
-        objects.add(new PowerObject(gamePlayer, powerUp));
+        objects.add(new PowerUpUpdateObject(powerUp));
     }
 
     private void changeState(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {

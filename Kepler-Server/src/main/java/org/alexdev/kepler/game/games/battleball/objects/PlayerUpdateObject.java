@@ -5,10 +5,10 @@ import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class PlayerObject extends GameObject {
+public class PlayerUpdateObject extends GameObject {
     private final GamePlayer gamePlayer;
 
-    public PlayerObject(GamePlayer gamePlayer) {
+    public PlayerUpdateObject(GamePlayer gamePlayer) {
         super(GameObjectType.BATTLEBALL_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
     }
@@ -22,11 +22,5 @@ public class PlayerObject extends GameObject {
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
         response.writeInt(this.gamePlayer.getPlayerState().getStateId());
         response.writeInt(this.gamePlayer.getHarlequinTeamId());
-        response.writeString(this.gamePlayer.getPlayer().getDetails().getName());
-        response.writeString(this.gamePlayer.getPlayer().getDetails().getMotto());
-        response.writeString(this.gamePlayer.getPlayer().getDetails().getFigure());
-        response.writeString(this.gamePlayer.getPlayer().getDetails().getSex());
-        response.writeInt(this.gamePlayer.getTeamId());
-        response.writeInt(this.gamePlayer.getPlayer().getDetails().getId()); // Actually room user id/instance id
     }
 }

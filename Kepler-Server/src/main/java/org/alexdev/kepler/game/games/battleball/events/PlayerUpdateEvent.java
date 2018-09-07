@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.games.battleball.events;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.enums.GameEventType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -18,6 +19,6 @@ public class PlayerUpdateEvent extends GameEvent {
     @Override
     public void serialiseEvent(NettyResponse response) {
         response.writeInt(0);
-        new PlayerObject(this.gamePlayer).serialiseObject(response);
+        new PlayerUpdateObject(this.gamePlayer).serialiseObject(response);
     }
 }
