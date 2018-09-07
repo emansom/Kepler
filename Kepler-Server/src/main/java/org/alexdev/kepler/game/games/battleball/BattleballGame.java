@@ -38,14 +38,15 @@ public class BattleballGame extends Game {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
 
         this.allowedPowerUps = allowedPowerUps;
+        this.timeUntilNextPower = new AtomicInteger(0);
 
         this.activePowers = new CopyOnWriteArrayList<>();
         this.storedPowers = new ConcurrentHashMap<>();
     }
 
     @Override
-    public void gameBegin() {
-                this.checkSpawnPower();
+    public void gameBeginTick() {
+        this.checkSpawnPower();
     }
 
     @Override

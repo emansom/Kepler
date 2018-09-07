@@ -127,6 +127,8 @@ public abstract class Game {
                     return;
                 }
 
+                gameBeginTick();
+
                 if (preparingGameSecondsLeft.getAndDecrement() == 0) {
                     this.cancelFuture();
                     beginGame();
@@ -134,7 +136,7 @@ public abstract class Game {
             }
         };
 
-        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 0, 1, TimeUnit.SECONDS);
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
 
         this.sendObservers(new GAMEINSTANCE(this));
@@ -574,6 +576,11 @@ public abstract class Game {
      * Method called when the game initially began
      */
     public void gameBegin() { }
+
+    /**
+     * Method called for the tick in game beginning
+     */
+    public void gameBeginTick() { }
 
     /**
      * Method called when the game initially started
