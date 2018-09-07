@@ -46,6 +46,13 @@ public class BattleballTile extends GameTile  {
     }
 
     private boolean bounceWithPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+        BattleballColourType colour = this.getColour();
+        BattleballTileType state = this.getState();
+
+        if (colour == BattleballColourType.DISABLED) {
+            return false;
+        }
+        
         GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.HIGH_JUMPS) {
@@ -60,10 +67,31 @@ public class BattleballTile extends GameTile  {
         }
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.CLEANING_TILES) {
+            if (colour == BattleballColourType.DEFAULT) {
+                return false;
+            }
+
+            int pointsToRemove = 0;
+
+            if (state == BattleballTileType.TOUCHED) {
+                pointsToRemove = 2;
+            }
+
+            if (state == BattleballTileType.CLICKED) {
+                pointsToRemove = 6;
+            }
+
+            if (state == BattleballTileType.PRESSED) {
+                pointsToRemove = 10;
+            }
+
+            if (state == BattleballTileType.SEALED) {
+                pointsToRemove = 14;
+            }
+
             this.setColour(BattleballColourType.DEFAULT);
             this.setState(BattleballTileType.DEFAULT);
             updateTiles.add(this);
-
             return true;
         }
 
