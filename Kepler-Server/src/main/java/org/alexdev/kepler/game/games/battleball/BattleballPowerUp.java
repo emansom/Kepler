@@ -1,19 +1,24 @@
 package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BattleballPowerUp {
     private final int id;
+    private final PowerObject object;
     private final AtomicInteger timeToDespawn;
     private final BattleballPowerType powerType;
     private final BattleballTile tile;
@@ -23,6 +28,7 @@ public class BattleballPowerUp {
 
     public BattleballPowerUp(BattleballGame game, int id, BattleballTile tile) {
         this.id = id;
+        this.object = new PowerObject(this);
         this.tile = tile;
         this.game = game;
         this.position = this.tile.getPosition().copy();
@@ -65,6 +71,36 @@ public class BattleballPowerUp {
             }, 10, TimeUnit.SECONDS);
         }
 
+        if (this.powerType == BattleballPowerType.HARLEQUIN) {
+            List<GamePlayer> affectedPlayers = new ArrayList<>();
+
+            for (GamePlayer p : gamePlayer.getGame().getPlayers()) {
+                if (p.getHarlequinTeamId() != -1 || p.getTeamId() == gamePlayer.getTeamId()) {
+                    continue;
+                }
+
+                p.setPlayerState(BattleballPlayerState.NORMAL);
+                p.setHarlequinTeamId(gamePlayer.getTeamId());
+
+                this.game.getEventsQueue().add(new PlayerUpdateEvent(p));
+
+                affectedPlayers.add(p);
+            }
+
+            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
+                if (this.game.isGameFinished()) {
+                    return;
+                }
+
+                for (GamePlayer p : affectedPlayers) {
+                    p.setPlayerState(BattleballPlayerState.NORMAL);
+                    p.setHarlequinTeamId(-1);
+
+                    this.game.getEventsQueue().add(new PlayerUpdateEvent(p));
+                }
+
+            }, 10, TimeUnit.SECONDS);
+        }
     }
 
     /**
@@ -131,5 +167,9 @@ public class BattleballPowerUp {
         }
 
         return -1;
+    }
+
+    public GameObject getObject() {
+        return object;
     }
 }
