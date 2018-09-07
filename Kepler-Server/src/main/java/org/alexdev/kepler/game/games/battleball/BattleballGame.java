@@ -45,7 +45,7 @@ public class BattleballGame extends Game {
 
     @Override
     public void gameBegin() {
-        this.updateTimeUntilNextPower();
+                this.checkSpawnPower();
     }
 
     @Override
@@ -192,6 +192,7 @@ public class BattleballGame extends Game {
             for (GamePlayer p : team.getPlayers()) {
                 findSpawn(flip, spawnX, spawnY, spawnRotation);
                 p.setPlayerState(BattleballPlayerState.NORMAL);
+                p.setHarlequinTeamId(-1);
 
                 Position spawnPosition = new Position(spawnX.get(), spawnY.get(), this.getRoomModel().getTileHeight(spawnX.get(), spawnY.get()), spawnRotation.get(), spawnRotation.get());
                 p.getSpawnPosition().setX(spawnPosition.getX());

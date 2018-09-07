@@ -20,6 +20,7 @@ public class GamePlayer {
     private boolean clickedRestart;
     private TurnContainer turnContainer;
     private BattleballPlayerState playerState;
+    private int harlequinTeamId;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -119,5 +120,13 @@ public class GamePlayer {
 
     public void setPlayerState(BattleballPlayerState playerState) {
         this.playerState = playerState;
+    }
+
+    public int getHarlequinTeamId() {
+        return harlequinTeamId;
+    }
+
+    public void setHarlequinTeamId(int harlequinTeamId) {
+        this.harlequinTeamId = harlequinTeamId;
     }
 }
