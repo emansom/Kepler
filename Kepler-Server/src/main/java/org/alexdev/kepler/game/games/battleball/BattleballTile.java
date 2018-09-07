@@ -89,6 +89,13 @@ public class BattleballTile extends GameTile  {
                 pointsToRemove = 14;
             }
 
+            GameTeam oppositeTeam = gamePlayer.getGame().getTeams().get(colour.getColourId());
+            int eachTeamRemove = pointsToRemove / oppositeTeam.getActivePlayers().size();
+
+            for (GamePlayer p : oppositeTeam.getActivePlayers()) {
+                p.setScore(p.getScore() - eachTeamRemove);
+            }
+
             this.setColour(BattleballColourType.DEFAULT);
             this.setState(BattleballTileType.DEFAULT);
             updateTiles.add(this);
