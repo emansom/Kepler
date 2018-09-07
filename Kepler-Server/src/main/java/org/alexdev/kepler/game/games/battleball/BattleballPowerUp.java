@@ -64,6 +64,7 @@ public class BattleballPowerUp {
                 this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
             }, 10, TimeUnit.SECONDS);
         }
+
     }
 
     /**

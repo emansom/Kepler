@@ -57,12 +57,18 @@ public class BattleballTile extends GameTile  {
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.HIGH_JUMPS) {
             this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
-            this.setState(BattleballTileType.SEALED);
+
+            if (colour.getColourId() != team.getId() && state == BattleballTileType.SEALED) {
+                this.setState(BattleballTileType.TOUCHED); // Only set to touched when bounching on other teams locked tile
+                gamePlayer.setScore(gamePlayer.getScore() + 4);
+            } else {
+                this.setState(BattleballTileType.SEALED);
+                team.setSealedTileScore();
+            }
 
             this.checkFill(gamePlayer, updateTiles, updateFillTiles);
             updateTiles.add(this);
 
-            team.setSealedTileScore();
             return true;
         }
 
