@@ -133,13 +133,13 @@ public class Room {
         // Add vote to in-memory structure
         this.votes.put(userId, answer);
 
-        // Re-calculate total rating count
+        // Re-calculate sum of all ratings
         int sum = 0;
         for (Integer vote : this.votes.values()) {
             sum += vote;
         }
 
-        // Don't show negative rating (as the client shows the vote UI when rating < 0)
+        // Don't set rating to negative number (as the client shows the vote UI when rating < 0)
         if (sum < 0) {
             this.roomData.setRating(0);
         } else {
