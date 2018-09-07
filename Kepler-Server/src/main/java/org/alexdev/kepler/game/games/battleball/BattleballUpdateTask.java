@@ -68,8 +68,6 @@ public class BattleballUpdateTask implements Runnable {
                 }
 
                 this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
-                RoomEntity roomEntity = player.getRoomUser();
-
                 objects.add(new PlayerUpdateObject(gamePlayer));
             }
 

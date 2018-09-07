@@ -79,7 +79,7 @@ public class BattleballPowerUp {
                     continue;
                 }
 
-                p.setPlayerState(BattleballPlayerState.NORMAL);
+                p.setPlayerState(BattleballPlayerState.COLORING_FOR_OPPONENT);
                 p.setHarlequinTeamId(gamePlayer.getTeamId());
 
                 this.game.getEventsQueue().add(new PlayerUpdateEvent(p));
