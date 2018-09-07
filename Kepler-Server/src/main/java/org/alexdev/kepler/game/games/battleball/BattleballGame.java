@@ -129,11 +129,9 @@ public class BattleballGame extends Game {
     private int createObjectId() {
         int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
 
-        for (GameTeam team : this.getTeams().values()) {
-            for (GamePlayer gamePlayer : team.getActivePlayers()) {
-                if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
-                    return createObjectId();
-                }
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
+                return createObjectId();
             }
         }
 

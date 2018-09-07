@@ -110,10 +110,8 @@ public abstract class Game {
     public void startGame() {
         this.initialise();
 
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer p : team.getActivePlayers()) {
-                p.setEnteringGame(true); // Set to true so when they leave the lobby, the server knows to initialise the user when they join the arena
-            }
+        for (GamePlayer p : this.getPlayers()) {
+            p.setEnteringGame(true); // Set to true so when they leave the lobby, the server knows to initialise the user when they join the arena
         }
 
         this.send(new GAMELOCATION());
@@ -150,10 +148,8 @@ public abstract class Game {
         this.gameStarted = true;
 
         // Stop all players from walking when game starts if they selected a tile
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer p : team.getActivePlayers()) {
-                p.getPlayer().getRoomUser().setWalkingAllowed(true);
-            }
+        for (GamePlayer p : this.getPlayers()) {
+            p.getPlayer().getRoomUser().setWalkingAllowed(true);
         }
 
         // Send game seconds
@@ -199,10 +195,8 @@ public abstract class Game {
         GameManager.getInstance().getFinishedGames().add(finishedGame);
 
         // Stop all players from walking when game starts if they selected a tile
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer p : team.getActivePlayers()) {
-                p.getPlayer().getRoomUser().setWalkingAllowed(false);
-            }
+        for (GamePlayer p : this.getPlayers()) {
+            p.getPlayer().getRoomUser().setWalkingAllowed(false);
         }
 
         // Send scores to everybody
@@ -240,14 +234,12 @@ public abstract class Game {
         List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
         List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
 
-        for (GameTeam gameTeam : this.teams.values()) {
-            for (GamePlayer p : gameTeam.getActivePlayers()) {
-                if (!p.isClickedRestart()) {
-                    afkPlayers.add(p);
-                } else {
-                    p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
-                    players.add(p);
-                }
+        for (GamePlayer p : this.getPlayers()) {
+            if (!p.isClickedRestart()) {
+                afkPlayers.add(p);
+            } else {
+                p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
+                players.add(p);
             }
         }
 
@@ -424,10 +416,8 @@ public abstract class Game {
      * @param composer the composer to send
      */
     public void send(MessageComposer composer) {
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer gamePlayer : team.getActivePlayers()) {
-                gamePlayer.getPlayer().send(composer);
-            }
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            gamePlayer.getPlayer().send(composer);
         }
 
         for (GamePlayer player : this.spectators) {
@@ -591,6 +581,16 @@ public abstract class Game {
      * Method called when the game ends, when the scoreboard shows
      */
     public void gameEnded() { }
+
+    public List<GamePlayer> getPlayers() {
+        List<GamePlayer> gamePlayers = new ArrayList<>();
+
+        for (GameTeam team : this.teams.values()) {
+            gamePlayers.addAll(team.getActivePlayers());
+        }
+
+        return gamePlayers;
+    }
 
     /**
      * Get the list of specators, the people currently watching the game
