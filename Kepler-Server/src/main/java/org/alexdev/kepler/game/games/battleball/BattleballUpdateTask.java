@@ -54,42 +54,24 @@ public class BattleballUpdateTask implements Runnable {
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();
 
-           for (GamePlayer gamePlayer : this.game.getPlayers()) {
-               Player player = gamePlayer.getPlayer();
+            for (GamePlayer gamePlayer : this.game.getPlayers()) {
+                Player player = gamePlayer.getPlayer();
 
-               if (player != null
-                       && player.getRoomUser().getRoom() != null
-                       && player.getRoomUser().getRoom() == this.room) {
+                if (player.getRoomUser().getRoom() != this.room) {
+                    continue;
+                }
 
-                   // Keep setting spawn colour underneath player, only during "this game is starting soon"
-                        /*if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
-                            BattleballTile tile = (BattleballTile) this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
+                if (this.game.getStoredPowers().containsKey(gamePlayer)) {
+                    for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
+                        objects.add(new PowerUpUpdateObject(powerUp));
+                    }
+                }
 
-                            if (tile.isSpawnOccupied() && tile.getColour() != BattleballColourType.DISABLED) {
-                                // Set first interaction on spawn tile, like official Habbo
-                                tile.setState(BattleballTileType.TOUCHED);
-                                tile.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
+                RoomEntity roomEntity = player.getRoomUser();
 
-                                updateTiles.add(tile);
-                            }
-                        }*/
-
-                   if (this.game.getStoredPowers().containsKey(gamePlayer)) {
-                       for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
-                           objects.add(new PowerUpUpdateObject(powerUp));
-                       }
-                   }
-
-                   this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
-                   RoomEntity roomEntity = player.getRoomUser();
-
-                   objects.add(new PlayerUpdateObject(gamePlayer));
-
-                   if (roomEntity.isNeedsUpdate()) {
-                       roomEntity.setNeedsUpdate(false);
-                   }
-               }
-           }
+                objects.add(new PlayerUpdateObject(gamePlayer));
+            }
 
             this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
         } catch (Exception ex) {
