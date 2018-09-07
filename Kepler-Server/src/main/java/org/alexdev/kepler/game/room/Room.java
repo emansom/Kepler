@@ -138,7 +138,13 @@ public class Room {
         for (Integer vote : this.votes.values()) {
             sum += vote;
         }
-        this.roomData.setRating(sum);
+
+        // Don't show negative rating (as the client shows the vote UI when rating < 0)
+        if (sum < 0) {
+            this.roomData.setRating(0);
+        } else {
+            this.roomData.setRating(sum);
+        }
 
         // Send new vote count to all player entities
         for (Player p : this.roomEntityManager.getPlayers()) {
