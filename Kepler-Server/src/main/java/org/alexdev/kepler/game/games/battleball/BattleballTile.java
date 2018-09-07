@@ -133,6 +133,7 @@ public class BattleballTile extends GameTile  {
 
         game.getActivePowers().clear();
         game.getStoredPowers().get(gamePlayer).add(powerUp);
+        game.getObjects().remove(powerUp.getObject());
 
         powerUp.getTimeToDespawn().set(15);
         powerUp.setPlayerHolding(gamePlayer);
