@@ -16,6 +16,7 @@ import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
 import org.alexdev.kepler.game.pathfinder.Position;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.TimeUnit;
@@ -101,7 +102,7 @@ public class BattleballTile extends GameTile  {
                 team.setSealedTileScore();
             }
 
-            this.checkFill(gamePlayer, updateTiles, updateFillTiles);
+            checkFill(gamePlayer, this, updateFillTiles);
             updateTiles.add(this);
 
             return true;
@@ -208,8 +209,8 @@ public class BattleballTile extends GameTile  {
             BattleballColourType newColour = this.getColour();
 
             getNewPoints(gamePlayer, state, colour, newState, newColour);
+            checkFill(gamePlayer, this, updateFillTiles);
 
-            this.checkFill(gamePlayer, updateTiles, updateFillTiles);
             updateTiles.add(this);
         }
     }
@@ -271,11 +272,10 @@ public class BattleballTile extends GameTile  {
         return newPoints;
     }
 
-    private void checkFill(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
-        int teamId = gamePlayer.getHarlequinTeamId() != -1 ? gamePlayer.getHarlequinTeamId() : gamePlayer.getTeamId();
-        GameTeam team = gamePlayer.getGame().getTeams().get(teamId);
+    public static void checkFill(GamePlayer gamePlayer, BattleballTile tile, Collection<BattleballTile> updateFillTiles) {
+         GameTeam team = gamePlayer.getTeam();
 
-        for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), this.getPosition())) {
+        for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), tile.getPosition())) {
             if (neighbour == null || neighbour.getState() == BattleballTileType.SEALED || neighbour.getColour() == BattleballColourType.DISABLED) {
                 continue;
             }
@@ -290,7 +290,7 @@ public class BattleballTile extends GameTile  {
 
                     team.setSealedTileScore();
 
-                    filledTile.setColour(this.getColour());
+                    filledTile.setColour(tile.getColour());
                     filledTile.setState(BattleballTileType.SEALED);
 
                     updateFillTiles.add(filledTile);

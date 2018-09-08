@@ -36,6 +36,10 @@ public class LightbulbHandle {
             tile.setColour(newColour);
             tile.setState(newState);
 
+            if (newState == BattleballTileType.SEALED) {
+                BattleballTile.checkFill(gamePlayer, tile, game.getFillTilesQueue());
+            }
+
             gameTeam.setSealedTileScore();
             game.getUpdateTilesQueue().add(tile);
         }
