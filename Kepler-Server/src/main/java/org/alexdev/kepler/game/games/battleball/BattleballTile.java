@@ -209,60 +209,69 @@ public class BattleballTile extends GameTile  {
             BattleballTileType newState = this.getState();
             BattleballColourType newColour = this.getColour();
 
-            int newPoints = -1;
-            boolean tileLocked = false;
-
-            if (state != newState && newState == BattleballTileType.TOUCHED) {
-                newPoints = 2;
-
-                if (colour != newColour) {
-                    newPoints = 4;
-                }
-            }
-
-            if (state != newState && newState == BattleballTileType.CLICKED) {
-                newPoints = 6;
-
-                if (colour != newColour) {
-                    newPoints = 8;
-                }
-            }
-
-            if (state != newState && newState == BattleballTileType.PRESSED) {
-                newPoints = 10;
-
-                if (colour != newColour) {
-                    newPoints = 12;
-                }
-            }
-
-            if (state != newState && newState == BattleballTileType.SEALED) {
-                newPoints = 14;
-                tileLocked = true;
-            }
-
-            if (newPoints != -1) {
-                if (!tileLocked) {
-
-                    // Increase score for other team if harlequin is enabled
-                    if (gamePlayer.getHarlequinTeamId() != -1) {
-                        int pointsAcrossTeams = newPoints / team.getActivePlayers().size();
-
-                        for (GamePlayer p : team.getActivePlayers()) {
-                            p.setScore(p.getScore() + pointsAcrossTeams);
-                        }
-                    } else {
-                        gamePlayer.setScore(gamePlayer.getScore() + newPoints);
-                    }
-                } else {
-                    // Tile got sealed, so increase every team members' points
-                    team.setSealedTileScore();
-                }
-            }
+            getNewPoints(gamePlayer, state, colour, newState, newColour);
 
             this.checkFill(gamePlayer, updateTiles, updateFillTiles);
             updateTiles.add(this);
         }
+    }
+
+    public static int getNewPoints(GamePlayer gamePlayer, BattleballTileType state, BattleballColourType colour, BattleballTileType newState, BattleballColourType newColour) {
+        int teamId = gamePlayer.getHarlequinTeamId() != -1 ? gamePlayer.getHarlequinTeamId() : gamePlayer.getTeamId();
+        GameTeam team = gamePlayer.getGame().getTeams().get(teamId);
+
+        int newPoints = -1;
+        boolean sealed = false;
+
+        if (state != newState && newState == BattleballTileType.TOUCHED) {
+            newPoints = 2;
+
+            if (colour != newColour) {
+                newPoints = 4;
+            }
+        }
+
+        if (state != newState && newState == BattleballTileType.CLICKED) {
+            newPoints = 6;
+
+            if (colour != newColour) {
+                newPoints = 8;
+            }
+        }
+
+        if (state != newState && newState == BattleballTileType.PRESSED) {
+            newPoints = 10;
+
+            if (colour != newColour) {
+                newPoints = 12;
+            }
+        }
+
+        if (state != newState && newState == BattleballTileType.SEALED) {
+            newPoints = 14;
+            sealed = true;
+        }
+
+
+        if (newPoints != -1) {
+            if (!sealed) { // Set to sealed
+                // Increase score for other team if harlequin is enabled
+                if (gamePlayer.getHarlequinTeamId() != -1) {
+                    int pointsAcrossTeams = newPoints / team.getActivePlayers().size();
+
+                    for (GamePlayer p : team.getActivePlayers()) {
+                        p.setScore(p.getScore() + pointsAcrossTeams);
+                    }
+                } else {
+                    gamePlayer.setScore(gamePlayer.getScore() + newPoints);
+                }
+            } else {
+                // Tile got sealed, so increase every team members' points
+                team.setSealedTileScore();
+            }
+        }
+
+        return newPoints;
     }
 
     private void checkFill(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {

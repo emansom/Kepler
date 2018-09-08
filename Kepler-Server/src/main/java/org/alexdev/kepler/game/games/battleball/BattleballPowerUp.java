@@ -10,6 +10,7 @@ import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
+import org.alexdev.kepler.game.games.battleball.powerups.LightbulbHandle;
 import org.alexdev.kepler.game.games.battleball.powerups.NailBoxHandle;
 import org.alexdev.kepler.game.games.battleball.powerups.TorchHandle;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -54,6 +55,10 @@ public class BattleballPowerUp {
 
         if (this.powerType == BattleballPowerType.FLASHLIGHT) {
             TorchHandle.handle(this.game, gamePlayer, game.getRoom());
+        }
+
+        if (this.powerType == BattleballPowerType.LIGHT_BLUB) {
+            LightbulbHandle.handle(this.game, gamePlayer, game.getRoom());
         }
 
         if (this.powerType == BattleballPowerType.DRILL) {

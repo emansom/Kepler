@@ -12,27 +12,16 @@ import org.alexdev.kepler.game.room.Room;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TorchHandle {
+public class LightbulbHandle {
     public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
         GameTeam gameTeam = game.getTeams().get(gamePlayer.getTeamId());
-        List<BattleballTile> tilesToUpdate = new ArrayList<>();
 
-        Position nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
+        for (Position position : gamePlayer.getPlayer().getRoomUser().getPosition().getCircle(5)) {
+            BattleballTile tile = (BattleballTile) game.getTile(position.getX(), position.getY());
 
-        for (int i = 0; i < 10; i++) {
-            nextPosition = nextPosition.getSquareInFront();
-
-            BattleballTile tile = (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY());
-
-            if (tile == null || tile.getColour() == BattleballColourType.DISABLED) {
-                break;
-            }
-
-            tilesToUpdate.add(tile);
-        }
-
-        for (BattleballTile tile : tilesToUpdate) {
-            if (tile.getState() == BattleballTileType.SEALED) {
+            if (tile == null ||
+                    tile.getColour() == BattleballColourType.DISABLED ||
+                    tile.getState() == BattleballTileType.SEALED) {
                 continue;
             }
 
@@ -43,7 +32,11 @@ public class TorchHandle {
             BattleballColourType newColour = BattleballColourType.getColourById(gamePlayer.getTeamId());
 
             BattleballTile.getNewPoints(gamePlayer, state, colour, newState, newColour);
-            
+
+            tile.setColour(newColour);
+            tile.setState(newState);
+
+            gameTeam.setSealedTileScore();
             game.getUpdateTilesQueue().add(tile);
         }
 
