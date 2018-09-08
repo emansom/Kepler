@@ -9,7 +9,7 @@ public class PlayerUpdateObject extends GameObject {
     private final GamePlayer gamePlayer;
 
     public PlayerUpdateObject(GamePlayer gamePlayer) {
-        super(GameObjectType.BATTLEBALL_PLAYER_OBJECT);
+        super(gamePlayer.getPlayer().getDetails().getId(), GameObjectType.BATTLEBALL_PLAYER_OBJECT);
         this.gamePlayer = gamePlayer;
     }
 

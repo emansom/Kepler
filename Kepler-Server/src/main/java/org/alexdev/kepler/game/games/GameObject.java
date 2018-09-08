@@ -4,9 +4,10 @@ import org.alexdev.kepler.game.games.enums.GameObjectType;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public abstract class GameObject {
+    private int id;
     private GameObjectType gameObjectType;
 
-    public GameObject(GameObjectType gameObjectType) {
+    public GameObject(int id, GameObjectType gameObjectType) {
         this.gameObjectType = gameObjectType;
     }
 
@@ -19,5 +20,14 @@ public abstract class GameObject {
      */
     public GameObjectType getGameObjectType() {
         return gameObjectType;
+    }
+
+    /**
+     * Get the id of this object
+     *
+     * @return the object id
+     */
+    public int getId() {
+        return id;
     }
 }

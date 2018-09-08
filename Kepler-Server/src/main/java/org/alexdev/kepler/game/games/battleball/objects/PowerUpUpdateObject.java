@@ -9,7 +9,7 @@ public class PowerUpUpdateObject extends GameObject {
     private final BattleballPowerUp powerUp;
 
     public PowerUpUpdateObject(BattleballPowerUp powerUp) {
-        super(GameObjectType.BATTLEBALL_POWER_OBJECT);
+        super(powerUp.getId(), GameObjectType.BATTLEBALL_POWER_OBJECT);
         this.powerUp = powerUp;
     }
 

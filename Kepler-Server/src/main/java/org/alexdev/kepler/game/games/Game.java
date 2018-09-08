@@ -74,8 +74,8 @@ public abstract class Game {
         this.eventsQueue = new LinkedBlockingQueue<>();
         this.objectsQueue = new LinkedBlockingQueue<>();
 
-        this.objects = new ArrayList<>();
-        this.events = new ArrayList<>();
+        this.objects = new CopyOnWriteArrayList<>();
+        this.events = new CopyOnWriteArrayList<>();
 
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));

@@ -3,14 +3,13 @@ package org.alexdev.kepler.game.games.battleball.objects;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.enums.GameObjectType;
-import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class PowerObject extends GameObject {
     private final BattleballPowerUp powerUp;
 
     public PowerObject(BattleballPowerUp powerUp) {
-        super(GameObjectType.BATTLEBALL_POWER_OBJECT);
+        super(powerUp.getId(), GameObjectType.BATTLEBALL_POWER_OBJECT);
         this.powerUp = powerUp;
     }
 
