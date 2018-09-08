@@ -64,6 +64,7 @@ public class BattleballTile extends GameTile  {
 
             if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject.getPosition())) {
                 gamePlayer.getPlayer().getRoomUser().stopWalking();
+
                 gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
                 gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
 
@@ -82,8 +83,6 @@ public class BattleballTile extends GameTile  {
     private boolean bounceWithPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         BattleballColourType colour = this.getColour();
         BattleballTileType state = this.getState();
-
-        boolean hasPower = (gamePlayer.getPlayerState() != BattleballPlayerState.NORMAL);
 
         if (colour == BattleballColourType.DISABLED) {
             return false;
@@ -144,7 +143,7 @@ public class BattleballTile extends GameTile  {
             return true;
         }
 
-        return hasPower;
+        return false;
     }
 
     private void checkPowerUp(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {

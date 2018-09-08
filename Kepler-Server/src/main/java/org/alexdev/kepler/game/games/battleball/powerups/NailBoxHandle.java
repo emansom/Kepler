@@ -87,6 +87,8 @@ public class NailBoxHandle {
 
         for (GamePlayer dizzyPlayer : dizzyPlayers) {
             dizzyPlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
+            dizzyPlayer.getPlayer().getRoomUser().stopWalking();
+
             game.getEventsQueue().add(new PlayerUpdateEvent(dizzyPlayer));
         }
 
