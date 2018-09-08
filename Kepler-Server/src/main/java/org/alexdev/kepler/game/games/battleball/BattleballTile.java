@@ -195,7 +195,7 @@ public class BattleballTile extends GameTile  {
         }
 
         if (state != BattleballTileType.SEALED) {
-            if (colour.getColourId() == gamePlayer.getTeamId()) {
+            if (colour.getColourId() == team.getId()) {
                 this.setState(BattleballTileType.getStateById(state.getTileStateId() + 1));
             } else {
                 if (gamePlayer.getGame().getMapId() == 5) { // Barebones classic takes 4 hits
