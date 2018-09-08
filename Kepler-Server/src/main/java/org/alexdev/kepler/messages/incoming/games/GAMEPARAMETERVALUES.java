@@ -44,5 +44,7 @@ public class GAMEPARAMETERVALUES implements MessageEvent {
         }
 
         gameLobbyTrigger.createGame(player, gameParameters);
+        
+        room.send(gameLobbyTrigger.getInstanceList());
     }
 }
