@@ -19,6 +19,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
@@ -30,12 +31,16 @@ public class NailBoxHandle {
 
         Position tilePosition = gamePlayer.getPlayer().getRoomUser().getPosition()
                 .getSquareInFront()
+                .getSquareInFront()
                 .getSquareInFront();
 
         int maxPins = ThreadLocalRandom.current().nextInt(5, 12 + 1);
         List<Position> selectedPositions = new ArrayList<>();
+        List<Position> circlePositions = tilePosition.getCircle(3);
 
-        for (Position circlePos : tilePosition.getCircle(6)) {
+        Collections.shuffle(circlePositions);
+
+        for (Position circlePos : circlePositions) {
             if (circlePos.equals(gamePlayer.getPlayer().getRoomUser().getPosition())) {
                 continue;
             }
