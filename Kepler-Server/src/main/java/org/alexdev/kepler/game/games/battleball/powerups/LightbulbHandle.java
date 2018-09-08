@@ -14,7 +14,7 @@ import java.util.List;
 
 public class LightbulbHandle {
     public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
-        GameTeam gameTeam = game.getTeams().get(gamePlayer.getTeamId());
+        GameTeam gameTeam = gamePlayer.getTeam();
 
         for (Position position : gamePlayer.getPlayer().getRoomUser().getPosition().getCircle(5)) {
             BattleballTile tile = (BattleballTile) game.getTile(position.getX(), position.getY());
@@ -29,7 +29,7 @@ public class LightbulbHandle {
             BattleballColourType colour = tile.getColour();
 
             BattleballTileType newState = BattleballTileType.getStateById(tile.getState().getTileStateId() + 1);
-            BattleballColourType newColour = BattleballColourType.getColourById(gamePlayer.getTeamId());
+            BattleballColourType newColour = BattleballColourType.getColourById(gameTeam.getId());
 
             BattleballTile.getNewPoints(gamePlayer, state, colour, newState, newColour);
 

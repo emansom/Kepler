@@ -51,6 +51,11 @@ public class GamePlayer {
         return userId;
     }
 
+    public GameTeam getTeam() {
+        int teamId = this.getHarlequinTeamId() != -1 ? this.getHarlequinTeamId() : this.getTeamId();
+        return this.getGame().getTeams().get(teamId);
+    }
+
     public int getTeamId() {
         return teamId;
     }

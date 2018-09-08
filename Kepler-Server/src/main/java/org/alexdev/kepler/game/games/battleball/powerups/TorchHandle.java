@@ -14,7 +14,7 @@ import java.util.List;
 
 public class TorchHandle {
     public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
-        GameTeam gameTeam = game.getTeams().get(gamePlayer.getTeamId());
+        GameTeam gameTeam = gamePlayer.getTeam();
         List<BattleballTile> tilesToUpdate = new ArrayList<>();
 
         Position nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
@@ -40,10 +40,10 @@ public class TorchHandle {
             BattleballColourType colour = tile.getColour();
 
             BattleballTileType newState = BattleballTileType.getStateById(tile.getState().getTileStateId() + 1);
-            BattleballColourType newColour = BattleballColourType.getColourById(gamePlayer.getTeamId());
+            BattleballColourType newColour = BattleballColourType.getColourById(gameTeam.getId());
 
             BattleballTile.getNewPoints(gamePlayer, state, colour, newState, newColour);
-            
+
             game.getUpdateTilesQueue().add(tile);
         }
 

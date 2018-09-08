@@ -90,7 +90,7 @@ public class BattleballTile extends GameTile  {
             return false;
         }
         
-        GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
+        GameTeam team = gamePlayer.getTeam();
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.HIGH_JUMPS) {
             this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
@@ -217,8 +217,7 @@ public class BattleballTile extends GameTile  {
     }
 
     public static int getNewPoints(GamePlayer gamePlayer, BattleballTileType state, BattleballColourType colour, BattleballTileType newState, BattleballColourType newColour) {
-        int teamId = gamePlayer.getHarlequinTeamId() != -1 ? gamePlayer.getHarlequinTeamId() : gamePlayer.getTeamId();
-        GameTeam team = gamePlayer.getGame().getTeams().get(teamId);
+        GameTeam team = gamePlayer.getTeam();
 
         int newPoints = -1;
         boolean sealed = false;
