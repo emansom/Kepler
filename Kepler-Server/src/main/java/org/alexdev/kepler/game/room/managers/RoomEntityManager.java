@@ -218,10 +218,10 @@ public class RoomEntityManager {
         } else {
             this.room.getRights().addAll(RoomRightsDao.getRoomRights(this.room.getData()));
             this.room.getVotes().putAll(RoomDao.getRatings(this.room.getData()));
+            this.room.getData().setRating(this.room.getVotes().size());
         }
 
         this.room.getItems().addAll(ItemDao.getRoomItems(this.room.getData()));
-        this.room.getData().setRating(RoomDao.getRatingCount(this.room.getData()));
 
         this.room.getMapping().regenerateCollisionMap();
         this.room.getTaskManager().startTasks();
