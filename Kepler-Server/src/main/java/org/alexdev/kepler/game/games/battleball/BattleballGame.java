@@ -34,12 +34,14 @@ public class BattleballGame extends Game {
     private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
 
     private AtomicInteger timeUntilNextPower;
+    private AtomicInteger objectId;
 
     public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
 
         this.allowedPowerUps = allowedPowerUps;
         this.timeUntilNextPower = new AtomicInteger(0);
+        this.objectId = new AtomicInteger(0);
 
         this.activePowers = new CopyOnWriteArrayList<>();
         this.storedPowers = new ConcurrentHashMap<>();
@@ -133,11 +135,11 @@ public class BattleballGame extends Game {
      * @return the new object ids
      */
     public int createObjectId() {
-        int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
+        int powerId = this.objectId.incrementAndGet();//ThreadLocalRandom.current().nextInt(100, 9999);
 
         for (GamePlayer gamePlayer : this.getPlayers()) {
             if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
-                return createObjectId();
+                powerId = this.objectId.incrementAndGet();
             }
         }
 
