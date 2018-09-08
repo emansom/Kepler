@@ -1,19 +1,28 @@
 package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
+import org.alexdev.kepler.game.games.battleball.events.PinSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
-import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PinObject;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
+import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
+import org.alexdev.kepler.game.games.battleball.powerups.*;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BattleballPowerUp {
     private final int id;
+    private final PowerObject object;
     private final AtomicInteger timeToDespawn;
     private final BattleballPowerType powerType;
     private final BattleballTile tile;
@@ -23,10 +32,11 @@ public class BattleballPowerUp {
 
     public BattleballPowerUp(BattleballGame game, int id, BattleballTile tile) {
         this.id = id;
+        this.object = new PowerObject(this);
         this.tile = tile;
         this.game = game;
         this.position = this.tile.getPosition().copy();
-        this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 20));
+        this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25 + 1));
         this.powerType = BattleballPowerType.getById(game.getAllowedPowerUps()[ThreadLocalRandom.current().nextInt(0, game.getAllowedPowerUps().length)]);
     }
 
@@ -37,32 +47,28 @@ public class BattleballPowerUp {
      * @param position the position that the power up should be used at
      */
     public void usePower(GamePlayer gamePlayer, Position position) {
+        if (this.powerType == BattleballPowerType.BOX_OF_PINS) {
+            NailBoxHandle.handle(this.game, gamePlayer, game.getRoom());
+        }
+
+        if (this.powerType == BattleballPowerType.FLASHLIGHT) {
+            TorchHandle.handle(this.game, gamePlayer, game.getRoom());
+        }
+
+        if (this.powerType == BattleballPowerType.LIGHT_BLUB) {
+            LightbulbHandle.handle(this.game, gamePlayer, game.getRoom());
+        }
+
         if (this.powerType == BattleballPowerType.DRILL) {
-            gamePlayer.setPlayerState(BattleballPlayerState.CLEANING_TILES);
-            this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
-
-            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-                if (this.game.isGameFinished()) {
-                    return;
-                }
-
-                gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
-            }, 10, TimeUnit.SECONDS);
+            VacuumHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
         }
 
         if (this.powerType == BattleballPowerType.SPRING) {
-            gamePlayer.setPlayerState(BattleballPlayerState.HIGH_JUMPS);
-            this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+            SpringHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
+        }
 
-            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-                if (this.game.isGameFinished()) {
-                    return;
-                }
-
-                gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
-            }, 10, TimeUnit.SECONDS);
+        if (this.powerType == BattleballPowerType.HARLEQUIN) {
+            HarlequinHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
         }
     }
 
@@ -130,5 +136,9 @@ public class BattleballPowerUp {
         }
 
         return -1;
+    }
+
+    public GameObject getObject() {
+        return object;
     }
 }

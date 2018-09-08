@@ -45,9 +45,13 @@ public abstract class Game {
     private BlockingQueue<GameEvent> eventsQueue;
     private BlockingQueue<GameObject> objectsQueue;
 
+    private List<GameObject> objects;
+    private List<GameEvent> events;
+
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
+    private AtomicInteger objectId;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
@@ -71,10 +75,14 @@ public abstract class Game {
         this.eventsQueue = new LinkedBlockingQueue<>();
         this.objectsQueue = new LinkedBlockingQueue<>();
 
+        this.objects = new CopyOnWriteArrayList<>();
+        this.events = new CopyOnWriteArrayList<>();
+
         for (int i = 0; i < teamAmount; i++) {
             this.teams.put(i, new GameTeam(i));
         }
 
+        this.objectId = new AtomicInteger(-1);
         this.gameState = GameState.WAITING;
     }
 
@@ -83,6 +91,7 @@ public abstract class Game {
      */
     public void initialise() {
         this.gameState = GameState.STARTED;
+        this.objectId = new AtomicInteger(-1);
 
         this.gameStarted = false;
         this.gameFinished = false;
@@ -100,6 +109,9 @@ public abstract class Game {
             this.room.setRoomModel(this.getRoomModel());
         }
 
+        this.objects.clear();
+        this.events.clear();
+
         this.buildMap();
         this.assignSpawnPoints();
     }
@@ -110,10 +122,8 @@ public abstract class Game {
     public void startGame() {
         this.initialise();
 
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer p : team.getActivePlayers()) {
-                p.setEnteringGame(true); // Set to true so when they leave the lobby, the server knows to initialise the user when they join the arena
-            }
+        for (GamePlayer p : this.getPlayers()) {
+            p.setEnteringGame(true); // Set to true so when they leave the lobby, the server knows to initialise the user when they join the arena
         }
 
         this.send(new GAMELOCATION());
@@ -127,6 +137,8 @@ public abstract class Game {
                     return;
                 }
 
+                gameBeginTick();
+
                 if (preparingGameSecondsLeft.getAndDecrement() == 0) {
                     this.cancelFuture();
                     beginGame();
@@ -134,7 +146,7 @@ public abstract class Game {
             }
         };
 
-        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 0, 1, TimeUnit.SECONDS);
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
 
         this.sendObservers(new GAMEINSTANCE(this));
@@ -148,10 +160,8 @@ public abstract class Game {
         this.gameStarted = true;
 
         // Stop all players from walking when game starts if they selected a tile
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer p : team.getActivePlayers()) {
-                p.getPlayer().getRoomUser().setWalkingAllowed(true);
-            }
+        for (GamePlayer p : this.getPlayers()) {
+            p.getPlayer().getRoomUser().setWalkingAllowed(true);
         }
 
         // Send game seconds
@@ -197,10 +207,8 @@ public abstract class Game {
         GameManager.getInstance().getFinishedGames().add(finishedGame);
 
         // Stop all players from walking when game starts if they selected a tile
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer p : team.getActivePlayers()) {
-                p.getPlayer().getRoomUser().setWalkingAllowed(false);
-            }
+        for (GamePlayer p : this.getPlayers()) {
+            p.getPlayer().getRoomUser().setWalkingAllowed(false);
         }
 
         // Send scores to everybody
@@ -238,14 +246,12 @@ public abstract class Game {
         List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
         List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
 
-        for (GameTeam gameTeam : this.teams.values()) {
-            for (GamePlayer p : gameTeam.getActivePlayers()) {
-                if (!p.isClickedRestart()) {
-                    afkPlayers.add(p);
-                } else {
-                    p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
-                    players.add(p);
-                }
+        for (GamePlayer p : this.getPlayers()) {
+            if (!p.isClickedRestart()) {
+                afkPlayers.add(p);
+            } else {
+                p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
+                players.add(p);
             }
         }
 
@@ -304,6 +310,8 @@ public abstract class Game {
         //System.out.println("called: " + gamePlayer.getUserId());
         boolean isSpectator = this.spectators.contains(gamePlayer);
         this.spectators.remove(gamePlayer);
+
+        this.objects.remove(gamePlayer.getGameObject());
 
         gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
         gamePlayer.getPlayer().send(new GAMEDELETED());
@@ -422,10 +430,8 @@ public abstract class Game {
      * @param composer the composer to send
      */
     public void send(MessageComposer composer) {
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer gamePlayer : team.getActivePlayers()) {
-                gamePlayer.getPlayer().send(composer);
-            }
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            gamePlayer.getPlayer().send(composer);
         }
 
         for (GamePlayer player : this.spectators) {
@@ -543,6 +549,23 @@ public abstract class Game {
     }
 
     /**
+     * Method to create object ids.
+     *
+     * @return the new object ids
+     */
+    public int createObjectId() {
+        /*int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
+
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
+                powerId = createObjectId();
+            }
+        }*/
+
+        return this.getObjectId().incrementAndGet();
+    }
+
+    /**
      * Method for whether the game can continue, eg if all tiles are filled up or
      * some other logic
      *
@@ -576,6 +599,11 @@ public abstract class Game {
     public void gameBegin() { }
 
     /**
+     * Method called for the tick in game beginning
+     */
+    public void gameBeginTick() { }
+
+    /**
      * Method called when the game initially started
      */
     public void gameStarted() { }
@@ -584,6 +612,16 @@ public abstract class Game {
      * Method called when the game ends, when the scoreboard shows
      */
     public void gameEnded() { }
+
+    public List<GamePlayer> getPlayers() {
+        List<GamePlayer> gamePlayers = new ArrayList<>();
+
+        for (GameTeam team : this.teams.values()) {
+            gamePlayers.addAll(team.getActivePlayers());
+        }
+
+        return gamePlayers;
+    }
 
     /**
      * Get the list of specators, the people currently watching the game
@@ -601,14 +639,6 @@ public abstract class Game {
     public List<Player> getObservers() {
         return observers;
     }
-
-    /**
-     * Get persistent events, used for when spectators join mid-game and there's tacks
-     * or power ups on the map.
-     *
-     * @return the list of persistent events
-     */
-    public abstract List<GameEvent> getPersistentEvents();
 
     /**
      * Get the game id
@@ -683,7 +713,19 @@ public abstract class Game {
         return objectsQueue;
     }
 
+    public List<GameObject> getObjects() {
+        return objects;
+    }
+
     public void setRoomModel(RoomModel roomModel) {
         this.roomModel = roomModel;
+    }
+
+    public AtomicInteger getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(AtomicInteger objectId) {
+        this.objectId = objectId;
     }
 }

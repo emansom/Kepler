@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Aug 31, 2018 at 08:47 PM
+-- Generation Time: Sep 07, 2018 at 04:47 PM
 -- Server version: 10.3.7-MariaDB
 -- PHP Version: 7.2.6
 
@@ -7285,7 +7285,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('l79', 'rooftop', 'rooftop_flatcurb3', 9, 17, 4, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('h812', 'rooftop', 'rooftop_flatcurb4', 1, 17, 4, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('u905', 'rooftop', 'rooftop_flatcurb4', 8, 17, 4, 0, 1, 1, 1, 'can_sit_on_top', ''),
-('i180', 'rooftop', 'rooftop_flatcurb5', 13, 17, 4, 0, 1, 1, 1, 'can_sit_on_top', ''),
+('n630', 'rooftop', 'rooftop_flatcurb5', 13, 17, 4, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('n670', 'rooftop', 'rooftop_flatcurb5', 6, 17, 4, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('d340', 'rooftop', 'rooftop_minichair', 0, 1, 4, 4, 1, 1, 1, 'can_sit_on_top', ''),
 ('b503', 'rooftop', 'rooftop_minichair', 0, 11, 4, 0, 1, 1, 1, 'can_sit_on_top', ''),
@@ -7339,7 +7339,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('a316', 'tearoom', 'teastool', 2, 6, 3, 4, 1, 1, 1, 'can_sit_on_top', ''),
 ('l233', 'tearoom', 'teastool', 3, 12, 3, 4, 1, 1, 1, 'can_sit_on_top', ''),
 ('z163', 'tearoom', 'teastool', 3, 6, 3, 4, 1, 1, 1, 'can_sit_on_top', ''),
-('i180', 'tearoom', 'teastool2', 16, 12, 3, 0, 1, 1, 1, 'can_sit_on_top', ''),
+('n630', 'tearoom', 'teastool2', 16, 12, 3, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('t628', 'tearoom', 'teastool2', 17, 12, 3, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('q891', 'tearoom', 'teastool2', 2, 15, 3, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('n895', 'tearoom', 'teastool2', 2, 9, 3, 0, 1, 1, 1, 'can_sit_on_top', ''),
@@ -8256,7 +8256,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('q702', 'bb_lobby_1', 'bb_extra', 17, 8, 1, 4, 0.001, 1, 1, 'solid', ''),
 ('c780', 'bb_lobby_1', 'bb_extra', 18, 8, 1, 2, 0.001, 1, 1, 'solid', ''),
 ('c335', 'bb_lobby_1', 'bb_crossrd', 19, 8, 1, 6, 0.001, 1, 1, 'solid', ''),
-('i180', 'bb_lobby_1', 'bb_stool', 3, 9, 1, 6, 1, 1, 1, 'can_sit_on_top', ''),
+('c643', 'bb_lobby_1', 'bb_stool', 3, 9, 1, 6, 1, 1, 1, 'can_sit_on_top', ''),
 ('l61', 'bb_lobby_1', 'bb_chair', 9, 9, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('o787', 'bb_lobby_1', 'bb_chair', 10, 9, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('p238', 'bb_lobby_1', 'bb_bench1', 17, 9, 1, 4, 1, 1, 1, 'can_sit_on_top', ''),
@@ -8269,7 +8269,7 @@ INSERT INTO `public_items` (`id`, `room_model`, `sprite`, `x`, `y`, `z`, `rotati
 ('d851', 'bb_lobby_1', 'bb_wallend1in', 7, 12, 1, 0, 0.001, 1, 1, 'solid', ''),
 ('v766', 'bb_lobby_1', 'bb_bench1', 8, 12, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('j397', 'bb_lobby_1', 'bb_bench2', 9, 12, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
-('i180', 'bb_lobby_1', 'bb_bench1', 10, 12, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
+('n630', 'bb_lobby_1', 'bb_bench1', 10, 12, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('y599', 'bb_lobby_1', 'bb_bench2', 11, 12, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
 ('y661', 'bb_lobby_1', 'bb_wallend2in', 12, 12, 1, 0, 0.001, 1, 1, 'solid', ''),
 ('v743', 'bb_lobby_1', 'bb_bench1', 17, 12, 1, 0, 1, 1, 1, 'can_sit_on_top', ''),
@@ -9856,7 +9856,9 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180817093645'),
 ('20180818032804'),
 ('20180826011235'),
-('20180826152253');
+('20180826152253'),
+('20180901071104'),
+('20180901230642');
 
 -- --------------------------------------------------------
 

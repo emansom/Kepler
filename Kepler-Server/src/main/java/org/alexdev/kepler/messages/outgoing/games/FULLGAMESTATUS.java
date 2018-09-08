@@ -33,28 +33,14 @@ public class FULLGAMESTATUS extends MessageComposer {
         response.writeInt(this.game.getGameState().getStateId());
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
         response.writeInt(GameManager.getInstance().getPreparingSeconds(game.getGameType()));
-        response.writeInt(this.gamePlayerList.size()); // TODO: Objects here
+        response.writeInt(this.game.getObjects().size()); // TODO: Objects here
 
         if (this.game.getGameType() == GameType.BATTLEBALL) {
-            for (var team : this.game.getTeams().values()) {
-                for (var gamePlayer : team.getActivePlayers()) {
-                    //if (!this.startedGame) {
-                    response.writeInt(0); // type, 0 = player
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY());
-                    response.writeInt((int) gamePlayer.getPlayer().getRoomUser().getPosition().getZ());
-                    response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
-                    response.writeInt(0);
-                    response.writeInt(-1);
-                    response.writeString(gamePlayer.getPlayer().getDetails().getName());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getMotto());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getFigure());
-                    response.writeString(gamePlayer.getPlayer().getDetails().getSex());
-                    response.writeInt(gamePlayer.getTeamId());
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId()); // Actually room user id/instance id
-                }
+            for (var gameObject : this.game.getObjects()) {
+                response.writeInt(gameObject.getGameObjectType().getObjectId()); // type, 0 = player
+                gameObject.serialiseObject(response);
             }
+
             response.writeInt(this.game.getRoomModel().getMapSizeY());
             response.writeInt(this.game.getRoomModel().getMapSizeX());
 
@@ -73,12 +59,7 @@ public class FULLGAMESTATUS extends MessageComposer {
             }
 
             response.writeInt(1);
-            response.writeInt(this.game.getPersistentEvents().size());
-
-            for (GameEvent event : this.game.getPersistentEvents()) {
-                response.writeInt(event.getGameEventType().getEventId());
-                event.serialiseEvent(response);
-            }
+            response.writeInt(0); // TODO: Show events on game load
         }
     }
 

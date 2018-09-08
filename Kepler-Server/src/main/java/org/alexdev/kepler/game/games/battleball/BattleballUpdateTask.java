@@ -6,7 +6,9 @@ import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -42,53 +44,29 @@ public class BattleballUpdateTask implements Runnable {
             List<GameObject> objects = new ArrayList<>();
             List<GameEvent> events = new ArrayList<>();
 
-            this.game.getEventsQueue().drainTo(events);
-            this.game.getObjectsQueue().drainTo(objects);
-
-            // for (BattleballPowerUp battleballPowerUp : this.game.getActivePowers()) {
-            //     objects.add(new PowerObject(battleballPowerUp));
-            // }
-
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();
 
-            for (GameTeam gameTeam : this.game.getTeams().values()) {
-                for (GamePlayer gamePlayer : gameTeam.getActivePlayers()) {
-                    Player player = gamePlayer.getPlayer();
+            this.game.getEventsQueue().drainTo(events);
+            this.game.getObjectsQueue().drainTo(objects);
+            this.game.getUpdateTilesQueue().drainTo(updateTiles);
+            this.game.getFillTilesQueue().drainTo(fillTiles);
 
-                    if (player != null
-                            && player.getRoomUser().getRoom() != null
-                            && player.getRoomUser().getRoom() == this.room) {
+            for (GamePlayer gamePlayer : this.game.getPlayers()) {
+                Player player = gamePlayer.getPlayer();
 
-                        // Keep setting spawn colour underneath player, only during "this game is starting soon"
-                        /*if (!this.game.isGameStarted() && !this.game.isGameFinished()) {
-                            BattleballTile tile = (BattleballTile) this.game.getTile(gamePlayer.getSpawnPosition().getX(), gamePlayer.getSpawnPosition().getY());
+                if (player.getRoomUser().getRoom() != this.room) {
+                    continue;
+                }
 
-                            if (tile.isSpawnOccupied() && tile.getColour() != BattleballColourType.DISABLED) {
-                                // Set first interaction on spawn tile, like official Habbo
-                                tile.setState(BattleballTileType.TOUCHED);
-                                tile.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
-
-                                updateTiles.add(tile);
-                            }
-                        }*/
-
-                        if (this.game.getStoredPowers().containsKey(gamePlayer)) {
-                            for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
-                                objects.add(new PowerObject(gamePlayer, powerUp));
-                            }
-                        }
-
-                        this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
-                        RoomEntity roomEntity = player.getRoomUser();
-
-                        objects.add(new PlayerObject(gamePlayer));
-
-                        if (roomEntity.isNeedsUpdate()) {
-                            roomEntity.setNeedsUpdate(false);
-                        }
+                if (this.game.getStoredPowers().containsKey(gamePlayer)) {
+                    for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
+                        objects.add(new PowerUpUpdateObject(powerUp));
                     }
                 }
+
+                this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
+                objects.add(new PlayerUpdateObject(gamePlayer));
             }
 
             this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));

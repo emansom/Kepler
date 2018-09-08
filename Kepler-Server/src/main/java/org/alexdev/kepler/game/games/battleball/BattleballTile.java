@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games.battleball;
 
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.GameTile;
@@ -7,8 +8,9 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
-import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
-import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
+import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
+import org.alexdev.kepler.game.games.battleball.objects.PinObject;
+import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
@@ -16,6 +18,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class BattleballTile extends GameTile  {
     private BattleballColourType colour;
@@ -34,7 +37,11 @@ public class BattleballTile extends GameTile  {
      */
     public void interact(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         try {
-            if (this.bounceWithPower(gamePlayer, updateTiles, updateFillTiles)) {
+            if (this.checkNailTile(gamePlayer)) {
+                return;
+            }
+
+            if (this.hasUsedPower(gamePlayer, updateTiles, updateFillTiles)) {
                 return;
             }
 
@@ -45,7 +52,35 @@ public class BattleballTile extends GameTile  {
         }
     }
 
-    private boolean bounceWithPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+    private boolean checkNailTile(GamePlayer gamePlayer) {
+        for (GameObject gameObject : gamePlayer.getGame().getObjects()) {
+            if (!(gameObject instanceof PinObject)) {
+                continue;
+            }
+
+            PinObject pinObject = (PinObject) gameObject;
+
+            if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject.getPosition())) {
+                gamePlayer.getPlayer().getRoomUser().stopWalking();
+                gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
+
+                gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
+                gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+
+                GameScheduler.getInstance().getSchedulerService().schedule(()-> {
+                    gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
+                    gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
+                    gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+                }, 5, TimeUnit.SECONDS);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean hasUsedPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         BattleballColourType colour = this.getColour();
         BattleballTileType state = this.getState();
 
@@ -53,22 +88,28 @@ public class BattleballTile extends GameTile  {
             return false;
         }
         
-        GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
+        GameTeam team = gamePlayer.getTeam();
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.HIGH_JUMPS) {
             this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
-            this.setState(BattleballTileType.SEALED);
+
+            if (colour.getColourId() != team.getId() && state == BattleballTileType.SEALED) {
+                this.setState(BattleballTileType.TOUCHED); // Only set to touched when bounching on other teams locked tile
+                gamePlayer.setScore(gamePlayer.getScore() + 4);
+            } else {
+                this.setState(BattleballTileType.SEALED);
+                team.setSealedTileScore();
+            }
 
             this.checkFill(gamePlayer, updateTiles, updateFillTiles);
             updateTiles.add(this);
 
-            team.setSealedTileScore();
             return true;
         }
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.CLEANING_TILES) {
             if (colour == BattleballColourType.DEFAULT) {
-                return false;
+                return true;
             }
 
             int pointsToRemove = 0;
@@ -87,6 +128,13 @@ public class BattleballTile extends GameTile  {
 
             if (state == BattleballTileType.SEALED) {
                 pointsToRemove = 14;
+            }
+
+            GameTeam oppositeTeam = gamePlayer.getGame().getTeams().get(colour.getColourId());
+            int eachTeamRemove = pointsToRemove / oppositeTeam.getActivePlayers().size();
+
+            for (GamePlayer p : oppositeTeam.getActivePlayers()) {
+                p.setScore(p.getScore() - eachTeamRemove);
             }
 
             this.setColour(BattleballColourType.DEFAULT);
@@ -119,12 +167,13 @@ public class BattleballTile extends GameTile  {
 
         game.getActivePowers().clear();
         game.getStoredPowers().get(gamePlayer).add(powerUp);
+        game.getObjects().remove(powerUp.getObject());
 
         powerUp.getTimeToDespawn().set(15);
         powerUp.setPlayerHolding(gamePlayer);
 
         events.add(new AcquirePowerUpEvent(gamePlayer, powerUp));
-        objects.add(new PowerObject(gamePlayer, powerUp));
+        objects.add(new PowerUpUpdateObject(powerUp));
     }
 
     private void changeState(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
@@ -135,76 +184,96 @@ public class BattleballTile extends GameTile  {
         BattleballTileType state = this.getState();
         BattleballColourType colour = this.getColour();
 
-        GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
+        int teamId = gamePlayer.getHarlequinTeamId() != -1 ? gamePlayer.getHarlequinTeamId() : gamePlayer.getTeamId();
+        GameTeam team = gamePlayer.getGame().getTeams().get(teamId);
 
         if (colour == BattleballColourType.DISABLED) {
             return;
         }
 
         if (state != BattleballTileType.SEALED) {
-            if (colour.getColourId() == gamePlayer.getTeamId()) {
+            if (colour.getColourId() == team.getId()) {
                 this.setState(BattleballTileType.getStateById(state.getTileStateId() + 1));
             } else {
                 if (gamePlayer.getGame().getMapId() == 5) { // Barebones classic takes 4 hits
                     this.setState(BattleballTileType.TOUCHED);
-                    this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                    this.setColour(BattleballColourType.getColourById(teamId));
                 } else {
                     this.setState(BattleballTileType.CLICKED);
-                    this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+                    this.setColour(BattleballColourType.getColourById(teamId));
                 }
             }
 
             BattleballTileType newState = this.getState();
             BattleballColourType newColour = this.getColour();
 
-            int newPoints = -1;
-            boolean tileLocked = false;
-
-            if (state != newState && newState == BattleballTileType.TOUCHED) {
-                newPoints = 2;
-
-                if (colour != newColour) {
-                    newPoints = 4;
-                }
-            }
-
-            if (state != newState && newState == BattleballTileType.CLICKED) {
-                newPoints = 6;
-
-                if (colour != newColour) {
-                    newPoints = 8;
-                }
-            }
-
-            if (state != newState && newState == BattleballTileType.PRESSED) {
-                newPoints = 10;
-
-                if (colour != newColour) {
-                    newPoints = 12;
-                }
-            }
-
-            if (state != newState && newState == BattleballTileType.SEALED) {
-                newPoints = 14;
-                tileLocked = true;
-            }
-
-            if (newPoints != -1) {
-                if (!tileLocked) {
-                    gamePlayer.setScore(gamePlayer.getScore() + newPoints);
-                } else {
-                    // Tile got sealed, so increase every team members' points
-                    team.setSealedTileScore();
-                }
-            }
+            getNewPoints(gamePlayer, state, colour, newState, newColour);
 
             this.checkFill(gamePlayer, updateTiles, updateFillTiles);
             updateTiles.add(this);
         }
     }
 
+    public static int getNewPoints(GamePlayer gamePlayer, BattleballTileType state, BattleballColourType colour, BattleballTileType newState, BattleballColourType newColour) {
+        GameTeam team = gamePlayer.getTeam();
+
+        int newPoints = -1;
+        boolean sealed = false;
+
+        if (state != newState && newState == BattleballTileType.TOUCHED) {
+            newPoints = 2;
+
+            if (colour != newColour) {
+                newPoints = 4;
+            }
+        }
+
+        if (state != newState && newState == BattleballTileType.CLICKED) {
+            newPoints = 6;
+
+            if (colour != newColour) {
+                newPoints = 8;
+            }
+        }
+
+        if (state != newState && newState == BattleballTileType.PRESSED) {
+            newPoints = 10;
+
+            if (colour != newColour) {
+                newPoints = 12;
+            }
+        }
+
+        if (state != newState && newState == BattleballTileType.SEALED) {
+            newPoints = 14;
+            sealed = true;
+        }
+
+
+        if (newPoints != -1) {
+            if (!sealed) { // Set to sealed
+                // Increase score for other team if harlequin is enabled
+                if (gamePlayer.getHarlequinTeamId() != -1) {
+                    int pointsAcrossTeams = newPoints / team.getActivePlayers().size();
+
+                    for (GamePlayer p : team.getActivePlayers()) {
+                        p.setScore(p.getScore() + pointsAcrossTeams);
+                    }
+                } else {
+                    gamePlayer.setScore(gamePlayer.getScore() + newPoints);
+                }
+            } else {
+                // Tile got sealed, so increase every team members' points
+                team.setSealedTileScore();
+            }
+        }
+
+        return newPoints;
+    }
+
     private void checkFill(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
-        GameTeam team = gamePlayer.getGame().getTeams().get(gamePlayer.getTeamId());
+        int teamId = gamePlayer.getHarlequinTeamId() != -1 ? gamePlayer.getHarlequinTeamId() : gamePlayer.getTeamId();
+        GameTeam team = gamePlayer.getGame().getTeams().get(teamId);
 
         for (BattleballTile neighbour : FloodFill.neighbours(gamePlayer.getGame(), this.getPosition())) {
             if (neighbour == null || neighbour.getState() == BattleballTileType.SEALED || neighbour.getColour() == BattleballColourType.DISABLED) {

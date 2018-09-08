@@ -1,5 +1,8 @@
 package org.alexdev.kepler.game.pathfinder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Position {
 
     private int X;
@@ -206,78 +209,59 @@ public class Position {
 
         if (this.bodyRotation == 0) {
             square.Y--;
-        } else if (this.bodyRotation == 2) {
+        } else if (this.bodyRotation == 1) {
             square.X++;
-        } else if (this.bodyRotation == 4) {
-            square.Y++;
-        } else if (this.bodyRotation == 6) {
-            square.X--;
-        }
-
-        return square;
-    }
-    
-    /**
-     * Gets the square behind.
-     *
-     * @return the square behind
-     */
-    public Position getSquareBehind() {
-        Position square = this.copy();
-
-        if (this.bodyRotation == 0) {
-            square.Y++;
-        } else if (this.bodyRotation == 2) {
-            square.X--;
-        } else if (this.bodyRotation == 4) {
             square.Y--;
-        } else if (this.bodyRotation == 6) {
+        } else if (this.bodyRotation == 2) {
             square.X++;
+        } else if (this.bodyRotation == 3) {
+            square.X++;
+            square.Y++;
+        }  else if (this.bodyRotation == 4) {
+            square.Y++;
+        } else if (this.bodyRotation == 5) {
+            square.X--;
+            square.Y++;
+        } else if (this.bodyRotation == 6) {
+            square.X--;
+        } else if (this.bodyRotation == 7) {
+            square.X--;
+            square.Y--;
         }
 
         return square;
     }
 
     /**
-     * Gets the square left.
-     *
-     * @return the square left
+     * Coords to create list of coordinates for a flat circle
+     * @param radius the radius
+     * @return the list of coordinates
      */
-    public Position getSquareLeft() {
-        Position square = this.copy();
-        
-        if (this.bodyRotation == 0) {
-            square.X++;
-        } else if (this.bodyRotation == 2) {
-            square.Y--;
-        } else if (this.bodyRotation == 4) {
-            square.X--;
-        } else if (this.bodyRotation == 6) {
-            square.Y++;
+    public List<Position> getCircle(int radius) {
+        List<Position> coords = new ArrayList<>();
+
+        int cx = this.getX();
+        int cy = (int)this.getZ();
+        int cz = this.getY();
+
+        boolean sphere = true;
+        boolean hollow = false;
+        int h = 1;
+
+        for (int x = cx - radius; x <= cx + radius; x++) {
+            for (int z = cz - radius; z <= cz + radius; z++) {
+                //for (int y = (sphere ? cy - radius : cy); y < (sphere ? cy + radius : cy + h); y++) {
+                    double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z);// + (sphere ? (cy - y) * (cy - y) : 0);
+                    if (dist < radius * radius && !(hollow && dist < (radius - 1) * (radius - 1))) {
+                        //Location l = new Location(loc.getWorld(), x, y + plus_y, z);
+                        //circleblocks.add(l);
+                        coords.add(new Position(x, z));
+                    }
+                //}
+            }
         }
 
-        return square;
-    }
-    
-    /**
-     * Gets the square right.
-     *
-     * @return the square right
-     */
-    public Position getSquareRight() {
-        Position square = this.copy();
-
-        if (this.bodyRotation == 0) {
-            square.X--;
-        } else if (this.bodyRotation == 2) {
-            square.Y++;
-        } else if (this.bodyRotation == 4) {
-            square.X++;
-        } else if (this.bodyRotation == 6) {
-            square.Y--;
-        }
-
-        return square;
+        return coords;
     }
     
     /**

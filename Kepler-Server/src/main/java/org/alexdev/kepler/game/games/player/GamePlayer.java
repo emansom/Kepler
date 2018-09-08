@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.games.player;
 
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
+import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.snowstorm.TurnContainer;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -9,7 +10,9 @@ import org.alexdev.kepler.game.player.Player;
 
 public class GamePlayer {
     private Player player;
+    private GameObject gameObject;
     private int userId;
+    private int objectId;
     private int gameId;
     private int teamId;
     private Position position;
@@ -20,12 +23,15 @@ public class GamePlayer {
     private boolean clickedRestart;
     private TurnContainer turnContainer;
     private BattleballPlayerState playerState;
+    private int harlequinTeamId;
 
     public GamePlayer(Player player) {
         this.player = player;
         this.userId = player.getDetails().getId();
         this.teamId = -1;
         this.gameId = -1;
+        this.objectId = 0;
+        this.harlequinTeamId = -1;
         this.score = 0;
         this.enteringGame = false;
         this.clickedRestart = false;
@@ -43,6 +49,11 @@ public class GamePlayer {
 
     public int getUserId() {
         return userId;
+    }
+
+    public GameTeam getTeam() {
+        int teamId = this.getHarlequinTeamId() != -1 ? this.getHarlequinTeamId() : this.getTeamId();
+        return this.getGame().getTeams().get(teamId);
     }
 
     public int getTeamId() {
@@ -63,6 +74,10 @@ public class GamePlayer {
 
     public void setScore(int score) {
         this.score = score;
+
+        if (this.score < 0) {
+            this.score = 0;
+        }
     }
 
     public int getGameId() {
@@ -115,5 +130,29 @@ public class GamePlayer {
 
     public void setPlayerState(BattleballPlayerState playerState) {
         this.playerState = playerState;
+    }
+
+    public int getHarlequinTeamId() {
+        return harlequinTeamId;
+    }
+
+    public void setHarlequinTeamId(int harlequinTeamId) {
+        this.harlequinTeamId = harlequinTeamId;
+    }
+
+    public GameObject getGameObject() {
+        return gameObject;
+    }
+
+    public void setGameObject(GameObject gameObject) {
+        this.gameObject = gameObject;
+    }
+
+    public int getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(int objectId) {
+        this.objectId = objectId;
     }
 }

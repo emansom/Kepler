@@ -2,21 +2,26 @@ package org.alexdev.kepler.game.games.battleball.events;
 
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
+import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.enums.GameEventType;
+import org.alexdev.kepler.game.games.enums.GameObjectType;
+import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class PowerUpSpawnEvent extends GameEvent {
-    private final BattleballPowerUp powerUp;
+public class PinSpawnEvent extends GameEvent {
+    private final int id;
+    private final Position position;
 
-    public PowerUpSpawnEvent(BattleballPowerUp powerUp) {
+    public PinSpawnEvent(int id, Position position) {
         super(GameEventType.BATTLEBALL_OBJECT_SPAWN);
-        this.powerUp = powerUp;
+        this.id = id;
+        this.position = position;
     }
 
     @Override
     public void serialiseEvent(NettyResponse response) {
-        response.writeInt(1);
-        new PowerObject(this.powerUp).serialiseObject(response);
+        response.writeInt(2);
+        new PinObject(this.id, this.position).serialiseObject(response);
     }
 }
