@@ -28,7 +28,11 @@ public class LightbulbHandle {
             BattleballTileType state = tile.getState();
             BattleballColourType colour = tile.getColour();
 
-            BattleballTileType newState = BattleballTileType.getStateById(tile.getState().getTileStateId() + 1);
+            if (state == BattleballTileType.DEFAULT) {
+                state = BattleballTileType.CLICKED; // Don't make it 4 hits, make it 3
+            }
+
+            BattleballTileType newState = BattleballTileType.getStateById(state.getTileStateId() + 1);
             BattleballColourType newColour = BattleballColourType.getColourById(gameTeam.getId());
 
             BattleballTile.getNewPoints(gamePlayer, state, colour, newState, newColour);
