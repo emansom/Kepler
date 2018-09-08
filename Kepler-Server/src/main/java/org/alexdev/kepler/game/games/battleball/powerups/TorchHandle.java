@@ -44,6 +44,13 @@ public class TorchHandle {
 
             BattleballTile.getNewPoints(gamePlayer, state, colour, newState, newColour);
 
+            tile.setColour(newColour);
+            tile.setState(newState);
+
+            if (newState == BattleballTileType.SEALED) {
+                BattleballTile.checkFill(gamePlayer, tile, game.getFillTilesQueue());
+            }
+
             game.getUpdateTilesQueue().add(tile);
         }
     }
