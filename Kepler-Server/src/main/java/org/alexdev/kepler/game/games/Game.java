@@ -274,8 +274,6 @@ public abstract class Game {
      * Method to restart game.
      */
     private void initialise(List<GamePlayer> players) {
-        this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
-
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
         }
@@ -294,7 +292,10 @@ public abstract class Game {
         }
 
         this.initialise();
+
+        this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this, null));  // Show users back at spawn positions
+
         this.sendObservers(new GAMEDELETED());
 
         // Start game after "game is about to begin"

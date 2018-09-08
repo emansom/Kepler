@@ -21,7 +21,7 @@ public class GAMERESET extends MessageComposer {
         response.writeInt(this.gamePlayerList.size());
 
         for (GamePlayer gamePlayer : this.gamePlayerList) {
-            response.writeInt(gamePlayer.getPlayer().getRoomUser().getInstanceId());
+            response.writeInt(gamePlayer.getObjectId());
             response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getX());
             response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getY());
             response.writeInt(gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
