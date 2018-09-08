@@ -29,6 +29,7 @@ public class GamePlayer {
         this.userId = player.getDetails().getId();
         this.teamId = -1;
         this.gameId = -1;
+        this.harlequinTeamId = -1;
         this.score = 0;
         this.enteringGame = false;
         this.clickedRestart = false;
