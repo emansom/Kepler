@@ -31,10 +31,11 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
         }
 
         Player player = (Player) entity;
-        player.send(new LOUNGEINFO());
 
+        player.send(new LOUNGEINFO());
         player.send(new GAMEPLAYERINFO(this.getGameType(), room.getEntityManager().getPlayers()));
-        room.send(new GAMEPLAYERINFO(this.getGameType(), List.of(player)));
+
+        this.showPoints(player, room);
     }
 
     @Override

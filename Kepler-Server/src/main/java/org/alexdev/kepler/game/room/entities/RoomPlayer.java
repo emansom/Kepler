@@ -8,8 +8,10 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.managers.RoomTradeManager;
+import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
 import org.alexdev.kepler.messages.outgoing.rooms.user.FIGURE_CHANGE;
 import org.alexdev.kepler.messages.outgoing.user.USER_OBJECT;
 
@@ -120,6 +122,11 @@ public class RoomPlayer extends RoomEntity {
         // Send refresh to room if inside room
         if (this.getRoom() != null) {
             this.getRoom().send(new FIGURE_CHANGE(this.getInstanceId(), this.player.getDetails()));
+
+            if (this.getRoom().getModel().getModelTrigger() instanceof GameLobbyTrigger) {
+                GameLobbyTrigger gameLobbyTrigger = (GameLobbyTrigger) getRoom().getModel().getModelTrigger();
+                gameLobbyTrigger.showPoints(this.player, this.getRoom());
+            }
         }
     }
 
