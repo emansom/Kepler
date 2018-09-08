@@ -50,8 +50,6 @@ public class BattleballPowerUp {
                     .getSquareInFront()
                     .getSquareInFront()
                     .getSquareInFront()
-                    .getSquareInFront()
-                    .getSquareInFront()
                     .getSquareInFront();
 
             int maxPins = ThreadLocalRandom.current().nextInt(5, 12 + 1);
