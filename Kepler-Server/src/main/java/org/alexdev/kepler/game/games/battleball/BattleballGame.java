@@ -126,11 +126,9 @@ public class BattleballGame extends Game {
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
+
         this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
-
         this.getObjects().add(powerUp.getObject());
-
-        System.out.println("success");
     }
 
     private void updateTimeUntilNextPower() {

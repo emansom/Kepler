@@ -301,8 +301,6 @@ public abstract class Game {
         this.send(new FULLGAMESTATUS(this, null));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
 
-        this.gamePrepare();
-
         // Preparing game seconds countdown
         this.preparingTimerRunnable = new FutureRunnable() {
             public void run() {
@@ -326,6 +324,8 @@ public abstract class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
+
+        this.gamePrepare();
     }
 
     /**
