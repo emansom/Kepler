@@ -26,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 public class NailBoxHandle {
     public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
+        gamePlayer.getPlayer().getRoomUser().stopWalking();
+
         List<GamePlayer> dizzyPlayers = new ArrayList<>();
         List<GameObject> pins = new ArrayList<>();
 

@@ -59,10 +59,11 @@ public class BattleballTile extends GameTile  {
             if (!(gameObject instanceof PinObject)) {
                 continue;
             }
-            
+
             PinObject pinObject = (PinObject) gameObject;
 
-            if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject)) {
+            if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject.getPosition())) {
+                gamePlayer.getPlayer().getRoomUser().stopWalking();
                 gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
                 gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
 
