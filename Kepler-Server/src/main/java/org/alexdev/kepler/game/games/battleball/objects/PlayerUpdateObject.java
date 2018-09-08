@@ -15,7 +15,7 @@ public class PlayerUpdateObject extends GameObject {
 
     @Override
     public void serialiseObject(NettyResponse response) {
-        response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getInstanceId());
+        response.writeInt(this.gamePlayer.getObjectId());
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getX());
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getY());
         response.writeInt((int) this.gamePlayer.getPlayer().getRoomUser().getPosition().getZ());

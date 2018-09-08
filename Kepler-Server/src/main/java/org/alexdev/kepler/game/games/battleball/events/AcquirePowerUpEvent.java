@@ -19,7 +19,7 @@ public class AcquirePowerUpEvent extends GameEvent {
 
     @Override
     public void serialiseEvent(NettyResponse response) {
-        response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getInstanceId());
+        response.writeInt(this.gamePlayer.getObjectId());
         response.writeInt(this.powerUp.getId());
         response.writeInt(this.powerUp.getPowerType().getPowerUpId());
     }

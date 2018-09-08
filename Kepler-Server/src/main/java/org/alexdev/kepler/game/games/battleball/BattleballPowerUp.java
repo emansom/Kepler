@@ -132,7 +132,7 @@ public class BattleballPowerUp {
      */
     public Integer getPlayerHolding() {
         if (this.playerHolding != null) {
-            return this.playerHolding.getPlayer().getRoomUser().getInstanceId();
+            return this.playerHolding.getObjectId();
         }
 
         return -1;
