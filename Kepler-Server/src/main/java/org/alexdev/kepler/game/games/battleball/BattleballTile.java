@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games.battleball;
 
+import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.GameTile;
@@ -7,7 +8,9 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
+import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
+import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -17,6 +20,7 @@ import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class BattleballTile extends GameTile  {
     private BattleballColourType colour;
@@ -35,6 +39,10 @@ public class BattleballTile extends GameTile  {
      */
     public void interact(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         try {
+            if (this.brokeBall(gamePlayer)) {
+                return;
+            }
+
             if (this.bounceWithPower(gamePlayer, updateTiles, updateFillTiles)) {
                 return;
             }
@@ -44,6 +52,30 @@ public class BattleballTile extends GameTile  {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private boolean brokeBall(GamePlayer gamePlayer) {
+        for (GameObject gameObject : gamePlayer.getGame().getObjects()) {
+            if (!(gameObject instanceof PinObject)) {
+                continue;
+            }
+            
+            PinObject pinObject = (PinObject) gameObject;
+
+            if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject)) {
+                gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
+                gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+
+                GameScheduler.getInstance().getSchedulerService().schedule(()-> {
+                    gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
+                    gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+                }, 5, TimeUnit.SECONDS);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private boolean bounceWithPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
