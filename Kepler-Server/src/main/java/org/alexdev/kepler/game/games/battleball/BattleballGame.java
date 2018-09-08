@@ -132,7 +132,7 @@ public class BattleballGame extends Game {
      *
      * @return the new object ids
      */
-    private int createObjectId() {
+    public int createObjectId() {
         int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
 
         for (GamePlayer gamePlayer : this.getPlayers()) {
@@ -312,6 +312,10 @@ public class BattleballGame extends Game {
         BattleballTile battleballTile = (BattleballTile) this.getTile(x, y);
 
         if (battleballTile == null || battleballTile.getColour() == BattleballColourType.DISABLED) {
+            return getRandomTile();
+        }
+
+        if (this.getRoom().getMapping().getTile(x, y).getEntities().size() > 0) {
             return getRandomTile();
         }
 

@@ -7,7 +7,7 @@ public enum BattleballPowerType {
     SPRING(2),
     FLASHLIGHT(3),
     CANNON(4),
-    BOX_OF_TACKS(5),
+    BOX_OF_PINS(5),
     HARLEQUIN(6),
     BOMB(7),
     DRILL(8);

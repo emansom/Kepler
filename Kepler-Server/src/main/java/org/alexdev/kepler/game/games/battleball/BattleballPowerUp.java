@@ -2,10 +2,12 @@ package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
+import org.alexdev.kepler.game.games.battleball.events.PinSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
-import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
+import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -43,6 +45,40 @@ public class BattleballPowerUp {
      * @param position the position that the power up should be used at
      */
     public void usePower(GamePlayer gamePlayer, Position position) {
+        if (this.powerType == BattleballPowerType.BOX_OF_PINS) {
+            Position tilePosition = gamePlayer.getPlayer().getRoomUser().getPosition()
+                    .getSquareInFront()
+                    .getSquareInFront()
+                    .getSquareInFront()
+                    .getSquareInFront()
+                    .getSquareInFront()
+                    .getSquareInFront();
+
+            int maxPins = ThreadLocalRandom.current().nextInt(5, 12 + 1);
+            List<Position> selectedPositions = new ArrayList<>();
+
+            for (Position circlePos : tilePosition.getCircle(5)) {
+                if (circlePos.equals(gamePlayer.getPlayer().getRoomUser().getPosition())) {
+                    continue;
+                }
+
+                BattleballTile tile = (BattleballTile) this.game.getTile(circlePos.getX(), circlePos.getY());
+
+                if (tile == null || tile.getColour() == BattleballColourType.DISABLED) {
+                    continue;
+                }
+
+                circlePos.setZ(tile.getPosition().getZ());
+
+                if (selectedPositions.size() < maxPins) {
+                    if (ThreadLocalRandom.current().nextBoolean()) {
+                        this.game.getEventsQueue().add(new PinSpawnEvent(this.game.createObjectId(), circlePos));
+                        selectedPositions.add(circlePos);
+                    }
+                }
+            }
+        }
+
         if (this.powerType == BattleballPowerType.DRILL) {
             gamePlayer.setPlayerState(BattleballPlayerState.CLEANING_TILES);
             this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));

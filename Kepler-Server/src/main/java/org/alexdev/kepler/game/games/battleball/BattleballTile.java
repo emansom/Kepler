@@ -50,6 +50,8 @@ public class BattleballTile extends GameTile  {
         BattleballColourType colour = this.getColour();
         BattleballTileType state = this.getState();
 
+        boolean hasPower = (gamePlayer.getPlayerState() != BattleballPlayerState.NORMAL);
+
         if (colour == BattleballColourType.DISABLED) {
             return false;
         }
@@ -109,7 +111,7 @@ public class BattleballTile extends GameTile  {
             return true;
         }
 
-        return false;
+        return hasPower;
     }
 
     private void checkPowerUp(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
