@@ -12,6 +12,7 @@ public class GamePlayer {
     private Player player;
     private GameObject gameObject;
     private int userId;
+    private int objectId;
     private int gameId;
     private int teamId;
     private Position position;
@@ -29,6 +30,7 @@ public class GamePlayer {
         this.userId = player.getDetails().getId();
         this.teamId = -1;
         this.gameId = -1;
+        this.objectId = 0;
         this.harlequinTeamId = -1;
         this.score = 0;
         this.enteringGame = false;
@@ -139,5 +141,13 @@ public class GamePlayer {
 
     public void setGameObject(GameObject gameObject) {
         this.gameObject = gameObject;
+    }
+
+    public int getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(int objectId) {
+        this.objectId = objectId;
     }
 }

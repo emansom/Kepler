@@ -27,6 +27,6 @@ public class PlayerObject extends GameObject {
         response.writeString(this.gamePlayer.getPlayer().getDetails().getFigure());
         response.writeString(this.gamePlayer.getPlayer().getDetails().getSex());
         response.writeInt(this.gamePlayer.getTeamId());
-        response.writeInt(this.gamePlayer.getPlayer().getDetails().getId()); // Actually room user id/instance id
+        response.writeInt(this.gamePlayer.getObjectId()); // Actually room user id/instance id
     }
 }

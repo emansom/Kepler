@@ -8,6 +8,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.events.PinSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.battleball.powerups.NailBoxHandle;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -52,7 +53,7 @@ public class BattleballPowerUp {
 
         if (this.powerType == BattleballPowerType.DRILL) {
             gamePlayer.setPlayerState(BattleballPlayerState.CLEANING_TILES);
-            this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+            this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
             GameScheduler.getInstance().getSchedulerService().schedule(()-> {
                 if (this.game.isGameFinished()) {
@@ -60,13 +61,13 @@ public class BattleballPowerUp {
                 }
 
                 gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+                this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
             }, 10, TimeUnit.SECONDS);
         }
 
         if (this.powerType == BattleballPowerType.SPRING) {
             gamePlayer.setPlayerState(BattleballPlayerState.HIGH_JUMPS);
-            this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+            this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
             GameScheduler.getInstance().getSchedulerService().schedule(()-> {
                 if (this.game.isGameFinished()) {
@@ -74,7 +75,7 @@ public class BattleballPowerUp {
                 }
 
                 gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                this.game.getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+                this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
             }, 10, TimeUnit.SECONDS);
         }
 
@@ -89,8 +90,7 @@ public class BattleballPowerUp {
                 p.setPlayerState(BattleballPlayerState.COLORING_FOR_OPPONENT);
                 p.setHarlequinTeamId(gamePlayer.getTeamId());
 
-                this.game.getEventsQueue().add(new PlayerUpdateEvent(p));
-
+                this.game.getObjectsQueue().add(new PlayerUpdateObject(p));
                 affectedPlayers.add(p);
             }
 
@@ -103,7 +103,7 @@ public class BattleballPowerUp {
                     p.setPlayerState(BattleballPlayerState.NORMAL);
                     p.setHarlequinTeamId(-1);
 
-                    this.game.getEventsQueue().add(new PlayerUpdateEvent(p));
+                    this.game.getObjectsQueue().add(new PlayerUpdateObject(p));
                 }
 
             }, 10, TimeUnit.SECONDS);

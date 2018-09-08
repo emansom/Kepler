@@ -64,7 +64,6 @@ public class BattleballTile extends GameTile  {
 
             if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject.getPosition())) {
                 gamePlayer.getPlayer().getRoomUser().stopWalking();
-                gamePlayer.getPlayer().getRoomUser().setNextPosition(null);
                 gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
 
                 gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);

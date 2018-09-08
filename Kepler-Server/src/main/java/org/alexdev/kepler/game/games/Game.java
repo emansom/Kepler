@@ -51,6 +51,7 @@ public abstract class Game {
     private AtomicInteger preparingGameSecondsLeft;
     private AtomicInteger totalSecondsLeft;
     private AtomicLong restartCountdown;
+    private AtomicInteger objectId;
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
@@ -81,6 +82,7 @@ public abstract class Game {
             this.teams.put(i, new GameTeam(i));
         }
 
+        this.objectId = new AtomicInteger(-1);
         this.gameState = GameState.WAITING;
     }
 
@@ -89,6 +91,7 @@ public abstract class Game {
      */
     public void initialise() {
         this.gameState = GameState.STARTED;
+        this.objectId = new AtomicInteger(-1);
 
         this.gameStarted = false;
         this.gameFinished = false;
@@ -546,6 +549,23 @@ public abstract class Game {
     }
 
     /**
+     * Method to create object ids.
+     *
+     * @return the new object ids
+     */
+    public int createObjectId() {
+        /*int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
+
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
+                powerId = createObjectId();
+            }
+        }*/
+
+        return this.getObjectId().incrementAndGet();
+    }
+
+    /**
      * Method for whether the game can continue, eg if all tiles are filled up or
      * some other logic
      *
@@ -699,5 +719,13 @@ public abstract class Game {
 
     public void setRoomModel(RoomModel roomModel) {
         this.roomModel = roomModel;
+    }
+
+    public AtomicInteger getObjectId() {
+        return objectId;
+    }
+
+    public void setObjectId(AtomicInteger objectId) {
+        this.objectId = objectId;
     }
 }

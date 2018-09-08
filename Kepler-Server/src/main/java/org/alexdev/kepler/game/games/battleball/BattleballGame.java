@@ -34,14 +34,12 @@ public class BattleballGame extends Game {
     private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
 
     private AtomicInteger timeUntilNextPower;
-    private AtomicInteger objectId;
 
     public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
 
         this.allowedPowerUps = allowedPowerUps;
         this.timeUntilNextPower = new AtomicInteger(0);
-        this.objectId = new AtomicInteger(0);
 
         this.activePowers = new CopyOnWriteArrayList<>();
         this.storedPowers = new ConcurrentHashMap<>();
@@ -129,23 +127,6 @@ public class BattleballGame extends Game {
         this.getObjects().add(powerUp.getObject());
     }
 
-    /**
-     * Method to create object ids.
-     *
-     * @return the new object ids
-     */
-    public int createObjectId() {
-        int powerId = this.objectId.incrementAndGet();//ThreadLocalRandom.current().nextInt(100, 9999);
-
-        for (GamePlayer gamePlayer : this.getPlayers()) {
-            if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
-                powerId = this.objectId.incrementAndGet();
-            }
-        }
-
-        return powerId;
-    }
-
     private void updateTimeUntilNextPower() {
         this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 30));
     }
@@ -202,6 +183,7 @@ public class BattleballGame extends Game {
                 p.setPlayerState(BattleballPlayerState.NORMAL);
                 p.setHarlequinTeamId(-1);
                 p.setGameObject(new PlayerObject(p));
+                p.setObjectId(this.createObjectId());
 
                 this.getObjects().add(p.getGameObject());
 
