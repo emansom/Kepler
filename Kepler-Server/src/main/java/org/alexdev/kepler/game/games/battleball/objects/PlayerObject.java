@@ -15,7 +15,7 @@ public class PlayerObject extends GameObject {
 
     @Override
     public void serialiseObject(NettyResponse response) {
-        response.writeInt(this.gamePlayer.getPlayer().getDetails().getId());
+        response.writeInt(this.gamePlayer.getObjectId());
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getX());
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getY());
         response.writeInt((int) this.gamePlayer.getPlayer().getRoomUser().getPosition().getZ());
@@ -27,6 +27,6 @@ public class PlayerObject extends GameObject {
         response.writeString(this.gamePlayer.getPlayer().getDetails().getFigure());
         response.writeString(this.gamePlayer.getPlayer().getDetails().getSex());
         response.writeInt(this.gamePlayer.getTeamId());
-        response.writeInt(this.gamePlayer.getObjectId()); // Actually room user id/instance id
+        response.writeInt(this.gamePlayer.getObjectId());
     }
 }

@@ -20,7 +20,7 @@ public class PlayerMoveEvent extends GameEvent {
 
     @Override
     public void serialiseEvent(NettyResponse response) {
-        response.writeInt(this.gamePlayer.getObjectId());
+        response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getInstanceId());
         response.writeInt(this.nextPosition.getX());
         response.writeInt(this.nextPosition.getY());
     }
