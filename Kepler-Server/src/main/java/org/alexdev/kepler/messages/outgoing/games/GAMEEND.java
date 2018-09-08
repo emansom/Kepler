@@ -30,7 +30,7 @@ public class GAMEEND extends MessageComposer {
                 response.writeInt(players.size());
 
                 for (GamePlayer gamePlayer : players) {
-                    response.writeInt(gamePlayer.getPlayer().getDetails().getId());
+                    response.writeInt(gamePlayer.getObjectId());
                     response.writeString(gamePlayer.getPlayer().getDetails().getName());
                     response.writeInt(gamePlayer.getScore());
                 }
