@@ -40,7 +40,7 @@ public class TorchHandle {
             BattleballColourType colour = tile.getColour();
 
             if (state == BattleballTileType.DEFAULT) {
-                state = BattleballTileType.CLICKED; // Don't make it 4 hits, make it 3
+                state = BattleballTileType.TOUCHED; // Don't make it 4 hits, make it 3
             }
 
             BattleballTileType newState = BattleballTileType.getStateById(state.getTileStateId() + 1);
