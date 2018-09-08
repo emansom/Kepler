@@ -46,6 +46,5 @@ public class TorchHandle {
 
             game.getUpdateTilesQueue().add(tile);
         }
-
     }
 }

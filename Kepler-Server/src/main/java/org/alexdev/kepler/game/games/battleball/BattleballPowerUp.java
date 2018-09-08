@@ -10,9 +10,7 @@ import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
-import org.alexdev.kepler.game.games.battleball.powerups.LightbulbHandle;
-import org.alexdev.kepler.game.games.battleball.powerups.NailBoxHandle;
-import org.alexdev.kepler.game.games.battleball.powerups.TorchHandle;
+import org.alexdev.kepler.game.games.battleball.powerups.*;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 
@@ -62,61 +60,15 @@ public class BattleballPowerUp {
         }
 
         if (this.powerType == BattleballPowerType.DRILL) {
-            gamePlayer.setPlayerState(BattleballPlayerState.CLEANING_TILES);
-            this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-
-            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-                if (this.game.isGameFinished()) {
-                    return;
-                }
-
-                gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-            }, 10, TimeUnit.SECONDS);
+            VacuumHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
         }
 
         if (this.powerType == BattleballPowerType.SPRING) {
-            gamePlayer.setPlayerState(BattleballPlayerState.HIGH_JUMPS);
-            this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-
-            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-                if (this.game.isGameFinished()) {
-                    return;
-                }
-
-                gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                this.game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-            }, 10, TimeUnit.SECONDS);
+            SpringHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
         }
 
         if (this.powerType == BattleballPowerType.HARLEQUIN) {
-            List<GamePlayer> affectedPlayers = new ArrayList<>();
-
-            for (GamePlayer p : gamePlayer.getGame().getPlayers()) {
-                if (p.getHarlequinTeamId() != -1 || p.getTeamId() == gamePlayer.getTeamId()) {
-                    continue;
-                }
-
-                p.setPlayerState(BattleballPlayerState.COLORING_FOR_OPPONENT);
-                p.setHarlequinTeamId(gamePlayer.getTeamId());
-
-                this.game.getObjectsQueue().add(new PlayerUpdateObject(p));
-                affectedPlayers.add(p);
-            }
-
-            GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-                if (this.game.isGameFinished()) {
-                    return;
-                }
-
-                for (GamePlayer p : affectedPlayers) {
-                    p.setPlayerState(BattleballPlayerState.NORMAL);
-                    p.setHarlequinTeamId(-1);
-
-                    this.game.getObjectsQueue().add(new PlayerUpdateObject(p));
-                }
-
-            }, 10, TimeUnit.SECONDS);
+            HarlequinHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
         }
     }
 
