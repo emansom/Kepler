@@ -11,6 +11,7 @@ import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.battleball.powerups.NailBoxHandle;
+import org.alexdev.kepler.game.games.battleball.powerups.TorchHandle;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 
@@ -49,6 +50,10 @@ public class BattleballPowerUp {
     public void usePower(GamePlayer gamePlayer, Position position) {
         if (this.powerType == BattleballPowerType.BOX_OF_PINS) {
             NailBoxHandle.handle(this.game, gamePlayer, game.getRoom());
+        }
+
+        if (this.powerType == BattleballPowerType.FLASHLIGHT) {
+            TorchHandle.handle(this.game, gamePlayer, game.getRoom());
         }
 
         if (this.powerType == BattleballPowerType.DRILL) {

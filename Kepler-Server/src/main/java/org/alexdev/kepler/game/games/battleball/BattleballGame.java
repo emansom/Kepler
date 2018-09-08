@@ -20,9 +20,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BattleballGame extends Game {
@@ -32,6 +30,9 @@ public class BattleballGame extends Game {
     private List<BattleballPowerUp> activePowers;
 
     private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
+
+    private BlockingQueue<BattleballTile> updateTilesQueue;
+    private BlockingQueue<BattleballTile> fillTilesQueue;
 
     private AtomicInteger timeUntilNextPower;
 
@@ -43,6 +44,9 @@ public class BattleballGame extends Game {
 
         this.activePowers = new CopyOnWriteArrayList<>();
         this.storedPowers = new ConcurrentHashMap<>();
+
+        this.updateTilesQueue = new LinkedBlockingQueue<>();
+        this.fillTilesQueue = new LinkedBlockingQueue<>();
     }
 
     @Override
@@ -320,11 +324,39 @@ public class BattleballGame extends Game {
         return ArrayUtils.toPrimitive(this.allowedPowerUps.toArray(new Integer[0]));
     }
 
+    /**
+     * Get the current active powers on the board
+     *
+     * @return the list of active powers
+     */
     public List<BattleballPowerUp> getActivePowers() {
         return activePowers;
     }
 
+    /**
+     * Get the list of powers stored by player
+     *
+     * @return the list of players currently held by player
+     */
     public Map<GamePlayer, List<BattleballPowerUp>> getStoredPowers() {
         return storedPowers;
+    }
+
+    /**
+     * Get the queue for tiles to be updated, used by power ups
+     *
+     * @return the queue for updating tiles
+     */
+    public BlockingQueue<BattleballTile> getUpdateTilesQueue() {
+        return updateTilesQueue;
+    }
+
+    /**
+     * Get the fill tiles queue, used by power ups
+     *
+     * @return the fill tiles queue
+     */
+    public BlockingQueue<BattleballTile> getFillTilesQueue() {
+        return fillTilesQueue;
     }
 }

@@ -44,15 +44,13 @@ public class BattleballUpdateTask implements Runnable {
             List<GameObject> objects = new ArrayList<>();
             List<GameEvent> events = new ArrayList<>();
 
-            this.game.getEventsQueue().drainTo(events);
-            this.game.getObjectsQueue().drainTo(objects);
-
-            // for (BattleballPowerUp battleballPowerUp : this.game.getActivePowers()) {
-            //     objects.add(new PowerObject(battleballPowerUp));
-            // }
-
             List<BattleballTile> updateTiles = new ArrayList<>();
             List<BattleballTile> fillTiles = new ArrayList<>();
+
+            this.game.getEventsQueue().drainTo(events);
+            this.game.getObjectsQueue().drainTo(objects);
+            this.game.getUpdateTilesQueue().drainTo(updateTiles);
+            this.game.getFillTilesQueue().drainTo(fillTiles);
 
             for (GamePlayer gamePlayer : this.game.getPlayers()) {
                 Player player = gamePlayer.getPlayer();

@@ -85,6 +85,7 @@ public class NailBoxHandle {
 
         game.getObjects().addAll(pins);
 
+        // Make all affected players dizzy
         for (GamePlayer dizzyPlayer : dizzyPlayers) {
             dizzyPlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
             dizzyPlayer.getPlayer().getRoomUser().stopWalking();
@@ -93,6 +94,7 @@ public class NailBoxHandle {
             game.getEventsQueue().add(new PlayerUpdateEvent(dizzyPlayer));
         }
 
+        // Restore all players
         GameScheduler.getInstance().getSchedulerService().schedule(()-> {
             for (GamePlayer dizzyPlayer : dizzyPlayers) {
                 dizzyPlayer.setPlayerState(BattleballPlayerState.NORMAL);
@@ -102,6 +104,7 @@ public class NailBoxHandle {
             }
         }, 5, TimeUnit.SECONDS);
 
+        // Despawn all pins
         GameScheduler.getInstance().getSchedulerService().schedule(()-> {
             for (GameObject pinObject : pins) {
                 game.getEventsQueue().add(new DespawnObjectEvent(pinObject.getId()));
