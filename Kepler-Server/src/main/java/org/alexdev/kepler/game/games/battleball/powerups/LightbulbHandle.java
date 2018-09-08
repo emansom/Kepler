@@ -16,7 +16,7 @@ public class LightbulbHandle {
     public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
         GameTeam gameTeam = gamePlayer.getTeam();
 
-        for (Position position : gamePlayer.getPlayer().getRoomUser().getPosition().getCircle(5)) {
+        for (Position position : gamePlayer.getPlayer().getRoomUser().getPosition().getCircle(3)) {
             BattleballTile tile = (BattleballTile) game.getTile(position.getX(), position.getY());
 
             if (tile == null ||

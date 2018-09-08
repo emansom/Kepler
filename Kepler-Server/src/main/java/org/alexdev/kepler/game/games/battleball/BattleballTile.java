@@ -9,9 +9,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
-import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
-import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
@@ -39,11 +37,11 @@ public class BattleballTile extends GameTile  {
      */
     public void interact(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         try {
-            if (this.brokeBall(gamePlayer)) {
+            if (this.checkNailTile(gamePlayer)) {
                 return;
             }
 
-            if (this.bounceWithPower(gamePlayer, updateTiles, updateFillTiles)) {
+            if (this.hasUsedPower(gamePlayer, updateTiles, updateFillTiles)) {
                 return;
             }
 
@@ -54,7 +52,7 @@ public class BattleballTile extends GameTile  {
         }
     }
 
-    private boolean brokeBall(GamePlayer gamePlayer) {
+    private boolean checkNailTile(GamePlayer gamePlayer) {
         for (GameObject gameObject : gamePlayer.getGame().getObjects()) {
             if (!(gameObject instanceof PinObject)) {
                 continue;
@@ -82,7 +80,7 @@ public class BattleballTile extends GameTile  {
         return false;
     }
 
-    private boolean bounceWithPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
+    private boolean hasUsedPower(GamePlayer gamePlayer, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         BattleballColourType colour = this.getColour();
         BattleballTileType state = this.getState();
 
