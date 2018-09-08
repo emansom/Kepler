@@ -27,6 +27,7 @@ import java.util.concurrent.TimeUnit;
 public class NailBoxHandle {
     public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
         gamePlayer.getPlayer().getRoomUser().stopWalking();
+        gamePlayer.getPlayer().getRoomUser().setNextPosition(null);
 
         List<GamePlayer> dizzyPlayers = new ArrayList<>();
         List<GameObject> pins = new ArrayList<>();
@@ -88,6 +89,8 @@ public class NailBoxHandle {
         for (GamePlayer dizzyPlayer : dizzyPlayers) {
             dizzyPlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
             dizzyPlayer.getPlayer().getRoomUser().stopWalking();
+            dizzyPlayer.getPlayer().getRoomUser().setNextPosition(null);
+            dizzyPlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
 
             game.getEventsQueue().add(new PlayerUpdateEvent(dizzyPlayer));
         }
@@ -95,6 +98,8 @@ public class NailBoxHandle {
         GameScheduler.getInstance().getSchedulerService().schedule(()-> {
             for (GamePlayer dizzyPlayer : dizzyPlayers) {
                 dizzyPlayer.setPlayerState(BattleballPlayerState.NORMAL);
+                dizzyPlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
+
                 game.getEventsQueue().add(new PlayerUpdateEvent(dizzyPlayer));
             }
         }, 5, TimeUnit.SECONDS);

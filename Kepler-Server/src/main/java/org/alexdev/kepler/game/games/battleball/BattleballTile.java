@@ -64,12 +64,15 @@ public class BattleballTile extends GameTile  {
 
             if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject.getPosition())) {
                 gamePlayer.getPlayer().getRoomUser().stopWalking();
+                gamePlayer.getPlayer().getRoomUser().setNextPosition(null);
+                gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
 
                 gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
                 gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
 
                 GameScheduler.getInstance().getSchedulerService().schedule(()-> {
                     gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
+                    gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
                     gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
                 }, 5, TimeUnit.SECONDS);
 
