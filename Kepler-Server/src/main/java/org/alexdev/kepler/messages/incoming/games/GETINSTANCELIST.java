@@ -31,9 +31,6 @@ public class GETINSTANCELIST implements MessageEvent {
             return;
         }
 
-        player.send(new INSTANCELIST(
-                GameManager.getInstance().getGamesByType(gameLobbyTrigger.getGameType()),
-                GameManager.getInstance().getFinishedGames().stream().filter(game -> game.getGameType() == gameLobbyTrigger.getGameType())
-        .collect(Collectors.toList())));
+        player.send(gameLobbyTrigger.getInstanceList());
     }
 }
