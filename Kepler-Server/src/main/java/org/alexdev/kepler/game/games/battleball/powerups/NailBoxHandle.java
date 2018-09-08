@@ -30,14 +30,12 @@ public class NailBoxHandle {
 
         Position tilePosition = gamePlayer.getPlayer().getRoomUser().getPosition()
                 .getSquareInFront()
-                .getSquareInFront()
-                .getSquareInFront()
                 .getSquareInFront();
 
         int maxPins = ThreadLocalRandom.current().nextInt(5, 12 + 1);
         List<Position> selectedPositions = new ArrayList<>();
 
-        for (Position circlePos : tilePosition.getCircle(5)) {
+        for (Position circlePos : tilePosition.getCircle(6)) {
             if (circlePos.equals(gamePlayer.getPlayer().getRoomUser().getPosition())) {
                 continue;
             }

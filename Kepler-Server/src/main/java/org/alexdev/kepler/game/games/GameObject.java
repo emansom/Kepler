@@ -8,6 +8,7 @@ public abstract class GameObject {
     private GameObjectType gameObjectType;
 
     public GameObject(int id, GameObjectType gameObjectType) {
+        this.id = id;
         this.gameObjectType = gameObjectType;
     }
 
