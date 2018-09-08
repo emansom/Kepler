@@ -3,7 +3,6 @@ package org.alexdev.kepler.game.games.battleball;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
@@ -50,7 +49,14 @@ public class BattleballGame extends Game {
     }
 
     @Override
-    public void gameBeginTick() {
+    public void gamePrepare() {
+        this.activePowers.clear();
+        this.storedPowers.clear();
+        this.timeUntilNextPower = new AtomicInteger(0);
+    }
+
+    @Override
+    public void gamePrepareTick() {
         this.checkSpawnPower();
     }
 
@@ -59,12 +65,6 @@ public class BattleballGame extends Game {
         this.checkExpirePower();
         this.checkSpawnPower();
         this.checkStoredExpirePower();
-    }
-
-    @Override
-    public void gameEnded() {
-        this.activePowers.clear();
-        this.storedPowers.clear();
     }
 
     private void checkExpirePower() {
@@ -129,6 +129,8 @@ public class BattleballGame extends Game {
         this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
 
         this.getObjects().add(powerUp.getObject());
+
+        System.out.println("success");
     }
 
     private void updateTimeUntilNextPower() {

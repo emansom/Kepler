@@ -132,16 +132,20 @@ public abstract class Game {
         // Preparing game seconds countdown
         this.preparingTimerRunnable = new FutureRunnable() {
             public void run() {
-                if (!hasEnoughPlayers()) {
-                    this.cancelFuture();
-                    return;
-                }
+                try {
+                    if (!hasEnoughPlayers()) {
+                        this.cancelFuture();
+                        return;
+                    }
 
-                gameBeginTick();
+                    gamePrepareTick();
 
-                if (preparingGameSecondsLeft.getAndDecrement() == 0) {
-                    this.cancelFuture();
-                    beginGame();
+                    if (preparingGameSecondsLeft.getAndDecrement() == 0) {
+                        this.cancelFuture();
+                        beginGame();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
             }
         };
@@ -150,7 +154,7 @@ public abstract class Game {
         this.preparingTimerRunnable.setFuture(future);
 
         this.sendObservers(new GAMEINSTANCE(this));
-        this.gameBegin();
+        this.gamePrepare();
     }
 
     /**
@@ -257,7 +261,7 @@ public abstract class Game {
 
         // Only create a new game if there's two players who joined
         if (players.size() >= GameConfiguration.getInstance().getInteger(this.gameType.name().toLowerCase() + ".start.minimum.active.teams")) {
-            this.initialise(players);
+            this.restartGame(players);
         } else {
             afkPlayers.addAll(players);
         }
@@ -273,7 +277,7 @@ public abstract class Game {
     /**
      * Method to restart game.
      */
-    private void initialise(List<GamePlayer> players) {
+    public void restartGame(List<GamePlayer> players) {
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
         }
@@ -295,11 +299,33 @@ public abstract class Game {
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this, null));  // Show users back at spawn positions
-
         this.sendObservers(new GAMEDELETED());
 
-        // Start game after "game is about to begin"
-        GameScheduler.getInstance().getSchedulerService().schedule(this::beginGame, GameManager.getInstance().getPreparingSeconds(this.gameType), TimeUnit.SECONDS);
+        this.gamePrepare();
+
+        // Preparing game seconds countdown
+        this.preparingTimerRunnable = new FutureRunnable() {
+            public void run() {
+                try {
+                    if (!hasEnoughPlayers()) {
+                        this.cancelFuture();
+                        return;
+                    }
+
+                    gamePrepareTick();
+
+                    if (preparingGameSecondsLeft.getAndDecrement() == 0) {
+                        this.cancelFuture();
+                        beginGame();
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        };
+
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
+        this.preparingTimerRunnable.setFuture(future);
     }
 
     /**
@@ -597,12 +623,12 @@ public abstract class Game {
     /**
      * Method called when the game initially began
      */
-    public void gameBegin() { }
+    public void gamePrepare() { }
 
     /**
      * Method called for the tick in game beginning
      */
-    public void gameBeginTick() { }
+    public void gamePrepareTick() { }
 
     /**
      * Method called when the game initially started
