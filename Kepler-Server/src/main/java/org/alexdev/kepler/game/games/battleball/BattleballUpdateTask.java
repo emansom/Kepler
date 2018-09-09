@@ -70,6 +70,7 @@ public class BattleballUpdateTask implements Runnable {
             }
 
             if (objects.isEmpty()) {
+                this.game.getEventsQueue().addAll(events); // Add events back
                 return;
             }
 
