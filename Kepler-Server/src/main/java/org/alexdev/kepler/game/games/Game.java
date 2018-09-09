@@ -409,10 +409,14 @@ public abstract class Game {
      * @param gamePlayer the player to send
      */
     private void sendToLobby(GamePlayer gamePlayer) {
-        this.leaveGame(gamePlayer);
-
         Player player = gamePlayer.getPlayer();
-        player.getRoomUser().setGamePlayer(null);
+
+        if (player.getRoomUser().getRoom() != null) {
+            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, false);
+        } else {
+            this.leaveGame(gamePlayer);
+        }
+
         player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
     }
 
