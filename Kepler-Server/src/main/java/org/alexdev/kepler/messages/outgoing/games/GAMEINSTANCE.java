@@ -59,12 +59,12 @@ public class GAMEINSTANCE extends MessageComposer {
 
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
                     BattleballGame battleballGame = (BattleballGame) this.game;
-                    int[] allowedPowerUps = battleballGame.getAllowedPowerUps();
+                    List<Integer> allowedPowerUps = battleballGame.getAllowedPowerUps();
 
-                    String[] powerUps = new String[allowedPowerUps.length];
+                    String[] powerUps = new String[allowedPowerUps.size()];
 
-                    for (int i = 0; i < allowedPowerUps.length; i++) {
-                        powerUps[i] = String.valueOf(allowedPowerUps[i]);
+                    for (int i = 0; i < allowedPowerUps.size(); i++) {
+                        powerUps[i] = String.valueOf(allowedPowerUps.get(i));
                     }
 
                     response.writeString(String.join(",", powerUps));
@@ -101,12 +101,12 @@ public class GAMEINSTANCE extends MessageComposer {
 
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
                     BattleballGame battleballGame = (BattleballGame) this.game;
-                    int[] allowedPowerUps = battleballGame.getAllowedPowerUps();
+                    List<Integer> allowedPowerUps = battleballGame.getAllowedPowerUps();
 
-                    String[] powerUps = new String[allowedPowerUps.length];
+                    String[] powerUps = new String[allowedPowerUps.size()];
 
-                    for (int i = 0; i < allowedPowerUps.length; i++) {
-                        powerUps[i] = String.valueOf(allowedPowerUps[i]);
+                    for (int i = 0; i < allowedPowerUps.size(); i++) {
+                        powerUps[i] = String.valueOf(allowedPowerUps.get(i));
                     }
 
                     response.writeString(String.join(",", powerUps));
@@ -139,11 +139,12 @@ public class GAMEINSTANCE extends MessageComposer {
             }
 
             if (this.finishedGame.getGameType() == GameType.BATTLEBALL) {
-                int[] allowedPowerUps = this.finishedGame.getPowerUps();
-                String[] powerUps = new String[allowedPowerUps.length];
+                List<Integer> allowedPowerUps = this.finishedGame.getAllowedPowerUps();
 
-                for (int i = 0; i < allowedPowerUps.length; i++) {
-                    powerUps[i] = String.valueOf(allowedPowerUps[i]);
+                String[] powerUps = new String[allowedPowerUps.size()];
+
+                for (int i = 0; i < allowedPowerUps.size(); i++) {
+                    powerUps[i] = String.valueOf(allowedPowerUps.get(i));
                 }
 
                 response.writeString(String.join(",", powerUps));

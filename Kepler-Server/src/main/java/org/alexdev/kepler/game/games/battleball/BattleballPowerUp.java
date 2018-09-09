@@ -1,14 +1,7 @@
 package org.alexdev.kepler.game.games.battleball;
 
-import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
-import org.alexdev.kepler.game.games.battleball.events.PinSpawnEvent;
-import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
-import org.alexdev.kepler.game.games.battleball.objects.PinObject;
-import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.battleball.powerups.*;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -17,18 +10,18 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BattleballPowerUp {
     private final int id;
     private final PowerObject object;
     private final AtomicInteger timeToDespawn;
-    private final BattleballPowerType powerType;
     private final BattleballTile tile;
     private final Position position;
     private final BattleballGame game;
+
     private GamePlayer playerHolding;
+    private BattleballPowerType powerType;
 
     public BattleballPowerUp(int id, BattleballGame game, BattleballTile tile) {
         this.id = id;
@@ -37,7 +30,7 @@ public class BattleballPowerUp {
         this.game = game;
         this.position = this.tile.getPosition().copy();
         this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25 + 1));
-        this.powerType = BattleballPowerType.getById(game.getAllowedPowerUps()[ThreadLocalRandom.current().nextInt(0, game.getAllowedPowerUps().length)]);
+        this.powerType = BattleballPowerType.getById(game.getAllowedPowerUps().get(ThreadLocalRandom.current().nextInt(0, game.getAllowedPowerUps().size())));
     }
 
     /**
@@ -47,6 +40,13 @@ public class BattleballPowerUp {
      * @param position the position that the power up should be used at
      */
     public void usePower(GamePlayer gamePlayer, Position position) {
+        if (this.powerType == BattleballPowerType.QUESTION_MARK) {
+            List<Integer> powerUps = new ArrayList<>(this.game.getAllowedPowerUps());
+            powerUps.remove(BattleballPowerType.QUESTION_MARK.getPowerUpId());
+
+            this.powerType = BattleballPowerType.getById(powerUps.get(ThreadLocalRandom.current().nextInt(0, powerUps.size())));
+
+        }
         if (this.powerType == BattleballPowerType.BOX_OF_PINS) {
             NailBoxHandle.handle(this.game, gamePlayer, game.getRoom());
         }

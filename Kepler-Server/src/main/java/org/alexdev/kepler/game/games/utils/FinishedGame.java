@@ -19,7 +19,7 @@ public class FinishedGame {
     private String name;
     private String mapCreator;
     private GameType gameType;
-    private int[] powerUps;
+    private List<Integer> powerUps;
     private Map<Integer, FinishedGameTeam> teamScores;
 
     private long expireTime;
@@ -68,7 +68,7 @@ public class FinishedGame {
         return name;
     }
 
-    public int[] getPowerUps() {
+    public List<Integer> getAllowedPowerUps() {
         return powerUps;
     }
 
