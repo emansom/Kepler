@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.GameTile;
@@ -18,6 +19,7 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
 import org.alexdev.kepler.game.games.utils.PowerUpUtil;
+import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.ArrayList;
@@ -107,38 +109,10 @@ public class BattleballTile extends GameTile  {
         }
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.CLEANING_TILES) {
-            if (colour == BattleballColourType.DEFAULT) {
-                return true;
+            if (TileUtil.undoTileAttributes(this, gamePlayer.getGame())) {
+                updateTiles.add(this);
+
             }
-
-            int pointsToRemove = 0;
-
-            if (state == BattleballTileType.TOUCHED) {
-                pointsToRemove = 2;
-            }
-
-            if (state == BattleballTileType.CLICKED) {
-                pointsToRemove = 6;
-            }
-
-            if (state == BattleballTileType.PRESSED) {
-                pointsToRemove = 10;
-            }
-
-            if (state == BattleballTileType.SEALED) {
-                pointsToRemove = 14;
-            }
-
-            GameTeam oppositeTeam = gamePlayer.getGame().getTeams().get(colour.getColourId());
-            int eachTeamRemove = pointsToRemove / oppositeTeam.getActivePlayers().size();
-
-            for (GamePlayer p : oppositeTeam.getActivePlayers()) {
-                p.setScore(p.getScore() - eachTeamRemove);
-            }
-
-            this.setColour(BattleballColourType.DEFAULT);
-            this.setState(BattleballTileType.DEFAULT);
-            updateTiles.add(this);
             return true;
         }
 
