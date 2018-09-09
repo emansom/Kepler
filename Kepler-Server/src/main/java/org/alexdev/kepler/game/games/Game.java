@@ -171,6 +171,9 @@ public abstract class Game {
         // Send game seconds
         this.send(new GAMESTART(this.totalSecondsLeft.get()));
 
+        // Regenerate collision map when game starts
+        this.room.getMapping().regenerateCollisionMap();
+
         // Game seconds counter
         this.gameTimerRunnable = new FutureRunnable() {
             public void run() {
