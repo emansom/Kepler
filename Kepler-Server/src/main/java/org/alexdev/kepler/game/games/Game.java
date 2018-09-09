@@ -411,9 +411,10 @@ public abstract class Game {
     private void sendToLobby(GamePlayer gamePlayer) {
         this.leaveGame(gamePlayer);
 
+        player.getRoomUser().setGamePlayer(null);
+
         Player player = gamePlayer.getPlayer();
         player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
-        player.getRoomUser().setGamePlayer(null);
     }
 
     /**
