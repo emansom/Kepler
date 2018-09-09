@@ -35,6 +35,10 @@ public class TorchHandle {
                 continue;
             }
 
+            if (tile.getColour() == BattleballColourType.DISABLED) {
+                continue;
+            }
+
             BattleballTileType state = tile.getState();
             BattleballColourType colour = tile.getColour();
 
@@ -56,9 +60,5 @@ public class TorchHandle {
 
             game.getUpdateTilesQueue().add(tile);
         }
-    }
-
-    private static boolean isValidGameTile(BattleballTile tile) {
-        return tile != null && tile.getColour() != BattleballColourType.DISABLED;
     }
 }
