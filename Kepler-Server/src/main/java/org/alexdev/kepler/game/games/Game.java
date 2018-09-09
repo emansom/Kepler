@@ -224,7 +224,7 @@ public abstract class Game {
 
         var restartRunnable = new FutureRunnable() {
             public void run() {
-                if (!hasEnoughPlayers()) {
+                if (!hasEnoughPlayers() || gameState != GameState.ENDED) {
                     this.cancelFuture();
                     return;
                 }
@@ -246,7 +246,7 @@ public abstract class Game {
     /**
      * Restarts all the new players who clicked to play the next game.
      */
-    private void triggerRestart() {
+    public void triggerRestart() {
         List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
         List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
 
@@ -254,7 +254,6 @@ public abstract class Game {
             if (!p.isClickedRestart()) {
                 afkPlayers.add(p);
             } else {
-                p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
                 players.add(p);
             }
         }
@@ -278,6 +277,10 @@ public abstract class Game {
      * Method to restart game.
      */
     public void restartGame(List<GamePlayer> players) {
+        for (GamePlayer p : this.getPlayers()) {
+            p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
+        }
+
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
         }
