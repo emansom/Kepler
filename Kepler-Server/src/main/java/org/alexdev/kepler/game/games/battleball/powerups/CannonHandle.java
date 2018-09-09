@@ -43,7 +43,8 @@ public class CannonHandle {
         }
 
         if (tilesToUpdate.isEmpty()) {
-            return;
+            nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
+            tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
         }
 
         gamePlayer.setPlayerState(BattleballPlayerState.CLIMBING_INTO_CANNON);
