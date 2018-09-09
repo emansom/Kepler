@@ -171,6 +171,9 @@ public abstract class Game {
         // Send game seconds
         this.send(new GAMESTART(this.totalSecondsLeft.get()));
 
+        // Regenerate collision map when game starts
+        this.room.getMapping().regenerateCollisionMap();
+
         // Game seconds counter
         this.gameTimerRunnable = new FutureRunnable() {
             public void run() {
@@ -299,7 +302,6 @@ public abstract class Game {
 
         this.initialise();
         this.assignSpawnPoints();
-        this.room.getMapping().regenerateCollisionMap();
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
