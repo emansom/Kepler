@@ -238,6 +238,20 @@ public class Position {
      * @return the list of coordinates
      */
     public List<Position> getCircle(int radius) {
+      /*List<Position> coords = new ArrayList<>();
+
+        int circumference = (int) (2 * Math.PI * radius);
+        double increment = (2 * Math.PI) / circumference;
+
+        for(int i = 0;i < circumference; i++)
+        {
+            double angle = i * increment;
+            double x = this.getX() + (radius * Math.cos(angle));
+            double y = this.getY() + (radius * Math.sin(angle));
+            coords.add(new Position((int)x, (int)y, this.getZ()));
+        }
+
+        return coords;*/
         List<Position> coords = new ArrayList<>();
 
         int cx = this.getX();
