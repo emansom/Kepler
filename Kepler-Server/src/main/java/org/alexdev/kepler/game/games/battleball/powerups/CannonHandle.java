@@ -104,10 +104,16 @@ public class CannonHandle {
     }
 
     private static void finishedCannon(Game game, GamePlayer gamePlayer) {
-        gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-        gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
-
+        gamePlayer.setPlayerState(BattleballPlayerState.STUNNED);
         game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+
+        // Restore player 5 seconds later
+        GameScheduler.getInstance().getSchedulerService().schedule(()-> {
+            gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
+
+            gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
+            game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+        }, 5, TimeUnit.SECONDS);
     }
 
     public static boolean isValidGameTile(GamePlayer gamePlayer, BattleballTile tile) {
