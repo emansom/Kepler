@@ -299,6 +299,7 @@ public abstract class Game {
 
         this.initialise();
         this.assignSpawnPoints();
+        this.room.getMapping().regenerateCollisionMap();
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
