@@ -31,9 +31,6 @@ public class CannonHandle {
 
         LinkedList<BattleballTile> tilesToUpdate = new LinkedList<>();
 
-        gamePlayer.setPlayerState(BattleballPlayerState.CLIMBING_INTO_CANNON);
-        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-
         while (isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
             nextPosition = nextPosition.getSquareInFront();
 
@@ -44,6 +41,13 @@ public class CannonHandle {
             tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
 
         }
+
+        if (tilesToUpdate.isEmpty()) {
+            return;
+        }
+
+        gamePlayer.setPlayerState(BattleballPlayerState.CLIMBING_INTO_CANNON);
+        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
         for (BattleballTile tile : tilesToUpdate) {
             if (tile.getState() == BattleballTileType.SEALED) {
