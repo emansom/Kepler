@@ -34,6 +34,7 @@ public class NailBoxHandle {
         Position tilePosition = gamePlayer.getPlayer().getRoomUser().getPosition()
                 .getSquareInFront()
                 .getSquareInFront()
+                .getSquareInFront()
                 .getSquareInFront();
 
         int maxPins = ThreadLocalRandom.current().nextInt(5, 12 + 1);
