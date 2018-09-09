@@ -31,7 +31,7 @@ public class G_HMAP implements MessageEvent {
 
         if (gamePlayer != null) {
             if (gamePlayer.getGame() instanceof BattleballGame) {
-                player.send(new FULLGAMESTATUS(gamePlayer.getGame(), gamePlayer));
+                player.send(new FULLGAMESTATUS(gamePlayer.getGame()));
             } else {
                 SnowStormGame game = (SnowStormGame) gamePlayer.getGame();
 

@@ -37,7 +37,7 @@ public class BattleballUpdateTask implements Runnable {
     @Override
     public void run() {
         try {
-            if (this.game.isGameFinished()) {
+            if (this.game.isGameFinished() || this.game.getPlayers().isEmpty()) {
                 return; // Don't send any packets or do any logic checks during when the game is finished
             }
 
@@ -69,7 +69,11 @@ public class BattleballUpdateTask implements Runnable {
                 objects.add(new PlayerUpdateObject(gamePlayer));
             }
 
-            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
+            if (objects.isEmpty()) {
+                return;
+            }
+
+            this.game.getRoom().send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }

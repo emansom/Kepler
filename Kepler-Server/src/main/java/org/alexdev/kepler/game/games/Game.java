@@ -296,9 +296,10 @@ public abstract class Game {
         }
 
         this.initialise();
+        this.gamePrepare();
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
-        this.send(new FULLGAMESTATUS(this, null));  // Show users back at spawn positions
+        this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
 
         // Preparing game seconds countdown
@@ -324,8 +325,6 @@ public abstract class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
-
-        this.gamePrepare();
     }
 
     /**
