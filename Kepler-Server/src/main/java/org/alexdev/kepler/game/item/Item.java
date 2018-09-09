@@ -327,7 +327,51 @@ public class Item {
             if (item.getDefinition().getLength() <= 1 && item.getDefinition().getWidth() <= 1) {
                 return true;
             }
-        }
+        }/* else {
+            if (this.getDefinition().getLength() > 1 || this.getDefinition().getWidth() > 1) {
+                List<Item> rollers = new ArrayList<>();
+
+                int checkDirection = 0;
+                double checkHeight = 0.0;
+
+                for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
+                    tile = room.getMapping().getTile(position);
+
+                    if (tile == null) {
+                        continue;
+                    }
+
+                    if (room.getModel().getTileState(position.getX(), position.getY()) == RoomTileState.CLOSED) {
+                        continue;
+                    }
+
+                    Item highestItem = tile.getHighestItem();
+
+                    if (highestItem != null && highestItem.hasBehaviour(ItemBehaviour.ROLLER)) {
+                        rollers.add(highestItem);
+                    }
+                }
+
+                // If the amount of rollers is equal to the area of the furniture
+                if (rollers.size() == (this.getDefinition().getLength() * this.getDefinition().getWidth())) {
+                    checkDirection = rollers.get(0).getPosition().getRotation();
+                    checkHeight =  rollers.get(0).getPosition().getZ();
+
+                    boolean cantPlace = false;
+
+                    for (Item roller : rollers) {
+                        if (roller.getPosition().getZ() != checkHeight || roller.getPosition().getRotation() != checkDirection) {
+                            cantPlace = true;
+                            break;
+                        }
+                    }
+
+                    if (!cantPlace) {
+                        return true;
+                    }
+                }
+            }
+        }*/
 
         for (Position position : AffectedTile.getAffectedTiles(this, x, y, rotation)) {
             tile = room.getMapping().getTile(position);
