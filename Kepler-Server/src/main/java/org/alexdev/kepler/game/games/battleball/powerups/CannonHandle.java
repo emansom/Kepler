@@ -72,6 +72,7 @@ public class CannonHandle {
             tile.setState(newState);
 
             BattleballTile.checkFill(gamePlayer, tile, game.getFillTilesQueue());
+            game.getUpdateTilesQueue().add(tile);
         }
 
         BattleballTile lastTile = tilesToUpdate.getLast();
