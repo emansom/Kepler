@@ -113,7 +113,6 @@ public abstract class Game {
         this.events.clear();
 
         this.buildMap();
-        this.assignSpawnPoints();
     }
 
     /**
@@ -121,6 +120,7 @@ public abstract class Game {
      */
     public void startGame() {
         this.initialise();
+        this.assignSpawnPoints();
 
         for (GamePlayer p : this.getPlayers()) {
             p.setEnteringGame(true); // Set to true so when they leave the lobby, the server knows to initialise the user when they join the arena
@@ -296,7 +296,10 @@ public abstract class Game {
         }
 
         this.initialise();
+        this.assignSpawnPoints();
+
         this.gamePrepare();
+        this.gamePrepareTick();
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
@@ -420,7 +423,7 @@ public abstract class Game {
      */
     public void movePlayer(GamePlayer gamePlayer, int fromTeamId, int toTeamId) {
         if (fromTeamId != -1) {
-            if (this.gameState == GameState.WAITING) {
+            if (this.gameState == GameState.WAITING || this.gameState == GameState.ENDED) {
                 this.teams.get(fromTeamId).getPlayers().remove(gamePlayer);
             }
 
@@ -436,7 +439,7 @@ public abstract class Game {
             gamePlayer.setTeamId(toTeamId);
             gamePlayer.setInGame(true); // Entering team so they're in game
         } else {
-            if (this.gameState == GameState.WAITING) {
+            if (this.gameState == GameState.WAITING || this.gameState == GameState.ENDED) {
                 this.teams.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
             } else {
                 gamePlayer.setInGame(false); // Don't remove from team, just show they're no longer in game, for "0" score at the end.
