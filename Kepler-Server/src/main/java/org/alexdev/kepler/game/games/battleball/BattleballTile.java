@@ -204,8 +204,7 @@ public class BattleballTile extends GameTile  {
         BattleballTileType state = this.getState();
         BattleballColourType colour = this.getColour();
 
-        int teamId = gamePlayer.getHarlequinTeamId() != -1 ? gamePlayer.getHarlequinTeamId() : gamePlayer.getTeamId();
-        GameTeam team = gamePlayer.getGame().getTeams().get(teamId);
+        GameTeam team = gamePlayer.getTeam();
 
         if (colour == BattleballColourType.DISABLED) {
             return;
@@ -217,10 +216,10 @@ public class BattleballTile extends GameTile  {
             } else {
                 if (gamePlayer.getGame().getMapId() == 5) { // Barebones classic takes 4 hits
                     this.setState(BattleballTileType.TOUCHED);
-                    this.setColour(BattleballColourType.getColourById(teamId));
+                    this.setColour(BattleballColourType.getColourById(team.getId()));
                 } else {
                     this.setState(BattleballTileType.CLICKED);
-                    this.setColour(BattleballColourType.getColourById(teamId));
+                    this.setColour(BattleballColourType.getColourById(team.getId()));
                 }
             }
 
@@ -273,7 +272,7 @@ public class BattleballTile extends GameTile  {
         if (newPoints != -1) {
             if (!sealed) { // Set to sealed
                 // Increase score for other team if harlequin is enabled
-                if (gamePlayer.getHarlequinTeamId() != -1) {
+                if (gamePlayer.getHarlequinPlayer() != null) {
                     int pointsAcrossTeams = newPoints / team.getActivePlayers().size();
 
                     for (GamePlayer p : team.getActivePlayers()) {

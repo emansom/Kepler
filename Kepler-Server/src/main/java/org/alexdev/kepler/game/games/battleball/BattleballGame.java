@@ -187,9 +187,8 @@ public class BattleballGame extends Game {
 
             for (GamePlayer p : team.getPlayers()) {
                 findSpawn(flip, spawnX, spawnY, spawnRotation);
-
                 p.setPlayerState(BattleballPlayerState.NORMAL);
-                p.setHarlequinTeamId(-1);
+                p.setHarlequinPlayer(null);
                 p.setGameObject(new PlayerObject(p));
                 p.setObjectId(this.createObjectId());
 

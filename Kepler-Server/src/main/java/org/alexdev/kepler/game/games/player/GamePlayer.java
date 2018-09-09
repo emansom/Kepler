@@ -23,7 +23,7 @@ public class GamePlayer {
     private boolean clickedRestart;
     private TurnContainer turnContainer;
     private BattleballPlayerState playerState;
-    private int harlequinTeamId;
+    private GamePlayer harlequinPlayer;
 
     public GamePlayer(Player player) {
         this.player = player;
@@ -31,7 +31,7 @@ public class GamePlayer {
         this.teamId = -1;
         this.gameId = -1;
         this.objectId = 0;
-        this.harlequinTeamId = -1;
+        this.harlequinPlayer = null;
         this.score = 0;
         this.enteringGame = false;
         this.clickedRestart = false;
@@ -52,7 +52,7 @@ public class GamePlayer {
     }
 
     public GameTeam getTeam() {
-        int teamId = this.getHarlequinTeamId() != -1 ? this.getHarlequinTeamId() : this.getTeamId();
+        int teamId = this.harlequinPlayer != null ? this.harlequinPlayer.getTeamId() : this.getTeamId();
         return this.getGame().getTeams().get(teamId);
     }
 
@@ -108,6 +108,18 @@ public class GamePlayer {
         return clickedRestart;
     }
 
+    public int getColouringForOpponentId() {
+        return harlequinPlayer != null ? harlequinPlayer.getObjectId() : -1;
+    }
+
+    public GamePlayer getHarlequinPlayer() {
+        return harlequinPlayer;
+    }
+
+    public void setHarlequinPlayer(GamePlayer harlequinPlayer) {
+        this.harlequinPlayer = harlequinPlayer;
+    }
+
     public void setClickedRestart(boolean clickedRestart) {
         this.clickedRestart = clickedRestart;
     }
@@ -130,14 +142,6 @@ public class GamePlayer {
 
     public void setPlayerState(BattleballPlayerState playerState) {
         this.playerState = playerState;
-    }
-
-    public int getHarlequinTeamId() {
-        return harlequinTeamId;
-    }
-
-    public void setHarlequinTeamId(int harlequinTeamId) {
-        this.harlequinTeamId = harlequinTeamId;
     }
 
     public GameObject getGameObject() {

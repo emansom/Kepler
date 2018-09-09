@@ -21,6 +21,6 @@ public class PlayerUpdateObject extends GameObject {
         response.writeInt((int) this.gamePlayer.getPlayer().getRoomUser().getPosition().getZ());
         response.writeInt(this.gamePlayer.getPlayer().getRoomUser().getPosition().getRotation());
         response.writeInt(this.gamePlayer.getPlayerState().getStateId());
-        response.writeInt(this.gamePlayer.getHarlequinTeamId());
+        response.writeInt(this.gamePlayer.getColouringForOpponentId());
     }
 }
