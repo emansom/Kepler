@@ -75,6 +75,8 @@ public class BattleballTile extends GameTile  {
                 gamePlayer.getGame().getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
                 gamePlayer.getGame().getEventsQueue().add(new DespawnObjectEvent(pinObject.getId()));
 
+                gamePlayer.getGame().getObjects().remove(gameObject);
+
                 GameScheduler.getInstance().getSchedulerService().schedule(()-> {
                     gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
                     gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
