@@ -301,7 +301,7 @@ public class BattleballTile extends GameTile  {
 
             var fillTiles = FloodFill.getFill(gamePlayer, neighbour);
 
-            if (fillTiles.size() > 0) {
+            if (fillTiles.size() > 1) {
                 for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
                     if (filledTile.getState() == BattleballTileType.SEALED) {
                         continue;
