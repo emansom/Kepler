@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
+import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
@@ -22,7 +23,7 @@ public class FULLGAMESTATUS extends MessageComposer {
 
     @Override
     public void compose(NettyResponse response) {
-        response.writeInt(this.game.getGameState().getStateId());
+        response.writeInt(GameState.STARTED.getStateId());
         response.writeInt(this.game.getPreparingGameSecondsLeft().get());
         response.writeInt(GameManager.getInstance().getPreparingSeconds(game.getGameType()));
         response.writeInt(this.game.getObjects().size()); // TODO: Objects here
