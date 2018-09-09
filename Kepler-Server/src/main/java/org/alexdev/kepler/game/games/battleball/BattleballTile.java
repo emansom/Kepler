@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
+import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
@@ -69,7 +70,9 @@ public class BattleballTile extends GameTile  {
                 gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
 
                 gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
+
                 gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+                gamePlayer.getGame().getEventsQueue().add(new DespawnObjectEvent(pinObject.getId()));
 
                 GameScheduler.getInstance().getSchedulerService().schedule(()-> {
                     gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
