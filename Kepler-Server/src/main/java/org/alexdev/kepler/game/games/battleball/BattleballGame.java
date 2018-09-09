@@ -120,9 +120,7 @@ public class BattleballGame extends Game {
             return;
         }
 
-        int powerId = createObjectId();
-
-        BattleballPowerUp powerUp = new BattleballPowerUp(this, powerId, this.getRandomTile());
+        BattleballPowerUp powerUp = new BattleballPowerUp(this.createObjectId(), this, this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();

@@ -30,7 +30,7 @@ public class BattleballPowerUp {
     private final BattleballGame game;
     private GamePlayer playerHolding;
 
-    public BattleballPowerUp(BattleballGame game, int id, BattleballTile tile) {
+    public BattleballPowerUp(int id, BattleballGame game, BattleballTile tile) {
         this.id = id;
         this.object = new PowerObject(this);
         this.tile = tile;

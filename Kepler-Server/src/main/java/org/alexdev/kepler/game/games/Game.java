@@ -91,7 +91,7 @@ public abstract class Game {
      */
     public void initialise() {
         this.gameState = GameState.STARTED;
-        this.objectId = new AtomicInteger(-1);
+        this.objectId = new AtomicInteger(0);
 
         this.gameStarted = false;
         this.gameFinished = false;
@@ -580,15 +580,7 @@ public abstract class Game {
      * @return the new object ids
      */
     public int createObjectId() {
-        /*int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
-
-        for (GamePlayer gamePlayer : this.getPlayers()) {
-            if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
-                powerId = createObjectId();
-            }
-        }*/
-
-        return this.getObjectId().incrementAndGet();
+        return this.objectId.incrementAndGet();
     }
 
     /**
