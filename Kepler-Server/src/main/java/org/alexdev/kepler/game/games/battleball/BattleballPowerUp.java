@@ -30,7 +30,7 @@ public class BattleballPowerUp {
         this.game = game;
         this.position = this.tile.getPosition().copy();
         this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25 + 1));
-        this.powerType = BattleballPowerType.getById(game.getAllowedPowerUps().get(ThreadLocalRandom.current().nextInt(0, game.getAllowedPowerUps().size())));
+        this.powerType = BattleballPowerType.QUESTION_MARK;//BattleballPowerType.getById(game.getAllowedPowerUps().get(ThreadLocalRandom.current().nextInt(0, game.getAllowedPowerUps().size())));
     }
 
     /**
@@ -40,13 +40,6 @@ public class BattleballPowerUp {
      * @param position the position that the power up should be used at
      */
     public void usePower(GamePlayer gamePlayer, Position position) {
-        if (this.powerType == BattleballPowerType.QUESTION_MARK) {
-            List<Integer> powerUps = new ArrayList<>(this.game.getAllowedPowerUps());
-            powerUps.remove(BattleballPowerType.QUESTION_MARK.getPowerUpId());
-
-            this.powerType = BattleballPowerType.getById(powerUps.get(ThreadLocalRandom.current().nextInt(0, powerUps.size())));
-
-        }
         if (this.powerType == BattleballPowerType.BOX_OF_PINS) {
             NailBoxHandle.handle(this.game, gamePlayer, game.getRoom());
         }
@@ -91,6 +84,10 @@ public class BattleballPowerUp {
      */
     public BattleballPowerType getPowerType() {
         return powerType;
+    }
+
+    public void setPowerType(BattleballPowerType powerType) {
+        this.powerType = powerType;
     }
 
     /**
