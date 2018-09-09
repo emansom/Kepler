@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
+import org.alexdev.kepler.game.games.gamehalls.GameBattleShip;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
@@ -47,8 +48,8 @@ public class CannonHandle {
             tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
         }
 
-        gamePlayer.setPlayerState(BattleballPlayerState.CLIMBING_INTO_CANNON);
-        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+        //gamePlayer.setPlayerState(BattleballPlayerState.CLIMBING_INTO_CANNON);
+        //game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
         for (BattleballTile tile : tilesToUpdate) {
             if (tile.getState() == BattleballTileType.SEALED) {
@@ -70,46 +71,29 @@ public class CannonHandle {
             tile.setColour(newColour);
             tile.setState(newState);
 
-
             BattleballTile.checkFill(gamePlayer, tile, game.getFillTilesQueue());
-            game.getUpdateTilesQueue().add(tile);
         }
 
         BattleballTile lastTile = tilesToUpdate.getLast();
 
-        var runnable = new FutureRunnable() {
-            public void run() {
-                if (tilesToUpdate.isEmpty()) {
-                    finishedCannon(game, gamePlayer);
-                    this.cancelFuture();
-                    return;
-                }
+        Position lastPosition = lastTile.getPosition().copy();
+        lastPosition.setRotation(rotation);
 
-                BattleballTile pos = tilesToUpdate.pollFirst();
+        gamePlayer.setPlayerState(BattleballPlayerState.FLYING_THROUGH_AIR);
+        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+        game.getEventsQueue().add(new PlayerMoveEvent(gamePlayer, lastPosition));
 
-                if (pos == null) {
-                    return;
-                }
-
-                Position newPosition = pos.getPosition().copy();
-                newPosition.setRotation(rotation);
-
-                gamePlayer.setPlayerState(BattleballPlayerState.FLYING_THROUGH_AIR);
-                gamePlayer.getPlayer().getRoomUser().setPosition(newPosition);
-
-                game.send(new GAMESTATUS(game, game.getTeams().values(), List.of(new PlayerUpdateObject(gamePlayer)), List.of(), List.of(), List.of()));
-            }
-        };
-
-        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(runnable, 75, 75, TimeUnit.MILLISECONDS);
-        runnable.setFuture(future);
+        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+            finishedCannon(game, gamePlayer, lastPosition);
+        }, 1000, TimeUnit.MILLISECONDS);
 
         gamePlayer.getPlayer().getRoomUser().warp(lastTile.getPosition(), false);
 
     }
 
-    private static void finishedCannon(Game game, GamePlayer gamePlayer) {
+    private static void finishedCannon(Game game, GamePlayer gamePlayer, Position lastPosition) {
         gamePlayer.setPlayerState(BattleballPlayerState.STUNNED);
+        gamePlayer.getPlayer().getRoomUser().setPosition(lastPosition);
         game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
         // Restore player 5 seconds later
