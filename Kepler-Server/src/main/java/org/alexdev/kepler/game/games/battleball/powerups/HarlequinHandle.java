@@ -2,14 +2,9 @@ package org.alexdev.kepler.game.games.battleball.powerups;
 
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.player.GameTeam;
-import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
 import java.util.ArrayList;
@@ -21,7 +16,7 @@ public class HarlequinHandle {
         List<GamePlayer> affectedPlayers = new ArrayList<>();
 
         for (GamePlayer p : gamePlayer.getGame().getPlayers()) {
-            if (p.getHarlequinTeamId() != -1 || p.getTeamId() == gamePlayer.getTeamId()) {
+            if (p.getColouringForOpponentId() != -1 || p.getTeamId() == gamePlayer.getTeamId()) {
                 continue;
             }
 
@@ -30,7 +25,7 @@ public class HarlequinHandle {
             }
 
             p.setPlayerState(BattleballPlayerState.COLORING_FOR_OPPONENT);
-            p.setHarlequinTeamId(gamePlayer.getTeamId());
+            p.setHarlequinPlayer(gamePlayer);
 
             game.getObjectsQueue().add(new PlayerUpdateObject(p));
             affectedPlayers.add(p);
@@ -43,7 +38,7 @@ public class HarlequinHandle {
 
             for (GamePlayer p : affectedPlayers) {
                 p.setPlayerState(BattleballPlayerState.NORMAL);
-                p.setHarlequinTeamId(-1);
+                p.setHarlequinPlayer(null);
 
                 game.getObjectsQueue().add(new PlayerUpdateObject(p));
             }
