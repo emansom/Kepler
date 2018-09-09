@@ -50,14 +50,16 @@ public class BattleballGame extends Game {
 
     @Override
     public void gamePrepare() {
-        this.activePowers.clear();
-        this.storedPowers.clear();
-        this.timeUntilNextPower = new AtomicInteger(0);
+        //this.activePowers.clear();
+        //this.storedPowers.clear();
+        //this.timeUntilNextPower = new AtomicInteger(0);
     }
 
     @Override
     public void gamePrepareTick() {
-        this.checkSpawnPower();
+        this.activePowers.clear();
+        this.storedPowers.clear();
+        this.timeUntilNextPower = new AtomicInteger(0);
     }
 
     @Override

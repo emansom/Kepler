@@ -298,9 +298,6 @@ public abstract class Game {
         this.initialise();
         this.assignSpawnPoints();
 
-        this.gamePrepare();
-        this.gamePrepareTick();
-
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
@@ -314,7 +311,7 @@ public abstract class Game {
                         return;
                     }
 
-                    gamePrepareTick();
+                    gamePrepare();
 
                     if (preparingGameSecondsLeft.getAndDecrement() == 0) {
                         this.cancelFuture();
