@@ -104,7 +104,7 @@ public class BattleballTile extends GameTile  {
             this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
 
             if (colour.getColourId() != team.getId() && state == BattleballTileType.SEALED) {
-                this.setState(BattleballTileType.TOUCHED); // Only set to touched when bounching on other teams locked tile
+                this.setState(BattleballTileType.CLICKED); // Only set to touched when bounching on other teams locked tile
                 gamePlayer.setScore(gamePlayer.getScore() + 4);
             } else {
                 this.setState(BattleballTileType.SEALED);
