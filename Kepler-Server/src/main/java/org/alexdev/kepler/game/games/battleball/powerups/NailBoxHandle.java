@@ -14,6 +14,7 @@ import org.alexdev.kepler.game.games.battleball.events.PinSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.utils.PowerUpUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -90,22 +91,8 @@ public class NailBoxHandle {
 
         // Make all affected players dizzy
         for (GamePlayer dizzyPlayer : dizzyPlayers) {
-            dizzyPlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
-            dizzyPlayer.getPlayer().getRoomUser().stopWalking();
-            dizzyPlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
-
-            game.getEventsQueue().add(new PlayerUpdateEvent(dizzyPlayer));
+            PowerUpUtil.stunPlayer(game, dizzyPlayer, BattleballPlayerState.BALL_BROKEN);
         }
-
-        // Restore all players
-        GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-            for (GamePlayer dizzyPlayer : dizzyPlayers) {
-                dizzyPlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                dizzyPlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
-
-                game.getEventsQueue().add(new PlayerUpdateEvent(dizzyPlayer));
-            }
-        }, 5, TimeUnit.SECONDS);
 
         // Despawn all pins
         GameScheduler.getInstance().getSchedulerService().schedule(()-> {

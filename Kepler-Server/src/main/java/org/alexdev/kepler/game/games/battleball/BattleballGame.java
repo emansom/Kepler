@@ -207,6 +207,15 @@ public class BattleballGame extends Game {
                 // Don't allow anyone to spawn on this tile
                 BattleballTile tile = (BattleballTile) this.getTile(spawnPosition.getX(), spawnPosition.getY());
                 tile.setSpawnOccupied(true);
+
+                // Set spawn colour
+                tile.setColour(BattleballColourType.getColourById(team.getId()));
+
+                if (this.getMapId() == 5) {
+                    tile.setState(BattleballTileType.TOUCHED);
+                } else {
+                    tile.setState(BattleballTileType.CLICKED);
+                }
             }
         }
     }

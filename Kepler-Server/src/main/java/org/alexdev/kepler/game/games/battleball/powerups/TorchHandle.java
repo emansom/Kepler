@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
+import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 
@@ -19,24 +20,23 @@ public class TorchHandle {
 
         Position nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
 
-        while (isValidGameTile((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
-            nextPosition = nextPosition.getSquareInFront();
-            tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
-        }
-        /*for (int i = 0; i < 20; i++) {
+        while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
             nextPosition = nextPosition.getSquareInFront();
 
-            BattleballTile tile = (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY());
-
-            if (tile == null || tile.getColour() == BattleballColourType.DISABLED) {
+            if (!TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
                 break;
             }
 
-            tilesToUpdate.add(tile);
-        }*/
+            tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
+
+        }
 
         for (BattleballTile tile : tilesToUpdate) {
             if (tile.getState() == BattleballTileType.SEALED) {
+                continue;
+            }
+
+            if (tile.getColour() == BattleballColourType.DISABLED) {
                 continue;
             }
 
@@ -61,9 +61,5 @@ public class TorchHandle {
 
             game.getUpdateTilesQueue().add(tile);
         }
-    }
-
-    private static boolean isValidGameTile(BattleballTile tile) {
-        return tile != null && tile.getColour() != BattleballColourType.DISABLED;
     }
 }
