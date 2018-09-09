@@ -1,7 +1,6 @@
 package org.alexdev.kepler.game.games.battleball.powerups;
 
 import org.alexdev.kepler.game.GameScheduler;
-import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
@@ -9,17 +8,13 @@ import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
-import org.alexdev.kepler.game.games.gamehalls.GameBattleShip;
 import org.alexdev.kepler.game.games.player.GamePlayer;
+import org.alexdev.kepler.game.games.utils.PowerUpUtil;
+import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.messages.outgoing.games.GAMESTATUS;
-import org.alexdev.kepler.util.schedule.FutureRunnable;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CannonHandle {
@@ -32,10 +27,10 @@ public class CannonHandle {
 
         LinkedList<BattleballTile> tilesToUpdate = new LinkedList<>();
 
-        while (isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
+        while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
             nextPosition = nextPosition.getSquareInFront();
 
-            if (!isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
+            if (!TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
                 break;
             }
 
@@ -85,32 +80,11 @@ public class CannonHandle {
         game.getEventsQueue().add(new PlayerMoveEvent(gamePlayer, lastPosition));
 
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
-            finishedCannon(game, gamePlayer, lastPosition);
+            gamePlayer.getPlayer().getRoomUser().setPosition(lastPosition);
+            PowerUpUtil.stunPlayer(game, gamePlayer, BattleballPlayerState.STUNNED);
         }, 1000, TimeUnit.MILLISECONDS);
 
         gamePlayer.getPlayer().getRoomUser().warp(lastTile.getPosition(), false);
 
-    }
-
-    private static void finishedCannon(Game game, GamePlayer gamePlayer, Position lastPosition) {
-        gamePlayer.setPlayerState(BattleballPlayerState.STUNNED);
-        gamePlayer.getPlayer().getRoomUser().setPosition(lastPosition);
-        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-
-        // Restore player 5 seconds later
-        GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-            gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
-
-            gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-            game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-        }, 5, TimeUnit.SECONDS);
-    }
-
-    public static boolean isValidGameTile(GamePlayer gamePlayer, BattleballTile tile) {
-        if (tile == null) {// && tile.getColour() != BattleballColourType.DISABLED;
-            return false;
-        }
-
-        return RoomTile.isValidTile(gamePlayer.getGame().getRoom(), gamePlayer.getPlayer(), tile.getPosition());
     }
 }

@@ -17,6 +17,7 @@ import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
+import org.alexdev.kepler.game.games.utils.PowerUpUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 
 import java.util.ArrayList;
@@ -67,22 +68,10 @@ public class BattleballTile extends GameTile  {
             PinObject pinObject = (PinObject) gameObject;
 
             if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject.getPosition())) {
-                gamePlayer.getPlayer().getRoomUser().stopWalking();
-                gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
-
-                gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
-
-                gamePlayer.getGame().getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
                 gamePlayer.getGame().getEventsQueue().add(new DespawnObjectEvent(pinObject.getId()));
-
                 gamePlayer.getGame().getObjects().remove(gameObject);
 
-                GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-                    gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
-                    gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
-                    gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
-                }, 5, TimeUnit.SECONDS);
-
+                PowerUpUtil.stunPlayer(gamePlayer.getGame(), gamePlayer, BattleballPlayerState.BALL_BROKEN);
                 return true;
             }
         }
