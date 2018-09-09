@@ -35,11 +35,13 @@ public class NailBoxHandle {
                 .getSquareInFront()
                 .getSquareInFront()
                 .getSquareInFront()
+                .getSquareInFront()
+                .getSquareInFront()
                 .getSquareInFront();
 
-        int maxPins = ThreadLocalRandom.current().nextInt(5, 12 + 1);
+        int maxPins = ThreadLocalRandom.current().nextInt(8, 15 + 1);
         List<Position> selectedPositions = new ArrayList<>();
-        List<Position> circlePositions = tilePosition.getCircle(3);
+        List<Position> circlePositions = tilePosition.getCircle(5);
 
         Collections.shuffle(circlePositions);
 
