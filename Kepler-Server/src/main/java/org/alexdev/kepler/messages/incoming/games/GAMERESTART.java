@@ -41,12 +41,15 @@ public class GAMERESTART implements MessageEvent {
             if (!p.isClickedRestart()) {
                 afkPlayers.add(p);
             } else {
-                //p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
                 players.add(p);
             }
         }
 
         if (afkPlayers.isEmpty()) { // Everyone clicked restart
+            for (GamePlayer p : game.getPlayers()) {
+                p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
+            }
+
             game.restartGame(players);
         }
 

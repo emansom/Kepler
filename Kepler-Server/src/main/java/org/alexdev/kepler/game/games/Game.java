@@ -254,6 +254,7 @@ public abstract class Game {
             if (!p.isClickedRestart()) {
                 afkPlayers.add(p);
             } else {
+                p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
                 players.add(p);
             }
         }
@@ -277,10 +278,6 @@ public abstract class Game {
      * Method to restart game.
      */
     public void restartGame(List<GamePlayer> players) {
-        for (GamePlayer p : this.getPlayers()) {
-            p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
-        }
-
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
         }
