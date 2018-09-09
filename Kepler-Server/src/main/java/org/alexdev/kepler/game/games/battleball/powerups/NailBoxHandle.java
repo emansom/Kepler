@@ -52,7 +52,7 @@ public class NailBoxHandle {
 
             BattleballTile tile = (BattleballTile) game.getTile(circlePos.getX(), circlePos.getY());
 
-            if (tile == null) {
+            if (tile == null || room.getMapping().getTile(circlePos) == null) {
                 continue;
             }
 
