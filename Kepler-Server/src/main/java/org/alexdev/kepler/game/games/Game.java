@@ -292,6 +292,8 @@ public abstract class Game {
 
         for (var gamePlayer : players) {
             this.movePlayer(gamePlayer, -1, gamePlayer.getTeamId());
+
+            gamePlayer.setScore(0);
             gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false); // Don't allow them to walk, for next game
         }
 
@@ -406,9 +408,9 @@ public abstract class Game {
     private void sendToLobby(GamePlayer gamePlayer) {
         this.leaveGame(gamePlayer);
 
-        gamePlayer.getPlayer().send(new ROOMFORWARD(
-                true,
-                RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
+        Player player = gamePlayer.getPlayer();
+        player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
+        player.getRoomUser().setGamePlayer(null);
     }
 
     /**
