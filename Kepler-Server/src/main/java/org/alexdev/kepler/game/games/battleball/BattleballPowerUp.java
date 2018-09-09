@@ -70,6 +70,10 @@ public class BattleballPowerUp {
         if (this.powerType == BattleballPowerType.HARLEQUIN) {
             HarlequinHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
         }
+
+        if (this.powerType == BattleballPowerType.CANNON) {
+            CannonHandle.handle(this.game, gamePlayer, gamePlayer.getPlayer().getRoomUser().getRoom());
+        }
     }
 
     /**

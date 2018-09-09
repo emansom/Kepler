@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
@@ -56,6 +57,11 @@ public class BattleballUpdateTask implements Runnable {
                 Player player = gamePlayer.getPlayer();
 
                 if (player.getRoomUser().getRoom() != this.room) {
+                    continue;
+                }
+
+                if (gamePlayer.getPlayerState() == BattleballPlayerState.CLIMBING_INTO_CANNON ||
+                    gamePlayer.getPlayerState() == BattleballPlayerState.FLYING_THROUGH_AIR) {
                     continue;
                 }
 
