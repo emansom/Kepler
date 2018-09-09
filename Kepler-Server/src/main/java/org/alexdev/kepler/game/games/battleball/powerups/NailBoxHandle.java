@@ -34,11 +34,14 @@ public class NailBoxHandle {
         Position tilePosition = gamePlayer.getPlayer().getRoomUser().getPosition()
                 .getSquareInFront()
                 .getSquareInFront()
+                .getSquareInFront()
+                .getSquareInFront()
+                .getSquareInFront()
                 .getSquareInFront();
 
-        int maxPins = ThreadLocalRandom.current().nextInt(5, 12 + 1);
+        int maxPins = ThreadLocalRandom.current().nextInt(8, 15 + 1);
         List<Position> selectedPositions = new ArrayList<>();
-        List<Position> circlePositions = tilePosition.getCircle(3);
+        List<Position> circlePositions = tilePosition.getCircle(5);
 
         Collections.shuffle(circlePositions);
 
@@ -49,7 +52,7 @@ public class NailBoxHandle {
 
             BattleballTile tile = (BattleballTile) game.getTile(circlePos.getX(), circlePos.getY());
 
-            if (tile == null || tile.getColour() == BattleballColourType.DISABLED) {
+            if (tile == null || room.getMapping().getTile(circlePos) == null) {
                 continue;
             }
 

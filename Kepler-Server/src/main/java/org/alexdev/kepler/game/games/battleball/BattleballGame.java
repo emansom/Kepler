@@ -3,6 +3,7 @@ package org.alexdev.kepler.game.games.battleball;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
@@ -14,7 +15,6 @@ import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,10 @@ public class BattleballGame extends Game {
         this.allowedPowerUps = allowedPowerUps;
         this.timeUntilNextPower = new AtomicInteger(0);
 
+        if (this.allowedPowerUps.size() >= 2) {
+            this.allowedPowerUps.add(BattleballPowerType.QUESTION_MARK.getPowerUpId());
+        }
+
         this.activePowers = new CopyOnWriteArrayList<>();
         this.storedPowers = new ConcurrentHashMap<>();
 
@@ -50,14 +54,16 @@ public class BattleballGame extends Game {
 
     @Override
     public void gamePrepare() {
-        this.activePowers.clear();
-        this.storedPowers.clear();
-        this.timeUntilNextPower = new AtomicInteger(0);
+        //this.activePowers.clear();
+        //this.storedPowers.clear();
+        //this.timeUntilNextPower = new AtomicInteger(0);
     }
 
     @Override
     public void gamePrepareTick() {
-        this.checkSpawnPower();
+        this.activePowers.clear();
+        this.storedPowers.clear();
+        this.timeUntilNextPower = new AtomicInteger(0);
     }
 
     @Override
@@ -120,9 +126,7 @@ public class BattleballGame extends Game {
             return;
         }
 
-        int powerId = createObjectId();
-
-        BattleballPowerUp powerUp = new BattleballPowerUp(this, powerId, this.getRandomTile());
+        BattleballPowerUp powerUp = new BattleballPowerUp(this.createObjectId(), this, this.getRandomTile());
         this.activePowers.add(powerUp);
 
         this.updateTimeUntilNextPower();
@@ -320,8 +324,8 @@ public class BattleballGame extends Game {
      *
      * @return the power ups allowed
      */
-    public int[] getAllowedPowerUps() {
-        return ArrayUtils.toPrimitive(this.allowedPowerUps.toArray(new Integer[0]));
+    public List<Integer> getAllowedPowerUps() {
+        return this.allowedPowerUps;
     }
 
     /**

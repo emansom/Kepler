@@ -91,7 +91,7 @@ public abstract class Game {
      */
     public void initialise() {
         this.gameState = GameState.STARTED;
-        this.objectId = new AtomicInteger(-1);
+        this.objectId = new AtomicInteger(0);
 
         this.gameStarted = false;
         this.gameFinished = false;
@@ -113,7 +113,6 @@ public abstract class Game {
         this.events.clear();
 
         this.buildMap();
-        this.assignSpawnPoints();
     }
 
     /**
@@ -121,6 +120,7 @@ public abstract class Game {
      */
     public void startGame() {
         this.initialise();
+        this.assignSpawnPoints();
 
         for (GamePlayer p : this.getPlayers()) {
             p.setEnteringGame(true); // Set to true so when they leave the lobby, the server knows to initialise the user when they join the arena
@@ -224,7 +224,7 @@ public abstract class Game {
 
         var restartRunnable = new FutureRunnable() {
             public void run() {
-                if (!hasEnoughPlayers()) {
+                if (!hasEnoughPlayers() || gameState != GameState.ENDED) {
                     this.cancelFuture();
                     return;
                 }
@@ -246,7 +246,7 @@ public abstract class Game {
     /**
      * Restarts all the new players who clicked to play the next game.
      */
-    private void triggerRestart() {
+    public void triggerRestart() {
         List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
         List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
 
@@ -296,9 +296,10 @@ public abstract class Game {
         }
 
         this.initialise();
+        this.assignSpawnPoints();
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
-        this.send(new FULLGAMESTATUS(this, null));  // Show users back at spawn positions
+        this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
 
         // Preparing game seconds countdown
@@ -310,7 +311,7 @@ public abstract class Game {
                         return;
                     }
 
-                    gamePrepareTick();
+                    gamePrepare();
 
                     if (preparingGameSecondsLeft.getAndDecrement() == 0) {
                         this.cancelFuture();
@@ -324,8 +325,6 @@ public abstract class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
-
-        this.gamePrepare();
     }
 
     /**
@@ -421,7 +420,7 @@ public abstract class Game {
      */
     public void movePlayer(GamePlayer gamePlayer, int fromTeamId, int toTeamId) {
         if (fromTeamId != -1) {
-            if (this.gameState == GameState.WAITING) {
+            if (this.gameState == GameState.WAITING || this.gameState == GameState.ENDED) {
                 this.teams.get(fromTeamId).getPlayers().remove(gamePlayer);
             }
 
@@ -437,7 +436,7 @@ public abstract class Game {
             gamePlayer.setTeamId(toTeamId);
             gamePlayer.setInGame(true); // Entering team so they're in game
         } else {
-            if (this.gameState == GameState.WAITING) {
+            if (this.gameState == GameState.WAITING || this.gameState == GameState.ENDED) {
                 this.teams.get(gamePlayer.getTeamId()).getPlayers().remove(gamePlayer);
             } else {
                 gamePlayer.setInGame(false); // Don't remove from team, just show they're no longer in game, for "0" score at the end.
@@ -581,15 +580,7 @@ public abstract class Game {
      * @return the new object ids
      */
     public int createObjectId() {
-        /*int powerId = ThreadLocalRandom.current().nextInt(100, 9999);
-
-        for (GamePlayer gamePlayer : this.getPlayers()) {
-            if (gamePlayer.getPlayer().getRoomUser().getInstanceId() == powerId) {
-                powerId = createObjectId();
-            }
-        }*/
-
-        return this.getObjectId().incrementAndGet();
+        return this.objectId.incrementAndGet();
     }
 
     /**

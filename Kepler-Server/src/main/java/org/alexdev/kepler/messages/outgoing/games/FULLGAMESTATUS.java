@@ -15,17 +15,9 @@ import java.util.List;
 
 public class FULLGAMESTATUS extends MessageComposer {
     private final Game game;
-    private final List<GamePlayer> gamePlayerList;
-    private final GamePlayer gamePlayer;
 
-    public FULLGAMESTATUS(Game game, GamePlayer gamePlayer) {
+    public FULLGAMESTATUS(Game game) {
         this.game = game;
-        this.gamePlayerList = new ArrayList<>();
-        this.gamePlayer = gamePlayer;
-
-        for (GameTeam team : this.game.getTeams().values()) {
-            this.gamePlayerList.addAll(team.getActivePlayers());
-        }
     }
 
     @Override

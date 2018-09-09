@@ -1,5 +1,8 @@
 package org.alexdev.kepler.util;
 
+import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.util.config.GameConfiguration;
+
 import java.text.Normalizer;
 import java.util.*;
 
@@ -32,7 +35,10 @@ public class StringUtil {
             input = input.replace((char)13, ' ');
         }
 
-        input = Normalizer.normalize(input, Normalizer.Form.NFD);
+        if (GameConfiguration.getInstance().getBoolean("normalise.input.strings")) {
+            input = Normalizer.normalize(input, Normalizer.Form.NFD);
+        }
+        
         return input;
     }
 

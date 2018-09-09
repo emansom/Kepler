@@ -10,7 +10,8 @@ public enum BattleballPowerType {
     BOX_OF_PINS(5),
     HARLEQUIN(6),
     BOMB(7),
-    DRILL(8);
+    DRILL(8),
+    QUESTION_MARK(9);
 
     private final int powerUpId;
 
@@ -32,7 +33,7 @@ public enum BattleballPowerType {
         return null;
     }
 
-    public int getPowerUpId() {
+    public Integer getPowerUpId() {
         return powerUpId;
     }
 }

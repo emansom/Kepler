@@ -19,7 +19,11 @@ public class TorchHandle {
 
         Position nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
 
-        for (int i = 0; i < 10; i++) {
+        while (isValidGameTile((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
+            nextPosition = nextPosition.getSquareInFront();
+            tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
+        }
+        /*for (int i = 0; i < 20; i++) {
             nextPosition = nextPosition.getSquareInFront();
 
             BattleballTile tile = (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY());
@@ -29,7 +33,7 @@ public class TorchHandle {
             }
 
             tilesToUpdate.add(tile);
-        }
+        }*/
 
         for (BattleballTile tile : tilesToUpdate) {
             if (tile.getState() == BattleballTileType.SEALED) {
@@ -57,5 +61,9 @@ public class TorchHandle {
 
             game.getUpdateTilesQueue().add(tile);
         }
+    }
+
+    private static boolean isValidGameTile(BattleballTile tile) {
+        return tile != null && tile.getColour() != BattleballColourType.DISABLED;
     }
 }

@@ -8,6 +8,9 @@ import org.alexdev.kepler.messages.outgoing.games.PLAYERREJOINED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class GAMERESTART implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) throws Exception {
@@ -30,6 +33,26 @@ public class GAMERESTART implements MessageEvent {
         // Only allow restart once everyone has clicked they'd like to restart
         gamePlayer.setClickedRestart(true);
         game.send(new PLAYERREJOINED(player.getRoomUser().getInstanceId()));
+
+        List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
+        List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
+
+        for (GamePlayer p : game.getPlayers()) {
+            if (!p.isClickedRestart()) {
+                afkPlayers.add(p);
+            } else {
+                players.add(p);
+            }
+        }
+
+        if (afkPlayers.isEmpty()) { // Everyone clicked restart
+            for (GamePlayer p : game.getPlayers()) {
+                p.setClickedRestart(false); // Reset whether or not they clicked restart, for next game
+            }
+
+            game.restartGame(players);
+        }
+
 
 /*        for (GameTeam gameTeam : game.getTeams().values()) {
             for (GamePlayer p : gameTeam.getActivePlayers()) {

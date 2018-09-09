@@ -6,19 +6,24 @@ import org.alexdev.kepler.game.games.GameObject;
 import org.alexdev.kepler.game.games.GameTile;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
 import org.alexdev.kepler.game.games.battleball.events.AcquirePowerUpEvent;
+import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
+import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.utils.FloodFill;
 import org.alexdev.kepler.game.pathfinder.Position;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class BattleballTile extends GameTile  {
@@ -66,7 +71,11 @@ public class BattleballTile extends GameTile  {
                 gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
 
                 gamePlayer.setPlayerState(BattleballPlayerState.BALL_BROKEN);
-                gamePlayer.getGame().getEventsQueue().add(new PlayerUpdateEvent(gamePlayer));
+
+                gamePlayer.getGame().getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+                gamePlayer.getGame().getEventsQueue().add(new DespawnObjectEvent(pinObject.getId()));
+
+                gamePlayer.getGame().getObjects().remove(gameObject);
 
                 GameScheduler.getInstance().getSchedulerService().schedule(()-> {
                     gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
@@ -164,6 +173,16 @@ public class BattleballTile extends GameTile  {
 
         if (!game.getStoredPowers().containsKey(gamePlayer)) {
             game.getStoredPowers().put(gamePlayer, new CopyOnWriteArrayList<>());
+        }
+
+        // Select random power up if it's a question mark
+        if (powerUp.getPowerType() == BattleballPowerType.QUESTION_MARK) {
+            // Create a new list without the question mark
+            List<Integer> powerUps = new ArrayList<>(game.getAllowedPowerUps());
+            powerUps.remove(BattleballPowerType.QUESTION_MARK.getPowerUpId());
+
+            powerUp.setPowerType(BattleballPowerType.getById(powerUps.get(ThreadLocalRandom.current().nextInt(0, powerUps.size()))));
+
         }
 
         game.getActivePowers().clear();
@@ -282,7 +301,7 @@ public class BattleballTile extends GameTile  {
 
             var fillTiles = FloodFill.getFill(gamePlayer, neighbour);
 
-            if (fillTiles.size() > 1) {
+            if (fillTiles.size() > 0) {
                 for (BattleballTile filledTile : FloodFill.getFill(gamePlayer, neighbour)) {
                     if (filledTile.getState() == BattleballTileType.SEALED) {
                         continue;

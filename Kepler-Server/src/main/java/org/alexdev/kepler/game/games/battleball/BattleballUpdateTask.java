@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
+import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
@@ -37,7 +38,7 @@ public class BattleballUpdateTask implements Runnable {
     @Override
     public void run() {
         try {
-            if (this.game.isGameFinished()) {
+            if (this.game.isGameFinished() || this.game.getPlayers().isEmpty()) {
                 return; // Don't send any packets or do any logic checks during when the game is finished
             }
 
@@ -59,6 +60,11 @@ public class BattleballUpdateTask implements Runnable {
                     continue;
                 }
 
+                if (gamePlayer.getPlayerState() == BattleballPlayerState.CLIMBING_INTO_CANNON ||
+                    gamePlayer.getPlayerState() == BattleballPlayerState.FLYING_THROUGH_AIR) {
+                    continue;
+                }
+
                 if (this.game.getStoredPowers().containsKey(gamePlayer)) {
                     for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
                         objects.add(new PowerUpUpdateObject(powerUp));
@@ -69,7 +75,12 @@ public class BattleballUpdateTask implements Runnable {
                 objects.add(new PlayerUpdateObject(gamePlayer));
             }
 
-            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
+            if (objects.isEmpty()) {
+                this.game.getEventsQueue().addAll(events); // Add events back
+                return;
+            }
+
+            this.game.getRoom().send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }
