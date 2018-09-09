@@ -404,11 +404,6 @@ public class Item {
             return false;
         }
 
-        // Can't place items near non-walkable stackable objects if same height
-        if (tileItem.hasBehaviour(ItemBehaviour.SOLID) && tileItem.hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP) && (item.getPosition().getZ() == tileItem.getPosition().getZ())) {
-            return false;
-        }
-
         // Can't place gates on solid rollers
         if (tileItem.hasBehaviour(ItemBehaviour.ROLLER) && item.hasBehaviour(ItemBehaviour.DOOR)) {
             return false;
