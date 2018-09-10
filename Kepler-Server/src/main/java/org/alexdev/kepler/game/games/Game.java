@@ -234,7 +234,10 @@ public abstract class Game {
 
                 if (restartCountdown.decrementAndGet() == 0) {
                     this.cancelFuture();
-                    triggerRestart();
+
+                    if (gameState != GameState.ENDED) {
+                        triggerRestart();
+                    }
                 }
             }
         };
