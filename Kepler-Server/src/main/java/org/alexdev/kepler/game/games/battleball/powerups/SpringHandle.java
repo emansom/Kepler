@@ -23,6 +23,10 @@ public class SpringHandle {
                 return;
             }
 
+            if (gamePlayer.getPlayerState() != BattleballPlayerState.HIGH_JUMPS) {
+                return;
+            }
+
             gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
             game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
         }, 10, TimeUnit.SECONDS);

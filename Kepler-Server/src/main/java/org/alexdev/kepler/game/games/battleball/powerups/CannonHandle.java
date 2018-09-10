@@ -47,9 +47,9 @@ public class CannonHandle {
         //game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
         for (BattleballTile tile : tilesToUpdate) {
-            if (tile.getState() == BattleballTileType.SEALED) {
-                continue;
-            }
+            //if (tile.getState() == BattleballTileType.SEALED) {
+            //    continue;
+            //}
 
             if (tile.getColour() == BattleballColourType.DISABLED) {
                 continue;

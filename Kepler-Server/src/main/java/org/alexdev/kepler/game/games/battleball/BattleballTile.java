@@ -39,13 +39,15 @@ public class BattleballTile extends GameTile  {
 
     /**
      * Handle when a player jumps on a Battleball tile.
-     *  @param gamePlayer the GamePlayer instance of the user jumping on the tile
+     * @param gamePlayer the GamePlayer instance of the user jumping on the tile
      * @param objects
      * @param updateTiles the tile list to add to if the tile requires an update
      * @param updateFillTiles the list to add to if these tiles require the filling in animation
      */
     public void interact(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> updateFillTiles) {
         try {
+            this.checkPowerUp(gamePlayer, objects, events, updateTiles, updateFillTiles);
+
             if (this.checkNailTile(gamePlayer)) {
                 return;
             }
@@ -55,7 +57,6 @@ public class BattleballTile extends GameTile  {
             }
 
             this.changeState(gamePlayer, updateTiles, updateFillTiles);
-            this.checkPowerUp(gamePlayer, objects, events, updateTiles, updateFillTiles);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -92,19 +93,18 @@ public class BattleballTile extends GameTile  {
         GameTeam team = gamePlayer.getTeam();
 
         if (gamePlayer.getPlayerState() == BattleballPlayerState.HIGH_JUMPS) {
-            this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
-
-            if (colour.getColourId() != team.getId() && state == BattleballTileType.SEALED) {
-                this.setState(BattleballTileType.CLICKED); // Only set to touched when bounching on other teams locked tile
-                gamePlayer.setScore(gamePlayer.getScore() + 4);
-            } else {
-                this.setState(BattleballTileType.SEALED);
-                team.setSealedTileScore();
+            if (state == BattleballTileType.SEALED) {
+                return true;
             }
 
-            checkFill(gamePlayer, this, updateFillTiles);
-            updateTiles.add(this);
 
+            this.setColour(BattleballColourType.getColourById(gamePlayer.getTeamId()));
+            this.setState(BattleballTileType.SEALED);
+
+            team.setSealedTileScore();
+            checkFill(gamePlayer, this, updateFillTiles);
+
+            updateTiles.add(this);
             return true;
         }
 
@@ -138,6 +138,7 @@ public class BattleballTile extends GameTile  {
             game.getStoredPowers().put(gamePlayer, new CopyOnWriteArrayList<>());
         }
 
+
         // Select random power up if it's a question mark
         if (powerUp.getPowerType() == BattleballPowerType.QUESTION_MARK) {
             // Create a new list without the question mark
@@ -149,7 +150,10 @@ public class BattleballTile extends GameTile  {
         }
 
         game.getActivePowers().clear();
+
+        game.getStoredPowers().get(gamePlayer).clear();
         game.getStoredPowers().get(gamePlayer).add(powerUp);
+
         game.getObjects().remove(powerUp.getObject());
 
         powerUp.getTimeToDespawn().set(15);
