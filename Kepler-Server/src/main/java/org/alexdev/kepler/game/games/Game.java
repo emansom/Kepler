@@ -206,6 +206,7 @@ public abstract class Game {
      * Finish game
      */
     private void finishGame() {
+        Game instance = this;
         this.gameStarted = false;
         this.gameFinished = true;
         this.gameState = GameState.ENDED;
@@ -232,12 +233,18 @@ public abstract class Game {
                     return;
                 }
 
-                if (restartCountdown.decrementAndGet() == 0) {
-                    this.cancelFuture();
+                // Count players clicking restart so the next game can instantly start again if need be
+                List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
 
-                    if (gameState != GameState.ENDED) {
-                        triggerRestart();
+                for (GamePlayer p : instance.getPlayers()) {
+                    if (!p.isClickedRestart()) {
+                        afkPlayers.add(p);
                     }
+                }
+
+                if (restartCountdown.decrementAndGet() == 0 || afkPlayers.isEmpty()) {
+                    this.cancelFuture();
+                    triggerRestart();
                 }
             }
         };

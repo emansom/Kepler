@@ -35,7 +35,7 @@ public class GAMERESTART implements MessageEvent {
         gamePlayer.setClickedRestart(true);
         game.send(new PLAYERREJOINED(player.getRoomUser().getInstanceId()));
 
-        List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
+        /*List<GamePlayer> players = new ArrayList<>(); // Players who wanted to restart
         List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
 
         for (GamePlayer p : game.getPlayers()) {
@@ -52,7 +52,7 @@ public class GAMERESTART implements MessageEvent {
             }
 
             game.restartGame(players);
-        }
+        }*/
 
 
 /*        for (GameTeam gameTeam : game.getTeams().values()) {
