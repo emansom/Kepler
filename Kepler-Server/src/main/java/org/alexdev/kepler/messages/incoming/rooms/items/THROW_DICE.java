@@ -58,8 +58,6 @@ public class THROW_DICE implements MessageEvent {
         // And you don't want to get kicked while you're still actively rolling dices for people :)
         player.getRoomUser().getTimerManager().resetRoomTimer();
 
-        // TODO: change rotation of user towards dice
-
         room.send(new DICE_VALUE(itemId, true, 0));
 
         // Send spinning animation to room

@@ -36,11 +36,10 @@ public class UsersOnlineCommand extends Command {
 
         StringBuilder sb = new StringBuilder()
                 .append("Users online: ").append(players.size()).append("<br>")
-                .append("Daily player peak count: ").append(PlayerManager.getInstance().getDailyPlayerPeak()).append("<br>");
+                .append("Daily player peak count: ").append(PlayerManager.getInstance().getDailyPlayerPeak()).append("<br>")
+                .append("List of users online: ").append("<br><br>");
 
         for (List<Player> playerList : paginatedPlayers.values()) {
-            sb.append("\n");
-
             int i = 0;
             int length = playerList.size();
             for (Player player : playerList) {
@@ -52,6 +51,8 @@ public class UsersOnlineCommand extends Command {
                     sb.append(", ");
                 }
             }
+
+            sb.append("<br>");
         }
 
         session.send(new ALERT(sb.toString()));

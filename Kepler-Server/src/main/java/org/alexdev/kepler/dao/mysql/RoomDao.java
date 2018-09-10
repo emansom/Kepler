@@ -353,43 +353,6 @@ public class RoomDao {
     }
 
     /**
-     * Get room rating.
-     *
-     * @param roomData the room to get the rating for
-     */
-    public static int getRatingCount(RoomData roomData) {
-        int rating = 0;
-
-        Connection sqlConnection = null;
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            sqlConnection = Storage.getStorage().getConnection();
-            preparedStatement = Storage.getStorage().prepare("SELECT SUM(vote) AS rating FROM users_room_votes WHERE room_id = ?;", sqlConnection);
-            preparedStatement.setInt(1, roomData.getId());
-            resultSet = preparedStatement.executeQuery();
-
-            if (resultSet.next()) {
-                rating = resultSet.getInt("rating");
-
-                // Make sure negative numbers are not returned
-                if (rating < 0) {
-                    rating = 0;
-                }
-            }
-
-        } catch (Exception e) {
-            Storage.logError(e);
-        } finally {
-            Storage.closeSilently(preparedStatement);
-            Storage.closeSilently(sqlConnection);
-        }
-
-        return rating;
-    }
-
-    /**
      * Return a map of the room ratings
      *
      * @param room the Room
