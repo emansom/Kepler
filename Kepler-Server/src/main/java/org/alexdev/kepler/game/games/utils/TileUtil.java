@@ -47,11 +47,11 @@ public class TileUtil {
 
         return true;
     }
-    public static boolean isValidGameTile(GamePlayer gamePlayer, BattleballTile tile) {
+    public static boolean isValidGameTile(GamePlayer gamePlayer, BattleballTile tile, boolean checkEntities) {
         if (tile == null) {// && tile.getColour() != BattleballColourType.DISABLED;
             return false;
         }
 
-        return RoomTile.isValidTile(gamePlayer.getGame().getRoom(), gamePlayer.getPlayer(), tile.getPosition());
+        return RoomTile.isValidTile(gamePlayer.getGame().getRoom(), checkEntities ? gamePlayer.getPlayer() : null, tile.getPosition());
     }
 }

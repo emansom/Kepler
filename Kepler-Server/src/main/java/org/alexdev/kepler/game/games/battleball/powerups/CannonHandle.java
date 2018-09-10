@@ -27,10 +27,10 @@ public class CannonHandle {
 
         LinkedList<BattleballTile> tilesToUpdate = new LinkedList<>();
 
-        while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
+        while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()), false)) {
             nextPosition = nextPosition.getSquareInFront();
 
-            if (!TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
+            if (!TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()), false)) {
                 break;
             }
 
