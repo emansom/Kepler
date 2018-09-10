@@ -13,8 +13,11 @@ import org.alexdev.kepler.game.games.utils.PowerUpUtil;
 import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class CannonHandle {
@@ -26,6 +29,7 @@ public class CannonHandle {
         int rotation = nextPosition.getRotation();
 
         LinkedList<BattleballTile> tilesToUpdate = new LinkedList<>();
+        List<GamePlayer> stunnedPlayers = new ArrayList<>();
 
         while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()), false)) {
             nextPosition = nextPosition.getSquareInFront();
@@ -34,7 +38,10 @@ public class CannonHandle {
                 break;
             }
 
-            tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
+            BattleballTile battleballTile = (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY());
+
+            tilesToUpdate.add(battleballTile);
+            stunnedPlayers.addAll(battleballTile.getPlayers(gamePlayer));
 
         }
 
@@ -42,6 +49,14 @@ public class CannonHandle {
             nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
             tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
         }
+
+        // Stun players in direction of cannon
+        GameScheduler.getInstance().getSchedulerService().schedule(() -> {
+            for (GamePlayer stunnedPlayer : stunnedPlayers) {
+                PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
+            }
+        }, 500, TimeUnit.MILLISECONDS);
+
 
         //gamePlayer.setPlayerState(BattleballPlayerState.CLIMBING_INTO_CANNON);
         //game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));

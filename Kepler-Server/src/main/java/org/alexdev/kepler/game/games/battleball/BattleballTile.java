@@ -1,6 +1,8 @@
 package org.alexdev.kepler.game.games.battleball;
 
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
@@ -21,6 +23,8 @@ import org.alexdev.kepler.game.games.utils.FloodFill;
 import org.alexdev.kepler.game.games.utils.PowerUpUtil;
 import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.room.mapping.RoomTile;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,6 +39,33 @@ public class BattleballTile extends GameTile  {
 
     public BattleballTile(Position position) {
         super(position);
+    }
+
+    public List<GamePlayer> getPlayers(GamePlayer gamePlayer) {
+        RoomTile tile = gamePlayer.getGame().getRoom().getMapping().getTile(this.getPosition().getX(), this.getPosition().getY());
+
+        List<GamePlayer> gamePlayers = new ArrayList<>();
+
+        for (Entity entity : tile.getEntities()) {
+            if (entity.getType() != EntityType.PLAYER/* || entity.getDetails().getId()== gamePlayer.getUserId()*/) {
+                continue;
+            }
+
+            Player player = (Player) entity;
+            GamePlayer gameUser = player.getRoomUser().getGamePlayer();
+
+            if (gameUser == null) {
+                continue;
+            }
+
+            if (gamePlayers.contains(gameUser)) {
+                continue;
+            }
+
+            gamePlayers.add(gameUser);
+        }
+
+        return gamePlayers;
     }
 
     /**
