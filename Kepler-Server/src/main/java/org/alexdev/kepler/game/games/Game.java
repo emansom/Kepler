@@ -303,6 +303,10 @@ public abstract class Game {
         this.initialise();
         this.assignSpawnPoints();
 
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            gamePlayer.getPlayer().getRoomUser().setPosition(gamePlayer.getSpawnPosition());
+        }
+
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
