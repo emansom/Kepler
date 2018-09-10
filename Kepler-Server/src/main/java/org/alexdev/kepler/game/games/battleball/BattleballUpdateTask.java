@@ -72,15 +72,11 @@ public class BattleballUpdateTask implements Runnable {
                 }
 
                 this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
+
                 objects.add(new PlayerUpdateObject(gamePlayer));
             }
 
-            if (objects.isEmpty()) {
-                this.game.getEventsQueue().addAll(events); // Add events back
-                return;
-            }
-
-            this.game.getRoom().send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
+            this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
         } catch (Exception ex) {
             Log.getErrorLogger().error("GameTask crashed: ", ex);
         }

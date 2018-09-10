@@ -38,6 +38,7 @@ public class BombHandle {
         }
 
         for (GamePlayer stunnedPlayer : stunnedPlayers) {
+            // TODO: Move player away from blast radius: https://www.youtube.com/watch?v=cP3bvGOx53o&feature=youtu.be&t=242
             PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
         }
     }
