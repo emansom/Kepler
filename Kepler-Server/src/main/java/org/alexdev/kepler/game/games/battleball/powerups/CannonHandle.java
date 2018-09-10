@@ -54,6 +54,7 @@ public class CannonHandle {
         // Stun players in direction of cannon
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
             for (GamePlayer stunnedPlayer : stunnedPlayers) {
+                // TODO: Move player out of the way of user using cannon https://www.youtube.com/watch?v=YX1UZky5pg0&feature=youtu.be&t=98
                 PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
             }
         }, 250, TimeUnit.MILLISECONDS);
