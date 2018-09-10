@@ -55,6 +55,11 @@ public class CannonHandle {
                 continue;
             }
 
+            if (tile.getState() == BattleballTileType.SEALED && tile.getColour().getColourId() == gamePlayer.getTeam().getId()) {
+                continue;
+            }
+
+
             BattleballTileType state = tile.getState();
             BattleballColourType colour = tile.getColour();
 
