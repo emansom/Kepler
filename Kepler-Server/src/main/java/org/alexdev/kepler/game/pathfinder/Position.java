@@ -233,6 +233,72 @@ public class Position {
     }
 
     /**
+     * Gets the square to the right.
+     *
+     * @return the square to the right
+     */
+    public Position getSquareRight() {
+        Position square = this.copy();
+
+        if (this.bodyRotation == 0) {
+            square.X++;
+        } else if (this.bodyRotation == 1) {
+            square.X++;
+            square.Y++;
+        } else if (this.bodyRotation == 2) {
+            square.Y++;
+        } else if (this.bodyRotation == 3) {
+            square.X--;
+            square.Y++;
+        }  else if (this.bodyRotation == 4) {
+            square.X--;
+        } else if (this.bodyRotation == 5) {
+            square.X--;
+            square.Y--;
+        } else if (this.bodyRotation == 6) {
+            square.Y--;
+        } else if (this.bodyRotation == 7) {
+            square.X++;
+            square.Y--;
+        }
+
+        return square;
+    }
+
+    /**
+     * Gets the square to the right.
+     *
+     * @return the square to the right
+     */
+    public Position getSquareLeft() {
+        Position square = this.copy();
+
+        if (this.bodyRotation == 0) {
+            square.X--;
+        } else if (this.bodyRotation == 1) {
+            square.X--;
+            square.Y--;
+        } else if (this.bodyRotation == 2) {
+            square.Y--;
+        } else if (this.bodyRotation == 3) {
+            square.X++;
+            square.Y--;
+        }  else if (this.bodyRotation == 4) {
+            square.X++;
+        } else if (this.bodyRotation == 5) {
+            square.X++;
+            square.Y++;
+        } else if (this.bodyRotation == 6) {
+            square.Y++;
+        } else if (this.bodyRotation == 7) {
+            square.X--;
+            square.Y++;
+        }
+
+        return square;
+    }
+
+    /**
      * Coords to create list of coordinates for a flat circle
      * @param radius the radius
      * @return the list of coordinates
