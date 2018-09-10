@@ -26,9 +26,10 @@ public class GAMERESTART implements MessageEvent {
 
         Game game = GameManager.getInstance().getGameById(gamePlayer.getGameId());
 
-        if (game == null || !game.isGameFinished()) {
+        if (game == null || !game.isGameFinished() || gamePlayer.isClickedRestart()) {
             return;
         }
+
 
         // Only allow restart once everyone has clicked they'd like to restart
         gamePlayer.setClickedRestart(true);

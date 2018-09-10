@@ -93,7 +93,7 @@ public class CannonHandle {
                     ex.printStackTrace();
                 }
             }
-        }, 300, TimeUnit.MILLISECONDS);
+        }, 200, TimeUnit.MILLISECONDS);
 
 
         for (BattleballTile tile : tilesToUpdate) {

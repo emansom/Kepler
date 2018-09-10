@@ -210,10 +210,12 @@ public class BattleballGame extends Game {
                 // Set spawn colour
                 tile.setColour(BattleballColourType.getColourById(team.getId()));
 
-                if (this.getMapId() == 5) {
-                    tile.setState(BattleballTileType.TOUCHED);
-                } else {
-                    tile.setState(BattleballTileType.CLICKED);
+                if (tile.getColour() != BattleballColourType.DISABLED) {
+                    if (this.getMapId() == 5) {
+                        tile.setState(BattleballTileType.TOUCHED);
+                    } else {
+                        tile.setState(BattleballTileType.CLICKED);
+                    }
                 }
             }
         }
