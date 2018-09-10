@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.games.battleball.powerups;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
