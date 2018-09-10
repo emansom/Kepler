@@ -34,24 +34,26 @@ public class TileUtil {
         if (state == BattleballTileType.SEALED) {
             pointsToRemove = 14;
         }
-
         GameTeam team = game.getTeams().get(colour.getColourId());
-        int eachTeamRemove = pointsToRemove / team.getActivePlayers().size();
 
-        for (GamePlayer p : team.getActivePlayers()) {
-            p.setScore(p.getScore() - eachTeamRemove);
+        if (pointsToRemove > 0) {
+            int eachTeamRemove = team.getActivePlayers().size() / pointsToRemove;
+
+            for (GamePlayer p : team.getActivePlayers()) {
+                p.setScore(p.getScore() - eachTeamRemove);
+            }
+
+            tile.setColour(BattleballColourType.DEFAULT);
+            tile.setState(BattleballTileType.DEFAULT);
         }
-
-        tile.setColour(BattleballColourType.DEFAULT);
-        tile.setState(BattleballTileType.DEFAULT);
 
         return true;
     }
-    public static boolean isValidGameTile(GamePlayer gamePlayer, BattleballTile tile) {
+    public static boolean isValidGameTile(GamePlayer gamePlayer, BattleballTile tile, boolean checkEntities) {
         if (tile == null) {// && tile.getColour() != BattleballColourType.DISABLED;
             return false;
         }
 
-        return RoomTile.isValidTile(gamePlayer.getGame().getRoom(), gamePlayer.getPlayer(), tile.getPosition());
+        return RoomTile.isValidTile(gamePlayer.getGame().getRoom(), checkEntities ? gamePlayer.getPlayer() : null, tile.getPosition());
     }
 }

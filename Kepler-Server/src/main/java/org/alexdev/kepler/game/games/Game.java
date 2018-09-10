@@ -303,6 +303,10 @@ public abstract class Game {
         this.initialise();
         this.assignSpawnPoints();
 
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            gamePlayer.getPlayer().getRoomUser().setPosition(gamePlayer.getSpawnPosition());
+        }
+
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
         this.sendObservers(new GAMEDELETED());
@@ -409,11 +413,15 @@ public abstract class Game {
      * @param gamePlayer the player to send
      */
     private void sendToLobby(GamePlayer gamePlayer) {
-        this.leaveGame(gamePlayer);
-
         Player player = gamePlayer.getPlayer();
+
+        if (player.getRoomUser().getRoom() != null) {
+            player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, false);
+        } else {
+            this.leaveGame(gamePlayer);
+        }
+
         player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
-        player.getRoomUser().setGamePlayer(null);
     }
 
     /**

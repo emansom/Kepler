@@ -26,6 +26,10 @@ public class VacuumHandle {
                 return;
             }
 
+            if (gamePlayer.getPlayerState() != BattleballPlayerState.CLEANING_TILES) {
+                return;
+            }
+
             gamePlayer.setPlayerState(BattleballPlayerState.NORMAL);
             game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
         }, 10, TimeUnit.SECONDS);

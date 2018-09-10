@@ -34,24 +34,7 @@ public class BombHandle {
                 game.getUpdateTilesQueue().add(battleballTile);
             }
 
-            for (Entity entity : tile.getEntities()) {
-                if (entity.getType() != EntityType.PLAYER/* || entity.getDetails().getId()== gamePlayer.getUserId()*/) {
-                    continue;
-                }
-
-                Player player = (Player) entity;
-                GamePlayer gameUser = player.getRoomUser().getGamePlayer();
-
-                if (gameUser == null) {
-                    continue;
-                }
-
-                if (stunnedPlayers.contains(gameUser)) {
-                    continue;
-                }
-
-                stunnedPlayers.add(gameUser);
-            }
+            stunnedPlayers.addAll(battleballTile.getPlayers(gamePlayer));
         }
 
         for (GamePlayer stunnedPlayer : stunnedPlayers) {

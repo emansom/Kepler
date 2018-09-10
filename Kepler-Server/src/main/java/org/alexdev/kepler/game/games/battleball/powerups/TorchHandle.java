@@ -20,10 +20,10 @@ public class TorchHandle {
 
         Position nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
 
-        while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
+        while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()), false)) {
             nextPosition = nextPosition.getSquareInFront();
 
-            if (!TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()))) {
+            if (!TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()), false)) {
                 break;
             }
 

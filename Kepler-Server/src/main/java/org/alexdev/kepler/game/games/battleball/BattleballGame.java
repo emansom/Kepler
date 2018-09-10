@@ -200,7 +200,6 @@ public class BattleballGame extends Game {
                 p.getSpawnPosition().setRotation(spawnPosition.getRotation());
                 p.getSpawnPosition().setZ(spawnPosition.getZ());
 
-                p.getPlayer().getRoomUser().setPosition(spawnPosition.copy());
                 p.getPlayer().getRoomUser().setWalking(false);
                 p.getPlayer().getRoomUser().setNextPosition(null);
 

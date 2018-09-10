@@ -27,7 +27,7 @@ public class G_STAT implements MessageEvent {
 
             Game game = player.getRoomUser().getGamePlayer().getGame();
 
-            if (game.getGameState() == GameState.STARTED) {
+            if (game.isGameStarted()) {
                 player.send(new GAMESTART(game.getTotalSecondsLeft().get()));
             }
             return;
