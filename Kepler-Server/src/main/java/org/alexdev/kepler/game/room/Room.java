@@ -23,6 +23,7 @@ import org.alexdev.kepler.messages.outgoing.rooms.moderation.YOUNOTCONTROLLER;
 import org.alexdev.kepler.messages.types.MessageComposer;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -130,15 +131,56 @@ public class Room {
      * @param userId user that is voting
      */
     public void addVote(int answer, int userId) {
+        // If this room has a rating of 0 or below and the rating is -1 set the rating to 0
+        if (this.roomData.getRating() <= 0 && answer == -1) {
+            answer = 0;
+        }
+
         // Add vote to in-memory structure
         this.votes.put(userId, answer);
 
-        // Re-calculate total rating count
+        // Re-calculate sum of all ratings
         int sum = 0;
         for (Integer vote : this.votes.values()) {
             sum += vote;
         }
-        this.roomData.setRating(sum);
+
+        // Don't set rating to negative number (as the client shows the vote UI when rating < 0)
+        if (sum < 0) {
+            Iterator it = votes.entrySet().iterator();
+
+            // Delete room votes that have a decreasing value until the rating is 0
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+                Integer key = (Integer)pair.getKey();
+                Integer value = (Integer)pair.getValue();
+
+                // If the room rating is 0, stop iterator
+                if (this.roomData.getRating() == 0) {
+                    break;
+                }
+
+                // If the vote is decreasing, remove it
+                if (value == -1) {
+                    // Remove from map
+                    it.remove();
+
+                    // Persist remove from database
+                    RoomDao.removeVote(key, this.roomData);
+                }
+
+                // Re-calculate sum
+                int nextSum = 0;
+                for (Integer vote : this.votes.values()) {
+                    nextSum += vote;
+                }
+
+                // Set next rating
+                this.roomData.setRating(nextSum);
+            }
+        } else {
+            this.roomData.setRating(sum);
+        }
 
         // Send new vote count to all player entities
         for (Player p : this.roomEntityManager.getPlayers()) {
@@ -199,6 +241,7 @@ public class Room {
 
         this.items.clear();
         this.rights.clear();
+        this.votes.clear();
         this.entities.clear();
 
         RoomManager.getInstance().removeRoom(this.roomData.getId());
