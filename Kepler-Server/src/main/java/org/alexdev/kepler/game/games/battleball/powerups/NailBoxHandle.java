@@ -100,6 +100,6 @@ public class NailBoxHandle {
                 game.getEventsQueue().add(new DespawnObjectEvent(pinObject.getId()));
                 game.getObjects().remove(pinObject);
             }
-        }, 10, TimeUnit.SECONDS);
+        }, 15, TimeUnit.SECONDS);
     }
 }
