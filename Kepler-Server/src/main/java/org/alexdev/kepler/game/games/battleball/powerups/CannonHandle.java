@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.games.battleball.powerups;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
@@ -15,6 +14,7 @@ import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -30,7 +30,7 @@ public class CannonHandle {
         int rotation = nextPosition.getRotation();
 
         LinkedList<BattleballTile> tilesToUpdate = new LinkedList<>();
-        List<GamePlayer> stunnedPlayers = new ArrayList<>();
+        List<Pair<GamePlayer, Position>> stunnedPlayers = new ArrayList<>();
 
         while (TileUtil.isValidGameTile(gamePlayer, (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()), false)) {
             nextPosition = nextPosition.getSquareInFront();
@@ -42,8 +42,10 @@ public class CannonHandle {
             BattleballTile battleballTile = (BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY());
 
             tilesToUpdate.add(battleballTile);
-            stunnedPlayers.addAll(battleballTile.getPlayers(gamePlayer));
 
+            for (GamePlayer p : battleballTile.getPlayers(gamePlayer)) {
+                stunnedPlayers.add(Pair.of(p, nextPosition));
+            }
         }
 
         if (tilesToUpdate.isEmpty()) {
@@ -51,23 +53,50 @@ public class CannonHandle {
             tilesToUpdate.add((BattleballTile) game.getTile(nextPosition.getX(), nextPosition.getY()));
         }
 
-        // Stun players in direction of cannon
+        // Stun players in direction of cannon and make them move out of the way
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
-            for (GamePlayer stunnedPlayer : stunnedPlayers) {
-                // TODO: Move player out of the way of user using cannon https://www.youtube.com/watch?v=YX1UZky5pg0&feature=youtu.be&t=98
-                PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
+            for (var kvp : stunnedPlayers) {
+                try {
+                    // TODO: Move player out of the way of user using cannon https://www.youtube.com/watch?v=YX1UZky5pg0&feature=youtu.be&t=98
+                    GamePlayer stunnedPlayer = kvp.getKey();
+                    Position pushedFrom = kvp.getValue().copy();
+                    pushedFrom.setRotation(rotation);
+
+                    List<Position> pushedTo = new ArrayList<>();
+                    pushedTo.add(pushedFrom.getSquareRight());
+                    pushedTo.add(pushedFrom.getSquareLeft());
+
+                    Position setPosition = null;
+
+                    // Find best position to move player to
+                    for (Position position : pushedTo) {
+                        if (TileUtil.isValidGameTile(stunnedPlayer, (BattleballTile) game.getTile(position.getX(), position.getY()), true)) {
+                            setPosition = position;
+                            break;
+                        }
+                    }
+
+                    if (setPosition != null) {
+                        game.getEventsQueue().add(new PlayerMoveEvent(stunnedPlayer, setPosition));
+                    }
+
+                    // Stun player
+                    PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
+
+                    // Set player at teir new spot
+                    if (setPosition != null) {
+                        setPosition.setRotation(stunnedPlayer.getPlayer().getRoomUser().getPosition().getRotation());
+                        stunnedPlayer.getPlayer().getRoomUser().setPosition(setPosition);
+                        stunnedPlayer.getPlayer().getRoomUser().warp(setPosition, false);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
-        }, 250, TimeUnit.MILLISECONDS);
+        }, 300, TimeUnit.MILLISECONDS);
 
-
-        //gamePlayer.setPlayerState(BattleballPlayerState.CLIMBING_INTO_CANNON);
-        //game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
         for (BattleballTile tile : tilesToUpdate) {
-            //if (tile.getState() == BattleballTileType.SEALED) {
-            //    continue;
-            //}
-
             if (tile.getColour() == BattleballColourType.DISABLED) {
                 continue;
             }
