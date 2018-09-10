@@ -251,7 +251,7 @@ public class Position {
             square.X--;
             square.Y++;
         }  else if (this.bodyRotation == 4) {
-            square.Y--;
+            square.X--;
         } else if (this.bodyRotation == 5) {
             square.X--;
             square.Y--;
@@ -284,7 +284,7 @@ public class Position {
             square.X++;
             square.Y--;
         }  else if (this.bodyRotation == 4) {
-            square.Y++;
+            square.X++;
         } else if (this.bodyRotation == 5) {
             square.X++;
             square.Y++;
