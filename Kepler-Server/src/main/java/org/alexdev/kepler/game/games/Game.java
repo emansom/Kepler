@@ -518,15 +518,11 @@ public abstract class Game {
 
         if (this.teamAmount == 1) {
             maxPerTeam = 10;
-        }
-
-        if (this.teamAmount == 2) {
+        } else if (this.teamAmount == 2) {
             maxPerTeam = 5;
-        }
-        else if (this.teamAmount == 3) {
+        } else if (this.teamAmount == 3) {
             maxPerTeam = 3;
-        }
-        else if (this.teamAmount == 4) {
+        } else if (this.teamAmount == 4) {
             maxPerTeam = 2;
         }
 
@@ -575,11 +571,9 @@ public abstract class Game {
      * @return the game player instance, else if null
      */
     public GamePlayer getGamePlayer(int userId) {
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer gamePlayer : team.getPlayers()) {
-                if (gamePlayer.getUserId() == userId) {
-                    return gamePlayer;
-                }
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            if (gamePlayer.getUserId() == userId) {
+                return gamePlayer;
             }
         }
 
