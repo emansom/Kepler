@@ -70,7 +70,7 @@ public class AStar {
                     continue;
                 }
 
-				boolean isFinalMove = adjPoint.equals(currentNode.point);
+				boolean isFinalMove = adjPoint.equals(destNode.point);
 
 				if (Pathfinder.isValidStep(entity.getRoomUser().getRoom(), entity, currentNode.point.copy(), adjPoint.copy(), isFinalMove)) {
 					if (!closedList.contains(adjNode)) {
