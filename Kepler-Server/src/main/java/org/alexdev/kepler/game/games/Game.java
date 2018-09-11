@@ -208,6 +208,7 @@ public abstract class Game {
      * Finish game
      */
     private void finishGame() {
+        Game instance = this;
         this.gameStarted = false;
         this.gameFinished = true;
         this.gameState = GameState.ENDED;
@@ -234,9 +235,20 @@ public abstract class Game {
                     return;
                 }
 
+                List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
+
+                for (GamePlayer p : instance.getPlayers()) {
+                    if (!p.isClickedRestart()) {
+                        afkPlayers.add(p);
+                    }
+                }
+
                 if (restartCountdown.decrementAndGet() == 0) {
+                    if (afkPlayers.size() > 0) { // Only call this if not everyone clicked play again, else GAMERESTART.java handles it
+                        triggerRestart();
+                    }
+
                     this.cancelFuture();
-                    triggerRestart();
                 }
             }
         };
