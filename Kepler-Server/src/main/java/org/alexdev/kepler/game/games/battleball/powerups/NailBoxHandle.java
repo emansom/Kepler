@@ -61,6 +61,11 @@ public class NailBoxHandle {
                 continue;
             }
 
+            if (circlePos.equals(gamePlayer.getPlayer().getRoomUser().getPosition()) ||
+                    circlePos.equals(gamePlayer.getPlayer().getRoomUser().getNextPosition())) {
+                continue;
+            }
+
             circlePos.setZ(tile.getPosition().getZ());
 
             if (selectedPositions.size() < maxPins) {
