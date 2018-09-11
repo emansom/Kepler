@@ -1,6 +1,7 @@
 package org.alexdev.kepler.game.games;
 
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -599,6 +600,15 @@ public abstract class Game {
      */
     public int createObjectId() {
         return this.objectId.incrementAndGet();
+    }
+
+    public void addObjectToQueue(GameObject object) {
+        this.objectsQueue.removeIf(obj -> obj.getId() == object.getId());
+        this.objectsQueue.add(object);
+    }
+
+    public void addPlayerMove(PlayerMoveEvent event) {
+        this.eventsQueue.removeIf(e -> e instanceof PlayerMoveEvent && ((PlayerMoveEvent)e).getGamePlayer() == event.getGamePlayer());
     }
 
     /**

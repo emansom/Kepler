@@ -45,6 +45,10 @@ public class CannonHandle {
             tilesToUpdate.add(battleballTile);
 
             for (GamePlayer p : battleballTile.getPlayers(gamePlayer)) {
+                if (p == gamePlayer) {
+                    continue;
+                }
+
                 stunnedPlayers.add(Pair.of(p, nextPosition));
             }
         }
@@ -78,7 +82,7 @@ public class CannonHandle {
                     }
 
                     if (setPosition != null) {
-                        game.getEventsQueue().add(new PlayerMoveEvent(stunnedPlayer, setPosition));
+                        game.addPlayerMove(new PlayerMoveEvent(stunnedPlayer, setPosition));
                     }
 
                     // Stun player
@@ -130,8 +134,8 @@ public class CannonHandle {
         gamePlayer.getPlayer().getRoomUser().setPosition(firstPosition);
         gamePlayer.setPlayerState(BattleballPlayerState.FLYING_THROUGH_AIR);
 
-        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
-        game.getEventsQueue().add(new PlayerMoveEvent(gamePlayer, lastPosition));
+        game.addObjectToQueue(new PlayerUpdateObject(gamePlayer));
+        game.addPlayerMove(new PlayerMoveEvent(gamePlayer, lastPosition));
 
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
             gamePlayer.getPlayer().getRoomUser().setPosition(lastPosition);
