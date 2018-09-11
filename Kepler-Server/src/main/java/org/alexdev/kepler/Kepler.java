@@ -1,6 +1,5 @@
 package org.alexdev.kepler;
 
-import com.goterl.lazycode.lazysodium.interfaces.PwHash;
 import io.netty.util.ResourceLeakDetector;
 
 import org.alexdev.kepler.dao.Storage;
