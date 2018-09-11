@@ -362,6 +362,10 @@ public class Position {
      */
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
         if (obj instanceof Position) {
             Position position = (Position) obj;
             return position.getX() == this.X && position.getY() == this.Y;
