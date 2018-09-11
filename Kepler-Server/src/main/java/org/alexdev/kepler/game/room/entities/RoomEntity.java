@@ -148,10 +148,8 @@ public abstract class RoomEntity {
             return false;
         }
 
-        LinkedList<Position> path = new LinkedList<>(pathList);//Pathfinder.makePath(this.entity);
-
-        if (path.size() > 0) {
-            this.path = path;
+        if (pathList.size() > 0) {
+            this.path = pathList;
             this.isWalking = true;
             return true;
         }

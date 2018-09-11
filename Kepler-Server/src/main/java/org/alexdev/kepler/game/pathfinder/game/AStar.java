@@ -28,7 +28,7 @@ public class AStar {
         }
 	}
 
-	public AreaNode getNode(Position position) {
+	private AreaNode getNode(Position position) {
         if (position.getX() < 0 || position.getY() < 0) {
             return null;
         }
@@ -40,18 +40,18 @@ public class AStar {
         return this.nodes[position.getX()][position.getY()];
     }
 
-	public ArrayList<Position> calculateAStarNoTerrain(Entity entity, Position p1, Position p2) {
-		List<AreaNode> openList = new ArrayList<>();
-		List<AreaNode> closedList = new ArrayList<>();
+	public LinkedList<Position> calculateAStarNoTerrain(Entity entity, Position p1, Position p2) {
+		List<AreaNode> openList = new LinkedList<>();
+		Set<AreaNode> closedList = new HashSet<>();
 
 		AreaNode destNode = this.getNode(p2);
-
 		AreaNode currentNode = this.getNode(p1);
+
 		currentNode.parent = null;
 		currentNode.setGValue(0);
 		openList.add(currentNode);
 
-		while(!openList.isEmpty()) {
+		while (!openList.isEmpty()) {
 			openList.sort(this.fComparator);
 			currentNode = openList.get(0);
 
@@ -93,8 +93,8 @@ public class AStar {
 		return null;
 	}
 
-	private ArrayList<Position> calculatePath(AreaNode destinationNode) {
-		ArrayList<Position> path = new ArrayList<Position>();
+	private LinkedList<Position> calculatePath(AreaNode destinationNode) {
+		LinkedList<Position> path = new LinkedList<Position>();
 
 		if (destinationNode.parent == null) {
 		    //path.add(destinationNode.point);
