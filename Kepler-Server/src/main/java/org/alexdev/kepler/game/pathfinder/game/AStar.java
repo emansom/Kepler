@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 
+import java.security.PublicKey;
 import java.util.*;
 
 import static org.alexdev.kepler.game.pathfinder.Pathfinder.DIAGONAL_MOVE_POINTS;
@@ -12,11 +13,11 @@ public class AStar {
 	private final int width;
 	private final int height;
 
-	private final Map<Position, AreaMap> nodes = new HashMap<Position, AreaMap>();
+	private final Map<Position, AreaNode> nodes = new HashMap<Position, AreaNode>();
 
 	@SuppressWarnings("rawtypes")
-	private final Comparator<AreaMap> fComparator = new Comparator<AreaMap>() {
-		public int compare(AreaMap a, AreaMap b) {
+	private final Comparator<AreaNode> fComparator = new Comparator<AreaNode>() {
+		public int compare(AreaNode a, AreaNode b) {
 			return Integer.compare(a.getFValue(), b.getFValue()); //ascending to get the lowest
 		}
 	};
@@ -28,18 +29,28 @@ public class AStar {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				Position point = new Position(x, y);
-				this.nodes.put(point, new AreaMap(point));
+				this.nodes.put(point, new AreaNode(point));
 			}
 		}
 	}
 
+	public AreaNode getNode(Position position) {
+	    for (var kvp : this.nodes.entrySet()) {
+            if (kvp.getKey().equals(position)) {
+                return kvp.getValue();
+            }
+        }
+
+        return null;
+    }
+
 	public ArrayList<Position> calculateAStarNoTerrain(Entity entity, Position p1, Position p2) {
-		List<AreaMap> openList = new ArrayList<>();
-		List<AreaMap> closedList = new ArrayList<>();
+		List<AreaNode> openList = new ArrayList<>();
+		List<AreaNode> closedList = new ArrayList<>();
 
-		AreaMap destNode = this.nodes.get(p2);
+		AreaNode destNode = this.getNode(p2);
 
-		AreaMap currentNode = this.nodes.get(p1);
+		AreaNode currentNode = this.getNode(p1);
 		currentNode.parent = null;
 		currentNode.setGValue(0);
 		openList.add(currentNode);
@@ -57,15 +68,9 @@ public class AStar {
 
 			for (Position point : DIAGONAL_MOVE_POINTS) {
 				Position adjPoint = currentNode.point.copy().add(point);
-				AreaMap adjNode = null;
+				AreaNode adjNode = this.getNode(adjPoint);
 
 				if (Pathfinder.isValidStep(entity.getRoomUser().getRoom(), entity, currentNode.point, adjPoint, false)) {
-					for (var kvp : this.nodes.entrySet()) {
-						if (kvp.getKey().equals(adjPoint)) {
-							adjNode = kvp.getValue();
-						}
-					}
-
 					if (adjNode == null) {
 						continue;
 					}
@@ -90,9 +95,9 @@ public class AStar {
 		return null;
 	}
 
-	private ArrayList<Position> calculatePath(AreaMap destinationNode) {
+	private ArrayList<Position> calculatePath(AreaNode destinationNode) {
 		ArrayList<Position> path = new ArrayList<Position>();
-		AreaMap node = destinationNode;
+		AreaNode node = destinationNode;
 		while (node.parent != null) {
 			path.add(node.point);
 			node = node.parent;

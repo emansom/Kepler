@@ -2,11 +2,11 @@ package org.alexdev.kepler.game.pathfinder.game;
 
 import org.alexdev.kepler.game.pathfinder.Position;
 
-public class AreaMap {
+public class AreaNode {
 
 	public final Position point;
 
-	public AreaMap parent;
+	public AreaNode parent;
 
 	public int gValue; //points from start
 	public int hValue; //distance from target
@@ -14,7 +14,7 @@ public class AreaMap {
 
 	private final int MOVEMENT_COST = 10;
 
-	public AreaMap(Position point) {
+	public AreaNode(Position point) {
 		this.point = point;
 	}
 
@@ -25,11 +25,11 @@ public class AreaMap {
 		this.gValue = amount;
 	}
 
-	public void calculateHValue(AreaMap destPoint) {
+	public void calculateHValue(AreaNode destPoint) {
 		this.hValue = (Math.abs(point.getX() - destPoint.point.getX()) + Math.abs(point.getY() - destPoint.point.getY())) * this.MOVEMENT_COST;
 	}
 
-	public void calculateGValue(AreaMap point) {
+	public void calculateGValue(AreaNode point) {
 		this.gValue = point.gValue + this.MOVEMENT_COST;
 	}
 
