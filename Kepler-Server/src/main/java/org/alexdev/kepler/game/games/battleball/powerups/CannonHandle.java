@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games.battleball.powerups;
 
+import javafx.geometry.Pos;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
@@ -26,7 +27,9 @@ public class CannonHandle {
         gamePlayer.getPlayer().getRoomUser().stopWalking();
         gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(false);
 
-        Position nextPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
+        Position firstPosition = gamePlayer.getPlayer().getRoomUser().getPosition();
+
+        Position nextPosition = firstPosition.copy();
         int rotation = nextPosition.getRotation();
 
         LinkedList<BattleballTile> tilesToUpdate = new LinkedList<>();
@@ -126,7 +129,9 @@ public class CannonHandle {
         Position lastPosition = lastTile.getPosition().copy();
         lastPosition.setRotation(rotation);
 
+        gamePlayer.getPlayer().getRoomUser().setPosition(firstPosition);
         gamePlayer.setPlayerState(BattleballPlayerState.FLYING_THROUGH_AIR);
+        
         game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
         game.getEventsQueue().add(new PlayerMoveEvent(gamePlayer, lastPosition));
 
