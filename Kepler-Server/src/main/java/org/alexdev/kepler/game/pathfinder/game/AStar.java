@@ -41,7 +41,7 @@ public class AStar {
     }
 
 	public LinkedList<Position> calculateAStarNoTerrain(Entity entity, Position p1, Position p2) {
-        PriorityQueue<AreaNode> openList = new PriorityQueue<>();
+		List<AreaNode> openList = new LinkedList<>();
 		Set<AreaNode> closedList = new HashSet<>();
 
 		AreaNode destNode = this.getNode(p2);
@@ -52,8 +52,8 @@ public class AStar {
 		openList.add(currentNode);
 
 		while (!openList.isEmpty()) {
-			//openList.sort(this.fComparator);
-			currentNode = openList.poll();
+			openList.sort(this.fComparator);
+			currentNode = openList.get(0);
 
 			if (currentNode.point.equals(destNode.point)) {
 				return this.calculatePath(destNode);
