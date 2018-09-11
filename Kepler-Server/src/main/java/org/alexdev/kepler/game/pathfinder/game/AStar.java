@@ -3,6 +3,8 @@ package org.alexdev.kepler.game.pathfinder.game;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.alexdev.kepler.game.room.models.RoomModel;
 
 import java.security.PublicKey;
 import java.util.*;
@@ -10,38 +12,32 @@ import java.util.*;
 import static org.alexdev.kepler.game.pathfinder.Pathfinder.DIAGONAL_MOVE_POINTS;
 
 public class AStar {
-	private final int width;
-	private final int height;
+    private AreaNode[][] nodes;
 
-	private final Map<Position, AreaNode> nodes = new HashMap<Position, AreaNode>();
+    private final RoomModel roomModel;
+	private final Comparator<AreaNode> fComparator = Comparator.comparingInt(AreaNode::getFValue);
 
-	@SuppressWarnings("rawtypes")
-	private final Comparator<AreaNode> fComparator = new Comparator<AreaNode>() {
-		public int compare(AreaNode a, AreaNode b) {
-			return Integer.compare(a.getFValue(), b.getFValue()); //ascending to get the lowest
-		}
-	};
+	public AStar(RoomModel roomModel) {
+		this.roomModel = roomModel;
+		this.nodes = new AreaNode[roomModel.getMapSizeX()][roomModel.getMapSizeY()];
 
-	public AStar(int width, int height) {
-		this.width = width;
-		this.height = height;
-
-		for (int y = 0; y < width; y++) {
-			for (int x = 0; x < height; x++) {
-				Position point = new Position(x, y);
-				this.nodes.put(point, new AreaNode(point));
-			}
-		}
+        for (int y = 0; y < this.roomModel.getMapSizeY(); y++) {
+            for (int x = 0; x < this.roomModel.getMapSizeX(); x++) {
+                this.nodes[x][y] = new AreaNode(new Position(x, y));
+            }
+        }
 	}
 
 	public AreaNode getNode(Position position) {
-	    for (var kvp : this.nodes.entrySet()) {
-            if (kvp.getKey().equals(position)) {
-                return kvp.getValue();
-            }
+        if (position.getX() < 0 || position.getY() < 0) {
+            return null;
         }
 
-        return null;
+        if (position.getX() >= this.roomModel.getMapSizeX() || position.getY() >= this.roomModel.getMapSizeY()) {
+            return null;
+        }
+
+        return this.nodes[position.getX()][position.getY()];
     }
 
 	public ArrayList<Position> calculateAStarNoTerrain(Entity entity, Position p1, Position p2) {
@@ -106,12 +102,5 @@ public class AStar {
         Collections.reverse(path);
 
 		return path;
-	}
-
-	private boolean isInsideBounds(Position point) {
-		return point.getX() >= 0 &&
-				point.getX() < this.width &&
-				point.getY() >= 0 &&
-				point.getY() < this.height;
 	}
 }

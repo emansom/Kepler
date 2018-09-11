@@ -141,7 +141,7 @@ public abstract class RoomEntity {
             return false;
         }
 
-        AStar aStar = new AStar(this.room.getModel().getMapSizeY(), this.room.getModel().getMapSizeX());
+        AStar aStar = new AStar(this.room.getModel());
         LinkedList<Position> path = new LinkedList<>(aStar.calculateAStarNoTerrain(this.entity, this.position, this.goal));//Pathfinder.makePath(this.entity);
 
         if (path.size() > 0) {
