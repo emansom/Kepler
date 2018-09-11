@@ -72,8 +72,6 @@ public class BattleballUpdateTask implements Runnable {
                 }
 
                 this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
-
-                objects.add(new PlayerUpdateObject(gamePlayer));
             }
 
             this.game.send(new GAMESTATUS(this.game, this.game.getTeams().values(), objects, events, updateTiles, fillTiles));
@@ -145,6 +143,9 @@ public class BattleballUpdateTask implements Runnable {
 
             // If we're walking, make sure to tell the server
             roomEntity.setNeedsUpdate(true);
+
+            // Add update object only when required
+            objects.add(new PlayerUpdateObject(gamePlayer));
         }
     }
 }
