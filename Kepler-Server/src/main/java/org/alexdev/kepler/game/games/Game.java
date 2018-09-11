@@ -55,6 +55,7 @@ public abstract class Game {
 
     private FutureRunnable preparingTimerRunnable;
     private FutureRunnable gameTimerRunnable;
+    private FutureRunnable restartRunnable;
 
     private boolean gameStarted;
     private boolean gameFinished;
@@ -225,7 +226,7 @@ public abstract class Game {
         // Restart countdown
         this.restartCountdown = new AtomicLong(GameManager.getInstance().getRestartSeconds(this.gameType));
 
-        var restartRunnable = new FutureRunnable() {
+        this.restartRunnable = new FutureRunnable() {
             public void run() {
                 if (!hasEnoughPlayers() || gameState != GameState.ENDED) {
                     this.cancelFuture();
@@ -239,8 +240,8 @@ public abstract class Game {
             }
         };
 
-        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(restartRunnable, 0, 1, TimeUnit.SECONDS);
-        restartRunnable.setFuture(future);
+        var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.restartRunnable, 0, 1, TimeUnit.SECONDS);
+        this.restartRunnable.setFuture(future);
 
         this.sendObservers(new GAMEINSTANCE(finishedGame));
         this.observers.clear();
@@ -281,6 +282,10 @@ public abstract class Game {
      * Method to restart game.
      */
     public void restartGame(List<GamePlayer> players) {
+        if (this.restartRunnable != null) {
+            this.restartRunnable.cancelFuture();
+        }
+
         if (this.preparingTimerRunnable != null) {
             this.preparingTimerRunnable.cancelFuture();
         }
@@ -758,5 +763,9 @@ public abstract class Game {
 
     public void setObjectId(AtomicInteger objectId) {
         this.objectId = objectId;
+    }
+
+    public FutureRunnable getRestartRunnable() {
+        return restartRunnable;
     }
 }

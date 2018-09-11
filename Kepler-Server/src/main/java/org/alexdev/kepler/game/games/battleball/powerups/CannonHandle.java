@@ -133,7 +133,7 @@ public class CannonHandle {
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
             gamePlayer.getPlayer().getRoomUser().setPosition(lastPosition);
             PowerUpUtil.stunPlayer(game, gamePlayer, BattleballPlayerState.STUNNED);
-        }, 1000, TimeUnit.MILLISECONDS);
+        }, 800, TimeUnit.MILLISECONDS);
 
         gamePlayer.getPlayer().getRoomUser().warp(lastTile.getPosition(), false);
 
