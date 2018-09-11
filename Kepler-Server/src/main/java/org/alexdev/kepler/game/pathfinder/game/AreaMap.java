@@ -44,16 +44,19 @@ public class AreaMap {
 	 */
 	private void createMap() {
 		Node node;
-		map = new ArrayList<ArrayList<Node>>();
+		map = new ArrayList<>();
 		for (int y=0; y<mapHeight; y++) {
-			map.add(new ArrayList<Node>());
+			map.add(new ArrayList<>());
 			for (int x=0; x<mapWith; x++) {
-				node = new Node(x,y,this);
+				node = new Node(x, y, this);
+
 				try {
-					if (RoomTile.isValidTile(this.player.getRoomUser().getRoom(), this.player, this.player.getRoomUser().getPosition())) {
+					if (RoomTile.isValidTile(this.player.getRoomUser().getRoom(), this.player, new Position(x, y))) {
 						node.setObstical(true);
 					}
-				} catch (Exception e) {}
+				} catch (Exception e) {
+				}
+
 				map.get(y).add(node);
 			}
 		}
