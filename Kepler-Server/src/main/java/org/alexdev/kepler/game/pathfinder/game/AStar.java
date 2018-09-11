@@ -64,16 +64,15 @@ public class AStar {
 
 			for (Position point : DIAGONAL_MOVE_POINTS) {
 				Position adjPoint = currentNode.point.copy().add(point);
+                AreaNode adjNode = this.getNode(adjPoint);
+
+                if (adjNode == null) {
+                    continue;
+                }
 
 				boolean isFinalMove = adjPoint.equals(currentNode.point);
 
-				if (Pathfinder.isValidStep(entity.getRoomUser().getRoom(), entity, currentNode.point, adjPoint, isFinalMove)) {
-					AreaNode adjNode = this.getNode(adjPoint);
-
-					if (adjNode == null) {
-						continue;
-					}
-
+				if (Pathfinder.isValidStep(entity.getRoomUser().getRoom(), entity, currentNode.point.copy(), adjPoint.copy(), isFinalMove)) {
 					if (!closedList.contains(adjNode)) {
 						if (!openList.contains(adjNode)) {
 							adjNode.parent = currentNode;
