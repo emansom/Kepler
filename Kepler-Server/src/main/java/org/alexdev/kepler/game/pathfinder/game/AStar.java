@@ -96,6 +96,12 @@ public class AStar {
 
 	private ArrayList<Position> calculatePath(AreaNode destinationNode) {
 		ArrayList<Position> path = new ArrayList<Position>();
+
+		if (destinationNode.parent == null) {
+		    path.add(destinationNode.point);
+		    return path;
+        }
+
 		AreaNode node = destinationNode;
 		while (node.parent != null) {
 			path.add(node.point);
