@@ -142,9 +142,7 @@ public class CannonHandle {
             PowerUpUtil.stunPlayer(game, gamePlayer, BattleballPlayerState.STUNNED);
         }, 800, TimeUnit.MILLISECONDS);
 
-
-        room.getMapping().getTile(firstPosition).removeEntity(gamePlayer.getPlayer());
-        room.getMapping().getTile(lastPosition).addEntity(gamePlayer.getPlayer());
+        gamePlayer.getPlayer().getRoomUser().warp(lastTile.getPosition(), false);
 
     }
 }
