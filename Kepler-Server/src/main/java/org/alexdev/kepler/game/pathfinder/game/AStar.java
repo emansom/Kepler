@@ -26,8 +26,8 @@ public class AStar {
 		this.width = width;
 		this.height = height;
 
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
+		for (int y = 0; y < width; y++) {
+			for (int x = 0; x < height; x++) {
 				Position point = new Position(x, y);
 				this.nodes.put(point, new AreaNode(point));
 			}
