@@ -82,7 +82,7 @@ public class CannonHandle {
                     }
 
                     if (setPosition != null) {
-                        game.addPlayerMove(new PlayerMoveEvent(stunnedPlayer, setPosition));
+                        game.getEventsQueue().add(new PlayerMoveEvent(stunnedPlayer, setPosition));
                     }
 
                     // Stun player
@@ -134,8 +134,8 @@ public class CannonHandle {
         gamePlayer.getPlayer().getRoomUser().setPosition(firstPosition);
         gamePlayer.setPlayerState(BattleballPlayerState.FLYING_THROUGH_AIR);
 
-        game.addObjectToQueue(new PlayerUpdateObject(gamePlayer));
-        game.addPlayerMove(new PlayerMoveEvent(gamePlayer, lastPosition));
+        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+        game.getEventsQueue().add(new PlayerMoveEvent(gamePlayer, lastPosition));
 
         GameScheduler.getInstance().getSchedulerService().schedule(() -> {
             gamePlayer.getPlayer().getRoomUser().setPosition(lastPosition);
