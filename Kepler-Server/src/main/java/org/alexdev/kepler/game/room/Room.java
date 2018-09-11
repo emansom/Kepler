@@ -368,6 +368,24 @@ public class Room {
     }
 
     /**
+     * Check if this room is for club members only
+     *
+     * @return true, if successful
+     */
+    public boolean isClubOnly() {
+        if (!this.isPublicRoom()) {
+            return false;
+        }
+
+        // 8 is Club Only category (TODO: use enums for public space categories)
+        if (this.getCategory().getId() == 8) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get the room id of this room.
      */
     public int getId() {
