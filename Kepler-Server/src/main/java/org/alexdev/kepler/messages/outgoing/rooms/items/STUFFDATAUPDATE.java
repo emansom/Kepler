@@ -5,10 +5,10 @@ import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class UPDATE_ITEM extends MessageComposer {
+public class STUFFDATAUPDATE extends MessageComposer {
     private final Item item;
 
-    public UPDATE_ITEM(Item item) {
+    public STUFFDATAUPDATE(Item item) {
         this.item = item;
     }
 
@@ -19,7 +19,6 @@ public class UPDATE_ITEM extends MessageComposer {
         } else {
             response.writeString(this.item.getId());
             response.writeString(this.item.getCustomData());
-            response.writeString("");
         }
     }
 

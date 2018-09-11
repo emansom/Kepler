@@ -9,10 +9,13 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
+import org.alexdev.kepler.messages.outgoing.rooms.items.STUFFDATAUPDATE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.List;
 
 public class SETSTUFFDATA implements MessageEvent {
     @Override
@@ -22,7 +25,7 @@ public class SETSTUFFDATA implements MessageEvent {
         }
 
         // Do not process public room items
-        if (reader.contents().contains("/")) {
+        if (player.getRoomUser().getRoom().isPublicRoom()) {
             return;
         }
 
