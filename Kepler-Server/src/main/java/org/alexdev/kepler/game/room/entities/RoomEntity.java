@@ -9,6 +9,10 @@ import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
+import org.alexdev.kepler.game.pathfinder.game.AStar;
+import org.alexdev.kepler.game.pathfinder.game.AreaMap;
+import org.alexdev.kepler.game.pathfinder.game.heuristics.AStarHeuristic;
+import org.alexdev.kepler.game.pathfinder.game.heuristics.DiagonalHeuristic;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUserStatus;
@@ -143,7 +147,12 @@ public abstract class RoomEntity {
             return false;
         }
 
-        LinkedList<Position> path = Pathfinder.makePath(this.entity);
+        AStarHeuristic heuristic = new DiagonalHeuristic();
+        AStar aStar = new AStar(new AreaMap(this.entity), heuristic);
+
+        ArrayList<Position> shortestPath = aStar.calcShortestPath(this.position.getX(), this.position.getY(), this.goal.getX(), this.goal.getY());
+
+        LinkedList<Position> path = new LinkedList<>(shortestPath);//Pathfinder.makePath(this.entity);
 
         if (path.size() > 0) {
             this.path = path;
