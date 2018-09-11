@@ -102,6 +102,9 @@ public class AStar {
 			path.add(node.point);
 			node = node.parent;
 		}
+
+        Collections.reverse(path);
+
 		return path;
 	}
 
