@@ -16,8 +16,9 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.alexdev.kepler.messages.incoming.rooms.items.SETSTUFFDATA;
 import org.alexdev.kepler.messages.outgoing.rooms.items.SHOWPROGRAM;
-import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.STUFFDATAUPDATE;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 import org.alexdev.kepler.util.StringUtil;
 
@@ -230,7 +231,7 @@ public class Item {
         Room room = this.getRoom();
 
         if (room != null) {
-            room.send(new UPDATE_ITEM(this));
+            room.send(new STUFFDATAUPDATE(this));
         }
     }
 

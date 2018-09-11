@@ -7,7 +7,7 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.entities.RoomEntity;
 import org.alexdev.kepler.messages.outgoing.rooms.items.DICE_VALUE;
-import org.alexdev.kepler.messages.outgoing.rooms.items.UPDATE_ITEM;
+import org.alexdev.kepler.messages.outgoing.rooms.items.STUFFDATAUPDATE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -47,7 +47,7 @@ public class DICE_OFF implements MessageEvent {
         }
 
         room.send(new DICE_VALUE(itemId, false, 0));
-        room.send(new UPDATE_ITEM(item));
+        room.send(new STUFFDATAUPDATE(item));
 
         item.setCustomData("0");
         ItemDao.updateItem(item);
