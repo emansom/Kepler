@@ -44,6 +44,9 @@ public class SnowStormLobbyTrigger extends GameLobbyTrigger {
 
         Player player = (Player) entity;
 
+        if (player.getRoomUser().getObservingGameId() != -1) {
+            player.getRoomUser().stopObservingGame();
+        }
     }
 
     /* new GameParameter("fieldType", true, "1", 1, 5),
