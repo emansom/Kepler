@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.roller.RollingData;
+import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.pathfinder.game.AStar;
@@ -141,8 +142,10 @@ public abstract class RoomEntity {
             return false;
         }
 
-        AStar aStar = new AStar(this.room.getModel());
-        var pathList = aStar.calculateAStarNoTerrain(this.entity, this.position, this.goal);
+        //AStar aStar = new AStar(this.room.getModel());
+        //var pathList = aStar.calculateAStarNoTerrain(this.entity, this.position, this.goal);
+
+        LinkedList<Position> pathList = Pathfinder.makePath(this.entity);
 
         if (pathList == null) {
             return false;
