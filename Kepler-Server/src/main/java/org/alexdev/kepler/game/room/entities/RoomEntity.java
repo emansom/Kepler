@@ -161,6 +161,51 @@ public abstract class RoomEntity {
     }
 
     /**
+     * Make a user walk to specific coordinates. The goal must be valid and reachable.
+     *
+     * @param X the X coordinates
+     * @param Y the Y coordinate
+     */
+    public boolean bounceTo(int X, int Y) {
+        if (this.room == null) {
+            return false;
+        }
+
+        if (this.nextPosition != null) {
+            this.position.setX(this.nextPosition.getX());
+            this.position.setY(this.nextPosition.getY());
+            this.updateNewHeight(this.position);
+        }
+
+        RoomTile tile = this.room.getMapping().getTile(X, Y);
+
+        if (tile == null) {
+            return false;
+        }
+
+        this.goal = new Position(X, Y);
+
+        if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
+            return false;
+        }
+
+        AStar aStar = new AStar(this.room.getModel());
+        var pathList = aStar.calculateAStarNoTerrain(this.entity, this.position, this.goal);
+
+        if (pathList == null) {
+            return false;
+        }
+
+        if (pathList.size() > 0) {
+            this.path = pathList;
+            this.isWalking = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Called to make a user stop walking.
      */
     public void stopWalking() {
