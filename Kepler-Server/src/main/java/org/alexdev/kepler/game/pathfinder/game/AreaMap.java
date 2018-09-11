@@ -54,7 +54,7 @@ public class AreaMap {
 						node.setObstical(true);
 					}
 				} catch (Exception e) {}
-				map.get(x).add(node);
+				map.get(y).add(node);
 			}
 		}
 	}
