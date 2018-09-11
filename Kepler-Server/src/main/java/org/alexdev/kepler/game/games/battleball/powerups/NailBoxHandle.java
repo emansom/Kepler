@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 public class NailBoxHandle {
     public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
-        gamePlayer.getPlayer().getRoomUser().stopWalking();
+        //gamePlayer.getPlayer().getRoomUser().stopWalking();
 
         List<GamePlayer> dizzyPlayers = new ArrayList<>();
         List<GameObject> pins = new ArrayList<>();
@@ -39,6 +39,10 @@ public class NailBoxHandle {
                 .getSquareInFront()
                 .getSquareInFront()
                 .getSquareInFront();
+
+        if (gamePlayer.getPlayer().getRoomUser().isWalking()) {
+            tilePosition = tilePosition.getSquareInFront();
+        }
 
         int maxPins = ThreadLocalRandom.current().nextInt(8, 15 + 1);
         List<Position> selectedPositions = new ArrayList<>();
