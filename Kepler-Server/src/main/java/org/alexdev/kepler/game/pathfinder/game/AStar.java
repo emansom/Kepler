@@ -1,138 +1,109 @@
 package org.alexdev.kepler.game.pathfinder.game;
 
+import org.alexdev.kepler.game.entity.Entity;
+import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
-import org.alexdev.kepler.game.pathfinder.game.heuristics.AStarHeuristic;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.*;
+
+import static org.alexdev.kepler.game.pathfinder.Pathfinder.DIAGONAL_MOVE_POINTS;
 
 public class AStar {
-	private AreaMap map;
-	private AStarHeuristic heuristic;
-	/**
-	 * closedList The list of Nodes not searched yet, sorted by their distance to the goal as guessed by our heuristic.
-	 */
-	private ArrayList<Node> closedList;
-	private SortedNodeList openList;
-	private ArrayList<Position> shortestPath;
+	private final int width;
+	private final int height;
 
-	public AStar(AreaMap map, AStarHeuristic heuristic) {
-		this.map = map;
-		this.heuristic = heuristic;
-		closedList = new ArrayList<Node>();
-		openList = new SortedNodeList();
+	private final Map<Position, AreaMap> nodes = new HashMap<Position, AreaMap>();
+
+	@SuppressWarnings("rawtypes")
+	private final Comparator<AreaMap> fComparator = new Comparator<AreaMap>() {
+		public int compare(AreaMap a, AreaMap b) {
+			return Integer.compare(a.getFValue(), b.getFValue()); //ascending to get the lowest
+		}
+	};
+
+	public AStar(int width, int height) {
+		this.width = width;
+		this.height = height;
+
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				Position point = new Position(x, y);
+				this.nodes.put(point, new AreaMap(point));
+			}
+		}
 	}
 
-	public ArrayList<Position> calcShortestPath(int startX, int startY, int goalX, int goalY) {
-		//this.startX = startX;
-		//this.startY = startY;
-		//this.goalX = goalX;
-		//this.goalY = goalY;
+	public ArrayList<Position> calculateAStarNoTerrain(Entity entity, Position p1, Position p2) {
+		List<AreaMap> openList = new ArrayList<>();
+		List<AreaMap> closedList = new ArrayList<>();
 
-		//mark start and goal node
-		map.setStartLocation(startX, startY);
-		map.setGoalLocation(goalX, goalY);
+		AreaMap destNode = this.nodes.get(p2);
 
-		//Check if the goal node is also an obstacle (if it is, it is impossible to find a path there)
-		if (map.getNode(goalX, goalY).isObstacle) {
-			return null;
-		}
+		AreaMap currentNode = this.nodes.get(p1);
+		currentNode.parent = null;
+		currentNode.setGValue(0);
+		openList.add(currentNode);
 
-		map.getStartNode().setDistanceFromStart(0);
-		closedList.clear();
-		openList.clear();
-		openList.add(map.getStartNode());
+		while(!openList.isEmpty()) {
+			openList.sort(this.fComparator);
+			currentNode = openList.get(0);
 
-		//while we haven't reached the goal yet
-		while(openList.size() != 0) {
-
-			//get the first Node from non-searched Node list, sorted by lowest distance from our goal as guessed by our heuristic
-			Node current = openList.getFirst();
-
-			// check if our current Node location is the goal Node. If it is, we are done.
-			if(current.getX() == map.getGoalLocationX() && current.getY() == map.getGoalLocationY()) {
-				return reconstructPath(current);
+			if (currentNode.point.equals(destNode.point)) {
+				return this.calculatePath(destNode);
 			}
 
-			//move current Node to the closed (already searched) list
-			openList.remove(current);
-			closedList.add(current);
+			openList.remove(currentNode);
+			closedList.add(currentNode);
 
-			//go through all the current Nodes neighbors and calculate if one should be our next step
-			for(Node neighbor : current.getNeighborList()) {
-				boolean neighborIsBetter;
+			for (Position point : DIAGONAL_MOVE_POINTS) {
+				Position adjPoint = currentNode.point.copy().add(point);
+				AreaMap adjNode = null;
 
-				//if we have already searched this Node, don't bother and continue to the next one
-				if (closedList.contains(neighbor))
-					continue;
-
-				//also just continue if the neighbor is an obstacle
-				if (!neighbor.isObstacle) {
-
-					// calculate how long the path is if we choose this neighbor as the next step in the path
-					float neighborDistanceFromStart = (current.getDistanceFromStart() + map.getDistanceBetween(current, neighbor));
-
-					//add neighbor to the open list if it is not there
-					if(!openList.contains(neighbor)) {
-						openList.add(neighbor);
-						neighborIsBetter = true;
-						//if neighbor is closer to start it could also be better
-					} else if(neighborDistanceFromStart < current.getDistanceFromStart()) {
-						neighborIsBetter = true;
-					} else {
-						neighborIsBetter = false;
+				if (Pathfinder.isValidStep(entity.getRoomUser().getRoom(), entity, currentNode.point, adjPoint, false)) {
+					for (var kvp : this.nodes.entrySet()) {
+						if (kvp.getKey().equals(adjPoint)) {
+							adjNode = kvp.getValue();
+						}
 					}
-					// set neighbors parameters if it is better
-					if (neighborIsBetter) {
-						neighbor.setPreviousNode(current);
-						neighbor.setDistanceFromStart(neighborDistanceFromStart);
-						neighbor.setHeuristicDistanceFromGoal(heuristic.getEstimatedDistanceToGoal(neighbor.getPoint(), map.getGoalPoint()));
+
+					if (adjNode == null) {
+						continue;
+					}
+
+					if (!closedList.contains(adjNode)) {
+						if (!openList.contains(adjNode)) {
+							adjNode.parent = currentNode;
+							adjNode.calculateGValue(currentNode);
+							adjNode.calculateHValue(destNode);
+							openList.add(adjNode);
+						} else {
+							if (adjNode.gValue < currentNode.gValue) {
+								adjNode.calculateGValue(currentNode);
+								currentNode = adjNode;
+							}
+						}
 					}
 				}
-
 			}
 		}
+
 		return null;
 	}
 
-	private ArrayList<Position> reconstructPath(Node node) {
-		ArrayList<Position> path = new ArrayList<>();
-		while(!(node.getPreviousNode() == null)) {
-			path.add(0,node.getPoint());
-			node = node.getPreviousNode();
+	private ArrayList<Position> calculatePath(AreaMap destinationNode) {
+		ArrayList<Position> path = new ArrayList<Position>();
+		AreaMap node = destinationNode;
+		while (node.parent != null) {
+			path.add(node.point);
+			node = node.parent;
 		}
-		this.shortestPath = path;
 		return path;
 	}
 
-	private class SortedNodeList {
-
-		private ArrayList<Node> list = new ArrayList<Node>();
-
-		public Node getFirst() {
-			return list.get(0);
-		}
-
-		public void clear() {
-			list.clear();
-		}
-
-		public void add(Node node) {
-			list.add(node);
-			Collections.sort(list);
-		}
-
-		public void remove(Node n) {
-			list.remove(n);
-		}
-
-		public int size() {
-			return list.size();
-		}
-
-		public boolean contains(Node n) {
-			return list.contains(n);
-		}
+	private boolean isInsideBounds(Position point) {
+		return point.getX() >= 0 &&
+				point.getX() < this.width &&
+				point.getY() >= 0 &&
+				point.getY() < this.height;
 	}
-
 }

@@ -6,22 +6,16 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.item.roller.RollingData;
-import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.pathfinder.game.AStar;
-import org.alexdev.kepler.game.pathfinder.game.AreaMap;
-import org.alexdev.kepler.game.pathfinder.game.heuristics.AStarHeuristic;
-import org.alexdev.kepler.game.pathfinder.game.heuristics.DiagonalHeuristic;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.enums.DrinkType;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.managers.RoomTimerManager;
-import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.public_rooms.SunTerraceHandler;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
@@ -147,12 +141,8 @@ public abstract class RoomEntity {
             return false;
         }
 
-        AStarHeuristic heuristic = new DiagonalHeuristic();
-        AStar aStar = new AStar(new AreaMap(this.entity), heuristic);
-
-        ArrayList<Position> shortestPath = aStar.calcShortestPath(this.position.getX(), this.position.getY(), this.goal.getX(), this.goal.getY());
-
-        LinkedList<Position> path = new LinkedList<>(shortestPath);//Pathfinder.makePath(this.entity);
+        AStar aStar = new AStar(this.room.getModel().getMapSizeY(), this.room.getModel().getMapSizeX());
+        LinkedList<Position> path = new LinkedList<>(aStar.calculateAStarNoTerrain(this.entity, this.position, this.goal));//Pathfinder.makePath(this.entity);
 
         if (path.size() > 0) {
             this.path = path;
