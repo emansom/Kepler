@@ -32,8 +32,8 @@ public class AreaMap {
 	 * @param player        the with of the map as int
 	 */
 	public AreaMap(Entity player) {
-		this.mapHeight = player.getRoomUser().getRoom().getModel().getMapSizeX();
-		this.mapWith = player.getRoomUser().getRoom().getModel().getMapSizeY();
+		this.mapHeight = player.getRoomUser().getRoom().getModel().getMapSizeY();
+		this.mapWith = player.getRoomUser().getRoom().getModel().getMapSizeX();
 		this.player = player;
 		createMap();
 	}
