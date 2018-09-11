@@ -97,7 +97,7 @@ public class AStar {
 		ArrayList<Position> path = new ArrayList<Position>();
 
 		if (destinationNode.parent == null) {
-		    path.add(destinationNode.point);
+		    //path.add(destinationNode.point);
 		    return path;
         }
 
