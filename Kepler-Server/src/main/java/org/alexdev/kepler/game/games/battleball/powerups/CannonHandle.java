@@ -1,6 +1,5 @@
 package org.alexdev.kepler.game.games.battleball.powerups;
 
-import javafx.geometry.Pos;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.battleball.BattleballTile;
@@ -14,7 +13,6 @@ import org.alexdev.kepler.game.games.utils.PowerUpUtil;
 import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.room.Room;
-import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -131,7 +129,7 @@ public class CannonHandle {
 
         gamePlayer.getPlayer().getRoomUser().setPosition(firstPosition);
         gamePlayer.setPlayerState(BattleballPlayerState.FLYING_THROUGH_AIR);
-        
+
         game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
         game.getEventsQueue().add(new PlayerMoveEvent(gamePlayer, lastPosition));
 
