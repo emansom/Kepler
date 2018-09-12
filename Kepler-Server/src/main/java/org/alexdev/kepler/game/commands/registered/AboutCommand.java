@@ -30,13 +30,12 @@ public class AboutCommand extends Command {
         contributorList.add("Alito");
         contributorList.add("Ascii");
         contributorList.add("Lightbulb");
-        contributorList.add("<br>   ");
         contributorList.add("Raptosaur");
+        contributorList.add("<br>   ");
         contributorList.add("Romuald");
         contributorList.add("Nillus");
         contributorList.add("Holo Team");
         contributorList.add("Meth0d");
-        contributorList.add("<br>   ");
         contributorList.add("office.boy");
 
         StringBuffer about = new StringBuffer();
