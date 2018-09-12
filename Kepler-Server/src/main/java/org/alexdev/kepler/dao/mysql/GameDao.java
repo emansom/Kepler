@@ -172,7 +172,7 @@ public class GameDao {
                 }
 
                 if (type == GameType.SNOWSTORM) {
-                    details.setBattleballPoints(updatedAmount);
+                    details.setSnowStormPoints(updatedAmount);
                 }
             }
 
