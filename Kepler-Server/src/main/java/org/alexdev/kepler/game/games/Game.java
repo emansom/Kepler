@@ -338,7 +338,7 @@ public abstract class Game {
                         return;
                     }
 
-                    gamePrepare();
+                    gamePrepareTick();
 
                     if (preparingGameSecondsLeft.getAndDecrement() == 0) {
                         this.cancelFuture();
@@ -352,6 +352,8 @@ public abstract class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
+
+        this.gamePrepare();
     }
 
     /**
