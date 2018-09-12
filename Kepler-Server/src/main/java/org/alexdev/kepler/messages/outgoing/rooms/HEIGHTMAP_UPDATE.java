@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.rooms;
 
+import org.alexdev.kepler.game.item.base.ItemBehaviour;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.messages.types.MessageComposer;
@@ -26,8 +27,14 @@ public class HEIGHTMAP_UPDATE extends MessageComposer {
                         height = 0;
                     }
 
-                    //char updateChar = (char) (height + 65);
-                    updateMap.append(height);
+                    if (room.getMapping().getTile(x, y).getHighestItem() != null &&
+                            room.getMapping().getTile(x, y).getHighestItem().hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
+                        updateMap.append("y");
+                    } else {
+
+                        //char updateChar = (char) (height + 65);
+                        updateMap.append(height);
+                    }
                 } else {
                     updateMap.append("x");
                 }
