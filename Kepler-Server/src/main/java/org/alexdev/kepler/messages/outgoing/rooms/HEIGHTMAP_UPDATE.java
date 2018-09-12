@@ -26,8 +26,8 @@ public class HEIGHTMAP_UPDATE extends MessageComposer {
                         height = 0;
                     }
 
-                    char updateChar = (char) (height + 65);
-                    updateMap.append(updateChar);
+                    //char updateChar = (char) (height + 65);
+                    updateMap.append(height);
                 } else {
                     updateMap.append("x");
                 }
