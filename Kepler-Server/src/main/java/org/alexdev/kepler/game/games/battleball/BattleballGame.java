@@ -89,8 +89,6 @@ public class BattleballGame extends Game {
                 continue;
             }
 
-            System.out.println("lol 123");
-
             this.activePowers.remove(powerUp);
             this.getObjects().remove(powerUp.getObject());
         }
