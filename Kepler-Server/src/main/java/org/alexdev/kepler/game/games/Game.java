@@ -435,6 +435,10 @@ public abstract class Game {
     private void sendToLobby(GamePlayer gamePlayer) {
         Player player = gamePlayer.getPlayer();
 
+        if (player.getRoomUser().getRoom() != this.room) {
+            return; // Don't force people to go to a room they didn't request
+        }
+
         if (player.getRoomUser().getRoom() != null) {
             player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, false);
         } else {
