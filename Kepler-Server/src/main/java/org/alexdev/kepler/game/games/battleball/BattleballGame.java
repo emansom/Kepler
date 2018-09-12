@@ -163,11 +163,7 @@ public class BattleballGame extends Game {
     }
 
     private void updateTimeUntilNextPower() {
-        if (this.activePowers.size() >= MAX_POWERS_ACTIVE) {
-            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25 + 1)); // Longer time gaps when there maximum amount of spawned power ups have reached
-        } else {
-            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 15 + 1));
-        }
+        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 35 + 1)); // Longer time gaps when there maximum amount of spawned power ups have reached
     }
 
     @Override
