@@ -9,6 +9,7 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.utils.PowerUpUtil;
 import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
+import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
@@ -38,6 +39,21 @@ public class BombHandle {
         }
 
         for (GamePlayer stunnedPlayer : stunnedPlayers) {
+            Position from = stunnedPlayer.getPlayer().getRoomUser().getPosition();
+            Position towards = gamePlayer.getPlayer().getRoomUser().getPosition();
+
+            int temporaryRotation = Rotation.calculateHumanDirection(from.getX(), from.getY(), towards.getX(), towards.getY());
+
+            Position pushBack = from.copy();
+            pushBack.setRotation(temporaryRotation);
+            pushBack = pushBack.getSquareBehind();
+
+            BattleballTile battleballTile = (BattleballTile) game.getTile(pushBack.getX(), pushBack.getY());
+
+            if (TileUtil.isValidGameTile(stunnedPlayer, battleballTile, true)) {
+                stunnedPlayer.getPlayer().getRoomUser().setPosition(pushBack);
+            }
+
             // TODO: Move player away from blast radius: https://www.youtube.com/watch?v=cP3bvGOx53o&feature=youtu.be&t=242
             PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
         }
