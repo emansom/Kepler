@@ -25,10 +25,9 @@ public class GAMEEND extends MessageComposer {
 
         for (GameTeam team : this.teams.values()) {
             var players = team.getPlayers();
+            response.writeInt(players.size());
 
             if (players.size() > 0) {
-                response.writeInt(players.size());
-
                 for (GamePlayer gamePlayer : players) {
                     response.writeInt(gamePlayer.getObjectId());
                     response.writeString(gamePlayer.getPlayer().getDetails().getName());
