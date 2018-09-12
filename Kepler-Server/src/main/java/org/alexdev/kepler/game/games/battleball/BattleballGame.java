@@ -33,6 +33,8 @@ public class BattleballGame extends Game {
     private BlockingQueue<BattleballTile> updateTilesQueue;
     private BlockingQueue<BattleballTile> fillTilesQueue;
 
+    public static final int MAX_POWERS_ACTIVE = 2;
+
     private AtomicInteger timeUntilNextPower;
 
     public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
@@ -68,21 +70,29 @@ public class BattleballGame extends Game {
 
     @Override
     public void gameTick() {
-        this.checkExpirePower();
-        this.checkSpawnPower();
-        this.checkStoredExpirePower();
+        try {
+            this.checkExpirePower();
+            this.checkSpawnPower();
+            this.checkStoredExpirePower();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     private void checkExpirePower() {
-        if (this.allowedPowerUps.isEmpty() || this.activePowers.isEmpty() || (this.getMapId() == 5)) {
+        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
             return;
         }
 
-        BattleballPowerUp powerUp = this.activePowers.get(0);
+        for (BattleballPowerUp powerUp : this.activePowers) {
+            if (!expirePower(powerUp)) {
+                continue;
+            }
 
-        if (expirePower(powerUp)) {
+            System.out.println("lol 123");
+
+            this.activePowers.remove(powerUp);
             this.getObjects().remove(powerUp.getObject());
-            this.activePowers.clear();
         }
     }
 
@@ -122,21 +132,29 @@ public class BattleballGame extends Game {
             }
         }
 
-        if (this.activePowers.size() > 0) { // There's already an active power so don't spawn another one
+        if (this.activePowers.size() >= MAX_POWERS_ACTIVE) { // There's already an active power so don't spawn another one
             return;
         }
 
-        BattleballPowerUp powerUp = new BattleballPowerUp(this.createObjectId(), this, this.getRandomTile());
-        this.activePowers.add(powerUp);
+        //int powersToSpawn = MAX_POWERS_ACTIVE - this.activePowers.size();
+
+        //for (int i = 0; i < powersToSpawn; i++) {
+            BattleballPowerUp powerUp = new BattleballPowerUp(this.createObjectId(), this, this.getRandomTile());
+            this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
+
+            this.activePowers.add(powerUp);
+            this.getObjects().add(powerUp.getObject());
+        //}
 
         this.updateTimeUntilNextPower();
-
-        this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
-        this.getObjects().add(powerUp.getObject());
     }
 
     private void updateTimeUntilNextPower() {
-        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 30));
+        if (this.activePowers.size() >= MAX_POWERS_ACTIVE) {
+            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25)); // Longer time gaps when there maximum amount of spawned power ups have reached
+        } else {
+            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(5, 10 + 1));
+        }
     }
 
     @Override

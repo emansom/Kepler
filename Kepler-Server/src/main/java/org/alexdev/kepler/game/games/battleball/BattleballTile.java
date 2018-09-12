@@ -180,11 +180,10 @@ public class BattleballTile extends GameTile  {
 
         }
 
-        game.getActivePowers().clear();
-
         game.getStoredPowers().get(gamePlayer).clear();
         game.getStoredPowers().get(gamePlayer).add(powerUp);
 
+        game.getActivePowers().remove(powerUp);
         game.getObjects().remove(powerUp.getObject());
 
         powerUp.getTimeToDespawn().set(15);
