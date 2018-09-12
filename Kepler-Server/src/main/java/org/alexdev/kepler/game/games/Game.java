@@ -94,7 +94,6 @@ public abstract class Game {
      */
     public void initialise() {
         this.gameState = GameState.STARTED;
-        this.objectId = new AtomicInteger(0);
 
         this.gameStarted = false;
         this.gameFinished = false;

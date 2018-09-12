@@ -27,13 +27,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BattleballGame extends Game {
     private BattleballTile[][] battleballTiles;
 
+    private BlockingQueue<BattleballTile> updateTilesQueue;
+    private BlockingQueue<BattleballTile> fillTilesQueue;
+
     private List<Integer> allowedPowerUps;
     private List<BattleballPowerUp> activePowers;
 
     private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
-
-    private BlockingQueue<BattleballTile> updateTilesQueue;
-    private BlockingQueue<BattleballTile> fillTilesQueue;
 
     public static final int MAX_POWERS_ACTIVE = 2;
 
@@ -72,6 +72,11 @@ public class BattleballGame extends Game {
 
     @Override
     public void gamePrepareTick() {
+
+    }
+
+    @Override
+    public void gameStarted() {
         this.activePowers.clear();
         this.storedPowers.clear();
         this.timeUntilNextPower = new AtomicInteger(0);
@@ -215,7 +220,10 @@ public class BattleballGame extends Game {
                 p.setPlayerState(BattleballPlayerState.NORMAL);
                 p.setHarlequinPlayer(null);
                 p.setGameObject(new PlayerObject(p));
-                p.setObjectId(this.createObjectId());
+
+                if (p.getObjectId() == -1) {
+                    p.setObjectId(this.createObjectId());
+                }
 
                 this.getObjects().add(p.getGameObject());
 

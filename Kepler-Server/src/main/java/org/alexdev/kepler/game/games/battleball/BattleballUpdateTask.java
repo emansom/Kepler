@@ -38,7 +38,7 @@ public class BattleballUpdateTask implements Runnable {
     @Override
     public void run() {
         try {
-            if (this.game.isGameFinished() || this.game.getPlayers().isEmpty()) {
+            if ( this.game.getPlayers().isEmpty()) {
                 return; // Don't send any packets or do any logic checks during when the game is finished
             }
 

@@ -30,7 +30,7 @@ public class GamePlayer {
         this.userId = player.getDetails().getId();
         this.teamId = -1;
         this.gameId = -1;
-        this.objectId = 0;
+        this.objectId = -1;
         this.harlequinPlayer = null;
         this.score = 0;
         this.enteringGame = false;
