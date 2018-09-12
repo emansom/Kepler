@@ -29,7 +29,7 @@ public class BattleballPowerUp {
         this.tile = tile;
         this.game = game;
         this.position = this.tile.getPosition().copy();
-        this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25 + 1));
+        this.timeToDespawn = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 30 + 1));
         this.powerType = BattleballPowerType.getById(game.getAllowedPowerUps().get(ThreadLocalRandom.current().nextInt(0, game.getAllowedPowerUps().size())));
     }
 

@@ -58,9 +58,10 @@ public class BattleballGame extends Game {
 
     @Override
     public void gamePrepare() {
-        //this.activePowers.clear();
-        //this.storedPowers.clear();
-        //this.timeUntilNextPower = new AtomicInteger(0);
+        this.activePowers.clear();
+        this.storedPowers.clear();
+        this.timeUntilNextPower = new AtomicInteger(0);
+
         int ticketCharge = GameConfiguration.getInstance().getInteger("battleball.ticket.charge");
 
         if (ticketCharge > 0) {
@@ -72,14 +73,14 @@ public class BattleballGame extends Game {
 
     @Override
     public void gamePrepareTick() {
-
+        this.checkExpirePower();
+        this.checkSpawnPower();
+        this.checkStoredExpirePower();
     }
 
     @Override
     public void gameStarted() {
-        this.activePowers.clear();
-        this.storedPowers.clear();
-        this.timeUntilNextPower = new AtomicInteger(0);
+
     }
 
     @Override
@@ -165,7 +166,7 @@ public class BattleballGame extends Game {
         if (this.activePowers.size() >= MAX_POWERS_ACTIVE) {
             this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25 + 1)); // Longer time gaps when there maximum amount of spawned power ups have reached
         } else {
-            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(5, 10 + 1));
+            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 15 + 1));
         }
     }
 
