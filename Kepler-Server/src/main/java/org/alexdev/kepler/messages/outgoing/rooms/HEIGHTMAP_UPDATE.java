@@ -1,5 +1,6 @@
 package org.alexdev.kepler.messages.outgoing.rooms;
 
+import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -7,7 +8,7 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 public class HEIGHTMAP_UPDATE extends MessageComposer {
     private final String heightmap;
 
-    public HEIGHTMAP_UPDATE(RoomModel roomModel) {
+    public HEIGHTMAP_UPDATE(Room room, RoomModel roomModel) {
         String[] lines = roomModel.getHeightmap().split("\r");
 
         StringBuilder updateMap = new StringBuilder();
@@ -19,7 +20,7 @@ public class HEIGHTMAP_UPDATE extends MessageComposer {
                 char tile = line.charAt(x);
 
                 if (Character.isDigit(tile)) {
-                    int height = Character.getNumericValue(tile);
+                    int height = (int) room.getMapping().getTile(x, y).getWalkingHeight();//Character.getNumericValue(tile);
 
                     if (height < 0 || height > 8) {
                         height = 0;
