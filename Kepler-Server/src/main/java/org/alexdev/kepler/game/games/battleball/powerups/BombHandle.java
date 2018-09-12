@@ -42,7 +42,7 @@ public class BombHandle {
             Position from = stunnedPlayer.getPlayer().getRoomUser().getPosition();
             Position towards = gamePlayer.getPlayer().getRoomUser().getPosition();
 
-            int temporaryRotation = Rotation.calculateHumanDirection(from.getX(), from.getY(), towards.getX(), towards.getY());
+            int temporaryRotation = Rotation.calculateWalkDirection(from, towards);
 
             Position pushBack = from.copy();
             pushBack.setRotation(temporaryRotation);
