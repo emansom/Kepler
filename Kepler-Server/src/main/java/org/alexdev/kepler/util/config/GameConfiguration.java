@@ -58,7 +58,7 @@ public class GameConfiguration {
         config.put("battleball.game.lifetime.seconds", "180");
         config.put("battleball.restart.game.seconds", "30");
         config.put("battleball.ticket.charge", "2");
-        config.put("battleball.increase.points", "false");
+        config.put("battleball.increase.points", "true");
 
         config.put("game.finished.listing.expiry.seconds", "300");
 
@@ -68,7 +68,7 @@ public class GameConfiguration {
         //config.put("snowstorm.game.lifetime.seconds", "180");
         config.put("snowstorm.restart.game.seconds", "30");
         config.put("snowstorm.ticket.charge", "2");
-        config.put("snowstorm.increase.points", "false");
+        config.put("snowstorm.increase.points", "true");
 
         config.put("tutorial.enabled", "true");
         config.put("profile.editing", "true");
