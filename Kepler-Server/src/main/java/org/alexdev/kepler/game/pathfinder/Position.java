@@ -233,6 +233,39 @@ public class Position {
     }
 
     /**
+     * Gets the square behind
+     *
+     * @return the square behind
+     */
+    public Position getSquareBehind() {
+        Position square = this.copy();
+        
+        if (this.bodyRotation == 0) {
+            square.Y++;
+        } else if (this.bodyRotation == 1) {
+            square.X--;
+            square.Y++;
+        } else if (this.bodyRotation == 2) {
+            square.X--;
+        } else if (this.bodyRotation == 3) {
+            square.X--;
+            square.Y--;
+        }  else if (this.bodyRotation == 4) {
+            square.Y--;
+        } else if (this.bodyRotation == 5) {
+            square.X++;
+            square.Y--;
+        } else if (this.bodyRotation == 6) {
+            square.X++;
+        } else if (this.bodyRotation == 7) {
+            square.X++;
+            square.Y++;
+        }
+
+        return square;
+    }
+
+    /**
      * Gets the square to the right.
      *
      * @return the square to the right
