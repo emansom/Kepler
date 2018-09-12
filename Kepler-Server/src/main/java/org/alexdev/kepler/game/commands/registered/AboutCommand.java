@@ -31,11 +31,11 @@ public class AboutCommand extends Command {
         contributorList.add("Ascii");
         contributorList.add("Lightbulb");
         contributorList.add("Raptosaur");
-        contributorList.add("<br>  Romuald");
+        contributorList.add("<br>Romuald");
         contributorList.add("Nillus");
         contributorList.add("Holo Team");
         contributorList.add("Meth0d");
-        contributorList.add("office.boy");
+        contributorList.add("<br>office.boy");
 
         StringBuffer about = new StringBuffer();
         about.append("Project Kepler - Habbo Hotel emulation server for Shockwave");
