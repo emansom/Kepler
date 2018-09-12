@@ -39,22 +39,24 @@ public class BombHandle {
         }
 
         for (GamePlayer stunnedPlayer : stunnedPlayers) {
-            Position from = stunnedPlayer.getPlayer().getRoomUser().getPosition();
-            Position towards = gamePlayer.getPlayer().getRoomUser().getPosition();
+            // Move player away from blast radius: https://www.youtube.com/watch?v=cP3bvGOx53o&feature=youtu.be&t=242
+            if (gamePlayer != stunnedPlayer) {
+                Position from = stunnedPlayer.getPlayer().getRoomUser().getPosition();
+                Position towards = gamePlayer.getPlayer().getRoomUser().getPosition();
 
-            int temporaryRotation = Rotation.calculateWalkDirection(from, towards);
+                int temporaryRotation = Rotation.calculateWalkDirection(from, towards);
 
-            Position pushBack = from.copy();
-            pushBack.setRotation(temporaryRotation);
-            pushBack = pushBack.getSquareBehind();
+                Position pushBack = from.copy();
+                pushBack.setRotation(temporaryRotation);
+                pushBack = pushBack.getSquareBehind();
 
-            BattleballTile battleballTile = (BattleballTile) game.getTile(pushBack.getX(), pushBack.getY());
+                BattleballTile battleballTile = (BattleballTile) game.getTile(pushBack.getX(), pushBack.getY());
 
-            if (TileUtil.isValidGameTile(stunnedPlayer, battleballTile, true)) {
-                stunnedPlayer.getPlayer().getRoomUser().setPosition(pushBack);
+                if (TileUtil.isValidGameTile(stunnedPlayer, battleballTile, true)) {
+                    stunnedPlayer.getPlayer().getRoomUser().setPosition(pushBack);
+                }
             }
 
-            // TODO: Move player away from blast radius: https://www.youtube.com/watch?v=cP3bvGOx53o&feature=youtu.be&t=242
             PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
         }
     }
