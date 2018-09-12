@@ -7,12 +7,35 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 public class HEIGHTMAP_UPDATE extends MessageComposer {
     private final String heightmap;
 
-    public HEIGHTMAP_UPDATE(String heightmap) {
-        this.heightmap = heightmap;
-    }
-
     public HEIGHTMAP_UPDATE(RoomModel roomModel) {
-        this.heightmap = roomModel.getHeightmap();
+        String[] lines = roomModel.getHeightmap().split("\r");
+
+        StringBuilder updateMap = new StringBuilder();
+
+        for (int y = 0; y < roomModel.getMapSizeY(); y++) {
+            String line = lines[y];
+
+            for (int x = 0; x < roomModel.getMapSizeX(); x++) {
+                char tile = line.charAt(x);
+
+                if (Character.isDigit(tile)) {
+                    int height = Character.getNumericValue(tile);
+
+                    if (height < 0 || height > 8) {
+                        height = 0;
+                    }
+
+                    char updateChar = (char) (height + 65);
+                    updateMap.append(updateChar);
+                } else {
+                    updateMap.append("x");
+                }
+            }
+
+            updateMap.append("\r");
+        }
+
+        this.heightmap = updateMap.toString();
     }
 
     @Override
