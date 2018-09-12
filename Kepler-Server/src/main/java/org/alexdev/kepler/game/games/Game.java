@@ -222,8 +222,10 @@ public abstract class Game {
         }
 
         // Save all users' points
-        for (GamePlayer p : this.getPlayers()) {
-            GameDao.increasePoints(p.getPlayer().getDetails(), this.gameType, p.getScore());
+        if (this.canIncreasePoints()) {
+            for (GamePlayer p : this.getPlayers()) {
+                GameDao.increasePoints(p.getPlayer().getDetails(), this.gameType, p.getScore());
+            }
         }
 
         // Send scores to everybody
@@ -557,6 +559,15 @@ public abstract class Game {
      */
     public static int getTicketCost(GameType gameType) {
         return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".ticket.charge");
+    }
+
+    /**
+     * Get whether points can be increased or not
+     *
+     * @return true, if successful
+     */
+    public boolean canIncreasePoints() {
+        return GameConfiguration.getInstance().getBoolean(this.gameType.name().toLowerCase() + ".increase.points");
     }
 
     /**
