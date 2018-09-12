@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games;
 
+import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.enums.GameState;
@@ -219,6 +220,11 @@ public abstract class Game {
         // Stop all players from walking when game starts if they selected a tile
         for (GamePlayer p : this.getPlayers()) {
             p.getPlayer().getRoomUser().setWalkingAllowed(false);
+        }
+
+        // Save all users' points
+        for (GamePlayer p : this.getPlayers()) {
+            GameDao.increasePoints(p.getPlayer().getDetails(), this.gameType, p.getScore());
         }
 
         // Send scores to everybody
@@ -533,6 +539,25 @@ public abstract class Game {
         }
 
         return this.teams.get(teamId).getActivePlayers().size() <= maxPerTeam;
+    }
+
+    /**
+     * Get the cost of tickets required to play this game
+     *
+     * @return the ticket amount required
+     */
+    public int getTicketCost() {
+        return getTicketCost(this.getGameType());
+    }
+
+    /**
+     * Get the cost of tickets required to play each game
+     *
+     * @param gameType the type of game to get the ticket cost for
+     * @return the ticket amount required
+     */
+    public static int getTicketCost(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".ticket.charge");
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.alexdev.kepler.game.games.battleball;
 
+import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
 import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
@@ -15,6 +16,7 @@ import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,6 +61,13 @@ public class BattleballGame extends Game {
         //this.activePowers.clear();
         //this.storedPowers.clear();
         //this.timeUntilNextPower = new AtomicInteger(0);
+        int ticketCharge = GameConfiguration.getInstance().getInteger("battleball.ticket.charge");
+
+        if (ticketCharge > 0) {
+            for (GamePlayer gamePlayer : this.getPlayers()) {
+                CurrencyDao.decreaseTickets(gamePlayer.getPlayer().getDetails(), 2); // BattleBall costs 2 tickets
+            }
+        }
     }
 
     @Override
@@ -149,7 +158,7 @@ public class BattleballGame extends Game {
 
     private void updateTimeUntilNextPower() {
         if (this.activePowers.size() >= MAX_POWERS_ACTIVE) {
-            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25)); // Longer time gaps when there maximum amount of spawned power ups have reached
+            this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 25 + 1)); // Longer time gaps when there maximum amount of spawned power ups have reached
         } else {
             this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(5, 10 + 1));
         }

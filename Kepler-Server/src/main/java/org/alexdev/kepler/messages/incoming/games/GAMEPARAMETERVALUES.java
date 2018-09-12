@@ -1,8 +1,10 @@
 package org.alexdev.kepler.messages.incoming.games;
 
+import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
+import org.alexdev.kepler.messages.outgoing.games.JOINFAILED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.StringUtil;
@@ -25,6 +27,7 @@ public class GAMEPARAMETERVALUES implements MessageEvent {
         }
 
         GameLobbyTrigger gameLobbyTrigger = (GameLobbyTrigger) room.getModel().getModelTrigger();
+
         Map<String, Object> gameParameters = new HashMap<>();
 
         int parameters = reader.readInt();
