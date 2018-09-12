@@ -5,13 +5,12 @@ import org.alexdev.kepler.game.games.battleball.BattleballGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
-import org.alexdev.kepler.game.games.snowstorm.events.SnowStormObjectEvent;
 import org.alexdev.kepler.game.games.snowstorm.object.SnowStormAvatarObject;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.games.FULLGAMESTATUS;
 import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_FULLGAMESTATUS;
-import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_GAMESTATUS;
 import org.alexdev.kepler.messages.outgoing.rooms.HEIGHTMAP;
+import org.alexdev.kepler.messages.outgoing.rooms.HEIGHTMAP_UPDATE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -26,6 +25,7 @@ public class G_HMAP implements MessageEvent {
         }
 
         player.send(new HEIGHTMAP(player.getRoomUser().getRoom().getModel()));
+        player.send(new HEIGHTMAP_UPDATE(player.getRoomUser().getRoom().getModel()));
 
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
