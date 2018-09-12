@@ -30,6 +30,10 @@ public class GAMEEVENT implements MessageEvent {
 
         // Walk request
         if (eventType == 0) {
+            if (!player.getRoomUser().isWalkingAllowed()) {
+                return;
+            }
+
             int X = reader.readInt();
             int Y = reader.readInt();
 
@@ -43,6 +47,10 @@ public class GAMEEVENT implements MessageEvent {
 
         // Jump request
         if (eventType == 2) {
+            if (!player.getRoomUser().isWalkingAllowed()) {
+                return;
+            }
+
             int X = reader.readInt();
             int Y = reader.readInt();
 
