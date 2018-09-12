@@ -39,13 +39,11 @@ public class AboutCommand extends Command {
         Collections.sort(contributorList);
 
         StringBuffer about = new StringBuffer();
-        about.append("Project Kepler - Habbo Hotel emulation server for Shockwave");
-        about.append("<br><br>");
-        about.append("Contributors:");
+        about.append("Project Kepler<br><br>Contributors:");
         about.append("<br> - ");
         about.append(String.join(", ", contributorList));
         about.append("<br>");
-        about.append("<br><br>Made by Quackster (Alex) from RaGEZONE");
+        about.append("<br><br><br>Made by Quackster (Alex) from RaGEZONE");
 
         Player player = (Player)entity;
         player.send(new ALERT(about.toString()));
