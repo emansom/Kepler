@@ -58,6 +58,7 @@ public class BombHandle {
 
                     stunnedPlayer.getPlayer().getRoomUser().getPosition().setX(pushBack.getX());
                     stunnedPlayer.getPlayer().getRoomUser().getPosition().setY(pushBack.getY());
+                    stunnedPlayer.getPlayer().getRoomUser().getPosition().setZ(battleballTile.getPosition().getZ());
                 }
             }
 
