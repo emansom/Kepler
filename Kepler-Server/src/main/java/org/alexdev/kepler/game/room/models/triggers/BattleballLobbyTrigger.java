@@ -4,7 +4,7 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.enums.GameType;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
+import org.alexdev.kepler.game.games.battleball.BattleBallGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
@@ -81,7 +81,7 @@ public class BattleballLobbyTrigger extends GameLobbyTrigger {
             }
         }
 
-        BattleballGame game = new BattleballGame(GameManager.getInstance().createId(), mapId, this.getGameType(), name, teams, gameCreator, allowedPowerUps);
+        BattleBallGame game = new BattleBallGame(GameManager.getInstance().createId(), mapId, this.getGameType(), name, teams, gameCreator, allowedPowerUps);
 
         GamePlayer gamePlayer = new GamePlayer(gameCreator);
         gamePlayer.setGameId(game.getId());

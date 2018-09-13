@@ -3,7 +3,7 @@ package org.alexdev.kepler.game.games;
 import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.GameScheduler;
-import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
+import org.alexdev.kepler.game.games.battleball.BattleBallMap;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.games.utils.FinishedGame;
@@ -32,7 +32,7 @@ public class GameManager {
     private List<Game> games;
     private List<FinishedGame> finishedGames;
 
-    private List<BattleballTileMap> battleballTileMaps;
+    private List<BattleBallMap> battleballTileMaps;
 
     public GameManager() {
         this.rankList = GameDao.getRanks();
@@ -79,8 +79,8 @@ public class GameManager {
      * @param mapId the map id
      * @return the game spawn
      */
-    public BattleballTileMap getBattleballTileMap(int mapId) {
-        for (BattleballTileMap tileMap : this.battleballTileMaps) {
+    public BattleBallMap getBattleballTileMap(int mapId) {
+        for (BattleBallMap tileMap : this.battleballTileMaps) {
             if (tileMap.getMapId() == mapId) {
                 return tileMap;
             }

@@ -1,18 +1,12 @@
 package org.alexdev.kepler.messages.outgoing.games;
 
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameManager;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
+import org.alexdev.kepler.game.games.battleball.BattleBallTile;
 import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.games.enums.GameType;
-import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class FULLGAMESTATUS extends MessageComposer {
     private final Game game;
@@ -39,7 +33,7 @@ public class FULLGAMESTATUS extends MessageComposer {
 
             for (int y = 0; y < this.game.getRoomModel().getMapSizeY(); y++) {
                 for (int x = 0; x < this.game.getRoomModel().getMapSizeX(); x++) {
-                    BattleballTile tile = (BattleballTile) this.game.getTile(x, y);
+                    BattleBallTile tile = (BattleBallTile) this.game.getTile(x, y);
 
                     if (tile == null) {
                         response.writeInt(-1);

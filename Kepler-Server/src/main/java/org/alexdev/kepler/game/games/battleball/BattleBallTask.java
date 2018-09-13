@@ -4,14 +4,11 @@ import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallPlayerState;
 import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
-import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerUpdateObject;
-import org.alexdev.kepler.game.games.battleball.objects.PowerObject;
 import org.alexdev.kepler.game.games.battleball.objects.PowerUpUpdateObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
-import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
 import org.alexdev.kepler.game.player.Player;
@@ -26,11 +23,11 @@ import org.alexdev.kepler.util.StringUtil;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BattleballUpdateTask implements Runnable {
+public class BattleBallTask implements Runnable {
     private final Room room;
-    private final BattleballGame game;
+    private final BattleBallGame game;
 
-    public BattleballUpdateTask(Room room, BattleballGame game) {
+    public BattleBallTask(Room room, BattleBallGame game) {
         this.room = room;
         this.game = game;
     }
@@ -45,8 +42,8 @@ public class BattleballUpdateTask implements Runnable {
             List<GameObject> objects = new ArrayList<>();
             List<GameEvent> events = new ArrayList<>();
 
-            List<BattleballTile> updateTiles = new ArrayList<>();
-            List<BattleballTile> fillTiles = new ArrayList<>();
+            List<BattleBallTile> updateTiles = new ArrayList<>();
+            List<BattleBallTile> fillTiles = new ArrayList<>();
 
             this.game.getEventsQueue().drainTo(events);
             this.game.getObjectsQueue().drainTo(objects);
@@ -60,13 +57,13 @@ public class BattleballUpdateTask implements Runnable {
                     continue;
                 }
 
-                if (gamePlayer.getPlayerState() == BattleballPlayerState.CLIMBING_INTO_CANNON ||
-                    gamePlayer.getPlayerState() == BattleballPlayerState.FLYING_THROUGH_AIR) {
+                if (gamePlayer.getPlayerState() == BattleBallPlayerState.CLIMBING_INTO_CANNON ||
+                    gamePlayer.getPlayerState() == BattleBallPlayerState.FLYING_THROUGH_AIR) {
                     continue;
                 }
 
                 if (this.game.getStoredPowers().containsKey(gamePlayer)) {
-                    for (BattleballPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
+                    for (BattleBallPowerUp powerUp : this.game.getStoredPowers().get(gamePlayer)) {
                         objects.add(new PowerUpUpdateObject(powerUp));
                     }
                 }
@@ -85,7 +82,7 @@ public class BattleballUpdateTask implements Runnable {
     /**
      * Process entity.
      */
-    private void processEntity(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
+    private void processEntity(GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events, List<BattleBallTile> updateTiles, List<BattleBallTile> fillTiles) {
         Entity entity = (Entity) gamePlayer.getPlayer();
         Game game = gamePlayer.getGame();
 
@@ -102,7 +99,7 @@ public class BattleballUpdateTask implements Runnable {
                 roomEntity.updateNewHeight(roomEntity.getPosition());
 
                 // Increment tiles...
-                BattleballTile tile = (BattleballTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
+                BattleBallTile tile = (BattleBallTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
 
                 if (tile != null) {
                     tile.interact(gamePlayer, objects, events, updateTiles, fillTiles);

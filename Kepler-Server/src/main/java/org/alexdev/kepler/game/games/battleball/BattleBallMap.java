@@ -3,14 +3,14 @@ package org.alexdev.kepler.game.games.battleball;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.apache.commons.lang3.StringUtils;
 
-public class BattleballTileMap {
+public class BattleBallMap {
     private final String heightmap;
 
     private int mapId;
     private GameType gameType;
     private boolean battleballTileMap[][];
 
-    public BattleballTileMap(int mapId, GameType gameType,String tileMap) {
+    public BattleBallMap(int mapId, GameType gameType, String tileMap) {
         this.mapId = mapId;
         this.gameType = gameType;
         this.heightmap = tileMap.replace("|", "\r");

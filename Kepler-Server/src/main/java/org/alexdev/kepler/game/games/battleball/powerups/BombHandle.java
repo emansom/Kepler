@@ -1,16 +1,13 @@
 package org.alexdev.kepler.game.games.battleball.powerups;
 
-import org.alexdev.kepler.game.entity.Entity;
-import org.alexdev.kepler.game.entity.EntityType;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
+import org.alexdev.kepler.game.games.battleball.BattleBallGame;
+import org.alexdev.kepler.game.games.battleball.BattleBallTile;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallPlayerState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.utils.PowerUpUtil;
 import org.alexdev.kepler.game.games.utils.TileUtil;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
-import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 
@@ -18,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BombHandle {
-    public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
-        //PowerUpUtil.stunPlayer(game, gamePlayer, BattleballPlayerState.STUNNED);
+    public static void handle(BattleBallGame game, GamePlayer gamePlayer, Room room) {
+        //PowerUpUtil.stunPlayer(game, gamePlayer, BattleBallPlayerState.STUNNED);
         List<GamePlayer> stunnedPlayers = new ArrayList<>();
 
         for (Position position : gamePlayer.getPlayer().getRoomUser().getPosition().getCircle(5)) {
@@ -29,7 +26,7 @@ public class BombHandle {
                 continue;
             }
 
-            BattleballTile battleballTile = (BattleballTile) game.getTile(position.getX(), position.getY());
+            BattleBallTile battleballTile = (BattleBallTile) game.getTile(position.getX(), position.getY());
 
             if (TileUtil.undoTileAttributes(battleballTile, gamePlayer.getGame())) {
                 game.getUpdateTilesQueue().add(battleballTile);
@@ -50,7 +47,7 @@ public class BombHandle {
                 pushBack.setRotation(temporaryRotation);
                 pushBack = pushBack.getSquareBehind();
 
-                BattleballTile battleballTile = (BattleballTile) game.getTile(pushBack.getX(), pushBack.getY());
+                BattleBallTile battleballTile = (BattleBallTile) game.getTile(pushBack.getX(), pushBack.getY());
 
                 if (TileUtil.isValidGameTile(stunnedPlayer, battleballTile, true)) {
                     stunnedPlayer.getPlayer().getRoomUser().getRoom().getMapping().getTile(from).removeEntity(stunnedPlayer.getPlayer());
@@ -62,7 +59,7 @@ public class BombHandle {
                 }
             }
 
-            PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleballPlayerState.STUNNED);
+            PowerUpUtil.stunPlayer(game, stunnedPlayer, BattleBallPlayerState.STUNNED);
         }
     }
 }

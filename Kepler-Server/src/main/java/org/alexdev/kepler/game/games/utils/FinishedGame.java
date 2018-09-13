@@ -3,7 +3,7 @@ package org.alexdev.kepler.game.games.utils;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.enums.GameType;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
+import org.alexdev.kepler.game.games.battleball.BattleBallGame;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.util.DateUtil;
 import org.apache.commons.lang3.tuple.Pair;
@@ -32,7 +32,7 @@ public class FinishedGame {
         this.gameType = game.getGameType();
 
         if (this.gameType == GameType.BATTLEBALL) {
-            BattleballGame battleballGame = (BattleballGame) game;
+            BattleBallGame battleballGame = (BattleBallGame) game;
             this.powerUps = battleballGame.getAllowedPowerUps();
         }
 

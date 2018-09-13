@@ -3,7 +3,7 @@ package org.alexdev.kepler.game.games.player;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallPlayerState;
 import org.alexdev.kepler.game.games.snowstorm.TurnContainer;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
@@ -22,7 +22,7 @@ public class GamePlayer {
     private boolean inGame;
     private boolean clickedRestart;
     private TurnContainer turnContainer;
-    private BattleballPlayerState playerState;
+    private BattleBallPlayerState playerState;
     private GamePlayer harlequinPlayer;
 
     public GamePlayer(Player player) {
@@ -136,11 +136,11 @@ public class GamePlayer {
         return turnContainer;
     }
 
-    public BattleballPlayerState getPlayerState() {
+    public BattleBallPlayerState getPlayerState() {
         return playerState;
     }
 
-    public void setPlayerState(BattleballPlayerState playerState) {
+    public void setPlayerState(BattleBallPlayerState playerState) {
         this.playerState = playerState;
     }
 

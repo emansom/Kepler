@@ -1,9 +1,9 @@
 package org.alexdev.kepler.game.games.utils;
 
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
+import org.alexdev.kepler.game.games.battleball.BattleBallTile;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallColourState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
@@ -11,28 +11,28 @@ import org.alexdev.kepler.game.pathfinder.Position;
 import java.util.*;
 
 public class FloodFill {
-    public static Collection<BattleballTile> getFill(GamePlayer gamePlayer, BattleballTile startTile) {
-        HashSet<BattleballTile> closed = new HashSet<>();
+    public static Collection<BattleBallTile> getFill(GamePlayer gamePlayer, BattleBallTile startTile) {
+        HashSet<BattleBallTile> closed = new HashSet<>();
 
-        ArrayDeque<BattleballTile> stack = new ArrayDeque<>();
+        ArrayDeque<BattleBallTile> stack = new ArrayDeque<>();
         stack.add(startTile);
 
         while (stack.size() > 0) {
-            BattleballTile tile = stack.pollLast();
+            BattleBallTile tile = stack.pollLast();
 
             if (tile != null) {
-                for (BattleballTile loopTile : neighbours(gamePlayer.getGame(), tile.getPosition())) {
+                for (BattleBallTile loopTile : neighbours(gamePlayer.getGame(), tile.getPosition())) {
                     if (loopTile == null) {
                         closed.clear();
                         return closed;
                     }
 
-                    if (loopTile.getColour() == BattleballColourType.DISABLED) {
+                    if (loopTile.getColour() == BattleBallColourState.DISABLED) {
                         closed.clear();
                         return closed;
                     }
 
-                    if ((loopTile.getColour().getColourId() != gamePlayer.getTeamId() || loopTile.getState() != BattleballTileType.SEALED) && !closed.contains(loopTile) && !stack.contains(loopTile)) {
+                    if ((loopTile.getColour().getColourId() != gamePlayer.getTeamId() || loopTile.getState() != BattleBallTileState.SEALED) && !closed.contains(loopTile) && !stack.contains(loopTile)) {
                         stack.addFirst(loopTile);
                     }
                 }
@@ -44,12 +44,12 @@ public class FloodFill {
         return closed;
     }
 
-    public static HashSet<BattleballTile> neighbours(Game game, Position position) {
-        HashSet<BattleballTile> battleballTiles = new HashSet<>();
+    public static HashSet<BattleBallTile> neighbours(Game game, Position position) {
+        HashSet<BattleBallTile> battleballTiles = new HashSet<>();
 
         for (Position point : Pathfinder.MOVE_POINTS) {
             Position tmp = position.copy().add(point);
-            battleballTiles.add((BattleballTile) game.getTile(tmp.getX(), tmp.getY()));
+            battleballTiles.add((BattleBallTile) game.getTile(tmp.getX(), tmp.getY()));
         }
 
         return battleballTiles;

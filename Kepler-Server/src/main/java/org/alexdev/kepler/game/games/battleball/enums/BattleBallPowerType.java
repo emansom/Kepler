@@ -2,7 +2,7 @@ package org.alexdev.kepler.game.games.battleball.enums;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public enum BattleballPowerType {
+public enum BattleBallPowerType {
     LIGHT_BLUB(1),
     SPRING(2),
     FLASHLIGHT(3),
@@ -15,15 +15,15 @@ public enum BattleballPowerType {
 
     private final int powerUpId;
 
-    BattleballPowerType(int powerUpId) {
+    BattleBallPowerType(int powerUpId) {
         this.powerUpId = powerUpId;
     }
 
-    public static BattleballPowerType random() {
-        return BattleballPowerType.values()[ThreadLocalRandom.current().nextInt(0, BattleballPowerType.values().length)];
+    public static BattleBallPowerType random() {
+        return BattleBallPowerType.values()[ThreadLocalRandom.current().nextInt(0, BattleBallPowerType.values().length)];
     }
 
-    public static BattleballPowerType getById(int powerUpId) {
+    public static BattleBallPowerType getById(int powerUpId) {
         for (var powerUp : values()) {
             if (powerUp.getPowerUpId() == powerUpId) {
                 return powerUp;

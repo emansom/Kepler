@@ -2,7 +2,7 @@ package org.alexdev.kepler.dao.mysql;
 
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.game.games.enums.GameType;
-import org.alexdev.kepler.game.games.battleball.BattleballTileMap;
+import org.alexdev.kepler.game.games.battleball.BattleBallMap;
 import org.alexdev.kepler.game.games.player.GameRank;
 import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.room.models.RoomModel;
@@ -73,8 +73,8 @@ public class GameDao {
         return maps;
     }
 
-    public static List<BattleballTileMap> getBattleballTileMaps() {
-        List<BattleballTileMap> maps = new ArrayList<>();
+    public static List<BattleBallMap> getBattleballTileMaps() {
+        List<BattleBallMap> maps = new ArrayList<>();
 
         Connection sqlConnection = null;
         PreparedStatement preparedStatement = null;
@@ -86,7 +86,7 @@ public class GameDao {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                maps.add(new BattleballTileMap(resultSet.getInt("id"), GameType.BATTLEBALL, resultSet.getString("tile_map")));
+                maps.add(new BattleBallMap(resultSet.getInt("id"), GameType.BATTLEBALL, resultSet.getString("tile_map")));
             }
 
         } catch (Exception e) {

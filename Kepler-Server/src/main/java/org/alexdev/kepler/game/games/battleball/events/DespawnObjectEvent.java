@@ -1,8 +1,6 @@
 package org.alexdev.kepler.game.games.battleball.events;
 
 import org.alexdev.kepler.game.games.GameEvent;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
-import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
 import org.alexdev.kepler.game.games.enums.GameEventType;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 

@@ -1,16 +1,16 @@
 package org.alexdev.kepler.game.games.battleball.events;
 
 import org.alexdev.kepler.game.games.GameEvent;
-import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
+import org.alexdev.kepler.game.games.battleball.BattleBallPowerUp;
 import org.alexdev.kepler.game.games.enums.GameEventType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class ActivatePowerUpEvent extends GameEvent {
-    private final BattleballPowerUp powerUp;
+    private final BattleBallPowerUp powerUp;
     private final GamePlayer gamePlayer;
 
-    public ActivatePowerUpEvent(GamePlayer gamePlayer, BattleballPowerUp powerUp) {
+    public ActivatePowerUpEvent(GamePlayer gamePlayer, BattleBallPowerUp powerUp) {
         super(GameEventType.BATTLEBALL_POWERUP_ACTIVATE);
         this.gamePlayer = gamePlayer;
         this.powerUp = powerUp;

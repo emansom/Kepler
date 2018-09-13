@@ -1,7 +1,7 @@
 package org.alexdev.kepler.messages.incoming.rooms;
 
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
+import org.alexdev.kepler.game.games.battleball.BattleBallGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
@@ -10,7 +10,6 @@ import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.outgoing.games.FULLGAMESTATUS;
 import org.alexdev.kepler.messages.outgoing.games.SNOWSTORM_FULLGAMESTATUS;
 import org.alexdev.kepler.messages.outgoing.rooms.HEIGHTMAP;
-import org.alexdev.kepler.messages.outgoing.rooms.HEIGHTMAP_UPDATE;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -30,7 +29,7 @@ public class G_HMAP implements MessageEvent {
         GamePlayer gamePlayer = player.getRoomUser().getGamePlayer();
 
         if (gamePlayer != null) {
-            if (gamePlayer.getGame() instanceof BattleballGame) {
+            if (gamePlayer.getGame() instanceof BattleBallGame) {
                 player.send(new FULLGAMESTATUS(gamePlayer.getGame()));
             } else {
                 SnowStormGame game = (SnowStormGame) gamePlayer.getGame();
