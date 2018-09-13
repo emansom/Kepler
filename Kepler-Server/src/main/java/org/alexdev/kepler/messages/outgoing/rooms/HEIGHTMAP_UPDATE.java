@@ -29,7 +29,8 @@ public class HEIGHTMAP_UPDATE extends MessageComposer {
 
                     if (room.getMapping().getTile(x, y).getHighestItem() != null &&
                             room.getMapping().getTile(x, y).getHighestItem().hasBehaviour(ItemBehaviour.CAN_STACK_ON_TOP)) {
-                        updateMap.append("y");
+                        char updateChar = (char) (height + 65);
+                        updateMap.append(updateChar);
                     } else {
 
                         //char updateChar = (char) (height + 65);
