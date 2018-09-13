@@ -334,7 +334,7 @@ public abstract class Game {
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
-        this.sendObservers(new GAMEDELETED());
+        this.sendObservers(new GAMEDELETED(this.id));
 
         // Preparing game seconds countdown
         this.preparingTimerRunnable = new FutureRunnable() {
@@ -376,7 +376,7 @@ public abstract class Game {
         this.objects.remove(gamePlayer.getGameObject());
 
         gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
-        gamePlayer.getPlayer().send(new GAMEDELETED());
+        gamePlayer.getPlayer().send(new GAMEDELETED(this.id));
 
         if (!isSpectator) {
             this.movePlayer(gamePlayer, gamePlayer.getTeamId(), -1);
@@ -388,7 +388,7 @@ public abstract class Game {
         if (!this.hasEnoughPlayers()) {
             GameManager.getInstance().getGames().remove(this);
 
-            this.sendObservers(new GAMEDELETED());
+            this.sendObservers(new GAMEDELETED(this.id));
             this.killSpectators();
         }
 
