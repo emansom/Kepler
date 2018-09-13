@@ -377,7 +377,7 @@ public class Room {
             return false;
         }
 
-        // 8 is Club Only category (TODO: use enums for public space categories)
+        // 8 is Club Only category (TODO: create a club_only column in room categories table)
         if (this.getCategory().getId() == 8) {
             return true;
         }
