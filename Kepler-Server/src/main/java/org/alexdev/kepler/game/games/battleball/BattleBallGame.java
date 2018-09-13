@@ -262,43 +262,36 @@ public class BattleBallGame extends Game {
     private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
         try {
             while (this.battleballTiles[spawnX.get()][spawnY.get()].isSpawnOccupied()) {
-                /*if (spawnRotation.get() == 0 || spawnRotation.get() == 4) {
-                    if (flip)
-                        spawnX.incrementAndGet();// -= 1;
-                    else
-                        spawnY.decrementAndGet();// += 1;
-                } else if (spawnRotation.get() == 2 || spawnRotation.get() == 6) {
-                    if (flip)
-                        spawnX.incrementAndGet();// -= 1;
-                    else
-                        spawnY.decrementAndGet();// += 1;
-                }*/
                 if (spawnRotation.get() == 0) {
-                    if (!flip)
+                    if (!flip) {
                         spawnX.decrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnX.incrementAndGet();// += 1;
+                    }
                 }
 
                 if (spawnRotation.get() == 2) {
-                    if (!flip)
+                    if (!flip) {
                         spawnY.incrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnY.decrementAndGet();// += 1;
+                    }
                 }
 
                 if (spawnRotation.get() == 4) {
-                    if (!flip)
+                    if (!flip) {
                         spawnX.incrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnX.decrementAndGet();// += 1;
+                    }
                 }
 
                 if (spawnRotation.get() == 6) {
-                    if (!flip)
+                    if (!flip) {
                         spawnY.decrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnY.incrementAndGet();// += 1;
+                    }
                 }
             }
             flip = (!flip);

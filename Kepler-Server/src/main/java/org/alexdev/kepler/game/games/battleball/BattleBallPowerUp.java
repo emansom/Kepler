@@ -82,6 +82,16 @@ public class BattleBallPowerUp {
         }
     }
 
+    /**
+     * Get whether the user has bounced and uses a tile (used for vacuum and spring powers)
+     *
+     * @param tile the tile being bounced on
+     * @param gamePlayer the game player bouncing on the tile
+     * @param updateTiles the list of tiles to update
+     * @param updateFillTiles the fill tile list to append
+     *
+     * @return true, if successful
+     */
     public static boolean hasUsedPower(BattleBallTile tile, GamePlayer gamePlayer, List<BattleBallTile> updateTiles, List<BattleBallTile> updateFillTiles) {
         BattleBallColourState colour = tile.getColour();
         BattleBallTileState state = tile.getState();
@@ -119,6 +129,14 @@ public class BattleBallPowerUp {
         return false;
     }
 
+    /**
+     * Get whether the user has walked into a power up.
+     *
+     * @param tile the tile being bounced on
+     * @param gamePlayer the game player bouncing on the tile
+     * @param objects the list of objects to update for the next loop
+     * @param events the list of events to update for the next loop
+     */
     public static void checkPowerUp(BattleBallTile tile, GamePlayer gamePlayer, List<GameObject> objects, List<GameEvent> events) {
         BattleBallGame game = (BattleBallGame) gamePlayer.getGame();
         BattleBallPowerUp powerUp = null;
