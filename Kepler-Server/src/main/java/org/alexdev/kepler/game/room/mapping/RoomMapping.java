@@ -12,6 +12,7 @@ import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.models.RoomModel;
 import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.log.Log;
+import org.alexdev.kepler.messages.outgoing.rooms.HEIGHTMAP_UPDATE;
 import org.alexdev.kepler.messages.outgoing.rooms.items.REMOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.MOVE_FLOORITEM;
 import org.alexdev.kepler.messages.outgoing.rooms.items.PLACE_FLOORITEM;
@@ -51,6 +52,8 @@ public class RoomMapping {
 
         this.regenerateEntityCollision();
         this.regenerateItemCollision();
+
+        this.room.send(new HEIGHTMAP_UPDATE(this.room, this.room.getModel()));
     }
 
     /**
