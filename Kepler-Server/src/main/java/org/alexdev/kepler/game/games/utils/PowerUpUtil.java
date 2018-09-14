@@ -18,7 +18,9 @@ public class PowerUpUtil {
 
         // Restore player 5 seconds later
         GameScheduler.getInstance().getSchedulerService().schedule(()-> {
-            gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
+            if (!game.isGameFinished()) {
+                gamePlayer.getPlayer().getRoomUser().setWalkingAllowed(true);
+            }
 
             gamePlayer.setPlayerState(BattleBallPlayerState.NORMAL);
             game.addObjectToQueue(new PlayerUpdateObject(gamePlayer));
