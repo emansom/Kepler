@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 public class SpringHandle {
     public static void handle(BattleBallGame game, GamePlayer gamePlayer, Room room) {
         gamePlayer.setPlayerState(BattleBallPlayerState.HIGH_JUMPS);
-        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+        game.addObjectToQueue(new PlayerUpdateObject(gamePlayer));
 
         GameScheduler.getInstance().getSchedulerService().schedule(()-> {
             if (game.isGameFinished()) {
@@ -24,7 +24,7 @@ public class SpringHandle {
             }
 
             gamePlayer.setPlayerState(BattleBallPlayerState.NORMAL);
-            game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
+            game.addObjectToQueue(new PlayerUpdateObject(gamePlayer));
         }, 10, TimeUnit.SECONDS);
     }
 }

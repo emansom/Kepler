@@ -27,7 +27,7 @@ public class HarlequinHandle {
             p.setPlayerState(BattleBallPlayerState.COLORING_FOR_OPPONENT);
             p.setHarlequinPlayer(gamePlayer);
 
-            game.getObjectsQueue().add(new PlayerUpdateObject(p));
+            game.addObjectToQueue(new PlayerUpdateObject(p));
             affectedPlayers.add(p);
         }
 
@@ -40,7 +40,7 @@ public class HarlequinHandle {
                 p.setPlayerState(BattleBallPlayerState.NORMAL);
                 p.setHarlequinPlayer(null);
 
-                game.getObjectsQueue().add(new PlayerUpdateObject(p));
+                game.addObjectToQueue(new PlayerUpdateObject(p));
             }
 
         }, 10, TimeUnit.SECONDS);

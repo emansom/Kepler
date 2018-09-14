@@ -656,6 +656,7 @@ public abstract class Game {
 
     public void addPlayerMove(PlayerMoveEvent event) {
         this.eventsQueue.removeIf(e -> e instanceof PlayerMoveEvent && ((PlayerMoveEvent)e).getGamePlayer() == event.getGamePlayer());
+        this.eventsQueue.add(event);
     }
 
     /**
