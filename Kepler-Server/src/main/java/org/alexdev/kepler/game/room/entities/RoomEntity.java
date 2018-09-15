@@ -81,6 +81,11 @@ public abstract class RoomEntity {
     public void kick(boolean allowWalking) {
         Position doorLocation = this.getRoom().getModel().getDoorLocation();
 
+        if (doorLocation == null) {
+            this.getRoom().getEntityManager().leaveRoom(this.entity, true);
+            return;
+        }
+
         // If we're standing in the door, immediately leave room
         if (this.getPosition().equals(doorLocation)) {
             this.getRoom().getEntityManager().leaveRoom(this.entity, true);
