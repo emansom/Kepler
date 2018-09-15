@@ -37,6 +37,36 @@ public class Messenger {
         }
     }
 
+    public void removeFriend(int userId) {
+        MessengerUser messengerUser = null;
+
+        for (MessengerUser friend : this.friends) {
+            if (friend.getUserId() != userId) {
+                messengerUser = friend;
+                break;
+            }
+        }
+
+        if (messengerUser != null) {
+            this.friends.remove(friends);
+        }
+    }
+
+    public void removeRequest(int userId) {
+        MessengerUser messengerUser = null;
+
+        for (MessengerUser request : this.requests) {
+            if (request.getUserId() != userId) {
+                messengerUser = request;
+                break;
+            }
+        }
+
+        if (messengerUser != null) {
+            this.friends.remove(friends);
+        }
+    }
+
     /**
      * Get if the user already has a request from this user id.
      *
