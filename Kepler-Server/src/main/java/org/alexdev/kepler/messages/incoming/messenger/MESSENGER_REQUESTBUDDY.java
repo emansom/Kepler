@@ -21,12 +21,12 @@ public class MESSENGER_REQUESTBUDDY implements MessageEvent {
             return;
         }
 
-        if (player.getMessenger().isFriend(userId)) {
+        if (MessengerDao.requestExists(player.getDetails().getId(), userId) ||
+                MessengerDao.requestExists(userId, player.getDetails().getId())) {
             return;
         }
 
-        if (MessengerDao.requestExists(player.getDetails().getId(), userId) ||
-            MessengerDao.requestExists(userId, player.getDetails().getId())) {
+        if (player.getMessenger().isFriend(userId)) {
             return;
         }
 
