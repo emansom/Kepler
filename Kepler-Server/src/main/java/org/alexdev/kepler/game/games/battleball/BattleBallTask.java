@@ -108,9 +108,6 @@ public class BattleBallTask implements Runnable {
                 roomEntity.getPosition().setY(nextPosition.getY());
                 roomEntity.updateNewHeight(nextPosition);
 
-                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(nextPosition);
-                nextTile.addEntity(entity);
-
                 if (interact) {
                     // Increment tiles...
                     BattleBallTile tile = (BattleBallTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
@@ -145,6 +142,9 @@ public class BattleBallTask implements Runnable {
                 roomEntity.getPosition().setRotation(rotation);
                 roomEntity.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomEntity.setNextPosition(next);
+
+                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(nextPosition);
+                nextTile.addEntity(entity);
 
                 // Add next position if moving
                 events.add(new PlayerMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));
