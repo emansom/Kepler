@@ -18,7 +18,8 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (620, 'exe_artlamp', 45, 0, 5, 740, 0, NULL, NULL, 0),
 (621, 'exe_map', 45, 0, 5, 741, 0, NULL, NULL, 0),
 (622, 'exe_wfall', 45, 0, 5, 742, 0, NULL, NULL, 0),
-(623, 'exe_globe', 45, 0, 5, 743, 0, NULL, NULL, 0);
+(623, 'exe_globe', 45, 0, 5, 743, 0, NULL, NULL, 0),
+(624, 'exe_elevator', 45, 0, 7, 744, 0, NULL, NULL, 0);
 
 INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `top_height`, `behaviour`) VALUES
 (728, 'exe_s_table', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top,custom_data_numeric_state'),
@@ -37,7 +38,7 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (741, 'exe_map', '0,0,0', 1, 1, 0, 'wall_item'),
 (742, 'exe_wfall', '0,0,0', 1, 1, 0, 'wall_item'),
 (743, 'exe_globe', '0,0,0', 1, 1, 0, 'solid,custom_data_numeric_state'),
-(744, 'exe_elevator', '0,0,0', 1, 1, 0, 'teleporter');
+(744, 'exe_elevator', '0,0,0', 1, 1, 0, 'solid,requires_touching_for_interaction,custom_data_true_false,teleporter');
 
 -- migrate:down
 
