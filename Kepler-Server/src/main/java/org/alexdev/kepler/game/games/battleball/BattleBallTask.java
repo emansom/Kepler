@@ -143,7 +143,7 @@ public class BattleBallTask implements Runnable {
                 roomEntity.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomEntity.setNextPosition(next);
 
-                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(nextPosition);
+                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(next);
                 nextTile.addEntity(entity);
 
                 // Add next position if moving
