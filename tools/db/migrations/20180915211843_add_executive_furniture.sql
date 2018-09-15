@@ -22,6 +22,7 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (624, 'exe_elevator', 45, 0, 7, 744, 0, NULL, NULL, 0);
 
 INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `top_height`, `behaviour`) VALUES
+(727, 'exe_rug', '0,0,0', 3, 3, 0, 'can_stand_on_top,can_stack_on_top'),
 (728, 'exe_s_table', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top,custom_data_numeric_state'),
 (729, 'exe_bardesk', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
 (730, 'exe_chair', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
