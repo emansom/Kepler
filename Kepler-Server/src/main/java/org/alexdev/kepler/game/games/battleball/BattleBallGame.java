@@ -34,16 +34,14 @@ public class BattleBallGame extends Game {
     private List<BattleBallPowerUp> activePowers;
 
     private Map<GamePlayer, List<BattleBallPowerUp>> storedPowers;
+    private boolean spawnedInitialPowers;
 
     public static final int MAX_POWERS_ACTIVE = 2;
-
-    private AtomicInteger timeUntilNextPower;
 
     public BattleBallGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
 
         this.allowedPowerUps = allowedPowerUps;
-        this.timeUntilNextPower = new AtomicInteger(0);
 
         if (this.allowedPowerUps.size() >= 2) {
             this.allowedPowerUps.add(BattleBallPowerType.QUESTION_MARK.getPowerUpId());
@@ -58,9 +56,14 @@ public class BattleBallGame extends Game {
 
     @Override
     public void gamePrepare() {
+        // Despawn all previous powers
+        for (BattleBallPowerUp powerUp : this.activePowers) {
+            this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
+        }
+
+        this.spawnedInitialPowers = false;
         this.activePowers.clear();
         this.storedPowers.clear();
-        this.timeUntilNextPower = new AtomicInteger(0);
 
         int ticketCharge = GameConfiguration.getInstance().getInteger("battleball.ticket.charge");
 
@@ -73,9 +76,17 @@ public class BattleBallGame extends Game {
 
     @Override
     public void gamePrepareTick() {
-        this.checkExpirePower();
-        this.checkSpawnPower();
-        this.checkStoredExpirePower();
+        if (!this.spawnedInitialPowers) {
+            if (MAX_POWERS_ACTIVE > 0) {
+                int initialPowers = ThreadLocalRandom.current().nextInt(0, MAX_POWERS_ACTIVE + 1);
+
+                for (int i = 0; i < initialPowers; i++) {
+                    this.checkSpawnPower(false);
+                }
+
+                this.spawnedInitialPowers = true;
+            }
+        }
     }
 
     @Override
@@ -87,12 +98,38 @@ public class BattleBallGame extends Game {
     public void gameTick() {
         try {
             this.checkExpirePower();
-            this.checkSpawnPower();
+            this.checkSpawnPower(true);
             this.checkStoredExpirePower();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
+
+    private void checkSpawnPower(boolean doPercentCheck) {
+        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
+            return;
+        }
+
+        if (this.activePowers.size() >= MAX_POWERS_ACTIVE) { // There's already an active power so don't spawn another one
+            return;
+        }
+
+        if (doPercentCheck) {
+            if (!(Math.random() < 0.06)) {
+                return;
+            }
+        }
+
+        //int powersToSpawn = MAX_POWERS_ACTIVE - this.activePowers.size();
+
+        //for (int i = 0; i < powersToSpawn; i++) {
+            BattleBallPowerUp powerUp = new BattleBallPowerUp(this.createObjectId(), this, this.getRandomTile());
+            this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
+
+            this.activePowers.add(powerUp);
+            this.getObjects().add(powerUp.getObject());
+    }
+
 
     private void checkExpirePower() {
         if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
@@ -132,38 +169,6 @@ public class BattleBallGame extends Game {
 
         this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
         return true;
-    }
-
-    private void checkSpawnPower() {
-        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
-            return;
-        }
-
-        if (this.timeUntilNextPower.get() > 0) {
-            if (this.timeUntilNextPower.decrementAndGet() != 0) {
-                return;
-            }
-        }
-
-        if (this.activePowers.size() >= MAX_POWERS_ACTIVE) { // There's already an active power so don't spawn another one
-            return;
-        }
-
-        //int powersToSpawn = MAX_POWERS_ACTIVE - this.activePowers.size();
-
-        //for (int i = 0; i < powersToSpawn; i++) {
-            BattleBallPowerUp powerUp = new BattleBallPowerUp(this.createObjectId(), this, this.getRandomTile());
-            this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
-
-            this.activePowers.add(powerUp);
-            this.getObjects().add(powerUp.getObject());
-        //}
-
-        this.updateTimeUntilNextPower();
-    }
-
-    private void updateTimeUntilNextPower() {
-        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(15, 35 + 1)); // Longer time gaps when there maximum amount of spawned power ups have reached
     }
 
     @Override
@@ -341,6 +346,12 @@ public class BattleBallGame extends Game {
 
         if (this.getRoom().getMapping().getTile(x, y).getEntities().size() > 0) {
             return getRandomTile();
+        }
+
+        for (BattleBallPowerUp powerUp : this.activePowers) {
+            if (powerUp.getPosition().equals(new Position(x, y))) {
+                return this.getRandomTile();
+            }
         }
 
         return battleballTile;
