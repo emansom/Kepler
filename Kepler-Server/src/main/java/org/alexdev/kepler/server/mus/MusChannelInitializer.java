@@ -17,7 +17,7 @@ public class MusChannelInitializer extends ChannelInitializer<SocketChannel> {
     @Override
     protected void initChannel(SocketChannel socketChannel) throws Exception {
         ChannelPipeline pipeline = socketChannel.pipeline();
-        pipeline.addLast("frameDecoder",new LengthFieldBasedFrameDecoder(1048576, 2, 4, 0, 0));
+        pipeline.addLast("frameDecoder",new LengthFieldBasedFrameDecoder(Short.MAX_VALUE, 2, 4, 0, 0));
         pipeline.addLast("gameDecoder", new MusNetworkDecoder());
         pipeline.addLast("gameEncoder", new MusNetworkEncoder());
         pipeline.addLast("handler", new MusConnectionHandler(this.musServer));
