@@ -94,9 +94,6 @@ public class BattleBallTask implements Runnable {
         if (roomEntity.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomEntity.getNextPosition() != null) {
-                RoomTile previousTile = roomEntity.getTile();
-                previousTile.removeEntity(entity);
-
                 Position nextPosition = roomEntity.getNextPosition();
 
                 boolean interact = true;
@@ -134,6 +131,9 @@ public class BattleBallTask implements Runnable {
                     this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
                     return;
                 }*/
+
+                RoomTile previousTile = roomEntity.getTile();
+                previousTile.removeEntity(entity);
 
                 roomEntity.removeStatus(StatusType.LAY);
                 roomEntity.removeStatus(StatusType.SIT);
