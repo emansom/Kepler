@@ -2,12 +2,10 @@ package org.alexdev.kepler.game.room;
 
 import org.alexdev.kepler.dao.Storage;
 import org.alexdev.kepler.dao.mysql.RoomDao;
+import org.alexdev.kepler.dao.mysql.RoomFavouritesDao;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class RoomManager {
@@ -101,6 +99,29 @@ public class RoomManager {
         }
 
         return roomList;
+    }
+
+    /**
+     * Get a list of favourite rooms by user id
+     *
+     * @param userId the user to get the favourites for
+     * @return the list of favourites
+     */
+    public List<Room> getFavouriteRooms(int userId) {
+        List<Integer> roomIds = RoomFavouritesDao.getFavouriteRooms(userId);
+        Collections.reverse(roomIds); // To most recent favourite added at the top
+
+        List<Room> rooms = new ArrayList<>();
+
+        for (int roomId : roomIds) {
+            Room room = this.getRoomById(roomId);
+
+            if (room != null) {
+                rooms.add(room);
+            }
+        }
+
+        return rooms;
     }
 
     /**
