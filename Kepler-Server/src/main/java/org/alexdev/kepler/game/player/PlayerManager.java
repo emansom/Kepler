@@ -134,7 +134,7 @@ public class PlayerManager {
     public void disconnectSession(int userId) {
         for (Player player : this.players) {
             if (player.getDetails().getId() == userId) {
-                player.kickFromServer(true);
+                player.kickFromServer();
             }
         }
     }
@@ -194,7 +194,7 @@ public class PlayerManager {
             p.send(new INFO_HOTEL_CLOSED(LocalTime.now(), false));
 
             // Now disconnect the player
-            p.kickFromServer(true);
+            p.kickFromServer();
         }
     }
 
