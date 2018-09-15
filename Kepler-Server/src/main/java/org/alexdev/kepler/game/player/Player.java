@@ -265,6 +265,7 @@ public class Player extends Entity {
         try {
             this.network.send(new HOTEL_LOGOUT(LogoutReason.DISCONNECT));
             this.network.disconnect();
+
             this.dispose();
         } catch (Exception ignored) {
             // Ignore
@@ -281,10 +282,9 @@ public class Player extends Entity {
                 this.roomEntity.getRoom().getEntityManager().leaveRoom(this, false);
             }
 
-
             PlayerDao.saveLastOnline(this.getDetails());
             PlayerManager.getInstance().removePlayer(this);
-
+            
             this.messenger.sendStatusUpdate();
         }
 
