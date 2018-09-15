@@ -94,32 +94,15 @@ public class BattleBallTask implements Runnable {
         if (roomEntity.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomEntity.getNextPosition() != null) {
-                RoomTile previousTile = roomEntity.getTile();
-                previousTile.removeEntity(entity);
+                roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
+                roomEntity.getPosition().setY(roomEntity.getNextPosition().getY());
+                roomEntity.updateNewHeight(roomEntity.getPosition());
 
-                Position nextPosition = roomEntity.getNextPosition();
+                // Increment tiles...
+                BattleBallTile tile = (BattleBallTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
 
-                boolean interact = true;
-
-                if (!RoomTile.isValidTile(this.room, entity, nextPosition)) {
-                    nextPosition = roomEntity.getPosition().copy();
-                    interact = false;
-                }
-
-                roomEntity.getPosition().setX(nextPosition.getX());
-                roomEntity.getPosition().setY(nextPosition.getY());
-                roomEntity.updateNewHeight(nextPosition);
-
-                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(nextPosition);
-                nextTile.addEntity(entity);
-
-                if (interact) {
-                    // Increment tiles...
-                    BattleBallTile tile = (BattleBallTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
-
-                    if (tile != null) {
-                        tile.interact(gamePlayer, objects, events, updateTiles, fillTiles);
-                    }
+                if (tile != null) {
+                    tile.interact(gamePlayer, objects, events, updateTiles, fillTiles);
                 }
             }
 
@@ -134,6 +117,12 @@ public class BattleBallTask implements Runnable {
                     this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
                     return;
                 }
+
+                RoomTile previousTile = roomEntity.getTile();
+                previousTile.removeEntity(entity);
+
+                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(next);
+                nextTile.addEntity(entity);
 
                 roomEntity.removeStatus(StatusType.LAY);
                 roomEntity.removeStatus(StatusType.SIT);
