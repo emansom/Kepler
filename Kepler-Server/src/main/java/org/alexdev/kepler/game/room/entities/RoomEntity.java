@@ -191,7 +191,7 @@ public abstract class RoomEntity {
         this.goal = new Position(X, Y);
 
         if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
-            return false;
+           //return false;
         }
 
         AStar aStar = new AStar(this.room.getModel());

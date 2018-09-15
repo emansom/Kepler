@@ -90,7 +90,7 @@ public class AStar {
 			}
 		}
 
-		return null;
+		return this.calculatePath(destNode);
 	}
 
 	private LinkedList<Position> calculatePath(AreaNode destinationNode) {
