@@ -99,6 +99,7 @@ public class BattleBallTask implements Runnable {
                 boolean interact = true;
 
                 if (!RoomTile.isValidTile(this.room, entity, nextPosition)) {
+                    roomEntity.stopWalking();
                     nextPosition = roomEntity.getPosition().copy();
                     interact = false;
                 }

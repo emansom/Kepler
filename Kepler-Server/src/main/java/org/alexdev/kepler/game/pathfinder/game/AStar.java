@@ -72,7 +72,7 @@ public class AStar {
 
 				boolean isFinalMove = adjPoint.equals(destNode.point);
 
-				if (Pathfinder.isValidStep(entity.getRoomUser().getRoom(), entity, currentNode.point.copy(), adjPoint.copy(), isFinalMove)) {
+				if (Pathfinder.isValidStep(entity.getRoomUser().getRoom(), null, currentNode.point.copy(), adjPoint.copy(), isFinalMove)) {
 					if (!closedList.contains(adjNode)) {
 						if (!openList.contains(adjNode)) {
 							adjNode.parent = currentNode;
@@ -87,7 +87,7 @@ public class AStar {
 						}
 					}
 				}
-			}
+				}
 		}
 
 		return this.calculatePath(destNode);
