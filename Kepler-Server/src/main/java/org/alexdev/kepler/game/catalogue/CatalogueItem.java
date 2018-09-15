@@ -46,7 +46,11 @@ public class CatalogueItem {
         String name = TextsManager.getInstance().getValue(this.definition.getName(this.itemSpecialId));
 
         if (name.isEmpty()) {
-            name = StringUtils.capitalize(this.definition.getSprite());
+            if (this.definition.getSprite().equals("film")) {
+                return StringUtils.capitalize(this.definition.getSprite());
+            }
+
+            return this.definition.getName(this.itemSpecialId);
         }
 
         return name;
@@ -57,7 +61,13 @@ public class CatalogueItem {
             return this.packageDescription;
         }
 
-        return TextsManager.getInstance().getValue(this.definition.getDescription(this.itemSpecialId));
+        String description = TextsManager.getInstance().getValue(this.definition.getDescription(this.itemSpecialId));
+
+        if (description.isEmpty()) {
+            return this.definition.getDescription(this.itemSpecialId);
+        }
+
+        return description;
     }
 
     public String getType() {
