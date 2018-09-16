@@ -72,8 +72,8 @@ public class Pathfinder {
         }
 
         // Only check these below if the user is in a pool room.
-        if (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_") ||
-            entity.getRoomUser().getRoom().getModel().getName().equals("md_a")) {
+        if (entity != null && (entity.getRoomUser().getRoom().getModel().getName().startsWith("pool_") ||
+            entity.getRoomUser().getRoom().getModel().getName().equals("md_a"))) {
             if (toItem != null) {
                 // Check if they have swimmers before trying to enter pool
                 if (toItem.getDefinition().getSprite().equals("poolEnter") ||
