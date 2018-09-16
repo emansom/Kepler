@@ -7,6 +7,7 @@ import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.triggers.GameLobbyTrigger;
+import org.alexdev.kepler.messages.outgoing.games.JOINFAILED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 
@@ -38,7 +39,13 @@ public class INITIATEJOINGAME implements MessageEvent {
             return;
         }
 
+        if (player.getDetails().getTickets() < game.getTicketCost()) {
+            player.send(new JOINFAILED(JOINFAILED.FailedReason.TICKETS_NEEDED, null));
+            return;
+        }
+
         if (!game.canSwitchTeam(teamId)) {
+            player.send(new JOINFAILED(JOINFAILED.FailedReason.TEAMS_FULL, "join"));
             return;
         }
 

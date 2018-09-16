@@ -1,37 +1,37 @@
 package org.alexdev.kepler.game.games.utils;
 
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
+import org.alexdev.kepler.game.games.battleball.BattleBallTile;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallColourState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 
 public class TileUtil {
-    public static boolean undoTileAttributes(BattleballTile tile, Game game) {
-        BattleballTileType state = tile.getState();
-        BattleballColourType colour = tile.getColour();
+    public static boolean undoTileAttributes(BattleBallTile tile, Game game) {
+        BattleBallTileState state = tile.getState();
+        BattleBallColourState colour = tile.getColour();
 
-        if (colour == BattleballColourType.DEFAULT || state == BattleballTileType.DEFAULT) {
+        if (colour == BattleBallColourState.DEFAULT || state == BattleBallTileState.DEFAULT) {
             return false;
         }
 
         int pointsToRemove = 0;
 
-        if (state == BattleballTileType.TOUCHED) {
+        if (state == BattleBallTileState.TOUCHED) {
             pointsToRemove = 2;
         }
 
-        if (state == BattleballTileType.CLICKED) {
+        if (state == BattleBallTileState.CLICKED) {
             pointsToRemove = 6;
         }
 
-        if (state == BattleballTileType.PRESSED) {
+        if (state == BattleBallTileState.PRESSED) {
             pointsToRemove = 10;
         }
 
-        if (state == BattleballTileType.SEALED) {
+        if (state == BattleBallTileState.SEALED) {
             pointsToRemove = 14;
         }
         GameTeam team = game.getTeams().get(colour.getColourId());
@@ -43,14 +43,14 @@ public class TileUtil {
                 p.setScore(p.getScore() - eachTeamRemove);
             }
 
-            tile.setColour(BattleballColourType.DEFAULT);
-            tile.setState(BattleballTileType.DEFAULT);
+            tile.setColour(BattleBallColourState.DEFAULT);
+            tile.setState(BattleBallTileState.DEFAULT);
         }
 
         return true;
     }
-    public static boolean isValidGameTile(GamePlayer gamePlayer, BattleballTile tile, boolean checkEntities) {
-        if (tile == null) {// && tile.getColour() != BattleballColourType.DISABLED;
+    public static boolean isValidGameTile(GamePlayer gamePlayer, BattleBallTile tile, boolean checkEntities) {
+        if (tile == null) {// && tile.getColour() != BattleBallColourState.DISABLED;
             return false;
         }
 

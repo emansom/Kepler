@@ -5,7 +5,8 @@ import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
 public class CREATEFAILED extends MessageComposer {
     public enum FailedReason {
-        KICKED(6);
+        KICKED(6),
+        MINIMUM_TEAMS_REQUIRED(8);
 
         private final int reasonId;
 

@@ -52,7 +52,6 @@ public class Messenger {
             }
         }
     }
-
     /**
      * Get if the user already has a request from this user id.
      *

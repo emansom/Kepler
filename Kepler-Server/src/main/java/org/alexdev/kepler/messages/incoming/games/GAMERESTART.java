@@ -4,6 +4,7 @@ import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameManager;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.messages.outgoing.games.JOINFAILED;
 import org.alexdev.kepler.messages.outgoing.games.PLAYERREJOINED;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -29,7 +30,6 @@ public class GAMERESTART implements MessageEvent {
         if (game == null || !game.isGameFinished() || gamePlayer.isClickedRestart()) {
             return;
         }
-
 
         // Only allow restart once everyone has clicked they'd like to restart
         gamePlayer.setClickedRestart(true);

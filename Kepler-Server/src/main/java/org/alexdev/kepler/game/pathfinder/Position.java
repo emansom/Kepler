@@ -233,6 +233,39 @@ public class Position {
     }
 
     /**
+     * Gets the square behind
+     *
+     * @return the square behind
+     */
+    public Position getSquareBehind() {
+        Position square = this.copy();
+        
+        if (this.bodyRotation == 0) {
+            square.Y++;
+        } else if (this.bodyRotation == 1) {
+            square.X--;
+            square.Y++;
+        } else if (this.bodyRotation == 2) {
+            square.X--;
+        } else if (this.bodyRotation == 3) {
+            square.X--;
+            square.Y--;
+        }  else if (this.bodyRotation == 4) {
+            square.Y--;
+        } else if (this.bodyRotation == 5) {
+            square.X++;
+            square.Y--;
+        } else if (this.bodyRotation == 6) {
+            square.X++;
+        } else if (this.bodyRotation == 7) {
+            square.X++;
+            square.Y++;
+        }
+
+        return square;
+    }
+
+    /**
      * Gets the square to the right.
      *
      * @return the square to the right
@@ -304,44 +337,57 @@ public class Position {
      * @return the list of coordinates
      */
     public List<Position> getCircle(int radius) {
-      /*List<Position> coords = new ArrayList<>();
+        List<Position> coords = new ArrayList<>();
 
-        int circumference = (int) (2 * Math.PI * radius);
-        double increment = (2 * Math.PI) / circumference;
+        radius = (radius * 2); // Convert radius to diameter
 
-        for(int i = 0;i < circumference; i++)
+        for (int x = this.getX() - radius; x <= this.getX() + radius; x++) {
+            for (int y = this.getY() - radius; y <= this.getY() + radius; y++) {
+                double dist = new Position(x, y).getDistanceSquared(this);
+
+                if (dist <= radius) {
+                    coords.add(new Position(x, y));
+                }
+            }
+        }
+
+        return coords;
+
+        /*      for(int i = 0;i < circumference; i++)
         {
             double angle = i * increment;
             double x = this.getX() + (radius * Math.cos(angle));
             double y = this.getY() + (radius * Math.sin(angle));
             coords.add(new Position((int)x, (int)y, this.getZ()));
         }
-
-        return coords;*/
-        List<Position> coords = new ArrayList<>();
-
-        int cx = this.getX();
-        int cy = (int)this.getZ();
-        int cz = this.getY();
-
-        boolean sphere = true;
-        boolean hollow = false;
-        int h = 1;
-
-        for (int x = cx - radius; x <= cx + radius; x++) {
-            for (int z = cz - radius; z <= cz + radius; z++) {
-                //for (int y = (sphere ? cy - radius : cy); y < (sphere ? cy + radius : cy + h); y++) {
-                    double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z);// + (sphere ? (cy - y) * (cy - y) : 0);
-                    if (dist < radius * radius && !(hollow && dist < (radius - 1) * (radius - 1))) {
-                        //Location l = new Location(loc.getWorld(), x, y + plus_y, z);
-                        //circleblocks.add(l);
-                        coords.add(new Position(x, z));
-                    }
-                //}
-            }
-        }
+        radius = (radius * 2); // Convert radius to diameter
 
         return coords;
+
+        List<Position> coords = new ArrayList<>();
+
+        for (int x = this.getX() - radius; x <= this.getX() + radius; x++) {
+            for (int y = this.getY() - radius; y <= this.getY() + radius; y++) {
+                double dist = new Position(x, y).getDistanceSquared(this);
+
+                int cx = this.getX();
+                int cy = (int)this.getZ();
+                int cz = this.getY();
+
+                boolean sphere = true;
+                boolean hollow = false;
+                int h = 1;
+
+                for (int x = cx - radius; x <= cx + radius; x++) {
+                    for (int z = cz - radius; z <= cz + radius; z++) {
+                        //for (int y = (sphere ? cy - radius : cy); y < (sphere ? cy + radius : cy + h); y++) {
+                        double dist = (cx - x) * (cx - x) + (cz - z) * (cz - z);// + (sphere ? (cy - y) * (cy - y) : 0);
+                        if (dist < radius * radius && !(hollow && dist < (radius - 1) * (radius - 1))) {
+                            //Location l = new Location(loc.getWorld(), x, y + plus_y, z);
+                            //circleblocks.add(l);
+                            coords.add(new Position(x, z));
+                        }
+                        //}*/
     }
     
     /**
@@ -362,6 +408,10 @@ public class Position {
      */
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+
         if (obj instanceof Position) {
             Position position = (Position) obj;
             return position.getX() == this.X && position.getY() == this.Y;

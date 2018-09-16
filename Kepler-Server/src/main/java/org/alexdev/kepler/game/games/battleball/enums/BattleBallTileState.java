@@ -1,6 +1,6 @@
 package org.alexdev.kepler.game.games.battleball.enums;
 
-public enum BattleballTileType {
+public enum BattleBallTileState {
     DEFAULT(0),
     TOUCHED(1),
     CLICKED(2),
@@ -9,7 +9,7 @@ public enum BattleballTileType {
 
     private final int tileStateId;
 
-    BattleballTileType(int tileStateId) {
+    BattleBallTileState(int tileStateId) {
         this.tileStateId = tileStateId;
     }
 
@@ -17,8 +17,8 @@ public enum BattleballTileType {
         return tileStateId;
     }
 
-    public static BattleballTileType getStateById(int id) {
-        for (BattleballTileType state : values()) {
+    public static BattleBallTileState getStateById(int id) {
+        for (BattleBallTileState state : values()) {
             if (state.getTileStateId() == id) {
                 return state;
             }

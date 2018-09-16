@@ -9,15 +9,14 @@ import org.alexdev.kepler.game.item.roller.RollingData;
 import org.alexdev.kepler.game.pathfinder.Pathfinder;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.pathfinder.Rotation;
+import org.alexdev.kepler.game.pathfinder.game.AStar;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.RoomUserStatus;
 import org.alexdev.kepler.game.room.enums.DrinkType;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.managers.RoomTimerManager;
-import org.alexdev.kepler.game.room.managers.RoomTradeManager;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
-import org.alexdev.kepler.game.room.public_rooms.PoolHandler;
 import org.alexdev.kepler.game.room.public_rooms.SunTerraceHandler;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysEntrance;
 import org.alexdev.kepler.game.room.public_rooms.walkways.WalkwaysManager;
@@ -82,6 +81,11 @@ public abstract class RoomEntity {
     public void kick(boolean allowWalking) {
         Position doorLocation = this.getRoom().getModel().getDoorLocation();
 
+        if (doorLocation == null) {
+            this.getRoom().getEntityManager().leaveRoom(this.entity, true);
+            return;
+        }
+
         // If we're standing in the door, immediately leave room
         if (this.getPosition().equals(doorLocation)) {
             this.getRoom().getEntityManager().leaveRoom(this.entity, true);
@@ -143,10 +147,62 @@ public abstract class RoomEntity {
             return false;
         }
 
-        LinkedList<Position> path = Pathfinder.makePath(this.entity);
+        //AStar aStar = new AStar(this.room.getModel());
+        //var pathList = aStar.calculateAStarNoTerrain(this.entity, this.position, this.goal);
 
-        if (path.size() > 0) {
-            this.path = path;
+        LinkedList<Position> pathList = Pathfinder.makePath(this.entity);
+
+        if (pathList == null) {
+            return false;
+        }
+
+        if (pathList.size() > 0) {
+            this.path = pathList;
+            this.isWalking = true;
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Make a user walk to specific coordinates. The goal must be valid and reachable.
+     *
+     * @param X the X coordinates
+     * @param Y the Y coordinate
+     */
+    public boolean bounceTo(int X, int Y) {
+        if (this.room == null) {
+            return false;
+        }
+
+        if (this.nextPosition != null) {
+            this.position.setX(this.nextPosition.getX());
+            this.position.setY(this.nextPosition.getY());
+            this.updateNewHeight(this.position);
+        }
+
+        RoomTile tile = this.room.getMapping().getTile(X, Y);
+
+        if (tile == null) {
+            return false;
+        }
+
+        this.goal = new Position(X, Y);
+
+        if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
+            return false;
+        }
+
+        AStar aStar = new AStar(this.room.getModel());
+        var pathList = aStar.calculateAStarNoTerrain(this.entity, this.position, this.goal);
+
+        if (pathList == null) {
+            return false;
+        }
+
+        if (pathList.size() > 0) {
+            this.path = pathList;
             this.isWalking = true;
             return true;
         }

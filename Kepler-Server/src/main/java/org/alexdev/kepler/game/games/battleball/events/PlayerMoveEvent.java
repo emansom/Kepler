@@ -24,4 +24,8 @@ public class PlayerMoveEvent extends GameEvent {
         response.writeInt(this.nextPosition.getX());
         response.writeInt(this.nextPosition.getY());
     }
+
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
+    }
 }

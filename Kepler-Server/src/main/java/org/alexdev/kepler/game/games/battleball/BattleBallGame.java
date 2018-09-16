@@ -1,20 +1,22 @@
 package org.alexdev.kepler.game.games.battleball;
 
+import org.alexdev.kepler.dao.mysql.CurrencyDao;
 import org.alexdev.kepler.dao.mysql.GameSpawn;
 import org.alexdev.kepler.game.games.*;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPowerType;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallColourState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallPlayerState;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallPowerType;
 import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PowerUpSpawnEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PlayerObject;
 import org.alexdev.kepler.game.games.enums.GameType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballTileType;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallTileState;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.game.room.mapping.RoomTileState;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,27 +24,27 @@ import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BattleballGame extends Game {
-    private BattleballTile[][] battleballTiles;
+public class BattleBallGame extends Game {
+    private BattleBallTile[][] battleballTiles;
+
+    private BlockingQueue<BattleBallTile> updateTilesQueue;
+    private BlockingQueue<BattleBallTile> fillTilesQueue;
 
     private List<Integer> allowedPowerUps;
-    private List<BattleballPowerUp> activePowers;
+    private List<BattleBallPowerUp> activePowers;
 
-    private Map<GamePlayer, List<BattleballPowerUp>> storedPowers;
+    private Map<GamePlayer, List<BattleBallPowerUp>> storedPowers;
+    private boolean spawnedInitialPowers;
 
-    private BlockingQueue<BattleballTile> updateTilesQueue;
-    private BlockingQueue<BattleballTile> fillTilesQueue;
+    public static final int MAX_POWERS_ACTIVE = 2;
 
-    private AtomicInteger timeUntilNextPower;
-
-    public BattleballGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
+    public BattleBallGame(int id, int mapId, GameType gameType, String name, int teamAmount, Player gameCreator, List<Integer> allowedPowerUps) {
         super(id, mapId, gameType, name, teamAmount, gameCreator);
 
         this.allowedPowerUps = allowedPowerUps;
-        this.timeUntilNextPower = new AtomicInteger(0);
 
         if (this.allowedPowerUps.size() >= 2) {
-            this.allowedPowerUps.add(BattleballPowerType.QUESTION_MARK.getPowerUpId());
+            this.allowedPowerUps.add(BattleBallPowerType.QUESTION_MARK.getPowerUpId());
         }
 
         this.activePowers = new CopyOnWriteArrayList<>();
@@ -54,43 +56,101 @@ public class BattleballGame extends Game {
 
     @Override
     public void gamePrepare() {
-        //this.activePowers.clear();
-        //this.storedPowers.clear();
-        //this.timeUntilNextPower = new AtomicInteger(0);
+        // Despawn all previous powers
+        for (BattleBallPowerUp powerUp : this.activePowers) {
+            this.getEventsQueue().add(new DespawnObjectEvent(powerUp.getId()));
+        }
+
+        this.spawnedInitialPowers = false;
+        this.activePowers.clear();
+        this.storedPowers.clear();
+
+        int ticketCharge = GameConfiguration.getInstance().getInteger("battleball.ticket.charge");
+
+        if (ticketCharge > 0) {
+            for (GamePlayer gamePlayer : this.getPlayers()) {
+                CurrencyDao.decreaseTickets(gamePlayer.getPlayer().getDetails(), 2); // BattleBall costs 2 tickets
+            }
+        }
     }
 
     @Override
     public void gamePrepareTick() {
-        this.activePowers.clear();
-        this.storedPowers.clear();
-        this.timeUntilNextPower = new AtomicInteger(0);
+        if (!this.spawnedInitialPowers) {
+            if (MAX_POWERS_ACTIVE > 0) {
+                int initialPowers = ThreadLocalRandom.current().nextInt(0, MAX_POWERS_ACTIVE + 1);
+
+                for (int i = 0; i < initialPowers; i++) {
+                    this.checkSpawnPower(false);
+                }
+
+                this.spawnedInitialPowers = true;
+            }
+        }
+    }
+
+    @Override
+    public void gameStarted() {
+
     }
 
     @Override
     public void gameTick() {
-        this.checkExpirePower();
-        this.checkSpawnPower();
-        this.checkStoredExpirePower();
+        try {
+            this.checkExpirePower();
+            this.checkSpawnPower(true);
+            this.checkStoredExpirePower();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    private void checkExpirePower() {
-        if (this.allowedPowerUps.isEmpty() || this.activePowers.isEmpty() || (this.getMapId() == 5)) {
+    private void checkSpawnPower(boolean doPercentCheck) {
+        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
             return;
         }
 
-        BattleballPowerUp powerUp = this.activePowers.get(0);
+        if (this.activePowers.size() >= MAX_POWERS_ACTIVE) { // There's already an active power so don't spawn another one
+            return;
+        }
 
-        if (expirePower(powerUp)) {
+        if (doPercentCheck) {
+            if (!(Math.random() < 0.06)) {
+                return;
+            }
+        }
+
+        //int powersToSpawn = MAX_POWERS_ACTIVE - this.activePowers.size();
+
+        //for (int i = 0; i < powersToSpawn; i++) {
+            BattleBallPowerUp powerUp = new BattleBallPowerUp(this.createObjectId(), this, this.getRandomTile());
+            this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
+
+            this.activePowers.add(powerUp);
+            this.getObjects().add(powerUp.getObject());
+    }
+
+
+    private void checkExpirePower() {
+        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
+            return;
+        }
+
+        for (BattleBallPowerUp powerUp : this.activePowers) {
+            if (!expirePower(powerUp)) {
+                continue;
+            }
+
+            this.activePowers.remove(powerUp);
             this.getObjects().remove(powerUp.getObject());
-            this.activePowers.clear();
         }
     }
 
     private void checkStoredExpirePower() {
         for (var powers : this.storedPowers.values()) {
-            List<BattleballPowerUp> expiredPowers = new ArrayList<>();
+            List<BattleBallPowerUp> expiredPowers = new ArrayList<>();
 
-            for (BattleballPowerUp power : powers) {
+            for (BattleBallPowerUp power : powers) {
                 if (expirePower(power)) {
                     expiredPowers.add(power);
                 }
@@ -100,7 +160,7 @@ public class BattleballGame extends Game {
         }
     }
 
-    private boolean expirePower(BattleballPowerUp powerUp) {
+    private boolean expirePower(BattleBallPowerUp powerUp) {
         if (powerUp.getTimeToDespawn().get() > 0) {
             if (powerUp.getTimeToDespawn().decrementAndGet() != 0) {
                 return false;
@@ -111,58 +171,30 @@ public class BattleballGame extends Game {
         return true;
     }
 
-    private void checkSpawnPower() {
-        if (this.allowedPowerUps.isEmpty() || (this.getMapId() == 5)) {
-            return;
-        }
-
-        if (this.timeUntilNextPower.get() > 0) {
-            if (this.timeUntilNextPower.decrementAndGet() != 0) {
-                return;
-            }
-        }
-
-        if (this.activePowers.size() > 0) { // There's already an active power so don't spawn another one
-            return;
-        }
-
-        BattleballPowerUp powerUp = new BattleballPowerUp(this.createObjectId(), this, this.getRandomTile());
-        this.activePowers.add(powerUp);
-
-        this.updateTimeUntilNextPower();
-
-        this.getEventsQueue().add(new PowerUpSpawnEvent(powerUp));
-        this.getObjects().add(powerUp.getObject());
-    }
-
-    private void updateTimeUntilNextPower() {
-        this.timeUntilNextPower = new AtomicInteger(ThreadLocalRandom.current().nextInt(10, 30));
-    }
-
     @Override
     public void buildMap() {
-        BattleballTileMap tileMap = GameManager.getInstance().getBattleballTileMap(this.getMapId());
-        this.battleballTiles = new BattleballTile[this.getRoomModel().getMapSizeX()][this.getRoomModel().getMapSizeY()];
+        BattleBallMap tileMap = GameManager.getInstance().getBattleballTileMap(this.getMapId());
+        this.battleballTiles = new BattleBallTile[this.getRoomModel().getMapSizeX()][this.getRoomModel().getMapSizeY()];
 
         for (int y = 0; y < this.getRoomModel().getMapSizeY(); y++) {
             for (int x = 0; x < this.getRoomModel().getMapSizeX(); x++) {
                 RoomTileState tileState = this.getRoomModel().getTileState(x, y);
-                BattleballTile tile = new BattleballTile(new Position(x, y, this.getRoomModel().getTileHeight(x, y)));
+                BattleBallTile tile = new BattleBallTile(new Position(x, y, this.getRoomModel().getTileHeight(x, y)));
 
                 this.battleballTiles[x][y] = tile;
-                tile.setState(BattleballTileType.DEFAULT);
+                tile.setState(BattleBallTileState.DEFAULT);
 
                 if (tileState == RoomTileState.CLOSED) {
-                    tile.setColour(BattleballColourType.DISABLED);
+                    tile.setColour(BattleBallColourState.DISABLED);
                     continue;
                 }
 
                 if (!tileMap.isGameTile(x, y)) {
-                    tile.setColour(BattleballColourType.DISABLED);
+                    tile.setColour(BattleBallColourState.DISABLED);
                     continue;
                 }
 
-                tile.setColour(BattleballColourType.DEFAULT);
+                tile.setColour(BattleBallColourState.DEFAULT);
             }
         }
     }
@@ -187,10 +219,13 @@ public class BattleballGame extends Game {
 
             for (GamePlayer p : team.getPlayers()) {
                 findSpawn(flip, spawnX, spawnY, spawnRotation);
-                p.setPlayerState(BattleballPlayerState.NORMAL);
+                p.setPlayerState(BattleBallPlayerState.NORMAL);
                 p.setHarlequinPlayer(null);
                 p.setGameObject(new PlayerObject(p));
-                p.setObjectId(this.createObjectId());
+
+                if (p.getObjectId() == -1) {
+                    p.setObjectId(this.createObjectId());
+                }
 
                 this.getObjects().add(p.getGameObject());
 
@@ -204,17 +239,17 @@ public class BattleballGame extends Game {
                 p.getPlayer().getRoomUser().setNextPosition(null);
 
                 // Don't allow anyone to spawn on this tile
-                BattleballTile tile = (BattleballTile) this.getTile(spawnPosition.getX(), spawnPosition.getY());
+                BattleBallTile tile = (BattleBallTile) this.getTile(spawnPosition.getX(), spawnPosition.getY());
                 tile.setSpawnOccupied(true);
 
-                if (tile.getColour() != BattleballColourType.DISABLED) {
+                if (tile.getColour() != BattleBallColourState.DISABLED) {
                     // Set spawn colour
-                    tile.setColour(BattleballColourType.getColourById(team.getId()));
+                    tile.setColour(BattleBallColourState.getColourById(team.getId()));
 
                     if (this.getMapId() == 5) {
-                        tile.setState(BattleballTileType.TOUCHED);
+                        tile.setState(BattleBallTileState.TOUCHED);
                     } else {
-                        tile.setState(BattleballTileType.CLICKED);
+                        tile.setState(BattleBallTileState.CLICKED);
                     }
                 }
             }
@@ -232,43 +267,36 @@ public class BattleballGame extends Game {
     private void findSpawn(boolean flip, AtomicInteger spawnX, AtomicInteger spawnY, AtomicInteger spawnRotation) {
         try {
             while (this.battleballTiles[spawnX.get()][spawnY.get()].isSpawnOccupied()) {
-                /*if (spawnRotation.get() == 0 || spawnRotation.get() == 4) {
-                    if (flip)
-                        spawnX.incrementAndGet();// -= 1;
-                    else
-                        spawnY.decrementAndGet();// += 1;
-                } else if (spawnRotation.get() == 2 || spawnRotation.get() == 6) {
-                    if (flip)
-                        spawnX.incrementAndGet();// -= 1;
-                    else
-                        spawnY.decrementAndGet();// += 1;
-                }*/
                 if (spawnRotation.get() == 0) {
-                    if (!flip)
+                    if (!flip) {
                         spawnX.decrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnX.incrementAndGet();// += 1;
+                    }
                 }
 
                 if (spawnRotation.get() == 2) {
-                    if (!flip)
+                    if (!flip) {
                         spawnY.incrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnY.decrementAndGet();// += 1;
+                    }
                 }
 
                 if (spawnRotation.get() == 4) {
-                    if (!flip)
+                    if (!flip) {
                         spawnX.incrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnX.decrementAndGet();// += 1;
+                    }
                 }
 
                 if (spawnRotation.get() == 6) {
-                    if (!flip)
+                    if (!flip) {
                         spawnY.decrementAndGet();// -= 1;
-                    else
+                    } else {
                         spawnY.incrementAndGet();// += 1;
+                    }
                 }
             }
             flip = (!flip);
@@ -288,13 +316,13 @@ public class BattleballGame extends Game {
     public boolean canTimerContinue() {
         for (int y = 0; y < this.getRoomModel().getMapSizeY(); y++) {
             for (int x = 0; x < this.getRoomModel().getMapSizeX(); x++) {
-                BattleballTile tile = (BattleballTile) this.getTile(x, y);
+                BattleBallTile tile = (BattleBallTile) this.getTile(x, y);
 
-                if (tile == null || tile.getColour() == BattleballColourType.DISABLED) {
+                if (tile == null || tile.getColour() == BattleBallColourState.DISABLED) {
                     continue;
                 }
 
-                if (tile.getState() != BattleballTileType.SEALED) {
+                if (tile.getState() != BattleBallTileState.SEALED) {
                     return true;
                 }
             }
@@ -303,21 +331,27 @@ public class BattleballGame extends Game {
         return false;
     }
 
-    public BattleballTile getRandomTile() {
+    public BattleBallTile getRandomTile() {
         int mapSizeX = this.getRoomModel().getMapSizeX();
         int mapSizeY = this.getRoomModel().getMapSizeY();
 
         int x = ThreadLocalRandom.current().nextInt(0, mapSizeX);
         int y = ThreadLocalRandom.current().nextInt(0, mapSizeY);
 
-        BattleballTile battleballTile = (BattleballTile) this.getTile(x, y);
+        BattleBallTile battleballTile = (BattleBallTile) this.getTile(x, y);
 
-        if (battleballTile == null || battleballTile.getColour() == BattleballColourType.DISABLED) {
+        if (battleballTile == null || battleballTile.getColour() == BattleBallColourState.DISABLED) {
             return getRandomTile();
         }
 
         if (this.getRoom().getMapping().getTile(x, y).getEntities().size() > 0) {
             return getRandomTile();
+        }
+
+        for (BattleBallPowerUp powerUp : this.activePowers) {
+            if (powerUp.getPosition().equals(new Position(x, y))) {
+                return this.getRandomTile();
+            }
         }
 
         return battleballTile;
@@ -342,7 +376,7 @@ public class BattleballGame extends Game {
      *
      * @return the list of active powers
      */
-    public List<BattleballPowerUp> getActivePowers() {
+    public List<BattleBallPowerUp> getActivePowers() {
         return activePowers;
     }
 
@@ -351,7 +385,7 @@ public class BattleballGame extends Game {
      *
      * @return the list of players currently held by player
      */
-    public Map<GamePlayer, List<BattleballPowerUp>> getStoredPowers() {
+    public Map<GamePlayer, List<BattleBallPowerUp>> getStoredPowers() {
         return storedPowers;
     }
 
@@ -360,7 +394,7 @@ public class BattleballGame extends Game {
      *
      * @return the queue for updating tiles
      */
-    public BlockingQueue<BattleballTile> getUpdateTilesQueue() {
+    public BlockingQueue<BattleBallTile> getUpdateTilesQueue() {
         return updateTilesQueue;
     }
 
@@ -369,7 +403,7 @@ public class BattleballGame extends Game {
      *
      * @return the fill tiles queue
      */
-    public BlockingQueue<BattleballTile> getFillTilesQueue() {
+    public BlockingQueue<BattleBallTile> getFillTilesQueue() {
         return fillTilesQueue;
     }
 }

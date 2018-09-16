@@ -1,12 +1,11 @@
 package org.alexdev.kepler.messages.incoming.games;
 
 import org.alexdev.kepler.game.games.Game;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
-import org.alexdev.kepler.game.games.battleball.BattleballPowerUp;
+import org.alexdev.kepler.game.games.battleball.BattleBallGame;
+import org.alexdev.kepler.game.games.battleball.BattleBallPowerUp;
 import org.alexdev.kepler.game.games.battleball.events.ActivatePowerUpEvent;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
-import org.alexdev.kepler.game.pathfinder.Position;
 import org.alexdev.kepler.game.player.Player;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
@@ -30,6 +29,10 @@ public class GAMEEVENT implements MessageEvent {
 
         // Walk request
         if (eventType == 0) {
+            if (!player.getRoomUser().isWalkingAllowed()) {
+                return;
+            }
+
             int X = reader.readInt();
             int Y = reader.readInt();
 
@@ -43,18 +46,22 @@ public class GAMEEVENT implements MessageEvent {
 
         // Jump request
         if (eventType == 2) {
+            if (!player.getRoomUser().isWalkingAllowed()) {
+                return;
+            }
+
             int X = reader.readInt();
             int Y = reader.readInt();
 
-            player.getRoomUser().walkTo(X, Y);
+            player.getRoomUser().bounceTo(X, Y);
         }
 
         // Use power up request
         if (eventType == 4) {
             int powerId = reader.readInt();
 
-            if (game instanceof BattleballGame) {
-                BattleballGame battleballGame = (BattleballGame) game;
+            if (game instanceof BattleBallGame) {
+                BattleBallGame battleballGame = (BattleBallGame) game;
 
                 if (!battleballGame.getStoredPowers().containsKey(gamePlayer)) {
                     return;
@@ -62,9 +69,9 @@ public class GAMEEVENT implements MessageEvent {
 
                 var powerList = battleballGame.getStoredPowers().get(gamePlayer);
 
-                BattleballPowerUp powerUp = null;
+                BattleBallPowerUp powerUp = null;
 
-                for (BattleballPowerUp power : powerList) {
+                for (BattleBallPowerUp power : powerList) {
                     if (power.getId() == powerId) {
                         powerUp = power;
                         break;

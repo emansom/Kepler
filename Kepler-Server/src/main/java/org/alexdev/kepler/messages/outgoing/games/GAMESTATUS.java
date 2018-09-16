@@ -3,7 +3,7 @@ package org.alexdev.kepler.messages.outgoing.games;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameEvent;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
+import org.alexdev.kepler.game.games.battleball.BattleBallTile;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GameTeam;
 import org.alexdev.kepler.game.games.snowstorm.SnowStormGame;
@@ -21,10 +21,10 @@ public class GAMESTATUS extends MessageComposer {
     private final List<GameObject> objects;
     private final List<GameEvent> events;
 
-    private List<BattleballTile> updateTiles;
-    private List<BattleballTile> fillTiles;
+    private List<BattleBallTile> updateTiles;
+    private List<BattleBallTile> fillTiles;
 
-    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GameObject> objects, List<GameEvent> events, List<BattleballTile> updateTiles, List<BattleballTile> fillTiles) {
+    public GAMESTATUS(Game game, Collection<GameTeam> gameTeams, List<GameObject> objects, List<GameEvent> events, List<BattleBallTile> updateTiles, List<BattleBallTile> fillTiles) {
         this.game = game;
         this.gameTeams = gameTeams;
         this.objects = objects;
@@ -63,7 +63,7 @@ public class GAMESTATUS extends MessageComposer {
         if (this.game.getGameType() == GameType.BATTLEBALL) {
             response.writeInt(this.updateTiles.size());
 
-            for (BattleballTile tile : this.updateTiles) {
+            for (BattleBallTile tile : this.updateTiles) {
                 response.writeInt(tile.getPosition().getX());
                 response.writeInt(tile.getPosition().getY());
                 response.writeInt(tile.getColour().getColourId());
@@ -72,7 +72,7 @@ public class GAMESTATUS extends MessageComposer {
 
             response.writeInt(this.fillTiles.size());
 
-            for (BattleballTile tile : this.fillTiles) {
+            for (BattleBallTile tile : this.fillTiles) {
                 response.writeInt(tile.getPosition().getX());
                 response.writeInt(tile.getPosition().getY());
                 response.writeInt(tile.getColour().getColourId());

@@ -1,6 +1,8 @@
 package org.alexdev.kepler.game.games;
 
+import org.alexdev.kepler.dao.mysql.GameDao;
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.games.battleball.events.PlayerMoveEvent;
 import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.games.enums.GameType;
 import org.alexdev.kepler.game.games.player.GamePlayer;
@@ -92,7 +94,6 @@ public abstract class Game {
      */
     public void initialise() {
         this.gameState = GameState.STARTED;
-        this.objectId = new AtomicInteger(0);
 
         this.gameStarted = false;
         this.gameFinished = false;
@@ -108,6 +109,9 @@ public abstract class Game {
             this.room = new Room();
             this.room.getData().fill(this.id, "Battleball Arena", "");
             this.room.setRoomModel(this.getRoomModel());
+
+            this.room.getData().setGameArena(true);
+            this.room.getData().setGameLobby(this.gameType.getLobbyModel());
         }
 
         this.objects.clear();
@@ -207,6 +211,7 @@ public abstract class Game {
      * Finish game
      */
     private void finishGame() {
+        Game instance = this;
         this.gameStarted = false;
         this.gameFinished = true;
         this.gameState = GameState.ENDED;
@@ -217,6 +222,13 @@ public abstract class Game {
         // Stop all players from walking when game starts if they selected a tile
         for (GamePlayer p : this.getPlayers()) {
             p.getPlayer().getRoomUser().setWalkingAllowed(false);
+        }
+
+        // Save all users' points
+        if (this.canIncreasePoints()) {
+            for (GamePlayer p : this.getPlayers()) {
+                GameDao.increasePoints(p.getPlayer().getDetails(), this.gameType, p.getScore());
+            }
         }
 
         // Send scores to everybody
@@ -233,9 +245,20 @@ public abstract class Game {
                     return;
                 }
 
+                List<GamePlayer> afkPlayers = new ArrayList<>(); // Players who didn't touch any button
+
+                for (GamePlayer p : instance.getPlayers()) {
+                    if (!p.isClickedRestart()) {
+                        afkPlayers.add(p);
+                    }
+                }
+
                 if (restartCountdown.decrementAndGet() == 0) {
+                    if (afkPlayers.size() > 0) { // Only call this if not everyone clicked play again, else GAMERESTART.java handles it
+                        triggerRestart();
+                    }
+
                     this.cancelFuture();
-                    triggerRestart();
                 }
             }
         };
@@ -314,7 +337,7 @@ public abstract class Game {
 
         this.send(new GAMERESET(GameManager.getInstance().getPreparingSeconds(this.gameType), players));
         this.send(new FULLGAMESTATUS(this));  // Show users back at spawn positions
-        this.sendObservers(new GAMEDELETED());
+        this.sendObservers(new GAMEDELETED(this.id));
 
         // Preparing game seconds countdown
         this.preparingTimerRunnable = new FutureRunnable() {
@@ -325,7 +348,7 @@ public abstract class Game {
                         return;
                     }
 
-                    gamePrepare();
+                    gamePrepareTick();
 
                     if (preparingGameSecondsLeft.getAndDecrement() == 0) {
                         this.cancelFuture();
@@ -339,6 +362,8 @@ public abstract class Game {
 
         var future = GameScheduler.getInstance().getSchedulerService().scheduleAtFixedRate(this.preparingTimerRunnable, 1, 1, TimeUnit.SECONDS);
         this.preparingTimerRunnable.setFuture(future);
+
+        this.gamePrepare();
     }
 
     /**
@@ -354,7 +379,7 @@ public abstract class Game {
         this.objects.remove(gamePlayer.getGameObject());
 
         gamePlayer.getPlayer().getRoomUser().setGamePlayer(null);
-        gamePlayer.getPlayer().send(new GAMEDELETED());
+        gamePlayer.getPlayer().send(new GAMEDELETED(this.id));
 
         if (!isSpectator) {
             this.movePlayer(gamePlayer, gamePlayer.getTeamId(), -1);
@@ -366,7 +391,7 @@ public abstract class Game {
         if (!this.hasEnoughPlayers()) {
             GameManager.getInstance().getGames().remove(this);
 
-            this.sendObservers(new GAMEDELETED());
+            this.sendObservers(new GAMEDELETED(this.id));
             this.killSpectators();
         }
 
@@ -420,13 +445,17 @@ public abstract class Game {
     private void sendToLobby(GamePlayer gamePlayer) {
         Player player = gamePlayer.getPlayer();
 
+        if (player.getRoomUser().getRoom() != this.room) {
+            return; // Don't force people to go to a room they didn't request
+        }
+
         if (player.getRoomUser().getRoom() != null) {
             player.getRoomUser().getRoom().getEntityManager().leaveRoom(player, false);
         } else {
             this.leaveGame(gamePlayer);
         }
 
-        player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
+        player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel(this.gameType.getLobbyModel()).getId()));
     }
 
     /**
@@ -505,19 +534,43 @@ public abstract class Game {
 
         if (this.teamAmount == 1) {
             maxPerTeam = 10;
-        }
-
-        if (this.teamAmount == 2) {
+        } else if (this.teamAmount == 2) {
             maxPerTeam = 5;
-        }
-        else if (this.teamAmount == 3) {
+        } else if (this.teamAmount == 3) {
             maxPerTeam = 3;
-        }
-        else if (this.teamAmount == 4) {
+        } else if (this.teamAmount == 4) {
             maxPerTeam = 2;
         }
 
         return this.teams.get(teamId).getActivePlayers().size() <= maxPerTeam;
+    }
+
+    /**
+     * Get the cost of tickets required to play this game
+     *
+     * @return the ticket amount required
+     */
+    public int getTicketCost() {
+        return getTicketCost(this.getGameType());
+    }
+
+    /**
+     * Get the cost of tickets required to play each game
+     *
+     * @param gameType the type of game to get the ticket cost for
+     * @return the ticket amount required
+     */
+    public static int getTicketCost(GameType gameType) {
+        return GameConfiguration.getInstance().getInteger(gameType.name().toLowerCase() + ".ticket.charge");
+    }
+
+    /**
+     * Get whether points can be increased or not
+     *
+     * @return true, if successful
+     */
+    public boolean canIncreasePoints() {
+        return GameConfiguration.getInstance().getBoolean(this.gameType.name().toLowerCase() + ".increase.points");
     }
 
     /**
@@ -562,11 +615,9 @@ public abstract class Game {
      * @return the game player instance, else if null
      */
     public GamePlayer getGamePlayer(int userId) {
-        for (GameTeam team : this.teams.values()) {
-            for (GamePlayer gamePlayer : team.getPlayers()) {
-                if (gamePlayer.getUserId() == userId) {
-                    return gamePlayer;
-                }
+        for (GamePlayer gamePlayer : this.getPlayers()) {
+            if (gamePlayer.getUserId() == userId) {
+                return gamePlayer;
             }
         }
 
@@ -599,6 +650,16 @@ public abstract class Game {
      */
     public int createObjectId() {
         return this.objectId.incrementAndGet();
+    }
+
+    public void addObjectToQueue(GameObject object) {
+        this.objectsQueue.removeIf(obj -> obj.getId() == object.getId());
+        this.objectsQueue.add(object);
+    }
+
+    public void addPlayerMove(PlayerMoveEvent event) {
+        this.eventsQueue.removeIf(e -> e instanceof PlayerMoveEvent && ((PlayerMoveEvent)e).getGamePlayer() == event.getGamePlayer());
+        this.eventsQueue.add(event);
     }
 
     /**

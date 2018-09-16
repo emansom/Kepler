@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.1
+-- version 4.8.2
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 07, 2018 at 04:47 PM
--- Server version: 10.3.7-MariaDB
--- PHP Version: 7.2.6
+-- Generation Time: Sep 16, 2018 at 04:42 PM
+-- Server version: 10.2.15-MariaDB
+-- PHP Version: 7.2.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -651,7 +651,40 @@ INSERT INTO `catalogue_items` (`id`, `sale_code`, `page_id`, `order_id`, `price`
 (604, 'prize2', 44, 0, 15, 724, 0, NULL, NULL, 0),
 (605, 'prize3', 44, 0, 15, 725, 0, NULL, NULL, 0),
 (606, 'rare_snow_rug', 44, 0, 25, 726, 0, NULL, NULL, 0),
-(607, 'rare_poster_pedobear', 44, 1, 25, 251, 1338, NULL, NULL, 0);
+(607, 'rare_poster_pedobear', 44, 1, 25, 251, 1338, NULL, NULL, 0),
+(608, 'exe_rug', 45, 0, 1, 727, 0, NULL, NULL, 0),
+(609, 'exe_s_table', 45, 0, 2, 728, 0, NULL, NULL, 0),
+(610, 'exe_bardesk', 45, 0, 3, 729, 0, NULL, NULL, 0),
+(611, 'exe_chair', 45, 0, 2, 730, 0, NULL, NULL, 0),
+(612, 'exe_chair2', 45, 0, 3, 731, 0, NULL, NULL, 0),
+(613, 'exe_corner', 45, 0, 2, 732, 0, NULL, NULL, 0),
+(614, 'exe_drinks', 45, 0, 2, 733, 0, NULL, NULL, 0),
+(615, 'exe_sofa', 45, 0, 5, 734, 0, NULL, NULL, 0),
+(616, 'exe_table', 45, 0, 5, 735, 0, NULL, NULL, 0),
+(617, 'exe_plant', 45, 0, 5, 736, 0, NULL, NULL, 0),
+(618, 'exe_lught', 45, 0, 5, 737, 0, NULL, NULL, 0),
+(619, 'exe_cubelight', 45, 0, 5, 739, 0, NULL, NULL, 0),
+(620, 'exe_artlamp', 45, 0, 5, 740, 0, NULL, NULL, 0),
+(621, 'exe_map', 45, 0, 5, 741, 0, NULL, NULL, 0),
+(622, 'exe_wfall', 45, 0, 5, 742, 0, NULL, NULL, 0),
+(623, 'exe_globe', 45, 0, 5, 743, 0, NULL, NULL, 0),
+(624, 'exe_elevator', 45, 0, 7, 744, 0, NULL, NULL, 0),
+(627, 'arabian_bigtb', 46, 0, 5, 745, 0, NULL, NULL, 0),
+(628, 'arabian_chair', 46, 0, 2, 746, 0, NULL, NULL, 0),
+(629, 'arabian_divdr', 46, 0, 5, 747, 0, NULL, NULL, 0),
+(630, 'arabian_pllw', 46, 0, 2, 748, 0, NULL, NULL, 0),
+(631, 'arabian_rug', 46, 0, 3, 749, 0, NULL, NULL, 0),
+(632, 'arabian_snake', 46, 0, 3, 750, 0, NULL, NULL, 0),
+(633, 'arabian_swords', 46, 0, 4, 751, 0, NULL, NULL, 0),
+(634, 'arabian_teamk', 46, 0, 6, 752, 0, NULL, NULL, 0),
+(635, 'arabian_tetbl', 46, 0, 3, 753, 0, NULL, NULL, 0),
+(636, 'arabian_tray1', 46, 0, 3, 754, 0, NULL, NULL, 0),
+(637, 'arabian_tray2', 46, 0, 3, 755, 0, NULL, NULL, 0),
+(638, 'arabian_tray3', 46, 0, 3, 756, 0, NULL, NULL, 0),
+(639, 'arabian_tray4', 46, 0, 3, 757, 0, NULL, NULL, 0),
+(640, 'arabian_wndw', 46, 0, 4, 758, 0, NULL, NULL, 0),
+(641, 'arabian_wall', 46, 0, 3, 759, 0, NULL, NULL, 0),
+(642, 'arabian_tile', 46, 0, 3, 760, 0, NULL, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -741,7 +774,7 @@ INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `n
 (21, 21, 1, 1, 'Plants', '', 'Plants', 'ctlg_layout2', 'catalog_plants_headline1', 'catalog_plants_teaser1,', 'Introducing the Plant Collection...  Every room needs a plant! Not only do they bring a bit of the outside inside, they also enhance the air quality! Do we give a fuck? Up to you!', 'Click on the item you want for more information', NULL, NULL),
 (22, 22, 1, 1, 'Sports', '', 'Sport', 'ctlg_layout2', 'catalog_sports_headline1', 'catalog_sports_teaser1,', 'For the sporty people, here is the Sports section! Create your own hockey stadium!', 'Click on the item you want for more information', '2:Yay!', NULL),
 (23, 23, 1, 1, 'Rugs', '', 'Rugs', 'ctlg_layout2', 'catalog_rugs_headline1', 'catalog_rugs_teaser1,', 'We have rugs for all occasions. All rugs are non-slip and washable.', 'Click on the item you want for more information', '2:We have rugs for ANY room!', NULL),
-(24, 24, 1, 1, 'Gallery', '', 'Gallery', 'ctlg_layout2', 'catalog_gallery_headline1', 'catalog_gallery_teaser1,', 'Adorn your walls with wondrous works of art, posters, plaques and wall hangings. We have items to suit all tastes, from kitsch to cool, traditional to modern.', 'Click on the item you want for more information', '2: Brighten up your walls!', NULL),
+(24, 24, 1, 1, 'Gallery', '', 'Gallery', 'ctlg_layout2', 'catalog_gallery_headline1', 'catalog_posters_teaser1,', 'Adorn your walls with wondrous works of art, posters, plaques and wall hangings. We have items to suit all tastes, from kitsch to cool, traditional to modern.', 'Click on the item you want for more information', '2: Brighten up your walls!', NULL),
 (25, 25, 1, 1, 'Flags', '', 'Flags', 'ctlg_layout2', 'catalog_flags_headline1', 'catalog_flags_teaser1,', 'If you\'re feeling patriotic, get a flag to prove it. Our finest cloth flags will brighten up the dullest walls.', 'Click on the item you want for more information', '2:Hail Nillus!', NULL),
 (26, 26, 1, 1, 'Trophies', '', 'Trophies', 'ctlg_trophies', 'catalog_trophies_headline1', '', 'Reward your friends, or yourself with one of our fabulous glittering array of bronze, silver and gold trophies.<br><br>First choose the trophy model (click on the arrows to see all the different styles) and then the metal (click on the seal below the trop', NULL, NULL, '1:Type your inscription CAREFULLY, it\'s permanent!'),
 (27, 40, 5, 1, 'staffHC', '', 'Club Shop', 'ctlg_layout2', 'catalog_club_headline1', 'catalog_hc_teaser,', 'Welcome to the Club Shop! All \'Habbo Club membership gifts\' are available here, use them wisely you greedy cunt! We have sofas, butlers and all the happy stuff.', 'Click on the item you want for more information', NULL, NULL),
@@ -761,7 +794,9 @@ INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `n
 (41, 3, 1, 1, 'Camera', 'Camera2', 'Camera', 'ctlg_camera1', 'catalog_camera_headline1', 'campic_cam,campic_film,', 'With your Camera you can take pictures of just about anything in the hotel - your friend on the loo (hehe), your best dive in the Lido, or your room when you\'ve got it just right!<br><br>A camera costs 10 Credits (two free photos included).', NULL, NULL, '1:When you\'ve used your free photos, you\'ll need to buy more. Each roll of film takes five photos. Your Camera will show how much film you have left and loads the next roll automatically.<br><br>Each Film (5 photos) costs:'),
 (42, 3, 1, 0, 'Camera2', '', 'Camera', 'ctlg_camera2', 'catalog_camera_headline1', 'campic_help,', 'CAMERA FUNCTIONS<br><br>1. Press this button to take a photo.<br>2. Photo cancel - for when you\'ve chopped off your friend\'s head!<br>3. Zoom in and out.<br>4. Photo counter - shows how much film you have left<br>5. Caption Box - write your caption before saving the photo.<br>6. Save - this moves the photo to your giant.<br>You can give photos to your friends, or put them on the wall like posters.', NULL, NULL, NULL),
 (43, 43, 5, 1, 'Inflatable Chairs', '', 'Inflatable Chairs', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
-(44, 44, 5, 1, 'Rares Mixed', '', 'Rares Mixed', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL);
+(44, 44, 5, 1, 'Rares Mixed', '', 'Rares Mixed', 'ctlg_layout2', 'catalog_rares_headline1', '', 'Yet another rares page.', 'Click on the item you want for more information', NULL, NULL),
+(45, 27, 1, 1, 'Executive', '', 'Executive', 'ctlg_layout2', 'catalog_exe_headline1', 'catalog_exe_teaser', 'The Executive Furni is ideal for creating a sophisticated working environment, whether it be an office, a mafia headquarters or study!', 'Click on the item you want for more information', '', ''),
+(46, 28, 1, 1, 'Alhambra', '', 'Alhambra', 'ctlg_layout2', 'catalog_alh_headline2', 'catalog_alh_teaser2,', 'The Palace of Alhambra has appeared and with it this exotic and beautifully crafted range of Arabian Furni. Luxury seating and gourmet food combine to make your room sparkle with riches.', 'Click on the item you want for more information', 's:2:Get your Alhambrian goodies now!', '');
 
 -- --------------------------------------------------------
 
@@ -5990,7 +6025,41 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (723, 'prize1', '0,0,0', 1, 1, 0, 'solid'),
 (724, 'prize2', '0,0,0', 1, 1, 0, 'solid'),
 (725, 'prize3', '0,0,0', 1, 1, 0, 'solid'),
-(726, 'rare_snowrug', '0,0,0', 2, 2, 0, 'can_stand_on_top,can_stack_on_top');
+(726, 'rare_snowrug', '0,0,0', 2, 2, 0, 'can_stand_on_top,can_stack_on_top'),
+(727, 'exe_rug', '0,0,0', 3, 3, 0.1, 'can_stand_on_top,can_stack_on_top'),
+(728, 'exe_s_table', '0,0,0', 2, 2, 1, 'solid,can_stack_on_top,custom_data_numeric_state'),
+(729, 'exe_bardesk', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
+(730, 'exe_chair', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
+(731, 'exe_chair2', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
+(732, 'exe_corner', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
+(733, 'exe_drinks', '0,0,0', 1, 1, 0, 'solid'),
+(734, 'exe_sofa', '0,0,0', 3, 1, 1, 'can_sit_on_top'),
+(735, 'exe_table', '0,0,0', 3, 2, 0, 'solid,custom_data_numeric_state'),
+(736, 'exe_plant', '0,0,0', 1, 1, 0, 'solid,custom_data_numeric_state'),
+(737, 'exe_light', '0,0,0', 1, 1, 0, 'can_stand_on_top,can_stack_on_top,custom_data_numeric_state'),
+(738, 'exe_gate', '0,0,0', 1, 1, 0, 'solid,requires_rights_for_interaction,door'),
+(739, 'exe_cubelight', '0,0,0', 1, 1, 0, 'solid,custom_data_numeric_state'),
+(740, 'exe_artlamp', '0,0,0', 1, 1, 0, 'solid,custom_data_numeric_state'),
+(741, 'exe_map', '0,0,0', 1, 1, 0, 'wall_item'),
+(742, 'exe_wfall', '0,0,0', 1, 1, 0, 'wall_item'),
+(743, 'exe_globe', '0,0,0', 1, 1, 0, 'solid,custom_data_numeric_state'),
+(744, 'exe_elevator', '0,0,0', 1, 1, 0, 'solid,requires_touching_for_interaction,custom_data_true_false,teleporter'),
+(745, 'arabian_bigtb', '0,0,0', 3, 2, 1, 'solid,can_stack_on_top'),
+(746, 'arabian_chair', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
+(747, 'arabian_divdr', '0,0,0', 1, 2, 0, 'solid'),
+(748, 'arabian_pllw', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
+(749, 'arabian_rug', '0,0,0', 3, 5, 0.1, 'can_stand_on_top'),
+(750, 'arabian_snake', '0,0,0', 1, 1, 0, 'solid,custom_data_numeric_state'),
+(751, 'arabian_swords', '0,0,0', 1, 1, 0, 'wall_item'),
+(752, 'arabian_teamk', '0,0,0', 1, 1, 0, 'solid,custom_data_true_false'),
+(753, 'arabian_tetbl', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
+(754, 'arabian_tray1', '0,0,0', 1, 1, 0, 'solid'),
+(755, 'arabian_tray2', '0,0,0', 1, 1, 0, 'solid'),
+(756, 'arabian_tray3', '0,0,0', 1, 1, 0, 'solid'),
+(757, 'arabian_tray4', '0,0,0', 1, 1, 0, 'solid'),
+(758, 'arabian_wndw', '0,0,0', 1, 1, 0, 'wall_item'),
+(759, 'arabian_wall', '0,0,0', 1, 1, 0.1, 'wall_item'),
+(760, 'arabian_tile', '0,0,0', 2, 2, 0.1, 'can_stand_on_top,can_stack_on_top');
 
 -- --------------------------------------------------------
 
@@ -9858,7 +9927,10 @@ INSERT INTO `schema_migrations` (`version`) VALUES
 ('20180826011235'),
 ('20180826152253'),
 ('20180901071104'),
-('20180901230642');
+('20180901230642'),
+('20180915211843'),
+('20180915212304'),
+('20180916030415');
 
 -- --------------------------------------------------------
 
@@ -10113,7 +10185,7 @@ ALTER TABLE `users_badges`
 -- AUTO_INCREMENT for table `catalogue_items`
 --
 ALTER TABLE `catalogue_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=608;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=643;
 
 --
 -- AUTO_INCREMENT for table `games_ranks`
@@ -10131,7 +10203,7 @@ ALTER TABLE `items`
 -- AUTO_INCREMENT for table `items_definitions`
 --
 ALTER TABLE `items_definitions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=727;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=761;
 
 --
 -- AUTO_INCREMENT for table `messenger_messages`

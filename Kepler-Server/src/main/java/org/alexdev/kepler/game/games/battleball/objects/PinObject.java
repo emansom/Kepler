@@ -21,6 +21,7 @@ public class PinObject extends GameObject {
         response.writeInt(this.position.getY());
         response.writeInt((int) this.position.getZ());
     }
+
     public Position getPosition() {
         return position;
     }

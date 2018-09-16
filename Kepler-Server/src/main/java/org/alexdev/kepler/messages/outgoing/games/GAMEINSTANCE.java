@@ -5,7 +5,7 @@ import org.alexdev.kepler.game.games.utils.FinishedGame;
 import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.enums.GameState;
 import org.alexdev.kepler.game.games.enums.GameType;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
+import org.alexdev.kepler.game.games.battleball.BattleBallGame;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
@@ -58,7 +58,7 @@ public class GAMEINSTANCE extends MessageComposer {
                 }
 
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
-                    BattleballGame battleballGame = (BattleballGame) this.game;
+                    BattleBallGame battleballGame = (BattleBallGame) this.game;
                     List<Integer> allowedPowerUps = battleballGame.getAllowedPowerUps();
 
                     String[] powerUps = new String[allowedPowerUps.size()];
@@ -100,7 +100,7 @@ public class GAMEINSTANCE extends MessageComposer {
                 // TODO: Special SnowStorm parameters
 
                 if (this.game.getGameType() == GameType.BATTLEBALL) {
-                    BattleballGame battleballGame = (BattleballGame) this.game;
+                    BattleBallGame battleballGame = (BattleBallGame) this.game;
                     List<Integer> allowedPowerUps = battleballGame.getAllowedPowerUps();
 
                     String[] powerUps = new String[allowedPowerUps.size()];

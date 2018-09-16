@@ -1,6 +1,6 @@
 package org.alexdev.kepler.game.games.battleball.enums;
 
-public enum BattleballColourType {
+public enum BattleBallColourState {
     DISABLED(-2),
     DEFAULT(-1),
     RED(0),
@@ -10,7 +10,7 @@ public enum BattleballColourType {
 
     private final int tileColourId;
 
-    BattleballColourType(int tileColourId) {
+    BattleBallColourState(int tileColourId) {
         this.tileColourId = tileColourId;
     }
 
@@ -18,8 +18,8 @@ public enum BattleballColourType {
         return tileColourId;
     }
 
-    public static BattleballColourType getColourById(int id) {
-        for (BattleballColourType colour : values()) {
+    public static BattleBallColourState getColourById(int id) {
+        for (BattleBallColourState colour : values()) {
             if (colour.getColourId() == id) {
                 return colour;
             }

@@ -1,6 +1,6 @@
 package org.alexdev.kepler.game.games.battleball.enums;
 
-public enum BattleballPlayerState {
+public enum BattleBallPlayerState {
     NORMAL(0),
     STUNNED(1),
     TURBO_BOOST(2),
@@ -23,7 +23,7 @@ public enum BattleballPlayerState {
 
     private final int stateId;
 
-    BattleballPlayerState(int stateId) {
+    BattleBallPlayerState(int stateId) {
         this.stateId = stateId;
     }
 

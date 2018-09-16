@@ -124,6 +124,9 @@ public class MessageHandler {
         registerEvent(264, new RECOMMENDED_ROOMS());
         registerEvent(17, new SRCHF());
         registerEvent(154, new GETSPACENODEUSERS());
+        registerEvent(18, new GETFVRF());
+        registerEvent(19, new ADD_FAVORITE_ROOM());
+        registerEvent(20, new DEL_FAVORITE_ROOM());
     }
 
     /**

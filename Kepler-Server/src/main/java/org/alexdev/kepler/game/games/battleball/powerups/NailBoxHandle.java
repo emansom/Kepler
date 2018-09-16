@@ -3,15 +3,12 @@ package org.alexdev.kepler.game.games.battleball.powerups;
 import org.alexdev.kepler.game.GameScheduler;
 import org.alexdev.kepler.game.entity.Entity;
 import org.alexdev.kepler.game.entity.EntityType;
-import org.alexdev.kepler.game.games.Game;
 import org.alexdev.kepler.game.games.GameObject;
-import org.alexdev.kepler.game.games.battleball.BattleballGame;
-import org.alexdev.kepler.game.games.battleball.BattleballTile;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballColourType;
-import org.alexdev.kepler.game.games.battleball.enums.BattleballPlayerState;
+import org.alexdev.kepler.game.games.battleball.BattleBallGame;
+import org.alexdev.kepler.game.games.battleball.BattleBallTile;
+import org.alexdev.kepler.game.games.battleball.enums.BattleBallPlayerState;
 import org.alexdev.kepler.game.games.battleball.events.DespawnObjectEvent;
 import org.alexdev.kepler.game.games.battleball.events.PinSpawnEvent;
-import org.alexdev.kepler.game.games.battleball.events.PlayerUpdateEvent;
 import org.alexdev.kepler.game.games.battleball.objects.PinObject;
 import org.alexdev.kepler.game.games.player.GamePlayer;
 import org.alexdev.kepler.game.games.utils.PowerUpUtil;
@@ -26,8 +23,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
 public class NailBoxHandle {
-    public static void handle(BattleballGame game, GamePlayer gamePlayer, Room room) {
-        gamePlayer.getPlayer().getRoomUser().stopWalking();
+    public static void handle(BattleBallGame game, GamePlayer gamePlayer, Room room) {
+        //gamePlayer.getPlayer().getRoomUser().stopWalking();
 
         List<GamePlayer> dizzyPlayers = new ArrayList<>();
         List<GameObject> pins = new ArrayList<>();
@@ -40,6 +37,10 @@ public class NailBoxHandle {
                 .getSquareInFront()
                 .getSquareInFront();
 
+        if (gamePlayer.getPlayer().getRoomUser().isWalking()) {
+            tilePosition = tilePosition.getSquareInFront();
+        }
+
         int maxPins = ThreadLocalRandom.current().nextInt(8, 15 + 1);
         List<Position> selectedPositions = new ArrayList<>();
         List<Position> circlePositions = tilePosition.getCircle(5);
@@ -51,9 +52,14 @@ public class NailBoxHandle {
                 continue;
             }
 
-            BattleballTile tile = (BattleballTile) game.getTile(circlePos.getX(), circlePos.getY());
+            BattleBallTile tile = (BattleBallTile) game.getTile(circlePos.getX(), circlePos.getY());
 
             if (tile == null || room.getMapping().getTile(circlePos) == null) {
+                continue;
+            }
+
+            if (circlePos.equals(gamePlayer.getPlayer().getRoomUser().getPosition()) ||
+                    circlePos.equals(gamePlayer.getPlayer().getRoomUser().getNextPosition())) {
                 continue;
             }
 
@@ -91,7 +97,7 @@ public class NailBoxHandle {
 
         // Make all affected players dizzy
         for (GamePlayer dizzyPlayer : dizzyPlayers) {
-            PowerUpUtil.stunPlayer(game, dizzyPlayer, BattleballPlayerState.BALL_BROKEN);
+            PowerUpUtil.stunPlayer(game, dizzyPlayer, BattleBallPlayerState.BALL_BROKEN);
         }
 
 
@@ -103,5 +109,25 @@ public class NailBoxHandle {
 
             }, ThreadLocalRandom.current().nextInt(12, 16+1), TimeUnit.SECONDS);
         }
+    }
+
+    public static boolean checkNailTile(GamePlayer gamePlayer) {
+        for (GameObject gameObject : gamePlayer.getGame().getObjects()) {
+            if (!(gameObject instanceof PinObject)) {
+                continue;
+            }
+
+            PinObject pinObject = (PinObject) gameObject;
+
+            if (gamePlayer.getPlayer().getRoomUser().getPosition().equals(pinObject.getPosition())) {
+                gamePlayer.getGame().getEventsQueue().add(new DespawnObjectEvent(pinObject.getId()));
+                gamePlayer.getGame().getObjects().remove(gameObject);
+
+                PowerUpUtil.stunPlayer(gamePlayer.getGame(), gamePlayer, BattleBallPlayerState.BALL_BROKEN);
+                return true;
+            }
+        }
+
+        return false;
     }
 }
