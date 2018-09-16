@@ -2,6 +2,7 @@ package org.alexdev.kepler.game.player;
 
 import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.GameScheduler;
+import org.alexdev.kepler.game.messenger.Messenger;
 import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.texts.TextsManager;
 import org.alexdev.kepler.messages.outgoing.openinghours.INFO_HOTEL_CLOSED;
@@ -88,14 +89,58 @@ public class PlayerManager {
      * Get a player data by user id.
      *
      * @param userId the user id to get with
-     * @return the player data, else if offline will query the database, else null
+     * @return the player data, else if offline will query the database
      */
     public PlayerDetails getPlayerData(int userId) {
-        if (getPlayerById(userId) != null) {
-            return getPlayerById(userId).getDetails();
+        Player player = getPlayerById(userId);
+
+        if (player != null) {
+            return player.getDetails();
         }
 
         return PlayerDao.getDetails(userId);
+    }
+
+    /**
+     * Get a player data by username.
+     *
+     * @param username the username to get with
+     * @return the player data, else if offline will query the database
+     */
+    public PlayerDetails getPlayerData(String username) {
+        Player player = getPlayerByName(username);
+
+        if (player != null) {
+            return player.getDetails();
+        }
+
+        return PlayerDao.getDetails(username);
+    }
+
+    public Messenger getMessengerData(int userId) {
+        Player player = getPlayerById(userId);
+
+        if (player != null) {
+            return player.getMessenger();
+        }
+
+        return new Messenger(this.getPlayerData(userId));
+    }
+
+    public Messenger getMessengerData(String username) {
+        Player player = getPlayerByName(username);
+
+        if (player != null) {
+            return player.getMessenger();
+        }
+
+        PlayerDetails details = this.getPlayerData(username);
+
+        if (details == null) {
+            return null;
+        }
+
+        return new Messenger(details);
     }
 
     /**
@@ -231,6 +276,7 @@ public class PlayerManager {
 
     /**
      * Get daily player peak
+     *
      * @return the daily player peak
      */
     public long getDailyPlayerPeak() {
@@ -239,6 +285,7 @@ public class PlayerManager {
 
     /**
      * Get duration until shutdown
+     *
      * @return duration until shutdown
      */
     public Duration getMaintenanceAt() {
@@ -247,6 +294,7 @@ public class PlayerManager {
 
     /**
      * Get maintenance shutdown status
+     *
      * @return the maintenance shutdown status
      */
     public boolean isMaintenance() {

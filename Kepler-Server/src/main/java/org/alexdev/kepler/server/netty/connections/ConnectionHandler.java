@@ -28,10 +28,11 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
     @Override
     public void channelRegistered(ChannelHandlerContext ctx) throws Exception {
         int maxConnectionsPerIp = GameConfiguration.getInstance().getInteger("max.connections.per.ip");
+        String ipAddress = NettyPlayerNetwork.getIpAddress(ctx.channel());
+
+        // TODO: IP ban checking
 
         if (maxConnectionsPerIp > 0) {
-            String ipAddress = NettyPlayerNetwork.getIpAddress(ctx.channel());
-
             int count = 0;
 
             for (Channel channel : this.server.getChannels()) {
@@ -40,12 +41,11 @@ public class ConnectionHandler extends SimpleChannelInboundHandler<NettyRequest>
                 if (connectedIpAddress.equals(ipAddress)) {
                     count++;
                 }
-            }
 
-            if (count >= maxConnectionsPerIp) {
-                log.info("Connection " + ipAddress + " kicked off, max connections per IP of " + maxConnectionsPerIp + " reached.");
-                ctx.close();
-                return;
+                if (count >= maxConnectionsPerIp) {
+                    log.info("Kicking off connection from " + ipAddress + " to make room for new connection");
+                    channel.close();
+                }
             }
         }
 

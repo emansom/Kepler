@@ -1,32 +1,48 @@
 package org.alexdev.kepler.game.messenger;
 
 import org.alexdev.kepler.dao.mysql.MessengerDao;
+import org.alexdev.kepler.dao.mysql.PlayerDao;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.game.player.PlayerManager;
-import org.alexdev.kepler.messages.MessageHandler;
 import org.alexdev.kepler.messages.incoming.messenger.FRIENDLIST_UPDATE;
+import org.alexdev.kepler.messages.outgoing.messenger.CONSOLE_MOTTO;
+import org.alexdev.kepler.messages.outgoing.messenger.FRIEND_REQUEST;
+import org.alexdev.kepler.util.config.GameConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class Messenger {
-    private Player player;
-    private List<MessengerUser> friends;
-    private List<MessengerUser> requests;
+    private Map<Integer, MessengerUser> friends;
+    private Map<Integer, MessengerUser> requests;
     private Map<Integer, MessengerMessage> offlineMessages;
+    private String persistentMessage;
+    private int friendsLimit;
+    private boolean allowsFriendRequests;
+    private MessengerUser user;
 
-    public Messenger(Player player) {
-        this.player = player;
-        this.friends = MessengerDao.getFriends(player.getDetails().getId());
-        this.requests = MessengerDao.getRequests(player.getDetails().getId());
-        this.offlineMessages = MessengerDao.getUnreadMessages(player.getDetails().getId());
+    public Messenger(PlayerDetails details) {
+        this.user = new MessengerUser(details);
+        this.persistentMessage = details.getConsoleMotto();
+        this.friends = MessengerDao.getFriends(details.getId());
+        this.requests = MessengerDao.getRequests(details.getId());
+        this.offlineMessages = MessengerDao.getUnreadMessages(details.getId());
+        this.allowsFriendRequests = details.isAllowFriendRequests();
+
+        if (details.hasClubSubscription()) {
+            this.friendsLimit = GameConfiguration.getInstance().getInteger("messenger.max.friends.club");
+        } else {
+            this.friendsLimit = GameConfiguration.getInstance().getInteger("messenger.max.friends.nonclub");
+        }
     }
 
     /**
      * Sends the status update when a friend enters or leaves a room, logs in or disconnects.
      */
     public void sendStatusUpdate() {
-        for (var user : this.friends) {
+        for (var user : this.friends.values()) {
             int userId = user.getUserId();
 
             Player friend = PlayerManager.getInstance().getPlayerById(userId);
@@ -53,8 +69,68 @@ public class Messenger {
      * @param userId the user id to check for
      * @return true, if successful
      */
-    public boolean isFriend(int userId) {
+    public boolean hasFriend(int userId) {
         return this.getFriend(userId) != null;
+    }
+
+    public void addFriend(MessengerUser friend) {
+        MessengerDao.removeRequest(friend, this.user);
+        MessengerDao.newFriend(friend, this.user);
+
+        this.requests.remove(friend.getUserId());
+        this.friends.put(friend.getUserId(), friend);
+    }
+
+    public void addRequest(MessengerUser requester) {
+        MessengerDao.newRequest(requester, this.user);
+        this.requests.put(requester.getUserId(), requester);
+
+        Player requested = PlayerManager.getInstance().getPlayerById(this.user.getUserId());
+
+        if (requested != null) {
+            requested.send(new FRIEND_REQUEST(requester));
+        }
+    }
+
+    public void declineRequest(MessengerUser requester) {
+        MessengerDao.removeRequest(requester, this.user);
+        this.requests.remove(requester);
+    }
+
+    public void declineAllRequests() {
+        MessengerDao.removeAllRequests(this.user);
+        this.requests.clear();
+    }
+
+    /**
+     * getPersistentMessage
+     * Get if the friend limit is reached. Limit is dependent upon club subscription
+     *
+     * @return true, if limit reached
+     */
+    public boolean isFriendsLimitReached() {
+        return this.friends.size() >= this.getFriendsLimit();
+    }
+
+    public int getFriendsLimit() {
+        return this.friendsLimit;
+    }
+
+    public void setPersistentMessage(String persistentMessage) {
+        this.persistentMessage = persistentMessage;
+
+        Player player = PlayerManager.getInstance().getPlayerById(this.user.getUserId());
+
+        if (player != null) {
+            player.getDetails().setConsoleMotto(persistentMessage);
+            player.send(new CONSOLE_MOTTO(persistentMessage));
+        }
+
+        PlayerDao.saveMotto(player.getDetails());
+    }
+
+    public String getPersistentMessage() {
+        return this.persistentMessage;
     }
 
     /**
@@ -64,29 +140,31 @@ public class Messenger {
      * @return the messenger user instance
      */
     public MessengerUser getRequest(int userId) {
-        for (MessengerUser requester : this.requests) {
-            if (requester.getUserId() == userId) {
-                return requester;
-            }
-        }
-
-        return null;
+        return this.requests.get(userId);
     }
 
     /**
      * Get the messenger user instance with this user id.
      *
-     * @param userId the user id to check for
+     * @param userId the user to check for
      * @return the messenger user instance
      */
     public MessengerUser getFriend(int userId) {
-        for (MessengerUser friend : this.friends) {
-            if (friend.getUserId() == userId) {
-                return friend;
-            }
-        }
+        return this.friends.get(userId);
+    }
 
-        return null;
+    /**
+     * Remove friend from friends list
+     *
+     * @param userId
+     * @return boolean indicating success
+     */
+    public boolean removeFriend(int userId) {
+        this.friends.remove(userId);
+
+        MessengerDao.removeFriend(userId, this.user.getUserId());
+
+        return true;
     }
 
     /**
@@ -104,7 +182,11 @@ public class Messenger {
      * @return the list of friends
      */
     public List<MessengerUser> getFriends() {
-        return friends;
+        return new ArrayList<>(this.friends.values());
+    }
+
+    public MessengerUser getMessengerUser() {
+        return this.user;
     }
 
     /**
@@ -113,6 +195,10 @@ public class Messenger {
      * @return the list of friends
      */
     public List<MessengerUser> getRequests() {
-        return requests;
+        return new ArrayList<>(this.requests.values());
+    }
+
+    public boolean isAllowsFriendRequests() {
+        return allowsFriendRequests;
     }
 }

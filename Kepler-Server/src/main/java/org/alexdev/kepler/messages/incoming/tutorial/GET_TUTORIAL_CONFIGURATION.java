@@ -14,8 +14,8 @@ public class GET_TUTORIAL_CONFIGURATION implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         TutorialTopic topic = new TutorialTopic();
-        topic.setId(0);
-        topic.setName("ayy lmao");
+        topic.setId(1);
+        topic.setName("own_user");
         topic.setStatus(0);
 
         List<TutorialTopic> topics = new ArrayList<>();

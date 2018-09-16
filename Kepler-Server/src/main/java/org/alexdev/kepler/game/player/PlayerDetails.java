@@ -37,6 +37,7 @@ public class PlayerDetails {
 
     // Settings
     private boolean allowStalking;
+    private boolean allowFriendRequests;
     private boolean soundEnabled;
     private boolean tutorialFinished;
 
@@ -74,7 +75,7 @@ public class PlayerDetails {
      * @param battleballPoints the points accumulated when playing battleball
      * @param snowstormPoints the points accumulated when playing snowstorm
      */
-    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean soundEnabled, boolean tutorialFinished, int battleballPoints, int snowstormPoints) {
+    public void fill(int id, String username, String figure, String poolFigure, int credits, String motto, String consoleMotto, String sex, int tickets, int film, int rank, long lastOnline, long firstClubSubscription, long clubExpiration, String currentBadge, boolean showBadge, boolean allowStalking, boolean allowFriendRequests, boolean soundEnabled, boolean tutorialFinished, int battleballPoints, int snowstormPoints) {
         this.id = id;
         this.username = StringUtil.filterInput(username, true);
         this.figure = StringUtil.filterInput(figure, true); // Format: hd-180-1.ch-255-70.lg-285-77.sh-295-74.fa-1205-91.hr-125-31.ha-1016-
@@ -89,23 +90,33 @@ public class PlayerDetails {
         this.lastOnline = lastOnline;
         this.firstClubSubscription = firstClubSubscription;
         this.clubExpiration = clubExpiration;
-        this.currentBadge = (!StringUtils.isAlphanumeric(currentBadge) || currentBadge.length() != 3) ? "" : currentBadge;
+
+        if (!StringUtils.isAlphanumeric(currentBadge) || currentBadge.length() != 3) {
+            this.currentBadge = currentBadge;
+        } else {
+            this.currentBadge = "";
+        }
+
         this.showBadge = showBadge;
         this.allowStalking = allowStalking;
+        this.allowFriendRequests = allowFriendRequests;
         this.soundEnabled = soundEnabled;
         this.tutorialFinished = tutorialFinished;
         this.battleballPoints = battleballPoints;
         this.snowstormPoints = snowstormPoints;
 
         if (this.credits < 0) {
+            // TODO: log warning
             this.credits = 0;
         }
 
         if (this.tickets < 0) {
+            // TODO: log warning
             this.tickets = 0;
         }
 
         if (this.film < 0) {
+            // TODO: log warning
             this.film = 0;
         }
     }
@@ -320,5 +331,9 @@ public class PlayerDetails {
         }
 
         return -1;
+    }
+
+    public boolean isAllowFriendRequests() {
+        return allowFriendRequests;
     }
 }

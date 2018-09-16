@@ -6,6 +6,7 @@ import org.alexdev.kepler.game.entity.EntityType;
 import org.alexdev.kepler.game.item.Item;
 import org.alexdev.kepler.game.moderation.Fuseright;
 import org.alexdev.kepler.game.player.Player;
+import org.alexdev.kepler.game.player.PlayerManager;
 import org.alexdev.kepler.game.room.Room;
 import org.alexdev.kepler.game.room.tasks.RainbowTask;
 import org.alexdev.kepler.messages.outgoing.rooms.user.CHAT_MESSAGE;
@@ -62,13 +63,32 @@ public class RainbowDimmerCommand extends Command {
             return;
         }
 
+
+        Player roomOwner = PlayerManager.getInstance().getPlayerById(room.getData().getOwnerId());
+        boolean ownerInRoom = false;
+
+        if (roomOwner.getRoomUser().getRoom() != null) {
+            ownerInRoom = roomOwner.getRoomUser().getRoom().getData().getOwnerId() == room.getData().getOwnerId();
+        }
+
+        String statusMessage;
+
         if (room.getTaskManager().hasTask("RainbowTask")) {
             room.getTaskManager().cancelTask("RainbowTask");
-            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Rainbow room dimmer cycle has stopped"));
+
+            statusMessage = "Rainbow room dimmer cycle has stopped";
         } else {
             RainbowTask rainbowTask = new RainbowTask(room);
             room.getTaskManager().scheduleTask("RainbowTask", rainbowTask, 0, tickInterval, TimeUnit.SECONDS);
-            player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), "Rainbow room dimmer cycle has started"));
+
+            statusMessage = "Rainbow room dimmer cycle has started";
+        }
+
+        player.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, player.getRoomUser().getInstanceId(), statusMessage));
+
+        // Send status of room task to roomowner
+        if (ownerInRoom) {
+            roomOwner.send(new CHAT_MESSAGE(ChatMessageType.WHISPER, roomOwner.getRoomUser().getInstanceId(), statusMessage));
         }
     }
 

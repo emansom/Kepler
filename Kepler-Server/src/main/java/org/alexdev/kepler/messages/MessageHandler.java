@@ -25,6 +25,8 @@ import org.alexdev.kepler.messages.incoming.songs.*;
 import org.alexdev.kepler.messages.incoming.trade.*;
 import org.alexdev.kepler.messages.incoming.tutorial.*;
 import org.alexdev.kepler.messages.incoming.user.*;
+import org.alexdev.kepler.messages.incoming.welcomingparty.ACCEPT_TUTOR_INVITATION;
+import org.alexdev.kepler.messages.incoming.welcomingparty.REJECT_TUTOR_INVITATION;
 import org.alexdev.kepler.messages.types.MessageEvent;
 import org.alexdev.kepler.server.netty.streams.NettyRequest;
 import org.alexdev.kepler.util.config.ServerConfiguration;
@@ -45,6 +47,7 @@ public class MessageHandler {
         registerHandshakePackets();
         registerPursePackets();
         registerUserPackets();
+        registerWelcomingPartyPackets();
         registerTutorialPackets();
         registerNavigatorPackets();
         registerRoomPackets();
@@ -93,6 +96,14 @@ public class MessageHandler {
         registerEvent(26, new GET_CLUB());
         registerEvent(190, new SUBSCRIBE_CLUB());
         //registerEvent(315, new TEST_LATENCY());
+    }
+
+    /**
+     * Register welcoming party packets.
+     */
+    private void registerWelcomingPartyPackets() {
+        registerEvent(357, new ACCEPT_TUTOR_INVITATION());
+        registerEvent(358, new REJECT_TUTOR_INVITATION());
     }
 
     /**

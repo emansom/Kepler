@@ -6,16 +6,16 @@ import org.alexdev.kepler.game.player.PlayerDetails;
 import org.alexdev.kepler.messages.types.MessageComposer;
 import org.alexdev.kepler.server.netty.streams.NettyResponse;
 
-public class NEW_FRIEND extends MessageComposer {
-    private final MessengerUser messengerUser;
+public class ADD_FRIEND extends MessageComposer {
+    private final MessengerUser friend;
 
-    public NEW_FRIEND(MessengerUser messengerUser) {
-        this.messengerUser = messengerUser;
+    public ADD_FRIEND(MessengerUser friend) {
+        this.friend = friend;
     }
 
     @Override
     public void compose(NettyResponse response) {
-        this.messengerUser.serialise(response);
+        this.friend.serialise(response);
     }
 
     @Override

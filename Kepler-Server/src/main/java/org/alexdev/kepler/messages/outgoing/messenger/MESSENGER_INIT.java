@@ -8,32 +8,34 @@ import org.alexdev.kepler.util.config.GameConfiguration;
 
 import java.util.List;
 
-public class FRIENDSLIST extends MessageComposer {
-    private final String consoleMotto;
-    private final List<MessengerUser> friends;
-    private final boolean isClubMember;
+public class MESSENGER_INIT extends MessageComposer {
+    private final String persistentMessage;
+    private final int friendsLimit;
+    private List<MessengerUser> friends;
 
-    public FRIENDSLIST(String consoleMotto, List<MessengerUser> friends, boolean isClubMember) {
-        this.consoleMotto = consoleMotto;
-        this.friends = friends;
-        this.isClubMember = isClubMember;
+    public MESSENGER_INIT(Messenger data) {
+        this.persistentMessage = data.getPersistentMessage();
+        this.friendsLimit = data.getFriendsLimit();
+        this.friends = data.getFriends();
     }
 
     @Override
     public void compose(NettyResponse response) {
+        response.writeString(this.persistentMessage);
+
+//        if (this.isClubMember) {
+//            response.writeInt(clubFriendsLimit);
+//        } else {
+//            response.writeInt(normalFriendsLimit);
+//        }
+
         int normalFriendsLimit = GameConfiguration.getInstance().getInteger("messenger.max.friends.nonclub");
         int clubFriendsLimit = GameConfiguration.getInstance().getInteger("messenger.max.friends.club");
 
-        response.writeString(this.consoleMotto);
-
-        if (this.isClubMember) {
-            response.writeInt(clubFriendsLimit);
-        } else {
-            response.writeInt(normalFriendsLimit);
-        }
-
+        response.writeInt(this.friendsLimit);
         response.writeInt(normalFriendsLimit);
         response.writeInt(clubFriendsLimit);
+
         response.writeInt(this.friends.size());
 
         for (MessengerUser friend : this.friends) {

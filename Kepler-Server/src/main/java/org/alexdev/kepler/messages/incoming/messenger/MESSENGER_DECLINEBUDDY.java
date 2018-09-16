@@ -11,8 +11,13 @@ import java.sql.SQLException;
 
 public class MESSENGER_DECLINEBUDDY implements MessageEvent {
     @Override
-    public void handle(Player player, NettyRequest reader) throws SQLException {
-        reader.readInt(); // Junk wtf
+    public void handle(Player player, NettyRequest reader) {
+        boolean declineAll = reader.readBoolean();
+
+        if (declineAll) {
+            player.getMessenger().declineAllRequests();
+            return;
+        }
 
         int amount = reader.readInt();
 
@@ -23,16 +28,8 @@ public class MESSENGER_DECLINEBUDDY implements MessageEvent {
                 continue;
             }
 
-            MessengerDao.removeRequest(userId, player.getDetails().getId());
-            MessengerDao.removeRequest(player.getDetails().getId(), userId);
-
-            player.getMessenger().getRequests().remove(player.getMessenger().getRequest(userId));
-
-            Player friend = PlayerManager.getInstance().getPlayerById(userId);
-
-            if (friend != null) {
-                friend.getMessenger().getRequests().remove(friend.getMessenger().getRequest(player.getDetails().getId()));
-            }
+            MessengerUser requester = player.getMessenger().getRequest(userId);
+            player.getMessenger().declineRequest(requester);
         }
     }
 }

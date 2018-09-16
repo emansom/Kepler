@@ -52,6 +52,9 @@ public class GameConfiguration {
         config.put("chat.garbled.text", "true");
         config.put("chat.bubble.timeout.seconds", "15");
 
+        config.put("messenger.max.friends.nonclub", "100");
+        config.put("messenger.max.friends.club", "600");
+
         config.put("battleball.create.game.enabled", "true");
         config.put("battleball.start.minimum.active.teams", "2");
         config.put("battleball.preparing.game.seconds", "10");

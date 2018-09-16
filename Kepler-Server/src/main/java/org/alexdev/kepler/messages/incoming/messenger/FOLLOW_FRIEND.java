@@ -31,7 +31,7 @@ public class FOLLOW_FRIEND implements MessageEvent {
     public void handle(Player player, NettyRequest reader) {
         int friendId = reader.readInt();
 
-        if (!player.getMessenger().isFriend(friendId)) {
+        if (!player.getMessenger().hasFriend(friendId)) {
             player.send(new FOLLOW_ERROR(FollowErrors.NOT_FRIEND.getErrorId())); // Not their friend
             return;
         }

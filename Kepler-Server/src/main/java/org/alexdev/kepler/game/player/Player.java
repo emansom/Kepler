@@ -66,7 +66,7 @@ public class Player extends Entity {
         this.details.loadBadges();
         this.details.resetNextHandout();
 
-        this.messenger = new Messenger(this);
+        this.messenger = new Messenger(this.details);
         this.inventory = new Inventory(this);
 
         this.send(new LOGIN());

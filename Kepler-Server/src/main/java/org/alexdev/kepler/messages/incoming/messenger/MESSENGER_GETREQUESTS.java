@@ -12,7 +12,7 @@ public class MESSENGER_GETREQUESTS implements MessageEvent {
     @Override
     public void handle(Player player, NettyRequest reader) {
         for (MessengerUser requester : player.getMessenger().getRequests()) {
-            player.send(new FRIEND_REQUEST(requester.getUserId(), requester.getUsername()));
+            player.send(new FRIEND_REQUEST(requester));
         }
     }
 }

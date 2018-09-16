@@ -44,7 +44,7 @@ public class NettyRequest {
         int length = this.readBase64();
         byte[] data = this.readBytes(length);
 
-        return new String(data, StandardCharsets.UTF_8);
+        return new String(data);
     }
 
     public byte[] readBytes(int len) {
@@ -68,7 +68,7 @@ public class NettyRequest {
         byte[] remiainingBytes = this.remainingBytes();
 
         if (remiainingBytes != null) {
-            return new String(remiainingBytes, StandardCharsets.UTF_8);
+            return new String(remiainingBytes);
         }
 
         return null;

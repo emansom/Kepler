@@ -23,7 +23,8 @@ public class CHAT implements MessageEvent {
             return;
         }
 
-        String message = StringUtil.filterInput(reader.readString(), true);
+        //String message = StringUtil.filterInput(reader.readString(), true);
+        String message = reader.readString();
 
         player.getRoomUser().setTyping(false);
         room.send(new TYPING_STATUS(player.getRoomUser().getInstanceId(), player.getRoomUser().isTyping()));

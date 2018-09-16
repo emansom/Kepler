@@ -12,13 +12,6 @@ public class MESSENGER_ASSIGNPERSMSG implements MessageEvent {
     public void handle(Player player, NettyRequest reader) {
         String consoleMotto = StringUtil.filterInput(reader.readString(), true);
 
-        if (consoleMotto == null) {
-            return;
-        }
-
-        player.getDetails().setConsoleMotto(consoleMotto);
-        player.send(new CONSOLE_MOTTO(consoleMotto));
-
-        PlayerDao.saveMotto(player.getDetails());
+        player.getMessenger().setPersistentMessage(consoleMotto);
     }
 }
