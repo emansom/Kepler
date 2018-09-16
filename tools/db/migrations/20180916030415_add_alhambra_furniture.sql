@@ -1,4 +1,7 @@
 -- migrate:up
+INSERT INTO `catalogue_pages` (`id`, `order_id`, `min_role`, `index_visible`, `name_index`, `link_list`, `name`, `layout`, `image_headline`, `image_teasers`, `body`, `label_pick`, `label_extra_s`, `label_extra_t`) VALUES
+(46, 28, 1, 1, 'Alhambra', '', 'Alhambra', 'ctlg_layout2', 'catalog_alh_headline2', 'catalog_alh_teaser2,', 'The Palace of Alhambra has appeared and with it this exotic and beautifully crafted range of Arabian Furni. Luxury seating and gourmet food combine to make your room sparkle with riches.', 'Click on the item you want for more information', 's:2:Get your Alhambrian goodies now!', '');
+
 INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `top_height`, `behaviour`) VALUES
 (745, 'arabian_bigtb', '0,0,0', 3, 2, 1, 'solid,can_stack_on_top'),
 (746, 'arabian_chair', '0,0,0', 1, 1, 1, 'can_sit_on_top'),
