@@ -10,7 +10,7 @@ INSERT INTO `items_definitions` (`id`, `sprite`, `colour`, `length`, `width`, `t
 (749, 'arabian_rug', '0,0,0', 3, 5, 0.1, 'can_stand_on_top'),
 (750, 'arabian_snake', '0,0,0', 1, 1, 0, 'solid,custom_data_numeric_state'),
 (751, 'arabian_swords', '0,0,0', 1, 1, 0, 'wall_item'),
-(752, 'arabian_teamk', '0,0,0', 1, 1, 0, 'solid'),
+(752, 'arabian_teamk', '0,0,0', 1, 1, 0, 'solid,custom_data_true_false'),
 (753, 'arabian_tetbl', '0,0,0', 1, 1, 1, 'solid,can_stack_on_top'),
 (754, 'arabian_tray1', '0,0,0', 1, 1, 0, 'solid'),
 (755, 'arabian_tray2', '0,0,0', 1, 1, 0, 'solid'),
