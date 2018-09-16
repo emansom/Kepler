@@ -98,24 +98,28 @@ public class BattleBallTask implements Runnable {
                 boolean interact = true;
 
                 if (!RoomTile.isValidTile(this.room, entity, roomEntity.getNextPosition())) {
-                    roomEntity.setNextPosition(roomEntity.getPosition().copy());
+                    RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(roomEntity.getPosition());
+                    nextTile.addEntity(entity);
+
                     roomEntity.stopWalking();
                     interact = false;
                 }
 
-                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(roomEntity.getNextPosition());
-                nextTile.addEntity(entity);
+                if (roomEntity.getNextPosition() != null) {
+                    RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(roomEntity.getNextPosition());
+                    nextTile.addEntity(entity);
 
-                roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
-                roomEntity.getPosition().setY(roomEntity.getNextPosition().getY());
-                roomEntity.updateNewHeight(roomEntity.getNextPosition());
+                    roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
+                    roomEntity.getPosition().setY(roomEntity.getNextPosition().getY());
+                    roomEntity.updateNewHeight(roomEntity.getNextPosition());
 
-                if (interact) {
-                    // Increment tiles...
-                    BattleBallTile tile = (BattleBallTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
+                    if (interact) {
+                        // Increment tiles...
+                        BattleBallTile tile = (BattleBallTile) game.getTile(roomEntity.getNextPosition().getX(), roomEntity.getNextPosition().getY());
 
-                    if (tile != null) {
-                        tile.interact(gamePlayer, objects, events, updateTiles, fillTiles);
+                        if (tile != null) {
+                            tile.interact(gamePlayer, objects, events, updateTiles, fillTiles);
+                        }
                     }
                 }
             }
