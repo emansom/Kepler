@@ -177,15 +177,8 @@ public abstract class RoomEntity {
         }
 
         if (this.nextPosition != null) {
-            if (!RoomTile.isValidTile(this.room, entity, this.nextPosition)) {
-                this.nextPosition = null;
-            }
-
-            if (this.nextPosition != null) {
-                this.position.setX(this.nextPosition.getX());
-                this.position.setY(this.nextPosition.getY());
-            }
-
+            this.position.setX(this.nextPosition.getX());
+            this.position.setY(this.nextPosition.getY());
             this.updateNewHeight(this.position);
         }
 
@@ -198,7 +191,7 @@ public abstract class RoomEntity {
         this.goal = new Position(X, Y);
 
         if (!RoomTile.isValidTile(this.room, this.entity, this.goal)) {
-           //return false;
+            return false;
         }
 
         AStar aStar = new AStar(this.room.getModel());

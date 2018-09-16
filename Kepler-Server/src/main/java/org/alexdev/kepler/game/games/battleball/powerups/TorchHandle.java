@@ -47,6 +47,7 @@ public class TorchHandle {
                 state = BattleBallTileState.TOUCHED; // Don't make it 4 hits, make it 3
             }
 
+
             BattleBallTileState newState = null;
 
             if (colour.getColourId() != gameTeam.getId()) {

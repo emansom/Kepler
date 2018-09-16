@@ -29,6 +29,7 @@ public class LightbulbHandle {
                 state = BattleBallTileState.TOUCHED; // Don't make it 4 hits, make it 3
             }
 
+
             BattleBallTileState newState = null;
 
             if (colour.getColourId() != gameTeam.getId()) {
@@ -36,8 +37,9 @@ public class LightbulbHandle {
             } else {
                 newState = BattleBallTileState.getStateById(state.getTileStateId() + 1);
             }
-
+            
             BattleBallColourState newColour = BattleBallColourState.getColourById(gameTeam.getId());
+
             BattleBallTile.getNewPoints(gamePlayer, state, colour, newState, newColour);
 
             tile.setColour(newColour);
