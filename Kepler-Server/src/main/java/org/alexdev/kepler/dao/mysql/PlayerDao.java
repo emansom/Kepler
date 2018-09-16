@@ -23,7 +23,7 @@ public class PlayerDao {
     public static final LazySodiumJava LIB_SODIUM = new LazySodiumJava(new SodiumJava());
 
     /**
-     * Gets the details.
+     * Gets the details by user id
      *
      * @param userId the user id
      * @return the details
@@ -39,6 +39,41 @@ public class PlayerDao {
             sqlConnection = Storage.getStorage().getConnection();
             preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE id = ? LIMIT 1", sqlConnection);
             preparedStatement.setInt(1, userId);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                details = new PlayerDetails();
+                fill(details, resultSet);
+            }
+
+        } catch (Exception e) {
+            Storage.logError(e);
+        } finally {
+            Storage.closeSilently(resultSet);
+            Storage.closeSilently(preparedStatement);
+            Storage.closeSilently(sqlConnection);
+        }
+
+        return details;
+    }
+
+    /**
+     * Gets the details by username
+     *
+     * @param username the username
+     * @return the details
+     */
+    public static PlayerDetails getDetails(String username) {
+        Connection sqlConnection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        PlayerDetails details = null;
+
+        try {
+            sqlConnection = Storage.getStorage().getConnection();
+            preparedStatement = Storage.getStorage().prepare("SELECT * FROM users WHERE username = ? LIMIT 1", sqlConnection);
+            preparedStatement.setString(1, username);
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
@@ -115,7 +150,7 @@ public class PlayerDao {
             resultSet = preparedStatement.executeQuery();
 
             if (resultSet.next()) {
-                byte[] hashedPassword = resultSet.getString("password").getBytes(StandardCharsets.UTF_8);
+                byte[] hashedPassword = (resultSet.getString("password") + '\0').getBytes(StandardCharsets.UTF_8);
                 byte[] pass = password.getBytes(StandardCharsets.UTF_8);
 
                 PwHash.Native pwHash = (PwHash.Native) LIB_SODIUM;
@@ -507,7 +542,8 @@ public class PlayerDao {
                 row.getInt("film"), row.getInt("rank"), row.getLong("last_online"),
                 row.getLong("club_subscribed"), row.getLong("club_expiration"), row.getString("badge"),
                 row.getBoolean("badge_active"), row.getBoolean("allow_stalking"),
-                row.getBoolean("sound_enabled"), row.getBoolean("tutorial_finished"),
-                row.getInt("battleball_points"), row.getInt("snowstorm_points"));
+                row.getBoolean("allow_friend_requests"), row.getBoolean("sound_enabled"),
+                row.getBoolean("tutorial_finished"), row.getInt("battleball_points"),
+                row.getInt("snowstorm_points"));
     }
 }
