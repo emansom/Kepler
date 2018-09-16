@@ -14,7 +14,7 @@ public class PowerUpUtil {
         gamePlayer.getPlayer().getRoomUser().stopWalking();
 
         gamePlayer.setPlayerState(state);
-        game.addObjectToQueue(new PlayerUpdateObject(gamePlayer));
+        game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
 
         // Restore player 5 seconds later
         GameScheduler.getInstance().getSchedulerService().schedule(()-> {
@@ -23,7 +23,7 @@ public class PowerUpUtil {
             }
 
             gamePlayer.setPlayerState(BattleBallPlayerState.NORMAL);
-            game.addObjectToQueue(new PlayerUpdateObject(gamePlayer));
+            game.getObjectsQueue().add(new PlayerUpdateObject(gamePlayer));
         }, 5, TimeUnit.SECONDS);
     }
 
