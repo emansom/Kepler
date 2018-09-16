@@ -95,6 +95,35 @@ public class RoomTile {
     }
 
     /**
+     * Gets if the tile was valid.
+     *
+     * @param position the position of the tile
+     * @return true, if successful
+     */
+    public static boolean isValidTile(Room room, Position position) {
+        if (room == null) {
+            return false;
+        }
+
+        RoomTile tile = room.getMapping().getTile(position);
+
+        if (tile == null) {
+            return false;
+        }
+
+        if (tile.getEntities().size() > 0) {
+            return false;
+        }
+
+
+        if (!tile.hasWalkableFurni()) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Gets if the tile was valid, but if there's chairs in the way it will not be valid.
      *
      * @param entity the entity checking

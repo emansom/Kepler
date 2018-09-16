@@ -18,6 +18,7 @@ import org.alexdev.kepler.game.room.enums.StatusType;
 import org.alexdev.kepler.game.room.mapping.RoomTile;
 import org.alexdev.kepler.log.Log;
 import org.alexdev.kepler.messages.outgoing.games.GAMESTATUS;
+import org.alexdev.kepler.server.netty.NettyPlayerNetwork;
 import org.alexdev.kepler.util.StringUtil;
 
 import java.util.ArrayList;
@@ -94,19 +95,20 @@ public class BattleBallTask implements Runnable {
         if (roomEntity.isWalking()) {
             // Apply next tile from the tile we removed from the list the cycle before
             if (roomEntity.getNextPosition() != null) {
-                Position nextPosition = roomEntity.getNextPosition();
-
                 boolean interact = true;
 
-                if (!RoomTile.isValidTile(this.room, entity, nextPosition)) {
-                    roomEntity.stopWalking();
-                    nextPosition = roomEntity.getPosition().copy();
+                if (!RoomTile.isValidTile(this.room, entity, roomEntity.getNextPosition())) {
+                    roomEntity.setNextPosition(roomEntity.getPosition().copy());
+                    //System.out.println("Redirected !!");
                     interact = false;
                 }
 
-                roomEntity.getPosition().setX(nextPosition.getX());
-                roomEntity.getPosition().setY(nextPosition.getY());
-                roomEntity.updateNewHeight(nextPosition);
+                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(roomEntity.getNextPosition());
+                nextTile.addEntity(entity);
+
+                roomEntity.getPosition().setX(roomEntity.getNextPosition().getX());
+                roomEntity.getPosition().setY(roomEntity.getNextPosition().getY());
+                roomEntity.updateNewHeight(roomEntity.getNextPosition());
 
                 if (interact) {
                     // Increment tiles...
@@ -122,14 +124,6 @@ public class BattleBallTask implements Runnable {
             if (roomEntity.getPath().size() > 0) {
                 Position next = roomEntity.getPath().pop();
 
-                // Tile was invalid after we started walking, so lets try again!
-                /*if (!RoomTile.isValidTile(this.room, entity, next)) {
-                    entity.getRoomUser().getPath().clear();
-                    roomEntity.walkTo(goal.getX(), goal.getY());
-                    this.processEntity(gamePlayer, objects, events, updateTiles, fillTiles);
-                    return;
-                }*/
-
                 RoomTile previousTile = roomEntity.getTile();
                 previousTile.removeEntity(entity);
 
@@ -142,9 +136,6 @@ public class BattleBallTask implements Runnable {
                 roomEntity.getPosition().setRotation(rotation);
                 roomEntity.setStatus(StatusType.MOVE, next.getX() + "," + next.getY() + "," + StringUtil.format(height));
                 roomEntity.setNextPosition(next);
-
-                RoomTile nextTile = roomEntity.getRoom().getMapping().getTile(next);
-                nextTile.addEntity(entity);
 
                 // Add next position if moving
                 events.add(new PlayerMoveEvent(gamePlayer, roomEntity.getNextPosition().copy()));

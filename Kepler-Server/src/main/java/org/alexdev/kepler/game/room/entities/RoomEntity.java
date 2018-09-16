@@ -177,6 +177,10 @@ public abstract class RoomEntity {
         }
 
         if (this.nextPosition != null) {
+            if (!RoomTile.isValidTile(this.room, entity, this.nextPosition)) {
+                this.nextPosition = this.position.copy();
+            }
+
             this.position.setX(this.nextPosition.getX());
             this.position.setY(this.nextPosition.getY());
             this.updateNewHeight(this.position);
