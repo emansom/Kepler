@@ -90,13 +90,7 @@ public class PlayerDetails {
         this.lastOnline = lastOnline;
         this.firstClubSubscription = firstClubSubscription;
         this.clubExpiration = clubExpiration;
-
-        if (!StringUtils.isAlphanumeric(currentBadge) || currentBadge.length() != 3) {
-            this.currentBadge = currentBadge;
-        } else {
-            this.currentBadge = "";
-        }
-
+        this.currentBadge = currentBadge;
         this.showBadge = showBadge;
         this.allowStalking = allowStalking;
         this.allowFriendRequests = allowFriendRequests;
