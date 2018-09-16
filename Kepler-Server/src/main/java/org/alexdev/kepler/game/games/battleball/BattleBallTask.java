@@ -99,7 +99,7 @@ public class BattleBallTask implements Runnable {
 
                 if (!RoomTile.isValidTile(this.room, entity, roomEntity.getNextPosition())) {
                     roomEntity.setNextPosition(roomEntity.getPosition().copy());
-                    //System.out.println("Redirected !!");
+                    roomEntity.stopWalking();
                     interact = false;
                 }
 
