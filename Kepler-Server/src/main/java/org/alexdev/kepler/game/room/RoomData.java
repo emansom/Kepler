@@ -26,6 +26,8 @@ public class RoomData {
     private int floor;
     private boolean showOwnerName;
     private boolean superUsers;
+    private boolean isGameArena;
+    private String gameLobby;
     private int accessType;
     private String password;
     private int visitorsNow;
@@ -322,4 +324,19 @@ public class RoomData {
         this.rating = amount;
     }
 
+    public boolean isGameArena() {
+        return isGameArena;
+    }
+
+    public void setGameArena(boolean gameArena) {
+        isGameArena = gameArena;
+    }
+
+    public String getGameLobby() {
+        return gameLobby;
+    }
+
+    public void setGameLobby(String gameLobby) {
+        this.gameLobby = gameLobby;
+    }
 }

@@ -109,6 +109,9 @@ public abstract class Game {
             this.room = new Room();
             this.room.getData().fill(this.id, "Battleball Arena", "");
             this.room.setRoomModel(this.getRoomModel());
+
+            this.room.getData().setGameArena(true);
+            this.room.getData().setGameLobby(this.gameType.getLobbyModel());
         }
 
         this.objects.clear();
@@ -452,7 +455,7 @@ public abstract class Game {
             this.leaveGame(gamePlayer);
         }
 
-        player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel("bb_lobby_1").getId()));
+        player.send(new ROOMFORWARD(true, RoomManager.getInstance().getRoomByModel(this.gameType.getLobbyModel()).getId()));
     }
 
     /**
